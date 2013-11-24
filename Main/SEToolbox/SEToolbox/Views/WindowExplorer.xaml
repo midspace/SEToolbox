@@ -1,0 +1,116 @@
+﻿<Window x:Class="SEToolbox.Views.WindowExplorer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:views="clr-namespace:SEToolbox.Views"
+        xmlns:vm="clr-namespace:SEToolbox.ViewModels"
+        xmlns:m="clr-namespace:SEToolbox.Models"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        Title="SE Toolbox" Height="600" Width="800" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        commands:DialogService.IsRegisteredView="True">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <commands:CommandAction Command="{Binding ClosingCommand}" EventArgs="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
+
+
+
+        <!--<DataTemplate x:Key="DefaultJobsViewTemplate" DataType="{x:Type vm:DefaultJobsTableViewModel}">
+            <telerik:RadPane Header="{Binding Title}" telerik:RadDocking.SerializationTag="{Binding WindowId}" ContextMenuService.IsEnabled="False">
+                <views:JobsTableWindow />
+            </telerik:RadPane>
+        </DataTemplate>-->
+
+
+
+    </Window.Resources>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
+    <Grid IsEnabled="{Binding IsActive}">
+        <DockPanel>
+            <ToolBarPanel DockPanel.Dock="Top">
+                <ToolBar>
+                    <Button Content="Open" Command="{Binding OpenCommand}" />
+                    <Button Content="Save" Command="{Binding SaveCommand}" />
+                    <Separator/>
+                    <Button Content="Clear" Command="{Binding ClearCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button Content="Reload" Command="{Binding ReloadCommand}" />
+                    <Separator/>
+                    <Menu>
+                        <MenuItem Header="Import" Command="{Binding ImportCommand}">
+                            <MenuItem Header="Image" Command="{Binding ImportImageCommand}"/>
+                            <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}"/>
+                        </MenuItem>
+                    </Menu>
+                    <Separator/>
+                    <Button Content="Export To Excel" Command="{Binding ExportExcelCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button Content="Test" Command="{Binding TestCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </ToolBar>
+            </ToolBarPanel>
+            <StatusBar DockPanel.Dock="Bottom">
+                <StatusBarItem>
+                    <TextBlock Name="uxStatusText" />
+                </StatusBarItem>
+            </StatusBar>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="40"/>
+                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="*" MinWidth="40"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Character"/>
+                        <TextBox Grid.Column="1" Name="uxCharacterText" IsReadOnly="True" />
+                        <Label Grid.Row="1" Content="Saved"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Name="uxSavedText" IsReadOnly="True" />
+                        <controls:SortableListView Grid.Row="2" Grid.ColumnSpan="2" DisplayMemberPath="ClassType" SelectionMode="Single" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure}"
+                            ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>
+                                    <GridViewColumn Header="Type" Width="80" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
+                                </GridView>
+                            </ListView.View>
+                        </controls:SortableListView>
+                    </Grid>
+                </Grid>
+                <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="4"/>
+                <Grid Grid.Column="2">
+                    <ContentControl Content="{Binding SelectedStructure}">
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type m:StructureCharacterModel}">
+                                <views:ControlCharacter />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type m:StructureVoxelModel}">
+                                <views:ControlVoxel />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type m:StructureCubeGridModel}">
+                                <views:ControlCubes />
+                            </DataTemplate>
+                        </ContentControl.Resources>
+                    </ContentControl>
+                </Grid>
+            </Grid>
+        </DockPanel>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</Window>

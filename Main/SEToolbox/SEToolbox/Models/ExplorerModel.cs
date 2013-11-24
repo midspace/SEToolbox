@@ -1,0 +1,321 @@
+﻿namespace SEToolbox.Models
+{
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Windows.Threading;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
+
+    public class ExplorerModel : BaseModel
+    {
+        #region Fields
+
+        /// <summary>
+        /// The base path of the save files, minus the userid.
+        /// </summary>
+        private string baseSavePath;
+
+        private SaveResource activeWorld;
+
+        private bool isActive;
+
+        private bool isBusy;
+
+        private bool isModified;
+
+        private MyObjectBuilder_Sector sectorData;
+
+        private StructureCharacterModel theCharacter;
+
+        ///// <summary>
+        ///// Collection of <see cref="IStructureBase"/> objects that represent the builds currently configured.
+        ///// </summary>
+        private ObservableCollection<IStructureBase> structures;
+
+        private IStructureBase selectedStructure;
+
+        #endregion
+
+        #region Properties
+
+        public string BaseSavePath
+        {
+            get
+            {
+                return this.baseSavePath;
+            }
+
+            set
+            {
+                if (value != this.baseSavePath)
+                {
+                    this.baseSavePath = value;
+                    this.RaisePropertyChanged(() => BaseSavePath);
+                }
+            }
+        }
+
+        public ObservableCollection<IStructureBase> Structures
+        {
+            get
+            {
+                return this.structures;
+            }
+
+            set
+            {
+                if (value != this.structures)
+                {
+                    this.structures = value;
+                    this.RaisePropertyChanged(() => Structures);
+                }
+            }
+        }
+
+        public IStructureBase SelectedStructure
+        {
+            get
+            {
+                return this.selectedStructure;
+            }
+
+            set
+            {
+                if (value != this.selectedStructure)
+                {
+                    this.selectedStructure = value;
+                    this.RaisePropertyChanged(() => SelectedStructure);
+                }
+            }
+        }
+
+        public StructureCharacterModel TheCharacter
+        {
+            get
+            {
+                return this.theCharacter;
+            }
+
+            set
+            {
+                if (value != this.theCharacter)
+                {
+                    this.theCharacter = value;
+                    this.RaisePropertyChanged(() => TheCharacter);
+                }
+            }
+        }
+
+        public SaveResource ActiveWorld
+        {
+            get
+            {
+                return this.activeWorld;
+            }
+
+            set
+            {
+                if (value != this.activeWorld)
+                {
+                    this.activeWorld = value;
+                    this.RaisePropertyChanged(() => ActiveWorld);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the View is available.  This is based on the IsInError and IsBusy properties
+        /// </summary>
+        public bool IsActive
+        {
+            get
+            {
+                return this.isActive;
+            }
+
+            set
+            {
+                if (value != this.isActive)
+                {
+                    this.isActive = value;
+                    this.RaisePropertyChanged(() => IsActive);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the View is currently in the middle of an asynchonise operation.
+        /// </summary>
+        public bool IsBusy
+        {
+            get
+            {
+                return this.isBusy;
+            }
+
+            set
+            {
+                if (value != this.isBusy)
+                {
+                    this.isBusy = value;
+                    this.RaisePropertyChanged(() => IsBusy);
+                    this.SetActiveStatus();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the View content has been changed.
+        /// </summary>
+        public bool IsModified
+        {
+            get
+            {
+                return this.isModified;
+            }
+
+            set
+            {
+                if (value != this.isModified)
+                {
+                    this.isModified = value;
+                    this.RaisePropertyChanged(() => IsModified);
+                }
+            }
+        }
+
+        public MyObjectBuilder_Sector SectorData
+        {
+            get
+            {
+                return this.sectorData;
+            }
+
+            set
+            {
+                if (value != this.sectorData)
+                {
+                    this.sectorData = value;
+                    this.RaisePropertyChanged(() => SectorData);
+                }
+            }
+        }
+        
+        #endregion
+
+        #region Constructors
+
+        public ExplorerModel()
+        {
+            //this.buildServerService = buildServerService;
+            //this.ProjectPicker = projectPicker;
+            //this.settings = Settings.Default;
+            //this.builds = new ObservableCollection<BuildSetting>();
+
+            //this.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            //{
+            //    if (e.PropertyName.Equals("TfsUri"))
+            //    {
+            //        this.LoadBuilds(this.builds);
+            //    }
+            //};
+
+            //this.Load();
+        }
+
+        #endregion
+
+        #region Methods
+
+        public void SetActiveStatus()
+        {
+            this.IsActive = !this.IsBusy;
+        }
+
+        public void Load()
+        {
+            this.BaseSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves");
+            this.SetActiveStatus();
+        }
+
+        public void LoadSandBox()
+        {
+            this.IsBusy = true;
+
+            Dispatcher.CurrentDispatcher.Invoke(
+                DispatcherPriority.DataBind,
+                new Action(delegate
+                {
+                    if (this.ActiveWorld == null)
+                    {
+                        this.SectorData = null;
+                    }
+                    else
+                    {
+                        var filename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+                        this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+                    }
+                    this.LoadSectorDetail();
+                    this.IsBusy = false;
+                }));
+        }
+
+        public void SaveSandBox()
+        {
+            this.ActiveWorld.LastSaveTime = DateTime.Now;
+
+            var checkpointFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename + ".test");
+            SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
+
+            var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename + ".test");
+            SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
+
+            this.IsModified = false;
+        }
+
+        /// <summary>
+        /// Loads the content from the directory and SE objects, creating object models.
+        /// </summary>
+        private void LoadSectorDetail()
+        {
+            this.Structures = new ObservableCollection<IStructureBase>();
+            this.TheCharacter = null;
+
+            if (this.SectorData != null)
+            {
+                foreach (var entityBase in this.SectorData.SectorObjects)
+                {
+                    var structure = StructureBaseModel.Create(entityBase);
+
+                    if (this.TheCharacter == null)
+                    {
+                        if (structure is StructureCharacterModel)
+                        {
+                            this.TheCharacter = structure as StructureCharacterModel;
+                        }
+                        else if (structure is StructureCubeGridModel)
+                        {
+                            var cubeGrid = structure as StructureCubeGridModel;
+
+                            if (cubeGrid.HasPilot())
+                            {
+                                // Add the character when they are a pilot in a cockpit.
+                                this.Structures.Add(cubeGrid.GetPilot());
+                            }
+                        }
+                    }
+
+                    this.Structures.Add(structure);
+                }
+            }
+
+            this.RaisePropertyChanged(() => Structures);
+        }
+           
+        #endregion
+    }
+}

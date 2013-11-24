@@ -1,0 +1,29 @@
+﻿namespace SEToolbox.Interop
+{
+    public enum CubeType
+    {
+        None,
+        Interior,
+        Cube,
+        SlopeCenterFrontTop,
+        SlopeLeftFrontCenter,
+        SlopeRightFrontCenter,
+        SlopeCenterFrontBottom,
+        SlopeLeftCenterTop,
+        SlopeRightCenterTop,
+        SlopeLeftCenterBottom,
+        SlopeRightCenterBottom,
+        SlopeCenterBackTop,
+        SlopeLeftBackCenter,
+        SlopeRightBackCenter,
+        SlopeCenterBackBottom,
+        CornerLeftFrontTop,
+        CornerRightFrontTop,
+        CornerLeftBackTop,
+        CornerRightBackTop,
+        CornerLeftFrontBottom,
+        CornerRightFrontBottom,
+        CornerLeftBackBottom,
+        CornerRightBackBottom
+    };
+}
