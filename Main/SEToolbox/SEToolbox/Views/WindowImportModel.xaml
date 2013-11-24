@@ -1,0 +1,41 @@
+﻿<Window x:Class="SEToolbox.Views.WindowImportModel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        ResizeMode="NoResize" SizeToContent="Height" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="Import 3D Model" Height="300" Width="500"
+        commands:DialogService.IsRegisteredView="True"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
+    <Window.Background>
+        <LinearGradientBrush>
+            <GradientStop Color="#FF2B2077" Offset="4"/>
+            <GradientStop Color="#FFFFFFFF" Offset="0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <StackPanel Margin="8">
+            <Grid Margin="0,0,0,8" Height="220">
+                <!--<ListView ItemsSource="{Binding Worlds}" SelectionMode="Single" SelectedValue="{Binding SelectedWorld}" Name="uxWorldSelectionBox">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding SessionName}"/>
+                            <GridViewColumn Header="Saved" DisplayMemberBinding="{Binding LastSaveTime}"/>
+                        </GridView>
+                    </ListView.View>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <commands:CommandAction Command="{Binding LoadCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListView>-->
+
+            </Grid>
+            <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
+                <Button Width="90" Command="{Binding LoadCommand}" Content="Open" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

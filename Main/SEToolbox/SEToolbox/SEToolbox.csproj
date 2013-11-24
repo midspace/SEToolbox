@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{476405E8-27C7-4CD8-B75F-00B8DE0B4BD5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SEToolbox</RootNamespace>
+    <AssemblyName>SEToolbox</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SEToolbox.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sandbox.CommonLib">
+      <HintPath>..\References\Sandbox.CommonLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Sandbox.CommonLib.XmlSerializers">
+      <HintPath>..\References\Sandbox.CommonLib.XmlSerializers.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity">
+      <HintPath>..\References\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="VRage.Math, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\VRage.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\BusyIndicator.cs" />
+    <Compile Include="Controls\SortableListView.cs" />
+    <Compile Include="Converters\BooleanConverter.cs" />
+    <Compile Include="Converters\BusyMouseConverter.cs" />
+    <Compile Include="Converters\CountToVisibilityConverter.cs" />
+    <Compile Include="Converters\EnumToResouceConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\MainColorToBackgroundConverter.cs" />
+    <Compile Include="Converters\NullImageConverter.cs" />
+    <Compile Include="Converters\ResouceToImageConverter.cs" />
+    <Compile Include="Converters\StringFormatMultiValueConverter.cs" />
+    <Compile Include="Interop\SpaceEngineersAPI.cs" />
+    <Compile Include="Models\StructureCharacterModel.cs" />
+    <Compile Include="Models\StructureVoxelModel.cs" />
+    <Compile Include="Models\StructureBaseModel.cs" />
+    <Compile Include="Models\Import3dModelModel.cs" />
+    <Compile Include="Models\ImportImageModel.cs" />
+    <Compile Include="Models\IStructureBase.cs" />
+    <Compile Include="Models\StructureCubeGridModel.cs" />
+    <Compile Include="Old\StructureCubeGrid.cs" />
+    <Compile Include="Services\CommandAction.cs" />
+    <Compile Include="Services\CommandReference.cs" />
+    <Compile Include="Services\DelegateCommand.cs" />
+    <Compile Include="Services\DialogCloser.cs" />
+    <Compile Include="CoreToolbox.cs" />
+    <Compile Include="Interop\CubeType.cs" />
+    <Compile Include="Interop\SubtypeId.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SubtypeId.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\ICanExportToExcel.cs" />
+    <Compile Include="Interfaces\ICanExportToPng.cs" />
+    <Compile Include="Interfaces\IDialogService.cs" />
+    <Compile Include="Interfaces\IDialogServiceContract.cs" />
+    <Compile Include="Interfaces\IFileDialog.cs" />
+    <Compile Include="Interfaces\IFolderBrowserDialog.cs" />
+    <Compile Include="Interfaces\IOpenFileDialog.cs" />
+    <Compile Include="Interfaces\ISaveFileDialog.cs" />
+    <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\FileDialogViewModel.cs" />
+    <Compile Include="Services\FolderBrowserDialog.cs" />
+    <Compile Include="Services\OpenFileDialog.cs" />
+    <Compile Include="Services\OpenFileDialogViewModel.cs" />
+    <Compile Include="Services\SaveFileDialog.cs" />
+    <Compile Include="Services\SaveFileDialogViewModel.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="Services\WindowWrapper.cs" />
+    <Compile Include="Models\ExplorerModel.cs" />
+    <Compile Include="Services\RelayCommand.cs" />
+    <Compile Include="Models\SelectWorldModel.cs" />
+    <Compile Include="Interop\SpaceEngineersConsts.cs" />
+    <Compile Include="Support\PropertyChangedExtensions.cs" />
+    <Compile Include="Support\ToolboxExtensions.cs" />
+    <Compile Include="Old\Tester.cs" />
+    <Compile Include="Interop\ClassType.cs" />
+    <Compile Include="Old\SEResource.cs" />
+    <Compile Include="Models\SaveResource.cs" />
+    <Compile Include="Old\SESupport.cs" />
+    <Compile Include="Support\VisualTreeEnumeration.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Import3dModelViewModel.cs" />
+    <Compile Include="ViewModels\ImportImageViewModel.cs" />
+    <Compile Include="ViewModels\ExplorerViewModel.cs" />
+    <Compile Include="ViewModels\SelectWorldViewModel.cs" />
+    <Compile Include="ViewModels\StructureBaseViewModel.cs" />
+    <Compile Include="ViewModels\StructureCharacterViewModel.cs" />
+    <Compile Include="ViewModels\StructureCubeGridViewModel.cs" />
+    <Compile Include="ViewModels\StructureVoxelViewModel.cs" />
+    <Compile Include="Views\ControlCharacter.xaml.cs">
+      <DependentUpon>ControlCharacter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlCubes.xaml.cs">
+      <DependentUpon>ControlCubes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlVoxel.xaml.cs">
+      <DependentUpon>ControlVoxel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ViewTemplateSelector.cs" />
+    <Compile Include="Views\WindowExplorer.xaml.cs">
+      <DependentUpon>WindowExplorer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\WindowImportImage.xaml.cs">
+      <DependentUpon>WindowImportImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowImportModel.xaml.cs">
+      <DependentUpon>WindowImportModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowLoad.xaml.cs">
+      <DependentUpon>WindowLoad.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlCharacter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlCubes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlVoxel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WindowExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WindowImportImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WindowImportModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WindowLoad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Interop\SubtypeId.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SubtypeId.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="SEToolbox.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Documentation\readme.txt" />
+    <Content Include="poly2vox.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SEToolbox.Image.Library\SEToolbox.ImageLibrary.csproj">
+      <Project>{e78476cb-bc3d-4265-806d-96f09229a449}</Project>
+      <Name>SEToolbox.ImageLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RnD\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

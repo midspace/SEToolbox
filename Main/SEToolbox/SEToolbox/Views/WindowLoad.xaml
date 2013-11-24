@@ -1,0 +1,55 @@
+﻿<Window x:Class="SEToolbox.Views.WindowLoad"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="Select World" Height="400" Width="500"
+        commands:DialogService.IsRegisteredView="True"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
+    <Window.Resources>
+        <converters:NullImageConverter x:Key="NullImageConverter"/>
+    </Window.Resources>
+    <Window.Background>
+        <LinearGradientBrush>
+            <GradientStop Color="#FF2B2077" Offset="4"/>
+            <GradientStop Color="#FFFFFFFF" Offset="0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Grid Margin="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="100" Width="4*"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition MinWidth="98" MaxWidth="200"/>
+            </Grid.ColumnDefinitions>
+            <controls:SortableListView ItemsSource="{Binding Worlds}" SelectionMode="Single" SelectedValue="{Binding SelectedWorld}" x:Name="uxWorldSelectionBox" VerticalAlignment="Stretch"
+                ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding SessionName}" Header="Name"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding LastSaveTime}" Header="Saved"/>
+                    </GridView>
+                </ListView.View>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <commands:CommandAction Command="{Binding LoadCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </controls:SortableListView>
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="4"/>
+            <Grid Grid.Column="2" Margin="8,0,0,0">
+                <StackPanel VerticalAlignment="Top">
+                    <Image HorizontalAlignment="Stretch" Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <Button Width="90" Command="{Binding LoadCommand}" Content="Open" IsDefault="True"/>
+                    <Button Margin="0,8,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

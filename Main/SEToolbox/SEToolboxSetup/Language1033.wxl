@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization" Language="1033">
+
+  <!--<String Id="ApplicationVersion">01.006.010.1</String>-->
+  
+  <String Id="ApplicationTitle">Space Engineers Toolbox</String>
+  <String Id="ManufacturerName">Mid-Space Productions</String>
+  <String Id="ProductName">Space Engineers Toolbox</String>
+
+  <String Id="DirCompanyName">MidSpace</String>
+  <String Id="DirApplicationName">SEToolbox</String>
+  <String Id="ShortcutName">Space Engineers Toolbox</String>
+  <String Id="ShortcutDescription">Space Engineers Toolbox</String>
+
+  <!--<String Id="ProductServerDlg_Title" Overridable="yes">!(loc.ProductName) Setup</String>-->
+  <!--<String Id='ProductServerDlgTitle'>{\WixUI_Font_Title}Console Service</String>-->
+  <!--<String Id='ProductServerDlgDescription'>Please enter the details of the server hosting the Console Service</String>--> 
+  <!--<String Id='ProductServerDlgEnterServer'>Console Service machine name or IP address, and port number:</String>-->
+</WixLocalization>
