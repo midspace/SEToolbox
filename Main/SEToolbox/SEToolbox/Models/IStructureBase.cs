@@ -13,6 +13,8 @@
 
         ClassType ClassType { get; set; }
 
+        string Description { get; set; }
+
         void UpdateFromEntityBase();
     }
 }

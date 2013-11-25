@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="SEToolbox.Views.ControlCubeGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label>Cubes</Label>
+        <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+            <ToolBar>
+                <Button Command="{Binding DeleteObjectCommand}">
+                    <AccessText>_Delete</AccessText>
+                </Button>
+            </ToolBar>
+        </ToolBarPanel>
+        <Label Grid.Row="2" Content="Piloted:"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPiloted}" />
+        <Label Grid.Row="3" Content="Size:"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Size}" />
+        
+        <Label Grid.Row="4" Content="Count:"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Name="uxCountText" />
+
+        <Grid Grid.Row="5" Grid.ColumnSpan="2">
+            <ListView Name="uxCubesListView" DisplayMemberPath="SubtypeName" SelectionMode="Single"/>
+        </Grid>
+    </Grid>
+</UserControl>

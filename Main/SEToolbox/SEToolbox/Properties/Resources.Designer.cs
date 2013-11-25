@@ -61,6 +61,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Floating Object.
+        /// </summary>
+        internal static string ClassType_FloatingObject {
+            get {
+                return ResourceManager.GetString("ClassType_FloatingObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large Ship.
         /// </summary>
         internal static string ClassType_LargeShip {
@@ -84,6 +93,124 @@ namespace SEToolbox.Properties {
         internal static string ClassType_Station {
             get {
                 return ResourceManager.GetString("ClassType_Station", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder {
+            get {
+                object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Large Ship.
+        /// </summary>
+        internal static string ImportClassType_LargeShip {
+            get {
+                return ResourceManager.GetString("ImportClassType_LargeShip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Small Ship.
+        /// </summary>
+        internal static string ImportClassType_SmallShip {
+            get {
+                return ResourceManager.GetString("ImportClassType_SmallShip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image files (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*.
+        /// </summary>
+        internal static string ImportImagesFilter {
+            get {
+                return ResourceManager.GetString("ImportImagesFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Image to Import.
+        /// </summary>
+        internal static string ImportImagesTitle {
+            get {
+                return ResourceManager.GetString("ImportImagesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astronaut Grey.
+        /// </summary>
+        internal static string MyCharacterModelEnum_Astronaut {
+            get {
+                return ResourceManager.GetString("MyCharacterModelEnum_Astronaut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astronaut Black.
+        /// </summary>
+        internal static string MyCharacterModelEnum_Astronaut_Black {
+            get {
+                return ResourceManager.GetString("MyCharacterModelEnum_Astronaut_Black", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astronaut Blue.
+        /// </summary>
+        internal static string MyCharacterModelEnum_Astronaut_Blue {
+            get {
+                return ResourceManager.GetString("MyCharacterModelEnum_Astronaut_Blue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astronaut Green.
+        /// </summary>
+        internal static string MyCharacterModelEnum_Astronaut_Green {
+            get {
+                return ResourceManager.GetString("MyCharacterModelEnum_Astronaut_Green", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astronaut Red.
+        /// </summary>
+        internal static string MyCharacterModelEnum_Astronaut_Red {
+            get {
+                return ResourceManager.GetString("MyCharacterModelEnum_Astronaut_Red", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astronaut White.
+        /// </summary>
+        internal static string MyCharacterModelEnum_Astronaut_White {
+            get {
+                return ResourceManager.GetString("MyCharacterModelEnum_Astronaut_White", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astronaut Yellow.
+        /// </summary>
+        internal static string MyCharacterModelEnum_Astronaut_Yellow {
+            get {
+                return ResourceManager.GetString("MyCharacterModelEnum_Astronaut_Yellow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soldier.
+        /// </summary>
+        internal static string MyCharacterModelEnum_Soldier {
+            get {
+                return ResourceManager.GetString("MyCharacterModelEnum_Soldier", resourceCulture);
             }
         }
     }

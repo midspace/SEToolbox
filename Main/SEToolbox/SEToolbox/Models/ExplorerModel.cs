@@ -1,14 +1,14 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Windows.Threading;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
-    using SEToolbox.Support;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.IO;
+    using System.Windows.Threading;
 
     public class ExplorerModel : BaseModel
     {
@@ -27,6 +27,8 @@
 
         private bool isModified;
 
+        private bool isBaseSaveChanged;
+
         private MyObjectBuilder_Sector sectorData;
 
         private StructureCharacterModel theCharacter;
@@ -36,7 +38,23 @@
         ///// </summary>
         private ObservableCollection<IStructureBase> structures;
 
-        private IStructureBase selectedStructure;
+        /// <summary>
+        /// List of new Voxel files to add to the 'world'. [localVoxelFile, SourceFilepathName].
+        /// </summary>
+        private Dictionary<string, string> manageNewVoxelList;
+
+        private List<string> manageDeleteVoxelList;
+
+        #endregion
+
+        #region Constructors
+
+        public ExplorerModel()
+        {
+            this.Structures = new ObservableCollection<IStructureBase>();
+            this.manageNewVoxelList = new Dictionary<string, string>();
+            this.manageDeleteVoxelList = new List<string>();
+        }
 
         #endregion
 
@@ -72,23 +90,6 @@
                 {
                     this.structures = value;
                     this.RaisePropertyChanged(() => Structures);
-                }
-            }
-        }
-
-        public IStructureBase SelectedStructure
-        {
-            get
-            {
-                return this.selectedStructure;
-            }
-
-            set
-            {
-                if (value != this.selectedStructure)
-                {
-                    this.selectedStructure = value;
-                    this.RaisePropertyChanged(() => SelectedStructure);
                 }
             }
         }
@@ -188,6 +189,26 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the base SE save content has changed.
+        /// </summary>
+        public bool IsBaseSaveChanged
+        {
+            get
+            {
+                return this.isBaseSaveChanged;
+            }
+
+            set
+            {
+                if (value != this.isBaseSaveChanged)
+                {
+                    this.isBaseSaveChanged = value;
+                    this.RaisePropertyChanged(() => IsBaseSaveChanged);
+                }
+            }
+        }
+
         public MyObjectBuilder_Sector SectorData
         {
             get
@@ -203,28 +224,6 @@
                     this.RaisePropertyChanged(() => SectorData);
                 }
             }
-        }
-        
-        #endregion
-
-        #region Constructors
-
-        public ExplorerModel()
-        {
-            //this.buildServerService = buildServerService;
-            //this.ProjectPicker = projectPicker;
-            //this.settings = Settings.Default;
-            //this.builds = new ObservableCollection<BuildSetting>();
-
-            //this.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-            //{
-            //    if (e.PropertyName.Equals("TfsUri"))
-            //    {
-            //        this.LoadBuilds(this.builds);
-            //    }
-            //};
-
-            //this.Load();
         }
 
         #endregion
@@ -260,21 +259,30 @@
                         this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
                     }
                     this.LoadSectorDetail();
+                    this.IsModified = false;
                     this.IsBusy = false;
                 }));
         }
 
         public void SaveSandBox()
         {
+            this.IsBusy = true;
             this.ActiveWorld.LastSaveTime = DateTime.Now;
 
-            var checkpointFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename + ".test");
+            var checkpointFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
             SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
 
-            var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename + ".test");
+            var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
             SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
 
+            // TODO: manage adding new voxels.
+            //this.manageNewVoxelList.Clear();
+            
+            // TODO: manage removing old voxels.
+            //this.manageDeleteVoxelList.Clear();
+
             this.IsModified = false;
+            this.IsBusy = false;
         }
 
         /// <summary>
@@ -282,7 +290,9 @@
         /// </summary>
         private void LoadSectorDetail()
         {
-            this.Structures = new ObservableCollection<IStructureBase>();
+            this.Structures.Clear();
+            this.manageNewVoxelList.Clear();
+            this.manageDeleteVoxelList.Clear();
             this.TheCharacter = null;
 
             if (this.SectorData != null)
@@ -303,8 +313,9 @@
 
                             if (cubeGrid.HasPilot())
                             {
+                                this.TheCharacter = cubeGrid.GetPilot() as StructureCharacterModel;
                                 // Add the character when they are a pilot in a cockpit.
-                                this.Structures.Add(cubeGrid.GetPilot());
+                                this.Structures.Add(this.TheCharacter);
                             }
                         }
                     }
@@ -315,7 +326,39 @@
 
             this.RaisePropertyChanged(() => Structures);
         }
-           
+
+        public IStructureBase AddEntity(MyObjectBuilder_EntityBase entity)
+        {
+            if (entity != null)
+            {
+                this.SectorData.SectorObjects.Add(entity);
+                var structure = StructureBaseModel.Create(entity);
+                this.Structures.Add(structure);
+                this.IsModified = true;
+                return structure;
+            }
+            return null;
+        }
+
+        public bool RemoveEntity(MyObjectBuilder_EntityBase entity)
+        {
+            if (entity != null)
+            {
+                if (this.SectorData.SectorObjects.Contains(entity))
+                {
+                    if (entity is MyObjectBuilder_VoxelMap)
+                    {
+                        manageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).Filename);
+                    }
+
+                    this.SectorData.SectorObjects.Remove(entity);
+                    this.IsModified = true;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         #endregion
     }
 }

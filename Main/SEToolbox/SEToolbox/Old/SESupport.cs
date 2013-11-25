@@ -904,15 +904,7 @@
 
 //        #endregion
 
-//        #region GenerateEntityId
 
-//        private static long GenerateEntityId()
-//        {
-//            var buffer = Guid.NewGuid().ToByteArray();
-//            return BitConverter.ToInt64(buffer, 0);
-//        }
-
-//        #endregion
 
 //        #region WriteOutCubeBlocks
 

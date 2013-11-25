@@ -37,6 +37,7 @@
                 {
                     this.Character.CharacterModel = value;
                     this.RaisePropertyChanged(() => CharacterModel);
+                    this.UpdateFromEntityBase();
                 }
             }
         }
@@ -48,6 +49,7 @@
         public override void UpdateFromEntityBase()
         {
             this.ClassType = ClassType.Character;
+            this.Description = string.Format("{0}", this.CharacterModel);
         }
 
         #endregion

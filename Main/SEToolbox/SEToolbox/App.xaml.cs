@@ -6,6 +6,9 @@
     using System.Windows.Threading;
     using SEToolbox.Interfaces;
     using SEToolbox.Services;
+    using System.Drawing;
+    using SEToolbox.Support;
+    using System.Linq;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -28,6 +31,8 @@
             this.toolboxApplication = new CoreToolbox();
 
             string[] args = e.Args;
+
+            //testlab();
 
             this.toolboxApplication.Startup(args);
         }
@@ -58,6 +63,27 @@
                     Application.Current.Shutdown();
                 }
             }
+        }
+
+
+        private void testlab()
+        {
+            var x = new System.Windows.Media.Media3D.Vector3D(10, 20, 30);
+
+            x.Negate();
+
+            //x.Normalize();
+
+            var y = new VRageMath.Vector3(10, 20, 30);
+
+            var a = y.Cross(new VRageMath.Vector3(-1, -1, -1));
+
+            var b = y.Dot(new VRageMath.Vector3(-1));
+
+            //y.
+
+
+
         }
     }
 }

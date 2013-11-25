@@ -1,15 +1,17 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.Contracts;
-    using System.Windows.Input;
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Views;
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Windows.Input;
 
     public class ExplorerViewModel : BaseViewModel
     {
@@ -18,6 +20,17 @@
         private ExplorerModel dataModel;
         private readonly IDialogService dialogService;
         private bool? closeResult;
+
+        private IStructureViewBase selectedStructure;
+
+        private ObservableCollection<IStructureViewBase> structures;
+        private bool selectNewStructure;
+
+        #endregion
+
+        #region event handlers
+
+        public event EventHandler CloseRequested;
 
         #endregion
 
@@ -34,15 +47,25 @@
             Contract.Requires(dialogService != null);
 
             this.dialogService = dialogService;
-
             this.dataModel = dataModel;
 
-            this.dataModel.PropertyChanged += this.OnPropertyChanged;
+            this.Structures = new ObservableCollection<IStructureViewBase>();
+            foreach (IStructureBase item in this.dataModel.Structures)
+            {
+                this.AddViewModel(item);
+            }
+
+            this.dataModel.Structures.CollectionChanged += Structures_CollectionChanged;
+            this.dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            {
+                // Will bubble property change events from the Model to the ViewModel.
+                this.OnPropertyChanged(e.PropertyName);
+            };
         }
 
         #endregion
 
-        #region Properties
+        #region Command Properties
 
         public ICommand ClosingCommand
         {
@@ -124,6 +147,18 @@
             }
         }
 
+        public ICommand AboutCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(AboutExecuted), new Func<bool>(AboutCanExecute));
+            }
+        }
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets or sets the DialogResult of the View.  If True or False is passed, this initiates the Close().
         /// </summary>
@@ -141,88 +176,49 @@
             }
         }
 
-        //public string TfsUri
-        //{
-        //    get
-        //    {
-        //        return this.dataModel.TfsUri;
-        //    }
-
-        //    set
-        //    {
-        //        this.dataModel.TfsUri = value;
-        //    }
-        //}
-
-        //public int Columns
-        //{
-        //    get
-        //    {
-        //        return this.dataModel.Columns;
-        //    }
-
-        //    set
-        //    {
-        //        this.dataModel.Columns = value;
-        //    }
-        //}
-
-        //public int Screen
-        //{
-        //    get
-        //    {
-        //        return this.dataModel.Screen;
-        //    }
-
-        //    set
-        //    {
-        //        this.dataModel.Screen = value;
-        //    }
-        //}
-
-        //public int UpdateInterval
-        //{
-        //    get
-        //    {
-        //        return this.dataModel.UpdateInterval;
-        //    }
-
-        //    set
-        //    {
-        //        this.dataModel.UpdateInterval = value;
-        //    }
-        //}
-
-        //public int StaleThreshold
-        //{
-        //    get
-        //    {
-        //        return this.dataModel.StaleThreshold;
-        //    }
-
-        //    set
-        //    {
-        //        this.dataModel.StaleThreshold = value;
-        //    }
-        //}
-
-        public ObservableCollection<IStructureBase> Structures
+        public ObservableCollection<IStructureViewBase> Structures
         {
             get
             {
-                return this.dataModel.Structures;
+                return this.structures;
+            }
+
+            private set
+            {
+                if (value != this.structures)
+                {
+                    this.structures = value;
+                    this.RaisePropertyChanged(() => Structures);
+                }
             }
         }
 
-        public IStructureBase SelectedStructure
+        public IStructureViewBase SelectedStructure
         {
             get
             {
-                return this.dataModel.SelectedStructure;
+                return this.selectedStructure;
+            }
+
+            set
+            {
+                if (value != this.selectedStructure)
+                {
+                    this.selectedStructure = value;
+                    this.RaisePropertyChanged(() => SelectedStructure);
+                }
+            }
+        }
+
+        public SaveResource ActiveWorld
+        {
+            get
+            {
+                return this.dataModel.ActiveWorld;
             }
             set
             {
-                this.dataModel.SelectedStructure = value;
+                this.dataModel.ActiveWorld = value;
             }
         }
 
@@ -291,14 +287,35 @@
             }
         }
 
+        public bool IsModified
+        {
+            get
+            {
+                return this.dataModel.IsModified;
+            }
+
+            set
+            {
+                this.dataModel.IsModified = value;
+            }
+        }
+
+        public bool IsBaseSaveChanged
+        {
+            get
+            {
+                return this.dataModel.IsBaseSaveChanged;
+            }
+
+            set
+            {
+                this.dataModel.IsBaseSaveChanged = value;
+            }
+        }
+
         #endregion
 
         #region Methods
-
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            this.OnPropertyChanged(e.PropertyName);
-        }
 
         public bool ClosingCanExecute(CancelEventArgs e)
         {
@@ -377,7 +394,8 @@
         {
             // TODO: check is save directory is still valid.
 
-            // TODO: reload Checkpoint file.
+            // Reload Checkpoint file.
+            this.ActiveWorld.LoadCheckpoint();
 
             // Load Sector file.
             this.dataModel.LoadSandBox();
@@ -401,15 +419,16 @@
         public void ImportImageExecuted()
         {
             ImportImageModel model = new ImportImageModel();
-            model.Load(/*this.dataModel.BaseSavePath*/);
+            model.Load(this.dataModel.TheCharacter.PositionAndOrientation.Value);
             ImportImageViewModel loadVm = new ImportImageViewModel(this, model);
 
             var result = dialogService.ShowDialog<WindowImportImage>(this, loadVm);
             if (result == true)
             {
-                // TODO:
-                //this.dataModel.ActiveWorld = model.SelectedWorld;
-                //this.dataModel.LoadSandBox();
+                var newEntity = loadVm.BuildEntity();
+                this.selectNewStructure = true;
+                var structure = this.dataModel.AddEntity(newEntity);
+                this.selectNewStructure = false;
             }
         }
 
@@ -453,9 +472,76 @@
             // TODO:
         }
 
+        public bool AboutCanExecute()
+        {
+            return true;
+        }
+
+        public void AboutExecuted()
+        {
+            AboutViewModel loadVm = new AboutViewModel(this);
+            var result = dialogService.ShowDialog<WindowAbout>(this, loadVm);
+        }
+
         #endregion
 
-        public event EventHandler CloseRequested;
+        void Structures_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add: this.AddViewModel(e.NewItems[0] as IStructureBase); break;
+                case NotifyCollectionChangedAction.Remove: this.RemoveViewModel(e.OldItems[0] as IStructureBase); break;
+                case NotifyCollectionChangedAction.Reset: this.structures.Clear(); break;
+                case NotifyCollectionChangedAction.Replace:
+                case NotifyCollectionChangedAction.Move: throw new NotImplementedException();
+            }
+        }
 
+        private void AddViewModel(IStructureBase structureBase)
+        {
+            IStructureViewBase item = null;
+            if (structureBase is StructureCharacterModel)
+                item = new StructureCharacterViewModel(this, structureBase as StructureCharacterModel);
+            else if (structureBase is StructureCubeGridModel)
+                item = new StructureCubeGridViewModel(this, structureBase as StructureCubeGridModel);
+            else if (structureBase is StructureVoxelModel)
+                item = new StructureVoxelViewModel(this, structureBase as StructureVoxelModel);
+            else if (structureBase is StructureFloatingObjectModel)
+                item = new StructureFloatingObjectViewModel(this, structureBase as StructureFloatingObjectModel);
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            if (item != null)
+            {
+                this.structures.Add(item);
+
+                if (this.selectNewStructure)
+                {
+                    this.SelectedStructure = item;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Find and remove ViewModel, with the specied Model.
+        /// Remove the Entity also.
+        /// </summary>
+        /// <param name="structureBase"></param>
+        private void RemoveViewModel(IStructureBase model)
+        {
+            var viewModel = this.Structures.FirstOrDefault(s => s.DataModel == model);
+            if (viewModel != null && this.dataModel.RemoveEntity(model.EntityBase))
+            {
+                this.Structures.Remove(viewModel);
+            }
+        }
+
+        // remove Model from, causing sync to happen.
+        public void DeleteModel(IStructureViewBase viewModel)
+        {
+            this.dataModel.Structures.Remove(viewModel.DataModel);
+        }
     }
 }

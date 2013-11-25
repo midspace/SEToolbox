@@ -1,10 +1,11 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using System.Windows.Input;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
 
     public class SelectWorldViewModel : BaseViewModel
     {
@@ -21,35 +22,16 @@
             : base(parentViewModel)
         {
             this.dataModel = dataModel;
+            this.dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            {
+                // Will bubble property change events from the Model to the ViewModel.
+                this.OnPropertyChanged(e.PropertyName);
+            };
         }
 
         #endregion
 
         #region Properties
-
-        public SaveResource SelectedWorld
-        {
-            get
-            {
-                return this.dataModel.SelectedWorld;
-            }
-            set
-            {
-                if (value != this.dataModel.SelectedWorld)
-                {
-                    this.dataModel.SelectedWorld = value;
-                    this.RaisePropertyChanged(() => SelectedWorld);
-                }
-            }
-        }
-
-        public ObservableCollection<SaveResource> Worlds
-        {
-            get
-            {
-                return this.dataModel.Worlds;
-            }
-        }
 
         public ICommand LoadCommand
         {
@@ -81,6 +63,29 @@
             {
                 this.closeResult = value;
                 this.RaisePropertyChanged(() => CloseResult);
+            }
+        }
+
+        public SaveResource SelectedWorld
+        {
+            get
+            {
+                return this.dataModel.SelectedWorld;
+            }
+            set
+            {
+                if (value != this.dataModel.SelectedWorld)
+                {
+                    this.dataModel.SelectedWorld = value;
+                }
+            }
+        }
+
+        public ObservableCollection<SaveResource> Worlds
+        {
+            get
+            {
+                return this.dataModel.Worlds;
             }
         }
 
