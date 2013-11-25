@@ -138,6 +138,30 @@
             }
         }
 
+        public bool IsDamaged
+        {
+            get
+            {
+                return this.CubeGrid.Skeleton.Count > 0;
+            }
+        }
+
+        public int DamageCount
+        {
+            get
+            {
+                return this.CubeGrid.Skeleton.Count;
+            }
+        }
+
+        public double Speed
+        {
+            get
+            {
+                return  (double)this.CubeGrid.LinearVelocity.Sum();
+            }
+        }
+
         #endregion
 
         #region methods
@@ -211,6 +235,23 @@
             }
 
             return null;
+        }
+
+        public void RepairAllDamage()
+        {
+            if (this.CubeGrid.Skeleton == null)
+                this.CubeGrid.Skeleton = new System.Collections.Generic.List<BoneInfo>();
+            else
+                this.CubeGrid.Skeleton.Clear();
+            this.RaisePropertyChanged(() => IsDamaged);
+            this.RaisePropertyChanged(() => DamageCount);
+        }
+
+        public void ResetSpeed()
+        {
+            this.CubeGrid.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
+            this.CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
+            this.RaisePropertyChanged(() => Speed);
         }
 
         #endregion

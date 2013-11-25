@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:SEToolbox.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -16,13 +20,25 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label>Cubes</Label>
+        <StackPanel Orientation="Horizontal">
+            <Label>Structure - </Label>
+            <TextBlock VerticalAlignment="Center" Text="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}" />
+        </StackPanel>
         <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
                 <Button Command="{Binding DeleteObjectCommand}">
                     <AccessText>_Delete</AccessText>
+                </Button>
+                <Button Command="{Binding RepairObjectCommand}">
+                    <AccessText>_Repair</AccessText>
+                </Button>
+                <Button Command="{Binding ResetSpeedCommand}">
+                    <AccessText>Reset _Speed</AccessText>
                 </Button>
             </ToolBar>
         </ToolBarPanel>
@@ -30,11 +46,15 @@
         <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPiloted}" />
         <Label Grid.Row="3" Content="Size:"/>
         <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Size}" />
-        
-        <Label Grid.Row="4" Content="Count:"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Name="uxCountText" />
+        <Label Grid.Row="4" Content="Damage:"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
+        <Label Grid.Row="5" Content="Speed:"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed}" />
 
-        <Grid Grid.Row="5" Grid.ColumnSpan="2">
+        <Label Grid.Row="6" Content="Count:"/>
+        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Name="uxCountText" />
+
+        <Grid Grid.Row="6" Grid.ColumnSpan="2">
             <ListView Name="uxCubesListView" DisplayMemberPath="SubtypeName" SelectionMode="Single"/>
         </Grid>
     </Grid>
