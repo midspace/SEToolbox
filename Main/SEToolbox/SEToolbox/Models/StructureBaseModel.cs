@@ -12,6 +12,7 @@
 
         private MyObjectBuilder_EntityBase entityBase;
         private ClassType classType;
+        private string description;
 
         #endregion
 
@@ -99,27 +100,22 @@
             }
         }
 
-        //// public virtual Type StructureType{get;set;}
+        public string Description
+        {
+            get
+            {
+                return this.description;
+            }
 
-        ////public virtual string Filename { get; set; }
-
-        //public virtual bool IsCharacter { get; protected set; }
-
-        //public virtual bool IsVoxel { get; protected set; }
-
-        //public virtual bool IsCubes { get; protected set; }
-
-        //public virtual Sandbox.CommonLib.ObjectBuilders.MyCubeSize GridSize { get; set; }
-
-        //public virtual bool IsStatic { get; set; }
-
-        ////public virtual  List<Cube> Cubes{get;set;}
-
-        //public virtual Point3D Min { get; set; }
-
-        //public virtual Point3D Max { get; set; }
-
-        //public virtual Vector3D Size { get; set; }
+            set
+            {
+                if (value != this.description)
+                {
+                    this.description = value;
+                    this.RaisePropertyChanged(() => Description);
+                }
+            }
+        }
 
         #endregion
 
@@ -143,6 +139,10 @@
             else if (entityBase is MyObjectBuilder_CubeGrid)
             {
                 return new StructureCubeGridModel(entityBase);
+            }
+            else if (entityBase is MyObjectBuilder_FloatingObject)
+            {
+                return new StructureFloatingObjectModel(entityBase);
             }
             else
             {

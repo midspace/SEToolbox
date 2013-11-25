@@ -14,16 +14,16 @@
         {
             var filename = Path.GetFullPath(@"..\..\..\..\building 3D\images\7242630_orig.jpg");
             var bmp = ToolboxExtensions.OptimizeImagePalette(filename);
-            var outputFileTest = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "_up" + ".png");
+            var outputFileTest = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "_optimized" + ".png");
             bmp.Save(outputFileTest, ImageFormat.Png);
         }
 
         [TestMethod]
         public void TestImageOptimizer2()
         {
-            var filename = Path.GetFullPath(@"..\..\..\..\building 3D\images\7242630_orig_scaled.png");
+            var filename = Path.GetFullPath(@"..\..\..\..\building 3D\images\7242630_scale432.png");
             var bmp = ToolboxExtensions.OptimizeImagePalette(filename);
-            var outputFileTest = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "_up" + ".png");
+            var outputFileTest = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "_optimized" + ".png");
             bmp.Save(outputFileTest, ImageFormat.Png);
         }
 

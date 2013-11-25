@@ -131,26 +131,15 @@
 
                     foreach (var savePath in savePaths)
                     {
-                        var filename = Path.Combine(savePath, SpaceEngineersConsts.SandBoxCheckpointFilename);
-                        if (File.Exists(filename))
+                        SaveResource saveResource;
+                        this.Worlds.Add(saveResource = new SaveResource()
                         {
-                            MyObjectBuilder_Checkpoint content  = null;
-                            try
-                            {
-                                content = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
-                            }
-                            catch
-                            {
-                            }
+                            Savename = Path.GetFileName(savePath),
+                            Username = Path.GetFileName(userPath),
+                            Savepath = savePath
+                        });
 
-                            this.Worlds.Add(new SaveResource()
-                            {
-                                Content = content,
-                                Savename = Path.GetFileName(savePath),
-                                Username = Path.GetFileName(userPath),
-                                Savepath = savePath
-                            });
-                        }
+                        saveResource.LoadCheckpoint();
                     }
                 }
 

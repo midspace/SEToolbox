@@ -13,7 +13,7 @@
         private Point3D min;
         private Point3D max;
         private Vector3D size;
-        //        private List<Cube> cubes;
+        private bool isPiloted;
 
         #endregion
 
@@ -121,20 +121,22 @@
             }
         }
 
-        //public List<Cube> Cubes
-        //{
-        //    get
-        //    {
-        //        return this.cubes;
-        //    }
+        public bool IsPiloted
+        {
+            get
+            {
+                return this.isPiloted;
+            }
 
-        //    set
-        //    {
-        //        this.cubes = value;
-
-        //        this.RaisePropertyChanged(() => Cubes);
-        //    }
-        //}
+            set
+            {
+                if (value != this.isPiloted)
+                {
+                    this.isPiloted = value;
+                    this.RaisePropertyChanged(() => IsPiloted);
+                }
+            }
+        }
 
         #endregion
 
@@ -176,16 +178,19 @@
             this.Min = min;
             this.Max = max;
             this.Size = size;
+
+            this.Description = string.Format("{0}", this.Size);
         }
 
         public bool HasPilot()
         {
-            var cube = this.CubeGrid.CubeBlocks.FirstOrDefault<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit);
+            var cube = this.CubeGrid.CubeBlocks.FirstOrDefault<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
 
             if (cube != null)
             {
                 var cockpit = cube as MyObjectBuilder_Cockpit;
-                return cockpit.Pilot != null;
+                this.IsPiloted = cockpit.Pilot != null;
+                return this.IsPiloted;
             }
 
             return false;
@@ -193,7 +198,7 @@
 
         public IStructureBase GetPilot()
         {
-            var cube = this.CubeGrid.CubeBlocks.FirstOrDefault<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit);
+            var cube = this.CubeGrid.CubeBlocks.FirstOrDefault<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
 
             if (cube != null)
             {

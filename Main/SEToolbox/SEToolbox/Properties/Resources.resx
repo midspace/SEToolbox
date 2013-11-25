@@ -126,4 +126,47 @@
   <data name="ClassType_Station" xml:space="preserve">
     <value>Station</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportImagesFilter" xml:space="preserve">
+    <value>Image files (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*</value>
+  </data>
+  <data name="ImportImagesTitle" xml:space="preserve">
+    <value>Select Image to Import</value>
+  </data>
+  <data name="ImportClassType_LargeShip" xml:space="preserve">
+    <value>Large Ship</value>
+  </data>
+  <data name="ImportClassType_SmallShip" xml:space="preserve">
+    <value>Small Ship</value>
+  </data>
+  <data name="ClassType_FloatingObject" xml:space="preserve">
+    <value>Floating Object</value>
+  </data>
+  <data name="MyCharacterModelEnum_Astronaut" xml:space="preserve">
+    <value>Astronaut Grey</value>
+  </data>
+  <data name="MyCharacterModelEnum_Astronaut_Black" xml:space="preserve">
+    <value>Astronaut Black</value>
+  </data>
+  <data name="MyCharacterModelEnum_Astronaut_Blue" xml:space="preserve">
+    <value>Astronaut Blue</value>
+  </data>
+  <data name="MyCharacterModelEnum_Astronaut_Green" xml:space="preserve">
+    <value>Astronaut Green</value>
+  </data>
+  <data name="MyCharacterModelEnum_Astronaut_Red" xml:space="preserve">
+    <value>Astronaut Red</value>
+  </data>
+  <data name="MyCharacterModelEnum_Astronaut_White" xml:space="preserve">
+    <value>Astronaut White</value>
+  </data>
+  <data name="MyCharacterModelEnum_Astronaut_Yellow" xml:space="preserve">
+    <value>Astronaut Yellow</value>
+  </data>
+  <data name="MyCharacterModelEnum_Soldier" xml:space="preserve">
+    <value>Soldier</value>
+  </data>
 </root>

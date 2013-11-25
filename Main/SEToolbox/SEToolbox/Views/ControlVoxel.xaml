@@ -6,9 +6,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <StackPanel>
-            <Label>Voxel</Label>
-            <TextBlock Text="{Binding Filename}" />
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.ColumnSpan="2">Voxel</Label>
+        <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+            <ToolBar>
+                <Button Command="{Binding DeleteObjectCommand}">
+                    <AccessText>_Delete</AccessText>
+                </Button>
+            </ToolBar>
+        </ToolBarPanel>
+        <Label Grid.Row="2" Content="Filename"/>
+        <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsReadOnly="True" Text="{Binding Filename}" />
     </Grid>
 </UserControl>

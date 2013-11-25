@@ -5,7 +5,6 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:views="clr-namespace:SEToolbox.Views"
         xmlns:vm="clr-namespace:SEToolbox.ViewModels"
-        xmlns:m="clr-namespace:SEToolbox.Models"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         Title="SE Toolbox" Height="600" Width="800" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
@@ -20,17 +19,6 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
-
-
-
-        <!--<DataTemplate x:Key="DefaultJobsViewTemplate" DataType="{x:Type vm:DefaultJobsTableViewModel}">
-            <telerik:RadPane Header="{Binding Title}" telerik:RadDocking.SerializationTag="{Binding WindowId}" ContextMenuService.IsEnabled="False">
-                <views:JobsTableWindow />
-            </telerik:RadPane>
-        </DataTemplate>-->
-
-
-
     </Window.Resources>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
@@ -39,73 +27,105 @@
         <DockPanel>
             <ToolBarPanel DockPanel.Dock="Top">
                 <ToolBar>
-                    <Button Content="Open" Command="{Binding OpenCommand}" />
-                    <Button Content="Save" Command="{Binding SaveCommand}" />
-                    <Separator/>
-                    <Button Content="Clear" Command="{Binding ClearCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <Button Content="Reload" Command="{Binding ReloadCommand}" />
-                    <Separator/>
-                    <Menu>
-                        <MenuItem Header="Import" Command="{Binding ImportCommand}">
-                            <MenuItem Header="Image" Command="{Binding ImportImageCommand}"/>
-                            <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}"/>
-                        </MenuItem>
-                    </Menu>
-                    <Separator/>
-                    <Button Content="Export To Excel" Command="{Binding ExportExcelCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <Button Content="Test" Command="{Binding TestCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <DockPanel Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ToolBarPanel}}}">
+                        <DockPanel.Resources>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                            </Style>
+                        </DockPanel.Resources>
+                        <Button Command="{Binding OpenCommand}">
+                            <AccessText>_Open</AccessText>
+                        </Button>
+                        <Button Command="{Binding SaveCommand}">
+                            <AccessText>_Save</AccessText>
+                        </Button>
+                        <Separator/>
+                        <Button Content="Clear" Command="{Binding ClearCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <Button Command="{Binding ReloadCommand}">
+                            <AccessText>_Reload</AccessText>
+                        </Button>
+                        <Separator/>
+                        <Menu>
+                            <MenuItem Header="_Import" Command="{Binding ImportCommand}">\
+                                <MenuItem Header="Import Voxel" Command="{Binding ImportVoxelCommand}" IsEnabled="False"/>
+                                <MenuItem Header="Image" Command="{Binding ImportImageCommand}"/>
+                                <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}" IsEnabled="False"/>
+                            </MenuItem>
+                        </Menu>
+                        <Separator/>
+                        <Button Content="Export To Excel" Command="{Binding ExportExcelCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <Button Content="Test" Command="{Binding TestCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <Button Command="{Binding AboutCommand}" HorizontalAlignment="Right">
+                            <AccessText>_About</AccessText>
+                        </Button>
+                    </DockPanel>
                 </ToolBar>
             </ToolBarPanel>
             <StatusBar DockPanel.Dock="Bottom">
                 <StatusBarItem>
-                    <TextBlock Name="uxStatusText" />
+                    <views:ControlSaveState />
+                </StatusBarItem>
+                <Separator/>
+                <StatusBarItem>
+                    <views:ControlBaseState/>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <!-- placeholder to maintain correct height for text -->
+                    <TextBlock />
                 </StatusBarItem>
             </StatusBar>
             <Grid>
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ActiveWorld, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" MinWidth="40"/>
                     <ColumnDefinition Width="4"/>
                     <ColumnDefinition Width="*" MinWidth="40"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Character"/>
-                        <TextBox Grid.Column="1" Name="uxCharacterText" IsReadOnly="True" />
-                        <Label Grid.Row="1" Content="Saved"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Name="uxSavedText" IsReadOnly="True" />
-                        <controls:SortableListView Grid.Row="2" Grid.ColumnSpan="2" DisplayMemberPath="ClassType" SelectionMode="Single" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure}"
+                    <TabControl>
+                        <TabItem Header="Craft/Objects">
+                            <controls:SortableListView Grid.Row="2" Grid.ColumnSpan="2" DisplayMemberPath="ClassType" SelectionMode="Single" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>
-                                    <GridViewColumn Header="Type" Width="80" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
-                                </GridView>
-                            </ListView.View>
-                        </controls:SortableListView>
-                    </Grid>
+                                <ListView.View>
+                                    <GridView>
+                                        <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
+                                        <GridViewColumn Header="Type" Width="100" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
+                                        <GridViewColumn Header="Description" Width="120" DisplayMemberBinding="{Binding Description}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </controls:SortableListView>
+                        </TabItem>
+                        <!--<TabItem Header="Properties">
+                            
+                        </TabItem>-->
+                    </TabControl>
                 </Grid>
                 <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="4"/>
                 <Grid Grid.Column="2">
                     <ContentControl Content="{Binding SelectedStructure}">
                         <ContentControl.Resources>
-                            <DataTemplate DataType="{x:Type m:StructureCharacterModel}">
+                            <DataTemplate DataType="{x:Type vm:StructureCharacterViewModel}">
                                 <views:ControlCharacter />
                             </DataTemplate>
-                            <DataTemplate DataType="{x:Type m:StructureVoxelModel}">
+                            <DataTemplate DataType="{x:Type vm:StructureVoxelViewModel}">
                                 <views:ControlVoxel />
                             </DataTemplate>
-                            <DataTemplate DataType="{x:Type m:StructureCubeGridModel}">
-                                <views:ControlCubes />
+                            <DataTemplate DataType="{x:Type vm:StructureCubeGridViewModel}">
+                                <views:ControlCubeGrid />
                             </DataTemplate>
+                            <DataTemplate DataType="{x:Type vm:StructureFloatingObjectViewModel}">
+                                <views:ControlFloatingObject />
+                            </DataTemplate>
+                            <!--<DataTemplate DataType="{x:Type vm:StructureBaseViewModel}">
+                                <Label Content="nothing" />
+                            </DataTemplate>-->
                         </ContentControl.Resources>
                     </ContentControl>
                 </Grid>

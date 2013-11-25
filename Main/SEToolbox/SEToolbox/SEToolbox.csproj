@@ -93,6 +93,11 @@
     <Compile Include="Converters\ResouceToImageConverter.cs" />
     <Compile Include="Converters\StringFormatMultiValueConverter.cs" />
     <Compile Include="Interop\SpaceEngineersAPI.cs" />
+    <Compile Include="Models\BindableVector3DModel.cs" />
+    <Compile Include="Models\BindablePoint3DModel.cs" />
+    <Compile Include="Models\StructureFloatingObjectModel.cs" />
+    <Compile Include="Models\SizeModel.cs" />
+    <Compile Include="Models\ThreeDPointFModel.cs" />
     <Compile Include="Models\StructureCharacterModel.cs" />
     <Compile Include="Models\StructureVoxelModel.cs" />
     <Compile Include="Models\StructureBaseModel.cs" />
@@ -101,6 +106,10 @@
     <Compile Include="Models\IStructureBase.cs" />
     <Compile Include="Models\StructureCubeGridModel.cs" />
     <Compile Include="Old\StructureCubeGrid.cs" />
+    <Compile Include="RnD\StructureBaseViewModel.cs" />
+    <Compile Include="RnD\StructureCharacterViewModel.cs" />
+    <Compile Include="RnD\StructureCubeGridViewModel.cs" />
+    <Compile Include="RnD\StructureVoxelViewModel.cs" />
     <Compile Include="Services\CommandAction.cs" />
     <Compile Include="Services\CommandReference.cs" />
     <Compile Include="Services\DelegateCommand.cs" />
@@ -134,6 +143,7 @@
     <Compile Include="Services\RelayCommand.cs" />
     <Compile Include="Models\SelectWorldModel.cs" />
     <Compile Include="Interop\SpaceEngineersConsts.cs" />
+    <Compile Include="RnD\ImageUtilities.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
     <Compile Include="Old\Tester.cs" />
@@ -143,24 +153,40 @@
     <Compile Include="Old\SESupport.cs" />
     <Compile Include="Support\VisualTreeEnumeration.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\StructureFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\Import3dModelViewModel.cs" />
     <Compile Include="ViewModels\ImportImageViewModel.cs" />
     <Compile Include="ViewModels\ExplorerViewModel.cs" />
+    <Compile Include="ViewModels\IStructureViewBase.cs" />
     <Compile Include="ViewModels\SelectWorldViewModel.cs" />
     <Compile Include="ViewModels\StructureBaseViewModel.cs" />
     <Compile Include="ViewModels\StructureCharacterViewModel.cs" />
     <Compile Include="ViewModels\StructureCubeGridViewModel.cs" />
     <Compile Include="ViewModels\StructureVoxelViewModel.cs" />
+    <Compile Include="ViewModels\SyncCollection.cs" />
+    <Compile Include="Views\ControlBaseState.xaml.cs">
+      <DependentUpon>ControlBaseState.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ControlCharacter.xaml.cs">
       <DependentUpon>ControlCharacter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ControlCubes.xaml.cs">
-      <DependentUpon>ControlCubes.xaml</DependentUpon>
+    <Compile Include="Views\ControlCubeGrid.xaml.cs">
+      <DependentUpon>ControlCubeGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlSaveState.xaml.cs">
+      <DependentUpon>ControlSaveState.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControlVoxel.xaml.cs">
       <DependentUpon>ControlVoxel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ViewTemplateSelector.cs" />
+    <Compile Include="RnD\ViewTemplateSelector.cs" />
+    <Compile Include="Views\ControlFloatingObject.xaml.cs">
+      <DependentUpon>ControlFloatingObject.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowAbout.xaml.cs">
+      <DependentUpon>WindowAbout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WindowExplorer.xaml.cs">
       <DependentUpon>WindowExplorer.xaml</DependentUpon>
     </Compile>
@@ -181,15 +207,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ControlBaseState.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ControlCharacter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ControlCubes.xaml">
+    <Page Include="Views\ControlCubeGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlSaveState.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ControlVoxel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlFloatingObject.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowAbout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -243,6 +285,7 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\folder.png" />
     <Resource Include="Documentation\readme.txt" />
     <Content Include="poly2vox.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -257,9 +300,7 @@
       <Name>SEToolbox.ImageLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RnD\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

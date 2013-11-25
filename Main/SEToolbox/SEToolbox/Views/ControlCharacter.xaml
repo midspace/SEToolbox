@@ -4,19 +4,39 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:sandbox="clr-namespace:Sandbox.CommonLib.ObjectBuilders;assembly=Sandbox.CommonLib"
+             xmlns:converters="clr-namespace:SEToolbox.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <!--<ObjectDataProvider x:Key="ThemesEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <ObjectDataProvider x:Key="MyCharacterModelEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="support:Themes" />
+                <x:Type TypeName="sandbox:MyCharacterModelEnum" />
             </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>-->
+        </ObjectDataProvider>
     </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Label>Character</Label>
-
-        <!--<ComboBox Name="uxThemeList" ItemsSource="{Binding Source={StaticResource ThemesEnum}}" SelectedItem="{Binding EditSettings.Theme, Mode=TwoWay}" />-->
-
+        <Label Grid.Row="1" Content="Suit:"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource MyCharacterModelEnum}}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </Grid>
 </UserControl>

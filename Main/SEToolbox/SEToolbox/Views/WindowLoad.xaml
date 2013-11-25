@@ -5,8 +5,8 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
-        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Select World" Height="400" Width="500"
+        ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="Select World" Height="400" Width="600" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
@@ -22,7 +22,7 @@
     <Grid>
         <Grid Margin="8">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="100" Width="4*"/>
+                <ColumnDefinition MinWidth="100" Width="6*"/>
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition MinWidth="98" MaxWidth="200"/>
             </Grid.ColumnDefinitions>
@@ -31,7 +31,9 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding SessionName}" Header="Name"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding LastLoadTime}" Header="Loaded"/>
                         <GridViewColumn DisplayMemberBinding="{Binding LastSaveTime}" Header="Saved"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding WorkshopId}" Header="Workshop"/>
                     </GridView>
                 </ListView.View>
                 <i:Interaction.Triggers>

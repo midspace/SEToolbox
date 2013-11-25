@@ -3,6 +3,7 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
+    using System.IO;
 
     public class StructureVoxelModel : StructureBaseModel
     {
@@ -49,6 +50,7 @@
         public override void UpdateFromEntityBase()
         {
             this.ClassType = ClassType.Voxel;
+            this.Description = Path.GetFileNameWithoutExtension(this.VoxelMap.Filename);
         }
 
         #endregion

@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="OctreeQuantizer.cs" />
     <Compile Include="PaletteQuantizer.cs" />
+    <Compile Include="PaletteReplacerQuantizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quantizer.cs" />
   </ItemGroup>

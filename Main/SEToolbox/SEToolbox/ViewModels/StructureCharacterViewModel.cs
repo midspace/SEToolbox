@@ -2,14 +2,20 @@
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Models;
+    using System.ComponentModel;
 
-    public class StructureCharacterViewModel : StructureBaseViewModel
+    public class StructureCharacterViewModel : StructureBaseViewModel<StructureCharacterModel>
     {
         #region ctor
 
         public StructureCharacterViewModel(BaseViewModel parentViewModel, StructureCharacterModel dataModel)
             : base(parentViewModel, dataModel)
         {
+            this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            {
+                // Will bubble property change events from the Model to the ViewModel.
+                this.OnPropertyChanged(e.PropertyName);
+            };
         }
 
         #endregion
@@ -24,6 +30,58 @@
             }
         }
 
+        //public long EntityId
+        //{
+        //    get
+        //    {
+        //        return this.DataModel.EntityBase.EntityId;
+        //    }
+
+        //    set
+        //    {
+        //        if (value != this.DataModel.EntityBase.EntityId)
+        //        {
+        //            this.DataModel.EntityBase.EntityId = value;
+        //            this.RaisePropertyChanged(() => EntityId);
+        //        }
+        //    }
+        //}
+
+        //public MyPositionAndOrientation? PositionAndOrientation
+        //{
+        //    get
+        //    {
+        //        return this.DataModel.EntityBase.PositionAndOrientation;
+        //    }
+
+        //    set
+        //    {
+        //        if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, this.DataModel.EntityBase.PositionAndOrientation))
+        //        //if (value != this.entityBase.PositionAndOrientation)
+        //        {
+        //            this.DataModel.EntityBase.PositionAndOrientation = value;
+        //            this.RaisePropertyChanged(() => PositionAndOrientation);
+        //        }
+        //    }
+        //}
+
+        //public ClassType ClassType
+        //{
+        //    get
+        //    {
+        //        return this.DataModel.ClassType;
+        //    }
+
+        //    set
+        //    {
+        //        if (value != this.DataModel.ClassType)
+        //        {
+        //            this.DataModel.ClassType = value;
+        //            this.RaisePropertyChanged(() => ClassType);
+        //        }
+        //    }
+        //}
+
         public MyCharacterModelEnum CharacterModel
         {
             get
@@ -33,11 +91,8 @@
 
             set
             {
-                if (value != this.DataModel.CharacterModel)
-                {
-                    this.DataModel.CharacterModel = value;
-                    this.RaisePropertyChanged(() => CharacterModel);
-                }
+                this.DataModel.CharacterModel = value;
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
             }
         }
 

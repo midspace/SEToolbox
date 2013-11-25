@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using System;
@@ -106,12 +107,12 @@
             }
         }
 
-        public DateTime? LastSaveTime
+        public DateTime LastSaveTime
         {
             get
             {
-                if (this.content == null)
-                    return null;
+                //if (this.content == null)
+                //    return null;
 
                 return this.content.LastSaveTime;
             }
@@ -120,12 +121,47 @@
             {
                 if (value != this.content.LastSaveTime)
                 {
-                    this.content.LastSaveTime = value.Value;
+                    this.content.LastSaveTime = value;
                     this.RaisePropertyChanged(() => LastSaveTime);
                 }
             }
         }
 
+        public DateTime LastLoadTime
+        {
+            get
+            {
+                //if (this.content == null)
+                //    return null;
+
+                return this.content.LastLoadTime;
+            }
+
+            set
+            {
+                if (value != this.content.LastLoadTime)
+                {
+                    this.content.LastLoadTime = value;
+                    this.RaisePropertyChanged(() => LastLoadTime);
+                }
+            }
+        }
+
+        public bool IsWorkshopItem
+        {
+            get
+            {
+                return this.content.WorkshopId.HasValue;
+            }
+        }
+
+        public ulong? WorkshopId
+        {
+            get
+            {
+                return this.content.WorkshopId;
+            }
+        }
 
         public bool IsValid
         {
@@ -144,5 +180,29 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// Loads checkpoint file.
+        /// </summary>
+        public void LoadCheckpoint()
+        {
+            var filename = Path.Combine(this.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
+            
+            if (File.Exists(filename))
+            {
+                try
+                {
+                    this.Content = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
+                }
+                catch
+                {
+                    this.Content = null;
+                }
+            }
+            else
+            {
+                this.Content = null;
+            }
+        }
     }
 }

@@ -5,17 +5,17 @@
     using SEToolbox.Models;
     using System.Collections.Generic;
 
-    public class StructureBaseViewModel : BaseViewModel
+    public abstract class StructureBaseViewModel<TModel> : BaseViewModel, IStructureViewBase where TModel : IStructureBase
     {
         #region fields
 
-        private StructureBaseModel dataModel;
+        private TModel dataModel;
 
         #endregion
 
         #region ctor
 
-        public StructureBaseViewModel(BaseViewModel parentViewModel, StructureBaseModel dataModel)
+        public StructureBaseViewModel(BaseViewModel parentViewModel, TModel dataModel)
             : base(parentViewModel)
         {
             this.dataModel = dataModel;
@@ -25,12 +25,17 @@
 
         #region Properties
 
-        protected virtual StructureBaseModel DataModel
-        {   
-            get
-            {
-                return this.dataModel;
-            }
+        //protected TModel DataModel
+        //{
+        //    get
+        //    {
+        //        return this.dataModel;
+        //    }
+        //}
+
+        public IStructureBase DataModel
+        {
+            get { return this.dataModel; }
         }
 
         public long EntityId
@@ -82,6 +87,19 @@
                     this.dataModel.ClassType = value;
                     this.RaisePropertyChanged(() => ClassType);
                 }
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return this.dataModel.Description;
+            }
+
+            set
+            {
+                this.dataModel.Description = value;
             }
         }
 
