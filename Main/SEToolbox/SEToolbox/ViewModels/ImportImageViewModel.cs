@@ -258,7 +258,7 @@
             this.IsValidImage = false;
 
             IOpenFileDialog openFileDialog = openFileDialogFactory();
-            openFileDialog.Filter = Resources.ImportImagesFilter;
+            openFileDialog.Filter = Resources.ImportImageFilter;
 
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
@@ -267,7 +267,7 @@
                 openFileDialog.InitialDirectory = Path.GetFullPath(@"..\..\..\..\building 3D\images");
             }
 
-            openFileDialog.Title = Resources.ImportImagesTitle;
+            openFileDialog.Title = Resources.ImportImageTitle;
 
             // Open the dialog
             DialogResult result = dialogService.ShowOpenFileDialog(this, openFileDialog);
@@ -369,7 +369,7 @@
 
                     this.NewImage = ToolboxExtensions.ConvertBitmapToBitmapImage(image);
 
-                    //ImageUtilities.SavePng(@"C:\temp\test.png", image);
+                    //ToolboxExtensions.SavePng(@"C:\temp\test.png", image);
                 }
                 else
                 {
@@ -442,6 +442,7 @@
                 //        var color = palatteImage.GetPixel(x, y);
 
                 //        var cname = palatteNames.First(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B).Value;
+                //        // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
                 //        SubtypeId armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock" + cname);
 
                 //        entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
@@ -465,6 +466,8 @@
                         var color = palatteImage.GetPixel(x, y);
 
                         var cname = palatteNames.First(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B).Value;
+                        
+                        // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
                         SubtypeId armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock" + cname);
 
                         entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());

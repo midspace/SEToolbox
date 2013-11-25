@@ -115,6 +115,14 @@
             }
         }
 
+        public ICommand ImportVoxelCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ImportVoxelExecuted), new Func<bool>(ImportVoxelCanExecute));
+            }
+        }
+
         public ICommand ImportImageCommand
         {
             get
@@ -411,6 +419,17 @@
             // do nothing. Only required for base menu.
         }
 
+        public bool ImportVoxelCanExecute()
+        {
+            return false;
+            //return this.dataModel.ActiveWorld != null;
+        }
+
+        public void ImportVoxelExecuted()
+        {
+            // TODO:
+        }
+
         public bool ImportImageCanExecute()
         {
             return this.dataModel.ActiveWorld != null;
@@ -440,15 +459,16 @@
         public void ImportModelExecuted()
         {
             Import3dModelModel model = new Import3dModelModel();
-            model.Load(/*this.dataModel.BaseSavePath*/);
+            model.Load(this.dataModel.TheCharacter.PositionAndOrientation.Value);
             Import3dModelViewModel loadVm = new Import3dModelViewModel(this, model);
 
             var result = dialogService.ShowDialog<WindowImportModel>(this, loadVm);
             if (result == true)
             {
-                // TODO:
-                //this.dataModel.ActiveWorld = model.SelectedWorld;
-                //this.dataModel.LoadSandBox();
+                var newEntity = loadVm.BuildEntity();
+                this.selectNewStructure = true;
+                var structure = this.dataModel.AddEntity(newEntity);
+                this.selectNewStructure = false;
             }
         }
 

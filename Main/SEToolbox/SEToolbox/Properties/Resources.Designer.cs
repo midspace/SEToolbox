@@ -61,6 +61,16 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap about {
+            get {
+                object obj = ResourceManager.GetObject("about", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Floating Object.
         /// </summary>
         internal static string ClassType_FloatingObject {
@@ -97,11 +107,50 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Asteroid.
+        /// </summary>
+        internal static string ClassType_Voxel {
+            get {
+                return ResourceManager.GetString("ClassType_Voxel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cube_molecule {
+            get {
+                object obj = ResourceManager.GetObject("cube_molecule", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap disk_blue {
+            get {
+                object obj = ResourceManager.GetObject("disk_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap folder {
             get {
                 object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap import1 {
+            get {
+                object obj = ResourceManager.GetObject("import1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -127,18 +176,36 @@ namespace SEToolbox.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Image files (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*.
         /// </summary>
-        internal static string ImportImagesFilter {
+        internal static string ImportImageFilter {
             get {
-                return ResourceManager.GetString("ImportImagesFilter", resourceCulture);
+                return ResourceManager.GetString("ImportImageFilter", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Select Image to Import.
         /// </summary>
-        internal static string ImportImagesTitle {
+        internal static string ImportImageTitle {
             get {
-                return ResourceManager.GetString("ImportImagesTitle", resourceCulture);
+                return ResourceManager.GetString("ImportImageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Polygon files (*.asc;*.3ds;*.md2;*.md3;*.obj;*.stl)|*.asc;*.3ds;*.md2;*.md3;*.obj;*.stl|All files (*.*)|*.*.
+        /// </summary>
+        internal static string ImportModelFilter {
+            get {
+                return ResourceManager.GetString("ImportModelFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Model to Import.
+        /// </summary>
+        internal static string ImportModelTitle {
+            get {
+                return ResourceManager.GetString("ImportModelTitle", resourceCulture);
             }
         }
         
@@ -211,6 +278,26 @@ namespace SEToolbox.Properties {
         internal static string MyCharacterModelEnum_Soldier {
             get {
                 return ResourceManager.GetString("MyCharacterModelEnum_Soldier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap photo_scenery {
+            get {
+                object obj = ResourceManager.GetObject("photo_scenery", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap refresh {
+            get {
+                object obj = ResourceManager.GetObject("refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

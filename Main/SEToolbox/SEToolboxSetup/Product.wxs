@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-	<Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.006.010.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.007.005.3" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -13,6 +14,8 @@
     <Feature Id="ProductFeature" Title="!(loc.DirApplicationName)" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
+
+  
 
     <Icon Id="APPLICATIONICON" SourceFile="app.ico"/>
 
@@ -35,16 +38,12 @@
     </Directory>
 
     <!-- UI -->
-    <!--<UIRef Id="WixUI_InstallDir" />-->
-
+    <UIRef Id="WixUI_InstallDir" />
     <!--<UIRef Id="WixUI_CustomInstallDir" />-->
+    
     <UIRef Id="WixUI_ErrorProgressText" />
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
     <Property Id="ARPPRODUCTICON" Value="APPLICATIONICON" />
-
-    <!-- Install properties. Override these in the msiexec install for unattended install. -->
-    <!--<Property Id="WIXUI_SERVERNAME" Value="SERVERNAME" />
-    <Property Id="WIXUI_SERVERPORT" Value="30000" />-->
 
     <!-- All Files, except the .config -->
     <ComponentGroup Id="ProductComponents" Directory="APPLICATIONFOLDER">
@@ -95,44 +94,21 @@
     <Feature Id="MainApplication" Title="Main Application" Level="1">
       <ComponentRef Id="comp2EA1FC447B50410DA2CE55F182C0E00C" />
       <ComponentRef Id="ApplicationShortcut" />
-      <!--<ComponentRef Id="UpdateConfig" />-->
       <ComponentRef Id="UninstallAppFolder"/>
     </Feature>
-
-    <!--<InstallExecuteSequence>
-      <Custom Action="IsPrivileged" Before="LaunchConditions">
-        Not Privileged
-      </Custom>
-
-      <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWERPRODUCTFOUND</Custom>
-
-      --><!-- Need to schedule this late to avoid uninstalling the service and needing to re-enter log-in details. --><!--
-      <RemoveExistingProducts After="InstallFinalize" />
-    </InstallExecuteSequence>-->
-
-    <!--<InstallUISequence>
-      <Custom Action="IsPrivileged" Before="LaunchConditions">
-        Not Privileged
-      </Custom>
-
-      <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWERPRODUCTFOUND</Custom>
-    </InstallUISequence>-->
   </Product>
 
   <Fragment>
    
     
-      <!--<UI Id="WixUI_CustomInstallDir">
-      <Dialog Id="ProductServerDlg" Width="370" Height="270" Title="!(loc.ProductServerDlg_Title)">
+      <UI Id="WixUI_CustomInstallDir">
+      <!--<Dialog Id="ProductServerDlg" Width="370" Height="270" Title="!(loc.ProductServerDlg_Title)">
         <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
         <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
         <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
         <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ProductServerDlgDescription)" />
         <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ProductServerDlgTitle)" />
 
-        <Control Id="EnterServer" Type="Text" Height="16" Width="254" X="20" Y="60" Text="!(loc.ProductServerDlgEnterServer)" />
-        <Control Id="Server" Type="Edit" Height="15" Width="140" X="20" Y="100" Property="WIXUI_SERVERNAME" />
-        <Control Id="Port" Type="Edit" Height="15" Width="100" X="162" Y="100" Property="WIXUI_SERVERPORT" />
 
         <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
         <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
@@ -143,7 +119,7 @@
         <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
           <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
         </Control>
-      </Dialog>
+      </Dialog>-->
 
       <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
       <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
@@ -172,12 +148,17 @@
       <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
 
       <Publish Dialog="LicenseAgreementDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
-      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="ProductServerDlg">LicenseAccepted = "1"</Publish>
+      <!--<Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="ProductServerDlg">LicenseAccepted = "1"</Publish>
 
       <Publish Dialog="ProductServerDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
       <Publish Dialog="ProductServerDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg"><![CDATA[WIXUI_SERVERNAME <> ""]]></Publish>
       
-      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="ProductServerDlg">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="ProductServerDlg">1</Publish>-->
+
+        <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">LicenseAccepted = "1"</Publish>
+
+        <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
+        
       <Publish Dialog="InstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
       <Publish Dialog="InstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
       <Publish Dialog="InstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
@@ -196,58 +177,9 @@
       <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
 
       <Property Id="ARPNOMODIFY" Value="1" />
-    </UI>-->
-
-    <!--<UI>
-      <Dialog Id="AssistanceOptionsDlg" Width="370" Height="270" Title="!(loc.AssistanceOptionsDlg_Title)">
-        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
-          <Publish Event="NewDialog" Value="[WixUI_AssistanceOptionsDlg_Next]">1</Publish>
-          <Publish Property="ALLUSERS" Value="{}">ASSISTANCE_USERS="cur"</Publish>
-          <Publish Property="ALLUSERS" Value="1">ASSISTANCE_USERS="all"</Publish>
-        </Control>
-        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
-          <Publish Event="NewDialog" Value="[WixUI_AssistanceOptionsDlg_Back]">1</Publish>
-        </Control>
-        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
-          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
-        </Control>
-
-        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.AssistanceOptionsDlgDescription)" />
-        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.AssistanceOptionsDlgTitle)" />
-        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.AssistanceOptionsDlgBannerBitmap)" />
-        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
-        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
-
-        <Control Id="UserText1" Type="Text" X="20" Y="60" Width="330" Height="35"
-             Text="!(loc.AssistanceOptionsDlgUserText1)" />
-        <Control Id="UserText2" Type="Text" X="20" Y="95" Width="330" Height="20"
-           Text="!(loc.AssistanceOptionsDlgUserText2)" />
-        <Control Id="UserSelection" Type="RadioButtonGroup"
-          X="26" Y="115" Width="305" Height="45" Property="ASSISTANCE_USERS"
-          Text="ASSISTANCE_USERS">
-          <RadioButtonGroup Property="ASSISTANCE_USERS">
-            <RadioButton Value="cur" X="0" Y="0" Width="295" Height="16"
-                   Text="!(loc.AssistanceOptionsDlgRBOneUser)" />
-            <RadioButton Value="all" X="0" Y="20" Width="295" Height="16"
-                   Text="!(loc.AssistanceOptionsDlgRBAllUsers)" />
-          </RadioButtonGroup>
-        </Control>
-
-        <Control Id="SplitLine" Type="Line" X="0" Y="160" Width="370" Height="0" />
-        <Control Id="ShortcutDesktop" Type="CheckBox" Height="18" Width="295" X="40" Y="170"
-             Text="!(loc.AssistanceOptionsDlgShortcutDesktop)"
-             Property="ASSISTANCE_SHORTCUT_DESKTOP" CheckBoxValue="1" Disabled="yes" />
-        <Control Id="ShortcutProgramMenu" Type="CheckBox" Height="18" Width="295" X="40" Y="190"
-             Text="!(loc.AssistanceOptionsDlgShortcutProgramMenu)" Disabled="yes"
-             Property="ASSISTANCE_SHORTCUT_PROGRAMMENU" CheckBoxValue="1" />
-        <Control Id="ShortcutStartup" Type="CheckBox" Height="18" Width="295" X="40" Y="210"
-             Text="!(loc.AssistanceOptionsDlgShortcutStartup)" Disabled="yes"
-             Property="ASSISTANCE_SHORTCUT_STARTUP" CheckBoxValue="1" />
-
-      </Dialog>
-    </UI>-->
+    </UI>
     
-    <!--<UIRef Id="WixUI_Common" />-->
+    <UIRef Id="WixUI_Common" />
     
   </Fragment>
 </Wix>

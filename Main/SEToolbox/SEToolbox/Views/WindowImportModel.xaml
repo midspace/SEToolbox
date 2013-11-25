@@ -3,11 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:commands="clr-namespace:SEToolbox.Services"
-        ResizeMode="NoResize" SizeToContent="Height" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import 3D Model" Height="300" Width="500"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:interop="clr-namespace:SEToolbox.Interop"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="Import 3D Model" Height="380" Width="480" Icon="/SEToolbox;component/app.ico"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
-        FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
+        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
+    <Window.Resources>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+    </Window.Resources>
     <Window.Background>
         <LinearGradientBrush>
             <GradientStop Color="#FF2B2077" Offset="4"/>
@@ -15,25 +21,144 @@
         </LinearGradientBrush>
     </Window.Background>
     <Grid>
-        <StackPanel Margin="8">
-            <Grid Margin="0,0,0,8" Height="220">
-                <!--<ListView ItemsSource="{Binding Worlds}" SelectionMode="Single" SelectedValue="{Binding SelectedWorld}" Name="uxWorldSelectionBox">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding SessionName}"/>
-                            <GridViewColumn Header="Saved" DisplayMemberBinding="{Binding LastSaveTime}"/>
-                        </GridView>
-                    </ListView.View>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <commands:CommandAction Command="{Binding LoadCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListView>-->
+        <StackPanel Margin="8" Orientation="Vertical">
+            <Grid Margin="0,0,0,8" Height="280">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
+                <Label Content="Image:" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBox Width="180" Text="{Binding Filename}" VerticalAlignment="Center" Name="uxInitialElement"/>
+                    <Button ToolTip="Browse for Image" Command="{Binding BrowseImageCommand}" VerticalAlignment="Center">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
+                    </Button>
+                </StackPanel>
+                <Label Content="Type:" Grid.Row="1" />
+                <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ClassTypeEnum}}" SelectedValue="{Binding ClassType}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Label Content="Armor:" Grid.Row="2" />
+                <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ArmorTypeEnum}}" SelectedValue="{Binding ArmorType}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <GroupBox Header="Original Size" MinWidth="120">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Width:" Margin="0,0,0,0" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=OriginalImageSize.Width}" />
+                            <Label Content="Height:" Margin="0,0,0,0" Grid.Row="1" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{Binding Path=OriginalImageSize.Height}" />
+                            <Label Content="Depth:" Margin="0,0,0,0" Grid.Row="2" />
+                            <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Text="{Binding Path=OriginalImageSize.Depth}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Scale" MinWidth="120">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton Content="Multiply:"/>
+                            <TextBox  Width="80" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=MultipleScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="Max Length:" Grid.Row="1"/>
+                            <TextBox  Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=MaxLengthScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="New Size" MinWidth="120" Margin="8,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Width:" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewImageSize.Width}" />
+                            <Label Content="Height:" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewImageSize.Height}" />
+                            <Label Content="Depth:" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="1" Grid.Row="2" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewImageSize.Height}" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <GroupBox Header="Position" MinWidth="120">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="X:" Margin="0,0,4,0" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Grid.Row="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Label Content="X:" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Orientation" MinWidth="120" Margin="8,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton IsChecked="True" Content="Facing Character" Grid.ColumnSpan="2" />
+                            <Label Content="Distance:" Grid.Row="2" />
+                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding Distance}" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
-                <Button Width="90" Command="{Binding LoadCommand}" Content="Open" IsDefault="True"/>
+                <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
                 <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
             </StackPanel>
         </StackPanel>

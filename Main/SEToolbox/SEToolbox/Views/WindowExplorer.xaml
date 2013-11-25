@@ -19,6 +19,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
     </Window.Resources>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
@@ -33,29 +34,52 @@
                             </Style>
                         </DockPanel.Resources>
                         <Button Command="{Binding OpenCommand}">
-                            <AccessText>_Open</AccessText>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
+                                <AccessText>_Open</AccessText>
+                            </StackPanel>
                         </Button>
                         <Button Command="{Binding SaveCommand}">
-                            <AccessText>_Save</AccessText>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}" />
+                                <AccessText>_Save</AccessText>
+                            </StackPanel>
                         </Button>
-                        <Separator/>
+                        <Separator Style="{StaticResource DockPanelSeparator}" />
                         <Button Content="Clear" Command="{Binding ClearCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <Button Command="{Binding ReloadCommand}">
-                            <AccessText>_Reload</AccessText>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}" />
+                                <AccessText>_Reload</AccessText>
+                            </StackPanel>
                         </Button>
-                        <Separator/>
+                        <Separator Style="{StaticResource DockPanelSeparator}" />
                         <Menu>
-                            <MenuItem Header="_Import" Command="{Binding ImportCommand}">\
-                                <MenuItem Header="Import Voxel" Command="{Binding ImportVoxelCommand}" IsEnabled="False"/>
-                                <MenuItem Header="Image" Command="{Binding ImportImageCommand}"/>
-                                <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}" IsEnabled="False"/>
+                            <MenuItem Header="_Import" Command="{Binding ImportCommand}">
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=import1}" />
+                                </MenuItem.Icon>
+                                <MenuItem Header=" Voxel" Command="{Binding ImportVoxelCommand}"/>
+                                <MenuItem Header="Image" Command="{Binding ImportImageCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=photo_scenery}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </MenuItem>
                         </Menu>
-                        <Separator/>
+                        <Separator Style="{StaticResource DockPanelSeparator}" />
                         <Button Content="Export To Excel" Command="{Binding ExportExcelCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <Button Content="Test" Command="{Binding TestCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <Button Command="{Binding AboutCommand}" HorizontalAlignment="Right">
-                            <AccessText>_About</AccessText>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}" />
+                                <AccessText>_About</AccessText>
+                            </StackPanel>
                         </Button>
                     </DockPanel>
                 </ToolBar>

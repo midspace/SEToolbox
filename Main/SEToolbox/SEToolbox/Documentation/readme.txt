@@ -16,48 +16,51 @@ http://spaceengineerswiki.com/index.php?title=FAQs
 
 
 TODO: list of tasks
+Double the Voxel count of 3D objects and thicken 3D objects, and use this to generate the slopes,corners,inversecorners instead of trying to interprete them.
 Refresh/Save needs to check if save directory no longer exists.
-Datatemplate Structure type.
 tree view.
 Property Grid.
-Close Dialog on ismodified.
+Close Dialog on IsModified.
 Wix installer project,
-  - Select Directory
   - Desktop Icon.
 Obfuscate/dotfuscator
 
 
-Text:
+Text Unicode support in SpaceEngineers ???:
 testing text
 テキストをテスト
 
 
 Actions:
-Refresh button, to reload selected Sandbox content.
-Link to open Workshop ID?
+- Import 3D model.
 
-Show status: Ship Pilot/Roaming Astronaught.
-Change Astronaught color.
-Set/Reset Astronaught Vector. (Direction and Speed)
-Move Astronaught to position.
-Switch Jetpack on/off.
-Switch initerial Stablizers on/off.
+- Link to open Workshop ID?
 
-Delete ship/station/object.
-Import multiple ships/stations/objects from another 'world'.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
+- Show status: Ship Pilot/Roaming Astronaught.
+- Set/Reset Astronaught Vector. (Direction and Speed)
+- Move Astronaught to position.
+- Switch Jetpack on/off.
+- Switch initerial Stablizers on/off.
+
+- Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
+  Need a way to detect attached landing skids, or overlapping objects (sigh).
 - Check if landing gear actived?
 
-Replace Voxel.
-Add Voxel.
-Move Voxel.
+- Replace Asteroid/Voxel.
+- Add Asteroid/Voxel.
+- Move Asteroid/Voxel.
 
-Show ship status. Size. Item count. Weight. Thrust.
-Set/Reset Ship Vector. (Direction and Speed)
-Move Ship to position.
-Switch power on/off.
-Switch initerial Stablizers on/off.
-Replace Armor light/heavy/color.
-Repair ship.
+- Show ship status. Size. Item count. Weight. Thrust.
+- Switch power on/off.
+- Switch initerial Stablizers on/off.
+- Set/Reset Ship Vector. (Direction and Speed)
+- Move Ship to position.
+- Replace Armor light/heavy/color.
+- Repair ship.
 
-Import Image.
-Import 3D model.
+
+Completed:
+- Refresh button, to reload selected Sandbox content.
+- Change Astronaught color.
+- Import Image.
+- Delete ship/station/object.

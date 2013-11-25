@@ -6,10 +6,10 @@
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:interop="clr-namespace:SEToolbox.Interop"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Image" Height="380" Width="550"
+        Title="Import Image" Height="380" Width="550" Icon="/SEToolbox;component/app.ico"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
-        FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
+        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
     <Window.Resources>
         <converters:NullImageConverter x:Key="NullImageConverter"/>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
@@ -42,7 +42,7 @@
                 
                 <Label Content="Image:" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <TextBox Width="180" Text="{Binding Filename}" VerticalAlignment="Center"/>
+                    <TextBox Width="180" Text="{Binding Filename}" VerticalAlignment="Center" Name="uxInitialElement"/>
                     <Button ToolTip="Browse for Image" Command="{Binding BrowseImageCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
