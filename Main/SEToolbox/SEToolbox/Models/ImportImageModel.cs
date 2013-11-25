@@ -12,7 +12,7 @@
         private bool isValidImage;
 
         private Size originalImageSize;
-        private SizeModel newImageSize;
+        private BindableSizeModel newImageSize;
         private BindablePoint3DModel position;
         private BindableVector3DModel forward;
         private BindableVector3DModel up;
@@ -83,7 +83,7 @@
             }
         }
 
-        public SizeModel NewImageSize
+        public BindableSizeModel NewImageSize
         {
             get
             {

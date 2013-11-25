@@ -4,6 +4,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:interop="clr-namespace:SEToolbox.Interop"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
         Title="Import 3D Model" Height="380" Width="480" Icon="/SEToolbox;component/app.ico"
@@ -11,8 +12,10 @@
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
     </Window.Resources>
     <Window.Background>
         <LinearGradientBrush>
@@ -20,6 +23,9 @@
             <GradientStop Color="#FFFFFFFF" Offset="0"/>
         </LinearGradientBrush>
     </Window.Background>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
     <Grid>
         <StackPanel Margin="8" Orientation="Vertical">
             <Grid Margin="0,0,0,8" Height="280">
@@ -37,11 +43,10 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <Label Content="Image:" />
+                <Label Content="Model:" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <TextBox Width="180" Text="{Binding Filename}" VerticalAlignment="Center" Name="uxInitialElement"/>
-                    <Button ToolTip="Browse for Image" Command="{Binding BrowseImageCommand}" VerticalAlignment="Center">
+                    <Button ToolTip="Browse for Model" Command="{Binding BrowseImageCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>
@@ -74,11 +79,11 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Label Content="Width:" Margin="0,0,0,0" />
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=OriginalImageSize.Width}" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Width}" />
                             <Label Content="Height:" Margin="0,0,0,0" Grid.Row="1" />
-                            <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{Binding Path=OriginalImageSize.Height}" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Height}" />
                             <Label Content="Depth:" Margin="0,0,0,0" Grid.Row="2" />
-                            <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Text="{Binding Path=OriginalImageSize.Depth}" />
+                            <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Depth}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Scale" MinWidth="120">
@@ -91,10 +96,10 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <RadioButton Content="Multiply:"/>
+                            <RadioButton Content="Multiply:" IsChecked="{Binding IsMultipleScale}" />
                             <TextBox  Width="80" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=MultipleScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <RadioButton Content="Max Length:" Grid.Row="1"/>
-                            <TextBox  Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=MaxLengthScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="Max Length:" Grid.Row="1" IsChecked="{Binding IsMaxLengthScale}"/>
+                            <TextBox  Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=MaxLengthScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="Cannot be greater than 1024"/>
                         </Grid>
                     </GroupBox>
 
@@ -110,11 +115,11 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Label Content="Width:" Margin="0,0,0,0" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewImageSize.Width}" />
+                            <TextBlock Grid.Column="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Width}" />
                             <Label Content="Height:" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Grid.Row="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewImageSize.Height}" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Height}" />
                             <Label Content="Depth:" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Grid.Row="2" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewImageSize.Height}" />
+                            <TextBlock Grid.Column="1" Grid.Row="2" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Depth}" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>
@@ -152,7 +157,7 @@
                             </Grid.ColumnDefinitions>
                             <RadioButton IsChecked="True" Content="Facing Character" Grid.ColumnSpan="2" />
                             <Label Content="Distance:" Grid.Row="2" />
-                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding Distance}" />
+                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>
@@ -162,5 +167,6 @@
                 <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
             </StackPanel>
         </StackPanel>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

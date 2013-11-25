@@ -1,12 +1,13 @@
 ﻿namespace SEToolbox.Support
 {
     using SEToolbox.ImageLibrary;
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
-    using System.Linq;
+    using System.Reflection;
     using System.Windows.Media.Imaging;
     using System.Xml;
 
@@ -338,6 +339,56 @@
         public static void SavePng(string path, Image image)
         {
             image.Save(path, ImageFormat.Png);
+        }
+
+        #endregion
+
+        #region ConvertPolyToVox
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="polyFilename"></param>
+        /// <param name="fixScale">Specify voxel size of longest dimension. 1-1024, &lt;=256 for KVX</param>
+        /// <param name="gaplessModel">Enable an experimental xor-style converter. It's useful for gap-less models but has buggy color conversion</param>
+        /// <returns></returns>
+        public static string ConvertPolyToVox(string polyFilename, int fixScale, bool gaplessModel)
+        {
+            string voxFilename = null;
+
+            if (fixScale > 1024)
+                fixScale = 1024;
+
+            string tempfilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".vox");
+
+            Process p = new Process();
+            string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            p.StartInfo.FileName = Path.Combine(directory, "poly2vox.exe");
+            p.StartInfo.WorkingDirectory = directory;
+            string arguments = string.Format("\"{0}\" \"{1}\"", polyFilename, tempfilename);
+
+            if (fixScale > 1)
+            {
+                arguments += string.Format(" /v{0}", fixScale);
+            }
+
+            if (gaplessModel)
+            {
+                arguments += string.Format(" /x");
+            }
+
+            p.StartInfo.Arguments = arguments;
+
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            var ret = p.Start();
+            p.WaitForExit();
+
+            if (ret && File.Exists(tempfilename))
+            {
+                voxFilename = tempfilename;
+            }
+
+            return voxFilename;
         }
 
         #endregion

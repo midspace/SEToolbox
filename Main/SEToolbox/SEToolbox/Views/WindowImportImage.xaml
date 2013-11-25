@@ -4,6 +4,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:interop="clr-namespace:SEToolbox.Interop"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
         Title="Import Image" Height="380" Width="550" Icon="/SEToolbox;component/app.ico"
@@ -11,9 +12,11 @@
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:NullImageConverter x:Key="NullImageConverter"/>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
     </Window.Resources>
     <Window.Background>
         <LinearGradientBrush>
@@ -21,6 +24,9 @@
             <GradientStop Color="#FFFFFFFF" Offset="0"/>
         </LinearGradientBrush>
     </Window.Background>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
     <Grid>
         <StackPanel Margin="8">
             <Grid Margin="0,0,0,8" Height="270">
@@ -157,5 +163,6 @@
                 <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
             </StackPanel>
         </StackPanel>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

@@ -95,6 +95,7 @@
     <Compile Include="Interop\SpaceEngineersAPI.cs" />
     <Compile Include="Models\BindableVector3DModel.cs" />
     <Compile Include="Models\BindablePoint3DModel.cs" />
+    <Compile Include="Models\BindableSize3DModel.cs" />
     <Compile Include="Models\SaveResource.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,7 +103,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\StructureFloatingObjectModel.cs" />
-    <Compile Include="Models\SizeModel.cs" />
+    <Compile Include="Models\BindableSizeModel.cs" />
     <Compile Include="Models\StructureCharacterModel.cs" />
     <Compile Include="Models\StructureVoxelModel.cs" />
     <Compile Include="Models\StructureBaseModel.cs" />
@@ -141,11 +142,9 @@
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Services\WindowWrapper.cs" />
     <Compile Include="Models\ExplorerModel.cs" />
-    <Compile Include="Services\RelayCommand.cs" />
     <Compile Include="Interop\SpaceEngineersConsts.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
-    <Compile Include="Old\Tester.cs" />
     <Compile Include="Interop\ClassType.cs" />
     <Compile Include="Old\SEResource.cs" />
     <Compile Include="Old\SESupport.cs" />

@@ -2,23 +2,27 @@
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
-    using System.Drawing;
 
     public class Import3dModelModel : BaseModel
     {
         #region Fields
 
         private string filename;
-        private bool isValidImage;
+        private bool isValidModel;
 
-        private Size originalImageSize;
-        private SizeModel newImageSize;
+        private BindableSize3DModel originalModelSize;
+        private BindableSize3DModel newModelSize;
         private BindablePoint3DModel position;
         private BindableVector3DModel forward;
         private BindableVector3DModel up;
         private ImportClassType classType;
         private ImportArmorType armorType;
         private MyPositionAndOrientation characterPosition;
+        private double multipleScale;
+        private double maxLengthScale;
+        private double buildDistance;
+        private bool isMultipleScale;
+        private bool isMaxLengthScale;
 
         #endregion
 
@@ -49,53 +53,53 @@
             }
         }
 
-        public bool IsValidImage
+        public bool IsValidModel
         {
             get
             {
-                return this.isValidImage;
+                return this.isValidModel;
             }
 
             set
             {
-                if (value != this.isValidImage)
+                if (value != this.isValidModel)
                 {
-                    this.isValidImage = value;
-                    this.RaisePropertyChanged(() => IsValidImage);
+                    this.isValidModel = value;
+                    this.RaisePropertyChanged(() => IsValidModel);
                 }
             }
         }
 
-        public Size OriginalImageSize
+        public BindableSize3DModel OriginalModelSize
         {
             get
             {
-                return this.originalImageSize;
+                return this.originalModelSize;
             }
 
             set
             {
-                if (value != this.originalImageSize)
+                if (value != this.originalModelSize)
                 {
-                    this.originalImageSize = value;
-                    this.RaisePropertyChanged(() => OriginalImageSize);
+                    this.originalModelSize = value;
+                    this.RaisePropertyChanged(() => OriginalModelSize);
                 }
             }
         }
 
-        public SizeModel NewImageSize
+        public BindableSize3DModel NewModelSize
         {
             get
             {
-                return this.newImageSize;
+                return this.newModelSize;
             }
 
             set
             {
-                if (value != this.newImageSize)
+                if (value != this.newModelSize)
                 {
-                    this.newImageSize = value;
-                    this.RaisePropertyChanged(() => NewImageSize);
+                    this.newModelSize = value;
+                    this.RaisePropertyChanged(() => NewModelSize);
                 }
             }
         }
@@ -201,6 +205,91 @@
             }
         }
 
+        public double MultipleScale
+        {
+            get
+            {
+                return this.multipleScale;
+            }
+
+            set
+            {
+                if (value != this.multipleScale)
+                {
+                    this.multipleScale = value;
+                    this.RaisePropertyChanged(() => MultipleScale);
+                }
+            }
+        }
+
+        public double MaxLengthScale
+        {
+            get
+            {
+                return this.maxLengthScale;
+            }
+
+            set
+            {
+                if (value != this.maxLengthScale)
+                {
+                    this.maxLengthScale = value;
+                    this.RaisePropertyChanged(() => MaxLengthScale);
+                }
+            }
+        }
+
+        public double BuildDistance
+        {
+            get
+            {
+                return this.buildDistance;
+            }
+
+            set
+            {
+                if (value != this.buildDistance)
+                {
+                    this.buildDistance = value;
+                    this.RaisePropertyChanged(() => BuildDistance);
+                }
+            }
+        }
+
+        public bool IsMultipleScale
+        {
+            get
+            {
+                return this.isMultipleScale;
+            }
+
+            set
+            {
+                if (value != this.isMultipleScale)
+                {
+                    this.isMultipleScale = value;
+                    this.RaisePropertyChanged(() => IsMultipleScale);
+                }
+            }
+        }
+
+        public bool IsMaxLengthScale
+        {
+            get
+            {
+                return this.isMaxLengthScale;
+            }
+
+            set
+            {
+                if (value != this.isMaxLengthScale)
+                {
+                    this.isMaxLengthScale = value;
+                    this.RaisePropertyChanged(() => IsMaxLengthScale);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -209,10 +298,6 @@
         {
             this.CharacterPosition = characterPosition;
         }
-
-        #endregion
-
-        #region helpers
 
         #endregion
     }
