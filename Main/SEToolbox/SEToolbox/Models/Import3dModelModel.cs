@@ -1,25 +1,24 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Collections.ObjectModel;
-    using System.IO;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
-    using SEToolbox.Support;
+    using SEToolbox.Interop;
+    using System.Drawing;
 
     public class Import3dModelModel : BaseModel
     {
         #region Fields
 
-        ///// <summary>
-        ///// The base path of the save files, minus the userid.
-        ///// </summary>
-        //private string baseSavePath;
+        private string filename;
+        private bool isValidImage;
 
-        //private bool isValidSaveDirectory;
-
-        //private SaveResource selectedWorld;
-
-        //private ObservableCollection<SaveResource> worlds;
+        private Size originalImageSize;
+        private SizeModel newImageSize;
+        private BindablePoint3DModel position;
+        private BindableVector3DModel forward;
+        private BindableVector3DModel up;
+        private ImportClassType classType;
+        private ImportArmorType armorType;
+        private MyPositionAndOrientation characterPosition;
 
         #endregion
 
@@ -27,140 +26,193 @@
 
         public Import3dModelModel()
         {
-            //this.SelectedWorld = null;
-            //this.Worlds = new ObservableCollection<SaveResource>();
         }
 
         #endregion
 
         #region Properties
 
-        //public string BaseSavePath
-        //{
-        //    get
-        //    {
-        //        return this.baseSavePath;
-        //    }
+        public string Filename
+        {
+            get
+            {
+                return this.filename;
+            }
 
-        //    set
-        //    {
-        //        if (value != this.baseSavePath)
-        //        {
-        //            this.baseSavePath = value;
-        //            this.RaisePropertyChanged(() => BaseSavePath);
-        //        }
-        //    }
-        //}
+            set
+            {
+                if (value != this.filename)
+                {
+                    this.filename = value;
+                    this.RaisePropertyChanged(() => Filename);
+                }
+            }
+        }
 
-        //public bool IsValidSaveDirectory
-        //{
-        //    get
-        //    {
-        //        return this.isValidSaveDirectory;
-        //    }
+        public bool IsValidImage
+        {
+            get
+            {
+                return this.isValidImage;
+            }
 
-        //    set
-        //    {
-        //        if (value != this.isValidSaveDirectory)
-        //        {
-        //            this.isValidSaveDirectory = value;
-        //            this.RaisePropertyChanged(() => IsValidSaveDirectory);
-        //        }
-        //    }
-        //}
+            set
+            {
+                if (value != this.isValidImage)
+                {
+                    this.isValidImage = value;
+                    this.RaisePropertyChanged(() => IsValidImage);
+                }
+            }
+        }
 
-        //public SaveResource SelectedWorld
-        //{
-        //    get
-        //    {
-        //        return this.selectedWorld;
-        //    }
+        public Size OriginalImageSize
+        {
+            get
+            {
+                return this.originalImageSize;
+            }
 
-        //    set
-        //    {
-        //        if (value != this.selectedWorld)
-        //        {
-        //            this.selectedWorld = value;
-        //            this.RaisePropertyChanged(() => SelectedWorld);
-        //        }
-        //    }
-        //}
+            set
+            {
+                if (value != this.originalImageSize)
+                {
+                    this.originalImageSize = value;
+                    this.RaisePropertyChanged(() => OriginalImageSize);
+                }
+            }
+        }
 
-        //public ObservableCollection<SaveResource> Worlds
-        //{
-        //    get
-        //    {
-        //        return this.worlds;
-        //    }
+        public SizeModel NewImageSize
+        {
+            get
+            {
+                return this.newImageSize;
+            }
 
-        //    set
-        //    {
-        //        if (value != this.worlds)
-        //        {
-        //            this.worlds = value;
-        //            this.RaisePropertyChanged(() => Worlds);
-        //        }
-        //    }
-        //}
+            set
+            {
+                if (value != this.newImageSize)
+                {
+                    this.newImageSize = value;
+                    this.RaisePropertyChanged(() => NewImageSize);
+                }
+            }
+        }
+
+        public BindablePoint3DModel Position
+        {
+            get
+            {
+                return this.position;
+            }
+
+            set
+            {
+                if (value != this.position)
+                {
+                    this.position = value;
+                    this.RaisePropertyChanged(() => Position);
+                }
+            }
+        }
+
+        public BindableVector3DModel Forward
+        {
+            get
+            {
+                return this.forward;
+            }
+
+            set
+            {
+                if (value != this.forward)
+                {
+                    this.forward = value;
+                    this.RaisePropertyChanged(() => Forward);
+                }
+            }
+        }
+
+        public BindableVector3DModel Up
+        {
+            get
+            {
+                return this.up;
+            }
+
+            set
+            {
+                if (value != this.up)
+                {
+                    this.up = value;
+                    this.RaisePropertyChanged(() => Up);
+                }
+            }
+        }
+
+        public ImportClassType ClassType
+        {
+            get
+            {
+                return this.classType;
+            }
+
+            set
+            {
+                if (value != this.classType)
+                {
+                    this.classType = value;
+                    this.RaisePropertyChanged(() => ClassType);
+                }
+            }
+        }
+
+        public ImportArmorType ArmorType
+        {
+            get
+            {
+                return this.armorType;
+            }
+
+            set
+            {
+                if (value != this.armorType)
+                {
+                    this.armorType = value;
+                    this.RaisePropertyChanged(() => ArmorType);
+                }
+            }
+        }
+
+
+        public MyPositionAndOrientation CharacterPosition
+        {
+            get
+            {
+                return this.characterPosition;
+            }
+
+            set
+            {
+                //if (value != this.characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
+                this.characterPosition = value;
+                this.RaisePropertyChanged(() => CharacterPosition);
+            }
+        }
 
         #endregion
 
         #region methods
 
-        public void Load(/*string baseSavePath*/)
+        public void Load(MyPositionAndOrientation characterPosition)
         {
-            //this.BaseSavePath = baseSavePath;
-            //this.LoadSaveList();
+            this.CharacterPosition = characterPosition;
         }
 
         #endregion
 
         #region helpers
-
-        //private void LoadSaveList()
-        //{
-        //    this.Worlds.Clear();
-
-        //    if (Directory.Exists(this.BaseSavePath))
-        //    {
-        //        var userPaths = Directory.GetDirectories(this.BaseSavePath);
-
-        //        foreach (var userPath in userPaths)
-        //        {
-        //            var savePaths = Directory.GetDirectories(userPath);
-
-        //            foreach (var savePath in savePaths)
-        //            {
-        //                var filename = Path.Combine(savePath, SpaceEngineersConsts.SandBoxDescriptorFilename);
-        //                if (File.Exists(filename))
-        //                {
-        //                    MyObjectBuilder_Checkpoint content  = null;
-        //                    try
-        //                    {
-        //                        content = ToolboxExtensions.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
-        //                    }
-        //                    catch
-        //                    {
-        //                    }
-
-        //                    this.Worlds.Add(new SaveResource()
-        //                    {
-        //                        Content = content,
-        //                        Savename = Path.GetFileName(savePath),
-        //                        Username = Path.GetFileName(userPath),
-        //                        Savepath = savePath
-        //                    });
-        //                }
-        //            }
-        //        }
-
-        //        this.IsValidSaveDirectory = true;
-        //    }
-        //    else
-        //    {
-        //        this.IsValidSaveDirectory = false;
-        //    }
-        //}
 
         #endregion
     }

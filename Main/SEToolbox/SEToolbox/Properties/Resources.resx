@@ -130,10 +130,10 @@
   <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ImportImagesFilter" xml:space="preserve">
+  <data name="ImportImageFilter" xml:space="preserve">
     <value>Image files (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*</value>
   </data>
-  <data name="ImportImagesTitle" xml:space="preserve">
+  <data name="ImportImageTitle" xml:space="preserve">
     <value>Select Image to Import</value>
   </data>
   <data name="ImportClassType_LargeShip" xml:space="preserve">
@@ -168,5 +168,32 @@
   </data>
   <data name="MyCharacterModelEnum_Soldier" xml:space="preserve">
     <value>Soldier</value>
+  </data>
+  <data name="about" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\about.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cube_molecule" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cube_molecule.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="disk_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\disk_blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="import1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\import1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="photo_scenery" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\photo_scenery.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportModelFilter" xml:space="preserve">
+    <value>Polygon files (*.asc;*.3ds;*.md2;*.md3;*.obj;*.stl)|*.asc;*.3ds;*.md2;*.md3;*.obj;*.stl|All files (*.*)|*.*</value>
+  </data>
+  <data name="ImportModelTitle" xml:space="preserve">
+    <value>Select Model to Import</value>
+  </data>
+  <data name="ClassType_Voxel" xml:space="preserve">
+    <value>Asteroid</value>
   </data>
 </root>

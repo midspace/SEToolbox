@@ -33,9 +33,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-
-// First 3 mnumbers to match the current SpaceEngineers release.
-// http://forums.keenswh.com/post/about-change-log-6578819
-// Forth number to indicate my own build of ShipReport to match. Remember to reset it back to 1 every time there is a new release of SpaceEngineers.
-[assembly: AssemblyFileVersion("01.001.009.1")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
 

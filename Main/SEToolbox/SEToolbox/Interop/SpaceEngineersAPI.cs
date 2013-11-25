@@ -1,13 +1,36 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.CommonLib.ObjectBuilders;
     using System;
     using System.Xml;
+    using Microsoft.Win32;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using Sandbox.CommonLib.ObjectBuilders;
 
     public class SpaceEngineersAPI
     {
-        #region SpaceEngineersHelpers
+        #region GetApplicationFilePath
+
+        public static string GetApplicationFilePath()
+        {
+            // Using the [Software\Valve\Steam\SteamPath] as a base for "\steamapps\common\SpaceEngineers", is unreliable, as the Steam Library is customizable (multiple installations/locations).
+
+            RegistryKey key;
+            if (Environment.Is64BitProcess)
+                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244850", false);
+            else
+                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244850", false);
+
+            if (key != null)
+            {
+                return key.GetValue("InstallLocation") as string;
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region Serializers
 
         public static T ReadSpaceEngineersFile<T, S>(string filename)
         where S : XmlSerializer1
@@ -74,6 +97,8 @@
             return true;
         }
 
+        #endregion
+
         #region GenerateEntityId
 
         public static long GenerateEntityId()
@@ -123,6 +148,5 @@
 
         #endregion
 
-        #endregion
     }
 }

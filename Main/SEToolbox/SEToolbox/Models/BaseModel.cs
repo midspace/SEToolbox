@@ -1,9 +1,9 @@
 ﻿namespace SEToolbox.Models
 {
-    using SEToolbox.Support;
     using System;
     using System.ComponentModel;
     using System.Linq.Expressions;
+    using SEToolbox.Support;
 
     public class BaseModel : INotifyPropertyChanged
     {

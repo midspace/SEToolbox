@@ -332,5 +332,14 @@
         }
 
         #endregion
+
+        #region SavePng
+
+        public static void SavePng(string path, Image image)
+        {
+            image.Save(path, ImageFormat.Png);
+        }
+
+        #endregion
     }
 }

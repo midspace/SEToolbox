@@ -1,14 +1,14 @@
 ﻿namespace SEToolbox.Models
 {
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.CommonLib.ObjectBuilders;
-    using Sandbox.CommonLib.ObjectBuilders.Voxels;
-    using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Windows.Threading;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.CommonLib.ObjectBuilders.Voxels;
+    using SEToolbox.Interop;
 
     public class ExplorerModel : BaseModel
     {
@@ -275,11 +275,24 @@
             var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
             SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
 
-            // TODO: manage adding new voxels.
-            //this.manageNewVoxelList.Clear();
+            // manages the adding of new voxel files. [localVoxelFile, SourceFilepathName].
+            foreach (KeyValuePair<string, string> kvp in this.manageNewVoxelList)
+            {
+                var filename = Path.Combine(this.ActiveWorld.Savepath, kvp.Key);
+                // TODO: manage adding new voxels.
+            }
+            this.manageNewVoxelList.Clear();
             
-            // TODO: manage removing old voxels.
-            //this.manageDeleteVoxelList.Clear();
+            // Manages the removal old voxels files.
+            foreach (var file in this.manageDeleteVoxelList)
+            {
+                var filename = Path.Combine(this.ActiveWorld.Savepath, file);
+                if (File.Exists(filename))
+                {
+                    File.Delete(filename);
+                }
+            }
+            this.manageDeleteVoxelList.Clear();
 
             this.IsModified = false;
             this.IsBusy = false;
