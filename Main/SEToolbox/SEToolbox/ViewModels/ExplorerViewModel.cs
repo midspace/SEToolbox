@@ -444,10 +444,12 @@
             var result = dialogService.ShowDialog<WindowImportImage>(this, loadVm);
             if (result == true)
             {
+                this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
                 this.selectNewStructure = true;
                 var structure = this.dataModel.AddEntity(newEntity);
                 this.selectNewStructure = false;
+                this.IsBusy = false;
             }
         }
 
@@ -465,10 +467,12 @@
             var result = dialogService.ShowDialog<WindowImportModel>(this, loadVm);
             if (result == true)
             {
+                this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
                 this.selectNewStructure = true;
                 var structure = this.dataModel.AddEntity(newEntity);
                 this.selectNewStructure = false;
+                this.IsBusy = false;
             }
         }
 

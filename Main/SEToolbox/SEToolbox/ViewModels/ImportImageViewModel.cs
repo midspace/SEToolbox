@@ -9,7 +9,6 @@
     using SEToolbox.Support;
     using System;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Drawing;
     using System.IO;
@@ -30,6 +29,7 @@
         private bool? closeResult;
         private Image sourceImage;
         private BitmapImage newImage;
+        private bool isBusy;
 
         #endregion
 
@@ -148,7 +148,7 @@
             }
         }
 
-        public SizeModel NewImageSize
+        public BindableSizeModel NewImageSize
         {
             get
             {
@@ -244,6 +244,30 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the View is currently in the middle of an asynchonise operation.
+        /// </summary>
+        public bool IsBusy
+        {
+            get
+            {
+                return this.isBusy;
+            }
+
+            set
+            {
+                if (value != this.isBusy)
+                {
+                    this.isBusy = value;
+                    this.RaisePropertyChanged(() => IsBusy);
+                    if (this.isBusy)
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -259,14 +283,6 @@
 
             IOpenFileDialog openFileDialog = openFileDialogFactory();
             openFileDialog.Filter = Resources.ImportImageFilter;
-
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            if (Debugger.IsAttached)
-            {
-                openFileDialog.InitialDirectory = Path.GetFullPath(@"..\..\..\..\building 3D\images");
-            }
-
             openFileDialog.Title = Resources.ImportImageTitle;
 
             // Open the dialog
@@ -274,6 +290,7 @@
 
             if (result == DialogResult.OK)
             {
+                this.IsBusy = true;
                 string filename = openFileDialog.FileName;
 
                 if (File.Exists(filename))
@@ -290,7 +307,7 @@
                     this.sourceImage = Image.FromFile(filename);
                     this.OriginalImageSize = new Size(this.sourceImage.Width, this.sourceImage.Height);
 
-                    this.NewImageSize = new SizeModel(this.sourceImage.Width, this.sourceImage.Height);
+                    this.NewImageSize = new BindableSizeModel(this.sourceImage.Width, this.sourceImage.Height);
                     this.NewImageSize.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
                     {
                         this.ProcessImage();
@@ -308,8 +325,7 @@
                     vector.Normalize();
                     vector = Vector3D.Multiply(vector, 10);
                     this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
-                    
-                    this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward.X * -1, this.dataModel.CharacterPosition.Forward.Y * -1, this.dataModel.CharacterPosition.Forward.Z * -1);
+                    this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Negate();
                     this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
 
                     this.ClassType = ImportClassType.SmallShip;
@@ -318,6 +334,8 @@
                     this.Filename = openFileDialog.FileName;
                     this.IsValidImage = true;
                 }
+
+                this.IsBusy = false;
             }
         }
 

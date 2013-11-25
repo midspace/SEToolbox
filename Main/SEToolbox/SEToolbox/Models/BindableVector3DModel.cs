@@ -144,6 +144,18 @@
             return result;
         }
 
+        public override string ToString()
+        {
+            return this.vector.ToString();
+        }
+
+        public BindableVector3DModel Negate()
+        {
+            Vector3D v = this.vector;
+            v.Negate();
+            return new BindableVector3DModel(v);
+        }
+
         #endregion
     }
 }

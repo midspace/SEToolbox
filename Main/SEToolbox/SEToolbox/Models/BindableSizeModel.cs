@@ -2,23 +2,23 @@
 {
     using System.Drawing;
 
-    public class SizeModel : BaseModel
+    public class BindableSizeModel : BaseModel
     {
         private Size size;
 
-        public SizeModel()
+        public BindableSizeModel()
         {
             this.size = new Size();
         }
 
-        public SizeModel(int width, int height)
+        public BindableSizeModel(int width, int height)
             : this()
         {
             this.Width = width;
             this.Height = height;
         }
 
-        public SizeModel(Size size)
+        public BindableSizeModel(Size size)
             : this()
         {
             this.Width = size.Width;
