@@ -22,6 +22,7 @@
         private bool? closeResult;
 
         private IStructureViewBase selectedStructure;
+        private ObservableCollection<IStructureViewBase> selections;
 
         private ObservableCollection<IStructureViewBase> structures;
         private bool selectNewStructure;
@@ -49,6 +50,7 @@
             this.dialogService = dialogService;
             this.dataModel = dataModel;
 
+            this.Selections = new ObservableCollection<IStructureViewBase>();
             this.Structures = new ObservableCollection<IStructureViewBase>();
             foreach (IStructureBase item in this.dataModel.Structures)
             {
@@ -163,6 +165,14 @@
             }
         }
 
+        public ICommand DeleteObjectCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(DeleteObjectExecuted), new Func<bool>(DeleteObjectCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -214,6 +224,23 @@
                 {
                     this.selectedStructure = value;
                     this.RaisePropertyChanged(() => SelectedStructure);
+                }
+            }
+        }
+
+        public ObservableCollection<IStructureViewBase> Selections
+        {
+            get
+            {
+                return this.selections;
+            }
+
+            set
+            {
+                if (value != this.selections)
+                {
+                    this.selections = value;
+                    this.RaisePropertyChanged(() => Selections);
                 }
             }
         }
@@ -507,6 +534,16 @@
             var result = dialogService.ShowDialog<WindowAbout>(this, loadVm);
         }
 
+        public bool DeleteObjectCanExecute()
+        {
+            return true;
+        }
+
+        public void DeleteObjectExecuted()
+        {
+            this.DeleteModel(this.Selections.ToArray());
+        }
+
         #endregion
 
         void Structures_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -562,10 +599,42 @@
             }
         }
 
-        // remove Model from, causing sync to happen.
-        public void DeleteModel(IStructureViewBase viewModel)
+        // remove Model from collection, causing sync to happen.
+        public void DeleteModel(params IStructureViewBase[] viewModels)
         {
-            this.dataModel.Structures.Remove(viewModel.DataModel);
+            int index = -1;
+            if (viewModels.Length > 0)
+            {
+                index = this.Structures.IndexOf(viewModels[0]);
+            }
+
+            foreach (var viewModel in viewModels)
+            {
+                bool canDelete = true;
+
+                if (viewModel == null)
+                    canDelete = false;
+                else if (viewModel is StructureCharacterViewModel)
+                    canDelete = false;
+                else if (viewModel is StructureCubeGridViewModel)
+                    canDelete = !((StructureCubeGridViewModel)viewModel).IsPiloted;
+
+                if (canDelete)
+                {
+                    this.dataModel.Structures.Remove(viewModel.DataModel);
+                }
+            }
+
+            // Find and select next object
+            while (index >= this.Structures.Count)
+            {
+                index--;
+            }
+
+            if (index > -1)
+            {
+                this.SelectedStructure = this.Structures[index];
+            }
         }
     }
 }

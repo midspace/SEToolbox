@@ -8,6 +8,8 @@
 
     public interface IStructureViewBase
     {
+        bool IsSelected { get; set; }
+
         IStructureBase DataModel { get; }
 
         //MyObjectBuilder_EntityBase EntityBase { get; set; }

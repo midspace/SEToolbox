@@ -9,6 +9,7 @@
     {
         #region fields
 
+        private bool isSelected;
         private TModel dataModel;
 
         #endregion
@@ -32,6 +33,20 @@
         //        return this.dataModel;
         //    }
         //}
+
+        public bool IsSelected
+        {
+            get { return this.isSelected; }
+
+            set
+            {
+                if (value != this.isSelected)
+                {
+                    this.isSelected = value;
+                    this.RaisePropertyChanged(() => IsSelected);
+                }
+            }
+        }
 
         public IStructureBase DataModel
         {

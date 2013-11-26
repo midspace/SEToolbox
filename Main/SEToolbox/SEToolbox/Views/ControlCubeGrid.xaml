@@ -31,15 +31,10 @@
         </StackPanel>
         <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
-                <Button Command="{Binding DeleteObjectCommand}">
-                    <AccessText>_Delete</AccessText>
-                </Button>
-                <Button Command="{Binding RepairObjectCommand}">
-                    <AccessText>_Repair</AccessText>
-                </Button>
-                <Button Command="{Binding ResetSpeedCommand}">
-                    <AccessText>Reset _Speed</AccessText>
-                </Button>
+                <Button Command="{Binding DeleteObjectCommand}" Content="Delete" />
+                <Separator/>
+                <Button Command="{Binding RepairObjectCommand}" Content="Repair"/>
+                <Button Command="{Binding ResetSpeedCommand}" Content="Reset Speed"/>
             </ToolBar>
         </ToolBarPanel>
         <Label Grid.Row="2" Content="Piloted:"/>

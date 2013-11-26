@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:SEToolbox.ViewModels"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
-        Title="SE Toolbox" Height="600" Width="800" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
+        Height="600" Width="800" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         commands:DialogService.IsRegisteredView="True">
     <i:Interaction.Triggers>
@@ -20,10 +20,16 @@
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:StringFormatMultiValueConverter x:Key="StringFormatConverter"/>
     </Window.Resources>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
     </Window.Cursor>
+    <Window.Title>
+        <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}SE Toolbox - {0}">
+            <Binding Path="ActiveWorld.SessionName"/>
+        </MultiBinding>
+    </Window.Title>
     <Grid IsEnabled="{Binding IsActive}">
         <DockPanel>
             <ToolBarPanel DockPanel.Dock="Top">
@@ -46,7 +52,6 @@
                             </StackPanel>
                         </Button>
                         <Separator Style="{StaticResource DockPanelSeparator}" />
-                        <Button Content="Clear" Command="{Binding ClearCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <Button Command="{Binding ReloadCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}" />
@@ -73,8 +78,6 @@
                             </MenuItem>
                         </Menu>
                         <Separator Style="{StaticResource DockPanelSeparator}" />
-                        <Button Content="Export To Excel" Command="{Binding ExportExcelCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <Button Content="Test" Command="{Binding TestCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <Button Command="{Binding AboutCommand}" HorizontalAlignment="Right">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}" />
@@ -82,6 +85,11 @@
                             </StackPanel>
                         </Button>
                     </DockPanel>
+                </ToolBar>
+                <ToolBar Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Button Content="Clear" Command="{Binding ClearCommand}" />
+                    <Button Content="Export To Excel" Command="{Binding ExportExcelCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button Content="Test" Command="{Binding TestCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </ToolBar>
             </ToolBarPanel>
             <StatusBar DockPanel.Dock="Bottom">
@@ -115,7 +123,7 @@
                 <Grid Grid.Column="0">
                     <TabControl>
                         <TabItem Header="Craft/Objects">
-                            <controls:SortableListView Grid.Row="2" Grid.ColumnSpan="2" DisplayMemberPath="ClassType" SelectionMode="Single" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
+                            <controls:SortableListView Grid.Row="2" Grid.ColumnSpan="2" DisplayMemberPath="ClassType" SelectionMode="Extended" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
@@ -124,6 +132,13 @@
                                         <GridViewColumn Header="Description" Width="120" DisplayMemberBinding="{Binding Description}"/>
                                     </GridView>
                                 </ListView.View>
+                                <ListView.InputBindings>
+                                    <KeyBinding Key="Delete" Command="{Binding DeleteObjectCommand}" />
+                                </ListView.InputBindings>
+                                <i:Interaction.Behaviors>
+                                    <!-- Custom behavior that synchronizes the selected items with the view models collection -->
+                                    <commands:SynchronizeSelectedItems Selections="{Binding Selections}"/>
+                                </i:Interaction.Behaviors>
                             </controls:SortableListView>
                         </TabItem>
                         <!--<TabItem Header="Properties">

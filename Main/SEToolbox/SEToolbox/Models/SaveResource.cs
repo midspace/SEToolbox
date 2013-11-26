@@ -107,12 +107,12 @@
             }
         }
 
-        public DateTime LastSaveTime
+        public DateTime? LastSaveTime
         {
             get
             {
-                //if (this.content == null)
-                //    return null;
+                if (this.content == null)
+                    return null;
 
                 return this.content.LastSaveTime;
             }
@@ -121,18 +121,18 @@
             {
                 if (value != this.content.LastSaveTime)
                 {
-                    this.content.LastSaveTime = value;
+                    this.content.LastSaveTime = value.Value;
                     this.RaisePropertyChanged(() => LastSaveTime);
                 }
             }
         }
 
-        public DateTime LastLoadTime
+        public DateTime? LastLoadTime
         {
             get
             {
-                //if (this.content == null)
-                //    return null;
+                if (this.content == null)
+                    return null;
 
                 return this.content.LastLoadTime;
             }
@@ -141,7 +141,7 @@
             {
                 if (value != this.content.LastLoadTime)
                 {
-                    this.content.LastLoadTime = value;
+                    this.content.LastLoadTime = value.Value;
                     this.RaisePropertyChanged(() => LastLoadTime);
                 }
             }
@@ -159,6 +159,9 @@
         {
             get
             {
+                if (this.content == null)
+                    return null;
+
                 return this.content.WorkshopId;
             }
         }
