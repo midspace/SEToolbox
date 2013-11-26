@@ -140,6 +140,8 @@
     <Compile Include="Services\SaveFileDialog.cs" />
     <Compile Include="Services\SaveFileDialogViewModel.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="Services\SynchronizeSelectedItems.cs" />
+    <Compile Include="Services\WeakEventHandler.cs" />
     <Compile Include="Services\WindowWrapper.cs" />
     <Compile Include="Models\ExplorerModel.cs" />
     <Compile Include="Interop\SpaceEngineersConsts.cs" />

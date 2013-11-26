@@ -21,9 +21,7 @@
         <Label Grid.ColumnSpan="2">Floating Object</Label>
         <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
-                <Button Command="{Binding DeleteObjectCommand}">
-                    <AccessText>_Delete</AccessText>
-                </Button>
+                <Button Command="{Binding DeleteObjectCommand}" Content="Delete"/>
             </ToolBar>
         </ToolBarPanel>
         <Label Grid.Row="2" Content="Type:"/>
