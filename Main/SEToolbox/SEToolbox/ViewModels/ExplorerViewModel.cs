@@ -141,11 +141,19 @@
             }
         }
 
-        public ICommand ExportExcelCommand
+        public ICommand ImportSandBoxCommand
         {
             get
             {
-                return new DelegateCommand(new Action(ExportExcelExecuted), new Func<bool>(ExportExcelCanExecute));
+                return new DelegateCommand(new Action(ImportSandBoxExecuted), new Func<bool>(ImportSandBoxCanExecute));
+            }
+        }
+
+        public ICommand ExportObjectCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ExportObjectExecuted), new Func<bool>(ExportObjectCanExecute));
             }
         }
 
@@ -457,6 +465,17 @@
             // TODO:
         }
 
+        public bool ImportSandBoxCanExecute()
+        {
+            return false;
+            //return this.dataModel.ActiveWorld != null;
+        }
+
+        public void ImportSandBoxExecuted()
+        {
+            // TODO:
+        }
+
         public bool ImportImageCanExecute()
         {
             return this.dataModel.ActiveWorld != null;
@@ -503,12 +522,13 @@
             }
         }
 
-        public bool ExportExcelCanExecute()
+        public bool ExportObjectCanExecute()
         {
-            return this.dataModel.ActiveWorld != null;
+            return false;
+            //return this.dataModel.ActiveWorld != null;
         }
 
-        public void ExportExcelExecuted()
+        public void ExportObjectExecuted()
         {
             // TODO:
         }

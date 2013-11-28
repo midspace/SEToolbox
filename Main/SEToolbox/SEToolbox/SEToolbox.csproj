@@ -282,6 +282,12 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\SpaceEngineers16x16.png" />
+    <None Include="Resources\export1.png" />
+    <None Include="Resources\Asteroid.png" />
+    <None Include="Resources\spedometer 16x16.png" />
+    <None Include="Resources\wrench.png" />
+    <None Include="Resources\delete2.png" />
     <None Include="Resources\about.png" />
     <None Include="Resources\cube_molecule.png" />
     <None Include="Resources\disk_blue.png" />

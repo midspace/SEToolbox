@@ -1,10 +1,14 @@
 ﻿namespace SEToolbox.Interop
 {
     using System;
+    using System.IO;
     using System.Xml;
     using Microsoft.Win32;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.CommonLib.ObjectBuilders.Definitions;
+    using System.Linq;
+    using System.Collections.Generic;
 
     public class SpaceEngineersAPI
     {
@@ -148,5 +152,46 @@
 
         #endregion
 
+        #region ReadCubeBlockDefinitions
+
+        static MyObjectBuilder_CubeBlockDefinitions cubeBlockDefinitions;
+        static MyObjectBuilder_ComponentDefinitions componentDefinitions;
+
+        public static void ReadCubeBlockDefinitions()
+        {
+            var cubeblocksFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\CubeBlocks.sbc");
+            var componentsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\Components.sbc");
+
+            cubeBlockDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>(cubeblocksFilename);
+            componentDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>(componentsFilename);
+
+            // TODO: set a file watch to reload the files, incase modding is occuring at the same time this is open.
+            //     Lock the load during this time, in case it happens multiple times.
+            // Report a friendly error if this load fails.
+        }
+
+        #endregion
+
+        #region FetchCubeBlockMass
+
+        public static float FetchCubeBlockMass(string subTypeid, MyCubeSize cubeSize)
+        {
+            float mass = 0;
+
+            var cubeBlockDefinition = cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
+                && (subTypeid == c.Id.SubtypeId || (c.Variants != null && c.Variants.Any(v => subTypeid == c.Id.SubtypeId + v.Color))));
+
+            if (cubeBlockDefinition != null)
+            {
+                foreach (var component in cubeBlockDefinition.Components)
+                {
+                    mass += componentDefinitions.Components.Where(c => c.Id.SubtypeId == component.Subtype).Sum(c => c.Mass) * component.Count;
+                }
+            }
+
+            return mass;
+        }
+
+        #endregion
     }
 }

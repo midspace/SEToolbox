@@ -14,6 +14,8 @@
         private Point3D max;
         private Vector3D size;
         private bool isPiloted;
+        private string report;
+        private float mass;
 
         #endregion
 
@@ -162,6 +164,40 @@
             }
         }
 
+        public string Report
+        {
+            get
+            {
+                return this.report;
+            }
+
+            set
+            {
+                if (value != this.report)
+                {
+                    this.report = value;
+                    this.RaisePropertyChanged(() => Report);
+                }
+            }
+        }
+
+        public float Mass
+        {
+            get
+            {
+                return this.mass;
+            }
+
+            set
+            {
+                if (value != this.mass)
+                {
+                    this.mass = value;
+                    this.RaisePropertyChanged(() => Mass);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -183,6 +219,7 @@
 
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
+            float calcMass = 0;
 
             foreach (var block in this.CubeGrid.CubeBlocks)
             {
@@ -192,6 +229,8 @@
                 max.X = Math.Max(max.X, block.Max.X);
                 max.Y = Math.Max(max.Y, block.Max.Y);
                 max.Z = Math.Max(max.Z, block.Max.Z);
+
+                calcMass += SpaceEngineersAPI.FetchCubeBlockMass(block.SubtypeName, this.CubeGrid.GridSizeEnum);
             }
 
             var size = max - min;
@@ -202,8 +241,9 @@
             this.Min = min;
             this.Max = max;
             this.Size = size;
+            this.Mass = calcMass;
 
-            this.Description = string.Format("{0}", this.Size);
+            this.Description = string.Format("{0} | {1:#,##0}Kg", this.Size, this.Mass);
         }
 
         public bool HasPilot()

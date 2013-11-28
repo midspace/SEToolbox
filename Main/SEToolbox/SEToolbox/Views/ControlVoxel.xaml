@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:SEToolbox.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -21,7 +25,12 @@
         <Label Grid.ColumnSpan="2">Voxel</Label>
         <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
-                <Button Command="{Binding DeleteObjectCommand}" Content="Delete"/>
+                <Button Command="{Binding DeleteObjectCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" Margin="0,0,2,0" />
+                        <AccessText>Delete</AccessText>
+                    </StackPanel>
+                </Button>
             </ToolBar>
         </ToolBarPanel>
         <Label Grid.Row="2" Content="Filename"/>
