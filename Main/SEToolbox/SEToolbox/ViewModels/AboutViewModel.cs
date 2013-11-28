@@ -11,7 +11,6 @@
     {
         #region Fields
 
-        private SelectWorldModel dataModel;
         private bool? closeResult;
 
         #endregion

@@ -5,6 +5,7 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using System.Linq;
+    using System.Collections.Generic;
 
     public class StructureCubeGridModel : StructureBaseModel
     {
@@ -13,7 +14,7 @@
         private Point3D min;
         private Point3D max;
         private Vector3D size;
-        private bool isPiloted;
+        private int pilots;
         private string report;
         private float mass;
 
@@ -123,20 +124,28 @@
             }
         }
 
-        public bool IsPiloted
+        public int Pilots
         {
             get
             {
-                return this.isPiloted;
+                return this.pilots;
             }
 
             set
             {
-                if (value != this.isPiloted)
+                if (value != this.pilots)
                 {
-                    this.isPiloted = value;
-                    this.RaisePropertyChanged(() => IsPiloted);
+                    this.pilots = value;
+                    this.RaisePropertyChanged(() => Pilots);
                 }
+            }
+        }
+
+        public bool IsPiloted
+        {
+            get
+            {
+                return this.Pilots > 0;
             }
         }
 
@@ -246,35 +255,14 @@
             this.Description = string.Format("{0} | {1:#,##0}Kg", this.Size, this.Mass);
         }
 
-        public bool HasPilot()
+        /// <summary>
+        /// Find any Cockpits that have player character/s in them.
+        /// </summary>
+        /// <returns></returns>
+        public List<MyObjectBuilder_Cockpit> GetActiveCockpits()
         {
-            var cube = this.CubeGrid.CubeBlocks.FirstOrDefault<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
-
-            if (cube != null)
-            {
-                var cockpit = cube as MyObjectBuilder_Cockpit;
-                this.IsPiloted = cockpit.Pilot != null;
-                return this.IsPiloted;
-            }
-
-            return false;
-        }
-
-        public IStructureBase GetPilot()
-        {
-            var cube = this.CubeGrid.CubeBlocks.FirstOrDefault<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
-
-            if (cube != null)
-            {
-                var cockpit = cube as MyObjectBuilder_Cockpit;
-
-                if (cockpit.Pilot != null)
-                {
-                    return StructureBaseModel.Create(cockpit.Pilot);
-                }
-            }
-
-            return null;
+            var cubes = this.CubeGrid.CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
+            return new List<MyObjectBuilder_Cockpit>(cubes.Cast<MyObjectBuilder_Cockpit>());
         }
 
         public void RepairAllDamage()

@@ -484,7 +484,7 @@
         public void ImportImageExecuted()
         {
             ImportImageModel model = new ImportImageModel();
-            model.Load(this.dataModel.TheCharacter.PositionAndOrientation.Value);
+            model.Load(this.dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
             ImportImageViewModel loadVm = new ImportImageViewModel(this, model);
 
             var result = dialogService.ShowDialog<WindowImportImage>(this, loadVm);
@@ -507,7 +507,7 @@
         public void ImportModelExecuted()
         {
             Import3dModelModel model = new Import3dModelModel();
-            model.Load(this.dataModel.TheCharacter.PositionAndOrientation.Value);
+            model.Load(this.dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
             Import3dModelViewModel loadVm = new Import3dModelViewModel(this, model);
 
             var result = dialogService.ShowDialog<WindowImportModel>(this, loadVm);
@@ -633,11 +633,17 @@
                 bool canDelete = true;
 
                 if (viewModel == null)
+                {
                     canDelete = false;
+                }
                 else if (viewModel is StructureCharacterViewModel)
-                    canDelete = false;
+                {
+                    canDelete = !((StructureCharacterViewModel)viewModel).IsPlayer;
+                }
                 else if (viewModel is StructureCubeGridViewModel)
+                {
                     canDelete = !((StructureCubeGridViewModel)viewModel).IsPiloted;
+                }
 
                 if (canDelete)
                 {

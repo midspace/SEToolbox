@@ -22,7 +22,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Grid.ColumnSpan="2">Voxel</Label>
+        <Label Grid.ColumnSpan="2">Asteroid</Label>
         <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
                 <Button Command="{Binding DeleteObjectCommand}">

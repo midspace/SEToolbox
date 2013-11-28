@@ -111,7 +111,6 @@
     <Compile Include="Models\ImportImageModel.cs" />
     <Compile Include="Models\IStructureBase.cs" />
     <Compile Include="Models\StructureCubeGridModel.cs" />
-    <Compile Include="Old\StructureCubeGrid.cs" />
     <Compile Include="Services\CommandAction.cs" />
     <Compile Include="Services\CommandReference.cs" />
     <Compile Include="Services\DelegateCommand.cs" />
@@ -148,8 +147,6 @@
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
     <Compile Include="Interop\ClassType.cs" />
-    <Compile Include="Old\SEResource.cs" />
-    <Compile Include="Old\SESupport.cs" />
     <Compile Include="Support\VisualTreeEnumeration.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
