@@ -2,7 +2,10 @@
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Models;
+    using SEToolbox.Services;
+    using System;
     using System.ComponentModel;
+    using System.Windows.Input;
 
     public class StructureCharacterViewModel : StructureBaseViewModel<StructureCharacterModel>
     {
@@ -22,6 +25,14 @@
 
         #region Properties
 
+        public ICommand DeleteObjectCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(DeleteObjectExecuted), new Func<bool>(DeleteObjectCanExecute));
+            }
+        }
+
         protected new StructureCharacterModel DataModel
         {
             get
@@ -30,57 +41,18 @@
             }
         }
 
-        //public long EntityId
-        //{
-        //    get
-        //    {
-        //        return this.DataModel.EntityBase.EntityId;
-        //    }
+        public bool IsPlayer
+        {
+            get
+            {
+                return this.DataModel.IsPlayer;
+            }
 
-        //    set
-        //    {
-        //        if (value != this.DataModel.EntityBase.EntityId)
-        //        {
-        //            this.DataModel.EntityBase.EntityId = value;
-        //            this.RaisePropertyChanged(() => EntityId);
-        //        }
-        //    }
-        //}
-
-        //public MyPositionAndOrientation? PositionAndOrientation
-        //{
-        //    get
-        //    {
-        //        return this.DataModel.EntityBase.PositionAndOrientation;
-        //    }
-
-        //    set
-        //    {
-        //        if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, this.DataModel.EntityBase.PositionAndOrientation))
-        //        //if (value != this.entityBase.PositionAndOrientation)
-        //        {
-        //            this.DataModel.EntityBase.PositionAndOrientation = value;
-        //            this.RaisePropertyChanged(() => PositionAndOrientation);
-        //        }
-        //    }
-        //}
-
-        //public ClassType ClassType
-        //{
-        //    get
-        //    {
-        //        return this.DataModel.ClassType;
-        //    }
-
-        //    set
-        //    {
-        //        if (value != this.DataModel.ClassType)
-        //        {
-        //            this.DataModel.ClassType = value;
-        //            this.RaisePropertyChanged(() => ClassType);
-        //        }
-        //    }
-        //}
+            set
+            {
+                this.DataModel.IsPlayer = value;
+            }
+        }
 
         public MyCharacterModelEnum CharacterModel
         {
@@ -99,6 +71,16 @@
         #endregion
 
         #region methods
+
+        public bool DeleteObjectCanExecute()
+        {
+            return !this.IsPlayer;
+        }
+
+        public void DeleteObjectExecuted()
+        {
+            ((ExplorerViewModel)this.OwnerViewModel).DeleteModel(this);
+        }
 
         #endregion
     }

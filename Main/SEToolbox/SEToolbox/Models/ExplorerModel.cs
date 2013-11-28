@@ -1,14 +1,15 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.IO;
-    using System.Windows.Threading;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.IO;
+    using System.Linq;
+    using System.Windows.Threading;
 
     public class ExplorerModel : BaseModel
     {
@@ -31,7 +32,7 @@
 
         private MyObjectBuilder_Sector sectorData;
 
-        private StructureCharacterModel theCharacter;
+        private StructureCharacterModel thePlayerCharacter;
 
         ///// <summary>
         ///// Collection of <see cref="IStructureBase"/> objects that represent the builds currently configured.
@@ -94,19 +95,19 @@
             }
         }
 
-        public StructureCharacterModel TheCharacter
+        public StructureCharacterModel ThePlayerCharacter
         {
             get
             {
-                return this.theCharacter;
+                return this.thePlayerCharacter;
             }
 
             set
             {
-                if (value != this.theCharacter)
+                if (value != this.thePlayerCharacter)
                 {
-                    this.theCharacter = value;
-                    this.RaisePropertyChanged(() => TheCharacter);
+                    this.thePlayerCharacter = value;
+                    this.RaisePropertyChanged(() => ThePlayerCharacter);
                 }
             }
         }
@@ -263,6 +264,12 @@
                     this.IsModified = false;
                     this.IsBusy = false;
                 }));
+
+            if (this.ThePlayerCharacter == null)
+            {
+                // TODO: warn user there is no active "Player" character.
+                // Show a dialog, and ask them if they want one created.
+            }
         }
 
         public void SaveSandBox()
@@ -283,7 +290,7 @@
                 // TODO: manage adding new voxels.
             }
             this.manageNewVoxelList.Clear();
-            
+
             // Manages the removal old voxels files.
             foreach (var file in this.manageDeleteVoxelList)
             {
@@ -307,7 +314,7 @@
             this.Structures.Clear();
             this.manageNewVoxelList.Clear();
             this.manageDeleteVoxelList.Clear();
-            this.TheCharacter = null;
+            this.ThePlayerCharacter = null;
 
             if (this.SectorData != null)
             {
@@ -315,22 +322,33 @@
                 {
                     var structure = StructureBaseModel.Create(entityBase);
 
-                    if (this.TheCharacter == null)
+                    if (structure is StructureCharacterModel)
                     {
-                        if (structure is StructureCharacterModel)
-                        {
-                            this.TheCharacter = structure as StructureCharacterModel;
-                        }
-                        else if (structure is StructureCubeGridModel)
-                        {
-                            var cubeGrid = structure as StructureCubeGridModel;
+                        var character = structure as StructureCharacterModel;
 
-                            if (cubeGrid.HasPilot())
+                        if (character.EntityId == this.ActiveWorld.Content.ControlledObject)
+                        {
+                            character.IsPlayer = true;
+                            this.ThePlayerCharacter = character;
+                        }
+                    }
+                    else if (structure is StructureCubeGridModel)
+                    {
+                        var cubeGrid = structure as StructureCubeGridModel;
+
+                        var list = cubeGrid.GetActiveCockpits();
+                        foreach (var cockpit in list)
+                        {
+                            cubeGrid.Pilots++;
+                            var character = StructureBaseModel.Create(cockpit.Pilot);
+
+                            if (cockpit.EntityId == this.ActiveWorld.Content.ControlledObject)
                             {
-                                this.TheCharacter = cubeGrid.GetPilot() as StructureCharacterModel;
-                                // Add the character when they are a pilot in a cockpit.
-                                this.Structures.Add(this.TheCharacter);
+                                this.ThePlayerCharacter = character as StructureCharacterModel;
+                                this.ThePlayerCharacter.IsPlayer = true;
                             }
+
+                            this.Structures.Add(character);
                         }
                     }
 
@@ -369,7 +387,35 @@
                     this.IsModified = true;
                     return true;
                 }
+                else
+                {
+                    // TODO: write as linq;
+                    //var x = this.SectorData.SectorObjects.Where(s => s is MyObjectBuilder_CubeGrid).Cast<MyObjectBuilder_CubeGrid>().
+                    //    Where(s => s.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot == entity)).Select(e => e).ToArray();
+
+                    foreach (var sectorObject in this.SectorData.SectorObjects)
+                    {
+                        if (sectorObject is MyObjectBuilder_CubeGrid)
+                        {
+                            foreach (var cubeGrid in ((MyObjectBuilder_CubeGrid)sectorObject).CubeBlocks)
+                            {
+                                if (cubeGrid is MyObjectBuilder_Cockpit)
+                                {
+                                    var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
+                                    if (cockpit.Pilot == entity)
+                                    {
+                                        cockpit.Pilot = null;
+                                        var structure = this.Structures.FirstOrDefault(s => s.EntityBase == sectorObject) as StructureCubeGridModel;
+                                        structure.Pilots--;
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
             return false;
         }
 

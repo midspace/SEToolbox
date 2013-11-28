@@ -10,6 +10,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <ObjectDataProvider x:Key="MyCharacterModelEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="sandbox:MyCharacterModelEnum" />
@@ -30,13 +31,25 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label>Character</Label>
-        <Label Grid.Row="1" Content="Suit:"/>
-        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource MyCharacterModelEnum}}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}">
+        <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+            <ToolBar>
+                <Button Command="{Binding DeleteObjectCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" Margin="0,0,2,0" />
+                        <AccessText>Delete</AccessText>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </ToolBarPanel>
+        <Label Grid.Row="2" Content="Suit:"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource MyCharacterModelEnum}}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+        <Label Grid.Row="3" Content="Player:"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
     </Grid>
 </UserControl>

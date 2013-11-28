@@ -5,6 +5,12 @@
 
     public class StructureCharacterModel : StructureBaseModel
     {
+        #region Fields
+
+        private bool isPlayer;
+
+        #endregion
+
         #region ctor
 
         public StructureCharacterModel(MyObjectBuilder_EntityBase entityBase)
@@ -38,6 +44,23 @@
                     this.Character.CharacterModel = value;
                     this.RaisePropertyChanged(() => CharacterModel);
                     this.UpdateFromEntityBase();
+                }
+            }
+        }
+
+        public bool IsPlayer
+        {
+            get
+            {
+                return this.isPlayer;
+            }
+
+            set
+            {
+                if (value != this.isPlayer)
+                {
+                    this.isPlayer = value;
+                    this.RaisePropertyChanged(() => IsPlayer);
                 }
             }
         }
