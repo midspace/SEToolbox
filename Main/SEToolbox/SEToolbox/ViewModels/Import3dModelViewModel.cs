@@ -232,6 +232,7 @@
             set
             {
                 this.dataModel.ClassType = value;
+                this.ProcessModelScale();
             }
         }
 
@@ -287,6 +288,7 @@
             set
             {
                 this.dataModel.BuildDistance = value;
+                this.ProcessModelScale();
             }
         }
 
@@ -392,14 +394,7 @@
                     //this.Forward = new ThreeDPointModel(0, 0, 1);
                     //this.Up = new ThreeDPointModel(0, 1, 0);
 
-
-                    // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
-                    var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
-                    vector.Normalize();
-                    vector = Vector3D.Multiply(vector, this.BuildDistance);
-                    this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
-                    this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward);
-                    this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
+                    this.BuildDistance = 10;
 
                     this.IsValidModel = true;
                     this.ProcessModelScale();
@@ -449,7 +444,22 @@
                     this.NewModelSize.Depth = (int)(this.MultipleScale * this.OriginalModelSize.Depth);
                 }
 
-                this.BuildDistance = this.NewModelSize.Depth + 10;
+                double vectorDistance = this.BuildDistance;
+
+                switch (this.ClassType)
+                {
+                    case ImportClassType.SmallShip: vectorDistance += this.NewModelSize.Depth * 0.5; break;
+                    case ImportClassType.LargeShip: vectorDistance += this.NewModelSize.Depth * 2.5; break;
+                    case ImportClassType.Station: vectorDistance += this.NewModelSize.Depth * 2.5; break;
+                }
+
+                // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
+                var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
+                vector.Normalize();
+                vector = Vector3D.Multiply(vector, vectorDistance);
+                this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
+                this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward);
+                this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
             }
         }
 
@@ -459,20 +469,37 @@
             entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
             entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
 
-            entity.IsStatic = false;
             entity.Skeleton = new System.Collections.Generic.List<BoneInfo>();
             entity.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
             entity.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
 
             //double scaleFactor = 2.5;
 
-
             string blockPrefix = "";
             switch (this.ClassType)
             {
-                case ImportClassType.SmallShip: entity.GridSizeEnum = MyCubeSize.Small; blockPrefix += "Small"; break;
-                case ImportClassType.LargeShip: entity.GridSizeEnum = MyCubeSize.Large; blockPrefix += "Large"; break;
+                case ImportClassType.SmallShip:
+                    entity.GridSizeEnum = MyCubeSize.Small;
+                    blockPrefix += "Small";
+                    entity.IsStatic = false;
+                    break;
+
+                case ImportClassType.LargeShip:
+                    entity.GridSizeEnum = MyCubeSize.Large;
+                    blockPrefix += "Large";
+                    entity.IsStatic = false;
+                    break;
+
+                case ImportClassType.Station:
+                    entity.GridSizeEnum = MyCubeSize.Large;
+                    blockPrefix += "Large";
+                    entity.IsStatic = true;
+                    this.Position = this.Position.RoundOff();
+                    this.Forward = this.Forward.RoundToAxis();
+                    this.Up = this.Up.RoundToAxis();
+                    break;
             }
+
             switch (this.ArmorType)
             {
                 case ImportArmorType.Heavy: blockPrefix += "HeavyBlock"; break;

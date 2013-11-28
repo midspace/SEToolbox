@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
+    using System;
     using System.Windows.Media.Media3D;
 
     public class BindableVector3DModel : BaseModel
@@ -153,6 +154,26 @@
         {
             Vector3D v = this.vector;
             v.Negate();
+            return new BindableVector3DModel(v);
+        }
+
+        public BindableVector3DModel RoundToAxis()
+        {
+            Vector3D v = new Vector3D();
+
+            if (Math.Abs(this.vector.X) > Math.Abs(this.vector.Y) && Math.Abs(this.vector.X) > Math.Abs(this.vector.Z))
+            {
+                v = new Vector3D(Math.Sign(this.vector.X), 0, 0);
+            }
+            else if (Math.Abs(this.vector.Y) > Math.Abs(this.vector.X) && Math.Abs(this.vector.Y) > Math.Abs(this.vector.Z))
+            {
+                v = new Vector3D(0, Math.Sign(this.vector.Y), 0);
+            }
+            else if (Math.Abs(this.vector.Z) > Math.Abs(this.vector.X) && Math.Abs(this.vector.Z) > Math.Abs(this.vector.Y))
+            {
+                v = new Vector3D(0, 0, Math.Sign(this.vector.Z));
+            }
+
             return new BindableVector3DModel(v);
         }
 

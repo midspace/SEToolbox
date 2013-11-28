@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
+    using System;
     using System.Windows.Media.Media3D;
 
     public class BindablePoint3DModel : BaseModel
@@ -142,6 +143,12 @@
                 result = float.MinValue;
             }
             return result;
+        }
+
+        public BindablePoint3DModel RoundOff()
+        {
+            Point3D v = new Point3D(Math.Round(this.point.X, 0, MidpointRounding.ToEven), Math.Round(this.point.Y, 0, MidpointRounding.ToEven), Math.Round(this.point.Z, 0, MidpointRounding.ToEven));
+            return new BindablePoint3DModel(v);
         }
 
         #endregion
