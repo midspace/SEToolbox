@@ -406,7 +406,6 @@
             entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
             entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
 
-            entity.IsStatic = false;
             entity.Skeleton = new System.Collections.Generic.List<BoneInfo>();
             entity.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
             entity.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
@@ -416,9 +415,28 @@
             string blockPrefix = "";
             switch (this.ClassType)
             {
-                case ImportClassType.SmallShip: entity.GridSizeEnum = MyCubeSize.Small; blockPrefix += "Small"; break;
-                case ImportClassType.LargeShip: entity.GridSizeEnum = MyCubeSize.Large; blockPrefix += "Large"; break;
+                case ImportClassType.SmallShip:
+                    entity.GridSizeEnum = MyCubeSize.Small;
+                    blockPrefix += "Small";
+                    entity.IsStatic = false;
+                    break;
+
+                case ImportClassType.LargeShip:
+                    entity.GridSizeEnum = MyCubeSize.Large;
+                    blockPrefix += "Large";
+                    entity.IsStatic = false;
+                    break;
+
+                case ImportClassType.Station:
+                    entity.GridSizeEnum = MyCubeSize.Large;
+                    blockPrefix += "Large";
+                    entity.IsStatic = true;
+                    this.Position = this.Position.RoundOff();
+                    this.Forward = this.Forward.RoundToAxis();
+                    this.Up = this.Up.RoundToAxis();
+                    break;
             }
+
             switch (this.ArmorType)
             {
                 case ImportArmorType.Heavy: blockPrefix += "HeavyBlock"; break;

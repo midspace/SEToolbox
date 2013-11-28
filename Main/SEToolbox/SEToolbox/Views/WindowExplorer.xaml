@@ -137,7 +137,7 @@
                                     <GridView>
                                         <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
                                         <GridViewColumn Header="Type" Width="100" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
-                                        <GridViewColumn Header="Description" Width="120" DisplayMemberBinding="{Binding Description}"/>
+                                        <GridViewColumn Header="Description" Width="150" DisplayMemberBinding="{Binding Description}"/>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>

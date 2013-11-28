@@ -14,7 +14,8 @@
     public enum ImportClassType
     {
         SmallShip,
-        LargeShip
+        LargeShip,
+        Station
     };
 
     public enum ImportArmorType
