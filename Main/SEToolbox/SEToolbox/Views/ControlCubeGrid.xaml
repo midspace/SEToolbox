@@ -8,6 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -31,10 +32,25 @@
         </StackPanel>
         <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
-                <Button Command="{Binding DeleteObjectCommand}" Content="Delete" />
+                <Button Command="{Binding DeleteObjectCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" Margin="0,0,2,0" />
+                        <AccessText>Delete</AccessText>
+                    </StackPanel>
+                </Button>
                 <Separator/>
-                <Button Command="{Binding RepairObjectCommand}" Content="Repair"/>
-                <Button Command="{Binding ResetSpeedCommand}" Content="Reset Speed"/>
+                <Button Command="{Binding RepairObjectCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" Margin="0,0,2,0" />
+                        <AccessText>Repair</AccessText>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding ResetSpeedCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" Margin="0,0,2,0" />
+                        <AccessText>Reset Speed</AccessText>
+                    </StackPanel>
+                </Button>
             </ToolBar>
         </ToolBarPanel>
         <Label Grid.Row="2" Content="Piloted:"/>

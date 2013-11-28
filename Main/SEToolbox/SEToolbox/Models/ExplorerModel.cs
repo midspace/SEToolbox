@@ -238,6 +238,7 @@
         public void Load()
         {
             this.BaseSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves");
+            SpaceEngineersAPI.ReadCubeBlockDefinitions();
             this.SetActiveStatus();
         }
 
