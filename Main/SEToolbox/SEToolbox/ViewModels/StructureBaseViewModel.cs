@@ -118,6 +118,19 @@
             }
         }
 
+        public double PlayerDistance
+        {
+            get
+            {
+                return this.dataModel.PlayerDistance;
+            }
+
+            set
+            {
+                this.dataModel.PlayerDistance = value;
+            }
+        }
+
         #endregion
 
         #region methods

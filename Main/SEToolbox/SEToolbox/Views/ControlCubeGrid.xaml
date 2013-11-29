@@ -24,6 +24,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
@@ -61,12 +63,9 @@
         <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
         <Label Grid.Row="5" Content="Speed:"/>
         <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed}" />
-
-        <Label Grid.Row="6" Content="Count:"/>
-        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Name="uxCountText" />
-
-        <Grid Grid.Row="6" Grid.ColumnSpan="2">
-            <ListView Name="uxCubesListView" DisplayMemberPath="SubtypeName" SelectionMode="Single"/>
-        </Grid>
+        <Label Grid.Row="6" Content="Mass:"/>
+        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0} Kg'}" />
+        <Label Grid.Row="7" Content="Distance:"/>
+        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0}'}" />
     </Grid>
 </UserControl>

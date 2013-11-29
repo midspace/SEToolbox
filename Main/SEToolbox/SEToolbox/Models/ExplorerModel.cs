@@ -354,6 +354,15 @@
 
                     this.Structures.Add(structure);
                 }
+
+                if (this.ThePlayerCharacter != null)
+                {
+                    foreach (var structure in this.Structures)
+                    {
+                        var dist = this.ThePlayerCharacter.PositionAndOrientation.Value.Position - structure.PositionAndOrientation.Value.Position;
+                        structure.PlayerDistance = dist.Length();
+                    }
+                }
             }
 
             this.RaisePropertyChanged(() => Structures);

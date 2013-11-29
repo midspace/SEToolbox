@@ -13,6 +13,7 @@
         private MyObjectBuilder_EntityBase entityBase;
         private ClassType classType;
         private string description;
+        double playerDistance;
 
         #endregion
 
@@ -113,6 +114,23 @@
                 {
                     this.description = value;
                     this.RaisePropertyChanged(() => Description);
+                }
+            }
+        }
+
+        public double PlayerDistance
+        {
+            get
+            {
+                return this.playerDistance;
+            }
+
+            set
+            {
+                if (value != this.playerDistance)
+                {
+                    this.playerDistance = value;
+                    this.RaisePropertyChanged(() => PlayerDistance);
                 }
             }
         }
