@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
@@ -456,13 +457,25 @@
 
         public bool ImportVoxelCanExecute()
         {
-            return false;
-            //return this.dataModel.ActiveWorld != null;
+            return this.dataModel.ActiveWorld != null;
         }
 
         public void ImportVoxelExecuted()
         {
-            // TODO:
+            ImportVoxelModel model = new ImportVoxelModel();
+            model.Load(this.dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            ImportVoxelViewModel loadVm = new ImportVoxelViewModel(this, model);
+
+            if (loadVm.BrowseVoxel() == true)
+            {
+                this.IsBusy = true;
+                var newEntity = loadVm.BuildEntity();
+                this.dataModel.AddVoxelFile(loadVm.Filename, loadVm.SourceFilename);
+                this.selectNewStructure = true;
+                var structure = this.dataModel.AddEntity(newEntity);
+                this.selectNewStructure = false;
+                this.IsBusy = false;
+            }
         }
 
         public bool ImportSandBoxCanExecute()
@@ -661,6 +674,11 @@
             {
                 this.SelectedStructure = this.Structures[index];
             }
+        }
+
+        public bool ContainsVoxelFilename(string filename)
+        {
+            return this.dataModel.ContainsVoxelFilename(filename);
         }
     }
 }

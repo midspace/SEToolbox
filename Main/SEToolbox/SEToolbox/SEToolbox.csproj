@@ -96,6 +96,7 @@
     <Compile Include="Models\BindableVector3DModel.cs" />
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
+    <Compile Include="Models\ImportVoxelModel.cs" />
     <Compile Include="Models\SaveResource.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -150,6 +151,7 @@
     <Compile Include="Support\VisualTreeEnumeration.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\ImportVoxelViewModel.cs" />
     <Compile Include="ViewModels\StructureFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\Import3dModelViewModel.cs" />
     <Compile Include="ViewModels\ImportImageViewModel.cs" />

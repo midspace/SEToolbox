@@ -240,6 +240,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image files (*.vox)|*.vox;*.png|All files (*.*)|*.*.
+        /// </summary>
+        internal static string ImportVoxelFilter {
+            get {
+                return ResourceManager.GetString("ImportVoxelFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Asteroid to Import.
+        /// </summary>
+        internal static string ImportVoxelTitle {
+            get {
+                return ResourceManager.GetString("ImportVoxelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Astronaut Grey.
         /// </summary>
         internal static string MyCharacterModelEnum_Astronaut {
