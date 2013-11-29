@@ -214,4 +214,10 @@
   <data name="wrench" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wrench.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ImportVoxelFilter" xml:space="preserve">
+    <value>Image files (*.vox)|*.vox;*.png|All files (*.*)|*.*</value>
+  </data>
+  <data name="ImportVoxelTitle" xml:space="preserve">
+    <value>Select Asteroid to Import</value>
+  </data>
 </root>

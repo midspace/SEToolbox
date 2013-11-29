@@ -287,7 +287,7 @@
             foreach (KeyValuePair<string, string> kvp in this.manageNewVoxelList)
             {
                 var filename = Path.Combine(this.ActiveWorld.Savepath, kvp.Key);
-                // TODO: manage adding new voxels.
+                File.Copy(kvp.Value, filename);
             }
             this.manageNewVoxelList.Clear();
 
@@ -418,6 +418,16 @@
 
             return false;
         }
+
+        public void AddVoxelFile(string voxelFilename, string sourceFilename)
+        {
+            this.manageNewVoxelList.Add(voxelFilename, sourceFilename);
+        }
+        public bool ContainsVoxelFilename(string filename)
+        {
+            return this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this.manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
+        }
+
 
         #endregion
     }
