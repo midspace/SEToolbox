@@ -16,5 +16,7 @@
         string Description { get; set; }
 
         void UpdateFromEntityBase();
+
+        double PlayerDistance { get; set; }
     }
 }

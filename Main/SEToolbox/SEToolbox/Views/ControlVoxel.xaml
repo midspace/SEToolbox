@@ -20,6 +20,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.ColumnSpan="2">Asteroid</Label>
@@ -34,6 +36,8 @@
             </ToolBar>
         </ToolBarPanel>
         <Label Grid.Row="2" Content="Filename"/>
-        <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsReadOnly="True" Text="{Binding Filename}" />
+        <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Filename}"/>
+        <Label Grid.Row="3" Content="Distance:"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0}'}" />
     </Grid>
 </UserControl>

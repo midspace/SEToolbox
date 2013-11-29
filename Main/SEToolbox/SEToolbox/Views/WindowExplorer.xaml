@@ -138,6 +138,7 @@
                                         <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
                                         <GridViewColumn Header="Type" Width="100" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
                                         <GridViewColumn Header="Description" Width="150" DisplayMemberBinding="{Binding Description}"/>
+                                        <GridViewColumn Header="Distance" Width="80" DisplayMemberBinding="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0}'}"/>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>

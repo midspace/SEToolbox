@@ -154,6 +154,14 @@
             }
         }
 
+        public double Mass
+        {
+            get
+            {
+                return this.DataModel.Mass;
+            }
+        }
+
         #endregion
 
         #region methods
