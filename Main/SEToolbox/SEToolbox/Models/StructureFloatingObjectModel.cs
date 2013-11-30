@@ -55,7 +55,7 @@
         public override void UpdateFromEntityBase()
         {
             this.ClassType = ClassType.FloatingObject;
-            this.Description = string.Format("{1}x {0}", this.FloatingObject.Item.Content.SubtypeName, this.FloatingObject.Item.Amount);
+            this.Description = string.Format("{0} x {1}", this.FloatingObject.Item.Content.SubtypeName, this.FloatingObject.Item.Amount);
         }
 
         #endregion

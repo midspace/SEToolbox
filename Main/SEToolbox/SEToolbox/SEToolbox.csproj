@@ -85,6 +85,7 @@
     <Compile Include="Controls\SortableListView.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BusyMouseConverter.cs" />
+    <Compile Include="Converters\DistanceConverter.cs" />
     <Compile Include="Converters\CountToVisibilityConverter.cs" />
     <Compile Include="Converters\EnumToResouceConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
