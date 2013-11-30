@@ -54,6 +54,6 @@
         <Label Grid.Row="3" Content="Player:"/>
         <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
         <Label Grid.Row="4" Content="Distance:"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0}'}" />
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
     </Grid>
 </UserControl>

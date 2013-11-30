@@ -21,6 +21,7 @@
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:StringFormatMultiValueConverter x:Key="StringFormatConverter"/>
+        <converters:DistanceConverter x:Key="DistanceConverter"/>
     </Window.Resources>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
@@ -138,7 +139,7 @@
                                         <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
                                         <GridViewColumn Header="Type" Width="100" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
                                         <GridViewColumn Header="Description" Width="150" DisplayMemberBinding="{Binding Description}"/>
-                                        <GridViewColumn Header="Distance" Width="80" DisplayMemberBinding="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0}'}"/>
+                                        <GridViewColumn Header="Distance" Width="80" DisplayMemberBinding="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}"/>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>

@@ -66,6 +66,6 @@
         <Label Grid.Row="6" Content="Mass:"/>
         <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0} Kg'}" />
         <Label Grid.Row="7" Content="Distance:"/>
-        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0}'}" />
+        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
     </Grid>
 </UserControl>

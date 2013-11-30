@@ -359,8 +359,7 @@
                 {
                     foreach (var structure in this.Structures)
                     {
-                        var dist = this.ThePlayerCharacter.PositionAndOrientation.Value.Position - structure.PositionAndOrientation.Value.Position;
-                        structure.PlayerDistance = dist.Length();
+                        structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position - structure.PositionAndOrientation.Value.Position).Length();
                     }
                 }
             }
@@ -374,6 +373,7 @@
             {
                 this.SectorData.SectorObjects.Add(entity);
                 var structure = StructureBaseModel.Create(entity);
+                structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position - structure.PositionAndOrientation.Value.Position).Length();
                 this.Structures.Add(structure);
                 this.IsModified = true;
                 return structure;
@@ -436,7 +436,6 @@
         {
             return this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this.manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
         }
-
 
         #endregion
     }
