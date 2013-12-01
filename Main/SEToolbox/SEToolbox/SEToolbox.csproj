@@ -113,6 +113,11 @@
     <Compile Include="Models\ImportImageModel.cs" />
     <Compile Include="Models\IStructureBase.cs" />
     <Compile Include="Models\StructureCubeGridModel.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\CommandAction.cs" />
     <Compile Include="Services\CommandReference.cs" />
     <Compile Include="Services\DelegateCommand.cs" />
@@ -197,6 +202,9 @@
     <Compile Include="Views\WindowImportModel.xaml.cs">
       <DependentUpon>WindowImportModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WindowImportVoxel.xaml.cs">
+      <DependentUpon>WindowImportVoxel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WindowLoad.xaml.cs">
       <DependentUpon>WindowLoad.xaml</DependentUpon>
     </Compile>
@@ -244,6 +252,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\WindowImportVoxel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\WindowLoad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -253,11 +265,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -265,6 +272,7 @@
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Interop\SubtypeId.tt">
@@ -276,6 +284,25 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\asteroid_Gold1.vox" />
+    <None Include="Resources\asteroid_Gold2.vox" />
+    <None Include="Resources\asteroid_Gold3.vox" />
+    <None Include="Resources\asteroid_Ice_Magnasium.vox" />
+    <None Include="Resources\asteroid_Iron1.vox" />
+    <None Include="Resources\asteroid_Iron2.vox" />
+    <None Include="Resources\asteroid_Iron_Cobalt.vox" />
+    <None Include="Resources\asteroid_Iron_Nickel1.vox" />
+    <None Include="Resources\asteroid_Nickel_Gold1.vox" />
+    <None Include="Resources\asteroid_Platinum1.vox" />
+    <None Include="Resources\asteroid_Platinum_Nickel1.vox" />
+    <None Include="Resources\asteroid_Platinum_Nickel2.vox" />
+    <None Include="Resources\asteroid_Silicon1.vox" />
+    <None Include="Resources\asteroid_Silicon_Cobalt.vox" />
+    <None Include="Resources\asteroid_Silver1.vox" />
+    <None Include="Resources\asteroid_Silver2.vox" />
+    <None Include="Resources\asteroid_Silver_Iron_Cobalt.vox" />
+    <None Include="Resources\asteroid_Silver_Platinum_small.vox" />
+    <None Include="Resources\asteroid_Uranium1.vox" />
     <None Include="SEToolbox.pfx" />
   </ItemGroup>
   <ItemGroup>

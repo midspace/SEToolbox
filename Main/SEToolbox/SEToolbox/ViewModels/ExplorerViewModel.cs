@@ -466,11 +466,12 @@
             model.Load(this.dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
             ImportVoxelViewModel loadVm = new ImportVoxelViewModel(this, model);
 
-            if (loadVm.BrowseVoxel() == true)
+            var result = dialogService.ShowDialog<WindowImportVoxel>(this, loadVm);
+            if (result == true)
             {
                 this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
-                this.dataModel.AddVoxelFile(loadVm.Filename, loadVm.SourceFilename);
+                this.dataModel.AddVoxelFile(loadVm.Filename, loadVm.SourceFile);
                 this.selectNewStructure = true;
                 var structure = this.dataModel.AddEntity(newEntity);
                 this.selectNewStructure = false;
