@@ -81,6 +81,196 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Gold1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Gold1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Gold2 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Gold2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Gold3 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Gold3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Ice_Magnasium {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Ice_Magnasium", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Iron_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Iron_Cobalt", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Iron_Nickel1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Iron_Nickel1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Iron1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Iron1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Iron2 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Iron2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Nickel_Gold1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Nickel_Gold1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Platinum_Nickel1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Platinum_Nickel1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Platinum_Nickel2 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Platinum_Nickel2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Platinum1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Platinum1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Silicon_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Silicon_Cobalt", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Silicon1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Silicon1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Silver_Iron_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Silver_Iron_Cobalt", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Silver_Platinum_small {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Silver_Platinum_small", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Silver1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Silver1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Silver2 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Silver2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] asteroid_Uranium1 {
+            get {
+                object obj = ResourceManager.GetObject("asteroid_Uranium1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Floating Object.
         /// </summary>
         internal static string ClassType_FloatingObject {

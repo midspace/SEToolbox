@@ -7,16 +7,13 @@
     using SEToolbox.Models;
     using SEToolbox.Properties;
     using SEToolbox.Services;
-    using SEToolbox.Support;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using System.Drawing;
     using System.IO;
-    using System.Linq;
     using System.Windows.Forms;
     using System.Windows.Input;
-    using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
 
     public class ImportVoxelViewModel : BaseViewModel
@@ -58,7 +55,31 @@
         #endregion
 
         #region Properties
-        
+
+        public ICommand BrowseVoxelCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(BrowseVoxelExecuted), new Func<bool>(BrowseVoxelCanExecute));
+            }
+        }
+
+        public ICommand CreateCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(CreateExecuted), new Func<bool>(CreateCanExecute));
+            }
+        }
+
+        public ICommand CancelCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
+            }
+        }
+
         /// <summary>
         /// Gets or sets the DialogResult of the View.  If True or False is passed, this initiates the Close().
         /// </summary>
@@ -89,29 +110,29 @@
             }
         }
 
-        public string SourceFilename
+        public string SourceFile
         {
             get
             {
-                return this.dataModel.SourceFilename;
+                return this.dataModel.SourceFile;
             }
 
             set
             {
-                this.dataModel.SourceFilename = value;
+                this.dataModel.SourceFile = value;
             }
         }
 
-        public bool IsValidVoxel
+        public bool IsValidVoxelFile
         {
             get
             {
-                return this.dataModel.IsValidVoxel;
+                return this.dataModel.IsValidVoxelFile;
             }
 
             set
             {
-                this.dataModel.IsValidVoxel = value;
+                this.dataModel.IsValidVoxelFile = value;
             }
         }
 
@@ -178,18 +199,132 @@
             }
         }
 
+        public bool IsStockVoxel
+        {
+            get
+            {
+                return this.dataModel.IsStockVoxel;
+            }
+
+            set
+            {
+                this.dataModel.IsStockVoxel = value;
+            }
+        }
+
+        public bool IsCustomVoxel
+        {
+            get
+            {
+                return this.dataModel.IsCustomVoxel;
+            }
+
+            set
+            {
+                this.dataModel.IsCustomVoxel = value;
+            }
+        }
+
+        public bool IsFileVoxel
+        {
+            get
+            {
+                return this.dataModel.IsFileVoxel;
+            }
+
+            set
+            {
+                this.dataModel.IsFileVoxel = value;
+            }
+        }
+
+        public string StockVoxel
+        {
+            get
+            {
+                return this.dataModel.StockVoxel;
+            }
+
+            set
+            {
+                this.dataModel.StockVoxel = value;
+            }
+        }
+
+        public string CustomVoxel
+        {
+            get
+            {
+                return this.dataModel.CustomVoxel;
+            }
+
+            set
+            {
+                this.dataModel.CustomVoxel = value;
+            }
+        }
+
+        public List<string> StockVoxelFileList
+        {
+            get
+            {
+                return this.dataModel.StockVoxelFileList;
+            }
+        }
+
+        public List<string> CustomVoxelFileList
+        {
+            get
+            {
+                return this.dataModel.CustomVoxelFileList;
+            }
+        }
+
         #endregion
 
         #region methods
 
-        public bool BrowseVoxel()
+        public bool BrowseVoxelCanExecute()
         {
-            this.IsValidVoxel = false;
+            return true;
+        }
+
+        public void BrowseVoxelExecuted()
+        {
+            this.BrowseVoxel();
+        }
+
+        public bool CreateCanExecute()
+        {
+            return (this.IsValidVoxelFile && this.IsFileVoxel) || (this.IsCustomVoxel && this.CustomVoxel != null) || (this.IsStockVoxel && this.StockVoxel != null);
+        }
+
+        public void CreateExecuted()
+        {
+            this.CloseResult = true;
+        }
+
+        public bool CancelCanExecute()
+        {
+            return true;
+        }
+
+        public void CancelExecuted()
+        {
+            this.CloseResult = false;
+        }
+
+        #endregion
+
+        #region heleprs
+
+        private void BrowseVoxel()
+        {
+            this.IsValidVoxelFile = false;
 
             IOpenFileDialog openFileDialog = openFileDialogFactory();
             openFileDialog.Filter = Resources.ImportVoxelFilter;
             openFileDialog.Title = Resources.ImportVoxelTitle;
-            openFileDialog.InitialDirectory = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\VoxelMaps");
 
             // Open the dialog
             DialogResult result = dialogService.ShowOpenFileDialog(this.OwnerViewModel, openFileDialog);
@@ -200,51 +335,66 @@
 
                 if (File.Exists(openFileDialog.FileName))
                 {
-                    //this.Position = new BindablePoint3DModel(0, 0, 0);
-                    //this.Position = new ThreeDPointModel(0, 0, 0);
-                    //this.Forward = new ThreeDPointModel(0, 0, 1);
-                    //this.Up = new ThreeDPointModel(0, 1, 0);
-
-
-                    // Figure out where the Character is facing, and plant the new constrcut right in front, by "5" units, facing the Character.
-                    double distance = 5;
-                    var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
-                    vector.Normalize();
-                    vector = Vector3D.Multiply(vector, distance);
-                    this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
-                    this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward);
-                    this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
-
-                    // automatically number all files, and check for duplicate filenames.
-                    var filepartname = Path.GetFileNameWithoutExtension(openFileDialog.FileName).ToLower();
-                    var extension = Path.GetExtension(openFileDialog.FileName).ToLower();
-                    int index = 0;
-
-                    var filename = filepartname + index.ToString() + extension;
-
-                    while (((ExplorerViewModel)this.OwnerViewModel).ContainsVoxelFilename(filename))
-                    {
-                        index++;
-                        filename = filepartname + index.ToString() + extension;
-                    }
-                    this.Filename = filename;
-
-                    this.SourceFilename = openFileDialog.FileName;
-                    this.IsValidVoxel = true;
+                    this.SourceFile = openFileDialog.FileName;
+                    this.IsValidVoxelFile = true;
+                    this.IsFileVoxel = true;
                 }
 
                 this.IsBusy = false;
             }
-
-            return this.IsValidVoxel;
         }
-        
-        #endregion
 
-        #region methods
-        
         public MyObjectBuilder_EntityBase BuildEntity()
         {
+            //this.Position = new BindablePoint3DModel(0, 0, 0);
+            //this.Position = new ThreeDPointModel(0, 0, 0);
+            //this.Forward = new ThreeDPointModel(0, 0, 1);
+            //this.Up = new ThreeDPointModel(0, 1, 0);
+
+            // Figure out where the Character is facing, and plant the new constrcut right in front, by "5" units, facing the Character.
+            //double distance = 5;
+            var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
+            vector.Normalize();
+            //vector = Vector3D.Multiply(vector, distance);
+            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
+            this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward);
+            this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
+
+
+            string originalFile = null;
+            if (this.IsStockVoxel)
+            {
+                this.SourceFile = Path.Combine(Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\VoxelMaps"), this.StockVoxel + ".vox");
+                originalFile = this.SourceFile;
+            }
+            else if (this.IsCustomVoxel)
+            {
+                this.SourceFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".vox");
+                originalFile = this.CustomVoxel + ".vox";
+
+                // Copy Resource to Temp file.
+                File.WriteAllBytes(this.SourceFile, (byte[])Properties.Resources.ResourceManager.GetObject(this.CustomVoxel));
+            }
+            else if (this.IsFileVoxel)
+            {
+                originalFile = this.SourceFile;
+            }
+
+
+            // automatically number all files, and check for duplicate filenames.
+            var filepartname = Path.GetFileNameWithoutExtension(originalFile).ToLower();
+            var extension = Path.GetExtension(originalFile).ToLower();
+            int index = 0;
+            var filename = filepartname + index.ToString() + extension;
+
+            while (((ExplorerViewModel)this.OwnerViewModel).ContainsVoxelFilename(filename))
+            {
+                index++;
+                filename = filepartname + index.ToString() + extension;
+            }
+            this.Filename = filename;
+
+
             MyObjectBuilder_VoxelMap entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3(), this.Filename);
             entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
             entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;

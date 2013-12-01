@@ -220,4 +220,61 @@
   <data name="ImportVoxelTitle" xml:space="preserve">
     <value>Select Asteroid to Import</value>
   </data>
+  <data name="asteroid_Gold1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Gold1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Iron2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Iron2.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Nickel_Gold1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Nickel_Gold1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Silver1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Silver1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Iron1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Iron1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Iron_Cobalt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Iron_Cobalt.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Ice_Magnasium" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Ice_Magnasium.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Platinum_Nickel1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Platinum_Nickel1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Platinum_Nickel2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Platinum_Nickel2.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Silver_Iron_Cobalt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Silver_Iron_Cobalt.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Gold2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Gold2.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Gold3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Gold3.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Iron_Nickel1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Iron_Nickel1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Platinum1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Platinum1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Silicon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Silicon1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Silicon_Cobalt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Silicon_Cobalt.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Silver2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Silver2.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Silver_Platinum_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Silver_Platinum_small.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="asteroid_Uranium1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\asteroid_Uranium1.vox;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

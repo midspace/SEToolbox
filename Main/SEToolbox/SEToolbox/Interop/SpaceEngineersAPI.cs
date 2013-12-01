@@ -1,18 +1,29 @@
 ﻿namespace SEToolbox.Interop
 {
-    using System;
-    using System.IO;
-    using System.Xml;
     using Microsoft.Win32;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Definitions;
+    using System;
+    using System.IO;
     using System.Linq;
-    using System.Collections.Generic;
+    using System.Xml;
 
     public class SpaceEngineersAPI
     {
         #region GetApplicationFilePath
+
+        public static bool IsSpaceEngineersInstalled()
+        {
+            var filePath = GetApplicationFilePath();
+            if (string.IsNullOrEmpty(filePath))
+                return false;
+            if (!Directory.Exists(filePath))
+                return false;
+            if (!File.Exists(Path.Combine(filePath, "SpaceEngineers.exe")))
+                return false;
+            return true;
+        }
 
         public static string GetApplicationFilePath()
         {
