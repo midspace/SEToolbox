@@ -62,3 +62,24 @@ Why are the blocks 0.5 and 2.5 meter blocks?
 Sectors have the same size as in Miner Wars: 50x50x50km. It would take a couple of minutes to get from one border to the other.
 http://spaceengineerswiki.com/index.php?title=FAQs
 
+
+My experiments turning 3D models into in-game ships
+http://forums.keenswh.com/post/my-experiments-turning-3d-models-into-ingame-ships-6588883?&trail=15
+
+
+Python v3.1.5 documentation » The Python Standard Library »
+http://docs.python.org/3.1/library/functions.html
+
+
+ILMerge
+http://www.microsoft.com/en-us/download/details.aspx?id=17630
+http://research.microsoft.com/en-us/people/mbarnett/ILMerge.aspx
+https://www.nuget.org/packages/ilmerge
+ilmerge /target:winexe /out:SEToolbox.exe SEToolbox.exe SEToolbox.ImageLibrary.dll
+
+
+Shaders
+https://wpffx.codeplex.com/
+http://blogs.msdn.com/b/chuckw/archive/2011/12/09/known-issue-directx-sdk-june-2010-setup-and-the-s1023-error.aspx
+https://wpf.codeplex.com/downloads/get/40167
+http://www.microsoft.com/en-au/download/details.aspx?id=6812

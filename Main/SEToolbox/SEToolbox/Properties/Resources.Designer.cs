@@ -113,9 +113,9 @@ namespace SEToolbox.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] asteroid_Ice_Magnasium {
+        internal static byte[] asteroid_Ice_Magnesium {
             get {
-                object obj = ResourceManager.GetObject("asteroid_Ice_Magnasium", resourceCulture);
+                object obj = ResourceManager.GetObject("asteroid_Ice_Magnesium", resourceCulture);
                 return ((byte[])(obj));
             }
         }

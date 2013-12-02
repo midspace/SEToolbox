@@ -88,6 +88,13 @@
                             </MenuItem>
                         </Menu>
                         <Separator Style="{StaticResource DockPanelSeparator}" />
+                        <Button Command="{Binding DeleteObjectCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" Margin="0,0,2,0" />
+                                <AccessText>Delete</AccessText>
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource DockPanelSeparator}" />
                         <Button Command="{Binding AboutCommand}" HorizontalAlignment="Right">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}" Margin="0,0,2,0" />

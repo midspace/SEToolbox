@@ -25,14 +25,6 @@
 
         #region Properties
 
-        public ICommand DeleteObjectCommand
-        {
-            get
-            {
-                return new DelegateCommand(new Action(DeleteObjectExecuted), new Func<bool>(DeleteObjectCanExecute));
-            }
-        }
-
         public ICommand RepairObjectCommand
         {
             get
@@ -165,16 +157,6 @@
         #endregion
 
         #region methods
-
-        public bool DeleteObjectCanExecute()
-        {
-            return !this.IsPiloted;
-        }
-
-        public void DeleteObjectExecuted()
-        {
-            ((ExplorerViewModel)this.OwnerViewModel).DeleteModel(this);
-        }
 
         public bool RepairObjectCanExecute()
         {
