@@ -25,14 +25,6 @@
 
         #region Properties
 
-        public ICommand DeleteObjectCommand
-        {
-            get
-            {
-                return new DelegateCommand(new Action(DeleteObjectExecuted), new Func<bool>(DeleteObjectCanExecute));
-            }
-        }
-
         protected new StructureFloatingObjectModel DataModel
         {
             get
@@ -65,16 +57,6 @@
         #endregion
 
         #region methods
-
-        public bool DeleteObjectCanExecute()
-        {
-            return true;
-        }
-
-        public void DeleteObjectExecuted()
-        {
-            ((ExplorerViewModel)this.OwnerViewModel).DeleteModel(this);
-        }
 
         #endregion
     }

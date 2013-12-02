@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:interop="clr-namespace:SEToolbox.Interop"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:shaders="clr-namespace:SEToolbox.ImageShaders;assembly=SEToolbox.ImageShaders"
              Startup="OnStartup" Exit="OnExit" DispatcherUnhandledException="OnDispatcherUnhandledException">
     <Application.Resources>
 
@@ -53,6 +54,18 @@
                 <x:Type TypeName="interop:ImportArmorType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        
+
+        <Style x:Key="{x:Type Image}" TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="Image.IsEnabled" Value="False">
+                    <Setter Property="Image.Effect">
+                        <Setter.Value>
+                            <shaders:DesaturateEffect />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Application.Resources>
 </Application>

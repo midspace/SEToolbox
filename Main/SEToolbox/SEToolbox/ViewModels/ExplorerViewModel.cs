@@ -570,7 +570,7 @@
 
         public bool DeleteObjectCanExecute()
         {
-            return true;
+            return this.dataModel.ActiveWorld != null && this.Selections.Count > 0;
         }
 
         public void DeleteObjectExecuted()

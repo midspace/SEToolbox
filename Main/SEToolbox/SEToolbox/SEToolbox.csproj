@@ -287,7 +287,7 @@
     <None Include="Resources\asteroid_Gold1.vox" />
     <None Include="Resources\asteroid_Gold2.vox" />
     <None Include="Resources\asteroid_Gold3.vox" />
-    <None Include="Resources\asteroid_Ice_Magnasium.vox" />
+    <None Include="Resources\asteroid_Ice_Magnesium.vox" />
     <None Include="Resources\asteroid_Iron1.vox" />
     <None Include="Resources\asteroid_Iron2.vox" />
     <None Include="Resources\asteroid_Iron_Cobalt.vox" />
@@ -334,6 +334,10 @@
     <ProjectReference Include="..\SEToolbox.Image.Library\SEToolbox.ImageLibrary.csproj">
       <Project>{e78476cb-bc3d-4265-806d-96f09229a449}</Project>
       <Name>SEToolbox.ImageLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SEToolbox.Image.Shaders\SEToolbox.ImageShaders.csproj">
+      <Project>{967d61a9-c8f0-4c2a-a784-6cda648ecb19}</Project>
+      <Name>SEToolbox.ImageShaders</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

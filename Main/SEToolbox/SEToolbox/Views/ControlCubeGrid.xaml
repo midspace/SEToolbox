@@ -34,13 +34,6 @@
         </StackPanel>
         <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
-                <Button Command="{Binding DeleteObjectCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" Margin="0,0,2,0" />
-                        <AccessText>Delete</AccessText>
-                    </StackPanel>
-                </Button>
-                <Separator/>
                 <Button Command="{Binding RepairObjectCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" Margin="0,0,2,0" />
