@@ -23,7 +23,7 @@
 
         #endregion
 
-        #region Properties
+        #region command Properties
 
         public ICommand RepairObjectCommand
         {
@@ -40,6 +40,34 @@
                 return new DelegateCommand(new Action(ResetSpeedExecuted), new Func<bool>(ResetSpeedCanExecute));
             }
         }
+
+        public ICommand ConvertCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertExecuted), new Func<bool>(ConvertCanExecute));
+            }
+        }
+
+        public ICommand ConvertToHeavyCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertToHeavyExecuted), new Func<bool>(ConvertToHeavyCanExecute));
+            }
+        }
+
+        public ICommand ConvertToLightCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertToLightExecuted), new Func<bool>(ConvertToLightCanExecute));
+            }
+        }
+
+        #endregion
+
+        #region Properties
 
         protected new StructureCubeGridModel DataModel
         {
@@ -177,6 +205,37 @@
         public void ResetSpeedExecuted()
         {
             this.DataModel.ResetSpeed();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ConvertCanExecute()
+        {
+            return true;
+        }
+
+        public void ConvertExecuted()
+        {
+        }
+
+        public bool ConvertToHeavyCanExecute()
+        {
+            return true;
+        }
+
+        public void ConvertToHeavyExecuted()
+        {
+            this.DataModel.ConvertFromLightToHeavyArmor();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ConvertToLightCanExecute()
+        {
+            return true;
+        }
+
+        public void ConvertToLightExecuted()
+        {
+            this.DataModel.ConvertFromHeavyToLightArmor();
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 

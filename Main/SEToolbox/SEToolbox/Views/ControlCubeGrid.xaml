@@ -46,6 +46,15 @@
                         <AccessText>Reset Speed</AccessText>
                     </StackPanel>
                 </Button>
+                <Menu Style="{StaticResource ToolBarMenu}">
+                    <MenuItem Header="Convert" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
+                        </MenuItem.Icon>
+                        <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyCommand}"/>
+                        <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightCommand}"/>
+                    </MenuItem>
+                </Menu>
             </ToolBar>
         </ToolBarPanel>
         <Label Grid.Row="2" Content="Piloted:"/>
