@@ -163,11 +163,11 @@
                                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" />
                                             </MenuItem.Icon>
                                         </MenuItem>
-                                        <MenuItem Header="Export" Command="{Binding ExportObjectCommand}">
+                                        <!--<MenuItem Header="Export" Command="{Binding ExportObjectCommand}">
                                             <MenuItem.Icon>
                                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                                             </MenuItem.Icon>
-                                        </MenuItem>
+                                        </MenuItem>-->
                                     </ContextMenu>
                                 </ListBox.ContextMenu>
                             </controls:SortableListView>

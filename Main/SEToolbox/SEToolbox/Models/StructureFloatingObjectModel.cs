@@ -55,7 +55,21 @@
         public override void UpdateFromEntityBase()
         {
             this.ClassType = ClassType.FloatingObject;
-            this.Description = string.Format("{0} x {1}", this.FloatingObject.Item.Content.SubtypeName, this.FloatingObject.Item.Amount);
+
+            if (this.FloatingObject.Item.Content is MyObjectBuilder_Ore)
+            {
+                this.Description = string.Format("{0} x {1:#,###.000} L", this.FloatingObject.Item.Content.SubtypeName, this.FloatingObject.Item.Amount * 1000);
+            }
+            else if (this.FloatingObject.Item.Content is MyObjectBuilder_EntityBase)
+            {
+                var name = this.FloatingObject.Item.Content.GetType().Name;
+                name = name.Split('_')[1];
+                this.Description = string.Format("{0} x {1}", name, this.FloatingObject.Item.Amount);
+            }
+            else
+            {
+                this.Description = string.Format("{0} x {1}", this.FloatingObject.Item.Content.SubtypeName, this.FloatingObject.Item.Amount);
+            }
         }
 
         #endregion
