@@ -282,6 +282,40 @@
             this.RaisePropertyChanged(() => Speed);
         }
 
+        public void ConvertFromLightToHeavyArmor()
+        {
+            foreach (var cube in this.CubeGrid.CubeBlocks)
+            {
+                if (cube.SubtypeName.StartsWith("LargeBlockArmor"))
+                {
+                    cube.SubtypeName = cube.SubtypeName.Replace("LargeBlockArmor", "LargeHeavyBlockArmor");
+                }
+                else if (cube.SubtypeName.StartsWith("SmallBlockArmor"))
+                {
+                    cube.SubtypeName = cube.SubtypeName.Replace("SmallBlockArmor", "SmallHeavyBlockArmor");
+                }
+            }
+
+            this.UpdateFromEntityBase();
+        }
+
+        public void ConvertFromHeavyToLightArmor()
+        {
+            foreach (var cube in this.CubeGrid.CubeBlocks)
+            {
+                if (cube.SubtypeName.StartsWith("LargeHeavyBlockArmor"))
+                {
+                    cube.SubtypeName = cube.SubtypeName.Replace("LargeHeavyBlockArmor", "LargeBlockArmor");
+                }
+                else if (cube.SubtypeName.StartsWith("SmallHeavyBlockArmor"))
+                {
+                    cube.SubtypeName = cube.SubtypeName.Replace("SmallHeavyBlockArmor", "SmallBlockArmor");
+                }
+            }
+
+            this.UpdateFromEntityBase();
+        }
+
         #endregion
     }
 }

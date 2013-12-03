@@ -60,8 +60,8 @@
                             </StackPanel>
                         </Button>
                         <Separator Style="{StaticResource DockPanelSeparator}" />
-                        <Menu>
-                            <MenuItem Header="_Import" Command="{Binding ImportCommand}">
+                        <Menu Style="{StaticResource ToolBarMenu}">
+                            <MenuItem Header="_Import" Command="{Binding ImportCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=import1}" />
                                 </MenuItem.Icon>
