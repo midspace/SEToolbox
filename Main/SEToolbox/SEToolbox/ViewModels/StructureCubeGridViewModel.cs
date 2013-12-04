@@ -182,6 +182,19 @@
             }
         }
 
+        public string Report
+        {
+            get
+            {
+                return this.DataModel.Report;
+            }
+
+            set
+            {
+                this.DataModel.Report = value;
+            }
+        }
+
         #endregion
 
         #region methods

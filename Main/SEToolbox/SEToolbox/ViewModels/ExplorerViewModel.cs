@@ -1,10 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.CommonLib.ObjectBuilders.Voxels;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Views;
     using System;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
@@ -13,6 +8,10 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Windows.Input;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Views;
 
     public class ExplorerViewModel : BaseViewModel
     {
@@ -554,7 +553,7 @@
 
         public void TestExecuted()
         {
-            // TODO:
+            // TODO: test code goes here.
         }
 
         public bool AboutCanExecute()

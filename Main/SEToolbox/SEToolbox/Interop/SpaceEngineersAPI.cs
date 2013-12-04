@@ -1,13 +1,14 @@
 ﻿namespace SEToolbox.Interop
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
     using Microsoft.Win32;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Definitions;
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Xml;
 
     public class SpaceEngineersAPI
     {
@@ -167,14 +168,27 @@
 
         static MyObjectBuilder_CubeBlockDefinitions cubeBlockDefinitions;
         static MyObjectBuilder_ComponentDefinitions componentDefinitions;
+        static MyObjectBuilder_BlueprintDefinitions blueprintDefinitions;
+        static MyObjectBuilder_PhysicalItemDefinitions physicalItemDefinitions;
+        static MyObjectBuilder_VoxelMaterialDefinitions voxelMaterialDefinitions;
 
         public static void ReadCubeBlockDefinitions()
         {
-            var cubeblocksFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\CubeBlocks.sbc");
-            var componentsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\Components.sbc");
+            var voxelMaterialsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\VoxelMaterials.sbc");
+            voxelMaterialDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>(voxelMaterialsFilename);
 
-            cubeBlockDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>(cubeblocksFilename);
+            var physicalItemsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\PhysicalItems.sbc");
+            physicalItemDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>(physicalItemsFilename);
+
+            var componentsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\Components.sbc");
             componentDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>(componentsFilename);
+
+            var cubeblocksFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\CubeBlocks.sbc");
+            cubeBlockDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>(cubeblocksFilename);
+
+            var blueprintsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\Blueprints.sbc");
+            blueprintDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>(blueprintsFilename);
+
 
             // TODO: set a file watch to reload the files, incase modding is occuring at the same time this is open.
             //     Lock the load during this time, in case it happens multiple times.
@@ -202,6 +216,77 @@
 
             return mass;
         }
+
+        public static void AccumulateCubeBlueprintRequirements(string subTypeid, MyCubeSize cubeSize, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, ref TimeSpan timeTaken)
+        {
+            var cubeBlockDefinition = cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
+                && (subTypeid == c.Id.SubtypeId || (c.Variants != null && c.Variants.Any(v => subTypeid == c.Id.SubtypeId + v.Color))));
+
+            if (cubeBlockDefinition != null)
+            {
+                foreach (var component in cubeBlockDefinition.Components)
+                {
+                    var bp = blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == component.Subtype && b.Result.TypeId == component.Type);
+                    if (bp != null)
+                    {
+                        foreach (var item in bp.Prerequisites)
+                        {
+                            if (requirements.ContainsKey(item.SubtypeId))
+                            {
+                                // append
+                                requirements[item.SubtypeId].Amount += (amount / bp.Result.Amount) * item.Amount;
+                            }
+                            else
+                            {
+                                // add
+                                requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item()
+                                {
+                                    Amount = (amount / bp.Result.Amount) * item.Amount,
+                                    TypeId = item.TypeId,
+                                    SubtypeId = item.SubtypeId,
+                                    Id = item.Id
+                                });
+                            }
+
+                            var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount;
+                            var ts = new TimeSpan((long)ticks);
+                            timeTaken += ts;
+                        }
+                    }
+                }
+            }
+        }
+
+        //public static void AccumulateCubeBlueprintRequirements(ref MyObjectBuilder_BlueprintDefinition requirements, string subTypeid, MyCubeSize cubeSize)
+        //{
+        //    var cubeBlockDefinition = cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
+        //       && (subTypeid == c.Id.SubtypeId || (c.Variants != null && c.Variants.Any(v => subTypeid == c.Id.SubtypeId + v.Color))));
+
+        //    if (cubeBlockDefinition != null)
+        //    {
+        //        foreach (var component in cubeBlockDefinition.Components)
+        //        {
+        //            var bp = blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == component.Subtype && b.Result.TypeId == component.Type);
+        //            if (bp != null)
+        //            {
+        //                foreach (var item in bp.Prerequisites)
+        //                {
+        //                    requirements.Prerequisites.FirstOrDefault(
+        //                    //if (requirements.ContainsKey(item.SubtypeId))
+        //                    //{
+        //                    //    // append
+        //                    //    requirements[item.SubtypeId].Amount += item.Amount;
+        //                    //}
+        //                    //else
+        //                    //{
+        //                    //    // add
+        //                    //    requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item() { Amount = item.Amount, TypeId = item.TypeId, SubtypeId = item.SubtypeId, Id = item.Id });
+        //                    //}
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         #endregion
     }
