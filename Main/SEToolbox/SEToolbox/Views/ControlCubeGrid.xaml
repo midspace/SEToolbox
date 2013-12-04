@@ -49,8 +49,10 @@
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
                         </MenuItem.Icon>
-                        <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyCommand}"/>
-                        <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightCommand}"/>
+                        <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}"/>
+                        <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}"/>
+                        <MenuItem Header="To Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed."/>
+                        <MenuItem Header="To Complete Structure" Command="{Binding ConvertToCompleteStructureCommand}" ToolTip="Any unconstructed components are constructed."/>
                     </MenuItem>
                 </Menu>
             </ToolBar>

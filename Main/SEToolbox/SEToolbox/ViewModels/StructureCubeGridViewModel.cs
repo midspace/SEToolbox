@@ -49,19 +49,36 @@
             }
         }
 
-        public ICommand ConvertToHeavyCommand
+        public ICommand ConvertToHeavyArmorCommand
         {
             get
             {
-                return new DelegateCommand(new Action(ConvertToHeavyExecuted), new Func<bool>(ConvertToHeavyCanExecute));
+                return new DelegateCommand(new Action(ConvertToHeavyArmorExecuted), new Func<bool>(ConvertToHeavyArmorCanExecute));
             }
         }
 
-        public ICommand ConvertToLightCommand
+        public ICommand ConvertToLightArmorCommand
         {
             get
             {
-                return new DelegateCommand(new Action(ConvertToLightExecuted), new Func<bool>(ConvertToLightCanExecute));
+                return new DelegateCommand(new Action(ConvertToLightArmorExecuted), new Func<bool>(ConvertToLightArmorCanExecute));
+            }
+        }
+
+
+        public ICommand ConvertToFrameworkCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertToFrameworkExecuted), new Func<bool>(ConvertToFrameworkCanExecute));
+            }
+        }
+
+        public ICommand ConvertToCompleteStructureCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertToCompleteStructureExecuted), new Func<bool>(ConvertToCompleteStructureCanExecute));
             }
         }
 
@@ -230,25 +247,47 @@
         {
         }
 
-        public bool ConvertToHeavyCanExecute()
+        public bool ConvertToHeavyArmorCanExecute()
         {
             return true;
         }
 
-        public void ConvertToHeavyExecuted()
+        public void ConvertToHeavyArmorExecuted()
         {
             this.DataModel.ConvertFromLightToHeavyArmor();
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 
-        public bool ConvertToLightCanExecute()
+        public bool ConvertToLightArmorCanExecute()
         {
             return true;
         }
 
-        public void ConvertToLightExecuted()
+        public void ConvertToLightArmorExecuted()
         {
             this.DataModel.ConvertFromHeavyToLightArmor();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ConvertToFrameworkCanExecute()
+        {
+            return true;
+        }
+
+        public void ConvertToFrameworkExecuted()
+        {
+            this.DataModel.ConvertToFramework();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ConvertToCompleteStructureCanExecute()
+        {
+            return true;
+        }
+
+        public void ConvertToCompleteStructureExecuted()
+        {
+            this.DataModel.ConvertToCompleteStructure();
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 
