@@ -306,19 +306,6 @@
             set
             {
                 this.dataModel.IsBusy = value;
-                //if (this.Dispatcher.CheckAccess())
-                //{
-                //if (this.isBusy != value)
-                //{
-                //    this.isBusy = value;
-                //    this.RaisePropertyChanged(() => IsBusy);
-                //    this.SetActiveStatus();
-                //}
-                //}
-                //else
-                //{
-                //    this.Dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate { this.IsBusy = value; });
-                //}
             }
         }
 
@@ -399,9 +386,8 @@
             if (result == true)
             {
                 this.dataModel.ActiveWorld = model.SelectedWorld;
+                this.ActiveWorld.LoadCheckpoint();
                 this.dataModel.LoadSandBox();
-
-                // TODO: work out whether to wrap the model with a viewmodel here, or elsewhere.
             }
         }
 
@@ -414,7 +400,7 @@
         {
             if (this.dataModel != null)
             {
-                this.dataModel.SaveSandBox();
+                this.dataModel.SaveCheckPointAndSandBox();
             }
         }
 
@@ -425,7 +411,7 @@
 
         public void ClearExecuted()
         {
-            // TODO: clear
+            // TODO: clear loaded data.
         }
 
         public bool ReloadCanExecute()
