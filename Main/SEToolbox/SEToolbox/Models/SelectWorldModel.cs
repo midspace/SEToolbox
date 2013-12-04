@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
+    using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using System.Collections.ObjectModel;
     using System.IO;
@@ -158,6 +159,8 @@
                 if (character != null)
                 {
                     model.ActiveWorld.Content.ControlledObject = character.EntityId;
+                    model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
+                    model.ActiveWorld.Content.CameraEntity = character.EntityId;
                     str.AppendLine("* Found and Set new active Player.");
                     model.SaveCheckPointAndSandBox();
                     str.AppendLine("* Saved changes.");
@@ -188,6 +191,9 @@
                         character.LinearVelocity = new VRageMath.Vector3();
                         character.AutoenableJetpackDelay = -1;
                         character.JetpackEnabled = true;
+                        character.Inventory = (MyObjectBuilder_Inventory)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.Inventory);
+                        
+                        // TODO: add default items to Inventory.
 
                         model.ActiveWorld.Content.ControlledObject = character.EntityId;
                         model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
