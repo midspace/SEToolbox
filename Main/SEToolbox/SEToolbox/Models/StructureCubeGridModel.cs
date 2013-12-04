@@ -1,11 +1,13 @@
 ﻿namespace SEToolbox.Models
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
     using System.Windows.Media.Media3D;
     using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.CommonLib.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
-    using System.Linq;
-    using System.Collections.Generic;
 
     public class StructureCubeGridModel : StructureBaseModel
     {
@@ -169,7 +171,7 @@
         {
             get
             {
-                return  (double)this.CubeGrid.LinearVelocity.Sum();
+                return (double)this.CubeGrid.LinearVelocity.Sum();
             }
         }
 
@@ -229,6 +231,9 @@
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
             float calcMass = 0;
+            Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+            MyObjectBuilder_BlueprintDefinition requirements2 = new MyObjectBuilder_BlueprintDefinition();
+            TimeSpan timeTaken = new TimeSpan();
 
             foreach (var block in this.CubeGrid.CubeBlocks)
             {
@@ -240,6 +245,9 @@
                 max.Z = Math.Max(max.Z, block.Max.Z);
 
                 calcMass += SpaceEngineersAPI.FetchCubeBlockMass(block.SubtypeName, this.CubeGrid.GridSizeEnum);
+
+                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(block.SubtypeName, this.CubeGrid.GridSizeEnum, 1, requirements, ref timeTaken);
+                //SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(ref requirements2, block.SubtypeName, this.CubeGrid.GridSizeEnum);
             }
 
             var size = max - min;
@@ -253,6 +261,27 @@
             this.Mass = calcMass;
 
             this.Description = string.Format("{0} | {1:#,##0}Kg", this.Size, this.Mass);
+
+            StringBuilder bld = new StringBuilder();
+            bld.AppendLine("Construction Requirements:");
+            foreach(var kvp in requirements)
+            {
+                bld.AppendFormat("{0} {1}: {2:###,##0.000} L\r\n", kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount * 1000);
+            }
+            bld.AppendLine();
+            bld.AppendFormat("Time to produce: {0}\r\n", timeTaken);
+
+            this.Report = bld.ToString();
+
+            // Report:
+            // Reflectors On
+            // Mass:      9,999,999 Kg
+            // Speed:          0.0 m/s
+            // Power Usage:      0.05%
+            // Reactors:     12,999 GW
+            // Thrusts:            999
+            // Gyros:              999
+            // Fuel Time:        0 sec
         }
 
         /// <summary>
