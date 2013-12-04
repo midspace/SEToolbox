@@ -11,7 +11,9 @@
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:NullImageConverter x:Key="NullImageConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
     </Window.Resources>
     <Window.Background>
         <LinearGradientBrush>
@@ -19,6 +21,9 @@
             <GradientStop Color="#FFFFFFFF" Offset="0"/>
         </LinearGradientBrush>
     </Window.Background>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
     <Grid>
         <Grid Margin="8">
             <Grid.ColumnDefinitions>
@@ -48,10 +53,12 @@
                     <Image HorizontalAlignment="Stretch" Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Button Width="90" Command="{Binding LoadCommand}" Content="Open" IsDefault="True"/>
-                    <Button Margin="0,8,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                    <Button Width="90" Command="{Binding RepairCommand}" Content="Repair"  Margin="0,0,0,32" ToolTip="This will attempt to repair the save content it it finds any issues." />
+                    <Button Width="90" Command="{Binding LoadCommand}" Content="Open" IsDefault="True" Margin="0,0,0,8" />
+                    <Button Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
                 </StackPanel>
             </Grid>
         </Grid>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

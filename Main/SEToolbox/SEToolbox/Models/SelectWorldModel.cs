@@ -1,10 +1,9 @@
 ﻿namespace SEToolbox.Models
 {
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using System.Collections.ObjectModel;
     using System.IO;
+    using System.Text;
 
     public class SelectWorldModel : BaseModel
     {
@@ -20,6 +19,8 @@
         private SaveResource selectedWorld;
 
         private ObservableCollection<SaveResource> worlds;
+
+        private bool isBusy;
 
         #endregion
 
@@ -103,6 +104,30 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the View is currently in the middle of an asynchonise operation.
+        /// </summary>
+        public bool IsBusy
+        {
+            get
+            {
+                return this.isBusy;
+            }
+
+            set
+            {
+                if (value != this.isBusy)
+                {
+                    this.isBusy = value;
+                    this.RaisePropertyChanged(() => IsBusy);
+                    if (this.isBusy)
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -111,6 +136,78 @@
         {
             this.BaseSavePath = baseSavePath;
             this.LoadSaveList();
+        }
+
+        public string Repair()
+        {
+            StringBuilder str = new StringBuilder();
+            str.AppendLine("Results:");
+            bool statusNormal = true;
+
+            ExplorerModel model = new ExplorerModel();
+            model.ActiveWorld = this.SelectedWorld;
+            model.ActiveWorld.LoadCheckpoint();
+            model.LoadSandBox();
+
+            if (model.ThePlayerCharacter == null)
+            {
+                statusNormal = false;
+                str.AppendLine("! No active Player in Save content.");
+
+                var character = model.FindAstronautCharacter();
+                if (character != null)
+                {
+                    model.ActiveWorld.Content.ControlledObject = character.EntityId;
+                    str.AppendLine("* Found and Set new active Player.");
+                    model.SaveCheckPointAndSandBox();
+                    str.AppendLine("* Saved changes.");
+                }
+                else
+                {
+                    var cockpit = model.FindPilotCharacter();
+                    if (cockpit != null)
+                    {
+                        model.ActiveWorld.Content.ControlledObject = cockpit.EntityId;
+                        model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.ThirdPersonSpectator;
+                        model.ActiveWorld.Content.CameraEntity = 0;
+                        str.AppendLine("* Found and Set new active Player.");
+                        model.SaveCheckPointAndSandBox();
+                        str.AppendLine("* Saved changes.");
+                    }
+                    else
+                    {
+                        str.AppendLine("! Could not find any Player Characters.");
+                        character = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Character();
+                        character.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                        character.PersistentFlags = Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.InScene;
+                        character.PositionAndOrientation = new Sandbox.CommonLib.ObjectBuilders.MyPositionAndOrientation(new VRageMath.Vector3(0, 0, 0), new VRageMath.Vector3(0, 0, 1), new VRageMath.Vector3(0, 1, 0));
+                        character.CharacterModel = Sandbox.CommonLib.ObjectBuilders.MyCharacterModelEnum.Astronaut_White;
+                        character.Battery = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
+                        character.LightEnabled = false;
+                        character.HeadAngle = new VRageMath.Vector2();
+                        character.LinearVelocity = new VRageMath.Vector3();
+                        character.AutoenableJetpackDelay = -1;
+                        character.JetpackEnabled = true;
+
+                        model.ActiveWorld.Content.ControlledObject = character.EntityId;
+                        model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
+                        model.ActiveWorld.Content.CameraEntity = character.EntityId;
+
+                        model.SectorData.SectorObjects.Add(character);
+
+                        str.AppendLine("* Created new active Player.");
+                        model.SaveCheckPointAndSandBox();
+                        str.AppendLine("* Saved changes.");
+                    }
+                }
+            }
+
+            if (statusNormal)
+            {
+                str.AppendLine("Detected no issues.");
+            }
+
+            return str.ToString();
         }
 
         #endregion

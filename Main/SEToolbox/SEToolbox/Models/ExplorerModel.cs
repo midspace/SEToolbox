@@ -264,15 +264,9 @@
                     this.IsModified = false;
                     this.IsBusy = false;
                 }));
-
-            if (this.ThePlayerCharacter == null)
-            {
-                // TODO: warn user there is no active "Player" character.
-                // Show a dialog, and ask them if they want one created.
-            }
         }
 
-        public void SaveSandBox()
+        public void SaveCheckPointAndSandBox()
         {
             this.IsBusy = true;
             this.ActiveWorld.LastSaveTime = DateTime.Now;
@@ -432,9 +426,45 @@
         {
             this.manageNewVoxelList.Add(voxelFilename, sourceFilename);
         }
+
         public bool ContainsVoxelFilename(string filename)
         {
             return this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this.manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
+        }
+
+        public MyObjectBuilder_Character FindAstronautCharacter()
+        {
+            if (this.SectorData != null)
+            {
+                foreach (var entityBase in this.SectorData.SectorObjects)
+                {
+                    if (entityBase is MyObjectBuilder_Character)
+                    {
+                        return (MyObjectBuilder_Character)entityBase;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public MyObjectBuilder_Cockpit FindPilotCharacter()
+        {
+            if (this.SectorData != null)
+            {
+                foreach (var entityBase in this.SectorData.SectorObjects)
+                {
+                    if (entityBase is MyObjectBuilder_CubeGrid)
+                    {
+                        var cubes = ((MyObjectBuilder_CubeGrid)entityBase).CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null).ToList();
+                        if (cubes.Count > 0)
+                        {
+                            return (MyObjectBuilder_Cockpit)cubes[0];
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         #endregion
