@@ -345,6 +345,32 @@
             this.UpdateFromEntityBase();
         }
 
+        public void ConvertToFramework()
+        {
+            foreach (var cube in this.CubeGrid.CubeBlocks)
+            {
+                cube.DamagedComponents = new MyObjectBuilder_CubeBlock.DamagedComponent[]
+                {
+                    new MyObjectBuilder_CubeBlock.DamagedComponent()
+                    {
+                        IntegrityPercentage = 0.2f
+                    }
+                };
+            }
+
+            this.UpdateFromEntityBase();
+        }
+
+        public void ConvertToCompleteStructure()
+        {
+            foreach (var cube in this.CubeGrid.CubeBlocks)
+            {
+                cube.DamagedComponents = null;
+            }
+
+            this.UpdateFromEntityBase();
+        }
+
         #endregion
     }
 }
