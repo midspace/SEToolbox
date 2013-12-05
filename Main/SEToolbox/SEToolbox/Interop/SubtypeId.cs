@@ -169,5 +169,9 @@
         LargeBlockLargeGenerator,
         SmallBlockConveyor,
         LargeBlockConveyor,
+        LargeStator,
+        LargeRotor,
+        SmallStator,
+        SmallRotor,
     };
 }
