@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:interop="clr-namespace:SEToolbox.Interop"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import 3D Model" Height="380" Width="480" Icon="/SEToolbox;component/app.ico"
+        Title="Import 3D Model" Height="380" Width="520" Icon="/SEToolbox;component/app.ico"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -76,14 +76,14 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="65"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="Width:" Margin="0,0,0,0" />
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Width}" />
-                            <Label Content="Height:" Margin="0,0,0,0" Grid.Row="1" />
-                            <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Height}" />
-                            <Label Content="Depth:" Margin="0,0,0,0" Grid.Row="2" />
-                            <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Depth}" />
+                            <TextBlock Text="Width:" Margin="0,0,0,0" />
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Width, StringFormat={}{0:#,##0}}" />
+                            <TextBlock Text="Height:" Margin="0,0,0,0" Grid.Row="1" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Height, StringFormat={}{0:#,##0}}" />
+                            <TextBlock Text="Depth:" Margin="0,0,0,0" Grid.Row="2" />
+                            <TextBlock Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Depth, StringFormat={}{0:#,##0}}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Scale" MinWidth="120">
@@ -109,17 +109,24 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="Width:" Margin="0,0,0,0" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Width}" />
-                            <Label Content="Height:" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Grid.Row="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Height}" />
-                            <Label Content="Depth:" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Grid.Row="2" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Depth}" />
+                            <TextBlock Grid.Column="1" Text="Blocks" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="2" Text="Meters" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="1" Text="Width:" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Width, StringFormat={}{0:#,##0}}" />
+                            <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.X, StringFormat={}{0:#,##0.0}}" />
+                            <TextBlock Grid.Row="2" Text="Height:" Margin="0,0,0,0" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Height, StringFormat={}{0:#,##0}}" />
+                            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.Y, StringFormat={}{0:#,##0.0}}" />
+                            <TextBlock Grid.Row="3" Text="Depth:" Margin="0,0,0,0" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Depth, StringFormat={}{0:#,##0}}" />
+                            <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.Z, StringFormat={}{0:#,##0.0}}" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>
@@ -155,9 +162,9 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <RadioButton IsChecked="True" Content="Facing Character" Grid.ColumnSpan="2" />
+                            <RadioButton IsChecked="True" Content="Facing Player" Grid.ColumnSpan="2" />
                             <Label Content="Distance:" Grid.Row="2" />
-                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" />
+                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" ToolTip="Distance in front of Player in Meters." />
                         </Grid>
                     </GroupBox>
                 </StackPanel>

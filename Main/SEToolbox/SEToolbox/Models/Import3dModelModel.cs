@@ -12,6 +12,7 @@
 
         private BindableSize3DModel originalModelSize;
         private BindableSize3DModel newModelSize;
+        private BindablePoint3DModel newModelScale;
         private BindablePoint3DModel position;
         private BindableVector3DModel forward;
         private BindableVector3DModel up;
@@ -100,6 +101,23 @@
                 {
                     this.newModelSize = value;
                     this.RaisePropertyChanged(() => NewModelSize);
+                }
+            }
+        }
+
+        public BindablePoint3DModel NewModelScale
+        {
+            get
+            {
+                return this.newModelScale;
+            }
+
+            set
+            {
+                if (value != this.newModelScale)
+                {
+                    this.newModelScale = value;
+                    this.RaisePropertyChanged(() => NewModelScale);
                 }
             }
         }

@@ -21,7 +21,7 @@ using System.Security.Permissions;
 [assembly: CLSCompliant(true)]
 
 //Establish Minimum security permissions
-[assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution=true)]
+//[assembly: SecurityPermission(SecurityAction.RequestMinimum.RequestMinimum, Execution=true)]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
