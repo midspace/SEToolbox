@@ -492,6 +492,7 @@
                 this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
                 this.selectNewStructure = true;
+                this.dataModel.CollisionCorrectEntity(newEntity);
                 var structure = this.dataModel.AddEntity(newEntity);
                 this.selectNewStructure = false;
                 this.IsBusy = false;
@@ -515,6 +516,7 @@
                 this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
                 this.selectNewStructure = true;
+                this.dataModel.CollisionCorrectEntity(newEntity);
                 var structure = this.dataModel.AddEntity(newEntity);
                 this.selectNewStructure = false;
                 this.IsBusy = false;

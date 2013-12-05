@@ -136,7 +136,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <RadioButton IsChecked="True" Content="Facing Character" />
+                            <RadioButton IsChecked="True" Content="Facing Player" />
                             <!--<Label Content="X:" Margin="0,0,4,0" />
                             <TextBox Grid.Column="1" MinWidth="80" Text="1234" />
                             <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" />

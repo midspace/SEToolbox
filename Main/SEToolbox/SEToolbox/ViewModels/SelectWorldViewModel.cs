@@ -159,7 +159,7 @@
         public void RepairExecuted()
         {
             this.IsBusy = true;
-            var results = this.dataModel.Repair();
+            var results = this.dataModel.RepairSandBox();
             this.IsBusy = false;
             var result = dialogService.ShowMessageBox(this, results, "Repair results", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
         }

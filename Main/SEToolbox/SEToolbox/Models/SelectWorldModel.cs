@@ -139,71 +139,105 @@
             this.LoadSaveList();
         }
 
-        public string Repair()
+        public string RepairSandBox()
         {
             StringBuilder str = new StringBuilder();
-            str.AppendLine("Results:");
             bool statusNormal = true;
+            bool missingFiles = false;
 
             ExplorerModel model = new ExplorerModel();
             model.ActiveWorld = this.SelectedWorld;
             model.ActiveWorld.LoadCheckpoint();
             model.LoadSandBox();
 
-            if (model.ThePlayerCharacter == null)
+            if (model.ActiveWorld.Content == null)
             {
                 statusNormal = false;
-                str.AppendLine("! No active Player in Save content.");
+                str.AppendLine("! Checkpoint file is missing or broken.");
+                missingFiles = true;
+            }
+            
+            if (model.SectorData == null)
+            {
+                statusNormal = false;
+                str.AppendLine("! Sector file is missing or broken.");
+                missingFiles = true;
+            }
 
-                var character = model.FindAstronautCharacter();
-                if (character != null)
+            if (!missingFiles)
+            {
+                if (model.ThePlayerCharacter == null)
                 {
-                    model.ActiveWorld.Content.ControlledObject = character.EntityId;
-                    model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
-                    model.ActiveWorld.Content.CameraEntity = character.EntityId;
-                    str.AppendLine("* Found and Set new active Player.");
-                    model.SaveCheckPointAndSandBox();
-                    str.AppendLine("* Saved changes.");
-                }
-                else
-                {
-                    var cockpit = model.FindPilotCharacter();
-                    if (cockpit != null)
+                    statusNormal = false;
+                    str.AppendLine("! No active Player in Save content.");
+
+                    var character = model.FindAstronautCharacter();
+                    if (character != null)
                     {
-                        model.ActiveWorld.Content.ControlledObject = cockpit.EntityId;
-                        model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.ThirdPersonSpectator;
-                        model.ActiveWorld.Content.CameraEntity = 0;
+                        model.ActiveWorld.Content.ControlledObject = character.EntityId;
+                        model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
+                        model.ActiveWorld.Content.CameraEntity = character.EntityId;
                         str.AppendLine("* Found and Set new active Player.");
                         model.SaveCheckPointAndSandBox();
                         str.AppendLine("* Saved changes.");
                     }
                     else
                     {
-                        str.AppendLine("! Could not find any Player Characters.");
-                        character = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Character();
-                        character.EntityId = SpaceEngineersAPI.GenerateEntityId();
-                        character.PersistentFlags = Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.InScene;
-                        character.PositionAndOrientation = new Sandbox.CommonLib.ObjectBuilders.MyPositionAndOrientation(new VRageMath.Vector3(0, 0, 0), new VRageMath.Vector3(0, 0, 1), new VRageMath.Vector3(0, 1, 0));
-                        character.CharacterModel = Sandbox.CommonLib.ObjectBuilders.MyCharacterModelEnum.Astronaut_White;
-                        character.Battery = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
-                        character.LightEnabled = false;
-                        character.HeadAngle = new VRageMath.Vector2();
-                        character.LinearVelocity = new VRageMath.Vector3();
-                        character.AutoenableJetpackDelay = -1;
-                        character.JetpackEnabled = true;
-                        character.Inventory = (MyObjectBuilder_Inventory)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.Inventory);
-                        
-                        // TODO: add default items to Inventory.
+                        var cockpit = model.FindPilotCharacter();
+                        if (cockpit != null)
+                        {
+                            model.ActiveWorld.Content.ControlledObject = cockpit.EntityId;
+                            model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.ThirdPersonSpectator;
+                            model.ActiveWorld.Content.CameraEntity = 0;
+                            str.AppendLine("* Found and Set new active Player.");
+                            model.SaveCheckPointAndSandBox();
+                            str.AppendLine("* Saved changes.");
+                        }
+                        else
+                        {
+                            str.AppendLine("! Could not find any Player Characters.");
+                            character = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Character();
+                            character.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            character.PersistentFlags = Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.InScene;
+                            character.PositionAndOrientation = new Sandbox.CommonLib.ObjectBuilders.MyPositionAndOrientation(new VRageMath.Vector3(0, 0, 0), new VRageMath.Vector3(0, 0, 1), new VRageMath.Vector3(0, 1, 0));
+                            character.CharacterModel = Sandbox.CommonLib.ObjectBuilders.MyCharacterModelEnum.Astronaut_White;
+                            character.Battery = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
+                            character.LightEnabled = false;
+                            character.HeadAngle = new VRageMath.Vector2();
+                            character.LinearVelocity = new VRageMath.Vector3();
+                            character.AutoenableJetpackDelay = -1;
+                            character.JetpackEnabled = true;
+                            character.Inventory = (MyObjectBuilder_Inventory)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.Inventory);
 
-                        model.ActiveWorld.Content.ControlledObject = character.EntityId;
-                        model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
-                        model.ActiveWorld.Content.CameraEntity = character.EntityId;
+                            // Add default items to Inventory.
+                            MyObjectBuilder_InventoryItem item;
 
-                        model.SectorData.SectorObjects.Add(character);
+                            character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.InventoryItem));
+                            item.AmountDecimal = 1;
+                            item.Content = new MyObjectBuilder_Welder() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None };
 
-                        str.AppendLine("* Created new active Player.");
-                        model.SaveCheckPointAndSandBox();
-                        str.AppendLine("* Saved changes.");
+                            character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.InventoryItem));
+                            item.AmountDecimal = 1;
+                            item.Content = new MyObjectBuilder_AngleGrinder() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None };
+
+                            character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.InventoryItem));
+                            item.AmountDecimal = 1;
+                            item.Content = new MyObjectBuilder_HandDrill() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None };
+
+                            character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.InventoryItem));
+                            item.AmountDecimal = 1;
+                            item.Content = new MyObjectBuilder_AutomaticRifle() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None, CurrentAmmo = 0 };
+
+                            model.ActiveWorld.Content.ControlledObject = character.EntityId;
+                            model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
+                            model.ActiveWorld.Content.CameraEntity = character.EntityId;
+
+                            model.SectorData.SectorObjects.Add(character);
+
+                            str.AppendLine("* Created new active Player.");
+                            model.SaveCheckPointAndSandBox();
+                            str.AppendLine("* Saved changes.");
+                        }
                     }
                 }
             }

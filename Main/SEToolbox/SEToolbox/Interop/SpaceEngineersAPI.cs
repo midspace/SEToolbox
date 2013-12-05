@@ -9,6 +9,7 @@
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Definitions;
+    using VRageMath;
 
     public class SpaceEngineersAPI
     {
@@ -58,14 +59,18 @@
             };
 
             object obj = null;
-            using (XmlReader xmlReader = XmlReader.Create(filename, settings))
-            {
 
-                S serializer = (S)Activator.CreateInstance(typeof(S));
-                //serializer.UnknownAttribute += serializer_UnknownAttribute;
-                //serializer.UnknownElement += serializer_UnknownElement;
-                //serializer.UnknownNode += serializer_UnknownNode;
-                obj = serializer.Deserialize(xmlReader);
+            if (File.Exists(filename))
+            {
+                using (XmlReader xmlReader = XmlReader.Create(filename, settings))
+                {
+
+                    S serializer = (S)Activator.CreateInstance(typeof(S));
+                    //serializer.UnknownAttribute += serializer_UnknownAttribute;
+                    //serializer.UnknownElement += serializer_UnknownElement;
+                    //serializer.UnknownNode += serializer_UnknownNode;
+                    obj = serializer.Deserialize(xmlReader);
+                }
             }
 
             return (T)obj;
@@ -287,6 +292,49 @@
         //        }
         //    }
         //}
+
+        #endregion
+
+        #region GetBoundingBox
+
+        public static BoundingBox GetBoundingBox(MyObjectBuilder_CubeGrid entity)
+        {
+            var min = new Vector3(int.MaxValue, int.MaxValue, int.MaxValue);
+            var max = new Vector3(int.MinValue, int.MinValue, int.MinValue);
+
+            foreach (var block in entity.CubeBlocks)
+            {
+                min.X = Math.Min(min.X, block.Min.X);
+                min.Y = Math.Min(min.Y, block.Min.Y);
+                min.Z = Math.Min(min.Z, block.Min.Z);
+                max.X = Math.Max(max.X, block.Max.X);
+                max.Y = Math.Max(max.Y, block.Max.Y);
+                max.Z = Math.Max(max.Z, block.Max.Z);
+            }
+
+            // scale box to GridSize
+            var size = max - min;
+            if (entity.GridSizeEnum == MyCubeSize.Large)
+            {
+                size = new Vector3(size.X * 2.5f, size.Y * 2.5f, size.Z * 2.5f);
+            }
+            else if (entity.GridSizeEnum == MyCubeSize.Small)
+            {
+                size = new Vector3(size.X * 0.5f, size.Y * 0.5f, size.Z * 0.5f);
+            }
+
+            // translate box according to min/max, but reset origin.
+            var bb = new BoundingBox(new Vector3(0, 0, 0), size);
+
+            // TODO: translate for rotation.
+            //bb. ????
+
+            // translate position.
+            bb.Translate(entity.PositionAndOrientation.Value.Position);
+
+
+            return bb;
+        }
 
         #endregion
     }

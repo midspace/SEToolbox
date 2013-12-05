@@ -10,6 +10,7 @@
     using System.IO;
     using System.Linq;
     using System.Windows.Threading;
+    using VRageMath;
 
     public class ExplorerModel : BaseModel
     {
@@ -320,7 +321,7 @@
                     {
                         var character = structure as StructureCharacterModel;
 
-                        if (character.EntityId == this.ActiveWorld.Content.ControlledObject)
+                        if (this.ActiveWorld.Content != null && character.EntityId == this.ActiveWorld.Content.ControlledObject)
                         {
                             character.IsPlayer = true;
                             this.ThePlayerCharacter = character;
@@ -336,7 +337,7 @@
                             cubeGrid.Pilots++;
                             var character = StructureBaseModel.Create(cockpit.Pilot);
 
-                            if (cockpit.EntityId == this.ActiveWorld.Content.ControlledObject)
+                            if (this.ActiveWorld.Content != null && cockpit.EntityId == this.ActiveWorld.Content.ControlledObject)
                             {
                                 this.ThePlayerCharacter = character as StructureCharacterModel;
                                 this.ThePlayerCharacter.IsPlayer = true;
@@ -359,6 +360,25 @@
             }
 
             this.RaisePropertyChanged(() => Structures);
+        }
+
+        // TODO: Bounding box collision detection.
+        public void CollisionCorrectEntity(MyObjectBuilder_EntityBase entity)
+        {
+            //var cubeGrid = entity as MyObjectBuilder_CubeGrid;
+            //if (cubeGrid != null)
+            //{
+            //    BoundingBox bb = SpaceEngineersAPI.GetBoundingBox(cubeGrid);
+            //    foreach (var sectorObject in this.SectorData.SectorObjects)
+            //    {
+            //        if (sectorObject is MyObjectBuilder_CubeGrid)
+            //        {
+            //            var checkbb = SpaceEngineersAPI.GetBoundingBox((MyObjectBuilder_CubeGrid)sectorObject);
+            //        }
+            //    }
+
+            //    //bb.Intersect
+            //}
         }
 
         public IStructureBase AddEntity(MyObjectBuilder_EntityBase entity)

@@ -183,6 +183,19 @@
             }
         }
 
+        public BindablePoint3DModel NewModelScale
+        {
+            get
+            {
+                return this.dataModel.NewModelScale;
+            }
+
+            set
+            {
+                this.dataModel.NewModelScale = value;
+            }
+        }
+
         public BindablePoint3DModel Position
         {
             get
@@ -445,13 +458,16 @@
                 }
 
                 double vectorDistance = this.BuildDistance;
+                double scaleMultiplyer = 2.5;
 
                 switch (this.ClassType)
                 {
-                    case ImportClassType.SmallShip: vectorDistance += this.NewModelSize.Depth * 0.5; break;
-                    case ImportClassType.LargeShip: vectorDistance += this.NewModelSize.Depth * 2.5; break;
-                    case ImportClassType.Station: vectorDistance += this.NewModelSize.Depth * 2.5; break;
+                    case ImportClassType.SmallShip: scaleMultiplyer = 0.5; break;
+                    case ImportClassType.LargeShip: scaleMultiplyer = 2.5; break;
+                    case ImportClassType.Station: scaleMultiplyer = 2.5;   break;
                 }
+                vectorDistance += this.NewModelSize.Depth * scaleMultiplyer;
+                this.NewModelScale = new BindablePoint3DModel(this.NewModelSize.Width * scaleMultiplyer, this.NewModelSize.Height * scaleMultiplyer, this.NewModelSize.Depth * scaleMultiplyer);
 
                 // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
                 var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
