@@ -6,8 +6,8 @@
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
-    <!--<WixVariable Id="WixUIBannerBmp" Value="WixUIBannerBmp.bmp" />
-    <WixVariable Id="WixUIDialogBmp" Value="WixUIDialogBmp.bmp" />-->
+    <WixVariable Id="WixUIBannerBmp" Value="WixUIBannerBmp.bmp" />
+    <!--<WixVariable Id="WixUIDialogBmp" Value="WixUIDialogBmp.bmp" />-->
 
     <Upgrade Id="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
       <UpgradeVersion Minimum="1.0.0.0" Maximum="99.0.0.0" Property="PREVIOUSVERSIONSINSTALLED" IncludeMinimum="yes" IncludeMaximum="no" />
@@ -65,6 +65,9 @@
       </Component>
       <Component Id="compD92E196604CA4CDBB739699BCB446CAE">
         <File Id="fileA1ED1B028B6F45868D48799D4DDE0D94" Source="$(var.SEToolbox.TargetDir)SEToolbox.ImageLibrary.dll"/>
+      </Component>
+      <Component Id="compA66C0B6FB6834A2A8140C5FC2039296B">
+        <File Id="file82AB916AB2C147F5A839E3EC2DDA7993" Source="$(var.SEToolbox.TargetDir)SEToolbox.ImageShaders.dll"/>
       </Component>
       <Component Id="comp4FF0A2172F244A5FA36AE80475BE0F8E">
         <File Id="file97FBC095E9A34E86AA664F4C5C9967B7" Source="$(var.SEToolbox.TargetDir)System.Windows.Interactivity.dll"/>
