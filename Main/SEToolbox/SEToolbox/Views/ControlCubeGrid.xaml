@@ -69,6 +69,6 @@
         <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0} Kg'}" />
         <Label Grid.Row="7" Content="Distance:"/>
         <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
-        <!--<TextBox Grid.Row="8" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Report}" />-->
+        <TextBox Grid.Row="8" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Report}" />
     </Grid>
 </UserControl>

@@ -231,67 +231,51 @@
             {
                 foreach (var component in cubeBlockDefinition.Components)
                 {
-                    var bp = blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == component.Subtype && b.Result.TypeId == component.Type);
-                    if (bp != null)
-                    {
-                        foreach (var item in bp.Prerequisites)
-                        {
-                            if (requirements.ContainsKey(item.SubtypeId))
-                            {
-                                // append
-                                requirements[item.SubtypeId].Amount += (amount / bp.Result.Amount) * item.Amount;
-                            }
-                            else
-                            {
-                                // add
-                                requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item()
-                                {
-                                    Amount = (amount / bp.Result.Amount) * item.Amount,
-                                    TypeId = item.TypeId,
-                                    SubtypeId = item.SubtypeId,
-                                    Id = item.Id
-                                });
-                            }
-
-                            var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount;
-                            var ts = new TimeSpan((long)ticks);
-                            timeTaken += ts;
-                        }
-                    }
+                    AccumulateCubeBlueprintRequirements(component.Subtype, component.Type, amount, requirements, ref timeTaken);
                 }
             }
         }
 
-        //public static void AccumulateCubeBlueprintRequirements(ref MyObjectBuilder_BlueprintDefinition requirements, string subTypeid, MyCubeSize cubeSize)
-        //{
-        //    var cubeBlockDefinition = cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
-        //       && (subTypeid == c.Id.SubtypeId || (c.Variants != null && c.Variants.Any(v => subTypeid == c.Id.SubtypeId + v.Color))));
+        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderTypeEnum type, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, ref TimeSpan timeTaken)
+        {
+            var bp = blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.TypeId == type);
+            if (bp != null)
+            {
+                foreach (var item in bp.Prerequisites)
+                {
+                    if (requirements.ContainsKey(item.SubtypeId))
+                    {
+                        // append existing
+                        requirements[item.SubtypeId].Amount += (amount / bp.Result.Amount) * item.Amount;
+                    }
+                    else
+                    {
+                        // add new
+                        requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item()
+                        {
+                            Amount = (amount / bp.Result.Amount) * item.Amount,
+                            TypeId = item.TypeId,
+                            SubtypeId = item.SubtypeId,
+                            Id = item.Id
+                        });
+                    }
 
-        //    if (cubeBlockDefinition != null)
-        //    {
-        //        foreach (var component in cubeBlockDefinition.Components)
-        //        {
-        //            var bp = blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == component.Subtype && b.Result.TypeId == component.Type);
-        //            if (bp != null)
-        //            {
-        //                foreach (var item in bp.Prerequisites)
-        //                {
-        //                    requirements.Prerequisites.FirstOrDefault(
-        //                    //if (requirements.ContainsKey(item.SubtypeId))
-        //                    //{
-        //                    //    // append
-        //                    //    requirements[item.SubtypeId].Amount += item.Amount;
-        //                    //}
-        //                    //else
-        //                    //{
-        //                    //    // add
-        //                    //    requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item() { Amount = item.Amount, TypeId = item.TypeId, SubtypeId = item.SubtypeId, Id = item.Id });
-        //                    //}
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+                    var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount;
+                    var ts = new TimeSpan((long)ticks);
+                    timeTaken += ts;
+                }
+            }
+        }
+
+        public static float GetItemMass(MyObjectBuilderTypeEnum typeId, string subTypeId)
+        {
+            var item = physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            if (item != null)
+            {
+                return item.Mass;
+            }
+            return 0;
+        }
 
         #endregion
 
