@@ -231,8 +231,9 @@
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
             float calcMass = 0;
-            Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
-            MyObjectBuilder_BlueprintDefinition requirements2 = new MyObjectBuilder_BlueprintDefinition();
+            Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+            Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+            //MyObjectBuilder_BlueprintDefinition requirements2 = new MyObjectBuilder_BlueprintDefinition();
             TimeSpan timeTaken = new TimeSpan();
 
             foreach (var block in this.CubeGrid.CubeBlocks)
@@ -246,8 +247,12 @@
 
                 calcMass += SpaceEngineersAPI.FetchCubeBlockMass(block.SubtypeName, this.CubeGrid.GridSizeEnum);
 
-                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(block.SubtypeName, this.CubeGrid.GridSizeEnum, 1, requirements, ref timeTaken);
-                //SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(ref requirements2, block.SubtypeName, this.CubeGrid.GridSizeEnum);
+                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(block.SubtypeName, this.CubeGrid.GridSizeEnum, 1, ingotRequirements, ref timeTaken);
+            }
+
+            foreach (var kvp in ingotRequirements)
+            {
+                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount, oreRequirements, ref timeTaken);
             }
 
             var size = max - min;
@@ -264,12 +269,13 @@
 
             StringBuilder bld = new StringBuilder();
             bld.AppendLine("Construction Requirements:");
-            foreach(var kvp in requirements)
+            foreach (var kvp in oreRequirements)
             {
-                bld.AppendFormat("{0} {1}: {2:###,##0.000} L\r\n", kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount * 1000);
+                var mass = SpaceEngineersAPI.GetItemMass(kvp.Value.TypeId, kvp.Value.SubtypeId);
+                bld.AppendFormat("{0} {1}: {2:###,##0.000} L or {3:###,##0.000} Kg\r\n", kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount * 1000, kvp.Value.Amount * (decimal)mass);
             }
             bld.AppendLine();
-            bld.AppendFormat("Time to produce: {0}\r\n", timeTaken);
+            bld.AppendFormat("Time to produce: {0:hh\\:mm\\:ss}\r\n", timeTaken);
 
             this.Report = bld.ToString();
 
