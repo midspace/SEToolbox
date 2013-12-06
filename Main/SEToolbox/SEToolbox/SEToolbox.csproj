@@ -152,6 +152,7 @@
     <Compile Include="Models\ExplorerModel.cs" />
     <Compile Include="Interop\SpaceEngineersConsts.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
+    <Compile Include="Support\RssFeedItem.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
     <Compile Include="Interop\ClassType.cs" />
     <Compile Include="Support\VisualTreeEnumeration.cs" />

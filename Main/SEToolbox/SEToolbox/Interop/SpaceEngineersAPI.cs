@@ -15,22 +15,22 @@
     {
         #region GetApplicationFilePath
 
-        public static bool IsSpaceEngineersInstalled()
+        public enum InstallState { NoRegistry, NoDirectory, NoApplication, OK };
+
+        public static InstallState IsSpaceEngineersInstalled()
         {
             var filePath = GetApplicationFilePath();
             if (string.IsNullOrEmpty(filePath))
-                return false;
+                return InstallState.NoRegistry;
             if (!Directory.Exists(filePath))
-                return false;
+                return InstallState.NoDirectory;
             if (!File.Exists(Path.Combine(filePath, "SpaceEngineers.exe")))
-                return false;
-            return true;
+                return InstallState.NoApplication;
+            return InstallState.OK;
         }
 
         public static string GetApplicationFilePath()
         {
-            // Using the [Software\Valve\Steam\SteamPath] as a base for "\steamapps\common\SpaceEngineers", is unreliable, as the Steam Library is customizable (multiple installations/locations).
-
             RegistryKey key;
             if (Environment.Is64BitProcess)
                 key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244850", false);
@@ -40,6 +40,20 @@
             if (key != null)
             {
                 return key.GetValue("InstallLocation") as string;
+            }
+            else
+            {
+                // Backup check, but no choice if the above goes to pot.
+                // Using the [Software\Valve\Steam\SteamPath] as a base for "\steamapps\common\SpaceEngineers", is unreliable, as the Steam Library is customizable and could be on another drive and directory.
+                if (Environment.Is64BitProcess)
+                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Valve\Steam", false);
+                else
+                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam", false);
+
+                if (key != null)
+                {
+                    return (string)key.GetValue("InstallPath") + @"\SteamApps\common\SpaceEngineers";
+                }
             }
 
             return null;

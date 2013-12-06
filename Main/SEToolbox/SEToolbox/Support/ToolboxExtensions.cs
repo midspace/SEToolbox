@@ -1,85 +1,22 @@
 ﻿namespace SEToolbox.Support
 {
-    using SEToolbox.ImageLibrary;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
+    using System.Net;
     using System.Reflection;
     using System.Windows.Media.Imaging;
     using System.Xml;
+    using System.Xml.Linq;
+    using SEToolbox.ImageLibrary;
+    using System.Linq;
 
-    public class ToolboxExtensions
+    public static class ToolboxExtensions
     {
         #region GetOptimizerPalatte
-
-        //internal static Dictionary<Color, string> GetOptimizerPalatte()
-        //{
-        //    Dictionary<Color, string> palette = new Dictionary<Color, string>()
-        //        {
-        //            {Color.FromArgb(255, 0, 0, 0), "Black"},
-        //            {Color.FromArgb(255, 20, 20, 20), "Black"},
-        //            {Color.FromArgb(255, 40, 40, 40), "Black"},
-
-        //            {Color.FromArgb(255, 128, 128, 128), ""}, // grey
-        //            {Color.FromArgb(255, 92, 92, 92), ""}, // grey
-
-        //            {Color.FromArgb(255, 255, 255, 255), "White"},
-        //            {Color.FromArgb(255, 192, 192, 192), "White"},
-
-        //            {Color.FromArgb(255, 255, 0, 0), "Red"},
-        //            {Color.FromArgb(255, 192, 110, 110), "Red"},
-        //            {Color.FromArgb(255, 160, 110, 110), "Red"},
-        //            {Color.FromArgb(255, 120, 80, 80), "Red"},
-        //            {Color.FromArgb(255, 148, 40, 40), "Red"},
-        //            {Color.FromArgb(255, 148, 0, 0), "Red"},
-        //            {Color.FromArgb(255, 128, 0, 0), "Red"},
-        //            {Color.FromArgb(255, 92, 20, 20), "Red"},
-        //            {Color.FromArgb(255, 64, 0, 0), "Red"},
-        //            {Color.FromArgb(255, 64, 32, 32), "Red"},
-
-        //            {Color.FromArgb(255, 0, 255, 0), "Green"},
-        //            {Color.FromArgb(255, 110, 192, 110), "Green"},
-        //            {Color.FromArgb(255, 110, 160, 110), "Green"},
-        //            {Color.FromArgb(255, 80, 120, 80), "Green"},
-        //            {Color.FromArgb(255, 40, 148, 40), "Green"},
-        //            {Color.FromArgb(255, 0, 148, 0), "Green"},
-        //            {Color.FromArgb(255, 0, 128, 0), "Green"},
-        //            {Color.FromArgb(255, 0, 64, 0), "Green"},
-        //            {Color.FromArgb(255, 32, 64, 32), "Green"},
-
-        //            {Color.FromArgb(255, 0, 0, 255), "Blue"},
-        //            {Color.FromArgb(255, 110, 110, 192), "Blue"},
-        //            {Color.FromArgb(255, 110, 110, 160), "Blue"},
-        //            {Color.FromArgb(255, 80, 90, 120), "Blue"},
-        //            {Color.FromArgb(255, 40, 40, 148), "Blue"},
-        //            {Color.FromArgb(255, 0, 0, 148), "Blue"},
-        //            {Color.FromArgb(255, 0, 0, 128), "Blue"},
-        //            {Color.FromArgb(255, 0, 0, 64), "Blue"},
-        //            {Color.FromArgb(255, 32, 32, 64), "Blue"},
-
-        //            {Color.FromArgb(255, 128, 128, 0), "Yellow"},
-        //            {Color.FromArgb(255, 215, 128, 0), "Yellow"},
-        //            {Color.FromArgb(255, 192, 128, 0), "Yellow"},
-        //            {Color.FromArgb(255, 215, 64, 0), "Yellow"},
-        //            {Color.FromArgb(255, 192, 64, 0), "Yellow"},
-        //            {Color.FromArgb(255, 215, 192, 128), "Yellow"},
-        //            {Color.FromArgb(255, 215, 192, 96), "Yellow"},
-        //            {Color.FromArgb(255, 215, 192, 64), "Yellow"},
-        //            {Color.FromArgb(255, 192, 172, 96), "Yellow"},
-        //            {Color.FromArgb(255, 192, 160, 96), "Yellow"},
-        //            {Color.FromArgb(255, 192, 160, 64), "Yellow"},
-        //            {Color.FromArgb(255, 192, 160, 32), "Yellow"},
-        //            {Color.FromArgb(255, 128, 96, 48), "Yellow"},
-        //            {Color.FromArgb(255, 128, 96, 32), "Yellow"},
-        //            {Color.FromArgb(255, 128, 96, 16), "Yellow"},
-        //            {Color.FromArgb(255, 92, 64, 16), "Yellow"},
-        //        };
-
-        //    return palette;
-        //}
 
         internal static Dictionary<Color, Color> GetOptimizerPalatte()
         {
@@ -389,6 +326,43 @@
             }
 
             return voxFilename;
+        }
+
+        #endregion
+
+        #region CheckForUpdates
+
+        public static RssFeedItem CheckForUpdates()
+        {
+            var assemblyVersion = Assembly.GetExecutingAssembly()
+                    .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
+                    .OfType<AssemblyFileVersionAttribute>()
+                    .FirstOrDefault();
+            var currentVersion = new Version(assemblyVersion.Version);
+
+            // Create the WebClient with Proxy Credentials, as stupidly this works for some reason before calling XDocument.Load.
+            var webclient = new WebClient();
+            webclient.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials; // For Proxy servers on Corporate networks.
+            XDocument rssFeed = null;
+
+            try
+            {
+                rssFeed = XDocument.Load("http://setoolbox.codeplex.com/project/feeds/rss?ProjectRSSFeed=codeplex%3a%2f%2frelease%2fsetoolbox");
+            }
+            catch
+            {
+            }
+
+            if (rssFeed != null)
+            {
+                var items = (from item in rssFeed.Descendants("item")
+                             select new RssFeedItem { Title = item.Element("title").Value, Link = item.Element("link").Value }).ToList();
+
+                var newItem = items.FirstOrDefault(i => i.GetVersion() > currentVersion);
+                return newItem;
+            }
+
+            return null;
         }
 
         #endregion
