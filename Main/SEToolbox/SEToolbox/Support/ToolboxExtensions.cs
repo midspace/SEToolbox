@@ -1,18 +1,18 @@
 ﻿namespace SEToolbox.Support
 {
+    using SEToolbox.ImageLibrary;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Reflection;
     using System.Windows.Media.Imaging;
     using System.Xml;
     using System.Xml.Linq;
-    using SEToolbox.ImageLibrary;
-    using System.Linq;
 
     public static class ToolboxExtensions
     {
@@ -334,6 +334,12 @@
 
         public static RssFeedItem CheckForUpdates()
         {
+#if DEBUG
+            // Skip the load check, as it make take a few seconds.
+            if (Debugger.IsAttached)
+                return null;
+#endif
+
             var assemblyVersion = Assembly.GetExecutingAssembly()
                     .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
                     .OfType<AssemblyFileVersionAttribute>()

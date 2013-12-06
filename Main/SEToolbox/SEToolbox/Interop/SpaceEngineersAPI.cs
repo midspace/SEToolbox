@@ -1,14 +1,15 @@
 ﻿namespace SEToolbox.Interop
 {
+    using Microsoft.Win32;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.CommonLib.ObjectBuilders.Definitions;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Xml;
-    using Microsoft.Win32;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.CommonLib.ObjectBuilders;
-    using Sandbox.CommonLib.ObjectBuilders.Definitions;
     using VRageMath;
 
     public class SpaceEngineersAPI
@@ -17,16 +18,19 @@
 
         public enum InstallState { NoRegistry, NoDirectory, NoApplication, OK };
 
-        public static InstallState IsSpaceEngineersInstalled()
+        public static bool IsSpaceEngineersInstalled()
         {
-            var filePath = GetApplicationFilePath();
+            string filePath = GetApplicationFilePath();
             if (string.IsNullOrEmpty(filePath))
-                return InstallState.NoRegistry;
+                throw new ToolboxException(ExceptionState.NoRegistry);
             if (!Directory.Exists(filePath))
-                return InstallState.NoDirectory;
-            if (!File.Exists(Path.Combine(filePath, "SpaceEngineers.exe")))
-                return InstallState.NoApplication;
-            return InstallState.OK;
+                throw new ToolboxException(ExceptionState.NoDirectory);
+
+            // Skip checking for the .exe. Not required for the Toolbox currently.
+            // The new "bin" and "Bin64" directories in the current release make this pointless.
+            //if (!File.Exists(Path.Combine(filePath, "SpaceEngineers.exe")))
+            //    throw new ToolboxException(ExceptionState.NoApplication);
+            return true;
         }
 
         public static string GetApplicationFilePath()
