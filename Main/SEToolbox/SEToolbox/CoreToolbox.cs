@@ -1,11 +1,13 @@
 ﻿namespace SEToolbox
 {
+    using System;
+    using System.Diagnostics;
+    using System.Windows;
     using SEToolbox.Interop;
     using SEToolbox.Models;
+    using SEToolbox.Support;
     using SEToolbox.ViewModels;
     using SEToolbox.Views;
-    using System;
-    using System.Windows;
 
     public class CoreToolbox
     {
@@ -21,8 +23,20 @@
 
         public void Startup(string[] args)
         {
+            RssFeedItem update = ToolboxExtensions.CheckForUpdates();
+            if (update != null)
+            {
+                var dialogResult = MessageBox.Show(string.Format("A new version of SEToolbox ({0}) is available.\r\nWould you like to download it now?", update.Version), "New version available", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (dialogResult == MessageBoxResult.Yes)
+                {
+                    Process.Start(update.Link);
+                    Application.Current.Shutdown();
+                }
+            }
+
             ExplorerModel explorerModel = new ExplorerModel();
-            if (SpaceEngineersAPI.IsSpaceEngineersInstalled())
+            SpaceEngineersAPI.InstallState state = SpaceEngineersAPI.IsSpaceEngineersInstalled();
+            if (state == SpaceEngineersAPI.InstallState.OK)
             {
                 explorerModel.Load();
                 ExplorerViewModel viewModel = new ExplorerViewModel(explorerModel);
@@ -35,7 +49,7 @@
             }
             else
             {
-                MessageBox.Show("The Space Engineers Game was not detected.\r\nTo use the SEToolbox, you must have SpaceEngineers installed on your computer.\r\n\r\nPlease visit www.SpaceEngineersGame.com to find out more about this exciting game.", "SpaceEngineers not found", MessageBoxButton.OK, MessageBoxImage.Stop, MessageBoxResult.OK);
+                MessageBox.Show(string.Format("The Space Engineers Game was not detected.\r\nTo use the SEToolbox, you must have SpaceEngineers installed on your computer.\r\n\r\nPlease visit www.SpaceEngineersGame.com to find out more about this exciting game.\r\n\r\nCode [{0}]", state), "SpaceEngineers not found", MessageBoxButton.OK, MessageBoxImage.Stop, MessageBoxResult.OK);
                 Application.Current.Shutdown();
             }
         }
