@@ -6,6 +6,7 @@
     using System.Windows.Threading;
     using SEToolbox.Interfaces;
     using SEToolbox.Services;
+    using SEToolbox.Support;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -40,14 +41,20 @@
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             // TODO: Log details to Events.
-            
-            MessageBox.Show(
-                string.Format(
-                "An error has been detected in the application that has caused the application to shutdown:\n\n{0}\n\nApologies for any inconvenience.",
-                e.Exception.Message),
-                "SE Toolbox",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+
+            string message = null;
+
+            if (e.Exception is ToolboxException)
+            {
+                message = e.Exception.Message;
+            }
+            else
+            {
+                // Unhandled Exception.
+                message = string.Format("An error has been detected in the application that has caused the application to shutdown:\n\n{0}\n\nApologies for any inconvenience.", e.Exception.Message);
+            }
+
+            MessageBox.Show(message, "SE Toolbox Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             if (!Debugger.IsAttached)
             {

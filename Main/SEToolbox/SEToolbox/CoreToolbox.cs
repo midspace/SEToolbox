@@ -35,8 +35,7 @@
             }
 
             ExplorerModel explorerModel = new ExplorerModel();
-            SpaceEngineersAPI.InstallState state = SpaceEngineersAPI.IsSpaceEngineersInstalled();
-            if (state == SpaceEngineersAPI.InstallState.OK)
+            if (SpaceEngineersAPI.IsSpaceEngineersInstalled())
             {
                 explorerModel.Load();
                 ExplorerViewModel viewModel = new ExplorerViewModel(explorerModel);
@@ -46,11 +45,6 @@
                 //}
                 var window = new WindowExplorer(viewModel);
                 window.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(string.Format("The Space Engineers Game was not detected.\r\nTo use the SEToolbox, you must have SpaceEngineers installed on your computer.\r\n\r\nPlease visit www.SpaceEngineersGame.com to find out more about this exciting game.\r\n\r\nCode [{0}]", state), "SpaceEngineers not found", MessageBoxButton.OK, MessageBoxImage.Stop, MessageBoxResult.OK);
-                Application.Current.Shutdown();
             }
         }
 
