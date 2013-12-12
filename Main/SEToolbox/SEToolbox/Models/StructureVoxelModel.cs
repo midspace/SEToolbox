@@ -3,8 +3,11 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
+    using System;
     using System.IO;
+    using System.Xml.Serialization;
 
+    [Serializable]
     public class StructureVoxelModel : StructureBaseModel
     {
         #region ctor
@@ -18,6 +21,7 @@
 
         #region Properties
 
+        [XmlIgnore]
         public MyObjectBuilder_VoxelMap VoxelMap
         {
             get
@@ -26,6 +30,7 @@
             }
         }
 
+        [XmlIgnore]
         public string Filename
         {
             get

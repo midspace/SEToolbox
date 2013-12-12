@@ -346,6 +346,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Space Engineers content files could not be loaded, either because they are corrupt, or they are newer than expected..
+        /// </summary>
+        internal static string ExceptionState_CorruptContentFiles {
+            get {
+                return ResourceManager.GetString("ExceptionState_CorruptContentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Space Engineers Application could not be found.
         ///To use the SEToolbox, you must have SpaceEngineers installed on your computer..
         /// </summary>

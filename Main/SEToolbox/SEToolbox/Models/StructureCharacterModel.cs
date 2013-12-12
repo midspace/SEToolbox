@@ -2,11 +2,15 @@
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
+    using System;
+    using System.Xml.Serialization;
 
+    [Serializable]
     public class StructureCharacterModel : StructureBaseModel
     {
         #region Fields
 
+        [NonSerialized]
         private bool isPlayer;
 
         #endregion
@@ -22,6 +26,7 @@
 
         #region Properties
 
+        [XmlIgnore]
         public MyObjectBuilder_Character Character
         {
             get
@@ -30,6 +35,7 @@
             }
         }
 
+        [XmlIgnore]
         public MyCharacterModelEnum CharacterModel
         {
             get
@@ -48,6 +54,7 @@
             }
         }
 
+        [XmlIgnore]
         public bool IsPlayer
         {
             get

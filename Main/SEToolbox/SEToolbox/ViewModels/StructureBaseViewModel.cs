@@ -3,23 +3,24 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Models;
+    using SEToolbox.Services;
     using System.Collections.Generic;
 
-    public abstract class StructureBaseViewModel<TModel> : BaseViewModel, IStructureViewBase where TModel : IStructureBase
+    public abstract class StructureBaseViewModel<TModel> : DataBaseViewModel, /*IDragable,*/ IStructureViewBase where TModel : IStructureBase
     {
         #region fields
 
         private bool isSelected;
-        private TModel dataModel;
+        //private TModel dataModel;
 
         #endregion
 
         #region ctor
 
         public StructureBaseViewModel(BaseViewModel parentViewModel, TModel dataModel)
-            : base(parentViewModel)
+            : base(parentViewModel, dataModel)
         {
-            this.dataModel = dataModel;
+            //this.dataModel = dataModel;
         }
 
         #endregion
@@ -30,7 +31,16 @@
         //{
         //    get
         //    {
-        //        return this.dataModel;
+        //        return (TModel)base.dataModel;
+        //    }
+
+        //    set
+        //    {
+        //        //if (value != this.dataModel)
+        //        {
+        //            this.dataModel = value;
+        //            this.RaisePropertyChanged(() => DataModel);
+        //        }
         //    }
         //}
 
@@ -48,23 +58,18 @@
             }
         }
 
-        public IStructureBase DataModel
-        {
-            get { return this.dataModel; }
-        }
-
         public long EntityId
         {
             get
             {
-                return this.dataModel.EntityId;
+                return this.DataModel.EntityId;
             }
 
             set
             {
-                if (value != this.dataModel.EntityId)
+                if (value != this.DataModel.EntityId)
                 {
-                    this.dataModel.EntityId = value;
+                    this.DataModel.EntityId = value;
                     this.RaisePropertyChanged(() => EntityId);
                 }
             }
@@ -74,15 +79,15 @@
         {
             get
             {
-                return this.dataModel.PositionAndOrientation;
+                return this.DataModel.PositionAndOrientation;
             }
 
             set
             {
-                if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, this.dataModel.PositionAndOrientation))
+                if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, this.DataModel.PositionAndOrientation))
                 //if (value != this.entityBase.PositionAndOrientation)
                 {
-                    this.dataModel.PositionAndOrientation = value;
+                    this.DataModel.PositionAndOrientation = value;
                     this.RaisePropertyChanged(() => PositionAndOrientation);
                 }
             }
@@ -92,14 +97,14 @@
         {
             get
             {
-                return this.dataModel.ClassType;
+                return this.DataModel.ClassType;
             }
 
             set
             {
-                if (value != this.dataModel.ClassType)
+                if (value != this.DataModel.ClassType)
                 {
-                    this.dataModel.ClassType = value;
+                    this.DataModel.ClassType = value;
                     this.RaisePropertyChanged(() => ClassType);
                 }
             }
@@ -109,12 +114,12 @@
         {
             get
             {
-                return this.dataModel.Description;
+                return this.DataModel.Description;
             }
 
             set
             {
-                this.dataModel.Description = value;
+                this.DataModel.Description = value;
             }
         }
 
@@ -122,12 +127,12 @@
         {
             get
             {
-                return this.dataModel.PlayerDistance;
+                return this.DataModel.PlayerDistance;
             }
 
             set
             {
-                this.dataModel.PlayerDistance = value;
+                this.DataModel.PlayerDistance = value;
             }
         }
 
@@ -161,5 +166,20 @@
         //}
 
         #endregion
+
+        //#region IDragable Interface
+
+        ////[XmlIgnore]
+        //System.Type IDragable.DataType
+        //{
+        //    get { return typeof(BaseViewModel); }
+        //}
+
+        //void IDragable.Remove(object i)
+        //{
+            
+        //} 
+
+        //#endregion
     }
 }

@@ -10,6 +10,7 @@
         #region fields
 
         private BaseViewModel ownerViewModel;
+        //protected object dataModel;
 
         #endregion
 

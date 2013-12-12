@@ -141,11 +141,18 @@
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\FileDialogViewModel.cs" />
     <Compile Include="Services\FolderBrowserDialog.cs" />
+    <Compile Include="Services\IDragable.cs" />
+    <Compile Include="Services\IDropable.cs" />
+    <Compile Include="Services\ListBoxAdornerManager.cs" />
+    <Compile Include="Services\ListBoxDropAdorner.cs" />
+    <Compile Include="Services\ListBoxDropBehavior.cs" />
+    <Compile Include="Services\ListBoxItemDragBehavior.cs" />
     <Compile Include="Services\OpenFileDialog.cs" />
     <Compile Include="Services\OpenFileDialogViewModel.cs" />
     <Compile Include="Services\SaveFileDialog.cs" />
     <Compile Include="Services\SaveFileDialogViewModel.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="Services\SupplementaryInteraction.cs" />
     <Compile Include="Services\SynchronizeSelectedItems.cs" />
     <Compile Include="Services\WeakEventHandler.cs" />
     <Compile Include="Services\WindowWrapper.cs" />
@@ -159,6 +166,7 @@
     <Compile Include="Support\VisualTreeEnumeration.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\DataBaseViewModel.cs" />
     <Compile Include="ViewModels\ImportVoxelViewModel.cs" />
     <Compile Include="ViewModels\StructureFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\Import3dModelViewModel.cs" />

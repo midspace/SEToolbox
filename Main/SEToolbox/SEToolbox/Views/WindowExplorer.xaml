@@ -5,6 +5,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:views="clr-namespace:SEToolbox.Views"
         xmlns:vm="clr-namespace:SEToolbox.ViewModels"
+        xmlns:m="clr-namespace:SEToolbox.Models"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         Height="600" Width="800" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
@@ -141,6 +142,16 @@
                         <TabItem Header="Craft/Objects">
                             <controls:SortableListView Grid.Row="2" Grid.ColumnSpan="2" DisplayMemberPath="ClassType" SelectionMode="Extended" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                                <ListView.Resources>
+                                    <commands:Behaviors x:Key="dragBehavior" x:Shared="False">
+                                        <commands:ListBoxItemDragBehavior DragSourceBinding="{Binding DataModel}" />
+                                    </commands:Behaviors>
+                                </ListView.Resources>
+                                <!--<ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="commands:SupplementaryInteraction.Behaviors" Value="{StaticResource dragBehavior}"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>-->
                                 <ListView.View>
                                     <GridView>
                                         <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
@@ -155,6 +166,7 @@
                                 <i:Interaction.Behaviors>
                                     <!-- Custom behavior that synchronizes the selected items with the view models collection -->
                                     <commands:SynchronizeSelectedItems Selections="{Binding Selections}"/>
+                                    <!--<commands:ListBoxDropBehavior AllowDropToSource="False" ShowDropIndicator="False" DropType="{x:Type m:IStructureBase}"/>-->
                                 </i:Interaction.Behaviors>
                                 <ListBox.ContextMenu>
                                     <ContextMenu>

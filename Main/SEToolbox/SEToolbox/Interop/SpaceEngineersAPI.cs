@@ -94,6 +94,23 @@
             return (T)obj;
         }
 
+        public static T Deserialize<T>(string xml)
+        {
+            using(StringReader textReader = new StringReader(xml))
+            {
+                return (T)(new XmlSerializerContract().GetSerializer(typeof(T)).Deserialize(textReader));
+            }
+        }
+
+        public static string Serialize<T>(object item)
+        {
+            using (StringWriter textWriter = new StringWriter())
+            {
+                new XmlSerializerContract().GetSerializer(typeof(T)).Serialize(textWriter, item);
+                return textWriter.ToString();
+            }
+        }
+
         public static bool WriteSpaceEngineersFile<T, S>(T sector, string filename)
             where S : XmlSerializer1
         {
@@ -198,20 +215,23 @@
         public static void ReadCubeBlockDefinitions()
         {
             var voxelMaterialsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\VoxelMaterials.sbc");
-            voxelMaterialDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>(voxelMaterialsFilename);
-
             var physicalItemsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\PhysicalItems.sbc");
-            physicalItemDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>(physicalItemsFilename);
-
             var componentsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\Components.sbc");
-            componentDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>(componentsFilename);
-
             var cubeblocksFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\CubeBlocks.sbc");
-            cubeBlockDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>(cubeblocksFilename);
-
             var blueprintsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\Blueprints.sbc");
-            blueprintDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>(blueprintsFilename);
 
+            try
+            {
+                voxelMaterialDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>(voxelMaterialsFilename);
+                physicalItemDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>(physicalItemsFilename);
+                componentDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>(componentsFilename);
+                cubeBlockDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>(cubeblocksFilename);
+                blueprintDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>(blueprintsFilename);
+            }
+            catch
+            {
+                throw new ToolboxException(ExceptionState.CorruptContentFiles);
+            }
 
             // TODO: set a file watch to reload the files, incase modding is occuring at the same time this is open.
             //     Lock the load during this time, in case it happens multiple times.

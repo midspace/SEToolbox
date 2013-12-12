@@ -1,10 +1,11 @@
 ﻿namespace SEToolbox.Models
 {
+    using SEToolbox.Support;
     using System;
     using System.ComponentModel;
     using System.Linq.Expressions;
-    using SEToolbox.Support;
 
+    [Serializable]
     public class BaseModel : INotifyPropertyChanged
     {
         #region Methods
@@ -16,25 +17,33 @@
         //[Obsolete("Use RaisePropertyChanged(() => PropertyName) instead.")]
         protected void OnPropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
+            if (this.propertyChanged != null)
             {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                this.propertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
         public void RaisePropertyChanged(params Expression<Func<object>>[] expression)
         {
-            PropertyChanged.Raise(expression);
+            propertyChanged.Raise(expression);
         }
 
         #endregion
 
         #region INotifyPropertyChanged Members
 
+        [NonSerialized]
+        PropertyChangedEventHandler propertyChanged;
+
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add { propertyChanged += value; }
+            remove { propertyChanged -= value; }
+        }
 
         #endregion
     }
