@@ -1,11 +1,11 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
-    using System.Windows.Media.Media3D;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
-    using System.Linq;
+    using System;
+    using System.Xml.Serialization;
 
+    [Serializable]
     public class StructureFloatingObjectModel : StructureBaseModel
     {
         #region Fields
@@ -23,6 +23,7 @@
 
         #region Properties
 
+        [XmlIgnore]
         public MyObjectBuilder_FloatingObject FloatingObject
         {
             get
@@ -31,6 +32,7 @@
             }
         }
 
+        [XmlIgnore]
         public MyObjectBuilder_InventoryItem Item
         {
             get

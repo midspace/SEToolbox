@@ -1,19 +1,30 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
-    using System.Collections.Generic;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
+    using System;
+    using System.Collections.Generic;
+    using System.Xml.Serialization;
 
+    [Serializable]
     public class StructureBaseModel : BaseModel, IStructureBase
     {
         #region fields
 
+        [NonSerialized]
         private MyObjectBuilder_EntityBase entityBase;
+
+        [NonSerialized]
         private ClassType classType;
+
+        [NonSerialized]
         private string description;
-        double playerDistance;
+
+        [NonSerialized]
+        private double playerDistance;
+
+        private string serializedEntity;
 
         #endregion
 
@@ -32,6 +43,7 @@
 
         #region Properties
 
+        [XmlIgnore]
         public virtual MyObjectBuilder_EntityBase EntityBase
         {
             get
@@ -49,6 +61,7 @@
             }
         }
 
+        [XmlIgnore]
         public long EntityId
         {
             get
@@ -66,6 +79,7 @@
             }
         }
 
+        [XmlIgnore]
         public MyPositionAndOrientation? PositionAndOrientation
         {
             get
@@ -84,6 +98,7 @@
             }
         }
 
+        [XmlIgnore]
         public ClassType ClassType
         {
             get
@@ -101,6 +116,7 @@
             }
         }
 
+        [XmlIgnore]
         public string Description
         {
             get
@@ -118,6 +134,7 @@
             }
         }
 
+        [XmlIgnore]
         public double PlayerDistance
         {
             get
@@ -131,6 +148,23 @@
                 {
                     this.playerDistance = value;
                     this.RaisePropertyChanged(() => PlayerDistance);
+                }
+            }
+        }
+
+        public string SerializedEntity
+        {
+            get
+            {
+                return this.serializedEntity;
+            }
+
+            set
+            {
+                if (value != this.serializedEntity)
+                {
+                    this.serializedEntity = value;
+                    this.RaisePropertyChanged(() => SerializedEntity);
                 }
             }
         }

@@ -9,7 +9,8 @@
         OK,
         NoRegistry,
         NoDirectory,
-        NoApplication
+        NoApplication,
+        CorruptContentFiles
     };
 
     public class ToolboxException : ArgumentException

@@ -1,14 +1,17 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Windows.Media.Media3D;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Text;
+    using System.Windows.Media.Media3D;
+    using System.Xml.Serialization;
 
+    [Serializable]
     public class StructureCubeGridModel : StructureBaseModel
     {
         #region Fields
@@ -33,6 +36,7 @@
 
         #region Properties
 
+        [XmlIgnore]
         public MyObjectBuilder_CubeGrid CubeGrid
         {
             get
@@ -41,6 +45,7 @@
             }
         }
 
+        [XmlIgnore]
         public Sandbox.CommonLib.ObjectBuilders.MyCubeSize GridSize
         {
             get
@@ -58,6 +63,7 @@
             }
         }
 
+        [XmlIgnore]
         public bool IsStatic
         {
             get
@@ -75,6 +81,7 @@
             }
         }
 
+        [XmlIgnore]
         public Point3D Min
         {
             get
@@ -92,6 +99,7 @@
             }
         }
 
+        [XmlIgnore]
         public Point3D Max
         {
             get
@@ -109,6 +117,7 @@
             }
         }
 
+        [XmlIgnore]
         public Vector3D Size
         {
             get
@@ -126,6 +135,7 @@
             }
         }
 
+        [XmlIgnore]
         public int Pilots
         {
             get
@@ -143,6 +153,7 @@
             }
         }
 
+        [XmlIgnore]
         public bool IsPiloted
         {
             get
@@ -151,6 +162,7 @@
             }
         }
 
+        [XmlIgnore]
         public bool IsDamaged
         {
             get
@@ -159,6 +171,7 @@
             }
         }
 
+        [XmlIgnore]
         public int DamageCount
         {
             get
@@ -167,6 +180,7 @@
             }
         }
 
+        [XmlIgnore]
         public double Speed
         {
             get
@@ -175,6 +189,7 @@
             }
         }
 
+        [XmlIgnore]
         public string Report
         {
             get
@@ -192,6 +207,7 @@
             }
         }
 
+        [XmlIgnore]
         public float Mass
         {
             get
@@ -212,6 +228,18 @@
         #endregion
 
         #region methods
+
+        [OnSerializing]
+        internal void OnSerializingMethod(StreamingContext context)
+        {
+            this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_CubeGrid>(this.CubeGrid);
+        }
+        
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_CubeGrid>(this.SerializedEntity);
+        }
 
         public override void UpdateFromEntityBase()
         {

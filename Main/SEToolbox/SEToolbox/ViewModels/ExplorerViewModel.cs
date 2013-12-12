@@ -12,8 +12,9 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Views;
+    using System.Collections.Generic;
 
-    public class ExplorerViewModel : BaseViewModel
+    public class ExplorerViewModel : BaseViewModel, IDropable
     {
         #region Fields
 
@@ -565,8 +566,6 @@
             this.DeleteModel(this.Selections.ToArray());
         }
 
-        #endregion
-
         void Structures_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -668,5 +667,24 @@
         {
             return this.dataModel.ContainsVoxelFilename(filename);
         }
+
+        #endregion
+
+        #region IDragable Interface
+
+        Type IDropable.DataType
+        {
+            get { return typeof(DataBaseViewModel); }
+        }
+
+        void IDropable.Drop(object data, int index)
+        {
+            foreach (var item in (IList<IStructureBase>)data)
+            {
+
+            }
+        }
+
+        #endregion
     }
 }

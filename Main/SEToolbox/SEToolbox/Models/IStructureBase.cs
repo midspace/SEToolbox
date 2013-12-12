@@ -15,8 +15,10 @@
 
         string Description { get; set; }
 
-        void UpdateFromEntityBase();
-
         double PlayerDistance { get; set; }
+
+        string SerializedEntity { get; set; }
+
+        void UpdateFromEntityBase();
     }
 }
