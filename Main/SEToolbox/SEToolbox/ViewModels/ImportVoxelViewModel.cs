@@ -380,20 +380,8 @@
                 originalFile = this.SourceFile;
             }
 
-
             // automatically number all files, and check for duplicate filenames.
-            var filepartname = Path.GetFileNameWithoutExtension(originalFile).ToLower();
-            var extension = Path.GetExtension(originalFile).ToLower();
-            int index = 0;
-            var filename = filepartname + index.ToString() + extension;
-
-            while (((ExplorerViewModel)this.OwnerViewModel).ContainsVoxelFilename(filename))
-            {
-                index++;
-                filename = filepartname + index.ToString() + extension;
-            }
-            this.Filename = filename;
-
+            this.Filename = ((ExplorerViewModel)this.OwnerViewModel).CreateUniqueVoxelFilename(originalFile);
 
             MyObjectBuilder_VoxelMap entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3(), this.Filename);
             entity.EntityId = SpaceEngineersAPI.GenerateEntityId();

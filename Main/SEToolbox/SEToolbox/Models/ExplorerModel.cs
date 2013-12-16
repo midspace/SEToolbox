@@ -315,7 +315,7 @@
             {
                 foreach (var entityBase in this.SectorData.SectorObjects)
                 {
-                    var structure = StructureBaseModel.Create(entityBase);
+                    var structure = StructureBaseModel.Create(entityBase, this.ActiveWorld.Savepath);
 
                     if (structure is StructureCharacterModel)
                     {
@@ -335,7 +335,7 @@
                         foreach (var cockpit in list)
                         {
                             cubeGrid.Pilots++;
-                            var character = StructureBaseModel.Create(cockpit.Pilot);
+                            var character = StructureBaseModel.Create(cockpit.Pilot, null);
 
                             if (this.ActiveWorld.Content != null && cockpit.EntityId == this.ActiveWorld.Content.ControlledObject)
                             {
@@ -386,7 +386,7 @@
             if (entity != null)
             {
                 this.SectorData.SectorObjects.Add(entity);
-                var structure = StructureBaseModel.Create(entity);
+                var structure = StructureBaseModel.Create(entity, this.ActiveWorld.Savepath);
                 structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position - structure.PositionAndOrientation.Value.Position).Length();
                 this.Structures.Add(structure);
                 this.IsModified = true;
@@ -485,6 +485,91 @@
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// automatically number all voxel files, and check for duplicate filenames.
+        /// </summary>
+        /// <param name="originalFile"></param>
+        /// <returns></returns>
+        public string CreateUniqueVoxelFilename(string originalFile)
+        {
+            var filepartname = Path.GetFileNameWithoutExtension(originalFile).ToLower();
+            var extension = Path.GetExtension(originalFile).ToLower();
+            int index = 0;
+            var filename = filepartname + index.ToString() + extension;
+
+            while (this.ContainsVoxelFilename(filename))
+            {
+                index++;
+                filename = filepartname + index.ToString() + extension;
+            }
+
+            return filename;
+        }
+
+        public void MergeData(IList<IStructureBase> data)
+        {
+            Dictionary<Int64, Int64> idReplacementTable = new Dictionary<long, long>();
+
+            foreach (var item in (IList<IStructureBase>)data)
+            {
+                if (item is StructureCubeGridModel)
+                {
+                    var ship = item as StructureCubeGridModel;
+                    ship.CubeGrid.EntityId = MergeId(ship.CubeGrid.EntityId, ref idReplacementTable);
+
+                    foreach (var cubeGrid in ship.CubeGrid.CubeBlocks)
+                    {
+                        cubeGrid.EntityId = MergeId(cubeGrid.EntityId, ref idReplacementTable);
+
+                        if (cubeGrid is MyObjectBuilder_Cockpit)
+                        {
+                            ((MyObjectBuilder_Cockpit)cubeGrid).Pilot = null;  // remove any pilots.
+                        }
+
+                        if (cubeGrid is MyObjectBuilder_MotorStator)
+                        {
+                            // reattach motor/rotor to correct entity.
+                            ((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId = MergeId(((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId, ref idReplacementTable);
+                        }
+                    }
+
+                    this.AddEntity(ship.CubeGrid);
+                }
+                else if (item is StructureVoxelModel)
+                {
+                    var asteroid = item as StructureVoxelModel;
+                    
+                    if (this.ContainsVoxelFilename(asteroid.Filename))
+                    {
+                        asteroid.Filename = CreateUniqueVoxelFilename(asteroid.Filename);
+                    }
+
+                    this.AddEntity(asteroid.VoxelMap);
+                    this.AddVoxelFile(asteroid.Filename, asteroid.VoxelFilepath);
+                }
+                else if (item is StructureFloatingObjectModel)
+                {
+                    var floatObject = item as StructureFloatingObjectModel;
+                    this.AddEntity(floatObject.FloatingObject);
+                }
+
+                // ignore the StructureCharacterModel.
+            }
+        }
+
+        private Int64 MergeId(long currentId, ref Dictionary<Int64, Int64> idReplacementTable)
+        {
+            if (currentId == 0)
+                return 0;
+            else if (idReplacementTable.ContainsKey(currentId))
+                return idReplacementTable[currentId];
+            else
+            {
+                idReplacementTable[currentId] = SpaceEngineersAPI.GenerateEntityId();
+                return idReplacementTable[currentId];
+            }
         }
 
         #endregion

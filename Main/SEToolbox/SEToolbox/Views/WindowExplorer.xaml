@@ -147,11 +147,11 @@
                                         <commands:ListBoxItemDragBehavior DragSourceBinding="{Binding DataModel}" />
                                     </commands:Behaviors>
                                 </ListView.Resources>
-                                <!--<ListView.ItemContainerStyle>
+                                <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem">
                                         <Setter Property="commands:SupplementaryInteraction.Behaviors" Value="{StaticResource dragBehavior}"/>
                                     </Style>
-                                </ListView.ItemContainerStyle>-->
+                                </ListView.ItemContainerStyle>
                                 <ListView.View>
                                     <GridView>
                                         <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
@@ -166,7 +166,7 @@
                                 <i:Interaction.Behaviors>
                                     <!-- Custom behavior that synchronizes the selected items with the view models collection -->
                                     <commands:SynchronizeSelectedItems Selections="{Binding Selections}"/>
-                                    <!--<commands:ListBoxDropBehavior AllowDropToSource="False" ShowDropIndicator="False" DropType="{x:Type m:IStructureBase}"/>-->
+                                    <commands:ListBoxDropBehavior AllowDropToSource="False" ShowDropIndicator="False" DropType="{x:Type m:IStructureBase}"/>
                                 </i:Interaction.Behaviors>
                                 <ListBox.ContextMenu>
                                     <ContextMenu>
