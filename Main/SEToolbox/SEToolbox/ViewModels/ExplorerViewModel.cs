@@ -13,6 +13,8 @@
     using SEToolbox.Services;
     using SEToolbox.Views;
     using System.Collections.Generic;
+    using SEToolbox.Interop;
+    using System.IO;
 
     public class ExplorerViewModel : BaseViewModel, IDropable
     {
@@ -460,6 +462,7 @@
                 this.dataModel.AddVoxelFile(loadVm.Filename, loadVm.SourceFile);
                 this.selectNewStructure = true;
                 var structure = this.dataModel.AddEntity(newEntity);
+                ((StructureVoxelModel)structure).VoxelFilepath = loadVm.SourceFile; // Overwrite the temporary file location of the Source Voxel, as it hasn't been written yet.
                 this.selectNewStructure = false;
                 this.IsBusy = false;
             }
@@ -663,9 +666,10 @@
             }
         }
 
-        public bool ContainsVoxelFilename(string filename)
+        /// <inheritdoc />
+        public string CreateUniqueVoxelFilename(string originalFile)
         {
-            return this.dataModel.ContainsVoxelFilename(filename);
+            return this.dataModel.CreateUniqueVoxelFilename(originalFile);
         }
 
         #endregion
@@ -679,10 +683,7 @@
 
         void IDropable.Drop(object data, int index)
         {
-            foreach (var item in (IList<IStructureBase>)data)
-            {
-
-            }
+            this.dataModel.MergeData((IList<IStructureBase>)data);
         }
 
         #endregion

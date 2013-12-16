@@ -3,6 +3,7 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using System;
+    using System.Runtime.Serialization;
     using System.Xml.Serialization;
 
     [Serializable]
@@ -75,6 +76,18 @@
         #endregion
 
         #region methods
+
+        [OnSerializing]
+        internal void OnSerializingMethod(StreamingContext context)
+        {
+            this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_Character>(this.Character);
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_Character>(this.SerializedEntity);
+        }
 
         public override void UpdateFromEntityBase()
         {

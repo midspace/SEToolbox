@@ -178,11 +178,11 @@
             this.ClassType = ClassType.Unknown;
         }
 
-        public static IStructureBase Create(MyObjectBuilder_EntityBase entityBase)
+        public static IStructureBase Create(MyObjectBuilder_EntityBase entityBase, string savefilePath)
         {
             if (entityBase is MyObjectBuilder_VoxelMap)
             {
-                return new StructureVoxelModel(entityBase);
+                return new StructureVoxelModel(entityBase, savefilePath);
             }
             else if (entityBase is MyObjectBuilder_Character)
             {
