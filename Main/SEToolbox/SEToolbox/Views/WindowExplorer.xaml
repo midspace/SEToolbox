@@ -8,7 +8,7 @@
         xmlns:m="clr-namespace:SEToolbox.Models"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
-        Height="600" Width="800" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
+        Height="600" Width="800" MinHeight="320" MinWidth="480" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         commands:DialogService.IsRegisteredView="True">
     <i:Interaction.Triggers>
@@ -34,77 +34,69 @@
     </Window.Title>
     <Grid IsEnabled="{Binding IsActive}">
         <DockPanel>
-            <ToolBarPanel DockPanel.Dock="Top">
+            <Menu DockPanel.Dock="Top">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel HorizontalAlignment="Stretch" Height="22"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+                <MenuItem Command="{Binding OpenCommand}" Header="_Open" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{Binding SaveCommand}" Header="_Save" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Style="{StaticResource DockPanelSeparator}" />
+                <MenuItem Command="{Binding ReloadCommand}" Header="_Reload" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Style="{StaticResource DockPanelSeparator}" />
+                <MenuItem Header="_Import" Command="{Binding ImportCommand}" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=import1}" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="Asteroid" Command="{Binding ImportVoxelCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Image" Command="{Binding ImportImageCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=photo_scenery}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="SandBox" Command="{Binding ImportSandBoxCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SpaceEngineers16}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <Separator Style="{StaticResource DockPanelSeparator}" />
+                <MenuItem Command="{Binding DeleteObjectCommand}" Header="Delete" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Style="{StaticResource DockPanelSeparator}" />
+                <MenuItem Command="{Binding AboutCommand}" HorizontalAlignment="Right" Header="_About" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </Menu>
+            <ToolBarPanel DockPanel.Dock="Top" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ToolBar>
-                    <DockPanel Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ToolBarPanel}}}">
-                        <DockPanel.Resources>
-                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                            </Style>
-                        </DockPanel.Resources>
-                        <Button Command="{Binding OpenCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" Margin="0,0,2,0" />
-                                <AccessText>_Open</AccessText>
-                            </StackPanel>
-                        </Button>
-                        <Button Command="{Binding SaveCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}" Margin="0,0,2,0" />
-                                <AccessText>_Save</AccessText>
-                            </StackPanel>
-                        </Button>
-                        <Separator Style="{StaticResource DockPanelSeparator}" />
-                        <Button Command="{Binding ReloadCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}" Margin="0,0,2,0" />
-                                <AccessText>_Reload</AccessText>
-                            </StackPanel>
-                        </Button>
-                        <Separator Style="{StaticResource DockPanelSeparator}" />
-                        <Menu Style="{StaticResource ToolBarMenu}">
-                            <MenuItem Header="_Import" Command="{Binding ImportCommand}" Style="{StaticResource ToolBarTopMenuitem}">
-                                <MenuItem.Icon>
-                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=import1}" />
-                                </MenuItem.Icon>
-                                <MenuItem Header="Asteroid" Command="{Binding ImportVoxelCommand}">
-                                    <MenuItem.Icon>
-                                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="Image" Command="{Binding ImportImageCommand}">
-                                    <MenuItem.Icon>
-                                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=photo_scenery}" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}">
-                                    <MenuItem.Icon>
-                                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="SandBox" Command="{Binding ImportSandBoxCommand}">
-                                    <MenuItem.Icon>
-                                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SpaceEngineers16}" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                            </MenuItem>
-                        </Menu>
-                        <Separator Style="{StaticResource DockPanelSeparator}" />
-                        <Button Command="{Binding DeleteObjectCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" Margin="0,0,2,0" />
-                                <AccessText>Delete</AccessText>
-                            </StackPanel>
-                        </Button>
-                        <Separator Style="{StaticResource DockPanelSeparator}" />
-                        <Button Command="{Binding AboutCommand}" HorizontalAlignment="Right">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}" Margin="0,0,2,0" />
-                                <AccessText>_About</AccessText>
-                            </StackPanel>
-                        </Button>
-                    </DockPanel>
-                </ToolBar>
-                <ToolBar Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Button Content="Clear" Command="{Binding ClearCommand}" />
                     <Button Content="Test" Command="{Binding TestCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </ToolBar>
