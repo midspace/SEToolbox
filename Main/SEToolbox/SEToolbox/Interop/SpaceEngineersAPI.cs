@@ -197,6 +197,15 @@
                 case CubeType.CornerLeftBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f); break;
                 case CubeType.CornerRightBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, 0, 1); break;
 
+                case CubeType.InverseCornerLeftFrontTop: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f); break;
+                case CubeType.InverseCornerRightFrontTop: cube.Orientation = new VRageMath.Quaternion(1, 0, 0, 0); break;
+                case CubeType.InverseCornerLeftBackTop: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0); break;
+                case CubeType.InverseCornerRightBackTop: cube.Orientation = new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f); break;
+                case CubeType.InverseCornerLeftFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f); break;
+                case CubeType.InverseCornerRightFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f); break;
+                case CubeType.InverseCornerLeftBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f); break;
+                case CubeType.InverseCornerRightBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, 0, 1); break;
+
                 default:
                     throw new NotImplementedException(string.Format("SetCubeOrientation of type [{0}] not yet implmented.", type));
             }

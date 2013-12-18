@@ -546,6 +546,18 @@
         public void TestExecuted()
         {
             // TODO: test code goes here.
+
+            Import3dModelModel model = new Import3dModelModel();
+            model.Load(this.dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            Import3dModelViewModel loadVm = new Import3dModelViewModel(this, model);
+
+            this.IsBusy = true;
+            var newEntity = loadVm.BuildTestEntity();
+            this.selectNewStructure = true;
+            this.dataModel.CollisionCorrectEntity(newEntity);
+            var structure = this.dataModel.AddEntity(newEntity);
+            this.selectNewStructure = false;
+            this.IsBusy = false;
         }
 
         public bool AboutCanExecute()
