@@ -24,6 +24,14 @@
         CornerLeftFrontBottom,
         CornerRightFrontBottom,
         CornerLeftBackBottom,
-        CornerRightBackBottom
+        CornerRightBackBottom,
+        InverseCornerLeftFrontTop,
+        InverseCornerRightFrontTop,
+        InverseCornerLeftBackTop,
+        InverseCornerRightBackTop,
+        InverseCornerLeftFrontBottom,
+        InverseCornerRightFrontBottom,
+        InverseCornerLeftBackBottom,
+        InverseCornerRightBackBottom
     };
 }
