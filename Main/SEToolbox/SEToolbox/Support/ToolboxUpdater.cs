@@ -14,7 +14,7 @@
     // Make sure none of the SpaceEngineers are referenced here, to prevent preloading of the assemblies.
     // Otherwise the assemblies updater will not work.
 
-    internal static class ToolboxUpdater
+    public static class ToolboxUpdater
     {
         #region GetApplicationFilePath
 
