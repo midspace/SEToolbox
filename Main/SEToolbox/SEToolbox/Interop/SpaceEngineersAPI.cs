@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Microsoft.Win32;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Definitions;
@@ -14,57 +13,6 @@
 
     public class SpaceEngineersAPI
     {
-        #region GetApplicationFilePath
-
-        public enum InstallState { NoRegistry, NoDirectory, NoApplication, OK };
-
-        public static bool IsSpaceEngineersInstalled()
-        {
-            string filePath = GetApplicationFilePath();
-            if (string.IsNullOrEmpty(filePath))
-                throw new ToolboxException(ExceptionState.NoRegistry);
-            if (!Directory.Exists(filePath))
-                throw new ToolboxException(ExceptionState.NoDirectory);
-
-            // Skip checking for the .exe. Not required for the Toolbox currently.
-            // The new "bin" and "Bin64" directories in the current release make this pointless.
-            //if (!File.Exists(Path.Combine(filePath, "SpaceEngineers.exe")))
-            //    throw new ToolboxException(ExceptionState.NoApplication);
-            return true;
-        }
-
-        public static string GetApplicationFilePath()
-        {
-            RegistryKey key;
-            if (Environment.Is64BitProcess)
-                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244850", false);
-            else
-                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244850", false);
-
-            if (key != null)
-            {
-                return key.GetValue("InstallLocation") as string;
-            }
-            else
-            {
-                // Backup check, but no choice if the above goes to pot.
-                // Using the [Software\Valve\Steam\SteamPath] as a base for "\steamapps\common\SpaceEngineers", is unreliable, as the Steam Library is customizable and could be on another drive and directory.
-                if (Environment.Is64BitProcess)
-                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Valve\Steam", false);
-                else
-                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam", false);
-
-                if (key != null)
-                {
-                    return (string)key.GetValue("InstallPath") + @"\SteamApps\common\SpaceEngineers";
-                }
-            }
-
-            return null;
-        }
-
-        #endregion
-
         #region Serializers
 
         public static T ReadSpaceEngineersFile<T, S>(string filename)
@@ -223,28 +171,43 @@
 
         public static void ReadCubeBlockDefinitions()
         {
-            var voxelMaterialsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\VoxelMaterials.sbc");
-            var physicalItemsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\PhysicalItems.sbc");
-            var componentsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\Components.sbc");
-            var cubeblocksFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\CubeBlocks.sbc");
-            var blueprintsFilename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\Blueprints.sbc");
+            voxelMaterialDefinitions = LoadContentFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>("VoxelMaterials.sbc");
+            physicalItemDefinitions = LoadContentFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>("PhysicalItems.sbc");
+            componentDefinitions = LoadContentFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>("Components.sbc");
+            cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>("CubeBlocks.sbc");
+            blueprintDefinitions = LoadContentFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>("Blueprints.sbc");
+        }
+
+        private static T LoadContentFile<T, S>(string filename) where S : XmlSerializer1
+        {
+            object fileContent = null;
+
+            var filePath = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\Data"), filename);
+
+            if (!File.Exists(filePath))
+            {
+                throw new ToolboxException(ExceptionState.MissingContentFile, filePath);
+            }
 
             try
             {
-                voxelMaterialDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>(voxelMaterialsFilename);
-                physicalItemDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>(physicalItemsFilename);
-                componentDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>(componentsFilename);
-                cubeBlockDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>(cubeblocksFilename);
-                blueprintDefinitions = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>(blueprintsFilename);
+                fileContent = SpaceEngineersAPI.ReadSpaceEngineersFile<T, S>(filePath);
             }
             catch
             {
-                throw new ToolboxException(ExceptionState.CorruptContentFiles);
+                throw new ToolboxException(ExceptionState.CorruptContentFile, filePath);
+            }
+
+            if (fileContent == null)
+            {
+                throw new ToolboxException(ExceptionState.EmptyContentFile, filePath);
             }
 
             // TODO: set a file watch to reload the files, incase modding is occuring at the same time this is open.
             //     Lock the load during this time, in case it happens multiple times.
             // Report a friendly error if this load fails.
+
+            return (T)fileContent;
         }
 
         #endregion

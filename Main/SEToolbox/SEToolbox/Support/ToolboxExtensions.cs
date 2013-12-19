@@ -7,12 +7,9 @@
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
-    using System.Linq;
-    using System.Net;
     using System.Reflection;
     using System.Windows.Media.Imaging;
     using System.Xml;
-    using System.Xml.Linq;
 
     public static class ToolboxExtensions
     {
@@ -326,49 +323,6 @@
             }
 
             return voxFilename;
-        }
-
-        #endregion
-
-        #region CheckForUpdates
-
-        public static RssFeedItem CheckForUpdates()
-        {
-#if DEBUG
-            // Skip the load check, as it make take a few seconds.
-            if (Debugger.IsAttached)
-                return null;
-#endif
-
-            var assemblyVersion = Assembly.GetExecutingAssembly()
-                    .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
-                    .OfType<AssemblyFileVersionAttribute>()
-                    .FirstOrDefault();
-            var currentVersion = new Version(assemblyVersion.Version);
-
-            // Create the WebClient with Proxy Credentials, as stupidly this works for some reason before calling XDocument.Load.
-            var webclient = new WebClient();
-            webclient.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials; // For Proxy servers on Corporate networks.
-            XDocument rssFeed = null;
-
-            try
-            {
-                rssFeed = XDocument.Load("http://setoolbox.codeplex.com/project/feeds/rss?ProjectRSSFeed=codeplex%3a%2f%2frelease%2fsetoolbox");
-            }
-            catch
-            {
-            }
-
-            if (rssFeed != null)
-            {
-                var items = (from item in rssFeed.Descendants("item")
-                             select new RssFeedItem { Title = item.Element("title").Value, Link = item.Element("link").Value }).ToList();
-
-                var newItem = items.FirstOrDefault(i => i.GetVersion() > currentVersion);
-                return newItem;
-            }
-
-            return null;
         }
 
         #endregion

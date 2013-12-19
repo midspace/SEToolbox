@@ -292,7 +292,13 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
     <value>The Space Engineers Game was not detected in Registry.
 To use the SEToolbox, you must have SpaceEngineers installed on your computer.</value>
   </data>
-  <data name="ExceptionState_CorruptContentFiles" xml:space="preserve">
-    <value>The Space Engineers content files could not be loaded, either because they are corrupt, or they are newer than expected.</value>
+  <data name="ExceptionState_CorruptContentFile" xml:space="preserve">
+    <value>The Space Engineers content file '{0}' could not be loaded, either because it is corrupt, or it is newer than expected.</value>
+  </data>
+  <data name="ExceptionState_EmptyContentFile" xml:space="preserve">
+    <value>The Space Engineers content file '{0}' could not be loaded, because it may be out of sync with SEToolbox.</value>
+  </data>
+  <data name="ExceptionState_MissingContentFile" xml:space="preserve">
+    <value>The Space Engineers content file '{0}' could not be loaded, because it could not be located.</value>
   </data>
 </root>

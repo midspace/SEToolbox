@@ -7,6 +7,7 @@
     using SEToolbox.Models;
     using SEToolbox.Properties;
     using SEToolbox.Services;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -364,7 +365,7 @@
             string originalFile = null;
             if (this.IsStockVoxel)
             {
-                this.SourceFile = Path.Combine(Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\VoxelMaps"), this.StockVoxel + ".vox");
+                this.SourceFile = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), this.StockVoxel + ".vox");
                 originalFile = this.SourceFile;
             }
             else if (this.IsCustomVoxel)

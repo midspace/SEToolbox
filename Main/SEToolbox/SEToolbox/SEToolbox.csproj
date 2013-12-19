@@ -163,6 +163,7 @@
     <Compile Include="Support\RssFeedItem.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
     <Compile Include="Interop\ClassType.cs" />
+    <Compile Include="Support\ToolboxUpdater.cs" />
     <Compile Include="Support\VisualTreeEnumeration.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />

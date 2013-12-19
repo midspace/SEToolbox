@@ -1,13 +1,12 @@
 ﻿namespace SEToolbox.Models
 {
     using Sandbox.CommonLib.ObjectBuilders;
-    using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
 
     public class ImportVoxelModel : BaseModel
     {
@@ -287,7 +286,7 @@
         public void Load(MyPositionAndOrientation characterPosition)
         {
             this.CharacterPosition = characterPosition;
-            var files = Directory.GetFiles(Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
+            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
 
             foreach (var file in files)
             {
