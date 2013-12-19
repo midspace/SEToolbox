@@ -8,7 +8,7 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Xml" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="SEToolbox.Interop" #>
+<#@ import namespace="SEToolbox.Support" #>
 <#@ output extension=".cs" #>
 namespace SEToolbox.Interop
 {
@@ -27,7 +27,7 @@ namespace SEToolbox.Interop
 <#
         
 		// Open the file @"C:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content\Data\CubeBlocks.sbc";
-		var filename = Path.Combine(SpaceEngineersAPI.GetApplicationFilePath(), @"Content\Data\CubeBlocks.sbc");
+		var filename = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\Data\CubeBlocks.sbc");
 
         XmlDocument xDoc = new XmlDocument();
         xDoc.Load(filename);
