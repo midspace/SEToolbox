@@ -10,17 +10,23 @@
         NoRegistry,
         NoDirectory,
         NoApplication,
-        CorruptContentFiles
+        MissingContentFile,
+        CorruptContentFile,
+        EmptyContentFile,
     };
 
     public class ToolboxException : ArgumentException
     {
+        private ExceptionState state;
         private string friendlyMessage;
+        private string[] arguments;
 
-        public ToolboxException(ExceptionState state)
+        public ToolboxException(ExceptionState state, params string[] arguments)
         {
             EnumToResouceConverter converter = new EnumToResouceConverter();
-            this.friendlyMessage = (string)converter.Convert(state, typeof(string), null, CultureInfo.CurrentUICulture);
+            this.state = state;
+            this.arguments = arguments;
+            this.friendlyMessage = string.Format((string)converter.Convert(state, typeof(string), null, CultureInfo.CurrentUICulture), this.arguments);
         }
 
         public override string Message

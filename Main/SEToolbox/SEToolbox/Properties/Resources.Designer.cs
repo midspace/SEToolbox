@@ -346,11 +346,29 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Space Engineers content files could not be loaded, either because they are corrupt, or they are newer than expected..
+        ///   Looks up a localized string similar to The Space Engineers content file &apos;{0}&apos; could not be loaded, either because it is corrupt, or it is newer than expected..
         /// </summary>
-        internal static string ExceptionState_CorruptContentFiles {
+        internal static string ExceptionState_CorruptContentFile {
             get {
-                return ResourceManager.GetString("ExceptionState_CorruptContentFiles", resourceCulture);
+                return ResourceManager.GetString("ExceptionState_CorruptContentFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Space Engineers content file &apos;{0}&apos; could not be loaded, because it may be out of sync with SEToolbox..
+        /// </summary>
+        internal static string ExceptionState_EmptyContentFile {
+            get {
+                return ResourceManager.GetString("ExceptionState_EmptyContentFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Space Engineers content file &apos;{0}&apos; could not be loaded, because it could not be located..
+        /// </summary>
+        internal static string ExceptionState_MissingContentFile {
+            get {
+                return ResourceManager.GetString("ExceptionState_MissingContentFile", resourceCulture);
             }
         }
         

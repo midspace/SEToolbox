@@ -70,12 +70,10 @@
             GC.SuppressFinalize(this);
         }
 
-
         ~FolderBrowserDialog()
         {
             Dispose(false);
         }
-
 
         protected virtual void Dispose(bool disposing)
         {
