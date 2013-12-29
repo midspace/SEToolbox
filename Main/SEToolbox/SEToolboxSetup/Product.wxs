@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.011.006.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.012.002.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -80,6 +80,9 @@
       </Component>
       <Component Id="compD71C446C9E204CD7A003FA06132E67BE">
         <File Id="file97E0990BBDDF40A68ED535BF1D64AF8E" Source="$(var.SEToolbox.TargetDir)VRage.Math.dll"/>
+      </Component>
+      <Component Id="comp12068FFAF2EB4772A897CB41720E056F">
+        <File Id="file64DEAD08B7A14DCCAD1984564BC6EA1C" Source="$(var.SEToolbox.TargetDir)SEToolboxUpdate.exe"/>
       </Component>
     </ComponentGroup>
 

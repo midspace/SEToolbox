@@ -6,9 +6,8 @@
     using SEToolbox.Views;
     using System;
     using System.Diagnostics;
+    using System.IO;
     using System.Windows;
-    // Make sure none of the SpaceEngineers are referenced here, to prevent preloading of the assemblies.
-    // Otherwise the assemblies updater will not work.
 
     public class CoreToolbox
     {
@@ -37,18 +36,20 @@
 
             if (ToolboxUpdater.IsSpaceEngineersInstalled())
             {
-                // TODO: split the base application and updater.
-
-                //// Dot not load any of the SpaceEngineers assemblies, or dependant classes before this point.
-                //if (ToolboxUpdater.IsBaseAssembliesChanged())
-                //{
-                //    var dialogResult = MessageBox.Show("The base version of Space Engineers has changed.  If you have not updated SEToolbox, you can update your base files from Space Engineers.\r\nWould you like to do that now?", "Space Engineers update detected", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                //    if (dialogResult == MessageBoxResult.Yes)
-                //    {
-                //        ToolboxUpdater.UpdateBaseFiles();
-                //    }
-                //}
-                // GC.Collect();
+                // Dot not load any of the SpaceEngineers assemblies, or dependant classes before this point.
+                if (ToolboxUpdater.IsBaseAssembliesChanged())
+                {
+                    var dialogResult = MessageBox.Show("The base version of Space Engineers has changed.  If you have not updated SEToolbox, you can update your base files from Space Engineers.\r\nWould you like to do that now?", "Space Engineers update detected", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                    if (dialogResult == MessageBoxResult.Yes)
+                    {
+                        if (ToolboxUpdater.RunElevated(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SEToolboxUpdate")))
+                        {
+                            Application.Current.Shutdown();
+                            return;
+                        }
+                    }
+                }
+                GC.Collect();
 
                 // ============================================
 
