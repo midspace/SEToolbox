@@ -200,30 +200,9 @@
 
         #endregion
 
-        // Use....
-        //var ret = ToolboxUpdater.CheckIsRuningElevated();
-        //if (ret)
-        //{
-        //    Application.Current.Shutdown();
-        //    return;
-        //}
-
-        internal static bool CheckIsRuningElevated()
-        {
-            WindowsPrincipal pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-            bool hasAdministrativeRight = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
-
-            if (!hasAdministrativeRight)
-            {
-                return RunElevated(Application.ExecutablePath);
-            }
-
-            return false;
-        }
-
         internal static bool RunElevated(string fileName)
         {
-            ProcessStartInfo processInfo = new ProcessStartInfo();
+            var processInfo = new ProcessStartInfo();
             processInfo.Verb = "runas";
             processInfo.FileName = fileName;
 
@@ -232,7 +211,7 @@
                 Process.Start(processInfo);
                 return true;
             }
-            catch (Win32Exception)
+            catch (Win32Exception ex)
             {
                 //Do nothing. Probably the user canceled the UAC window
             }
