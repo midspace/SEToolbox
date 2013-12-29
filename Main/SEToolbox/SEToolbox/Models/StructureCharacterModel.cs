@@ -1,10 +1,14 @@
-﻿namespace SEToolbox.Models
+﻿using System.Collections.ObjectModel;
+
+namespace SEToolbox.Models
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using System;
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using System.Linq;
 
     [Serializable]
     public class StructureCharacterModel : StructureBaseModel
@@ -14,6 +18,9 @@
         [NonSerialized]
         private bool isPlayer;
 
+        [NonSerialized]
+        private List<string> characterModels;
+
         #endregion
 
         #region ctor
@@ -21,6 +28,7 @@
         public StructureCharacterModel(MyObjectBuilder_EntityBase entityBase)
             : base(entityBase)
         {
+            this.CharacterModels = new List<string>(Enum.GetNames(typeof(MyCharacterModelEnum)));
         }
 
         #endregion
@@ -52,6 +60,20 @@
                     this.RaisePropertyChanged(() => CharacterModel);
                     this.UpdateFromEntityBase();
                 }
+            }
+        }
+
+        [XmlIgnore]
+        public List<string> CharacterModels
+        {
+            get { return this.characterModels; }
+            set
+            {
+                if (value != this.characterModels)
+                {
+                    this.characterModels = value;
+                    this.RaisePropertyChanged(() => CharacterModels);
+                } 
             }
         }
 

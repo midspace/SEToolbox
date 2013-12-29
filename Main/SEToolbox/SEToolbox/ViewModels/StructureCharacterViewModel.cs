@@ -1,9 +1,12 @@
-﻿namespace SEToolbox.ViewModels
+﻿using System.Windows.Documents;
+
+namespace SEToolbox.ViewModels
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Windows.Input;
 
@@ -46,17 +49,30 @@
             }
         }
 
-        public MyCharacterModelEnum CharacterModel
+        public string CharacterModel
         {
             get
             {
-                return this.DataModel.CharacterModel;
+                return this.DataModel.CharacterModel.ToString();
             }
 
             set
             {
-                this.DataModel.CharacterModel = value;
+                this.DataModel.CharacterModel = (MyCharacterModelEnum)Enum.Parse(typeof(MyCharacterModelEnum), value);
                 ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
+        }
+
+        public List<string> CharacterModels
+        {
+            get
+            {
+                return this.DataModel.CharacterModels;
+            }
+
+            set
+            {
+                this.DataModel.CharacterModels = value;
             }
         }
 

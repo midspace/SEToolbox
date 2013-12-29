@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
-        <ObjectDataProvider x:Key="MyCharacterModelEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider x:Key="CharacterModelEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="sandbox:MyCharacterModelEnum" />
             </ObjectDataProvider.MethodParameters>
@@ -38,13 +38,7 @@
             </ToolBar>
         </ToolBarPanel>-->
         <Label Grid.Row="2" Content="Suit:"/>
-        <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource MyCharacterModelEnum}}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+        <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding CharacterModels}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}" />
         <Label Grid.Row="3" Content="Player:"/>
         <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
         <Label Grid.Row="4" Content="Distance:"/>
