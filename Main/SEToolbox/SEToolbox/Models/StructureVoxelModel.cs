@@ -3,15 +3,18 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using System;
     using System.IO;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using VRageMath;
 
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
     {
-        private string voxelFilepath;
+        private string _voxelFilepath;
+        private Vector3I _size;
 
         #region ctor
 
@@ -21,6 +24,7 @@
             if (voxelPath != null)
             {
                 this.VoxelFilepath = Path.Combine(voxelPath, this.VoxelMap.Filename);
+                this.Size = MyVoxelMap.GetPreview(this.VoxelFilepath);
             }
         }
 
@@ -59,15 +63,32 @@
         {
             get
             {
-                return this.voxelFilepath;
+                return this._voxelFilepath;
             }
 
             set
             {
-                if (value != this.voxelFilepath)
+                if (value != this._voxelFilepath)
                 {
-                    this.voxelFilepath = value;
+                    this._voxelFilepath = value;
                     this.RaisePropertyChanged(() => VoxelFilepath);
+                }
+            }
+        }
+
+        public Vector3I Size
+        {
+            get
+            {
+                return this._size;
+            }
+
+            set
+            {
+                if (value != this._size)
+                {
+                    this._size = value;
+                    this.RaisePropertyChanged(() => Size);
                 }
             }
         }

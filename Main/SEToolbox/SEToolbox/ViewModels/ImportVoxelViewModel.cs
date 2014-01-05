@@ -4,13 +4,14 @@
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
     using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
+    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Windows.Forms;
@@ -21,12 +22,12 @@
     {
         #region Fields
 
-        private readonly IDialogService dialogService;
-        private readonly Func<IOpenFileDialog> openFileDialogFactory;
-        private ImportVoxelModel dataModel;
+        private readonly IDialogService _dialogService;
+        private readonly Func<IOpenFileDialog> _openFileDialogFactory;
+        private readonly ImportVoxelModel _dataModel;
 
-        private bool? closeResult;
-        private bool isBusy;
+        private bool? _closeResult;
+        private bool _isBusy;
 
         #endregion
 
@@ -43,14 +44,11 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
 
-            this.dialogService = dialogService;
-            this.openFileDialogFactory = openFileDialogFactory;
-            this.dataModel = dataModel;
-            this.dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-            {
-                // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
-            };
+            this._dialogService = dialogService;
+            this._openFileDialogFactory = openFileDialogFactory;
+            this._dataModel = dataModel;
+            // Will bubble property change events from the Model to the ViewModel.
+            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -88,12 +86,12 @@
         {
             get
             {
-                return this.closeResult;
+                return this._closeResult;
             }
 
             set
             {
-                this.closeResult = value;
+                this._closeResult = value;
                 this.RaisePropertyChanged(() => CloseResult);
             }
         }
@@ -102,12 +100,12 @@
         {
             get
             {
-                return this.dataModel.Filename;
+                return this._dataModel.Filename;
             }
 
             set
             {
-                this.dataModel.Filename = value;
+                this._dataModel.Filename = value;
             }
         }
 
@@ -115,12 +113,12 @@
         {
             get
             {
-                return this.dataModel.SourceFile;
+                return this._dataModel.SourceFile;
             }
 
             set
             {
-                this.dataModel.SourceFile = value;
+                this._dataModel.SourceFile = value;
             }
         }
 
@@ -128,12 +126,12 @@
         {
             get
             {
-                return this.dataModel.IsValidVoxelFile;
+                return this._dataModel.IsValidVoxelFile;
             }
 
             set
             {
-                this.dataModel.IsValidVoxelFile = value;
+                this._dataModel.IsValidVoxelFile = value;
             }
         }
 
@@ -141,12 +139,12 @@
         {
             get
             {
-                return this.dataModel.Position;
+                return this._dataModel.Position;
             }
 
             set
             {
-                this.dataModel.Position = value;
+                this._dataModel.Position = value;
             }
         }
 
@@ -154,12 +152,12 @@
         {
             get
             {
-                return this.dataModel.Forward;
+                return this._dataModel.Forward;
             }
 
             set
             {
-                this.dataModel.Forward = value;
+                this._dataModel.Forward = value;
             }
         }
 
@@ -167,12 +165,12 @@
         {
             get
             {
-                return this.dataModel.Up;
+                return this._dataModel.Up;
             }
 
             set
             {
-                this.dataModel.Up = value;
+                this._dataModel.Up = value;
             }
         }
 
@@ -183,16 +181,16 @@
         {
             get
             {
-                return this.isBusy;
+                return this._isBusy;
             }
 
             set
             {
-                if (value != this.isBusy)
+                if (value != this._isBusy)
                 {
-                    this.isBusy = value;
+                    this._isBusy = value;
                     this.RaisePropertyChanged(() => IsBusy);
-                    if (this.isBusy)
+                    if (this._isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -204,12 +202,12 @@
         {
             get
             {
-                return this.dataModel.IsStockVoxel;
+                return this._dataModel.IsStockVoxel;
             }
 
             set
             {
-                this.dataModel.IsStockVoxel = value;
+                this._dataModel.IsStockVoxel = value;
             }
         }
 
@@ -217,12 +215,12 @@
         {
             get
             {
-                return this.dataModel.IsCustomVoxel;
+                return this._dataModel.IsCustomVoxel;
             }
 
             set
             {
-                this.dataModel.IsCustomVoxel = value;
+                this._dataModel.IsCustomVoxel = value;
             }
         }
 
@@ -230,12 +228,12 @@
         {
             get
             {
-                return this.dataModel.IsFileVoxel;
+                return this._dataModel.IsFileVoxel;
             }
 
             set
             {
-                this.dataModel.IsFileVoxel = value;
+                this._dataModel.IsFileVoxel = value;
             }
         }
 
@@ -243,12 +241,12 @@
         {
             get
             {
-                return this.dataModel.StockVoxel;
+                return this._dataModel.StockVoxel;
             }
 
             set
             {
-                this.dataModel.StockVoxel = value;
+                this._dataModel.StockVoxel = value;
             }
         }
 
@@ -256,12 +254,12 @@
         {
             get
             {
-                return this.dataModel.CustomVoxel;
+                return this._dataModel.CustomVoxel;
             }
 
             set
             {
-                this.dataModel.CustomVoxel = value;
+                this._dataModel.CustomVoxel = value;
             }
         }
 
@@ -269,7 +267,7 @@
         {
             get
             {
-                return this.dataModel.StockVoxelFileList;
+                return this._dataModel.StockVoxelFileList;
             }
         }
 
@@ -277,7 +275,27 @@
         {
             get
             {
-                return this.dataModel.CustomVoxelFileList;
+                return this._dataModel.CustomVoxelFileList;
+            }
+        }
+
+        public ObservableCollection<MaterialSelectionModel> MaterialsCollection
+        {
+            get
+            {
+                return this._dataModel.MaterialsCollection;
+            }
+        }
+        public MaterialSelectionModel StockMaterial
+        {
+            get
+            {
+                return this._dataModel.StockMaterial;
+            }
+
+            set
+            {
+                this._dataModel.StockMaterial = value;
             }
         }
 
@@ -323,12 +341,12 @@
         {
             this.IsValidVoxelFile = false;
 
-            IOpenFileDialog openFileDialog = openFileDialogFactory();
+            IOpenFileDialog openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Resources.ImportVoxelFilter;
             openFileDialog.Title = Resources.ImportVoxelTitle;
 
             // Open the dialog
-            DialogResult result = dialogService.ShowOpenFileDialog(this.OwnerViewModel, openFileDialog);
+            DialogResult result = _dialogService.ShowOpenFileDialog(this.OwnerViewModel, openFileDialog);
 
             if (result == DialogResult.OK)
             {
@@ -354,19 +372,33 @@
 
             // Figure out where the Character is facing, and plant the new constrcut right in front, by "5" units, facing the Character.
             //double distance = 5;
-            var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
+            var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
             vector.Normalize();
             //vector = Vector3D.Multiply(vector, distance);
-            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
-            this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward);
-            this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
+            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
+            this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward);
+            this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
 
 
             string originalFile = null;
             if (this.IsStockVoxel)
             {
-                this.SourceFile = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), this.StockVoxel + ".vox");
-                originalFile = this.SourceFile;
+                var stockfile = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), this.StockVoxel + ".vox");
+
+                if (this.StockMaterial == null)
+                {
+                    this.SourceFile = stockfile;
+                    originalFile = this.SourceFile;
+                }
+                else
+                {
+                    var asteroid = new MyVoxelMap();
+                    asteroid.Load(stockfile, this.StockMaterial.Value);
+                    asteroid.ForceBaseMaterial(this.StockMaterial.Value);
+                    this.SourceFile = Path.GetTempFileName();
+                    asteroid.Save(this.SourceFile);
+                    originalFile = this.StockVoxel + ".vox";
+                }
             }
             else if (this.IsCustomVoxel)
             {
@@ -384,7 +416,7 @@
             // automatically number all files, and check for duplicate filenames.
             this.Filename = ((ExplorerViewModel)this.OwnerViewModel).CreateUniqueVoxelFilename(originalFile);
 
-            MyObjectBuilder_VoxelMap entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3(), this.Filename);
+            var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3(), this.Filename);
             entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
             entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
             entity.Filename = this.Filename;

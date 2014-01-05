@@ -29,9 +29,11 @@
             <ToolBar>
             </ToolBar>
         </ToolBarPanel>-->
-        <Label Grid.Row="2" Content="Filename"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="Filename"/>
         <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Filename}"/>
-        <Label Grid.Row="3" Content="Distance:"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+        <Label Grid.Row="3" Grid.Column="0" Content="Bounding Size:"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Size}" />
+        <Label Grid.Row="4" Grid.Column="0" Content="Distance:"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
     </Grid>
 </UserControl>

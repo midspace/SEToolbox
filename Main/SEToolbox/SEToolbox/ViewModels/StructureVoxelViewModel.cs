@@ -1,10 +1,8 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using SEToolbox.Models;
-    using SEToolbox.Services;
-    using System;
     using System.ComponentModel;
-    using System.Windows.Input;
+    using VRageMath;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -42,6 +40,19 @@
             set
             {
                 this.DataModel.Filename = value;
+            }
+        }
+
+        public Vector3I Size
+        {
+            get
+            {
+                return this.DataModel.Size;
+            }
+
+            set
+            {
+                this.DataModel.Size = value;
             }
         }
 

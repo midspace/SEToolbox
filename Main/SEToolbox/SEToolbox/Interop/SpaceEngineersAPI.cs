@@ -28,10 +28,10 @@
 
             if (File.Exists(filename))
             {
-                using (XmlReader xmlReader = XmlReader.Create(filename, settings))
+                using (var xmlReader = XmlReader.Create(filename, settings))
                 {
 
-                    S serializer = (S)Activator.CreateInstance(typeof(S));
+                    var serializer = (S)Activator.CreateInstance(typeof(S));
                     //serializer.UnknownAttribute += serializer_UnknownAttribute;
                     //serializer.UnknownElement += serializer_UnknownElement;
                     //serializer.UnknownNode += serializer_UnknownNode;
@@ -44,7 +44,7 @@
 
         public static T Deserialize<T>(string xml)
         {
-            using(StringReader textReader = new StringReader(xml))
+            using(var textReader = new StringReader(xml))
             {
                 return (T)(new XmlSerializerContract().GetSerializer(typeof(T)).Deserialize(textReader));
             }
@@ -52,7 +52,7 @@
 
         public static string Serialize<T>(object item)
         {
-            using (StringWriter textWriter = new StringWriter())
+            using (var textWriter = new StringWriter())
             {
                 new XmlSerializerContract().GetSerializer(typeof(T)).Serialize(textWriter, item);
                 return textWriter.ToString();
@@ -107,6 +107,7 @@
 
         public static long GenerateEntityId()
         {
+            // Not the offical SE way of generating IDs, but its fast and we don't have to worry about a random seed.
             var buffer = Guid.NewGuid().ToByteArray();
             return BitConverter.ToInt64(buffer, 0);
         }
@@ -136,6 +137,7 @@
                 case CubeType.SlopeLeftFrontCenter: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f); break;
                 case CubeType.SlopeCenterFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f); break;
 
+                // Probably got the names of these all messed up in relation to their actual orientation.
                 case CubeType.CornerLeftFrontTop: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f); break;
                 case CubeType.CornerRightFrontTop: cube.Orientation = new VRageMath.Quaternion(1, 0, 0, 0); break;
                 case CubeType.CornerLeftBackTop: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0); break;
@@ -144,7 +146,6 @@
                 case CubeType.CornerRightFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f); break;
                 case CubeType.CornerLeftBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f); break;
                 case CubeType.CornerRightBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, 0, 1); break;
-
                 case CubeType.InverseCornerLeftFrontTop: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f); break;
                 case CubeType.InverseCornerRightFrontTop: cube.Orientation = new VRageMath.Quaternion(1, 0, 0, 0); break;
                 case CubeType.InverseCornerLeftBackTop: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0); break;
@@ -163,19 +164,19 @@
 
         #region ReadCubeBlockDefinitions
 
-        static MyObjectBuilder_CubeBlockDefinitions cubeBlockDefinitions;
-        static MyObjectBuilder_ComponentDefinitions componentDefinitions;
-        static MyObjectBuilder_BlueprintDefinitions blueprintDefinitions;
-        static MyObjectBuilder_PhysicalItemDefinitions physicalItemDefinitions;
-        static MyObjectBuilder_VoxelMaterialDefinitions voxelMaterialDefinitions;
+        static MyObjectBuilder_CubeBlockDefinitions _cubeBlockDefinitions;
+        static MyObjectBuilder_ComponentDefinitions _componentDefinitions;
+        static MyObjectBuilder_BlueprintDefinitions _blueprintDefinitions;
+        static MyObjectBuilder_PhysicalItemDefinitions _physicalItemDefinitions;
+        static MyObjectBuilder_VoxelMaterialDefinitions _voxelMaterialDefinitions;
 
         public static void ReadCubeBlockDefinitions()
         {
-            voxelMaterialDefinitions = LoadContentFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>("VoxelMaterials.sbc");
-            physicalItemDefinitions = LoadContentFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>("PhysicalItems.sbc");
-            componentDefinitions = LoadContentFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>("Components.sbc");
-            cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>("CubeBlocks.sbc");
-            blueprintDefinitions = LoadContentFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>("Blueprints.sbc");
+            _voxelMaterialDefinitions = LoadContentFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>("VoxelMaterials.sbc");
+            _physicalItemDefinitions = LoadContentFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>("PhysicalItems.sbc");
+            _componentDefinitions = LoadContentFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>("Components.sbc");
+            _cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>("CubeBlocks.sbc");
+            _blueprintDefinitions = LoadContentFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>("Blueprints.sbc");
         }
 
         private static T LoadContentFile<T, S>(string filename) where S : XmlSerializer1
@@ -218,14 +219,14 @@
         {
             float mass = 0;
 
-            var cubeBlockDefinition = cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
+            var cubeBlockDefinition = _cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
                 && (subTypeid == c.Id.SubtypeId || (c.Variants != null && c.Variants.Any(v => subTypeid == c.Id.SubtypeId + v.Color))));
 
             if (cubeBlockDefinition != null)
             {
                 foreach (var component in cubeBlockDefinition.Components)
                 {
-                    mass += componentDefinitions.Components.Where(c => c.Id.SubtypeId == component.Subtype).Sum(c => c.Mass) * component.Count;
+                    mass += _componentDefinitions.Components.Where(c => c.Id.SubtypeId == component.Subtype).Sum(c => c.Mass) * component.Count;
                 }
             }
 
@@ -234,7 +235,7 @@
 
         public static void AccumulateCubeBlueprintRequirements(string subTypeid, MyCubeSize cubeSize, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, ref TimeSpan timeTaken)
         {
-            var cubeBlockDefinition = cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
+            var cubeBlockDefinition = _cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
                 && (subTypeid == c.Id.SubtypeId || (c.Variants != null && c.Variants.Any(v => subTypeid == c.Id.SubtypeId + v.Color))));
 
             if (cubeBlockDefinition != null)
@@ -248,7 +249,7 @@
 
         public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderTypeEnum type, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, ref TimeSpan timeTaken)
         {
-            var bp = blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.TypeId == type);
+            var bp = _blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.TypeId == type);
             if (bp != null)
             {
                 foreach (var item in bp.Prerequisites)
@@ -279,12 +280,17 @@
 
         public static float GetItemMass(MyObjectBuilderTypeEnum typeId, string subTypeId)
         {
-            var item = physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            var item = _physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
             if (item != null)
             {
                 return item.Mass;
             }
             return 0;
+        }
+
+        public static IList<MyObjectBuilder_VoxelMaterialDefinition> GetMaterialList()
+        {
+            return _voxelMaterialDefinitions.Materials;
         }
 
         #endregion

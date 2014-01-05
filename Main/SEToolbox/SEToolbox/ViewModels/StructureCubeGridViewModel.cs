@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
@@ -33,11 +34,19 @@
             }
         }
 
-        public ICommand ResetSpeedCommand
+        public ICommand ResetVelocityCommand
         {
             get
             {
-                return new DelegateCommand(new Action(ResetSpeedExecuted), new Func<bool>(ResetSpeedCanExecute));
+                return new DelegateCommand(new Action(ResetVelocityExecuted), new Func<bool>(ResetVelocityCanExecute));
+            }
+        }
+
+        public ICommand ReverseVelocityCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ReverseVelocityExecuted), new Func<bool>(ReverseVelocityCanExecute));
             }
         }
 
@@ -79,6 +88,22 @@
             get
             {
                 return new DelegateCommand(new Action(ConvertToCompleteStructureExecuted), new Func<bool>(ConvertToCompleteStructureCanExecute));
+            }
+        }
+
+        public ICommand ConvertToStationCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertToStationExecuted), new Func<bool>(ConvertToStationCanExecute));
+            }
+        }
+
+        public ICommand ConvertToShipCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertToShipExecuted), new Func<bool>(ConvertToShipCanExecute));
             }
         }
 
@@ -227,14 +252,25 @@
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 
-        public bool ResetSpeedCanExecute()
+        public bool ResetVelocityCanExecute()
         {
             return true;
         }
 
-        public void ResetSpeedExecuted()
+        public void ResetVelocityExecuted()
         {
-            this.DataModel.ResetSpeed();
+            this.DataModel.ResetVelocity();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ReverseVelocityCanExecute()
+        {
+            return true;
+        }
+
+        public void ReverseVelocityExecuted()
+        {
+            this.DataModel.ReverseVelocity();
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 
@@ -288,6 +324,29 @@
         public void ConvertToCompleteStructureExecuted()
         {
             this.DataModel.ConvertToCompleteStructure();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+
+        public bool ConvertToStationCanExecute()
+        {
+            return !this.DataModel.IsStatic && this.DataModel.GridSize == MyCubeSize.Large;
+        }
+
+        public void ConvertToStationExecuted()
+        {
+            this.DataModel.ConvertToStation();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ConvertToShipCanExecute()
+        {
+            return this.DataModel.IsStatic && this.DataModel.GridSize == MyCubeSize.Large;
+        }
+
+        public void ConvertToShipExecuted()
+        {
+            this.DataModel.ConvertToShip();
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 

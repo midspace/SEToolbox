@@ -76,22 +76,34 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="SandBox" Command="{Binding ImportSandBoxCommand}">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SpaceEngineers16}" />
-                        </MenuItem.Icon>
-                    </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Command="{Binding DeleteObjectCommand}" Header="Delete" Padding="0,2,4,2">
+                <MenuItem Header="World" Command="{Binding WorldCommand}" Padding="0,2,4,2">
                     <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SpaceEngineers16}" />
                     </MenuItem.Icon>
+                    <MenuItem Header="Open Folder" Command="{Binding OpenFolderCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Open Workshop" Command="{Binding OpenWorkshopCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=workshop16}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
                 <MenuItem Command="{Binding AboutCommand}" HorizontalAlignment="Right" Header="_About" Padding="0,2,4,2">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </Menu>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Command="{Binding DeleteObjectCommand}" Header="Delete" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </Menu>
@@ -167,11 +179,6 @@
                                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" />
                                             </MenuItem.Icon>
                                         </MenuItem>
-                                        <!--<MenuItem Header="Export" Command="{Binding ExportObjectCommand}">
-                                            <MenuItem.Icon>
-                                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
-                                            </MenuItem.Icon>
-                                        </MenuItem>-->
                                     </ContextMenu>
                                 </ListBox.ContextMenu>
                             </controls:SortableListView>

@@ -259,10 +259,10 @@
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
             float calcMass = 0;
-            Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
-            Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+            var ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+            var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
             //MyObjectBuilder_BlueprintDefinition requirements2 = new MyObjectBuilder_BlueprintDefinition();
-            TimeSpan timeTaken = new TimeSpan();
+            var timeTaken = new TimeSpan();
 
             foreach (var block in this.CubeGrid.CubeBlocks)
             {
@@ -295,7 +295,7 @@
 
             this.Description = string.Format("{0} | {1:#,##0}Kg", this.Size, this.Mass);
 
-            StringBuilder bld = new StringBuilder();
+            var bld = new StringBuilder();
             bld.AppendLine("Construction Requirements:");
             foreach (var kvp in oreRequirements)
             {
@@ -338,10 +338,17 @@
             this.RaisePropertyChanged(() => DamageCount);
         }
 
-        public void ResetSpeed()
+        public void ResetVelocity()
         {
             this.CubeGrid.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
             this.CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
+            this.RaisePropertyChanged(() => Speed);
+        }
+
+        public void ReverseVelocity()
+        {
+            this.CubeGrid.LinearVelocity = new VRageMath.Vector3(this.CubeGrid.LinearVelocity.X * -1, this.CubeGrid.LinearVelocity.Y * -1, this.CubeGrid.LinearVelocity.Z * -1);
+            this.CubeGrid.AngularVelocity = new VRageMath.Vector3(this.CubeGrid.AngularVelocity.X * -1, this.CubeGrid.AngularVelocity.Y * -1, this.CubeGrid.AngularVelocity.Z * -1);
             this.RaisePropertyChanged(() => Speed);
         }
 
@@ -383,6 +390,11 @@
         {
             foreach (var cube in this.CubeGrid.CubeBlocks)
             {
+                // Ignoring the Door object, as it is causing load failures in SE at the moment.
+                // TODO: test this again later.
+                if (cube is MyObjectBuilder_Door)
+                    continue;
+
                 cube.DamagedComponents = new MyObjectBuilder_CubeBlock.DamagedComponent[]
                 {
                     new MyObjectBuilder_CubeBlock.DamagedComponent()
@@ -402,6 +414,19 @@
                 cube.DamagedComponents = null;
             }
 
+            this.UpdateFromEntityBase();
+        }
+
+        public void ConvertToStation()
+        {
+            this.ResetVelocity();
+            this.CubeGrid.IsStatic = true;
+            this.UpdateFromEntityBase();
+        }
+
+        public void ConvertToShip()
+        {
+            this.CubeGrid.IsStatic = false;
             this.UpdateFromEntityBase();
         }
 

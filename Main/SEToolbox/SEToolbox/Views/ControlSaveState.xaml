@@ -5,26 +5,50 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="20" d:DesignWidth="150">
-    <UserControl.Style>
-        <Style TargetType="UserControl">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding DataContext.IsModified, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="False">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Style>
-    <Border CornerRadius="2" BorderBrush="Black" BorderThickness="0">
-        <Border.Background>
-            <LinearGradientBrush>
-                <GradientStop Color="#FF8B2020" Offset="4"/>
-                <GradientStop Color="#FFFFCFAF" Offset="0"/>
-            </LinearGradientBrush>
-        </Border.Background>
-        <Grid Margin="4,0,4,0">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Unsaved" ToolTip="Your content has been changed, and not yet saved." Foreground="Black" />
-            </StackPanel>
-        </Grid>
-    </Border>
+    <Grid>
+        <Border CornerRadius="2" BorderBrush="Black" BorderThickness="0">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.IsModified, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border.Background>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FF8B2020" Offset="4"/>
+                    <GradientStop Color="#FFFFCFAF" Offset="0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid Margin="4,0,4,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Unsaved" ToolTip="Your content has been changed, and not yet saved." Foreground="Black" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border CornerRadius="2" BorderBrush="Black" BorderThickness="0">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.IsModified, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border.Background>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FFE0E0E0" Offset="4"/>
+                    <GradientStop Color="#FFFAFAFA" Offset="0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid Margin="4,0,4,0">
+                <StackPanel Orientation="Horizontal" Width="46">
+                    <TextBlock Text=" " Foreground="Black" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>

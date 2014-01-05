@@ -95,11 +95,17 @@
     <Compile Include="Converters\NullImageConverter.cs" />
     <Compile Include="Converters\ResouceToImageConverter.cs" />
     <Compile Include="Converters\StringFormatMultiValueConverter.cs" />
+    <Compile Include="Interop\Asteroids\MyVoxelConstants.cs" />
+    <Compile Include="Interop\Asteroids\MyVoxelContentCell.cs" />
+    <Compile Include="Interop\Asteroids\MyVoxelContentCellContent.cs" />
+    <Compile Include="Interop\Asteroids\MyVoxelMap.cs" />
+    <Compile Include="Interop\Asteroids\MyVoxelMaterialCell.cs" />
     <Compile Include="Interop\SpaceEngineersAPI.cs" />
     <Compile Include="Models\BindableVector3DModel.cs" />
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
     <Compile Include="Models\ImportVoxelModel.cs" />
+    <Compile Include="Models\MaterialSelectionModel.cs" />
     <Compile Include="Models\SaveResource.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -322,6 +328,7 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\workshop16.png" />
     <None Include="Resources\transform.png" />
     <None Include="Resources\SpaceEngineers16x16.png" />
     <None Include="Resources\export1.png" />

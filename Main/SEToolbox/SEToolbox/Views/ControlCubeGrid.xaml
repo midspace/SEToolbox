@@ -38,21 +38,30 @@
                         <AccessText>Repair</AccessText>
                     </StackPanel>
                 </Button>
-                <Button Command="{Binding ResetSpeedCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" Margin="0,0,2,0" />
-                        <AccessText>Reset Speed</AccessText>
-                    </StackPanel>
-                </Button>
                 <Menu Style="{StaticResource ToolBarMenu}">
+                    <MenuItem Header="Speed" Style="{StaticResource ToolBarTopMenuitem}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
+                        </MenuItem.Icon>
+                        <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}"/>
+                        <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}"/>
+                    </MenuItem>
                     <MenuItem Header="Convert" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
                         </MenuItem.Icon>
-                        <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}"/>
-                        <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}"/>
-                        <MenuItem Header="To Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed."/>
-                        <MenuItem Header="To Complete Structure" Command="{Binding ConvertToCompleteStructureCommand}" ToolTip="Any unconstructed components are constructed."/>
+                        <MenuItem Header="Armor">
+                            <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}"/>
+                            <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}"/>
+                        </MenuItem>
+                        <MenuItem Header="Framework">
+                            <MenuItem Header="To Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed."/>
+                            <MenuItem Header="To Complete Structure" Command="{Binding ConvertToCompleteStructureCommand}" ToolTip="Any unconstructed components are constructed."/>
+                        </MenuItem>
+                        <MenuItem Header="Station/Ship">
+                            <MenuItem Header="To Station" Command="{Binding ConvertToStationCommand}" />
+                            <MenuItem Header="To Ship" Command="{Binding ConvertToShipCommand}" />
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
             </ToolBar>
