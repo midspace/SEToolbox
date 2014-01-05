@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:interop="clr-namespace:SEToolbox.Interop"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Asteroid" Height="190" Width="340" Icon="/SEToolbox;component/app.ico"
+        Title="Import Asteroid" Height="190" Width="440" Icon="/SEToolbox;component/app.ico"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         xmlns:wb="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -44,10 +44,13 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="4"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <RadioButton Content="Stock:" Margin="0,0,4,0" VerticalAlignment="Center" Name="uxInitialElement" IsChecked="{Binding IsStockVoxel}" />
                 <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding StockVoxelFileList}" SelectedValue="{Binding StockVoxel}"/>
+                <ComboBox Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="130" ItemsSource="{Binding MaterialsCollection}" SelectedValue="{Binding StockMaterial}" DisplayMemberPath="DisplayName"/>
+                
                 <RadioButton Content="Custom" Grid.Row="1" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsCustomVoxel}"/>
                 <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource SortedCustomVoxelFileList}}" SelectedValue="{Binding CustomVoxel}"/>
                 <RadioButton Content="File" Grid.Row="2" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>

@@ -7,7 +7,7 @@
     {
         #region fields
 
-        private Point3D point;
+        private Point3D _point;
 
         #endregion
 
@@ -15,7 +15,7 @@
 
         public BindablePoint3DModel()
         {
-            this.point = new Point3D();
+            this._point = new Point3D();
         }
 
         public BindablePoint3DModel(double x, double y, double z)
@@ -58,14 +58,14 @@
         {
             get
             {
-                return this.point.X;
+                return this._point.X;
             }
 
             set
             {
-                if (value != this.point.X)
+                if (value != this._point.X)
                 {
-                    this.point.X = value;
+                    this._point.X = value;
                     this.RaisePropertyChanged(() => X);
                 }
             }
@@ -75,14 +75,14 @@
         {
             get
             {
-                return this.point.Y;
+                return this._point.Y;
             }
 
             set
             {
-                if (value != this.point.Y)
+                if (value != this._point.Y)
                 {
-                    this.point.Y = value;
+                    this._point.Y = value;
                     this.RaisePropertyChanged(() => Y);
                 }
             }
@@ -92,14 +92,14 @@
         {
             get
             {
-                return this.point.Z;
+                return this._point.Z;
             }
 
             set
             {
-                if (value != this.point.Z)
+                if (value != this._point.Z)
                 {
-                    this.point.Z = value;
+                    this._point.Z = value;
                     this.RaisePropertyChanged(() => Z);
                 }
             }
@@ -109,14 +109,14 @@
         {
             get
             {
-                return this.point;
+                return this._point;
             }
 
             set
             {
-                if (value != this.point)
+                if (value != this._point)
                 {
-                    this.point = value;
+                    this._point = value;
                     this.RaisePropertyChanged(() => Point3D, () => X, () => Y, () => Z);
                 }
             }
@@ -133,7 +133,7 @@
 
         private float ToFloat(double value)
         {
-            float result = (float)value;
+            var result = (float)value;
             if (float.IsPositiveInfinity(result))
             {
                 result = float.MaxValue;
@@ -145,9 +145,9 @@
             return result;
         }
 
-        public BindablePoint3DModel RoundOff()
+        public BindablePoint3DModel RoundOff(double roundTo)
         {
-            Point3D v = new Point3D(Math.Round(this.point.X, 0, MidpointRounding.ToEven), Math.Round(this.point.Y, 0, MidpointRounding.ToEven), Math.Round(this.point.Z, 0, MidpointRounding.ToEven));
+            var v = new Point3D(Math.Round(this._point.X / roundTo, 0, MidpointRounding.ToEven) * roundTo, Math.Round(this._point.Y / roundTo, 0, MidpointRounding.ToEven) * roundTo, Math.Round(this._point.Z / roundTo, 0, MidpointRounding.ToEven) * roundTo);
             return new BindablePoint3DModel(v);
         }
 

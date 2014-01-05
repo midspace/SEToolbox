@@ -1,10 +1,12 @@
 ﻿namespace SEToolbox.Models
 {
     using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interop;
     using SEToolbox.Support;
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
 
@@ -12,20 +14,22 @@
     {
         #region Fields
 
-        private string filename;
-        private string sourceFile;
-        private bool isValidVoxelFile;
-        private BindablePoint3DModel position;
-        private BindableVector3DModel forward;
-        private BindableVector3DModel up;
-        private MyPositionAndOrientation characterPosition;
-        private bool isStockVoxel;
-        private bool isCustomVoxel;
-        private bool isFileVoxel;
-        private string stockVoxel;
-        private string customVoxel;
-        private List<string> stockVoxelFileList;
-        private List<string> customVoxelFileList;
+        private string _filename;
+        private string _sourceFile;
+        private bool _isValidVoxelFile;
+        private BindablePoint3DModel _position;
+        private BindableVector3DModel _forward;
+        private BindableVector3DModel _up;
+        private MyPositionAndOrientation _characterPosition;
+        private bool _isStockVoxel;
+        private bool _isCustomVoxel;
+        private bool _isFileVoxel;
+        private string _stockVoxel;
+        private MaterialSelectionModel _stockMaterial;
+        private string _customVoxel;
+        private List<string> _stockVoxelFileList;
+        private List<string> _customVoxelFileList;
+        private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
 
         #endregion
 
@@ -33,8 +37,17 @@
 
         public ImportVoxelModel()
         {
-            stockVoxelFileList = new List<string>();
-            customVoxelFileList = new List<string>();
+            _stockVoxelFileList = new List<string>();
+            _customVoxelFileList = new List<string>();
+            _materialsCollection = new ObservableCollection<MaterialSelectionModel>
+            {
+                new MaterialSelectionModel() {Value = null, DisplayName = "No change"}
+            };
+
+            foreach (var material in SpaceEngineersAPI.GetMaterialList())
+            {
+                _materialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
+            }
         }
 
         #endregion
@@ -45,14 +58,14 @@
         {
             get
             {
-                return this.filename;
+                return this._filename;
             }
 
             set
             {
-                if (value != this.filename)
+                if (value != this._filename)
                 {
-                    this.filename = value;
+                    this._filename = value;
                     this.RaisePropertyChanged(() => Filename);
                 }
             }
@@ -62,14 +75,14 @@
         {
             get
             {
-                return this.sourceFile;
+                return this._sourceFile;
             }
 
             set
             {
-                if (value != this.sourceFile)
+                if (value != this._sourceFile)
                 {
-                    this.sourceFile = value;
+                    this._sourceFile = value;
                     this.RaisePropertyChanged(() => SourceFile);
                 }
             }
@@ -79,14 +92,14 @@
         {
             get
             {
-                return this.isValidVoxelFile;
+                return this._isValidVoxelFile;
             }
 
             set
             {
-                if (value != this.isValidVoxelFile)
+                if (value != this._isValidVoxelFile)
                 {
-                    this.isValidVoxelFile = value;
+                    this._isValidVoxelFile = value;
                     this.RaisePropertyChanged(() => IsValidVoxelFile);
                 }
             }
@@ -96,14 +109,14 @@
         {
             get
             {
-                return this.position;
+                return this._position;
             }
 
             set
             {
-                if (value != this.position)
+                if (value != this._position)
                 {
-                    this.position = value;
+                    this._position = value;
                     this.RaisePropertyChanged(() => Position);
                 }
             }
@@ -113,14 +126,14 @@
         {
             get
             {
-                return this.forward;
+                return this._forward;
             }
 
             set
             {
-                if (value != this.forward)
+                if (value != this._forward)
                 {
-                    this.forward = value;
+                    this._forward = value;
                     this.RaisePropertyChanged(() => Forward);
                 }
             }
@@ -130,14 +143,14 @@
         {
             get
             {
-                return this.up;
+                return this._up;
             }
 
             set
             {
-                if (value != this.up)
+                if (value != this._up)
                 {
-                    this.up = value;
+                    this._up = value;
                     this.RaisePropertyChanged(() => Up);
                 }
             }
@@ -147,13 +160,13 @@
         {
             get
             {
-                return this.characterPosition;
+                return this._characterPosition;
             }
 
             set
             {
                 //if (value != this.characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
-                this.characterPosition = value;
+                this._characterPosition = value;
                 this.RaisePropertyChanged(() => CharacterPosition);
             }
         }
@@ -162,14 +175,14 @@
         {
             get
             {
-                return this.isStockVoxel;
+                return this._isStockVoxel;
             }
 
             set
             {
-                if (value != this.isStockVoxel)
+                if (value != this._isStockVoxel)
                 {
-                    this.isStockVoxel = value;
+                    this._isStockVoxel = value;
                     this.RaisePropertyChanged(() => IsStockVoxel);
                 }
             }
@@ -179,14 +192,14 @@
         {
             get
             {
-                return this.isCustomVoxel;
+                return this._isCustomVoxel;
             }
 
             set
             {
-                if (value != this.isCustomVoxel)
+                if (value != this._isCustomVoxel)
                 {
-                    this.isCustomVoxel = value;
+                    this._isCustomVoxel = value;
                     this.RaisePropertyChanged(() => IsCustomVoxel);
                 }
             }
@@ -196,14 +209,14 @@
         {
             get
             {
-                return this.isFileVoxel;
+                return this._isFileVoxel;
             }
 
             set
             {
-                if (value != this.isFileVoxel)
+                if (value != this._isFileVoxel)
                 {
-                    this.isFileVoxel = value;
+                    this._isFileVoxel = value;
                     this.RaisePropertyChanged(() => IsFileVoxel);
                 }
             }
@@ -213,14 +226,14 @@
         {
             get
             {
-                return this.stockVoxel;
+                return this._stockVoxel;
             }
 
             set
             {
-                if (value != this.stockVoxel)
+                if (value != this._stockVoxel)
                 {
-                    this.stockVoxel = value;
+                    this._stockVoxel = value;
                     this.RaisePropertyChanged(() => StockVoxel);
                     this.IsStockVoxel = true;
                 }
@@ -231,14 +244,14 @@
         {
             get
             {
-                return this.customVoxel;
+                return this._customVoxel;
             }
 
             set
             {
-                if (value != this.customVoxel)
+                if (value != this._customVoxel)
                 {
-                    this.customVoxel = value;
+                    this._customVoxel = value;
                     this.RaisePropertyChanged(() => CustomVoxel);
                     this.IsCustomVoxel = true;
                 }
@@ -249,14 +262,14 @@
         {
             get
             {
-                return this.stockVoxelFileList;
+                return this._stockVoxelFileList;
             }
 
             set
             {
-                if (value != this.stockVoxelFileList)
+                if (value != this._stockVoxelFileList)
                 {
-                    this.stockVoxelFileList = value;
+                    this._stockVoxelFileList = value;
                     this.RaisePropertyChanged(() => StockVoxelFileList);
                 }
             }
@@ -266,15 +279,41 @@
         {
             get
             {
-                return this.customVoxelFileList;
+                return this._customVoxelFileList;
             }
 
             set
             {
-                if (value != this.customVoxelFileList)
+                if (value != this._customVoxelFileList)
                 {
-                    this.customVoxelFileList = value;
+                    this._customVoxelFileList = value;
                     this.RaisePropertyChanged(() => CustomVoxelFileList);
+                }
+            }
+        }
+
+        public ObservableCollection<MaterialSelectionModel> MaterialsCollection
+        {
+            get
+            {
+                return this._materialsCollection;
+            }
+        }
+
+        public MaterialSelectionModel StockMaterial
+        {
+            get
+            {
+                return this._stockMaterial;
+            }
+
+            set
+            {
+                if (value != this._stockMaterial)
+                {
+                    this._stockMaterial = value;
+                    this.RaisePropertyChanged(() => StockMaterial);
+                    this.IsStockVoxel = true;
                 }
             }
         }

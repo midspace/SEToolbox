@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Select World" Height="400" Width="600" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico"
+        Title="Select World" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
@@ -14,6 +14,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:NullImageConverter x:Key="NullImageConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
     </Window.Resources>
     <Window.Background>
         <LinearGradientBrush>
@@ -46,6 +47,15 @@
                         <commands:CommandAction Command="{Binding LoadCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Open Folder" Command="{Binding OpenFolderCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </controls:SortableListView>
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="4"/>
             <Grid Grid.Column="2" Margin="8,0,0,0">

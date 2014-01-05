@@ -431,7 +431,7 @@
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = true;
-                    this.Position = this.Position.RoundOff();
+                    this.Position = this.Position.RoundOff(2.5);
                     this.Forward = this.Forward.RoundToAxis();
                     this.Up = this.Up.RoundToAxis();
                     break;

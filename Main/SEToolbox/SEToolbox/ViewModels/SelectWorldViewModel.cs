@@ -67,6 +67,13 @@
             }
         }
 
+        public ICommand OpenFolderCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(OpenFolderExecuted), new Func<bool>(OpenFolderCanExecute));
+            }
+        }
         #endregion
 
         #region Properties
@@ -162,6 +169,16 @@
             var results = this.dataModel.RepairSandBox();
             this.IsBusy = false;
             var result = dialogService.ShowMessageBox(this, results, "Repair results", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
+        }
+
+        public bool OpenFolderCanExecute()
+        {
+            return this.SelectedWorld != null;
+        }
+
+        public void OpenFolderExecuted()
+        {
+            System.Diagnostics.Process.Start("Explorer", this.SelectedWorld.Savepath);
         }
 
         #endregion
