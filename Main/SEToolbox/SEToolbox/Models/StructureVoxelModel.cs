@@ -24,7 +24,12 @@
             if (voxelPath != null)
             {
                 this.VoxelFilepath = Path.Combine(voxelPath, this.VoxelMap.Filename);
-                this.Size = MyVoxelMap.GetPreview(this.VoxelFilepath);
+
+                // TODO: fix this workaround, by storing the actual temporary file location here also.
+                if (File.Exists(this.VoxelFilepath))
+                {
+                    this.Size = MyVoxelMap.GetPreview(this.VoxelFilepath);
+                }
             }
         }
 
