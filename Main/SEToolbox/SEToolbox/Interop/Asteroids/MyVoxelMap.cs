@@ -8,6 +8,8 @@
 // All rights reserved.
 //===================================================================================
 
+using System.Runtime.InteropServices;
+
 namespace SEToolbox.Interop.Asteroids
 {
     using System;
@@ -35,6 +37,9 @@ namespace SEToolbox.Interop.Asteroids
 
         private Vector3 _positionLeftBottomCorner;
 
+        private Vector3I _min;
+        private Vector3I _max;
+
         #endregion
 
         #region properties
@@ -42,6 +47,8 @@ namespace SEToolbox.Interop.Asteroids
         public Int32 FileVersion { get; private set; }
 
         public Vector3I Size { get; private set; }
+
+        public Vector3I ContentSize { get { return this._max - this._min + 1; } }
 
         public string VoxelMaterial { get; private set; }
 
@@ -64,6 +71,8 @@ namespace SEToolbox.Interop.Asteroids
             this.VoxelMaterial = material;
             this.DisplayName = displayName;
             this._positionLeftBottomCorner = position;
+            this._min = new Vector3I(Size.X, Size.Y, Size.Z);
+            this._max = new Vector3I(0, 0, 0);
 
             // If you need larged voxel maps, enlarge this constant.
             Debug.Assert(Size.X <= MyVoxelConstants.MAX_VOXEL_MAP_SIZE_IN_VOXELS);
@@ -114,27 +123,39 @@ namespace SEToolbox.Interop.Asteroids
 
         #region Preview
 
-        public static Vector3I GetPreview(string filename)
+        public static void GetPreview(string filename, out Vector3I size, out Vector3I contentSize)
         {
-            var tempfilename = Path.GetTempFileName();
-            Uncompress(filename, tempfilename);
+            var map = new MyVoxelMap();
+            map.Load(filename, null, false);
+            size = map.Size;
 
-            Vector3I size;
+            //var min = new Vector3I(int.MaxValue, int.MaxValue, int.MaxValue);
+            //var max = new Vector3I(int.MinValue, int.MinValue, int.MinValue);
 
-            using (var ms = new FileStream(tempfilename, FileMode.Open))
-            {
-                using (var reader = new BinaryReader(ms))
-                {
-                    var fileVersion = reader.ReadInt32();
-                    var sizeX = reader.ReadInt32();
-                    var sizeY = reader.ReadInt32();
-                    var sizeZ = reader.ReadInt32();
-                    size = new Vector3I(sizeX, sizeY, sizeZ);
-                }
-            }
+            //var coords = new Vector3I(0, 0, 0);
+            //for (coords.X = 0; coords.X < size.X; coords.X++)
+            //{
+            //    for (coords.Y = 0; coords.Y < size.Y; coords.Y++)
+            //    {
+            //        for (coords.Z = 0; coords.Z < size.Z; coords.Z++)
+            //        {
+            //            var b = map.GetVoxelContent(ref coords);
+            //            if (b != MyVoxelConstants.VOXEL_CONTENT_EMPTY)
+            //            {
+            //                min.X = Math.Min(min.X, coords.X);
+            //                min.Y = Math.Min(min.Y, coords.Y);
+            //                min.Z = Math.Min(min.Z, coords.Z);
+            //                max.X = Math.Max(max.X, coords.X);
+            //                max.Y = Math.Max(max.Y, coords.Y);
+            //                max.Z = Math.Max(max.Z, coords.Z);
+            //            }
+            //        }
+            //    }
+            //}
 
-            File.Delete(tempfilename);
-            return size;
+            //var validateContentSize = max - min + 1;
+
+            contentSize = map.ContentSize;
         }
 
         #endregion
@@ -143,22 +164,28 @@ namespace SEToolbox.Interop.Asteroids
 
         public void Load(string filename, string defaultMaterial)
         {
+            this.Load(filename, defaultMaterial, true);
+        }
+
+        public void Load(string filename, string defaultMaterial, bool loadMaterial)
+        {
             var tempfilename = Path.GetTempFileName();
             Uncompress(filename, tempfilename);
 
             using (var ms = new FileStream(tempfilename, FileMode.Open))
             {
-                this.LoadUncompressed(Vector3.Zero, Path.GetFileNameWithoutExtension(filename), new BinaryReader(ms), defaultMaterial);
+                using (var reader = new BinaryReader(ms))
+                {
+                    this.LoadUncompressed(Vector3.Zero, Path.GetFileNameWithoutExtension(filename), reader, defaultMaterial, loadMaterial);
+                }
             }
 
             File.Delete(tempfilename);
         }
 
-        public void LoadUncompressed(Vector3 position, string displayName, BinaryReader reader, string defaultMaterial)
+        public void LoadUncompressed(Vector3 position, string displayName, BinaryReader reader, string defaultMaterial, bool loadMaterial)
         {
             Debug.WriteLine("Load: '{0}'", displayName);
-
-            //int byteCounter = 0;
 
             this.FileVersion = reader.ReadInt32();
 
@@ -169,9 +196,8 @@ namespace SEToolbox.Interop.Asteroids
             var cellSizeX = reader.ReadInt32();
             var cellSizeY = reader.ReadInt32();
             var cellSizeZ = reader.ReadInt32();
-            this._cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
 
-            //byteCounter += (4 * 7);
+            this._cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
 
             this.InitVoxelMap(displayName, position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
             var cellsCount = this.Size / this._cellSize;
@@ -183,7 +209,6 @@ namespace SEToolbox.Interop.Asteroids
                     for (var z = 0; z < cellsCount.Z; z++)
                     {
                         var cellType = (MyVoxelCellType)reader.ReadByte();
-                        //byteCounter++;
 
                         //  Cell's are FULL by default, therefore we don't need to change them
                         if (cellType != MyVoxelCellType.FULL)
@@ -193,31 +218,33 @@ namespace SEToolbox.Interop.Asteroids
                             var newCell = new MyVoxelContentCell();
                             this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
 
-                            //var newCell = new MyVoxelCell(x, y, z);
-                            //cells.Add(newCell);
-                            //cubicCells[x, y, z] = newCell;
-
                             if (cellType == MyVoxelCellType.EMPTY)
                             {
                                 newCell.SetToEmpty();
                             }
                             else if (cellType == MyVoxelCellType.MIXED)
                             {
-                                newCell.SetAllVoxelContents(reader.ReadBytes(this._cellSize.X * this._cellSize.Y * this._cellSize.Z));
-                                //byteCounter += (CellSize.X * CellSize.Y * CellSize.Z);
+                                Vector3I min;
+                                Vector3I max;
+                                newCell.SetAllVoxelContents(reader.ReadBytes(this._cellSize.X * this._cellSize.Y * this._cellSize.Z), out min, out max);
+                                this._min = Vector3I.Min(this._min, min);
+                                this._max = Vector3I.Max(this._max, max);
                             }
                             else
                             {
                                 throw new NotImplementedException();
                             }
                         }
-
-                        //this.cubic[x, y, z] = cellType;
+                        else
+                        {
+                            this._min = Vector3I.Min(this._min, new Vector3I(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            this._max = Vector3I.Max(this._max, new Vector3I((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                        }
                     }
                 }
             }
 
-            if (reader.PeekChar() == -1)
+            if (reader.PeekChar() == -1 || !loadMaterial)
             {
                 return;
             }
