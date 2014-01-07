@@ -16,7 +16,6 @@
 - Improve Import 3D Model:
   * Recode Poly2Vox to VisualC CLR to integrate with app, and enhance.
   * 3D Preview?
-- Link to open Workshop ID?
 
 - Exit Pilot from ship to Astronaut.
 - Set/Reset Astronaut Vector. (Direction and Speed)
@@ -47,6 +46,7 @@ Completed:
 - Show Ship Pilot/Roaming Astronaut status.
 - Repair ship.
 - Import Asteroid/Voxel.
+- Link to open Workshop ID.
 
 
 Dropped:

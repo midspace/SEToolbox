@@ -727,55 +727,69 @@
 
         private CubeType[, ,] ReadTemporaryVolmetic(string modelFile, int fixScale, bool fillObject)
         {
-            CubeType[, ,] ccubic;
+            CubeType[, ,] ccubic = null;
+            bool gapless = false;
+            bool foundShape = false;
+            int tries = 0;
 
-            var voxFilename = ToolboxExtensions.ConvertPolyToVox(modelFile, fixScale, false);
-
-            using (BinaryReader reader = new BinaryReader(File.Open(voxFilename, FileMode.Open)))
+            while (!foundShape && tries < 2)
             {
-                // switch the Z and Y axis about, and reverse the Y axis to get the dimension in the right order from the Vox file.
+                var voxFilename = ToolboxExtensions.ConvertPolyToVox(modelFile, fixScale, gapless);
 
-                int xCount = reader.ReadInt32();
-                int zCount = reader.ReadInt32();
-                int yCount = reader.ReadInt32();
-                ccubic = new CubeType[xCount, yCount, zCount];
-
-                for (int x = 0; x < xCount; x++)
+                using (BinaryReader reader = new BinaryReader(File.Open(voxFilename, FileMode.Open)))
                 {
-                    for (int z = 0; z < zCount; z++)
+                    // switch the Z and Y axis about, and reverse the Y axis to get the dimension in the right order from the Vox file.
+
+                    int xCount = reader.ReadInt32();
+                    int zCount = reader.ReadInt32();
+                    int yCount = reader.ReadInt32();
+                    ccubic = new CubeType[xCount, yCount, zCount];
+
+                    for (int x = 0; x < xCount; x++)
                     {
-                        for (int y = yCount - 1; y >= 0; y--)
+                        for (int z = 0; z < zCount; z++)
                         {
-                            var b = reader.ReadByte();
-
-                            switch (b)
+                            for (int y = yCount - 1; y >= 0; y--)
                             {
-                                case 0x00: // hollow interior
-                                    if (fillObject)
-                                    {
+                                var b = reader.ReadByte();
+
+                                switch (b)
+                                {
+                                    case 0x00: // hollow interior
+                                        if (fillObject)
+                                        {
+                                            ccubic[x, y, z] = CubeType.Cube;
+                                        }
+                                        else
+                                        {
+                                            ccubic[x, y, z] = CubeType.Interior;
+                                        }
+                                        break;
+
+                                    case 0xFF: // space
+                                        ccubic[x, y, z] = CubeType.None;
+                                        break;
+
+                                    case 0x12: // solid
+                                    default:
                                         ccubic[x, y, z] = CubeType.Cube;
-                                    }
-                                    else
-                                    {
-                                        ccubic[x, y, z] = CubeType.Interior;
-                                    }
-                                    break;
-
-                                case 0xFF: // space
-                                    ccubic[x, y, z] = CubeType.None;
-                                    break;
-
-                                case 0x12: // solid
-                                default:
-                                    ccubic[x, y, z] = CubeType.Cube;
-                                    break;
+                                        foundShape = true;
+                                        break;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            File.Delete(voxFilename);
+                File.Delete(voxFilename);
+
+                if (!foundShape)
+                {
+                    // Try again, but use the gapless switch.
+                    gapless = true;
+                }
+                tries++;
+            }
 
             return ccubic;
         }

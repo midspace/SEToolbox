@@ -74,6 +74,15 @@
                 return new DelegateCommand(new Action(OpenFolderExecuted), new Func<bool>(OpenFolderCanExecute));
             }
         }
+
+        public ICommand OpenWorkshopCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(OpenWorkshopExecuted), new Func<bool>(OpenWorkshopCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -179,6 +188,17 @@
         public void OpenFolderExecuted()
         {
             System.Diagnostics.Process.Start("Explorer", this.SelectedWorld.Savepath);
+        }
+
+        public bool OpenWorkshopCanExecute()
+        {
+            return this.SelectedWorld != null && this.SelectedWorld.WorkshopId.HasValue &&
+                   this.SelectedWorld.WorkshopId.Value != 0;
+        }
+
+        public void OpenWorkshopExecuted()
+        {
+            System.Diagnostics.Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", this.SelectedWorld.WorkshopId.Value), null);
         }
 
         #endregion
