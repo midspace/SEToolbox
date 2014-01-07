@@ -13,6 +13,7 @@
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
     {
+        private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
 
@@ -24,12 +25,7 @@
             if (voxelPath != null)
             {
                 this.VoxelFilepath = Path.Combine(voxelPath, this.VoxelMap.Filename);
-
-                // TODO: fix this workaround, by storing the actual temporary file location here also.
-                if (File.Exists(this.VoxelFilepath))
-                {
-                    this.Size = MyVoxelMap.GetPreview(this.VoxelFilepath);
-                }
+                this.ReadVoxelDetails(this.VoxelFilepath);
             }
         }
 
@@ -64,6 +60,30 @@
             }
         }
 
+        /// <summary>
+        /// This is the location of the temporary source file for importing/generating a Voxel file.
+        /// </summary>
+        public string SourceVoxelFilepath
+        {
+            get
+            {
+                return this._sourceVoxelFilepath;
+            }
+
+            set
+            {
+                if (value != this._sourceVoxelFilepath)
+                {
+                    this._sourceVoxelFilepath = value;
+                    this.RaisePropertyChanged(() => SourceVoxelFilepath);
+                    this.ReadVoxelDetails(this.SourceVoxelFilepath);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This is the actual file/path for the Voxel file. It may not exist yet.
+        /// </summary>
         public string VoxelFilepath
         {
             get
@@ -118,6 +138,14 @@
         {
             this.ClassType = ClassType.Voxel;
             this.Description = Path.GetFileNameWithoutExtension(this.VoxelMap.Filename);
+        }
+
+        private void ReadVoxelDetails(string filename)
+        {
+            if (filename != null && File.Exists(filename))
+            {
+                this.Size = MyVoxelMap.GetPreview(filename);
+            }
         }
 
         #endregion

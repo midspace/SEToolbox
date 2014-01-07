@@ -470,10 +470,9 @@
             {
                 this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
-                this._dataModel.AddVoxelFile(loadVm.Filename, loadVm.SourceFile);
                 this._selectNewStructure = true;
                 var structure = this._dataModel.AddEntity(newEntity);
-                ((StructureVoxelModel)structure).VoxelFilepath = loadVm.SourceFile; // Overwrite the temporary file location of the Source Voxel, as it hasn't been written yet.
+                ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
                 this._selectNewStructure = false;
                 this.IsBusy = false;
             }

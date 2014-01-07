@@ -97,9 +97,25 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <RadioButton Content="Multiply:" IsChecked="{Binding IsMultipleScale}" />
-                            <TextBox  Width="80" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=MultipleScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Width="80" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="MultipleScale" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="1000"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                             <RadioButton Content="Max Length:" Grid.Row="1" IsChecked="{Binding IsMaxLengthScale}"/>
-                            <TextBox  Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=MaxLengthScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="Cannot be greater than 1024"/>
+                            <TextBox Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}" ToolTip="This specifies the longest dimension of the structure.">
+                                <TextBox.Text>
+                                    <Binding Path="MaxLengthScale" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="5" Max="1024"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                         </Grid>
                     </GroupBox>
 

@@ -85,6 +85,8 @@
     </ApplicationDefinition>
     <Compile Include="Controls\BusyIndicator.cs" />
     <Compile Include="Controls\SortableListView.cs" />
+    <Compile Include="Converters\RangeRuleI.cs" />
+    <Compile Include="Converters\RangeRuleD.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BusyMouseConverter.cs" />
     <Compile Include="Converters\DistanceConverter.cs" />

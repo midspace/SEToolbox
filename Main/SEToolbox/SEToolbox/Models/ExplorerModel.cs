@@ -40,11 +40,6 @@
         ///// </summary>
         private ObservableCollection<IStructureBase> structures;
 
-        /// <summary>
-        /// List of new Voxel files to add to the 'world'. [localVoxelFile, SourceFilepathName].
-        /// </summary>
-        private Dictionary<string, string> manageNewVoxelList;
-
         private List<string> manageDeleteVoxelList;
 
         #endregion
@@ -54,7 +49,6 @@
         public ExplorerModel()
         {
             this.Structures = new ObservableCollection<IStructureBase>();
-            this.manageNewVoxelList = new Dictionary<string, string>();
             this.manageDeleteVoxelList = new List<string>();
         }
 
@@ -278,13 +272,19 @@
             var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
             SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
 
-            // manages the adding of new voxel files. [localVoxelFile, SourceFilepathName].
-            foreach (KeyValuePair<string, string> kvp in this.manageNewVoxelList)
+            // Manages the adding of new voxel files.
+            foreach (var entity in this.Structures)
             {
-                var filename = Path.Combine(this.ActiveWorld.Savepath, kvp.Key);
-                File.Copy(kvp.Value, filename);
+                if (entity is StructureVoxelModel)
+                {
+                    var voxel = (StructureVoxelModel)entity;
+                    if (voxel.SourceVoxelFilepath != null && File.Exists(voxel.SourceVoxelFilepath))
+                    {
+                        File.Copy(voxel.SourceVoxelFilepath, voxel.VoxelFilepath);
+                        voxel.SourceVoxelFilepath = null;
+                    }
+                }
             }
-            this.manageNewVoxelList.Clear();
 
             // Manages the removal old voxels files.
             foreach (var file in this.manageDeleteVoxelList)
@@ -307,7 +307,6 @@
         private void LoadSectorDetail()
         {
             this.Structures.Clear();
-            this.manageNewVoxelList.Clear();
             this.manageDeleteVoxelList.Clear();
             this.ThePlayerCharacter = null;
 
@@ -442,11 +441,6 @@
             return false;
         }
 
-        public void AddVoxelFile(string voxelFilename, string sourceFilename)
-        {
-            this.manageNewVoxelList.Add(voxelFilename, sourceFilename);
-        }
-
         public bool ContainsVoxelFilename(string filename)
         {
             return this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this.manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
@@ -546,8 +540,12 @@
                         asteroid.Filename = CreateUniqueVoxelFilename(asteroid.Filename);
                     }
 
-                    this.AddEntity(asteroid.VoxelMap);
-                    this.AddVoxelFile(asteroid.Filename, asteroid.VoxelFilepath);
+                    var entity = (StructureVoxelModel)this.AddEntity(asteroid.VoxelMap);
+
+                    if (asteroid.SourceVoxelFilepath != null)
+                        entity.SourceVoxelFilepath = asteroid.SourceVoxelFilepath;  // Source Voxel file is temporary. Hasn't been saved yet.
+                    else
+                        entity.SourceVoxelFilepath = asteroid.VoxelFilepath;  // Source Voxel file exists.
                 }
                 else if (item is StructureFloatingObjectModel)
                 {
