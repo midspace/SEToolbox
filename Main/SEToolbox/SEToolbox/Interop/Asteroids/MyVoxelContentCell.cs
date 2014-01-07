@@ -59,15 +59,18 @@ namespace SEToolbox.Interop.Asteroids
             this.CheckCellType();
         }
 
-        public void SetAllVoxelContents(byte[] buffer)
+        public void SetAllVoxelContents(byte[] buffer, out Vector3I min, out Vector3I max)
         {
             // quantize the buffer and compute sum
             this._voxelContentSum = 0;
-            for (int i = 0; i < buffer.Length; i++)
+            for (var i = 0; i < buffer.Length; i++)
             {
                 buffer[i] = MyVoxelContentCellContent.QuantizedValue(buffer[i]);
                 this._voxelContentSum += buffer[i];
             }
+
+            min = Vector3I.MaxValue;
+            max = Vector3I.MinValue;
 
             // mixed-->empty/full: deallocate
             // empty/full-->mixed: allocate
@@ -76,6 +79,8 @@ namespace SEToolbox.Interop.Asteroids
             {
                 if (this.CellType == MyVoxelCellType.MIXED) this.Deallocate();
                 this.CellType = MyVoxelCellType.EMPTY;
+                min = Vector3I.MaxValue;
+                max = Vector3I.MinValue;
             }
             else if (_voxelContentSum == MyVoxelConstants.VOXEL_CELL_CONTENT_SUM_TOTAL)
             {

@@ -56,6 +56,19 @@
             }
         }
 
+        public Vector3I ContentSize
+        {
+            get
+            {
+                return this.DataModel.ContentSize;
+            }
+
+            set
+            {
+                this.DataModel.ContentSize = value;
+            }
+        }
+
         #endregion
 
         #region methods

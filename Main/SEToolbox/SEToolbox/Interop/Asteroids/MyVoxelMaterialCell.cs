@@ -19,10 +19,10 @@ namespace SEToolbox.Interop.Asteroids
     {
         #region fields
 
-        static readonly int voxelsInCell = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
-        static readonly int xStep = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
-        static readonly int yStep = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
-        static readonly int zStep = 1;
+        private const int VoxelsInCell = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
+        private const int XStep = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
+        private const int YStep = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
+        private const int ZStep = 1;
 
         //  If whole cell contains only one material, it will be written in this member and 3D arrays won't be used.
         private bool _singleMaterialForWholeCell;
@@ -69,7 +69,7 @@ namespace SEToolbox.Interop.Asteroids
 
             if (this._singleMaterialForWholeCell == false)
             {
-                var xyz = voxelCoordInCell.X * xStep + voxelCoordInCell.Y * yStep + voxelCoordInCell.Z * zStep;
+                var xyz = voxelCoordInCell.X * XStep + voxelCoordInCell.Y * YStep + voxelCoordInCell.Z * ZStep;
                 this._materials[xyz] = material;
                 this._indestructibleContent[xyz] = indestructibleContent;
             }
@@ -91,10 +91,10 @@ namespace SEToolbox.Interop.Asteroids
         {
             if (this._singleMaterialForWholeCell && (this._singleMaterial != material))
             {
-                this._materials = new string[voxelsInCell];
-                this._indestructibleContent = new byte[voxelsInCell];
+                this._materials = new string[VoxelsInCell];
+                this._indestructibleContent = new byte[VoxelsInCell];
                 //  Fill with present cell values
-                for (var xyz = 0; xyz < voxelsInCell; xyz++)
+                for (var xyz = 0; xyz < VoxelsInCell; xyz++)
                 {
                     this._materials[xyz] = _singleMaterial;
                     this._indestructibleContent[xyz] = this._singleIndestructibleContent;
@@ -117,7 +117,7 @@ namespace SEToolbox.Interop.Asteroids
             {
                 //  If materials are stored in 3D array, we need to really calculate average material
                 //  Iterate materials in this data cell
-                for (var xyz = 0; xyz < voxelsInCell; xyz++)
+                for (var xyz = 0; xyz < VoxelsInCell; xyz++)
                 {
                     var material = this._materials[xyz];
 
@@ -155,7 +155,7 @@ namespace SEToolbox.Interop.Asteroids
             }
             else
             {
-                return _materials[voxelCoordInCell.X * xStep + voxelCoordInCell.Y * yStep + voxelCoordInCell.Z * zStep];
+                return _materials[voxelCoordInCell.X * XStep + voxelCoordInCell.Y * YStep + voxelCoordInCell.Z * ZStep];
             }
         }
 
@@ -163,7 +163,7 @@ namespace SEToolbox.Interop.Asteroids
         public byte GetIndestructibleContent(ref Vector3I voxelCoordInCell)
         {
             return 0xFF;  // Anything but full 255 isn't working quite right in SE.
-                          // Perhaps SE Alpha team haven't quite worked out if this is still to be supported in SE.
+            // Perhaps SE Alpha team haven't quite worked out if this is still to be supported in SE.
 
             //if (m_singleMaterialForWholeCell == true)
             //{

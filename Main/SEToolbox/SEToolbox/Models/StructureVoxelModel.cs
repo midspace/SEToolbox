@@ -16,6 +16,7 @@
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
+        private Vector3I _contentSize;
 
         #region ctor
 
@@ -101,6 +102,7 @@
             }
         }
 
+        [XmlIgnore]
         public Vector3I Size
         {
             get
@@ -114,6 +116,24 @@
                 {
                     this._size = value;
                     this.RaisePropertyChanged(() => Size);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public Vector3I ContentSize
+        {
+            get
+            {
+                return this._contentSize;
+            }
+
+            set
+            {
+                if (value != this._contentSize)
+                {
+                    this._contentSize = value;
+                    this.RaisePropertyChanged(() => ContentSize);
                 }
             }
         }
@@ -144,7 +164,9 @@
         {
             if (filename != null && File.Exists(filename))
             {
-                this.Size = MyVoxelMap.GetPreview(filename);
+                MyVoxelMap.GetPreview(filename, out this._size, out this._contentSize);
+                this.RaisePropertyChanged(() => Size);
+                this.RaisePropertyChanged(() => ContentSize);
             }
         }
 

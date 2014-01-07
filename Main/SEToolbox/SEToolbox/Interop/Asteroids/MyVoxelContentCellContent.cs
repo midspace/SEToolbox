@@ -17,21 +17,20 @@ namespace SEToolbox.Interop.Asteroids
     {
         #region fields
 
-        const int xStep = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
-        const int yStep = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
-        const int zStep = 1;
-        const int TOTAL_VOXEL_COUNT = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
+        const int XStep = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
+        const int YStep = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
+        const int ZStep = 1;
+        const int TotalVoxelCount = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS * MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS;
 
-        private const int QUANTIZATION_BITS = 3;                   // number of bits kept
+        private const int QuantizationBits = 3;                   // number of bits kept
 
-        const int THROWAWAY_BITS = 8 - QUANTIZATION_BITS;  // number of bits thrown away
-
+        const int ThrowawayBits = 8 - QuantizationBits;  // number of bits thrown away
 
         private readonly byte[] _packed;
 
         static readonly uint[] Bitmask = {
-            ~((255u >> THROWAWAY_BITS) << 0), ~((255u >> THROWAWAY_BITS) << 1), ~((255u >> THROWAWAY_BITS) << 2), ~((255u >> THROWAWAY_BITS) << 3),
-            ~((255u >> THROWAWAY_BITS) << 4), ~((255u >> THROWAWAY_BITS) << 5), ~((255u >> THROWAWAY_BITS) << 6), ~((255u >> THROWAWAY_BITS) << 7),
+            ~((255u >> ThrowawayBits) << 0), ~((255u >> ThrowawayBits) << 1), ~((255u >> ThrowawayBits) << 2), ~((255u >> ThrowawayBits) << 3),
+            ~((255u >> ThrowawayBits) << 4), ~((255u >> ThrowawayBits) << 5), ~((255u >> ThrowawayBits) << 6), ~((255u >> ThrowawayBits) << 7),
         };
 
         // Values quantized to (8 - QUANTIZATION_BITS) with correct smearing of significant bits.
@@ -47,18 +46,18 @@ namespace SEToolbox.Interop.Asteroids
 
         static MyVoxelContentCellContent()
         {
-            SmearBits = new byte[1 << QUANTIZATION_BITS];
-            for (uint i = 0; i < 1 << QUANTIZATION_BITS; i++)
+            SmearBits = new byte[1 << QuantizationBits];
+            for (uint i = 0; i < 1 << QuantizationBits; i++)
             {
-                uint value = i << THROWAWAY_BITS;
+                uint value = i << ThrowawayBits;
 
                 // smear bits
-                value = value + (value >> QUANTIZATION_BITS);
-                if (QUANTIZATION_BITS < 4)
+                value = value + (value >> QuantizationBits);
+                if (QuantizationBits < 4)
                 {
-                    value = value + (value >> QUANTIZATION_BITS * 2);
-                    if (QUANTIZATION_BITS < 2)
-                        value = value + (value >> QUANTIZATION_BITS * 4);
+                    value = value + (value >> QuantizationBits * 2);
+                    if (QuantizationBits < 2)
+                        value = value + (value >> QuantizationBits * 4);
                 }
 
                 SmearBits[i] = (byte)value;
@@ -68,7 +67,7 @@ namespace SEToolbox.Interop.Asteroids
         public MyVoxelContentCellContent()
         {
             // round number of bytes up, add 1 for quantizations with bits split into different bytes
-            this._packed = new byte[(TOTAL_VOXEL_COUNT * QUANTIZATION_BITS + 7) / 8 + 1];
+            this._packed = new byte[(TotalVoxelCount * QuantizationBits + 7) / 8 + 1];
             this.Reset(MyVoxelConstants.VOXEL_CONTENT_FULL);
         }
 
@@ -80,7 +79,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             unchecked
             {
-                return SmearBits[content >> THROWAWAY_BITS];
+                return SmearBits[content >> ThrowawayBits];
             }
         }
 
@@ -113,10 +112,10 @@ namespace SEToolbox.Interop.Asteroids
                 // for QUANTIZATION_BITS == 8 we can just do System.Buffer.BlockCopy
                 Array.Clear(this._packed, 0, this._packed.Length);
 
-                for (int bitadr = 0, adr = 0; bitadr < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL * QUANTIZATION_BITS; bitadr += QUANTIZATION_BITS, adr++)
+                for (int bitadr = 0, adr = 0; bitadr < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL * QuantizationBits; bitadr += QuantizationBits, adr++)
                 {
                     var byteadr = bitadr >> 3;
-                    var c = ((uint)contents[adr] >> THROWAWAY_BITS) << (bitadr & 7);
+                    var c = ((uint)contents[adr] >> ThrowawayBits) << (bitadr & 7);
                     this._packed[byteadr] |= (byte)c;
                     this._packed[byteadr + 1] |= (byte)(c >> 8);  // this needs to be done only for QUANTIZATION_BITS == 1,2,4,8
                 }
@@ -132,10 +131,10 @@ namespace SEToolbox.Interop.Asteroids
             unchecked
             {
                 // for QUANTIZATION_BITS == 8: m_packed[voxelCoordInCell.X * xStep + voxelCoordInCell.Y * yStep + voxelCoordInCell.Z * zStep] = content;
-                var bitadr = (voxelCoordInCell.X * xStep + voxelCoordInCell.Y * yStep + voxelCoordInCell.Z * zStep) * QUANTIZATION_BITS;
+                var bitadr = (voxelCoordInCell.X * XStep + voxelCoordInCell.Y * YStep + voxelCoordInCell.Z * ZStep) * QuantizationBits;
                 var bit = bitadr & 7;
                 var byteadr = bitadr >> 3;
-                var c = ((uint)content >> THROWAWAY_BITS) << bit;
+                var c = ((uint)content >> ThrowawayBits) << bit;
                 this._packed[byteadr] = (byte)(this._packed[byteadr] & Bitmask[bit] | c);
                 this._packed[byteadr + 1] = (byte)(this._packed[byteadr + 1] & Bitmask[bit] >> 8 | c >> 8);   // this needs to be done only for QUANTIZATION_BITS == 1,2,4,8
             }
@@ -150,10 +149,10 @@ namespace SEToolbox.Interop.Asteroids
             unchecked
             {
                 // for QUANTIZATION_BITS == 8: return m_packed[voxelCoordInCell.X * xStep + voxelCoordInCell.Y * yStep + voxelCoordInCell.Z * zStep];
-                var bitadr = (voxelCoordInCell.X * xStep + voxelCoordInCell.Y * yStep + voxelCoordInCell.Z * zStep) * QUANTIZATION_BITS;
+                var bitadr = (voxelCoordInCell.X * XStep + voxelCoordInCell.Y * YStep + voxelCoordInCell.Z * ZStep) * QuantizationBits;
                 var byteadr = bitadr >> 3;
                 var value = this._packed[byteadr] + ((uint)this._packed[byteadr + 1] << 8);  // QUANTIZATION_BITS == 1,2,4,8: value = (uint)m_packed[bitadr >> 3];
-                return SmearBits[(value >> (bitadr & 7)) & (255 >> THROWAWAY_BITS)];
+                return SmearBits[(value >> (bitadr & 7)) & (255 >> ThrowawayBits)];
             }
         }
 
