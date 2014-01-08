@@ -17,6 +17,7 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
+    using VRageMath;
 
     public class ImportVoxelViewModel : BaseViewModel
     {
@@ -365,20 +366,8 @@
 
         public MyObjectBuilder_EntityBase BuildEntity()
         {
-            //this.Position = new BindablePoint3DModel(0, 0, 0);
-            //this.Position = new ThreeDPointModel(0, 0, 0);
-            //this.Forward = new ThreeDPointModel(0, 0, 1);
-            //this.Up = new ThreeDPointModel(0, 1, 0);
-
-            // Figure out where the Character is facing, and plant the new constrcut right in front, by "5" units, facing the Character.
-            //double distance = 5;
-            var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
-            vector.Normalize();
-            //vector = Vector3D.Multiply(vector, distance);
-            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
-            this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward);
-            this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
-
+            Vector3I asteroidCenter = new Vector3I();
+            Vector3I asteroidSize = new Vector3I();
 
             string originalFile = null;
             if (this.IsStockVoxel)
@@ -389,6 +378,11 @@
                 {
                     this.SourceFile = stockfile;
                     originalFile = this.SourceFile;
+
+                    var asteroid = new MyVoxelMap();
+                    asteroid.Load(stockfile, null, false);
+                    asteroidCenter = asteroid.ContentCenter;
+                    asteroidSize = asteroid.ContentSize;
                 }
                 else
                 {
@@ -398,6 +392,8 @@
                     this.SourceFile = Path.GetTempFileName();
                     asteroid.Save(this.SourceFile);
                     originalFile = this.StockVoxel + ".vox";
+                    asteroidCenter = asteroid.ContentCenter;
+                    asteroidSize = asteroid.ContentSize;
                 }
             }
             else if (this.IsCustomVoxel)
@@ -407,23 +403,48 @@
 
                 // Copy Resource to Temp file.
                 File.WriteAllBytes(this.SourceFile, (byte[])Properties.Resources.ResourceManager.GetObject(this.CustomVoxel));
+
+                var asteroid = new MyVoxelMap();
+                asteroid.Load(this.SourceFile, null, false);
+                asteroidCenter = asteroid.ContentCenter;
+                asteroidSize = asteroid.ContentSize;
             }
             else if (this.IsFileVoxel)
             {
                 originalFile = this.SourceFile;
+
+                var asteroid = new MyVoxelMap();
+                asteroid.Load(this.SourceFile, null, false);
+                asteroidCenter = asteroid.ContentCenter;
+                asteroidSize = asteroid.ContentSize;
             }
 
             // automatically number all files, and check for duplicate filenames.
             this.Filename = ((ExplorerViewModel)this.OwnerViewModel).CreateUniqueVoxelFilename(originalFile);
 
-            var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3(), this.Filename);
+
+            // Figure out where the Character is facing, and plant the new constrcut right in front.
+            // Calculate the hypotenuse, as it will be the safest distance to place in front.
+            double distance = Math.Sqrt(Math.Pow(asteroidSize.X, 2) + Math.Pow(asteroidSize.Y, 2) + Math.Pow(asteroidSize.Z, 2)) / 2;
+
+            var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
+            vector.Normalize();
+            vector = Vector3D.Multiply(vector, distance);
+            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
+            //this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward);
+            //this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
+            this.Forward = new BindableVector3DModel(Vector3.Forward);  // Asteroids currently don't have any orientation.
+            this.Up = new BindableVector3DModel(Vector3.Up);
+
+
+            var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3() - asteroidCenter, this.Filename);
             entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
             entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
             entity.Filename = this.Filename;
 
             entity.PositionAndOrientation = new MyPositionAndOrientation()
             {
-                Position = this.Position.ToVector3(),
+                Position = this.Position.ToVector3() - asteroidCenter,
                 Forward = this.Forward.ToVector3(),
                 Up = this.Up.ToVector3()
             };

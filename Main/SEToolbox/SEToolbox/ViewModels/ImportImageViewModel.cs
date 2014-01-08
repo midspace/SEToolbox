@@ -314,10 +314,9 @@
                     };
 
 
-                    //this.Position = new BindablePoint3DModel(0, 0, 0);
-                    //this.Position = new ThreeDPointModel(0, 0, 0);
-                    //this.Forward = new ThreeDPointModel(0, 0, 1);
-                    //this.Up = new ThreeDPointModel(0, 1, 0);
+                    //this.Position = new BindablePoint3DModel(VRageMath.Vector3.Zero);
+                    //this.Forward = new BindableVector3DModel(VRageMath.Vector3.Forward);
+                    //this.Up = new BindableVector3DModel(VRageMath.Vector3.Up);
 
 
                     // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.

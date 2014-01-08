@@ -37,8 +37,7 @@ namespace SEToolbox.Interop.Asteroids
 
         private Vector3 _positionLeftBottomCorner;
 
-        private Vector3I _min;
-        private Vector3I _max;
+        private BoundingBox _boundingContent;
 
         #endregion
 
@@ -48,7 +47,9 @@ namespace SEToolbox.Interop.Asteroids
 
         public Vector3I Size { get; private set; }
 
-        public Vector3I ContentSize { get { return this._max - this._min + 1; } }
+        public Vector3I ContentSize { get { return new Vector3I(this._boundingContent.Size()) + 1; } }
+
+        public Vector3I ContentCenter { get { return new Vector3I(this._boundingContent.Center); } }
 
         public string VoxelMaterial { get; private set; }
 
@@ -71,8 +72,7 @@ namespace SEToolbox.Interop.Asteroids
             this.VoxelMaterial = material;
             this.DisplayName = displayName;
             this._positionLeftBottomCorner = position;
-            this._min = new Vector3I(Size.X, Size.Y, Size.Z);
-            this._max = new Vector3I(0, 0, 0);
+            this._boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
 
             // If you need larged voxel maps, enlarge this constant.
             Debug.Assert(Size.X <= MyVoxelConstants.MAX_VOXEL_MAP_SIZE_IN_VOXELS);
@@ -128,33 +128,6 @@ namespace SEToolbox.Interop.Asteroids
             var map = new MyVoxelMap();
             map.Load(filename, null, false);
             size = map.Size;
-
-            //var min = new Vector3I(int.MaxValue, int.MaxValue, int.MaxValue);
-            //var max = new Vector3I(int.MinValue, int.MinValue, int.MinValue);
-
-            //var coords = new Vector3I(0, 0, 0);
-            //for (coords.X = 0; coords.X < size.X; coords.X++)
-            //{
-            //    for (coords.Y = 0; coords.Y < size.Y; coords.Y++)
-            //    {
-            //        for (coords.Z = 0; coords.Z < size.Z; coords.Z++)
-            //        {
-            //            var b = map.GetVoxelContent(ref coords);
-            //            if (b != MyVoxelConstants.VOXEL_CONTENT_EMPTY)
-            //            {
-            //                min.X = Math.Min(min.X, coords.X);
-            //                min.Y = Math.Min(min.Y, coords.Y);
-            //                min.Z = Math.Min(min.Z, coords.Z);
-            //                max.X = Math.Max(max.X, coords.X);
-            //                max.Y = Math.Max(max.Y, coords.Y);
-            //                max.Z = Math.Max(max.Z, coords.Z);
-            //            }
-            //        }
-            //    }
-            //}
-
-            //var validateContentSize = max - min + 1;
-
             contentSize = map.ContentSize;
         }
 
@@ -224,11 +197,10 @@ namespace SEToolbox.Interop.Asteroids
                             }
                             else if (cellType == MyVoxelCellType.MIXED)
                             {
-                                Vector3I min;
-                                Vector3I max;
-                                newCell.SetAllVoxelContents(reader.ReadBytes(this._cellSize.X * this._cellSize.Y * this._cellSize.Z), out min, out max);
-                                this._min = Vector3I.Min(this._min, min);
-                                this._max = Vector3I.Max(this._max, max);
+                                BoundingBox box;
+                                newCell.SetAllVoxelContents(reader.ReadBytes(this._cellSize.X * this._cellSize.Y * this._cellSize.Z), out box);
+                                this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
+                                this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
                             }
                             else
                             {
@@ -237,8 +209,8 @@ namespace SEToolbox.Interop.Asteroids
                         }
                         else
                         {
-                            this._min = Vector3I.Min(this._min, new Vector3I(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
-                            this._max = Vector3I.Max(this._max, new Vector3I((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                            this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
                         }
                     }
                 }
