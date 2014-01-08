@@ -215,7 +215,7 @@
     <value>..\Resources\wrench.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ImportVoxelFilter" xml:space="preserve">
-    <value>Image files (*.vox)|*.vox;*.png|All files (*.*)|*.*</value>
+    <value>Image files (*.vox)|*.vox|All files (*.*)|*.*</value>
   </data>
   <data name="ImportVoxelTitle" xml:space="preserve">
     <value>Select Asteroid to Import</value>
@@ -303,5 +303,17 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   </data>
   <data name="workshop16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\workshop16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExportSandboxObjectFilter" xml:space="preserve">
+    <value>Sandbox Object files (*.sbo)|*.sbo|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
+  </data>
+  <data name="ExportSandboxObjectTitle" xml:space="preserve">
+    <value>Specify filename to export '{0}' to</value>
+  </data>
+  <data name="ImportSandboxObjectTitle" xml:space="preserve">
+    <value>Specify Sandbox objects to Import</value>
+  </data>
+  <data name="SECubes16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SECubes16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

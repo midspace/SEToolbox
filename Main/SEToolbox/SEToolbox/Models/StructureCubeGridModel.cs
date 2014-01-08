@@ -391,7 +391,7 @@
             foreach (var cube in this.CubeGrid.CubeBlocks)
             {
                 // Ignoring the Door object, as it is causing load failures in SE at the moment.
-                // TODO: test this again later.
+                // TODO: Door/DamagedComponent. Test this again in later SE Builds.
                 if (cube is MyObjectBuilder_Door)
                     continue;
 

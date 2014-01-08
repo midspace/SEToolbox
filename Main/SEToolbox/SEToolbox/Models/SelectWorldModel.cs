@@ -240,6 +240,39 @@
                         }
                     }
                 }
+
+                bool saveAfterScan = false;
+
+                // Scan through all items.
+                foreach (var entity in model.SectorData.SectorObjects)
+                {
+                    if (entity is MyObjectBuilder_CubeGrid)
+                    {
+                        var cubeGrid = (MyObjectBuilder_CubeGrid)entity;
+
+                        foreach (var cubeBlock in cubeGrid.CubeBlocks)
+                        {
+                            if (cubeBlock is MyObjectBuilder_Door)
+                            {
+                                if (cubeBlock.DamagedComponents != null && cubeBlock.DamagedComponents.Length > 0)
+                                {
+                                    // TODO: Door/DamagedComponent. Test this again in later SE Builds.
+                                    statusNormal = false;
+                                    str.AppendLine("! 'Door' does not support DamagedComponents currently.");
+                                    cubeBlock.DamagedComponents = null;
+                                    str.AppendLine("* Fixed 'Door'.");
+                                    saveAfterScan = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (saveAfterScan)
+                {
+                    model.SaveCheckPointAndSandBox();
+                    str.AppendLine("* Saved changes.");
+                }
             }
 
             if (statusNormal)

@@ -22,7 +22,12 @@
             <Border CornerRadius="10" BorderBrush="#80000000" BorderThickness="1" Background="#80000000" Width="200" Height="80" VerticalAlignment="Top" Margin="0,130,0,0" Padding="8">
                 <TextBlock Foreground="White" FontFamily="Segoe UI" TextWrapping="WrapWithOverflow" Text="A toolbox utility for modifying and importing content in the SpaceEngineers Game." />
             </Border>
-            <Button Command="{Binding CloseCommand}" Content="Close" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" />
+            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,10" ToolTip="{Binding HomepageUrl}">
+                <Hyperlink Command="{Binding OpenLinkCommand}">
+                    <TextBlock Text="Home Page" Foreground="White" TextDecorations="Underline"/>
+                </Hyperlink>
+            </TextBlock>
+            <Button Command="{Binding CloseCommand}" Content="Close" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,10"/>
         </Grid>
     </Border>
 </Window>

@@ -361,6 +361,40 @@
             this.RaisePropertyChanged(() => Structures);
         }
 
+        public void SaveEntity(IStructureBase strucutre, string filename)
+        {
+            if (strucutre.EntityBase is MyObjectBuilder_CubeGrid)
+            {
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>((MyObjectBuilder_CubeGrid)strucutre.EntityBase, filename);
+            }
+        }
+
+        public List<string> LoadEntities(string[] filenames)
+        {
+            this.IsBusy = true;
+            Dictionary<Int64, Int64> idReplacementTable = new Dictionary<long, long>();
+            List<string> badfiles = new List<string>();
+
+            foreach (var filename in filenames)
+            {
+                MyObjectBuilder_CubeGrid entity = null;
+
+                try
+                {
+                    entity = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>(filename);
+                }
+                catch
+                {
+                    badfiles.Add(filename);
+                }
+
+                this.MergeData(entity, ref idReplacementTable);
+            }
+
+            this.IsBusy = false;
+            return badfiles;
+        }
+
         // TODO: Bounding box collision detection.
         public void CollisionCorrectEntity(MyObjectBuilder_EntityBase entity)
         {
@@ -511,30 +545,12 @@
                 if (item is StructureCubeGridModel)
                 {
                     var ship = item as StructureCubeGridModel;
-                    ship.CubeGrid.EntityId = MergeId(ship.CubeGrid.EntityId, ref idReplacementTable);
-
-                    foreach (var cubeGrid in ship.CubeGrid.CubeBlocks)
-                    {
-                        cubeGrid.EntityId = MergeId(cubeGrid.EntityId, ref idReplacementTable);
-
-                        if (cubeGrid is MyObjectBuilder_Cockpit)
-                        {
-                            ((MyObjectBuilder_Cockpit)cubeGrid).Pilot = null;  // remove any pilots.
-                        }
-
-                        if (cubeGrid is MyObjectBuilder_MotorStator)
-                        {
-                            // reattach motor/rotor to correct entity.
-                            ((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId = MergeId(((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId, ref idReplacementTable);
-                        }
-                    }
-
-                    this.AddEntity(ship.CubeGrid);
+                    this.MergeData(ship.CubeGrid, ref idReplacementTable);
                 }
                 else if (item is StructureVoxelModel)
                 {
                     var asteroid = item as StructureVoxelModel;
-                    
+
                     if (this.ContainsVoxelFilename(asteroid.Filename))
                     {
                         asteroid.Filename = CreateUniqueVoxelFilename(asteroid.Filename);
@@ -555,6 +571,32 @@
 
                 // ignore the StructureCharacterModel.
             }
+        }
+
+        private void MergeData(MyObjectBuilder_CubeGrid cubeGridObject, ref Dictionary<Int64, Int64> idReplacementTable)
+        {
+            if (cubeGridObject == null)
+                return;
+
+            cubeGridObject.EntityId = MergeId(cubeGridObject.EntityId, ref idReplacementTable);
+
+            foreach (var cubeGrid in cubeGridObject.CubeBlocks)
+            {
+                cubeGrid.EntityId = MergeId(cubeGrid.EntityId, ref idReplacementTable);
+
+                if (cubeGrid is MyObjectBuilder_Cockpit)
+                {
+                    ((MyObjectBuilder_Cockpit)cubeGrid).Pilot = null;  // remove any pilots.
+                }
+
+                if (cubeGrid is MyObjectBuilder_MotorStator)
+                {
+                    // reattach motor/rotor to correct entity.
+                    ((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId = MergeId(((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId, ref idReplacementTable);
+                }
+            }
+
+            this.AddEntity(cubeGridObject);
         }
 
         private Int64 MergeId(long currentId, ref Dictionary<Int64, Int64> idReplacementTable)

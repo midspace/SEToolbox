@@ -1,9 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Interfaces;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Views;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -11,8 +7,15 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
+    using System.IO;
     using System.Linq;
+    using System.Windows.Forms;
     using System.Windows.Input;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Models;
+    using SEToolbox.Properties;
+    using SEToolbox.Services;
+    using SEToolbox.Views;
 
     public class ExplorerViewModel : BaseViewModel, IDropable
     {
@@ -20,6 +23,8 @@
 
         private readonly ExplorerModel _dataModel;
         private readonly IDialogService _dialogService;
+        private readonly Func<IOpenFileDialog> _openFileDialogFactory;
+        private readonly Func<ISaveFileDialog> _saveFileDialogFactory;
         private bool? _closeResult;
 
         private IStructureViewBase _selectedStructure;
@@ -39,16 +44,20 @@
         #region Constructors
 
         public ExplorerViewModel(ExplorerModel dataModel)
-            : this(dataModel, ServiceLocator.Resolve<IDialogService>())
+            : this(dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>(), () => ServiceLocator.Resolve<ISaveFileDialog>())
         {
         }
 
-        public ExplorerViewModel(ExplorerModel dataModel, IDialogService dialogService)
+        public ExplorerViewModel(ExplorerModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory, Func<ISaveFileDialog> saveFileDialogFactory)
             : base(null)
         {
             Contract.Requires(dialogService != null);
+            Contract.Requires(openFileDialogFactory != null);
+            Contract.Requires(saveFileDialogFactory != null);
 
             this._dialogService = dialogService;
+            this._openFileDialogFactory = openFileDialogFactory;
+            this._saveFileDialogFactory = saveFileDialogFactory;
             this._dataModel = dataModel;
 
             this.Selections = new ObservableCollection<IStructureViewBase>();
@@ -139,6 +148,14 @@
             }
         }
 
+        public ICommand ImportSandboxObjectCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ImportSandboxObjectExecuted), new Func<bool>(ImportSandboxObjectCanExecute));
+            }
+        }
+
         public ICommand WorldCommand
         {
             get
@@ -163,11 +180,11 @@
             }
         }
 
-        public ICommand ExportObjectCommand
+        public ICommand ExportSandboxObjectCommand
         {
             get
             {
-                return new DelegateCommand(new Action(ExportObjectExecuted), new Func<bool>(ExportObjectCanExecute));
+                return new DelegateCommand(new Action(ExportSandboxObjectExecuted), new Func<bool>(ExportSandboxObjectCanExecute));
             }
         }
 
@@ -396,7 +413,7 @@
             model.Load(this._dataModel.BaseSavePath);
             SelectWorldViewModel loadVm = new SelectWorldViewModel(this, model);
 
-            var result = _dialogService.ShowDialog<WindowLoad>(this, loadVm);
+            var result = this._dialogService.ShowDialog<WindowLoad>(this, loadVm);
             if (result == true)
             {
                 this._dataModel.ActiveWorld = model.SelectedWorld;
@@ -526,6 +543,16 @@
             }
         }
 
+        public bool ImportSandboxObjectCanExecute()
+        {
+            return this._dataModel.ActiveWorld != null;
+        }
+
+        public void ImportSandboxObjectExecuted()
+        {
+            this.ImportSandboxObjectFromFile();
+        }
+
         public bool WorldCanExecute()
         {
             return this._dataModel.ActiveWorld != null;
@@ -557,15 +584,14 @@
             System.Diagnostics.Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", this._dataModel.ActiveWorld.WorkshopId.Value), null);
         }
 
-        public bool ExportObjectCanExecute()
+        public bool ExportSandboxObjectCanExecute()
         {
-            return false;
-            //return this.dataModel.ActiveWorld != null;
+            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
         }
 
-        public void ExportObjectExecuted()
+        public void ExportSandboxObjectExecuted()
         {
-            // TODO:
+            this.ExportSandboxObjectToFile(this.Selections.ToArray());
         }
 
         public bool TestCanExecute()
@@ -712,6 +738,70 @@
         public string CreateUniqueVoxelFilename(string originalFile)
         {
             return this._dataModel.CreateUniqueVoxelFilename(originalFile);
+        }
+
+        public void ImportSandboxObjectFromFile()
+        {
+            IOpenFileDialog openFileDialog = this._openFileDialogFactory();
+            openFileDialog.Filter = Resources.ExportSandboxObjectFilter;
+            openFileDialog.Title = Resources.ImportSandboxObjectTitle;
+            openFileDialog.Multiselect = true;
+
+            // Open the dialog
+            DialogResult result = this._dialogService.ShowOpenFileDialog(this, openFileDialog);
+
+            if (result == DialogResult.OK)
+            {
+                var badfiles = this._dataModel.LoadEntities(openFileDialog.FileNames);
+
+                foreach(var filename in badfiles)
+                {
+                    this._dialogService.ShowMessageBox(this, string.Format("Could not load '{0}', because the file is either corrupt or invalid.", Path.GetFileName(filename)), "Could not import", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                }
+            }
+        }
+
+        public void ExportSandboxObjectToFile(params IStructureViewBase[] viewModels)
+        {
+            //".sbs" Sand Box Content. (app content)
+            //".sbc" Sand Box Checkpoint. (game content)
+            //".sbs" Sand Box Sector. (game content)
+            //".sbo" Sand Box Object. ??
+
+            foreach (var viewModel in viewModels)
+            {
+                if (viewModel is StructureCharacterViewModel)
+                {
+                    this._dialogService.ShowMessageBox(this, "Cannot export Player Characters.", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+                else if (viewModel is StructureVoxelViewModel)
+                {
+                    this._dialogService.ShowMessageBox(this, "Cannot export Asteroids currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+                else if (viewModel is StructureFloatingObjectViewModel)
+                {
+                    this._dialogService.ShowMessageBox(this, "Cannot export Floating objects currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+                else if (viewModel is StructureCubeGridViewModel)
+                {
+                    var structure = (StructureCubeGridViewModel)viewModel;
+                    //structure.IsPiloted // TODO: preemptively remove pilots?
+
+                    ISaveFileDialog saveFileDialog = this._saveFileDialogFactory();
+                    saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
+                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType);
+                    saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.EntityId);
+                    saveFileDialog.OverwritePrompt = true;
+
+                    // Open the dialog
+                    DialogResult result = this._dialogService.ShowSaveFileDialog(this, saveFileDialog);
+
+                    if (result == DialogResult.OK)
+                    {
+                        this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
+                    }
+                }
+            }
         }
 
         #endregion
