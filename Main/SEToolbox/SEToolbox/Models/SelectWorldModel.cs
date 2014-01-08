@@ -199,7 +199,7 @@
                             character = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Character();
                             character.EntityId = SpaceEngineersAPI.GenerateEntityId();
                             character.PersistentFlags = Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.InScene;
-                            character.PositionAndOrientation = new Sandbox.CommonLib.ObjectBuilders.MyPositionAndOrientation(new VRageMath.Vector3(0, 0, 0), new VRageMath.Vector3(0, 0, 1), new VRageMath.Vector3(0, 1, 0));
+                            character.PositionAndOrientation = new Sandbox.CommonLib.ObjectBuilders.MyPositionAndOrientation(VRageMath.Vector3.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
                             character.CharacterModel = Sandbox.CommonLib.ObjectBuilders.MyCharacterModelEnum.Astronaut_White;
                             character.Battery = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
                             character.LightEnabled = false;

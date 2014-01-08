@@ -33,8 +33,8 @@
         <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Filename}"/>
         <Label Grid.Row="3" Grid.Column="0" Content="Bounding Size:"/>
         <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Size}" />
-        <!--<Label Grid.Row="4" Grid.Column="0" Content="Size:"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ContentSize}" />-->
+        <Label Grid.Row="4" Grid.Column="0" Content="Size:"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ContentSize}" />
         <Label Grid.Row="5" Grid.Column="0" Content="Distance:"/>
         <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
     </Grid>

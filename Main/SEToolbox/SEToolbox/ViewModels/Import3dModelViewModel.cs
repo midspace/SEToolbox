@@ -402,10 +402,9 @@
                 {
                     this.OriginalModelSize = size;
 
-                    //this.Position = new BindablePoint3DModel(0, 0, 0);
-                    //this.Position = new ThreeDPointModel(0, 0, 0);
-                    //this.Forward = new ThreeDPointModel(0, 0, 1);
-                    //this.Up = new ThreeDPointModel(0, 1, 0);
+                    //this.Position = new BindablePoint3DModel(VRageMath.Vector3.Zero);
+                    //this.Forward = new BindableVector3DModel(VRageMath.Vector3.Forward);
+                    //this.Up = new BindableVector3DModel(VRageMath.Vector3.Up);
 
                     this.BuildDistance = 10;
 

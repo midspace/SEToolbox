@@ -105,7 +105,7 @@ namespace SEToolbox.Interop.Asteroids
             }
         }
 
-        public void SetAddVoxelContents(byte[] contents)
+        public void SetAddVoxelContents(byte[] contents, ref BoundingBox bounding)
         {
             unchecked
             {
@@ -116,6 +116,17 @@ namespace SEToolbox.Interop.Asteroids
                 {
                     var byteadr = bitadr >> 3;
                     var c = ((uint)contents[adr] >> ThrowawayBits) << (bitadr & 7);
+
+                    if (c > 0)
+                    {
+                        // Find the bounding region for content.
+                        var x = adr / XStep;
+                        var y = (adr % XStep) / YStep;
+                        var z = (adr % XStep) % YStep;
+                        bounding.Min = Vector3.Min(bounding.Min, new Vector3(x, y, z));
+                        bounding.Max = Vector3.Max(bounding.Max, new Vector3(x, y, z));
+                    }
+
                     this._packed[byteadr] |= (byte)c;
                     this._packed[byteadr + 1] |= (byte)(c >> 8);  // this needs to be done only for QUANTIZATION_BITS == 1,2,4,8
                 }
