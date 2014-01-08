@@ -17,6 +17,7 @@
         private string _voxelFilepath;
         private Vector3I _size;
         private Vector3I _contentSize;
+        private long _voxCells;
 
         #region ctor
 
@@ -138,6 +139,24 @@
             }
         }
 
+        [XmlIgnore]
+        public long VoxCells
+        {
+            get
+            {
+                return this._voxCells;
+            }
+
+            set
+            {
+                if (value != this._voxCells)
+                {
+                    this._voxCells = value;
+                    this.RaisePropertyChanged(() => VoxCells);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -164,9 +183,10 @@
         {
             if (filename != null && File.Exists(filename))
             {
-                MyVoxelMap.GetPreview(filename, out this._size, out this._contentSize);
+                MyVoxelMap.GetPreview(filename, out this._size, out this._contentSize, out this._voxCells);
                 this.RaisePropertyChanged(() => Size);
                 this.RaisePropertyChanged(() => ContentSize);
+                this.RaisePropertyChanged(() => VoxCells);
             }
         }
 

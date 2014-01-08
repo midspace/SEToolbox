@@ -139,8 +139,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SubtypeId.tt</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\ICanExportToExcel.cs" />
-    <Compile Include="Interfaces\ICanExportToPng.cs" />
     <Compile Include="Interfaces\IDialogService.cs" />
     <Compile Include="Interfaces\IDialogServiceContract.cs" />
     <Compile Include="Interfaces\IFileDialog.cs" />
@@ -330,6 +328,7 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\SECubes16.png" />
     <None Include="Resources\workshop16.png" />
     <None Include="Resources\transform.png" />
     <None Include="Resources\SpaceEngineers16x16.png" />

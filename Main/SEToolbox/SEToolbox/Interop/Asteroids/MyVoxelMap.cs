@@ -123,12 +123,13 @@ namespace SEToolbox.Interop.Asteroids
 
         #region Preview
 
-        public static void GetPreview(string filename, out Vector3I size, out Vector3I contentSize)
+        public static void GetPreview(string filename, out Vector3I size, out Vector3I contentSize, out long voxCells)
         {
             var map = new MyVoxelMap();
             map.Load(filename, null, false);
             size = map.Size;
             contentSize = map.ContentSize;
+            voxCells = map.SumVoxelCells();
         }
 
         #endregion

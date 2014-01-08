@@ -69,6 +69,19 @@
             }
         }
 
+        public long VoxCells
+        {
+            get
+            {
+                return this.DataModel.VoxCells;
+            }
+
+            set
+            {
+                this.DataModel.VoxCells = value;
+            }
+        }
+
         #endregion
 
         #region methods

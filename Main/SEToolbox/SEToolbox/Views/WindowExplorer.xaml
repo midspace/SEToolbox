@@ -76,6 +76,16 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="Sandbox Objects" Command="{Binding ImportSandboxObjectCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SECubes16}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Export" Command="{Binding ExportSandboxObjectCommand}" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
+                    </MenuItem.Icon>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
                 <MenuItem Header="World" Command="{Binding WorldCommand}" Padding="0,2,4,2">
@@ -168,7 +178,7 @@
                                     <KeyBinding Key="Delete" Command="{Binding DeleteObjectCommand}" />
                                 </ListView.InputBindings>
                                 <i:Interaction.Behaviors>
-                                    <!-- Custom behavior that synchronizes the selected items with the view models collection -->
+                                    <!-- This custom behavior that synchronizes the selected items with the view models collection -->
                                     <commands:SynchronizeSelectedItems Selections="{Binding Selections}"/>
                                     <commands:ListBoxDropBehavior AllowDropToSource="False" ShowDropIndicator="False" DropType="{x:Type m:IStructureBase}"/>
                                 </i:Interaction.Behaviors>

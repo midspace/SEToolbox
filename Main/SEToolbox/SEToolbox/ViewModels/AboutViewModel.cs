@@ -1,17 +1,18 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Models;
-    using SEToolbox.Services;
     using System;
+    using System.Diagnostics;
+    using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
-    using System.Linq;
+    using SEToolbox.Services;
 
     public class AboutViewModel : BaseViewModel
     {
         #region Fields
 
         private bool? closeResult;
+        private string homepageUrl;
 
         #endregion
 
@@ -20,6 +21,7 @@
         public AboutViewModel(BaseViewModel parentViewModel)
             : base(parentViewModel)
         {
+            this.homepageUrl = "http://forums.keenswh.com/post/custom-importereditor-tool-setoolbox-6638984";
         }
 
         #endregion
@@ -40,6 +42,14 @@
             {
                 this.closeResult = value;
                 this.RaisePropertyChanged(() => CloseResult);
+            }
+        }
+
+        public ICommand OpenLinkCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(OpenLinkExecuted), new Func<bool>(OpenLinkCanExecute));
             }
         }
 
@@ -75,6 +85,14 @@
             }
         }
 
+        public string HomepageUrl
+        {
+            get
+            {
+                return this.homepageUrl;
+            }
+        }
+
         #endregion
 
         #region methods
@@ -87,6 +105,16 @@
         public void CloseExecuted()
         {
             this.CloseResult = false;
+        }
+
+        public bool OpenLinkCanExecute()
+        {
+            return true;
+        }
+
+        public void OpenLinkExecuted()
+        {
+            Process.Start(this.HomepageUrl);
         }
 
         #endregion
