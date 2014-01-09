@@ -106,6 +106,9 @@
     <Compile Include="Models\BindableVector3DModel.cs" />
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
+    <Compile Include="Models\GenerateVoxelDetailModel.cs" />
+    <Compile Include="Models\GenerateVoxelModel.cs" />
+    <Compile Include="Models\GenerateVoxelFieldModel.cs" />
     <Compile Include="Models\ImportVoxelModel.cs" />
     <Compile Include="Models\MaterialSelectionModel.cs" />
     <Compile Include="Models\SaveResource.cs">
@@ -176,6 +179,7 @@
     <Compile Include="Support\VisualTreeEnumeration.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\GenerateVoxelFieldViewModel.cs" />
     <Compile Include="ViewModels\DataBaseViewModel.cs" />
     <Compile Include="ViewModels\ImportVoxelViewModel.cs" />
     <Compile Include="ViewModels\StructureFloatingObjectViewModel.cs" />
@@ -205,6 +209,9 @@
     </Compile>
     <Compile Include="Views\ControlFloatingObject.xaml.cs">
       <DependentUpon>ControlFloatingObject.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowGenerateVoxelField.xaml.cs">
+      <DependentUpon>WindowGenerateVoxelField.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowAbout.xaml.cs">
       <DependentUpon>WindowAbout.xaml</DependentUpon>
@@ -253,6 +260,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ControlFloatingObject.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowGenerateVoxelField.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

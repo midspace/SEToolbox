@@ -119,5 +119,10 @@
             </Style.Triggers>
         </Style>
 
+        <LinearGradientBrush x:Key="DialogBackgroundBrush">
+            <GradientStop Color="#FF2B2077" Offset="4"/>
+            <GradientStop Color="#FFFFFFFF" Offset="0"/>
+        </LinearGradientBrush>
+
     </Application.Resources>
 </Application>

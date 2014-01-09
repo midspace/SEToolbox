@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:interop="clr-namespace:SEToolbox.Interop"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Asteroid" Height="190" Width="440" Icon="/SEToolbox;component/app.ico"
+        Title="Import Asteroid" Height="190" Width="440" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         xmlns:wb="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -17,12 +17,6 @@
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
     </Window.Resources>
-    <Window.Background>
-        <LinearGradientBrush>
-            <GradientStop Color="#FF2B2077" Offset="4"/>
-            <GradientStop Color="#FFFFFFFF" Offset="0"/>
-        </LinearGradientBrush>
-    </Window.Background>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
     </Window.Cursor>

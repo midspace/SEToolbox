@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Select World" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico"
+        Title="Select World" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
@@ -16,12 +16,6 @@
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
     </Window.Resources>
-    <Window.Background>
-        <LinearGradientBrush>
-            <GradientStop Color="#FF2B2077" Offset="4"/>
-            <GradientStop Color="#FFFFFFFF" Offset="0"/>
-        </LinearGradientBrush>
-    </Window.Background>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
     </Window.Cursor>

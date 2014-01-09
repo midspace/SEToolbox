@@ -32,6 +32,8 @@
         private ObservableCollection<IStructureViewBase> _selections;
 
         private ObservableCollection<IStructureViewBase> _structures;
+
+        // If true, when adding new models to the collection, the new models will be highlighted as selected in the UI.
         private bool _selectNewStructure;
 
         #endregion
@@ -186,6 +188,14 @@
             get
             {
                 return new DelegateCommand(new Action(ExportSandboxObjectExecuted), new Func<bool>(ExportSandboxObjectCanExecute));
+            }
+        }
+
+        public ICommand GenerateVoxelFieldCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(GenerateVoxelFieldExecuted), new Func<bool>(GenerateVoxelFieldCanExecute));
             }
         }
 
@@ -609,6 +619,34 @@
         public void ExportSandboxObjectExecuted()
         {
             this.ExportSandboxObjectToFile(this.Selections.ToArray());
+        }
+
+        public bool GenerateVoxelFieldCanExecute()
+        {
+            return this._dataModel.ActiveWorld != null;
+        }
+
+        public void GenerateVoxelFieldExecuted()
+        {
+            var model = new GenerateVoxelFieldModel();
+            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var loadVm = new GenerateVoxelFieldViewModel(this, model);
+
+            var result = _dialogService.ShowDialog<WindowGenerateVoxelField>(this, loadVm);
+            if (result == true)
+            {
+                this.IsBusy = true;
+                string[] sourceVoxelFiles;
+                var newEntities = loadVm.BuildEntities(out sourceVoxelFiles);
+                this._selectNewStructure = true;
+                for (var i = 0; i < newEntities.Length; i++)
+                {
+                    var structure = this._dataModel.AddEntity(newEntities[i]);
+                    ((StructureVoxelModel)structure).SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                }
+                this._selectNewStructure = false;
+                this.IsBusy = false;
+            }
         }
 
         public bool TestCanExecute()
