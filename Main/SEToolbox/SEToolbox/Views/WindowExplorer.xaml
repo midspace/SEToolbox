@@ -104,10 +104,25 @@
                     </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Command="{Binding AboutCommand}" HorizontalAlignment="Right" Header="_About" Padding="0,2,4,2">
+                <MenuItem HorizontalAlignment="Right" Header="_Help" Padding="0,2,4,2">
                     <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}"/>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=help}"/>
                     </MenuItem.Icon>
+                    <MenuItem Command="{Binding OpenHomepageLinkCommand}" Header="_Homepage">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=message_edit}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding OpenUpdatesLinkCommand}" Header="Find _Updates">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=server_to_client}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding AboutCommand}" Header="_About">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
             </Menu>
             <Menu DockPanel.Dock="Top">

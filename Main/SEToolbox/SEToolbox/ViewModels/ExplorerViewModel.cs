@@ -15,6 +15,7 @@
     using SEToolbox.Models;
     using SEToolbox.Properties;
     using SEToolbox.Services;
+    using SEToolbox.Support;
     using SEToolbox.Views;
 
     public class ExplorerViewModel : BaseViewModel, IDropable
@@ -193,6 +194,22 @@
             get
             {
                 return new DelegateCommand(new Action(TestExecuted), new Func<bool>(TestCanExecute));
+            }
+        }
+
+        public ICommand OpenUpdatesLinkCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(OpenUpdatesLinkExecuted), new Func<bool>(OpenUpdatesLinkCanExecute));
+            }
+        }
+
+        public ICommand OpenHomepageLinkCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(OpenHomepageLinkExecuted), new Func<bool>(OpenHomepageLinkCanExecute));
             }
         }
 
@@ -614,6 +631,26 @@
             var structure = this._dataModel.AddEntity(newEntity);
             this._selectNewStructure = false;
             this.IsBusy = false;
+        }
+
+        public bool OpenUpdatesLinkCanExecute()
+        {
+            return true;
+        }
+
+        public void OpenUpdatesLinkExecuted()
+        {
+            Process.Start(AppConstants.UpdatesUrl);
+        }
+
+        public bool OpenHomepageLinkCanExecute()
+        {
+            return true;
+        }
+
+        public void OpenHomepageLinkExecuted()
+        {
+            Process.Start(AppConstants.HomepageUrl);
         }
 
         public bool AboutCanExecute()

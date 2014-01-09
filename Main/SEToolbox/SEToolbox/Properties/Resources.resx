@@ -316,4 +316,13 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   <data name="SECubes16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SECubes16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="help" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="message_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\message_edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="server_to_client" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\server_to_client.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
