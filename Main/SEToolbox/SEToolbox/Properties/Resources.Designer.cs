@@ -443,6 +443,16 @@ namespace SEToolbox.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap help {
+            get {
+                object obj = ResourceManager.GetObject("help", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap import1 {
             get {
                 object obj = ResourceManager.GetObject("import1", resourceCulture);
@@ -528,6 +538,16 @@ namespace SEToolbox.Properties {
         internal static string ImportVoxelTitle {
             get {
                 return ResourceManager.GetString("ImportVoxelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap message_edit {
+            get {
+                object obj = ResourceManager.GetObject("message_edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -629,6 +649,16 @@ namespace SEToolbox.Properties {
         internal static System.Drawing.Bitmap SECubes16 {
             get {
                 object obj = ResourceManager.GetObject("SECubes16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap server_to_client {
+            get {
+                object obj = ResourceManager.GetObject("server_to_client", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

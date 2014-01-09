@@ -4,17 +4,6 @@
     using System;
     using System.Globalization;
 
-    public enum ExceptionState
-    {
-        OK,
-        NoRegistry,
-        NoDirectory,
-        NoApplication,
-        MissingContentFile,
-        CorruptContentFile,
-        EmptyContentFile,
-    };
-
     public class ToolboxException : ArgumentException
     {
         private ExceptionState state;

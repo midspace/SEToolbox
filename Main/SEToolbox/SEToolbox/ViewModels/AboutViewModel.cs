@@ -6,13 +6,13 @@
     using System.Reflection;
     using System.Windows.Input;
     using SEToolbox.Services;
+    using SEToolbox.Support;
 
     public class AboutViewModel : BaseViewModel
     {
         #region Fields
 
         private bool? closeResult;
-        private string homepageUrl;
 
         #endregion
 
@@ -21,7 +21,6 @@
         public AboutViewModel(BaseViewModel parentViewModel)
             : base(parentViewModel)
         {
-            this.homepageUrl = "http://forums.keenswh.com/post/custom-importereditor-tool-setoolbox-6638984";
         }
 
         #endregion
@@ -89,7 +88,7 @@
         {
             get
             {
-                return this.homepageUrl;
+                return AppConstants.HomepageUrl;
             }
         }
 

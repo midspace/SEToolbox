@@ -78,8 +78,19 @@ https://www.nuget.org/packages/ilmerge
 ilmerge /target:winexe /out:SEToolbox.exe SEToolbox.exe SEToolbox.ImageLibrary.dll
 
 
-Shaders
-https://wpffx.codeplex.com/
-http://blogs.msdn.com/b/chuckw/archive/2011/12/09/known-issue-directx-sdk-june-2010-setup-and-the-s1023-error.aspx
-https://wpf.codeplex.com/downloads/get/40167
-http://www.microsoft.com/en-au/download/details.aspx?id=6812
+Requirements:
+*	Windows Installer XML (WiX) toolset 3.7
+	http://wixtoolset.org/releases/
+
+*	Shaders:
+	*	DirectX Software Development Kit 
+		http://www.microsoft.com/en-au/download/details.aspx?id=6812
+
+	*	Shader Effects BuildTask and Templates.zip
+		https://wpf.codeplex.com/downloads/get/40167
+
+	-	Documentation:
+		https://wpffx.codeplex.com/
+
+	-	Issues:
+		http://blogs.msdn.com/b/chuckw/archive/2011/12/09/known-issue-directx-sdk-june-2010-setup-and-the-s1023-error.aspx
