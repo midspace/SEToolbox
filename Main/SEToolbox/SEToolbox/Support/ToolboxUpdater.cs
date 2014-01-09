@@ -54,7 +54,7 @@
 
         public static bool IsSpaceEngineersInstalled()
         {
-            string filePath = GetApplicationFilePath();
+            var filePath = GetApplicationFilePath();
             if (string.IsNullOrEmpty(filePath))
                 throw new ToolboxException(ExceptionState.NoRegistry);
             if (!Directory.Exists(filePath))
@@ -96,6 +96,8 @@
             }
             catch
             {
+                // Ignore any errors.
+                // If it cannot connect, then there may be an intermittant connection issue, either with the internet, or codeplex (which has happened before).
             }
 
             if (rssFeed != null)
@@ -117,10 +119,10 @@
         public static bool IsBaseAssembliesChanged()
         {
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
-            string baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
-            string appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
+            var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
+            var appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
 
-            bool update = false;
+            var update = false;
 
             update = DoFilesDiffer(baseFilePath, appFilePath, "Sandbox.CommonLib.dll");
             if (update)
@@ -146,8 +148,8 @@
         public static bool UpdateBaseFiles()
         {
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
-            string baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
-            string appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
+            var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
+            var appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
 
             var files = new string[]{
             "Sandbox.CommonLib.dll",
@@ -202,9 +204,11 @@
 
         internal static bool RunElevated(string fileName)
         {
-            var processInfo = new ProcessStartInfo();
-            processInfo.Verb = "runas";
-            processInfo.FileName = fileName;
+            var processInfo = new ProcessStartInfo
+            {
+                Verb = "runas",
+                FileName = fileName
+            };
 
             try
             {

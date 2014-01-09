@@ -134,8 +134,9 @@
             </Menu>
             <ToolBarPanel DockPanel.Dock="Top" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ToolBar>
-                    <Button Content="Clear" Command="{Binding ClearCommand}" />
-                    <Button Content="Test" Command="{Binding TestCommand}" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button Content="Clear" Command="{Binding ClearCommand}"/>
+                    <Button Content="Test" Command="{Binding TestCommand}"/>
+                    <Button Content="Generate Asteroid Field" Command="{Binding GenerateVoxelFieldCommand}"/>
                 </ToolBar>
             </ToolBarPanel>
             <StatusBar DockPanel.Dock="Bottom">

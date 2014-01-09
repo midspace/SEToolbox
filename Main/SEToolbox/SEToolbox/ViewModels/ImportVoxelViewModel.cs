@@ -341,13 +341,12 @@
         private void BrowseVoxel()
         {
             this.IsValidVoxelFile = false;
-
-            IOpenFileDialog openFileDialog = _openFileDialogFactory();
+            var openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Resources.ImportVoxelFilter;
             openFileDialog.Title = Resources.ImportVoxelTitle;
 
             // Open the dialog
-            DialogResult result = _dialogService.ShowOpenFileDialog(this.OwnerViewModel, openFileDialog);
+            var result = _dialogService.ShowOpenFileDialog(this.OwnerViewModel, openFileDialog);
 
             if (result == DialogResult.OK)
             {
@@ -366,8 +365,8 @@
 
         public MyObjectBuilder_EntityBase BuildEntity()
         {
-            Vector3I asteroidCenter = new Vector3I();
-            Vector3I asteroidSize = new Vector3I();
+            var asteroidCenter = new Vector3I();
+            var asteroidSize = new Vector3I();
 
             string originalFile = null;
             if (this.IsStockVoxel)

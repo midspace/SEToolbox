@@ -8,6 +8,7 @@
 - Auto Updater, detect current and available version, prompt for update.
 - Wix installer project,
   * Desktop Icon.
+- Add collection for temporary files, to allow cleanup during shutdown.
 
 
 - Improve Import Image:
