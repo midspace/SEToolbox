@@ -365,7 +365,7 @@
 
         public MyObjectBuilder_EntityBase BuildEntity()
         {
-            var asteroidCenter = new Vector3I();
+            var asteroidCenter = new Vector3();
             var asteroidSize = new Vector3I();
 
             string originalFile = null;

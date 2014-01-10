@@ -172,6 +172,7 @@
     <Compile Include="Support\AppConstants.cs" />
     <Compile Include="Support\ExceptionState.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
+    <Compile Include="Support\RandomUtil.cs" />
     <Compile Include="Support\RssFeedItem.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
     <Compile Include="Interop\ClassType.cs" />

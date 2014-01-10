@@ -11,6 +11,7 @@
     using System.Linq;
     using System.Windows.Forms;
     using System.Windows.Input;
+    using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Properties;
@@ -812,7 +813,12 @@
         /// <inheritdoc />
         public string CreateUniqueVoxelFilename(string originalFile)
         {
-            return this._dataModel.CreateUniqueVoxelFilename(originalFile);
+            return this._dataModel.CreateUniqueVoxelFilename(originalFile, null);
+        }
+
+        public string CreateUniqueVoxelFilename(string originalFile, MyObjectBuilder_EntityBase[] additionalList)
+        {
+            return this._dataModel.CreateUniqueVoxelFilename(originalFile, additionalList);
         }
 
         public void ImportSandboxObjectFromFile()
