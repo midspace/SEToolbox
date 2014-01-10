@@ -57,6 +57,7 @@
   <ItemGroup>
     <Content Include="app.ico" />
     <Content Include="WixUIBannerBmp.bmp" />
+    <Content Include="WixUIDialogBmp.bmp" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

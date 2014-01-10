@@ -341,6 +341,7 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Toolbox_logo.jpg" />
     <None Include="Resources\server_to_client.png" />
     <None Include="Resources\message_edit.png" />
     <None Include="Resources\help.png" />
