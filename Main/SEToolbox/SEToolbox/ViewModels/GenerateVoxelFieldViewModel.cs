@@ -1,5 +1,11 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Windows.Input;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
@@ -7,12 +13,7 @@
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
     using SEToolbox.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Windows.Input;
+    using SEToolbox.Support;
     using VRageMath;
 
     public class GenerateVoxelFieldViewModel : BaseViewModel
@@ -22,6 +23,7 @@
         private readonly IDialogService _dialogService;
         private readonly Func<IOpenFileDialog> _openFileDialogFactory;
         private readonly GenerateVoxelFieldModel _dataModel;
+        private GenerateVoxelModel _selectedRow;
 
         private bool? _closeResult;
         private bool _isBusy;
@@ -51,6 +53,22 @@
         #endregion
 
         #region Properties
+
+        public ICommand AddRowCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(AddRowExecuted), new Func<bool>(AddRowCanExecute));
+            }
+        }
+
+        public ICommand DeleteRowCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(DeleteRowExecuted), new Func<bool>(DeleteRowCanExecute));
+            }
+        }
 
         public ICommand CreateCommand
         {
@@ -82,6 +100,20 @@
             {
                 this._closeResult = value;
                 this.RaisePropertyChanged(() => CloseResult);
+            }
+        }
+
+        public GenerateVoxelModel SelectedRow
+        {
+            get
+            {
+                return this._selectedRow;
+            }
+
+            set
+            {
+                this._selectedRow = value;
+                this.RaisePropertyChanged(() => SelectedRow);
             }
         }
 
@@ -168,10 +200,49 @@
 
         #region methods
 
+        public bool AddRowCanExecute()
+        {
+            return true;
+        }
+
+        public void AddRowExecuted()
+        {
+            if (this.SelectedRow != null)
+            {
+                this.VoxelCollection.Insert(this.VoxelCollection.IndexOf(this.SelectedRow) + 1, this.SelectedRow.Clone());
+            }
+            else
+            {
+                this.VoxelCollection.Add(this._dataModel.NewDefaultVoxel(this.VoxelCollection.Count + 1));
+            }
+
+            this.RenumberCollection();
+        }
+
+        public bool DeleteRowCanExecute()
+        {
+            return this.SelectedRow != null;
+        }
+
+        public void DeleteRowExecuted()
+        {
+            var index = this.VoxelCollection.IndexOf(this.SelectedRow);
+            this.VoxelCollection.Remove(this.SelectedRow);
+            this.RenumberCollection();
+
+            while (index >= this.VoxelCollection.Count)
+            {
+                index--;
+            }
+            if (index >= 0)
+            {
+                this.SelectedRow = this.VoxelCollection[index];
+            }
+        }
+
         public bool CreateCanExecute()
         {
             return true;
-            //return (this.IsValidVoxelFile && this.IsFileVoxel) || (this.IsCustomVoxel && this.CustomVoxel != null) || (this.IsStockVoxel && this.StockVoxel != null);
         }
 
         public void CreateExecuted()
@@ -209,38 +280,30 @@
                     asteroid.Save(tempfilename);
 
                     // automatically number all files, and check for duplicate filenames.
-                    var filename = ((ExplorerViewModel)this.OwnerViewModel).CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox");
+                    var filename = ((ExplorerViewModel)this.OwnerViewModel).CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox", entities.ToArray());
 
-                    // TODO: Complete Generate Voxel Field
+                    var radius = RandomUtil.GetDouble(this.MinimumRange, this.MaximumRange);
+                    var longitude = RandomUtil.GetDouble(0, 2 * Math.PI);
+                    var latitude = RandomUtil.GetDouble(-Math.PI / 2, Math.PI / 2 + double.Epsilon);
 
-                    // todo: Random range, from 
-                    //this.MinimumRange 
-                    //this.MaximumRange
+                    // Test data. Place asteroids items into a circle.
+                    //radius = 500;
+                    //longitude = Math.PI * 2 * ((double)voxelDesign.Index / this.VoxelCollection.Count);
+                    //latitude = 0;
 
-                    // Random Longitude in Radians, from 0 to 2*Math.PI.
-                    // Random Latitude in Radians, from -Math.PI/2 to +Math.PI/2.
+                    double x = radius * Math.Cos(latitude) * Math.Cos(longitude);
+                    double z = radius * Math.Cos(latitude) * Math.Sin(longitude);
+                    double y = radius * Math.Sin(latitude);
 
-
-
-                    // Figure out where the Character is facing, and plant the new constrcut right in front.
-                    // Calculate the hypotenuse, as it will be the safest distance to place in front.
-                    double distance = Math.Sqrt(Math.Pow(asteroid.ContentSize.X, 2) + Math.Pow(asteroid.ContentSize.Y, 2) + Math.Pow(asteroid.ContentSize.Z, 2)) / 2;
-
-                    var vector = this._dataModel.CharacterPosition.Forward;
-                    vector.Normalize();
-                    vector = new Vector3(vector.X * (float)distance, vector.Y * (float)distance, vector.Z * (float)distance);
-                    var position = this._dataModel.CharacterPosition.Position + vector;
-
-
-
-                    var entity = new MyObjectBuilder_VoxelMap(position - asteroid.ContentCenter, filename);
+                    Vector3 position = this._dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
+                    var entity = new MyObjectBuilder_VoxelMap(position, filename);
                     entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
                     entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
                     entity.Filename = filename;
 
                     entity.PositionAndOrientation = new MyPositionAndOrientation()
                     {
-                        Position = position - asteroid.ContentCenter,
+                        Position = position,
                         Forward = Vector3.Forward,  // Asteroids currently don't have any orientation.
                         Up = Vector3.Up
                     };
@@ -252,6 +315,14 @@
 
             sourceVoxelFiles = sourceFiles.ToArray();
             return entities.ToArray();
+        }
+
+        public void RenumberCollection()
+        {
+            for (var i = 0; i < this.VoxelCollection.Count; i++)
+            {
+                this.VoxelCollection[i].Index = i + 1;
+            }
         }
 
         #endregion

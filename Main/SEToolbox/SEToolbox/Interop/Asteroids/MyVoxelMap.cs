@@ -49,7 +49,7 @@ namespace SEToolbox.Interop.Asteroids
 
         public Vector3I ContentSize { get { return new Vector3I(this._boundingContent.Size()) + 1; } }
 
-        public Vector3I ContentCenter { get { return new Vector3I(this._boundingContent.Center); } }
+        public Vector3 ContentCenter { get { return this._boundingContent.Center; } }
 
         public string VoxelMaterial { get; private set; }
 

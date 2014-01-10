@@ -475,9 +475,18 @@
             return false;
         }
 
-        public bool ContainsVoxelFilename(string filename)
+        public bool ContainsVoxelFilename(string filename, MyObjectBuilder_EntityBase[] additionalList)
         {
-            return this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this.manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
+            bool contains = this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this.manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
+
+            if (contains || additionalList == null)
+            {
+                return contains;
+            }
+
+            contains |= additionalList.Any(s => s is MyObjectBuilder_VoxelMap && ((MyObjectBuilder_VoxelMap)s).Filename.ToUpper() == filename.ToUpper());
+
+            return contains;
         }
 
         public MyObjectBuilder_Character FindAstronautCharacter()
@@ -520,14 +529,14 @@
         /// </summary>
         /// <param name="originalFile"></param>
         /// <returns></returns>
-        public string CreateUniqueVoxelFilename(string originalFile)
+        public string CreateUniqueVoxelFilename(string originalFile, MyObjectBuilder_EntityBase[] additionalList)
         {
             var filepartname = Path.GetFileNameWithoutExtension(originalFile).ToLower();
             var extension = Path.GetExtension(originalFile).ToLower();
             int index = 0;
             var filename = filepartname + index.ToString() + extension;
 
-            while (this.ContainsVoxelFilename(filename))
+            while (this.ContainsVoxelFilename(filename, additionalList))
             {
                 index++;
                 filename = filepartname + index.ToString() + extension;
@@ -551,9 +560,9 @@
                 {
                     var asteroid = item as StructureVoxelModel;
 
-                    if (this.ContainsVoxelFilename(asteroid.Filename))
+                    if (this.ContainsVoxelFilename(asteroid.Filename, null))
                     {
-                        asteroid.Filename = CreateUniqueVoxelFilename(asteroid.Filename);
+                        asteroid.Filename = CreateUniqueVoxelFilename(asteroid.Filename, null);
                     }
 
                     var entity = (StructureVoxelModel)this.AddEntity(asteroid.VoxelMap);

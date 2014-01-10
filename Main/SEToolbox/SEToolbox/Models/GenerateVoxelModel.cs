@@ -126,5 +126,18 @@
         }
 
         #endregion
+
+        public GenerateVoxelModel Clone()
+        {
+            return new GenerateVoxelModel()
+            {
+                Index = this.Index,
+                VoxelFile = this.VoxelFile,
+                MainMaterial = this.MainMaterial,
+                SecondMaterial = this.SecondMaterial,
+                ThirdMaterial = this.ThirdMaterial,
+                ForthMaterial = this.ForthMaterial,
+            };
+        }
     }
 }

@@ -48,7 +48,11 @@
                     </TextBox.Text>
                 </TextBox>
             </StackPanel>
-            <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection}" CanUserDeleteRows="False" CanUserAddRows="False">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="8" HorizontalAlignment="Right">
+                <Button Content="_Add" Margin="8,0,0,0" Width="50" Command="{Binding AddRowCommand}"/>
+                <Button Content="_Delete" Margin="8,0,0,0" Width="50" Command="{Binding DeleteRowCommand}"/>
+            </StackPanel>
+            <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Index}" IsReadOnly="True" />
                     <DataGridComboBoxColumn Header="Asteroid" SelectedValueBinding="{Binding VoxelFile}" DisplayMemberPath="Name">

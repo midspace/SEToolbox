@@ -155,21 +155,26 @@
         
             // Set up a default start.
             this.VoxelCollection = new ObservableCollection<GenerateVoxelModel>();
-            for (var i = 0; i < 1; i++) // 20
+            for (var i = 0; i < 2; i++)
             {
-                this.VoxelCollection.Add(new GenerateVoxelModel()
-                {
-                    Index = i + 1,
-                    VoxelFile = i < 5 ? this.StockVoxelFileList[1] : this.StockVoxelFileList[0],
-                    MainMaterial = this.MaterialsCollection[0],
-                    SecondMaterial = this.MaterialsCollection[0],
-                    ThirdMaterial = this.MaterialsCollection[0],
-                    ForthMaterial = this.MaterialsCollection[0],
-                });
+                this.VoxelCollection.Add(this.NewDefaultVoxel(i + 1));
             }
 
             this.MinimumRange = 400;
             this.MaximumRange = 800;
+        }
+
+        public GenerateVoxelModel NewDefaultVoxel(int index)
+        {
+            return new GenerateVoxelModel()
+                {
+                    Index = index,
+                    VoxelFile = this.StockVoxelFileList[1],
+                    MainMaterial = this.MaterialsCollection[0],
+                    SecondMaterial = this.MaterialsCollection[0],
+                    ThirdMaterial = this.MaterialsCollection[0],
+                    ForthMaterial = this.MaterialsCollection[0],
+                };
         }
 
         #endregion
