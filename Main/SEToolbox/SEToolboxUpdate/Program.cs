@@ -14,12 +14,12 @@
             var appFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
             var appFilePath = Path.GetDirectoryName(appFile);
 
-            if (CheckIsRuningElevated(appFile))
+            if (CheckIsRuningElevated(appFile, string.Join(" ", args)))
             {
                 UpdateBaseFiles(appFilePath);
             }
 
-            RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), false);
+            RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/U", false);
         }
 
         private static bool UpdateBaseFiles(string appFilePath)
@@ -77,23 +77,26 @@
             return null;
         }
 
-        private static bool CheckIsRuningElevated(string appFile)
+        private static bool CheckIsRuningElevated(string appFile, string arguments)
         {
             var pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
             var hasAdministrativeRight = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
 
             if (!hasAdministrativeRight)
             {
-                return RunElevated(appFile, true);
+                return RunElevated(appFile, arguments, true);
             }
 
             return hasAdministrativeRight;
         }
 
-        private static bool RunElevated(string fileName, bool elevate)
+        private static bool RunElevated(string fileName, string arguments, bool elevate)
         {
-            var processInfo = new ProcessStartInfo();
-            processInfo.FileName = fileName;
+            var processInfo = new ProcessStartInfo
+            {
+                FileName = fileName,
+                Arguments = arguments
+            };
 
             if (elevate)
             {
