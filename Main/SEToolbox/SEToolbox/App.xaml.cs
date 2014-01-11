@@ -15,27 +15,35 @@
     {
         #region Fields
 
-        private CoreToolbox toolboxApplication;
+        private CoreToolbox _toolboxApplication;
 
         #endregion
 
         private void OnStartup(Object sender, StartupEventArgs e)
         {
-            // Configure service locator
+            var update = ToolboxUpdater.CheckForUpdates();
+            if (update != null)
+            {
+                var dialogResult = MessageBox.Show(string.Format("A new version of SEToolbox ({0}) is available.\r\nWould you like to download it now?", update.Version), "New version available", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (dialogResult == MessageBoxResult.Yes)
+                {
+                    Process.Start(update.Link);
+                    Application.Current.Shutdown();
+                }
+            }
+
+            // Configure service locator.
             ServiceLocator.RegisterSingleton<IDialogService, DialogService>();
             ServiceLocator.Register<IOpenFileDialog, OpenFileDialogViewModel>();
             ServiceLocator.Register<ISaveFileDialog, SaveFileDialogViewModel>();
 
-            this.toolboxApplication = new CoreToolbox();
-
-            string[] args = e.Args;
-
-            this.toolboxApplication.Startup(args);
+            this._toolboxApplication = new CoreToolbox();
+            this._toolboxApplication.Startup(e.Args);
         }
 
         private void OnExit(object sender, ExitEventArgs e)
         {
-            this.toolboxApplication.Exit();
+            this._toolboxApplication.Exit();
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

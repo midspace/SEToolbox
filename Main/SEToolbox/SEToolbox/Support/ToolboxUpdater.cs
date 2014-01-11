@@ -11,8 +11,6 @@
     using System.Security.Principal;
     using System.Windows.Forms;
     using System.Xml.Linq;
-    // Make sure none of the SpaceEngineers are referenced here, to prevent preloading of the assemblies.
-    // Otherwise the assemblies updater will not work.
 
     public static class ToolboxUpdater
     {
@@ -202,24 +200,43 @@
 
         #endregion
 
-        internal static bool RunElevated(string fileName)
+        #region CheckIsRuningElevated
+
+        internal static bool CheckIsRuningElevated()
+        {
+            var pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+            return pricipal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        #endregion
+
+        #region RunElevated
+
+        internal static bool RunElevated(string fileName, string arguments, bool elevate)
         {
             var processInfo = new ProcessStartInfo
             {
-                Verb = "runas",
-                FileName = fileName
+                FileName = fileName,
+                Arguments = arguments
             };
+
+            if (elevate)
+            {
+                processInfo.Verb = "runas";
+            }
 
             try
             {
                 Process.Start(processInfo);
                 return true;
             }
-            catch (Win32Exception ex)
+            catch (Win32Exception)
             {
                 //Do nothing. Probably the user canceled the UAC window
             }
             return false;
         }
+
+        #endregion
     }
 }
