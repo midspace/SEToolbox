@@ -1,4 +1,7 @@
-﻿namespace SEToolbox.Interop
+﻿using System.Collections;
+using System.Diagnostics;
+
+namespace SEToolbox.Interop
 {
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
@@ -13,6 +16,16 @@
 
     public class SpaceEngineersAPI
     {
+        #region ctor
+
+        static SpaceEngineersAPI()
+        {
+            // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
+            ReadCubeBlockDefinitions();
+        } 
+
+        #endregion
+
         #region Serializers
 
         public static T ReadSpaceEngineersFile<T, S>(string filename)
@@ -169,6 +182,7 @@
         static MyObjectBuilder_BlueprintDefinitions _blueprintDefinitions;
         static MyObjectBuilder_PhysicalItemDefinitions _physicalItemDefinitions;
         static MyObjectBuilder_VoxelMaterialDefinitions _voxelMaterialDefinitions;
+        static Dictionary<string, byte> _materialIndex;
 
         public static void ReadCubeBlockDefinitions()
         {
@@ -177,6 +191,8 @@
             _componentDefinitions = LoadContentFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>("Components.sbc");
             _cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>("CubeBlocks.sbc");
             _blueprintDefinitions = LoadContentFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>("Blueprints.sbc");
+
+            _materialIndex = new Dictionary<string, byte>();
         }
 
         private static T LoadContentFile<T, S>(string filename) where S : XmlSerializer1
@@ -291,6 +307,24 @@
         public static IList<MyObjectBuilder_VoxelMaterialDefinition> GetMaterialList()
         {
             return _voxelMaterialDefinitions.Materials;
+        }
+
+        public static byte GetMaterialIndex(string materialName)
+        {
+            if (_materialIndex.ContainsKey(materialName))
+                return _materialIndex[materialName];
+            else
+            {
+                var material = _voxelMaterialDefinitions.Materials.FirstOrDefault(m => m.Name == materialName);
+                var index = (byte) _voxelMaterialDefinitions.Materials.ToList().IndexOf(material);
+                _materialIndex.Add(materialName, index);
+                return index;
+            }
+        }
+
+        public static string GetMaterialName(byte materialIndex)
+        {
+            return _voxelMaterialDefinitions.Materials[materialIndex].Name;
         }
 
         #endregion
