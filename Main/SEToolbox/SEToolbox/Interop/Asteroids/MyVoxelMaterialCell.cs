@@ -26,23 +26,23 @@ namespace SEToolbox.Interop.Asteroids
 
         //  If whole cell contains only one material, it will be written in this member and 3D arrays won't be used.
         private bool _singleMaterialForWholeCell;
-        private string _singleMaterial;
+        private byte _singleMaterial;
         private byte _singleIndestructibleContent;
 
         //  Used only if individual materials aren't same - are mixed.
-        private string[] _materials;  // TODO: change back into a byte/int array, to preserve memory. Link to Material Dictionary.
+        private byte[] _materials;
         private byte[] _indestructibleContent;
-        private string _averageCellMaterial;
-        private static readonly Dictionary<string, int> CellMaterialCounts = new Dictionary<string, int>();
+        private byte _averageCellMaterial;
+        private static readonly Dictionary<byte, int> CellMaterialCounts = new Dictionary<byte, int>();
 
         #endregion
 
         #region ctor
 
-        public MyVoxelMaterialCell(string defaultMaterial, byte defaultIndestructibleContents)
+        public MyVoxelMaterialCell(byte defaultMaterialIndex, byte defaultIndestructibleContents)
         {
             //  By default cell contains only one single material
-            this.Reset(defaultMaterial, defaultIndestructibleContents);
+            this.Reset(defaultMaterialIndex, defaultIndestructibleContents);
         }
 
         #endregion
@@ -50,10 +50,10 @@ namespace SEToolbox.Interop.Asteroids
         #region methods
 
         //  Use when you want to change whole cell to one single material
-        public void Reset(string defaultMaterial, byte defaultIndestructibleContents)
+        public void Reset(byte defaultMaterialIndex, byte defaultIndestructibleContents)
         {
             this._singleMaterialForWholeCell = true;
-            this._singleMaterial = defaultMaterial;
+            this._singleMaterial = defaultMaterialIndex;
             this._singleIndestructibleContent = defaultIndestructibleContents;
             this._averageCellMaterial = this._singleMaterial;
             this._materials = null;
@@ -63,35 +63,47 @@ namespace SEToolbox.Interop.Asteroids
 
         //  Change material for specified voxel
         //  If this material is single material for whole cell, we do nothing. Otherwise we allocate 3D arrays and start using them.
-        public void SetMaterialAndIndestructibleContent(string material, byte indestructibleContent, ref Vector3I voxelCoordInCell)
+        public void SetMaterialAndIndestructibleContent(byte materialIndex, byte indestructibleContent, ref Vector3I voxelCoordInCell)
         {
-            this.CheckInitArrays(material);
+            this.CheckInitArrays(materialIndex);
 
             if (this._singleMaterialForWholeCell == false)
             {
                 var xyz = voxelCoordInCell.X * XStep + voxelCoordInCell.Y * YStep + voxelCoordInCell.Z * ZStep;
-                this._materials[xyz] = material;
+                this._materials[xyz] = materialIndex;
                 this._indestructibleContent[xyz] = indestructibleContent;
             }
         }
 
-        public void RepalceMaterial(string material)
+        /// <summary>
+        /// This will forcefully wipe the materials, and replace everything with the specified material
+        /// </summary>
+        /// <param name="materialIndex"></param>
+        public void ForceReplaceMaterial(byte materialIndex)
         {
-            this._singleMaterial = material;
-            this._averageCellMaterial = material;
+            this._singleMaterial = materialIndex;
+            this._averageCellMaterial = materialIndex;
+            this._singleMaterialForWholeCell = true;
+            this._indestructibleContent = null;
+            this._materials = null;
         }
 
-        public bool IsSingleMaterialForWholeCell()
+        public bool IsSingleMaterialForWholeCell
         {
-            return this._singleMaterialForWholeCell;
+            get { return this._singleMaterialForWholeCell; }
+        }
+
+        public byte SingleMaterial
+        {
+            get { return this._singleMaterial; }
         }
 
         //  Check if we new material differs from one main material and if yes, we need to start using 3D arrays
-        void CheckInitArrays(string material)
+        void CheckInitArrays(byte materialIndex)
         {
-            if (this._singleMaterialForWholeCell && (this._singleMaterial != material))
+            if (this._singleMaterialForWholeCell && (this._singleMaterial != materialIndex))
             {
-                this._materials = new string[VoxelsInCell];
+                this._materials = new byte[VoxelsInCell];
                 this._indestructibleContent = new byte[VoxelsInCell];
                 //  Fill with present cell values
                 for (var xyz = 0; xyz < VoxelsInCell; xyz++)
@@ -147,7 +159,7 @@ namespace SEToolbox.Interop.Asteroids
         }
 
         //  Return material for specified voxel. If whole cell contain one single material, this one is returned. Otherwise material from 3D array is returned.
-        public string GetMaterial(ref Vector3I voxelCoordInCell)
+        public byte GetMaterial(ref Vector3I voxelCoordInCell)
         {
             if (_singleMaterialForWholeCell == true)
             {

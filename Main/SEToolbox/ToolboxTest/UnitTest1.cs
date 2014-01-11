@@ -1,11 +1,13 @@
 ﻿namespace ToolboxTest
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using SEToolbox;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
+    using System.Collections.Generic;
     using System.Drawing.Imaging;
     using System.IO;
-    using SEToolbox.Interop;
+    using System.Linq;
 
     [TestClass]
     public class UnitTest1
@@ -13,7 +15,7 @@
         [TestMethod]
         public void TestImageOptimizer1()
         {
-            var filename = Path.GetFullPath(@"..\..\..\..\building 3D\images\7242630_orig.jpg");
+            var filename = Path.GetFullPath(@".\TestAssets\7242630_orig.jpg");
             var bmp = ToolboxExtensions.OptimizeImagePalette(filename);
             var outputFileTest = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "_optimized" + ".png");
             bmp.Save(outputFileTest, ImageFormat.Png);
@@ -22,17 +24,17 @@
         [TestMethod]
         public void TestImageOptimizer2()
         {
-            var filename = Path.GetFullPath(@"..\..\..\..\building 3D\images\7242630_scale432.png");
+            var filename = Path.GetFullPath(@".\TestAssets\7242630_scale432.png");
             var bmp = ToolboxExtensions.OptimizeImagePalette(filename);
             var outputFileTest = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "_optimized" + ".png");
             bmp.Save(outputFileTest, ImageFormat.Png);
         }
 
         [TestMethod]
-        public void TestXMLCompacter1()
+        public void TestXmlCompacter1()
         {
-            var filenameSource = Path.GetFullPath(@".\test.xml");
-            var filenameDestination = Path.GetFullPath(@".\test_out.xml");
+            var filenameSource = Path.GetFullPath(@".\TestAssets\test.xml");
+            var filenameDestination = Path.GetFullPath(@".\TestAssets\test_out.xml");
             ToolboxExtensions.CompactXmlFile(filenameSource, filenameDestination);
 
             var oldFileSize = new FileInfo(filenameSource).Length;
@@ -46,9 +48,230 @@
         [TestMethod]
         public void LocateSpaceEngineersApplication()
         {
-            var location = SpaceEngineersAPI.GetApplicationFilePath();
+            var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "SpaceEgineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
+        }
+
+
+        [TestMethod]
+        public void VoxelCompression()
+        {
+            var fileOriginal = @".\TestAssets\asteroid0moon4.vox";
+            var fileExtracted = @".\TestAssets\asteroid0moon4.vox.bin";
+            var fileNew = @".\TestAssets\asteroid0moon4_test.vox";
+            MyVoxelMap.Uncompress(fileOriginal, fileExtracted);
+            MyVoxelMap.Compress(fileExtracted, fileNew);
+
+            var lengthOriginal = new FileInfo(fileOriginal).Length;
+            var lengthExtracted = new FileInfo(fileExtracted).Length;
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(9428, lengthOriginal, "File size must match.");
+            Assert.AreEqual(310276, lengthExtracted, "File size must match.");
+            Assert.AreEqual(9428, lengthNew, "File size must match.");
+        }
+
+        [TestMethod]
+        public void VoxelMaterials()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+        }
+
+        [TestMethod]
+        public void VoxelLoadSave()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var fileOriginal = @".\TestAssets\asteroid0moon4.vox";
+            var fileNew = @".\TestAssets\asteroid0moon4_save.vox";
+
+            var voxelMap = new MyVoxelMap();
+
+            voxelMap.Load(fileOriginal, materials[0].Name);
+            voxelMap.Save(fileNew);
+
+            var lengthOriginal = new FileInfo(fileOriginal).Length;
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(9428, lengthOriginal, "File size must match.");
+            Assert.AreEqual(9428, lengthNew, "File size must match.");
+        }
+
+        [TestMethod]
+        public void VoxelDetails()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var fileOriginal = @".\TestAssets\DeformedSphereWithHoles_64x128x64.vox";
+
+            var voxelMap = new MyVoxelMap();
+
+            voxelMap.Load(fileOriginal, materials[0].Name);
+            var voxCells = voxelMap.SumVoxelCells();
+
+            Assert.AreEqual("DeformedSphereWithHoles_64x128x64", voxelMap.DisplayName, "Voxel Name must match.");
+
+            Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(128, voxelMap.Size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
+
+            Assert.AreEqual(48, voxelMap.ContentSize.X, "Voxel Content size must match.");
+            Assert.AreEqual(112, voxelMap.ContentSize.Y, "Voxel Content size must match.");
+            Assert.AreEqual(48, voxelMap.ContentSize.Z, "Voxel Content size must match.");
+
+            Assert.AreEqual(30909925, voxCells, "Voxel cells must match.");
+        }
+
+        [TestMethod]
+        public void VoxelMaterialIndexes()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            for (byte i = 0; i < materials.Count; i++)
+            {
+                Assert.AreEqual(i, SpaceEngineersAPI.GetMaterialIndex(materials[i].Name), "Material index should equal original.");
+            }
+
+            Assert.AreEqual(0xFF, SpaceEngineersAPI.GetMaterialIndex("blaggg"), "Material index should not exist.");
+        }
+
+        [TestMethod]
+        public void VoxelMaterialChanges()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var fileOriginal = @".\TestAssets\asteroid0moon4.vox";
+            var fileNew = @".\TestAssets\asteroid0moon4_gold.vox";
+
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(fileOriginal, materials[0].Name);
+            voxelMap.ForceBaseMaterial(goldMaterial.Name);
+            voxelMap.Save(fileNew);
+
+            var lengthOriginal = new FileInfo(fileOriginal).Length;
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(9428, lengthOriginal, "Original file size must match.");
+            Assert.AreEqual(7008, lengthNew, "New file size must match.");
+        }
+
+        [TestMethod]
+        public void VoxelMaterialAssets1()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var fileOriginal = @".\TestAssets\asteroid0moon4.vox";
+
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(fileOriginal, materials[0].Name);
+            var materialAssets = voxelMap.CalculateMaterialAssets();
+
+            Assert.AreEqual(44135, materialAssets.Count, "Asset count should be equal.");
+
+            var otherAssets = materialAssets.Where(c => c != 4).ToList();
+
+            Assert.AreEqual(0, otherAssets.Count, "Other Asset count should be equal.");
+
+            var assetNameCount = CountAssets(materialAssets);
+        }
+
+        [TestMethod]
+        public void VoxelMaterialAssets2()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var fileOriginal = @".\TestAssets\test_cube2x2x2.vox";
+
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(fileOriginal, materials[0].Name);
+            var materialAssets = voxelMap.CalculateMaterialAssets();
+
+            Assert.AreEqual(8, materialAssets.Count, "Asset count should be equal.");
+
+            var stoneAssets = materialAssets.Where(c => c == 1).ToList();
+
+            Assert.AreEqual(8, stoneAssets.Count, "Stone Asset count should be equal.");
+
+            var assetNameCount = CountAssets(materialAssets);
+        }
+
+        [TestMethod]
+        public void VoxelMaterialAssets3()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var fileOriginal = @".\TestAssets\test_cube_mixed_2x2x2.vox";
+
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(fileOriginal, materials[0].Name);
+            var materialAssets = voxelMap.CalculateMaterialAssets();
+
+            Assert.AreEqual(8, materialAssets.Count, "Asset count should be equal.");
+
+            var assetNameCount = CountAssets(materialAssets);
+
+            Assert.AreEqual(8, assetNameCount.Count, "Asset Mertials count should be equal.");
+        }
+
+        //[TestMethod]
+        //public void MemoryTest()
+        //{
+        //    var materials = SpaceEngineersAPI.GetMaterialList();
+        //    Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+        //    var fileOriginal = @"C:\temp\Sphere_Test_365radi.vox";
+        //    var voxelMap = new MyVoxelMap();
+        //    voxelMap.Load(fileOriginal, materials[0].Name);
+            
+        //    var materialAssets = voxelMap.CalculateMaterialAssets();
+        //    var assetNameCount = CountAssets(materialAssets);
+        //}
+
+
+        private static Dictionary<string, int> CountAssets(IList<byte> materialAssets)
+        {
+            var assetCount = new Dictionary<byte, int>();
+            for (var i = 0; i < materialAssets.Count; i++)
+            {
+                if (assetCount.ContainsKey(materialAssets[i]))
+                {
+                    assetCount[materialAssets[i]]++;
+                }
+                else
+                {
+                    assetCount.Add(materialAssets[i], 1);
+                }
+            }
+
+            var assetNameCount = new Dictionary<string, int>();
+            foreach (var kvp in assetCount)
+            {
+                assetNameCount.Add(SpaceEngineersAPI.GetMaterialName(kvp.Key), kvp.Value);
+            }
+
+            return assetNameCount;
         }
     }
 }
