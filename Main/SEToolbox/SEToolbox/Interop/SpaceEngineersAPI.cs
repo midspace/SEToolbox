@@ -22,7 +22,7 @@ namespace SEToolbox.Interop
         {
             // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
             ReadCubeBlockDefinitions();
-        } 
+        }
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace SEToolbox.Interop
 
         public static T Deserialize<T>(string xml)
         {
-            using(var textReader = new StringReader(xml))
+            using (var textReader = new StringReader(xml))
             {
                 return (T)(new XmlSerializerContract().GetSerializer(typeof(T)).Deserialize(textReader));
             }
@@ -316,7 +316,7 @@ namespace SEToolbox.Interop
             else
             {
                 var material = _voxelMaterialDefinitions.Materials.FirstOrDefault(m => m.Name == materialName);
-                var index = (byte) _voxelMaterialDefinitions.Materials.ToList().IndexOf(material);
+                var index = (byte)_voxelMaterialDefinitions.Materials.ToList().IndexOf(material);
                 _materialIndex.Add(materialName, index);
                 return index;
             }
@@ -368,6 +368,34 @@ namespace SEToolbox.Interop
 
 
             return bb;
+        }
+
+        #endregion
+
+        #region CountAssets
+
+        public static Dictionary<string, int> CountAssets(IList<byte> materialAssets)
+        {
+            var assetCount = new Dictionary<byte, int>();
+            for (var i = 0; i < materialAssets.Count; i++)
+            {
+                if (assetCount.ContainsKey(materialAssets[i]))
+                {
+                    assetCount[materialAssets[i]]++;
+                }
+                else
+                {
+                    assetCount.Add(materialAssets[i], 1);
+                }
+            }
+
+            var assetNameCount = new Dictionary<string, int>();
+            foreach (var kvp in assetCount)
+            {
+                assetNameCount.Add(SpaceEngineersAPI.GetMaterialName(kvp.Key), kvp.Value);
+            }
+
+            return assetNameCount;
         }
 
         #endregion

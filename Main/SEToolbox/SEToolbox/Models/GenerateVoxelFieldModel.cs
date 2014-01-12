@@ -3,6 +3,7 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
 
@@ -16,6 +17,7 @@
         private ObservableCollection<GenerateVoxelDetailModel> _stockVoxelFileList;
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
         private ObservableCollection<GenerateVoxelModel> _voxelCollection;
+        private List<int> _percentList;
 
         #endregion
 
@@ -26,6 +28,7 @@
             this._stockVoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>();
             this._materialsCollection = new ObservableCollection<MaterialSelectionModel>();
             this._voxelCollection = new ObservableCollection<GenerateVoxelModel>();
+            this._percentList = new List<int>();
         }
 
         #endregion
@@ -123,6 +126,14 @@
             }
         }
 
+        public List<int> PercentList
+        {
+            get
+            {
+                return this._percentList;
+            }
+        }
+
         #endregion
 
         #region methods
@@ -155,9 +166,14 @@
         
             // Set up a default start.
             this.VoxelCollection = new ObservableCollection<GenerateVoxelModel>();
-            for (var i = 0; i < 2; i++)
+            for (var i = 0; i < 1; i++)
             {
                 this.VoxelCollection.Add(this.NewDefaultVoxel(i + 1));
+            }
+
+            for (var i = 0; i < 100; i++)
+            {
+                this.PercentList.Add(i);
             }
 
             this.MinimumRange = 400;

@@ -8,8 +8,13 @@
         private GenerateVoxelDetailModel _voxelFile;
         private MaterialSelectionModel _mainMaterial;
         private MaterialSelectionModel _secondMaterial;
+        private int _secondPercent;
         private MaterialSelectionModel _thirdMaterial;
+        private int _thirdPercent;
         private MaterialSelectionModel _forthMaterial;
+        private int _forthPercent;
+        private MaterialSelectionModel _fifthMaterial;
+        private int _fifthPercent;
 
         #endregion
 
@@ -91,6 +96,23 @@
             }
         }
 
+        public int SecondPercent
+        {
+            get
+            {
+                return this._secondPercent;
+            }
+
+            set
+            {
+                if (value != this._secondPercent)
+                {
+                    this._secondPercent = value;
+                    this.RaisePropertyChanged(() => SecondPercent);
+                }
+            }
+        }
+
         public MaterialSelectionModel ThirdMaterial
         {
             get
@@ -104,6 +126,23 @@
                 {
                     this._thirdMaterial = value;
                     this.RaisePropertyChanged(() => ThirdMaterial);
+                }
+            }
+        }
+
+        public int ThirdPercent
+        {
+            get
+            {
+                return this._thirdPercent;
+            }
+
+            set
+            {
+                if (value != this._thirdPercent)
+                {
+                    this._thirdPercent = value;
+                    this.RaisePropertyChanged(() => ThirdPercent);
                 }
             }
         }
@@ -125,6 +164,57 @@
             }
         }
 
+        public int ForthPercent
+        {
+            get
+            {
+                return this._forthPercent;
+            }
+
+            set
+            {
+                if (value != this._forthPercent)
+                {
+                    this._forthPercent = value;
+                    this.RaisePropertyChanged(() => ForthPercent);
+                }
+            }
+        }
+
+        public MaterialSelectionModel FifthMaterial
+        {
+            get
+            {
+                return this._fifthMaterial;
+            }
+
+            set
+            {
+                if (value != this._fifthMaterial)
+                {
+                    this._fifthMaterial = value;
+                    this.RaisePropertyChanged(() => FifthMaterial);
+                }
+            }
+        }
+
+        public int FifthPercent
+        {
+            get
+            {
+                return this._fifthPercent;
+            }
+
+            set
+            {
+                if (value != this._fifthPercent)
+                {
+                    this._fifthPercent = value;
+                    this.RaisePropertyChanged(() => FifthPercent);
+                }
+            }
+        }
+
         #endregion
 
         public GenerateVoxelModel Clone()
@@ -135,8 +225,13 @@
                 VoxelFile = this.VoxelFile,
                 MainMaterial = this.MainMaterial,
                 SecondMaterial = this.SecondMaterial,
+                SecondPercent = this.SecondPercent,
                 ThirdMaterial = this.ThirdMaterial,
+                ThirdPercent = this.ThirdPercent,
                 ForthMaterial = this.ForthMaterial,
+                ForthPercent = this.ForthPercent,
+                FifthMaterial = this.FifthMaterial,
+                FifthPercent = this.FifthPercent
             };
         }
     }
