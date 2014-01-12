@@ -1,4 +1,6 @@
-﻿namespace SEToolbox.ViewModels
+﻿using System.Linq;
+
+namespace SEToolbox.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -196,6 +198,14 @@
             }
         }
 
+        public List<int> PercentList
+        {
+            get
+            {
+                return this._dataModel.PercentList;
+            }
+        }
+
         #endregion
 
         #region methods
@@ -242,7 +252,8 @@
 
         public bool CreateCanExecute()
         {
-            return true;
+            var valid = this.VoxelCollection.Count > 0;
+            return this.VoxelCollection.Aggregate(valid, (current, t) => current & (t.SecondPercent + t.ThirdPercent + t.ForthPercent + t.FifthPercent) <= 100);
         }
 
         public void CreateExecuted()
@@ -262,7 +273,7 @@
 
         #endregion
 
-        #region heleprs
+        #region methods
 
         public MyObjectBuilder_EntityBase[] BuildEntities(out string[] sourceVoxelFiles)
         {
@@ -275,7 +286,53 @@
                 {
                     var asteroid = new MyVoxelMap();
                     asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value);
-                    asteroid.ForceBaseMaterial(voxelDesign.MainMaterial.Value);
+                    //asteroid.ForceBaseMaterial(voxelDesign.MainMaterial.Value);
+
+                    var baseAssets = asteroid.CalculateMaterialAssets();
+
+                    var distribution = new List<double> { Double.NaN };
+                    var materialSelection = new List<byte> { SpaceEngineersAPI.GetMaterialIndex(voxelDesign.MainMaterial.Value) };
+
+                    if (voxelDesign.SecondPercent > 0)
+                    {
+                        distribution.Add((double)voxelDesign.SecondPercent / 100);
+                        materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.SecondMaterial.Value));
+                    }
+                    if (voxelDesign.ThirdPercent > 0)
+                    {
+                        distribution.Add((double)voxelDesign.ThirdPercent / 100);
+                        materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.ThirdMaterial.Value));
+                    }
+                    if (voxelDesign.ForthPercent > 0)
+                    {
+                        distribution.Add((double)voxelDesign.ForthPercent / 100);
+                        materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.ForthMaterial.Value));
+                    }
+                    if (voxelDesign.FifthPercent > 0)
+                    {
+                        distribution.Add((double)voxelDesign.FifthPercent / 100);
+                        materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.FifthMaterial.Value));
+                    }
+
+                    var newDistributiuon = new List<byte>();
+                    int count;
+                    for (var i = 1; i < distribution.Count(); i++)
+                    {
+                        count = (int)Math.Floor(distribution[i] * baseAssets.Count); // Round down.
+                        for (var j = 0; j < count; j++)
+                        {
+                            newDistributiuon.Add(materialSelection[i]);
+                        }
+                    }
+                    count = baseAssets.Count - newDistributiuon.Count;
+                    for (var j = 0; j < count; j++)
+                    {
+                        newDistributiuon.Add(materialSelection[0]);
+                    }
+
+                    newDistributiuon.Shuffle();
+                    asteroid.SetMaterialAssets(newDistributiuon);
+
                     var tempfilename = Path.GetTempFileName();
                     asteroid.Save(tempfilename);
 
@@ -316,6 +373,10 @@
             sourceVoxelFiles = sourceFiles.ToArray();
             return entities.ToArray();
         }
+
+        #endregion
+
+        #region helpers
 
         public void RenumberCollection()
         {

@@ -127,7 +127,7 @@ namespace SEToolbox.Interop.Asteroids
         public static void GetPreview(string filename, out Vector3I size, out Vector3I contentSize, out long voxCells)
         {
             var map = new MyVoxelMap();
-            map.Load(filename, null, false);
+            map.Load(filename, SpaceEngineersAPI.GetMaterialName(0), false);
             size = map.Size;
             contentSize = map.ContentSize;
             voxCells = map.SumVoxelCells();
@@ -731,6 +731,50 @@ namespace SEToolbox.Interop.Asteroids
             }
 
             return materialAssetList;
+        }
+
+        public void SetMaterialAssets(IList<byte> materialsList)
+        {
+            var materialsIndex = 0;
+            Vector3I cellCoord;
+            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            {
+                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                {
+                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    {
+                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var matCell = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+
+                        // A mixed cell, with mixed materials.
+                        Vector3I voxelCoordInCell;
+                        for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                        {
+                            for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                            {
+                                for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                {
+                                    if (voxelCell == null) // Cell is FULL.
+                                    {
+                                        matCell.SetMaterialAndIndestructibleContent(materialsList[materialsIndex++], 0xff, ref voxelCoordInCell);
+                                    }
+                                    else
+                                    {
+                                        // Cell is Mixed.
+                                        var content = voxelCell.GetVoxelContent(ref voxelCoordInCell);
+
+                                        if (content != MyVoxelConstants.VOXEL_CONTENT_EMPTY) // Only working with cells that aren't empty.
+                                        {
+                                            matCell.SetMaterialAndIndestructibleContent(
+                                                materialsList[materialsIndex++], 0xff, ref voxelCoordInCell);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

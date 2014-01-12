@@ -1,4 +1,6 @@
-﻿namespace ToolboxTest
+﻿using System;
+
+namespace ToolboxTest
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;
@@ -166,7 +168,7 @@
         }
 
         [TestMethod]
-        public void VoxelMaterialAssets1()
+        public void VoxelMaterialAssets_MixedGeneratedAsset()
         {
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
@@ -186,11 +188,11 @@
 
             Assert.AreEqual(0, otherAssets.Count, "Other Asset count should be equal.");
 
-            var assetNameCount = CountAssets(materialAssets);
+            var assetNameCount = SpaceEngineersAPI.CountAssets(materialAssets);
         }
 
         [TestMethod]
-        public void VoxelMaterialAssets2()
+        public void VoxelMaterialAssets_FixedSize()
         {
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
@@ -210,11 +212,11 @@
 
             Assert.AreEqual(8, stoneAssets.Count, "Stone Asset count should be equal.");
 
-            var assetNameCount = CountAssets(materialAssets);
+            var assetNameCount = SpaceEngineersAPI.CountAssets(materialAssets);
         }
 
         [TestMethod]
-        public void VoxelMaterialAssets3()
+        public void VoxelMaterialAssets_FixedSize_MixedContent()
         {
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
@@ -230,48 +232,74 @@
 
             Assert.AreEqual(8, materialAssets.Count, "Asset count should be equal.");
 
-            var assetNameCount = CountAssets(materialAssets);
+            var assetNameCount = SpaceEngineersAPI.CountAssets(materialAssets);
 
             Assert.AreEqual(8, assetNameCount.Count, "Asset Mertials count should be equal.");
         }
 
+        [TestMethod]
+        public void VoxelMaterialAssetsRandom()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            //var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            //Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var fileOriginal = @".\TestAssets\Arabian_Border_7.vox";
+            var fileNewVoxel = @".\TestAssets\Arabian_Border_7_mixed.vox";
+
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(fileOriginal, materials[0].Name);
+            var materialAssets = voxelMap.CalculateMaterialAssets();
+
+            Assert.AreEqual(35465, materialAssets.Count, "Asset count should be equal.");
+
+            var distribution = new double[] {Double.NaN, .5, .25};
+            var materialSelection = new byte[] {6, 15, 17};  //Helium, Gold, Uranium
+
+
+            var newDistributiuon = new List<byte>();
+            int count;
+            for (var i = 1; i < distribution.Count(); i++)
+            {
+                count = (int)Math.Floor(distribution[i] * materialAssets.Count); // Round down.
+                for (var j = 0; j < count; j++)
+                {
+                    newDistributiuon.Add(materialSelection[i]);
+                }
+            }
+            count = materialAssets.Count - newDistributiuon.Count;
+            for (var j = 0; j < count; j++)
+            {
+                newDistributiuon.Add(materialSelection[0]);
+            }
+
+            newDistributiuon.Shuffle();
+
+            var assetNameCount = SpaceEngineersAPI.CountAssets(newDistributiuon);
+
+            Assert.AreEqual(3, assetNameCount.Count, "Asset Mertials count should be equal.");
+            Assert.AreEqual(8867, assetNameCount[materials[6].Name], "Asset Mertials count should be equal.");
+            Assert.AreEqual(17732, assetNameCount[materials[15].Name], "Asset Mertials count should be equal.");
+            Assert.AreEqual(8866, assetNameCount[materials[17].Name], "Asset Mertials count should be equal.");
+
+            voxelMap.SetMaterialAssets(newDistributiuon);
+            voxelMap.Save(fileNewVoxel);
+        }
+
         //[TestMethod]
-        //public void MemoryTest()
+        //public void MemoryTest_NoMaterials()
         //{
         //    var materials = SpaceEngineersAPI.GetMaterialList();
         //    Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-        //    var fileOriginal = @"C:\temp\Sphere_Test_365radi.vox";
+        //    var fileOriginal = @".\TestAssets\sphere_mix_large_365radi.vox";
         //    var voxelMap = new MyVoxelMap();
         //    voxelMap.Load(fileOriginal, materials[0].Name);
-            
+
         //    var materialAssets = voxelMap.CalculateMaterialAssets();
-        //    var assetNameCount = CountAssets(materialAssets);
+        //    var assetNameCount = SpaceEngineersAPI.CountAssets(materialAssets);
         //}
-
-
-        private static Dictionary<string, int> CountAssets(IList<byte> materialAssets)
-        {
-            var assetCount = new Dictionary<byte, int>();
-            for (var i = 0; i < materialAssets.Count; i++)
-            {
-                if (assetCount.ContainsKey(materialAssets[i]))
-                {
-                    assetCount[materialAssets[i]]++;
-                }
-                else
-                {
-                    assetCount.Add(materialAssets[i], 1);
-                }
-            }
-
-            var assetNameCount = new Dictionary<string, int>();
-            foreach (var kvp in assetCount)
-            {
-                assetNameCount.Add(SpaceEngineersAPI.GetMaterialName(kvp.Key), kvp.Value);
-            }
-
-            return assetNameCount;
-        }
     }
 }
