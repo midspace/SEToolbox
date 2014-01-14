@@ -1,5 +1,12 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Windows.Forms;
+    using System.Windows.Input;
+    using System.Windows.Media.Media3D;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -7,17 +14,6 @@
     using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.Contracts;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Windows.Forms;
-    using System.Windows.Input;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Media.Media3D;
 
     public class Import3dModelViewModel : BaseViewModel
     {
@@ -65,11 +61,11 @@
 
         #region Properties
 
-        public ICommand BrowseImageCommand
+        public ICommand Browse3dModelCommand
         {
             get
             {
-                return new DelegateCommand(new Action(BrowseImageExecuted), new Func<bool>(BrowseImageCanExecute));
+                return new DelegateCommand(new Action(Browse3dModelExecuted), new Func<bool>(Browse3dModelCanExecute));
             }
         }
 
@@ -140,6 +136,7 @@
             set
             {
                 this.dataModel.Filename = value;
+                this.FilenameChanged();
             }
         }
 
@@ -337,12 +334,12 @@
 
         #region methods
 
-        public bool BrowseImageCanExecute()
+        public bool Browse3dModelCanExecute()
         {
             return true;
         }
 
-        public void BrowseImageExecuted()
+        public void Browse3dModelExecuted()
         {
             this.IsValidModel = false;
 
@@ -355,9 +352,13 @@
 
             if (result == DialogResult.OK)
             {
-                ProcessFilename(openFileDialog.FileName);
                 this.Filename = openFileDialog.FileName;
             }
+        }
+
+        private void FilenameChanged()
+        {
+            this.ProcessFilename(this.Filename);
         }
 
         public bool CreateCanExecute()
@@ -389,25 +390,20 @@
             this.IsValidModel = false;
             this.IsBusy = true;
 
+            this.OriginalModelSize = new BindableSize3DModel(0, 0, 0);
+            this.NewModelSize = new BindableSize3DModel(0, 0, 0);
+            this.Position = new BindablePoint3DModel(0, 0, 0);
+
             if (File.Exists(filename))
             {
-                this.OriginalModelSize = new BindableSize3DModel(0, 0, 0);
-                this.NewModelSize = new BindableSize3DModel(0, 0, 0);
-
                 // validate file is a real model.
                 // read model properties.
                 var size = Preview3DModel(filename);
 
-                if (size != null)
+                if (size != null && size.Height != 0 && size.Width != 0 && size.Depth != 0)
                 {
                     this.OriginalModelSize = size;
-
-                    //this.Position = new BindablePoint3DModel(VRageMath.Vector3.Zero);
-                    //this.Forward = new BindableVector3DModel(VRageMath.Vector3.Forward);
-                    //this.Up = new BindableVector3DModel(VRageMath.Vector3.Up);
-
                     this.BuildDistance = 10;
-
                     this.IsValidModel = true;
                     this.ProcessModelScale();
                 }

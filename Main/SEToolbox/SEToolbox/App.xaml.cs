@@ -73,6 +73,8 @@
                     Application.Current.Shutdown();
                 }
             }
+
+            TempfileUtil.Dispose();
         }
     }
 }

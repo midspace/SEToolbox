@@ -1,5 +1,4 @@
 ﻿TODO: list of tasks
-- Check if SpaceEngineers Game is installed first.
 - Double the Voxel shell thickness and double count of 3D objects, and use this to generate the slopes/corners/inversecorners instead of trying to interpret them.
 - Refresh/Save needs to check if save directory no longer exists.
 - tree view.
@@ -8,7 +7,10 @@
 - Auto Updater, detect current and available version, prompt for update.
 - Wix installer project,
   * Desktop Icon.
-- Add collection for temporary files, to allow cleanup during shutdown.
+- View subscribed workshop Items (to allow exporting/copying from).
+  * C:\Users\%Username%\AppData\Roaming\SpaceEngineers\WorkshopWorlds\*.sbw  These are .zip files.
+  * It's not until the user presses "Copy & Load" that it's acually saved there.
+  * The workshopId may or may not be present, depending on if it is the first version, or a subsequent upload by the author.
 
 
 - Improve Import Image:
@@ -29,6 +31,7 @@
 
 - Replace Asteroid/Voxel.
 - Move Asteroid/Voxel.
+- Rotate Asteroid/Voxel (not supported by sandbox currently, but procedual voxel rotation could be accomplished.)
 
 - Show ship status. Size. Item count. Weight. Thrust.
 - Switch power on/off.
@@ -39,6 +42,7 @@
 
 
 Completed:
+- Check if SpaceEngineers Game is installed first.
 - Refresh button, to reload selected Sandbox content.
 - Change Astronaut color.
 - Import Image.
@@ -48,6 +52,7 @@ Completed:
 - Repair ship.
 - Import Asteroid/Voxel.
 - Link to open Workshop ID.
+- Add collection for temporary files, to allow cleanup during shutdown.
 
 
 Dropped:
@@ -80,6 +85,9 @@ ilmerge /target:winexe /out:SEToolbox.exe SEToolbox.exe SEToolbox.ImageLibrary.d
 
 
 Requirements:
+*   7Zip - used in Build script on Setup project, to generate a .Zip of all release files without a .MSI.
+    http://www.7-zip.org/
+
 *	Windows Installer XML (WiX) toolset 3.7
 	http://wixtoolset.org/releases/
 

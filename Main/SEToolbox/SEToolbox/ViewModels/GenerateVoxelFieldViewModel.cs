@@ -333,7 +333,7 @@ namespace SEToolbox.ViewModels
                     newDistributiuon.Shuffle();
                     asteroid.SetMaterialAssets(newDistributiuon);
 
-                    var tempfilename = Path.GetTempFileName();
+                    var tempfilename = TempfileUtil.NewFilename();
                     asteroid.Save(tempfilename);
 
                     // automatically number all files, and check for duplicate filenames.

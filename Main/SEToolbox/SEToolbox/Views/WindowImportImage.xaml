@@ -42,7 +42,7 @@
                 
                 <Label Content="Image:" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <TextBox Width="180" Text="{Binding Filename}" VerticalAlignment="Center" Name="uxInitialElement"/>
+                    <TextBox Width="180" Text="{Binding Filename, Mode=TwoWay}" VerticalAlignment="Center" Name="uxInitialElement"/>
                     <Button ToolTip="Browse for Image" Command="{Binding BrowseImageCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>

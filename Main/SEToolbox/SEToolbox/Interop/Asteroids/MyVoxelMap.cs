@@ -17,6 +17,7 @@ namespace SEToolbox.Interop.Asteroids
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
+    using SEToolbox.Support;
     using VRageMath;
 
     public class MyVoxelMap
@@ -144,7 +145,7 @@ namespace SEToolbox.Interop.Asteroids
 
         public void Load(string filename, string defaultMaterial, bool loadMaterial)
         {
-            var tempfilename = Path.GetTempFileName();
+            var tempfilename = TempfileUtil.NewFilename();
             Uncompress(filename, tempfilename);
 
             using (var ms = new FileStream(tempfilename, FileMode.Open))
@@ -273,7 +274,7 @@ namespace SEToolbox.Interop.Asteroids
         public void Save(string filename)
         {
             Debug.Write("Saving binary.");
-            var tempfilename = Path.GetTempFileName();
+            var tempfilename = TempfileUtil.NewFilename();
             using (var ms = new FileStream(tempfilename, FileMode.Create))
             {
                 this.Save(new BinaryWriter(ms), true);
@@ -768,6 +769,55 @@ namespace SEToolbox.Interop.Asteroids
                                             matCell.SetMaterialAndIndestructibleContent(
                                                 materialsList[materialsIndex++], 0xff, ref voxelCoordInCell);
                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region UpdateContentBounds
+
+        public void UpdateContentBounds()
+        {
+            this._boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
+            Vector3I cellCoord;
+
+            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            {
+                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                {
+                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    {
+                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+
+                        if (voxelCell == null)
+                        {
+                            this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3(cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((cellCoord.X + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                        }
+                        //  Cell's are FULL by default, therefore we don't need to change them
+                        else if (voxelCell.CellType == MyVoxelCellType.MIXED)
+                        {
+
+                            Vector3I voxelCoordInCell;
+                            for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                            {
+                                for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                {
+                                    for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                    {
+                                        var content = voxelCell.GetVoxelContent(ref voxelCoordInCell);
+                                        if (content > 0)
+                                        {
+                                            this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
+                                            this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
+                                        }
+                                    
                                     }
                                 }
                             }

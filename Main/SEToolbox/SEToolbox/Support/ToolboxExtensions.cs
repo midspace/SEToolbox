@@ -1,7 +1,5 @@
 ﻿namespace SEToolbox.Support
 {
-    using SEToolbox.ImageLibrary;
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
@@ -10,11 +8,16 @@
     using System.Reflection;
     using System.Windows.Media.Imaging;
     using System.Xml;
+    using SEToolbox.ImageLibrary;
 
     public static class ToolboxExtensions
     {
         #region GetOptimizerPalatte
 
+        /// <summary>
+        /// This palatte is used for reducing the colors in an image down to specific colors, by using key colors for reduction.
+        /// </summary>
+        /// <returns></returns>
         internal static Dictionary<Color, Color> GetOptimizerPalatte()
         {
             Dictionary<Color, Color> palette = new Dictionary<Color, Color>()
@@ -76,11 +79,18 @@
                     {Color.FromArgb(255, 128, 96, 32), Color.Yellow},
                     {Color.FromArgb(255, 128, 96, 16), Color.Yellow},
                     {Color.FromArgb(255, 92, 64, 16), Color.Yellow},
+
+                    // Make 'Transparent' last, to give preference to 'White' above, otherwise white can be mistakenly made transparent.
+                    {Color.Transparent, Color.Transparent},
                 };
 
             return palette;
         }
 
+        /// <summary>
+        /// Maps the colors used in optimzation to color names used in Space Engineers Armor Cube names.
+        /// </summary>
+        /// <returns></returns>
         internal static Dictionary<Color, string> GetPalatteNames()
         {
             Dictionary<Color, string> palette = new Dictionary<Color, string>()
@@ -106,25 +116,6 @@
             imageFilename = Path.GetFullPath(imageFilename);
             Bitmap bmp = new Bitmap(imageFilename);
             return OptimizeImagePalette(bmp);
-            //Bitmap palatteImage;
-
-            //using (Bitmap image = new Bitmap(bmp))
-            //{
-            //    var palette = GetOptimizerPalatte();
-
-            //    //OctreeQuantizer octreeQuantizer = new OctreeQuantizer(255, 8);
-
-            //    //using (Bitmap octreeImage = octreeQuantizer.Quantize(image))
-            //    //{
-            //    ArrayList myPalette = new ArrayList(palette.Keys.ToArray());
-            //    PaletteQuantizer paletteQuantizer = new PaletteQuantizer(myPalette);
-
-            //    palatteImage = paletteQuantizer.Quantize(image);
-            //}
-
-            //bmp.Dispose();
-
-            //return palatteImage;
         }
 
         public static Bitmap OptimizeImagePalette(Bitmap bmp)
@@ -293,7 +284,7 @@
             if (fixScale > 1024)
                 fixScale = 1024;
 
-            string tempfilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".vox");
+            string tempfilename = TempfileUtil.NewFilename(".vox");
 
             Process p = new Process();
             string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -327,6 +318,13 @@
 
         #endregion
 
+        #region Shuffle
+
+        /// <summary>
+        ///  Randomly re-orders a list.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
         public static void Shuffle<T>(this IList<T> list)
         {
             var n = list.Count;
@@ -339,5 +337,7 @@
                 list[n] = value;
             }
         }
+
+        #endregion
     }
 }
