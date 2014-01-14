@@ -388,7 +388,7 @@
                     var asteroid = new MyVoxelMap();
                     asteroid.Load(stockfile, this.StockMaterial.Value);
                     asteroid.ForceBaseMaterial(this.StockMaterial.Value);
-                    this.SourceFile = Path.GetTempFileName();
+                    this.SourceFile = TempfileUtil.NewFilename();
                     asteroid.Save(this.SourceFile);
                     originalFile = this.StockVoxel + ".vox";
                     asteroidCenter = asteroid.ContentCenter;
@@ -397,14 +397,14 @@
             }
             else if (this.IsCustomVoxel)
             {
-                this.SourceFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".vox");
+                this.SourceFile = TempfileUtil.NewFilename(".vox");
                 originalFile = this.CustomVoxel + ".vox";
 
                 // Copy Resource to Temp file.
                 File.WriteAllBytes(this.SourceFile, (byte[])Properties.Resources.ResourceManager.GetObject(this.CustomVoxel));
 
                 var asteroid = new MyVoxelMap();
-                asteroid.Load(this.SourceFile, null, false);
+                asteroid.Load(this.SourceFile, SpaceEngineersAPI.GetMaterialName(0), false);
                 asteroidCenter = asteroid.ContentCenter;
                 asteroidSize = asteroid.ContentSize;
             }

@@ -1,12 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.CommonLib.ObjectBuilders;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
-    using SEToolbox.Properties;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -17,6 +10,13 @@
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
+    using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
+    using SEToolbox.Properties;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
 
     public class ImportImageViewModel : BaseViewModel
     {
@@ -119,6 +119,7 @@
             set
             {
                 this.dataModel.Filename = value;
+                this.FilenameChanged();
             }
         }
 
@@ -290,52 +291,13 @@
 
             if (result == DialogResult.OK)
             {
-                this.IsBusy = true;
-                string filename = openFileDialog.FileName;
-
-                if (File.Exists(filename))
-                {
-                    // TODO: validate file is a real image.
-
-                    // TODO: read image properties.
-
-                    if (this.sourceImage != null)
-                    {
-                        this.sourceImage.Dispose();
-                    }
-
-                    this.sourceImage = Image.FromFile(filename);
-                    this.OriginalImageSize = new Size(this.sourceImage.Width, this.sourceImage.Height);
-
-                    this.NewImageSize = new BindableSizeModel(this.sourceImage.Width, this.sourceImage.Height);
-                    this.NewImageSize.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-                    {
-                        this.ProcessImage();
-                    };
-
-
-                    //this.Position = new BindablePoint3DModel(VRageMath.Vector3.Zero);
-                    //this.Forward = new BindableVector3DModel(VRageMath.Vector3.Forward);
-                    //this.Up = new BindableVector3DModel(VRageMath.Vector3.Up);
-
-
-                    // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
-                    var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
-                    vector.Normalize();
-                    vector = Vector3D.Multiply(vector, 10);
-                    this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
-                    this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Negate();
-                    this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
-
-                    this.ClassType = ImportClassType.SmallShip;
-                    this.ArmorType = ImportArmorType.Light;
-
-                    this.Filename = openFileDialog.FileName;
-                    this.IsValidImage = true;
-                }
-
-                this.IsBusy = false;
+                this.Filename = openFileDialog.FileName;
             }
+        }
+
+        private void FilenameChanged()
+        {
+            this.ProcessFilename(this.Filename);
         }
 
         public bool SetToOriginalSizeCanExecute()
@@ -372,6 +334,60 @@
         #endregion
 
         #region methods
+
+        private void ProcessFilename(string filename)
+        {
+            this.IsBusy = true;
+
+            if (File.Exists(filename))
+            {
+                // TODO: validate file is a real image.
+
+                // TODO: read image properties.
+
+                if (this.sourceImage != null)
+                {
+                    this.sourceImage.Dispose();
+                }
+
+                this.sourceImage = Image.FromFile(filename);
+                this.OriginalImageSize = new Size(this.sourceImage.Width, this.sourceImage.Height);
+
+                this.NewImageSize = new BindableSizeModel(this.sourceImage.Width, this.sourceImage.Height);
+                this.NewImageSize.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+                {
+                    this.ProcessImage();
+                };
+
+
+                //this.Position = new BindablePoint3DModel(VRageMath.Vector3.Zero);
+                //this.Forward = new BindableVector3DModel(VRageMath.Vector3.Forward);
+                //this.Up = new BindableVector3DModel(VRageMath.Vector3.Up);
+
+
+                // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
+                var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
+                vector.Normalize();
+                vector = Vector3D.Multiply(vector, 10);
+                this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
+                this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Negate();
+                this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
+
+                this.ClassType = ImportClassType.SmallShip;
+                this.ArmorType = ImportArmorType.Light;
+
+                this.IsValidImage = true;
+            }
+            else
+            {
+                this.IsValidImage = false;
+                this.Position = new BindablePoint3DModel(0, 0, 0);
+                this.OriginalImageSize = new Size(0, 0);
+                this.NewImageSize = new BindableSizeModel(0, 0);
+            }
+
+            this.IsBusy = false;
+        }
 
         private void ProcessImage()
         {
@@ -499,19 +515,22 @@
                     {
                         int z = 0;
                         var color = palatteImage.GetPixel(x, y);
+                        var armorColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
 
-                        var cname = palatteNames.First(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B).Value;
-                        
-                        // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
-                        SubtypeId armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock" + cname);
+                        // This will specifically ignore the "Transparent" Color, as there is no matching color specified in the palatteNames.
+                        if (armorColor.Value != null)
+                        {
+                            // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
+                            SubtypeId armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock" + armorColor.Value);
 
-                        entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
-                        newCube.SubtypeName = armor.ToString();
-                        newCube.EntityId = 0;
-                        newCube.PersistentFlags = MyPersistentEntityFlags2.None;
-                        SpaceEngineersAPI.SetCubeOrientation(newCube, CubeType.Cube);
-                        newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
-                        newCube.Max = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
+                            entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
+                            newCube.SubtypeName = armor.ToString();
+                            newCube.EntityId = 0;
+                            newCube.PersistentFlags = MyPersistentEntityFlags2.None;
+                            SpaceEngineersAPI.SetCubeOrientation(newCube, CubeType.Cube);
+                            newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
+                            newCube.Max = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
+                        }
                     }
                 }
             }

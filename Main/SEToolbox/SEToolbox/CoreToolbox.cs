@@ -30,7 +30,7 @@
                 var ignoreUpdates = args.Any(a => a.ToUpper() == "/X");
 
                 // Dot not load any of the SpaceEngineers assemblies, or dependant classes before this point.
-                if (!ignoreUpdates && ToolboxUpdater.IsBaseAssembliesChanged())
+                if (!ignoreUpdates && ToolboxUpdater.IsBaseAssembliesChanged() && !Debugger.IsAttached)
                 {
                     // Already running as administrator. Run the updater and shut down.
                     if (ToolboxUpdater.CheckIsRuningElevated())
@@ -76,7 +76,7 @@
 
         public void Exit()
         {
-
+            TempfileUtil.Dispose();
         }
 
         #endregion

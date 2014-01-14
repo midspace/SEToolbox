@@ -1,17 +1,15 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Collections.Generic;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Models;
-    using SEToolbox.Services;
-    using System.Collections.Generic;
 
     public abstract class StructureBaseViewModel<TModel> : DataBaseViewModel, /*IDragable,*/ IStructureViewBase where TModel : IStructureBase
     {
         #region fields
 
         private bool isSelected;
-        //private TModel dataModel;
 
         #endregion
 
@@ -20,29 +18,11 @@
         public StructureBaseViewModel(BaseViewModel parentViewModel, TModel dataModel)
             : base(parentViewModel, dataModel)
         {
-            //this.dataModel = dataModel;
         }
 
         #endregion
 
         #region Properties
-
-        //protected TModel DataModel
-        //{
-        //    get
-        //    {
-        //        return (TModel)base.dataModel;
-        //    }
-
-        //    set
-        //    {
-        //        //if (value != this.dataModel)
-        //        {
-        //            this.dataModel = value;
-        //            this.RaisePropertyChanged(() => DataModel);
-        //        }
-        //    }
-        //}
 
         public bool IsSelected
         {
@@ -137,49 +117,5 @@
         }
 
         #endregion
-
-        #region methods
-
-        //public virtual void UpdateFromEntityBase()
-        //{
-        //    this.ClassType = ClassType.Unknown;
-        //}
-
-        //public static IStructureBase Create(MyObjectBuilder_EntityBase entityBase)
-        //{
-        //    if (entityBase is MyObjectBuilder_VoxelMap)
-        //    {
-        //        return new StructureVoxelModel(entityBase);
-        //    }
-        //    else if (entityBase is MyObjectBuilder_Character)
-        //    {
-        //        return new StructureCharacterModel(entityBase);
-        //    }
-        //    else if (entityBase is MyObjectBuilder_CubeGrid)
-        //    {
-        //        return new StructureCubeGridModel(entityBase);
-        //    }
-        //    else
-        //    {
-        //        throw new NotImplementedException(string.Format("A new object has not been catered for in the StructureBase, of type '{0}'.", entityBase.GetType()));
-        //    }
-        //}
-
-        #endregion
-
-        //#region IDragable Interface
-
-        ////[XmlIgnore]
-        //System.Type IDragable.DataType
-        //{
-        //    get { return typeof(BaseViewModel); }
-        //}
-
-        //void IDragable.Remove(object i)
-        //{
-            
-        //} 
-
-        //#endregion
     }
 }
