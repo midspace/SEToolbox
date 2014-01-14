@@ -120,6 +120,7 @@
             set
             {
                 this._dataModel.SourceFile = value;
+                this.SourceFileChanged();
             }
         }
 
@@ -350,17 +351,31 @@
 
             if (result == DialogResult.OK)
             {
-                this.IsBusy = true;
-
-                if (File.Exists(openFileDialog.FileName))
-                {
-                    this.SourceFile = openFileDialog.FileName;
-                    this.IsValidVoxelFile = true;
-                    this.IsFileVoxel = true;
-                }
-
-                this.IsBusy = false;
+                this.SourceFile = openFileDialog.FileName;
             }
+        }
+
+        private void SourceFileChanged()
+        {
+            this.ProcessSourceFile(this.SourceFile);
+        }
+
+        private void ProcessSourceFile(string filename)
+        {
+            this.IsBusy = true;
+
+            if (File.Exists(filename))
+            {
+                this.IsValidVoxelFile = true;
+                this.IsFileVoxel = true;
+            }
+            else
+            {
+                this.IsValidVoxelFile = false;
+                this.IsFileVoxel = false;
+            }
+
+            this.IsBusy = false;
         }
 
         public MyObjectBuilder_EntityBase BuildEntity()

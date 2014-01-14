@@ -151,10 +151,6 @@
             var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
 
             this.StockVoxelFileList.Clear();
-            this.StockVoxelFileList.Add(new GenerateVoxelDetailModel()
-            {
-                Name = "None"
-            });
             foreach (var file in files)
             {
                 this.StockVoxelFileList.Add(new GenerateVoxelDetailModel()
@@ -185,7 +181,7 @@
             return new GenerateVoxelModel()
                 {
                     Index = index,
-                    VoxelFile = this.StockVoxelFileList[1],
+                    VoxelFile = this.StockVoxelFileList[0],
                     MainMaterial = this.MaterialsCollection[0],
                     SecondMaterial = this.MaterialsCollection[0],
                     ThirdMaterial = this.MaterialsCollection[0],

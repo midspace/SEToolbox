@@ -53,12 +53,17 @@ namespace SEToolbox.Interop.Asteroids
 
                 // smear bits
                 value = value + (value >> QuantizationBits);
+
+#pragma warning disable 0162
+
                 if (QuantizationBits < 4)
                 {
                     value = value + (value >> QuantizationBits * 2);
                     if (QuantizationBits < 2)
                         value = value + (value >> QuantizationBits * 4);
                 }
+
+#pragma warning restore 0162
 
                 SmearBits[i] = (byte)value;
             }
