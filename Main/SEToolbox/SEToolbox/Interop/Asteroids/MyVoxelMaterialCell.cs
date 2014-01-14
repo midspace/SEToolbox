@@ -154,8 +154,6 @@ namespace SEToolbox.Interop.Asteroids
                     CellMaterialCounts[key] = 0; // Erase for next operation
                 }
             }
-
-            Debug.Assert(this._averageCellMaterial != null);
         }
 
         //  Return material for specified voxel. If whole cell contain one single material, this one is returned. Otherwise material from 3D array is returned.

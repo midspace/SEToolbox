@@ -27,37 +27,45 @@ namespace SEToolbox.Interop
 <#
         
 		// Open the file @"C:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content\Data\CubeBlocks.sbc";
-		var filename = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\Data\CubeBlocks.sbc");
+		var appPath = ToolboxUpdater.GetApplicationFilePath();
+		if (appPath == null)
+		{
+			Write("#warning Could not generate enums, because Space Engineers is not installed on the Developer machine. \r\n\r\n");
+		}
+		else
+		{
+			var filename = Path.Combine(appPath, @"Content\Data\CubeBlocks.sbc");
 
-        XmlDocument xDoc = new XmlDocument();
-        xDoc.Load(filename);
+			XmlDocument xDoc = new XmlDocument();
+			xDoc.Load(filename);
 
-		var nav = xDoc.CreateNavigator();
+			var nav = xDoc.CreateNavigator();
 
-        var definitions = nav.Select("MyObjectBuilder_CubeBlockDefinitions/Definitions/Definition");
-        while (definitions.MoveNext())
-        {
-            var name = definitions.Current.SelectSingleNode("Id/SubtypeId").Value;
+			var definitions = nav.Select("MyObjectBuilder_CubeBlockDefinitions/Definitions/Definition");
+			while (definitions.MoveNext())
+			{
+				var name = definitions.Current.SelectSingleNode("Id/SubtypeId").Value;
 
-            if (definitions.Current.SelectSingleNode("Variants") != null)
-            {
-				Write(string.Format("        {0},\r\n", name));
-
-                var variants = definitions.Current.Select("Variants/Variant");
-                while (variants.MoveNext())
-                {
-                    var variant = variants.Current.SelectSingleNode("@Color").Value;
-					Write(string.Format("        {0}{1},\r\n", name, variant));
-                }
-            }
-            else
-            {
-				if (!string.IsNullOrEmpty(name))
+				if (definitions.Current.SelectSingleNode("Variants") != null)
 				{
 					Write(string.Format("        {0},\r\n", name));
+
+					var variants = definitions.Current.Select("Variants/Variant");
+					while (variants.MoveNext())
+					{
+						var variant = variants.Current.SelectSingleNode("@Color").Value;
+						Write(string.Format("        {0}{1},\r\n", name, variant));
+					}
 				}
-            }
-        }
+				else
+				{
+					if (!string.IsNullOrEmpty(name))
+					{
+						Write(string.Format("        {0},\r\n", name));
+					}
+				}
+			}
+		}
 
 #>
     };

@@ -341,28 +341,29 @@ namespace SEToolbox.ViewModels
 
                     var radius = RandomUtil.GetDouble(this.MinimumRange, this.MaximumRange);
                     var longitude = RandomUtil.GetDouble(0, 2 * Math.PI);
-                    var latitude = RandomUtil.GetDouble(-Math.PI / 2, Math.PI / 2 + double.Epsilon);
+                    var latitude = RandomUtil.GetDouble(-Math.PI / 2, (Math.PI / 2) + double.Epsilon);
 
                     // Test data. Place asteroids items into a circle.
                     //radius = 500;
                     //longitude = Math.PI * 2 * ((double)voxelDesign.Index / this.VoxelCollection.Count);
                     //latitude = 0;
 
-                    double x = radius * Math.Cos(latitude) * Math.Cos(longitude);
-                    double z = radius * Math.Cos(latitude) * Math.Sin(longitude);
-                    double y = radius * Math.Sin(latitude);
+                    var x = radius * Math.Cos(latitude) * Math.Cos(longitude);
+                    var z = radius * Math.Cos(latitude) * Math.Sin(longitude);
+                    var y = radius * Math.Sin(latitude);
 
-                    Vector3 position = this._dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
-                    var entity = new MyObjectBuilder_VoxelMap(position, filename);
-                    entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
-                    entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
-                    entity.Filename = filename;
-
-                    entity.PositionAndOrientation = new MyPositionAndOrientation()
+                    var position = this._dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
+                    var entity = new MyObjectBuilder_VoxelMap(position, filename)
                     {
-                        Position = position,
-                        Forward = Vector3.Forward,  // Asteroids currently don't have any orientation.
-                        Up = Vector3.Up
+                        EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                        PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                        Filename = filename,
+                        PositionAndOrientation = new MyPositionAndOrientation()
+                        {
+                            Position = position,
+                            Forward = Vector3.Forward, // Asteroids currently don't have any orientation.
+                            Up = Vector3.Up
+                        }
                     };
 
                     entities.Add(entity);
