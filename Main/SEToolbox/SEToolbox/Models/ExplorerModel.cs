@@ -620,6 +620,15 @@
             }
         }
 
+        public void OptimizeModel(StructureCubeGridModel viewModel)
+        {
+            // Optimise ordering of CubeBlocks within structure, so that loops can load quickly based on {X++, Y++, Z++}.
+            var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenBy(c => c.Min.Y).ThenBy(c => c.Min.X).ToList();
+            //var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenByDescending(c => c.Min.Y).ThenBy(c => c.Min.X).ToList(); // {X++, Y--, Z++}.
+            viewModel.CubeGrid.CubeBlocks = neworder;
+            this.IsModified = true;
+        }
+
         #endregion
     }
 }

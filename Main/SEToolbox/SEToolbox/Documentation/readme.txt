@@ -1,4 +1,4 @@
-﻿TODO: list of tasks
+﻿TODO: list of tasks:
 - Double the Voxel shell thickness and double count of 3D objects, and use this to generate the slopes/corners/inversecorners instead of trying to interpret them.
 - Refresh/Save needs to check if save directory no longer exists.
 - tree view.
@@ -11,7 +11,6 @@
   * C:\Users\%Username%\AppData\Roaming\SpaceEngineers\WorkshopWorlds\*.sbw  These are .zip files.
   * It's not until the user presses "Copy & Load" that it's acually saved there.
   * The workshopId may or may not be present, depending on if it is the first version, or a subsequent upload by the author.
-
 
 - Improve Import Image:
   * Preview.
@@ -40,6 +39,7 @@
 - Move Ship to position.
 - Replace Armor light/heavy/color.
 
+========--------~~~~~~~~
 
 Completed:
 - Check if SpaceEngineers Game is installed first.
@@ -54,6 +54,7 @@ Completed:
 - Link to open Workshop ID.
 - Add collection for temporary files, to allow cleanup during shutdown.
 
+========--------~~~~~~~~
 
 Dropped:
 - Obfuscate/dotfuscator. Don't think it's worth it, considering I've gone open source. :D
@@ -61,28 +62,7 @@ Dropped:
   * testing text
   * テキストをテスト
 
-
-
-References:
-Why are the blocks 0.5 and 2.5 meter blocks?
-Sectors have the same size as in Miner Wars: 50x50x50km. It would take a couple of minutes to get from one border to the other.
-http://spaceengineerswiki.com/index.php?title=FAQs
-
-
-My experiments turning 3D models into in-game ships
-http://forums.keenswh.com/post/my-experiments-turning-3d-models-into-ingame-ships-6588883?&trail=15
-
-
-Python v3.1.5 documentation » The Python Standard Library »
-http://docs.python.org/3.1/library/functions.html
-
-
-ILMerge
-http://www.microsoft.com/en-us/download/details.aspx?id=17630
-http://research.microsoft.com/en-us/people/mbarnett/ILMerge.aspx
-https://www.nuget.org/packages/ilmerge
-ilmerge /target:winexe /out:SEToolbox.exe SEToolbox.exe SEToolbox.ImageLibrary.dll
-
+========--------~~~~~~~~
 
 Requirements:
 *   7Zip - used in Build script on Setup project, to generate a .Zip of all release files without a .MSI.
@@ -103,3 +83,42 @@ Requirements:
 
 	-	Issues:
 		http://blogs.msdn.com/b/chuckw/archive/2011/12/09/known-issue-directx-sdk-june-2010-setup-and-the-s1023-error.aspx
+
+========--------~~~~~~~~
+
+References:
+
+Offical file extensions in use.
+".sba" Sand Box Audio. App content, MyObjectBuilder_XA2CueDefinition.
+".sbc" Sand Box Content. Various app content, Blueprints, CubeBlocks, etc...
+".sbc" Sand Box 'Checkpoint'. Game content, MyObjectBuilder_Checkpoint.
+".sbl" Sand Box 'LastSession'. Game content, MyObjectBuilder_LastSession.
+".sbs" Sand Box 'Sector'. Game content, MyObjectBuilder_Sector.
+".sbw" Sand Box World. Zip compressed game world, used by workshop downloads.
+
+Unoffical file extensions.
+".sbo" Sand Box Object. I made this one up for import and export of ships (MyObjectBuilder_CubeGrid).  .sbc seemed like it would conflict with the other offical extensions.
+  Though looking at content assets, prefab fighters use the ".sbc" extension which are MyObjectBuilder_CubeGrid, so I will change this now.
+  // TODO: remove this file extention from use in a couple of weeks.
+
+
+Why are the blocks 0.5 and 2.5 meter blocks?
+Sectors have the same size as in Miner Wars: 50x50x50km. It would take a couple of minutes to get from one border to the other.
+http://spaceengineerswiki.com/index.php?title=FAQs
+
+
+My experiments turning 3D models into in-game ships
+http://forums.keenswh.com/post/my-experiments-turning-3d-models-into-ingame-ships-6588883?&trail=15
+
+
+Python v3.1.5 documentation » The Python Standard Library »
+http://docs.python.org/3.1/library/functions.html
+
+
+ILMerge
+http://www.microsoft.com/en-us/download/details.aspx?id=17630
+http://research.microsoft.com/en-us/people/mbarnett/ILMerge.aspx
+https://www.nuget.org/packages/ilmerge
+ilmerge /target:winexe /out:SEToolbox.exe SEToolbox.exe SEToolbox.ImageLibrary.dll
+
+
