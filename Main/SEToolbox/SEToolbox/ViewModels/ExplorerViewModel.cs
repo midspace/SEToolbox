@@ -200,11 +200,19 @@
             }
         }
 
-        public ICommand TestCommand
+        public ICommand Test1Command
         {
             get
             {
-                return new DelegateCommand(new Action(TestExecuted), new Func<bool>(TestCanExecute));
+                return new DelegateCommand(new Action(Test1Executed), new Func<bool>(Test1CanExecute));
+            }
+        }
+
+        public ICommand Test2Command
+        {
+            get
+            {
+                return new DelegateCommand(new Action(Test2Executed), new Func<bool>(Test2CanExecute));
             }
         }
 
@@ -650,15 +658,13 @@
             }
         }
 
-        public bool TestCanExecute()
+        public bool Test1CanExecute()
         {
             return this._dataModel.ActiveWorld != null;
         }
 
-        public void TestExecuted()
+        public void Test1Executed()
         {
-            // TODO: test code goes here.
-
             var model = new Import3dModelModel();
             model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
             var loadVm = new Import3dModelViewModel(this, model);
@@ -670,6 +676,16 @@
             var structure = this._dataModel.AddEntity(newEntity);
             this._selectNewStructure = false;
             this.IsBusy = false;
+        }
+
+        public bool Test2CanExecute()
+        {
+            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+        }
+
+        public void Test2Executed()
+        {
+            this.OptimizeModel(this.Selections.ToArray());
         }
 
         public bool OpenUpdatesLinkCanExecute()
@@ -810,6 +826,17 @@
             }
         }
 
+        public void OptimizeModel(params IStructureViewBase[] viewModels)
+        {
+            foreach (var viewModel in viewModels)
+            {
+                if (viewModel is StructureCubeGridViewModel)
+                {
+                    this._dataModel.OptimizeModel(((StructureCubeGridViewModel)viewModel).DataModel as StructureCubeGridModel);
+                }
+            }
+        }
+
         /// <inheritdoc />
         public string CreateUniqueVoxelFilename(string originalFile)
         {
@@ -824,7 +851,7 @@
         public void ImportSandboxObjectFromFile()
         {
             IOpenFileDialog openFileDialog = this._openFileDialogFactory();
-            openFileDialog.Filter = Resources.ExportSandboxObjectFilter;
+            openFileDialog.Filter = Resources.ImportSandboxObjectFilter;
             openFileDialog.Title = Resources.ImportSandboxObjectTitle;
             openFileDialog.Multiselect = true;
 
@@ -844,11 +871,6 @@
 
         public void ExportSandboxObjectToFile(params IStructureViewBase[] viewModels)
         {
-            //".sbs" Sand Box Content. (app content)
-            //".sbc" Sand Box Checkpoint. (game content)
-            //".sbs" Sand Box Sector. (game content)
-            //".sbo" Sand Box Object. ??
-
             foreach (var viewModel in viewModels)
             {
                 if (viewModel is StructureCharacterViewModel)

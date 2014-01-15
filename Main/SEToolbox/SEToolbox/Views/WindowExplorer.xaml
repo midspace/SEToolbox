@@ -81,7 +81,7 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Sandbox Objects" Command="{Binding ImportSandboxObjectCommand}">
+                    <MenuItem Header="Sandbox Content files" Command="{Binding ImportSandboxObjectCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SECubes16}" />
                         </MenuItem.Icon>
@@ -140,8 +140,8 @@
             <ToolBarPanel DockPanel.Dock="Top" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ToolBar>
                     <Button Content="Clear" Command="{Binding ClearCommand}"/>
-                    <Button Content="Test" Command="{Binding TestCommand}"/>
-                    <!--<Button Content="Generate Asteroid Field" Command="{Binding GenerateVoxelFieldCommand}"/>-->
+                    <Button Content="Test1" ToolTip="Create test structure for smoothing." Command="{Binding Test1Command}"/>
+                    <Button Content="Test2" ToolTip="Optimise structure" Command="{Binding Test2Command}"/>
                 </ToolBar>
             </ToolBarPanel>
             <StatusBar DockPanel.Dock="Bottom">

@@ -305,7 +305,7 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
     <value>..\Resources\workshop16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ExportSandboxObjectFilter" xml:space="preserve">
-    <value>Sandbox Object files (*.sbo)|*.sbo|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
+    <value>Sandbox Content files (*.sbc)|*.sbc|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
   </data>
   <data name="ExportSandboxObjectTitle" xml:space="preserve">
     <value>Specify filename to export '{0}' to</value>
@@ -327,5 +327,8 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   </data>
   <data name="Toolbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Toolbox_logo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportSandboxObjectFilter" xml:space="preserve">
+    <value>Sandbox Content files (*.sbc)|*.sbc;*.sbo|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
   </data>
 </root>
