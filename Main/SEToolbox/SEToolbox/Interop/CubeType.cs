@@ -3,6 +3,7 @@
     public enum CubeType
     {
         None,
+        Exterior,
         Interior,
         Cube,
         SlopeCenterFrontTop,

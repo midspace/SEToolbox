@@ -49,6 +49,9 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HelixToolkit.Wpf">
+      <HintPath>..\References\HelixToolkit.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Sandbox.CommonLib">
       <HintPath>..\References\Sandbox.CommonLib.dll</HintPath>
     </Reference>
@@ -174,6 +177,7 @@
     <Compile Include="Interop\SpaceEngineersConsts.cs" />
     <Compile Include="Support\AppConstants.cs" />
     <Compile Include="Support\ExceptionState.cs" />
+    <Compile Include="Support\MeshHelper.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\RandomUtil.cs" />
     <Compile Include="Support\RssFeedItem.cs" />
@@ -365,7 +369,6 @@
     <None Include="Resources\photo_scenery.png" />
     <None Include="Resources\refresh.png" />
     <None Include="Resources\folder.png" />
-    <Resource Include="Documentation\readme.txt" />
     <Content Include="poly2vox.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -10,6 +10,8 @@ namespace ToolboxTest
     using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
+    using SEToolbox.ViewModels;
+    using HelixToolkit.Wpf;
 
     [TestClass]
     public class UnitTest1
@@ -381,6 +383,126 @@ namespace ToolboxTest
             Assert.AreEqual(32, voxelMap.ContentCenter.X, "Voxel Center must match.");
             Assert.AreEqual(32, voxelMap.ContentCenter.Y, "Voxel Center must match.");
             Assert.AreEqual(32, voxelMap.ContentCenter.Z, "Voxel Center must match.");
+        }
+
+        [TestMethod]
+        public void VoxelGenerateSphereLarge()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var fileNew = @".\TestAssets\test_sphere_solid_499_gold.vox";
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, fileNew, 250, goldMaterial.Name, false, 0);
+
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(672207, lengthNew, "New file size must match.");
+
+            Assert.AreEqual(512, voxelMap.Size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(512, voxelMap.Size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(512, voxelMap.Size.Z, "Voxel Bounding size must match.");
+
+            Assert.AreEqual(499, voxelMap.ContentSize.X, "Voxel Content size must match.");
+            Assert.AreEqual(499, voxelMap.ContentSize.Y, "Voxel Content size must match.");
+            Assert.AreEqual(499, voxelMap.ContentSize.Z, "Voxel Content size must match.");
+
+            // Centered in the middle of the 512x512x512 cell.
+            Assert.AreEqual(256, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(256, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(256, voxelMap.ContentCenter.Z, "Voxel Center must match.");
+        }
+
+        [TestMethod]
+        public void GenerateModelComplexVolumentric()
+        {
+            var modelFile = @".\TestAssets\algos.obj";
+
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 1);
+
+            Assert.AreEqual(1290600, cubic.Length, "Array length size must match.");
+
+            Assert.AreEqual(108, cubic.GetLength(0), "Array size must match.");
+            Assert.AreEqual(50, cubic.GetLength(1), "Array size must match.");
+            Assert.AreEqual(239, cubic.GetLength(2), "Array size must match.");
+        }
+
+        [TestMethod]
+        public void GenerateModelComplexVolumentricHalfScale()
+        {
+            var modelFile = @".\TestAssets\algos.obj";
+
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0.5);
+
+            Assert.AreEqual(168480, cubic.Length, "Array length size must match.");
+
+            Assert.AreEqual(54, cubic.GetLength(0), "Array size must match.");
+            Assert.AreEqual(26, cubic.GetLength(1), "Array size must match.");
+            Assert.AreEqual(120, cubic.GetLength(2), "Array size must match.");
+        }
+
+        [TestMethod]
+        public void GenerateModelSimpleVolumentric()
+        {
+            var modelFile = @".\TestAssets\t25.obj";
+
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0);
+
+            Assert.AreEqual(72, cubic.Length, "Array length size must match.");
+
+            Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
+            Assert.AreEqual(6, cubic.GetLength(1), "Array size must match.");
+            Assert.AreEqual(3, cubic.GetLength(2), "Array size must match.");
+        }
+
+        [TestMethod]
+        public void LoadBrokenModel()
+        {
+            // TODO: finish testing the model.
+            //var modelFile = @".\TestAssets\LibertyStatue.obj";
+
+            //var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0);
+
+            //Assert.AreEqual(72, cubic.Length, "Array length size must match.");
+
+            //Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
+            //Assert.AreEqual(6, cubic.GetLength(1), "Array size must match.");
+            //Assert.AreEqual(3, cubic.GetLength(2), "Array size must match.");
+        }
+
+        [TestMethod]
+        public void GenerateModelSimpleVolumentricFill()
+        {
+            var modelFile = @".\TestAssets\t25.obj";
+
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 2);
+
+            Import3dModelViewModel.CalculateInverseCorners(cubic);
+            Import3dModelViewModel.CalculateSlopes(cubic);
+            Import3dModelViewModel.CalculateCorners(cubic);
+
+            Assert.AreEqual(480, cubic.Length, "Array length size must match.");
+
+            Assert.AreEqual(8, cubic.GetLength(0), "Array size must match.");
+            Assert.AreEqual(12, cubic.GetLength(1), "Array size must match.");
+            Assert.AreEqual(5, cubic.GetLength(2), "Array size must match.");
+        }
+
+        [TestMethod]
+        public void GenerateModelSimpleVolumentricAltFill()
+        {
+            var modelFile = @".\TestAssets\t25.obj";
+
+            var cubic = Import3dModelViewModel.ReadModelVolmeticAlt(modelFile, 1);
+
+            //Assert.AreEqual(480, cubic.Length, "Array length size must match.");
+
+            //Assert.AreEqual(8, cubic.GetLength(0), "Array size must match.");
+            //Assert.AreEqual(12, cubic.GetLength(1), "Array size must match.");
+            //Assert.AreEqual(5, cubic.GetLength(2), "Array size must match.");
         }
     }
 }
