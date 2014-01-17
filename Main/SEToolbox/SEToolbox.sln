@@ -5,6 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolbox", "SEToolbox\SETo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{06B6FC47-A535-42AC-8ACA-78DB66F28445}"
 	ProjectSection(SolutionItems) = preProject
+		References\HelixToolkit.Wpf.dll = References\HelixToolkit.Wpf.dll
 		References\poly2vox.exe = References\poly2vox.exe
 		References\Sandbox.CommonLib.dll = References\Sandbox.CommonLib.dll
 		References\Sandbox.CommonLib.XmlSerializers.dll = References\Sandbox.CommonLib.XmlSerializers.dll
@@ -23,6 +24,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolbox.ImageShaders", "SEToolbox.Image.Shaders\SEToolbox.ImageShaders.csproj", "{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolboxUpdate", "SEToolboxUpdate\SEToolboxUpdate.csproj", "{0914D968-2B68-4FB4-8554-7238C7A78969}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{F968BC09-554D-4ED1-8619-78EBBC8A30F2}"
+	ProjectSection(SolutionItems) = preProject
+		plansandtasks.txt = plansandtasks.txt
+		readme.txt = readme.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution

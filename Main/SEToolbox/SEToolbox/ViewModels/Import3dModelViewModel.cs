@@ -1,12 +1,15 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
+    using HelixToolkit.Wpf;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -14,6 +17,7 @@
     using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
+    using VRageMath;
 
     public class Import3dModelViewModel : BaseViewModel
     {
@@ -604,12 +608,11 @@
 
             #endregion
 
-
             if (smoothObject)
             {
-                this.CalculateInverseCorners(ccubic);
-                this.CalculateSlopes(ccubic);
-                this.CalculateCorners(ccubic);
+                CalculateInverseCorners(ccubic);
+                CalculateSlopes(ccubic);
+                CalculateCorners(ccubic);
             }
 
             this.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
@@ -695,20 +698,21 @@
                 fixScale = Math.Max(Math.Max(this.NewModelSize.Height, this.NewModelSize.Width), this.NewModelSize.Depth);
             }
 
-            // TODO: fillobject.
-            // TODO: smoothing.
+            // TODO: fillobject UI.
+            // TODO: smoothing UI.
 
             var fillObject = false;
             var smoothObject = true;
 
 
             ccubic = ReadTemporaryVolmetic(this.Filename, fixScale, fillObject);
+            //ccubic = ReadObjectVolmetic(this.Filename, 3, fillObject);
 
             if (smoothObject)
             {
-                this.CalculateInverseCorners(ccubic);
-                this.CalculateSlopes(ccubic);
-                this.CalculateCorners(ccubic);
+                CalculateInverseCorners(ccubic);
+                CalculateSlopes(ccubic);
+                CalculateCorners(ccubic);
             }
 
             this.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
@@ -789,24 +793,334 @@
             return ccubic;
         }
 
+        private static readonly object Locker = new object();
+
+
+
+        /// <summary>
+        /// Volumes are calculated across axis where they are whole numbers (rounded to 0 decimal places).
+        /// </summary>
+        /// <param name="modelFile"></param>
+        /// <param name="fixScale"></param>
+        /// <returns></returns>
+        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double fixScale)
+        {
+            var model = MeshHelper.Load(modelFile, IgnoreErrors: true);
+
+            if (fixScale > 0 && fixScale != 1)
+            {
+                model.TransformScale(fixScale);
+            }
+
+            int xMin = (int)Math.Floor(model.Bounds.X);
+            int yMin = (int)Math.Floor(model.Bounds.Y);
+            int zMin = (int)Math.Floor(model.Bounds.Z);
+
+            int xMax = (int)Math.Ceiling(model.Bounds.X + model.Bounds.SizeX);
+            int yMax = (int)Math.Ceiling(model.Bounds.Y + model.Bounds.SizeY);
+            int zMax = (int)Math.Ceiling(model.Bounds.Z + model.Bounds.SizeZ);
+
+            int xCount = xMax - xMin;
+            int yCount = yMax - yMin;
+            int zCount = zMax - zMin;
+
+            CubeType[, ,] ccubic = new CubeType[xCount, yCount, zCount];
+
+            #region basic ray trace of every individual triangle.
+
+            foreach (GeometryModel3D gm in model.Children)
+            {
+                var g = gm.Geometry as MeshGeometry3D;
+
+                for (int t = 0; t < g.TriangleIndices.Count; t += 3)
+                {
+                    var p1 = g.Positions[g.TriangleIndices[t]];
+                    var p2 = g.Positions[g.TriangleIndices[t + 1]];
+                    var p3 = g.Positions[g.TriangleIndices[t + 2]];
+
+                    var minBound = MeshHelper.Min(p1, p2, p3).Floor();
+                    var maxBound = MeshHelper.Max(p1, p2, p3).Ceiling();
+
+                    for (var y = minBound.Y; y < maxBound.Y; y++)
+                    {
+                        for (var z = minBound.Z; z < maxBound.Z; z++)
+                        {
+                            var r1 = new Point3D(xMin, y, z);
+                            var r2 = new Point3D(xMax, y, z);
+
+                            Point3D intersect;
+                            if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+                            {
+                                ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                            }
+                            else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                            {
+                                ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                            }
+                        }
+                    }
+
+                    for (var x = minBound.X; x < maxBound.X; x++)
+                    {
+                        for (var z = minBound.Z; z < maxBound.Z; z++)
+                        {
+                            var r1 = new Point3D(x, yMin, z);
+                            var r2 = new Point3D(x, yMax, z);
+
+                            Point3D intersect;
+                            if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+                            {
+                                ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                            }
+                            else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                            {
+                                ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                            }
+                        }
+                    }
+
+                    for (var x = minBound.X; x < maxBound.X; x++)
+                    {
+                        for (var y = minBound.Y; y < maxBound.Y; y++)
+                        {
+                            var r1 = new Point3D(x, y, zMin);
+                            var r2 = new Point3D(x, y, zMax);
+
+                            Point3D intersect;
+                            if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+                            {
+                                ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                            }
+                            else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                            {
+                                ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                            }
+                        }
+                    }
+                }
+            } 
+
+            #endregion
+
+            CrawlExterior(ccubic);
+
+            return ccubic;
+        }
+
+        // WIP.
+        public static CubeType[, ,] ReadModelVolmeticAlt(string modelFile, double voxelUnitSize)
+        {
+            var model = MeshHelper.Load(modelFile, IgnoreErrors: true);
+
+            var min = model.Bounds;
+            var max = new Point3D(model.Bounds.Location.X + model.Bounds.Size.X, model.Bounds.Location.X + model.Bounds.Size.Z, model.Bounds.Location.Z + model.Bounds.Size.Z);
+
+            //int xCount = xMax - xMin;
+            //int yCount = yMax - yMin;
+            //int zCount = zMax - zMin;
+
+            //CubeType[, ,] ccubic = new CubeType[xCount, yCount, zCount];
+            CubeType[, ,] ccubic = new CubeType[0, 0, 0];
+            var blockDict = new Dictionary<Point3D, byte[]>();
+
+            #region basic ray trace of every individual triangle.
+
+            foreach (GeometryModel3D gm in model.Children)
+            {
+                var g = gm.Geometry as MeshGeometry3D;
+
+                for (int t = 0; t < g.TriangleIndices.Count; t += 3)
+                {
+                    var p1 = g.Positions[g.TriangleIndices[t]];
+                    var p2 = g.Positions[g.TriangleIndices[t + 1]];
+                    var p3 = g.Positions[g.TriangleIndices[t + 2]];
+
+                    var minBound = MeshHelper.Min(p1, p2, p3).Floor();
+                    var maxBound = MeshHelper.Max(p1, p2, p3).Ceiling();
+
+                    //for (var y = minBound.Y; y < maxBound.Y; y++)
+                    //{
+                    //    for (var z = minBound.Z; z < maxBound.Z; z++)
+                    //    {
+                    //        var r1 = new Point3D(xMin, y, z);
+                    //        var r2 = new Point3D(xMax, y, z);
+
+                    //        Point3D intersect;
+                    //        if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+                    //        {
+                    //            //var blockPoint = intersect.Round();
+                    //            //var cornerHit = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+                    //            //if (!blockDict.ContainsKey(blockPoint))
+                    //            //    blockDict[blockPoint] = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+                    //            //if (Math.Round(intersect.X) - intersect.X < 0 && Math.Round(intersect.Y) - intersect.Y < 0 && Math.Round(intersect.Z) - intersect.Z < 0)
+                    //            //    cornerHit = new byte[] { 1, 0, 0, 0, 0, 0, 0, 0 };
+                    //            //else if (Math.Round(intersect.X) - intersect.X < 0 && Math.Round(intersect.Y) - intersect.Y > 0 && Math.Round(intersect.Z) - intersect.Z < 0)
+                    //            //    cornerHit = new byte[] { 0, 1, 0, 0, 0, 0, 0, 0 };
+                    //            //else if (Math.Round(intersect.X) - intersect.X < 0 && Math.Round(intersect.Y) - intersect.Y < 0 && Math.Round(intersect.Z) - intersect.Z > 0)
+                    //            //    cornerHit = new byte[] { 0, 0, 1, 0, 0, 0, 0, 0 };
+                    //            //else if (Math.Round(intersect.X) - intersect.X < 0 && Math.Round(intersect.Y) - intersect.Y > 0 && Math.Round(intersect.Z) - intersect.Z > 0)
+                    //            //    cornerHit = new byte[] { 0, 0, 0, 1, 0, 0, 0, 0 };
+                    //            //else if (Math.Round(intersect.X) - intersect.X > 0 && Math.Round(intersect.Y) - intersect.Y < 0 && Math.Round(intersect.Z) - intersect.Z < 0)
+                    //            //    cornerHit = new byte[] { 0, 0, 0, 0, 1, 0, 0, 0 };
+                    //            //else if (Math.Round(intersect.X) - intersect.X > 0 && Math.Round(intersect.Y) - intersect.Y > 0 && Math.Round(intersect.Z) - intersect.Z < 0)
+                    //            //    cornerHit = new byte[] { 0, 0, 0, 0, 0, 1, 0, 0 };
+                    //            //else if (Math.Round(intersect.X) - intersect.X > 0 && Math.Round(intersect.Y) - intersect.Y < 0 && Math.Round(intersect.Z) - intersect.Z > 0)
+                    //            //    cornerHit = new byte[] { 0, 0, 0, 0, 0, 0, 1, 0 };
+                    //            //else if (Math.Round(intersect.X) - intersect.X > 0 && Math.Round(intersect.Y) - intersect.Y > 0 && Math.Round(intersect.Z) - intersect.Z > 0)
+                    //            //    cornerHit = new byte[] { 0, 0, 0, 0, 0, 0, 0, 1 }; 
+
+                    //            //blockDict[blockPoint]=[int(bool(a+b)) for a,b in zip(blockDict[blockPoint],cornerHit)]
+
+
+                    //            ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                    //        }
+                    //        else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                    //        {
+                    //            ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                    //        }
+                    //    }
+                    //}
+
+                    //for (var x = minBound.X; x < maxBound.X; x++)
+                    //{
+                    //    for (var z = minBound.Z; z < maxBound.Z; z++)
+                    //    {
+                    //        var r1 = new Point3D(x, yMin, z);
+                    //        var r2 = new Point3D(x, yMax, z);
+
+                    //        Point3D intersect;
+                    //        if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+                    //        {
+                    //            ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                    //        }
+                    //        else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                    //        {
+                    //            ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                    //        }
+                    //    }
+                    //}
+
+                    //for (var x = minBound.X; x < maxBound.X; x++)
+                    //{
+                    //    for (var y = minBound.Y; y < maxBound.Y; y++)
+                    //    {
+                    //        var r1 = new Point3D(x, y, zMin);
+                    //        var r2 = new Point3D(x, y, zMax);
+
+                    //        Point3D intersect;
+                    //        if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+                    //        {
+                    //            ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                    //        }
+                    //        else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                    //        {
+                    //            ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                    //        }
+                    //    }
+                    //}
+                }
+            }
+
+            #endregion
+
+            return ccubic;
+        }
+
+        public static void CrawlExterior(CubeType[, ,] cubic)
+        {
+            var xMax = cubic.GetLength(0);
+            var yMax = cubic.GetLength(1);
+            var zMax = cubic.GetLength(2);
+            var list = new Queue<Vector3I>();
+
+            // Add basic check points from the corner blocks.
+            if (cubic[0, 0, 0] == CubeType.None)
+                list.Enqueue(new Vector3I(0, 0, 0));
+            if (cubic[xMax - 1, 0, 0] == CubeType.None)
+                list.Enqueue(new Vector3I(xMax - 1, 0, 0));
+            if (cubic[0, yMax - 1, 0] == CubeType.None)
+                list.Enqueue(new Vector3I(0, yMax - 1, 0));
+            if (cubic[0, 0, zMax - 1] == CubeType.None)
+                list.Enqueue(new Vector3I(0, 0, zMax - 1));
+            if (cubic[xMax - 1, yMax - 1, 0] == CubeType.None)
+                list.Enqueue(new Vector3I(xMax - 1, yMax - 1, 0));
+            if (cubic[0, yMax - 1, zMax - 1] == CubeType.None)
+                list.Enqueue(new Vector3I(0, yMax - 1, zMax - 1));
+            if (cubic[xMax - 1, 0, zMax - 1] == CubeType.None)
+                list.Enqueue(new Vector3I(xMax - 1, 0, zMax - 1));
+            if (cubic[xMax - 1, yMax - 1, zMax - 1] == CubeType.None)
+                list.Enqueue(new Vector3I(xMax - 1, yMax - 1, zMax - 1));
+
+            while (list.Count > 0)
+            {
+                var item = list.Dequeue();
+
+                if (cubic[item.X, item.Y, item.Z] == CubeType.None)
+                {
+                    cubic[item.X, item.Y, item.Z] = CubeType.Exterior;
+
+                    if (item.X - 1 >= 0 && item.Y >= 0 && item.Z >= 0 && item.X - 1 < xMax && item.Y < yMax && item.Z < zMax && cubic[item.X - 1, item.Y, item.Z] == CubeType.None)
+                    {
+                        list.Enqueue(new Vector3I(item.X - 1, item.Y, item.Z));
+                    }
+                    if (item.X >= 0 && item.Y - 1 >= 0 && item.Z >= 0 && item.X < xMax && item.Y - 1 < yMax && item.Z < zMax && cubic[item.X, item.Y - 1, item.Z] == CubeType.None)
+                    {
+                        list.Enqueue(new Vector3I(item.X, item.Y - 1, item.Z));
+                    }
+                    if (item.X >= 0 && item.Y >= 0 && item.Z - 1 >= 0 && item.X < xMax && item.Y < yMax && item.Z - 1 < zMax && cubic[item.X, item.Y, item.Z - 1] == CubeType.None)
+                    {
+                        list.Enqueue(new Vector3I(item.X, item.Y, item.Z - 1));
+                    }
+                    if (item.X + 1 >= 0 && item.Y >= 0 && item.Z >= 0 && item.X + 1 < xMax && item.Y < yMax && item.Z < zMax && cubic[item.X + 1, item.Y, item.Z] == CubeType.None)
+                    {
+                        list.Enqueue(new Vector3I(item.X + 1, item.Y, item.Z));
+                    }
+                    if (item.X >= 0 && item.Y + 1 >= 0 && item.Z >= 0 && item.X < xMax && item.Y + 1 < yMax && item.Z < zMax && cubic[item.X, item.Y + 1, item.Z] == CubeType.None)
+                    {
+                        list.Enqueue(new Vector3I(item.X, item.Y + 1, item.Z));
+                    }
+                    if (item.X >= 0 && item.Y >= 0 && item.Z + 1 >= 0 && item.X < xMax && item.Y < yMax && item.Z + 1 < zMax && cubic[item.X, item.Y, item.Z + 1] == CubeType.None)
+                    {
+                        list.Enqueue(new Vector3I(item.X, item.Y, item.Z + 1));
+                    }
+                }
+            }
+
+            // switch values around to work with current enum logic.
+            for (var x = 0; x < xMax; x++)
+            {
+                for (var y = 0; y < yMax; y++)
+                {
+                    for (var z = 0; z < zMax; z++)
+                    {
+                        if (cubic[x, y, z] == CubeType.None)
+                            cubic[x, y, z] = CubeType.Interior;
+                        else if (cubic[x, y, z] == CubeType.Exterior)
+                            cubic[x, y, z] = CubeType.None;
+                    }
+                }
+            }
+        }
+
         #endregion
 
 
-        /*
-                     (top)+z|   /-y(back)  
-                            |  /      
-                            | /       
-               -x(left)     |/       +x(right)
+        /*  Official SE orientation.
+                  (top/up)+Y|   /-Z(forward/front)
+                            |  /
+                            | /
+               -X(left)     |/       +X(right)
                -------------+-----------------
                            /|
                           / |
                          /  |
-               (front)+y/   |-z(bottom)
-             */
+                (back)+Z/   |-Y(bottom/down)
+        */
 
         #region CalculateSlopes
 
-        private void CalculateSlopes(CubeType[, ,] ccubic)
+        public static void CalculateSlopes(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -879,7 +1193,7 @@
 
         #region CalculateCorners
 
-        private void CalculateCorners(CubeType[, ,] ccubic)
+        public static void CalculateCorners(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -951,7 +1265,7 @@
 
         #region CalculateInverseCorners
 
-        private void CalculateInverseCorners(CubeType[, ,] ccubic)
+        public static void CalculateInverseCorners(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -1007,7 +1321,7 @@
 
         #region CheckAdjacentCubic
 
-        private bool IsValidRange(int x, int y, int z, int xCount, int yCount, int zCount, int xDelta, int yDelta, int zDelta)
+        private static bool IsValidRange(int x, int y, int z, int xCount, int yCount, int zCount, int xDelta, int yDelta, int zDelta)
         {
             if (x + xDelta >= 0 && x + xDelta < xCount
             && y + yDelta >= 0 && y + yDelta < yCount
@@ -1019,9 +1333,9 @@
             return false;
         }
 
-        private bool CheckAdjacentCubic(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount, int xDelta, int yDelta, int zDelta)
+        private static bool CheckAdjacentCubic(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount, int xDelta, int yDelta, int zDelta)
         {
-            if (ccubic[x, y, z] == CubeType.None && this.IsValidRange(x, y, z, xCount, yCount, zCount, xDelta, yDelta, zDelta))
+            if (ccubic[x, y, z] == CubeType.None && IsValidRange(x, y, z, xCount, yCount, zCount, xDelta, yDelta, zDelta))
             {
                 if (xDelta != 0 && ccubic[x + xDelta, y, z] == CubeType.Cube &&
                     yDelta != 0 && ccubic[x, y + yDelta, z] == CubeType.Cube &&
@@ -1055,11 +1369,10 @@
             return false;
         }
 
-
-        private bool CheckAdjacentCubic1(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount,
+        private static bool CheckAdjacentCubic1(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount,
            int xDelta, int yDelta, int zDelta, CubeType cubeType)
         {
-            if (this.IsValidRange(x, y, z, xCount, yCount, zCount, xDelta, yDelta, zDelta))
+            if (IsValidRange(x, y, z, xCount, yCount, zCount, xDelta, yDelta, zDelta))
             {
                 return ccubic[x + xDelta, y + yDelta, z + zDelta] == cubeType;
             }
@@ -1067,11 +1380,11 @@
             return false;
         }
 
-        private bool CheckAdjacentCubic2(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount,
+        private static bool CheckAdjacentCubic2(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount,
             int xDelta1, int yDelta1, int zDelta1, CubeType cubeType1,
             int xDelta2, int yDelta2, int zDelta2, CubeType cubeType2)
         {
-            if (this.IsValidRange(x, y, z, xCount, yCount, zCount, xDelta1, yDelta1, zDelta1) && IsValidRange(x, y, z, xCount, yCount, zCount, xDelta2, yDelta2, zDelta2))
+            if (IsValidRange(x, y, z, xCount, yCount, zCount, xDelta1, yDelta1, zDelta1) && IsValidRange(x, y, z, xCount, yCount, zCount, xDelta2, yDelta2, zDelta2))
             {
                 return ccubic[x + xDelta1, y + yDelta1, z + zDelta1] == cubeType1 && ccubic[x + xDelta2, y + yDelta2, z + zDelta2] == cubeType2;
             }
@@ -1079,12 +1392,12 @@
             return false;
         }
 
-        private bool CheckAdjacentCubic3(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount,
+        private static bool CheckAdjacentCubic3(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount,
             int xDelta1, int yDelta1, int zDelta1, CubeType cubeType1,
             int xDelta2, int yDelta2, int zDelta2, CubeType cubeType2,
             int xDelta3, int yDelta3, int zDelta3, CubeType cubeType3)
         {
-            if (this.IsValidRange(x, y, z, xCount, yCount, zCount, xDelta1, yDelta1, zDelta1) 
+            if (IsValidRange(x, y, z, xCount, yCount, zCount, xDelta1, yDelta1, zDelta1) 
                 && IsValidRange(x, y, z, xCount, yCount, zCount, xDelta2, yDelta2, zDelta2)
                 && IsValidRange(x, y, z, xCount, yCount, zCount, xDelta3, yDelta3, zDelta3))
             {

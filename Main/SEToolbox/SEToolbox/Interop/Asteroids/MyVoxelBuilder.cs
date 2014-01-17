@@ -1,7 +1,6 @@
 ﻿namespace SEToolbox.Interop.Asteroids
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
@@ -125,7 +124,7 @@
             var counter = 0;
             decimal progress = 0;
             var timer = new Stopwatch();
-            Debug.Write(string.Format("{0} : {1:000}", displayname, progress));
+            Debug.Write(string.Format("{0} : {1:000},", displayname, progress));
 
             timer.Start();
 
@@ -159,7 +158,7 @@
                             if (prog != progress)
                             {
                                 progress = prog;
-                                Debug.Write(string.Format("{0:000}", progress));
+                                Debug.Write(string.Format("{0:000},", progress));
                             }
                         }
                     }
@@ -174,7 +173,7 @@
                 // TODO: re-write the multi thread processing to be more stable.
                 // But still try and max out the processors.
 
-                var workers = new List<BackgroundWorker>();
+                var workerCount = 0;
                 var workerCounter = 0;
 
                 var baseCoords = new Vector3I(0, 0, 0);
@@ -184,6 +183,7 @@
                     {
                         for (baseCoords.Z = 0; baseCoords.Z < actualSize.Z; baseCoords.Z += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE)
                         {
+                            workerCount++;
                             var worker = new BackgroundWorker();
 
                             // Threaded work. Do each Data Cell as a single worker process, to prevent them from stepping all over each other at the byte level.
@@ -216,8 +216,6 @@
 
                             };
 
-                            // Brute force threading. not 100% reliable. Occasionally, some threads will not complete.
-                            worker.RunWorkerAsync(new MyVoxelBackgroundWorker(baseCoords));
                             worker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs args)
                             {
                                 lock (Locker)
@@ -232,17 +230,19 @@
                                     if (prog != progress)
                                     {
                                         progress = prog;
-                                        Debug.Write(string.Format("{0:000}", progress));
+                                        Debug.Write(string.Format("{0:000},", progress));
                                     }
                                     System.Windows.Forms.Application.DoEvents();
                                 }
                             };
-                            workers.Add(worker);
+
+                            // Brute force threading. not 100% reliable. Occasionally, some threads will not complete.
+                            worker.RunWorkerAsync(new MyVoxelBackgroundWorker(baseCoords));
                         }
                     }
                 }
 
-                while (workerCounter < workers.Count)
+                while (workerCounter < workerCount)
                 {
                     System.Windows.Forms.Application.DoEvents();
                 }
