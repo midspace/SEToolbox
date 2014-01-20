@@ -84,6 +84,9 @@
       <Component Id="comp12068FFAF2EB4772A897CB41720E056F">
         <File Id="file64DEAD08B7A14DCCAD1984564BC6EA1C" Source="$(var.SEToolbox.TargetDir)SEToolboxUpdate.exe"/>
       </Component>
+      <Component Id="comp5B10E5BF2D0D4C9EAF44EDE183D113EF">
+        <File Id="fileAD5B37B3F8524F6594A80B1BF9660D69" Source="$(var.SEToolbox.TargetDir)HelixToolkit.Wpf.dll"/>
+      </Component>
     </ComponentGroup>
 
     <DirectoryRef Id="ApplicationProgramsFolder">

@@ -388,13 +388,12 @@
             {
                 var stockfile = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), this.StockVoxel + ".vox");
 
-                if (this.StockMaterial == null)
+                if (this.StockMaterial == null || this.StockMaterial.Value == null)
                 {
                     this.SourceFile = stockfile;
                     originalFile = this.SourceFile;
-
                     var asteroid = new MyVoxelMap();
-                    asteroid.Load(stockfile, null, false);
+                    asteroid.Load(stockfile, SpaceEngineersAPI.GetMaterialName(0), false);
                     asteroidCenter = asteroid.ContentCenter;
                     asteroidSize = asteroid.ContentSize;
                 }

@@ -11,6 +11,14 @@
         EmptyContentFile,
     };
 
+    public enum Mirror
+    {
+        None,
+        EvenUp,
+        EvenDown,
+        Odd
+    };
+
     internal class AppConstants
     {
         public const string HomepageUrl = "http://forums.keenswh.com/post/custom-importereditor-tool-setoolbox-6638984";

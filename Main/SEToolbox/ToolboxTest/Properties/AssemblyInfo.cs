@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ToolboxTest")]
-[assembly: AssemblyCopyright("Copyright © MidSpace 2013")]
+[assembly: AssemblyCopyright("Copyright © MidSpace 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

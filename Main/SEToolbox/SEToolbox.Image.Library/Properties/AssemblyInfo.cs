@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mid-Space Productions")]
 [assembly: AssemblyProduct("SEToolbox.ImageLibrary")]
-[assembly: AssemblyCopyright("Copyright © MidSpace 2013")]
+[assembly: AssemblyCopyright("Copyright © MidSpace 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

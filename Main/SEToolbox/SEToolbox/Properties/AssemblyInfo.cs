@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mid-Space Productions")]
 [assembly: AssemblyProduct("SEToolbox")]
-[assembly: AssemblyCopyright("Copyright © MidSpace 2013")]
+[assembly: AssemblyCopyright("Copyright © MidSpace 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

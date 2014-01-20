@@ -69,7 +69,7 @@ set app="%25ProgramW6432%25\7-Zip\7z.exe"
 set archive="$(TargetDir)en-us\SEToolbox-.zip"
 
 cd /d %25sourceDir%25
-call %25app%25 a %25archive%25 poly2vox.exe Sandbox.CommonLib.dll Sandbox.CommonLib.XmlSerializers.dll SEToolbox.exe SEToolbox.ImageLibrary.dll SEToolbox.ImageShaders.dll SEToolboxUpdate.exe System.Windows.Interactivity.dll VRage.Common.dll VRage.Library.dll VRage.Math.dll</PostBuildEvent>
+call %25app%25 a %25archive%25 HelixToolkit.Wpf.dll poly2vox.exe Sandbox.CommonLib.dll Sandbox.CommonLib.XmlSerializers.dll SEToolbox.exe SEToolbox.ImageLibrary.dll SEToolbox.ImageShaders.dll SEToolboxUpdate.exe System.Windows.Interactivity.dll VRage.Common.dll VRage.Library.dll VRage.Math.dll</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
