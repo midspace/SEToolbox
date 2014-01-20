@@ -1,5 +1,13 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
+    using SEToolbox.Properties;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
+    using SEToolbox.Views;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -11,13 +19,7 @@
     using System.Linq;
     using System.Windows.Forms;
     using System.Windows.Input;
-    using Sandbox.CommonLib.ObjectBuilders;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Models;
-    using SEToolbox.Properties;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
-    using SEToolbox.Views;
+    using VRageMath;
 
     public class ExplorerViewModel : BaseViewModel, IDropable
     {
@@ -213,6 +215,22 @@
             get
             {
                 return new DelegateCommand(new Action(Test2Executed), new Func<bool>(Test2CanExecute));
+            }
+        }
+
+        public ICommand Test3Command
+        {
+            get
+            {
+                return new DelegateCommand(new Action(Test3Executed), new Func<bool>(Test3CanExecute));
+            }
+        }
+
+        public ICommand Test4Command
+        {
+            get
+            {
+                return new DelegateCommand(new Action(Test4Executed), new Func<bool>(Test4CanExecute));
             }
         }
 
@@ -606,7 +624,7 @@
 
         public void OpenFolderExecuted()
         {
-            System.Diagnostics.Process.Start("Explorer", this._dataModel.ActiveWorld.Savepath);
+            System.Diagnostics.Process.Start("Explorer", string.Format("\"{0}\"", this._dataModel.ActiveWorld.Savepath));
         }
 
         public bool OpenWorkshopCanExecute()
@@ -642,6 +660,7 @@
             var loadVm = new GenerateVoxelFieldViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowGenerateVoxelField>(this, loadVm);
+            model.Unload();
             if (result == true)
             {
                 this.IsBusy = true;
@@ -671,6 +690,11 @@
 
             this.IsBusy = true;
             var newEntity = loadVm.BuildTestEntity();
+
+            // Split object where X=28|29.
+            //newEntity.CubeBlocks.RemoveAll(c => c.Min.X <= 3);
+            newEntity.CubeBlocks.RemoveAll(c => c.Min.X > 4);
+
             this._selectNewStructure = true;
             this._dataModel.CollisionCorrectEntity(newEntity);
             var structure = this._dataModel.AddEntity(newEntity);
@@ -686,6 +710,51 @@
         public void Test2Executed()
         {
             this.OptimizeModel(this.Selections.ToArray());
+        }
+
+        public bool Test3CanExecute()
+        {
+            return this._dataModel.ActiveWorld != null;
+        }
+
+        public void Test3Executed()
+        {
+            var model = new Import3dModelModel();
+            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var loadVm = new Import3dModelViewModel(this, model);
+
+            loadVm.ArmorType = ImportArmorType.Light;
+            loadVm.BuildDistance = 10;
+            loadVm.ClassType = ImportClassType.SmallShip;
+            loadVm.Filename = @"D:\Development\SpaceEngineers\building 3D\models\algos.obj";
+            loadVm.Forward = new BindableVector3DModel(Vector3.Forward);
+            loadVm.IsMaxLengthScale = false;
+            loadVm.IsMultipleScale = true;
+            loadVm.IsValidModel = true;
+            loadVm.MultipleScale = 1;
+            loadVm.Up = new BindableVector3DModel(Vector3.Up);
+
+            this.IsBusy = true;
+            var newEntity = loadVm.BuildEntity();
+
+            // Split object where X=28|29.
+            newEntity.CubeBlocks.RemoveAll(c => c.Min.X <= 28);
+
+            this._selectNewStructure = true;
+            this._dataModel.CollisionCorrectEntity(newEntity);
+            var structure = this._dataModel.AddEntity(newEntity);
+            this._selectNewStructure = false;
+            this.IsBusy = false;
+        }
+
+        public bool Test4CanExecute()
+        {
+            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+        }
+
+        public void Test4Executed()
+        {
+            this.MirrorModel(false, this.Selections.ToArray());
         }
 
         public bool OpenUpdatesLinkCanExecute()
@@ -833,6 +902,17 @@
                 if (viewModel is StructureCubeGridViewModel)
                 {
                     this._dataModel.OptimizeModel(((StructureCubeGridViewModel)viewModel).DataModel as StructureCubeGridModel);
+                }
+            }
+        }
+
+        public void MirrorModel(bool oddMirror, params IStructureViewBase[] viewModels)
+        {
+            foreach (var viewModel in viewModels)
+            {
+                if (viewModel is StructureCubeGridViewModel)
+                {
+                    this._dataModel.MirrorModel(((StructureCubeGridViewModel)viewModel).DataModel as StructureCubeGridModel, oddMirror);
                 }
             }
         }

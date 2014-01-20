@@ -187,7 +187,7 @@
 
         public void OpenFolderExecuted()
         {
-            System.Diagnostics.Process.Start("Explorer", this.SelectedWorld.Savepath);
+            System.Diagnostics.Process.Start("Explorer", string.Format("\"{0}\"", this.SelectedWorld.Savepath));
         }
 
         public bool OpenWorkshopCanExecute()

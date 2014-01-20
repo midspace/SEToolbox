@@ -174,5 +174,6 @@
         LargeRotor,
         SmallStator,
         SmallRotor,
+        LargeRailStraight,
     };
 }

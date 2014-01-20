@@ -49,10 +49,11 @@
                 </TextBox>
             </StackPanel>
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="8" HorizontalAlignment="Right">
+                <Button Content="_Clear" Margin="8,0,0,0" Width="50" Command="{Binding ClearRowsCommand}"/>
                 <Button Content="_Add" Margin="8,0,0,0" Width="50" Command="{Binding AddRowCommand}"/>
                 <Button Content="_Delete" Margin="8,0,0,0" Width="50" Command="{Binding DeleteRowCommand}"/>
             </StackPanel>
-            <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
+            <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Index}" IsReadOnly="True" />
                     <DataGridComboBoxColumn Header="Asteroid" SelectedValueBinding="{Binding VoxelFile}" DisplayMemberPath="Name">
@@ -63,7 +64,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.StockVoxelFileList}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.StockVoxelFileList, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -75,7 +76,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -88,7 +89,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -100,7 +101,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -113,7 +114,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -125,7 +126,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -138,7 +139,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -150,7 +151,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -163,7 +164,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
@@ -175,7 +176,7 @@
                         </DataGridComboBoxColumn.ElementStyle>
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
-                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>

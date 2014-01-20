@@ -140,6 +140,8 @@ namespace SEToolbox.Interop.Asteroids
 
         public void Load(string filename, string defaultMaterial)
         {
+            if (defaultMaterial == null)
+                defaultMaterial = SpaceEngineersAPI.GetMaterialName(0);
             this.Load(filename, defaultMaterial, true);
         }
 
@@ -519,19 +521,19 @@ namespace SEToolbox.Interop.Asteroids
         public void ForceBaseMaterial(string materialName)
         {
             var materialIndex = SpaceEngineersAPI.GetMaterialIndex(materialName);
-            
-            for (var x = 0; x < this._voxelMaterialCells.Length; x++)
-            {
-                for (var y = 0; y < this._voxelMaterialCells[x].Length; y++)
-                {
-                    for (var z = 0; z < this._voxelMaterialCells[x][y].Length; z++)
-                    {
-                        this._voxelMaterialCells[x][y][z].ForceReplaceMaterial(materialIndex);
-                    }
-                }
-            }
-        }
+            var materialAssets = CalculateMaterialAssets();
 
+            for (var i = 0; i < materialAssets.Count; i++)
+                materialAssets[i] = materialIndex;
+
+            var minStone = materialAssets.Count / 100;  // Set 1% to Stone material.
+            for (var i = 0; i < minStone; i++)
+                materialAssets[i] = 0;
+
+            materialAssets.Shuffle();
+            SetMaterialAssets(materialAssets);
+        }
+    
         //  Coordinates are relative to voxel map
         private byte GetVoxelContent(ref Vector3I voxelCoord)
         {

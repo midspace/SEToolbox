@@ -142,6 +142,8 @@
                     <Button Content="Clear" Command="{Binding ClearCommand}"/>
                     <Button Content="Test1" ToolTip="Create test structure for smoothing." Command="{Binding Test1Command}"/>
                     <Button Content="Test2" ToolTip="Optimise structure" Command="{Binding Test2Command}"/>
+                    <Button Content="Test3" ToolTip="Create 1/2 test model" Command="{Binding Test3Command}"/>
+                    <Button Content="Test4" ToolTip="Mirror Structure" Command="{Binding Test4Command}"/>
                 </ToolBar>
             </ToolBarPanel>
             <StatusBar DockPanel.Dock="Bottom">

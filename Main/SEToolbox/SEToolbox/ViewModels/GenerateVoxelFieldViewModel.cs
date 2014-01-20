@@ -2,12 +2,6 @@
 
 namespace SEToolbox.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Windows.Input;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
@@ -16,6 +10,11 @@ namespace SEToolbox.ViewModels
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
     using VRageMath;
 
     public class GenerateVoxelFieldViewModel : BaseViewModel
@@ -55,6 +54,14 @@ namespace SEToolbox.ViewModels
         #endregion
 
         #region Properties
+
+        public ICommand ClearRowsCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ClearRowsExecuted), new Func<bool>(ClearRowsCanExecute));
+            }
+        }
 
         public ICommand AddRowCommand
         {
@@ -210,6 +217,18 @@ namespace SEToolbox.ViewModels
 
         #region methods
 
+        public bool ClearRowsCanExecute()
+        {
+            return this.VoxelCollection.Count > 0;
+        }
+
+        public void ClearRowsExecuted()
+        {
+            this.VoxelCollection.Clear();
+            this.MinimumRange = 400;
+            this.MaximumRange = 800;
+        }
+
         public bool AddRowCanExecute()
         {
             return true;
@@ -226,7 +245,7 @@ namespace SEToolbox.ViewModels
                 this.VoxelCollection.Add(this._dataModel.NewDefaultVoxel(this.VoxelCollection.Count + 1));
             }
 
-            this.RenumberCollection();
+            this._dataModel.RenumberCollection();
         }
 
         public bool DeleteRowCanExecute()
@@ -238,7 +257,7 @@ namespace SEToolbox.ViewModels
         {
             var index = this.VoxelCollection.IndexOf(this.SelectedRow);
             this.VoxelCollection.Remove(this.SelectedRow);
-            this.RenumberCollection();
+            this._dataModel.RenumberCollection();
 
             while (index >= this.VoxelCollection.Count)
             {
@@ -286,7 +305,6 @@ namespace SEToolbox.ViewModels
                 {
                     var asteroid = new MyVoxelMap();
                     asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value);
-                    //asteroid.ForceBaseMaterial(voxelDesign.MainMaterial.Value);
 
                     var baseAssets = asteroid.CalculateMaterialAssets();
 
@@ -373,18 +391,6 @@ namespace SEToolbox.ViewModels
 
             sourceVoxelFiles = sourceFiles.ToArray();
             return entities.ToArray();
-        }
-
-        #endregion
-
-        #region helpers
-
-        public void RenumberCollection()
-        {
-            for (var i = 0; i < this.VoxelCollection.Count; i++)
-            {
-                this.VoxelCollection[i].Index = i + 1;
-            }
         }
 
         #endregion

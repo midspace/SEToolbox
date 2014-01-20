@@ -415,19 +415,20 @@
             }
         }
 
-        public MyObjectBuilder_EntityBase BuildEntity()
+        public MyObjectBuilder_CubeGrid BuildEntity()
         {
-            MyObjectBuilder_CubeGrid entity = new MyObjectBuilder_CubeGrid();
-            entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
-            entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
-
-            entity.Skeleton = new System.Collections.Generic.List<BoneInfo>();
-            entity.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
-            entity.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
+            var entity = new MyObjectBuilder_CubeGrid
+            {
+                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Skeleton = new System.Collections.Generic.List<BoneInfo>(),
+                LinearVelocity = new VRageMath.Vector3(0, 0, 0),
+                AngularVelocity = new VRageMath.Vector3(0, 0, 0)
+            };
 
             //double scaleFactor = 2.5;
 
-            string blockPrefix = "";
+            var blockPrefix = "";
             switch (this.ClassType)
             {
                 case ImportClassType.SmallShip:

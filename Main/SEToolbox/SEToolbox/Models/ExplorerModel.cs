@@ -4,6 +4,7 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -371,8 +372,8 @@
         public List<string> LoadEntities(string[] filenames)
         {
             this.IsBusy = true;
-            Dictionary<Int64, Int64> idReplacementTable = new Dictionary<long, long>();
-            List<string> badfiles = new List<string>();
+            var idReplacementTable = new Dictionary<long, long>();
+            var badfiles = new List<string>();
 
             foreach (var filename in filenames)
             {
@@ -532,7 +533,7 @@
         {
             var filepartname = Path.GetFileNameWithoutExtension(originalFile).ToLower();
             var extension = Path.GetExtension(originalFile).ToLower();
-            int index = 0;
+            var index = 0;
             var filename = filepartname + index.ToString() + extension;
 
             while (this.ContainsVoxelFilename(filename, additionalList))
@@ -546,7 +547,7 @@
 
         public void MergeData(IList<IStructureBase> data)
         {
-            Dictionary<Int64, Int64> idReplacementTable = new Dictionary<long, long>();
+            var idReplacementTable = new Dictionary<long, long>();
 
             foreach (var item in (IList<IStructureBase>)data)
             {
@@ -607,7 +608,7 @@
             this.AddEntity(cubeGridObject);
         }
 
-        private Int64 MergeId(long currentId, ref Dictionary<Int64, Int64> idReplacementTable)
+        private static Int64 MergeId(long currentId, ref Dictionary<Int64, Int64> idReplacementTable)
         {
             if (currentId == 0)
                 return 0;
@@ -623,10 +624,175 @@
         public void OptimizeModel(StructureCubeGridModel viewModel)
         {
             // Optimise ordering of CubeBlocks within structure, so that loops can load quickly based on {X++, Y++, Z++}.
+            //var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenBy(c => c.Min.Y).ThenBy(c => c.Min.X).ToList();
+
             var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenBy(c => c.Min.Y).ThenBy(c => c.Min.X).ToList();
             //var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenByDescending(c => c.Min.Y).ThenBy(c => c.Min.X).ToList(); // {X++, Y--, Z++}.
             viewModel.CubeGrid.CubeBlocks = neworder;
             this.IsModified = true;
+        }
+
+        public void MirrorModel(StructureCubeGridModel viewModel, bool oddMirror)
+        {
+            // Find mirror Axis.
+            var minX = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.X);
+            var maxX = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.X);
+            var minY = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.Y);
+            var maxY = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.Y);
+            var minZ = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.Z);
+            var maxZ = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.Z);
+
+            var countMinX = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.X == minX);
+            var countMinY = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Y == minY);
+            var countMinZ = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Z == minZ);
+            var countMaxX = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.X == maxX);
+            var countMaxY = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Y == maxY);
+            var countMaxZ = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Z == maxZ);
+
+            var xMirror = Mirror.None;
+            var yMirror = Mirror.None;
+            var zMirror = Mirror.None;
+            var xAxis = 0;
+            var yAxis = 0;
+            var zAxis = 0;
+
+            if (countMinX > countMinY && countMinX > countMinZ && countMinX > countMaxX && countMinX > countMaxY && countMinX > countMaxZ)
+            {
+                xMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
+                xAxis = minX;
+            }
+            else if (countMinY > countMinX && countMinY > countMinZ && countMinY > countMaxX && countMinY > countMaxY && countMinY > countMaxZ)
+            {
+                yMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
+                yAxis = minY;
+            }
+            else if (countMinZ > countMinX && countMinZ > countMinY && countMinZ > countMaxX && countMinZ > countMaxY && countMinZ > countMaxZ)
+            {
+                zMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
+                zAxis = minZ;
+            }
+            else if (countMaxX > countMinX && countMaxX > countMinY && countMaxX > countMinZ && countMaxX > countMaxY && countMaxX > countMaxZ)
+            {
+                xMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
+                xAxis = maxX;
+            }
+            else if (countMaxY > countMinX && countMaxY > countMinY && countMaxY > countMinZ && countMaxY > countMaxX && countMaxY > countMaxZ)
+            {
+                yMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
+                yAxis = maxY;
+            }
+            else if (countMaxZ > countMinX && countMaxZ > countMinY && countMaxZ > countMinZ && countMaxZ > countMaxX && countMaxZ > countMaxY)
+            {
+                zMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
+                zAxis = maxZ;
+            }
+
+            var blocks = new List<MyObjectBuilder_CubeBlock>();
+
+            foreach (var block in viewModel.CubeGrid.CubeBlocks)
+            {
+                if (block.SubtypeName.Contains("Armor"))
+                {
+                    var newBlock = new MyObjectBuilder_CubeBlock()
+                    {
+                        SubtypeName = block.SubtypeName,
+                        EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId(),
+                        PersistentFlags = block.PersistentFlags,
+                        Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis),
+                        Max = block.Max.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis),
+                        Orientation = block.Orientation
+                        //Orientation = MirrorCubeOrientation(block.SubtypeName, block.Orientation, xMirror, yMirror, zMirror)
+                    };
+                    MirrorCubeOrientation(ref newBlock, block.Orientation, xMirror, yMirror, zMirror);
+
+                    if (block.PositionAndOrientation.HasValue)
+                        newBlock.PositionAndOrientation = new MyPositionAndOrientation()
+                        {
+                            Forward = block.PositionAndOrientation.Value.Forward,
+                            Position = block.PositionAndOrientation.Value.Position,
+                            Up = block.PositionAndOrientation.Value.Up,
+                        };
+
+                    blocks.Add(newBlock);
+                }
+            }
+
+            viewModel.CubeGrid.CubeBlocks.AddRange(blocks);
+            viewModel.UpdateFromEntityBase();
+            this.IsModified = true;
+        }
+
+        private static void MirrorCubeOrientation(ref MyObjectBuilder_CubeBlock block, /*string subtypeName, */ Quaternion orientation, Mirror xMirror, Mirror yMirror, Mirror zMirror)
+        {
+            var normal = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up));
+
+            if (xMirror != Mirror.None)
+            {
+                var nominal = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up));
+
+                // TODO: 
+                if (block.SubtypeName.Contains("ArmorSlope"))
+                {
+                    if (orientation == normal)
+                    {
+                        block.SubtypeName += "Red";
+                    }
+                    block.Orientation.Y = -orientation.Y;
+                    block.Orientation.Z = -orientation.Z;
+                }
+                else if (block.SubtypeName.Contains("ArmorCorner"))
+                {
+                    if (orientation == normal)
+                    {
+                        block.SubtypeName += "Red";
+                    }
+                    //block.Orientation.X = -orientation.X;
+                    block.Orientation.Y = -orientation.Y;
+                    block.Orientation.Z = -orientation.Z;
+                    //block.Orientation.W = -orientation.W;
+
+                    //SharpDX.
+                    //orientation.Axis
+                    //Quaternion.
+                    //var zz = orientation * Vector3.Forward;
+                    //orientation.
+
+                    //MathUtil..
+                    
+
+                }
+                // TODO: Other block types.
+            }
+            else if (yMirror != Mirror.None)
+            {
+                var nominal = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Right, Vector3.Up));
+                // TODO: 
+
+            }
+            else if (zMirror != Mirror.None)
+            {
+                var nominal = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Right));
+                // TODO: 
+
+            }
+            //var m = Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up);
+
+            //newOrientation = Quaternion.Add(orientation, Quaternion.Subtract(normal, orientation));
+
+            // nominal
+            // normal
+
+            //MathUtil.matrix
+            //MathUtil.MatrixToEulerXYZ();
+
+            //Matrix.
+            //m = Matrix.Invert(m);
+            //m = Matrix.Normalize(m);
+            //newOrientation =  Quaternion.CreateFromRotationMatrix(m);
+            //newOrientation = Quaternion.Negate(orientation);
+            //newOrientation = Quaternion.Inverse(orientation);
+
+            //return newOrientation;
         }
 
         #endregion

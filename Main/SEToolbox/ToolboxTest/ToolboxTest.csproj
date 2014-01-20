@@ -111,6 +111,9 @@
     <None Include="TestAssets\asteroid0moon4.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestAssets\cube_52x52x52.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestAssets\DeformedSphereWithHoles_64x128x64.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,6 @@
-﻿namespace SEToolbox.Models
+﻿using System.Linq;
+
+namespace SEToolbox.Models
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
@@ -9,15 +11,17 @@
 
     public class GenerateVoxelFieldModel : BaseModel
     {
+        private static readonly List<GenerateVoxelModel> VoxelStore;
+
         #region Fields
 
-        private int _minimumRange;
-        private int _maximumRange;
+        private static int _minimumRange;
+        private static int _maximumRange;
         private MyPositionAndOrientation _characterPosition;
         private ObservableCollection<GenerateVoxelDetailModel> _stockVoxelFileList;
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
         private ObservableCollection<GenerateVoxelModel> _voxelCollection;
-        private List<int> _percentList;
+        private readonly List<int> _percentList;
 
         #endregion
 
@@ -29,6 +33,11 @@
             this._materialsCollection = new ObservableCollection<MaterialSelectionModel>();
             this._voxelCollection = new ObservableCollection<GenerateVoxelModel>();
             this._percentList = new List<int>();
+        }
+
+        static GenerateVoxelFieldModel()
+        {
+            VoxelStore = new List<GenerateVoxelModel>();
         }
 
         #endregion
@@ -56,14 +65,14 @@
         {
             get
             {
-                return this._minimumRange;
+                return _minimumRange;
             }
 
             set
             {
-                if (value != this._minimumRange)
+                if (value != _minimumRange)
                 {
-                    this._minimumRange = value;
+                    _minimumRange = value;
                     this.RaisePropertyChanged(() => MinimumRange);
                 }
             }
@@ -73,14 +82,14 @@
         {
             get
             {
-                return this._maximumRange;
+                return _maximumRange;
             }
 
             set
             {
-                if (value != this._maximumRange)
+                if (value != _maximumRange)
                 {
-                    this._maximumRange = value;
+                    _maximumRange = value;
                     this.RaisePropertyChanged(() => MaximumRange);
                 }
             }
@@ -159,12 +168,26 @@
                     SourceFilename = file,
                 });
             }
-        
+
             // Set up a default start.
-            this.VoxelCollection = new ObservableCollection<GenerateVoxelModel>();
-            for (var i = 0; i < 1; i++)
+            if (VoxelStore.Count == 0)
             {
-                this.VoxelCollection.Add(this.NewDefaultVoxel(i + 1));
+                this.VoxelCollection.Add(this.NewDefaultVoxel(1));
+            }
+            else
+            {
+                foreach (var item in VoxelStore)
+                {
+                    var v1 = item.Clone();
+                    v1.VoxelFile = this.StockVoxelFileList.FirstOrDefault(v => v.Name == v1.VoxelFile.Name);
+                    v1.MainMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.MainMaterial.DisplayName);
+                    v1.SecondMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SecondMaterial.DisplayName);
+                    v1.ThirdMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ThirdMaterial.DisplayName);
+                    v1.ForthMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ForthMaterial.DisplayName);
+                    v1.FifthMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.FifthMaterial.DisplayName);
+                    this.VoxelCollection.Add(v1);
+                }
+                this.RenumberCollection();
             }
 
             for (var i = 0; i < 100; i++)
@@ -174,6 +197,12 @@
 
             this.MinimumRange = 400;
             this.MaximumRange = 800;
+        }
+
+        public void Unload()
+        {
+            VoxelStore.Clear();
+            VoxelStore.AddRange(this._voxelCollection);
         }
 
         public GenerateVoxelModel NewDefaultVoxel(int index)
@@ -186,7 +215,16 @@
                     SecondMaterial = this.MaterialsCollection[0],
                     ThirdMaterial = this.MaterialsCollection[0],
                     ForthMaterial = this.MaterialsCollection[0],
+                    FifthMaterial = this.MaterialsCollection[0],
                 };
+        }
+
+        public void RenumberCollection()
+        {
+            for (var i = 0; i < this.VoxelCollection.Count; i++)
+            {
+                this.VoxelCollection[i].Index = i + 1;
+            }
         }
 
         #endregion

@@ -309,6 +309,56 @@ namespace ToolboxTest
             voxelMap.Save(fileNewVoxel);
         }
 
+        [TestMethod]
+        public void VoxelMaterialAssetsGenerateFixed()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            //var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            //Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var files = new string[] { @".\TestAssets\Arabian_Border_7.vox", @".\TestAssets\cube_52x52x52.vox" };
+
+            foreach (var fileOriginal in files)
+            {
+                foreach (var material in materials)
+                {
+                    var fileNewVoxel =
+                        Path.Combine(Path.GetDirectoryName(Path.GetFullPath(fileOriginal)),
+                            Path.GetFileNameWithoutExtension(fileOriginal) + "_" + material.Name + ".vox").ToLower();
+
+                    var voxelMap = new MyVoxelMap();
+                    voxelMap.Load(fileOriginal, materials[0].Name);
+                    var materialAssets = voxelMap.CalculateMaterialAssets();
+
+                    var distribution = new double[] {Double.NaN, .99,};
+                    var materialSelection = new byte[] {0, SpaceEngineersAPI.GetMaterialIndex(material.Name)};
+
+                    var newDistributiuon = new List<byte>();
+                    int count;
+                    for (var i = 1; i < distribution.Count(); i++)
+                    {
+                        count = (int) Math.Floor(distribution[i]*materialAssets.Count); // Round down.
+                        for (var j = 0; j < count; j++)
+                        {
+                            newDistributiuon.Add(materialSelection[i]);
+                        }
+                    }
+                    count = materialAssets.Count - newDistributiuon.Count;
+                    for (var j = 0; j < count; j++)
+                    {
+                        newDistributiuon.Add(materialSelection[0]);
+                    }
+
+                    newDistributiuon.Shuffle();
+
+                    voxelMap.SetMaterialAssets(newDistributiuon);
+                    voxelMap.Save(fileNewVoxel);
+                }
+            }
+        }
+
         //[TestMethod]
         //public void MemoryTest_NoMaterials()
         //{
@@ -428,6 +478,18 @@ namespace ToolboxTest
             Assert.AreEqual(108, cubic.GetLength(0), "Array size must match.");
             Assert.AreEqual(50, cubic.GetLength(1), "Array size must match.");
             Assert.AreEqual(239, cubic.GetLength(2), "Array size must match.");
+
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 7]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 17]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 18]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 19]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 20]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 23]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 24]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 25]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 26]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 35]);
+            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 36]);
         }
 
         [TestMethod]

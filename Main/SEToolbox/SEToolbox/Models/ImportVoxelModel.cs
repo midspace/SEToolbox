@@ -236,6 +236,10 @@
                     this._stockVoxel = value;
                     this.RaisePropertyChanged(() => StockVoxel);
                     this.IsStockVoxel = true;
+                    if (this.StockMaterial == null)
+                    {
+                        this.StockMaterial = this.MaterialsCollection[0];
+                    }
                 }
             }
         }

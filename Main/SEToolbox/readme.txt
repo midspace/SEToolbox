@@ -27,8 +27,8 @@ Developer/Build Requirements:
 	http://wixtoolset.org/releases/
 
 *	Shaders:
-	*	DirectX Software Development Kit 
-		http://www.microsoft.com/en-au/download/details.aspx?id=6812
+	*	Windows SDK for Windows 8.1 (Includes DirectX SDK)
+		http://msdn.microsoft.com/en-us/windows/desktop/aa904949
 
 	*	Shader Effects BuildTask and Templates.zip
 		https://wpf.codeplex.com/downloads/get/40167

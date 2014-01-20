@@ -1,15 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Windows.Forms;
-    using System.Windows.Input;
-    using System.Windows.Media.Media3D;
-    using HelixToolkit.Wpf;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -17,6 +7,14 @@
     using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Windows.Forms;
+    using System.Windows.Input;
+    using System.Windows.Media.Media3D;
     using VRageMath;
 
     public class Import3dModelViewModel : BaseViewModel
@@ -482,17 +480,19 @@
 
         #region BuildTestEntity
 
-        public MyObjectBuilder_EntityBase BuildTestEntity()
+        public MyObjectBuilder_CubeGrid BuildTestEntity()
         {
-            MyObjectBuilder_CubeGrid entity = new MyObjectBuilder_CubeGrid();
-            entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
-            entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
+            var entity = new MyObjectBuilder_CubeGrid
+            {
+                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Skeleton = new System.Collections.Generic.List<BoneInfo>(),
+                LinearVelocity = new VRageMath.Vector3(0, 0, 0),
+                AngularVelocity = new VRageMath.Vector3(0, 0, 0),
+                GridSizeEnum = MyCubeSize.Small
+            };
 
-            entity.Skeleton = new System.Collections.Generic.List<BoneInfo>();
-            entity.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
-            entity.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-            entity.GridSizeEnum = MyCubeSize.Small;
-            string blockPrefix = "Small";
+            var blockPrefix = "Small";
             entity.IsStatic = false;
             blockPrefix += "Block";
 
@@ -517,12 +517,11 @@
             // Small|Block|ArmorSlope,
             // Small|HeavyBlock|ArmorCorner,
 
-            SubtypeId blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock");
-            SubtypeId slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorSlope");
-            SubtypeId cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCorner");
-            SubtypeId inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCornerInv");
+            var blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock");
+            var slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorSlope");
+            var cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCorner");
+            var inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCornerInv");
 
-            CubeType[, ,] ccubic;
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
 
             var fixScale = 0;
@@ -542,7 +541,7 @@
 
             #region Read in voxel and set main cube space.
 
-            //ccubic = new CubeType[9, 9, 9];
+            //var ccubic = new CubeType[9, 9, 9];
 
             //for (int i = 3; i < 6; i++)
             //{
@@ -565,46 +564,50 @@
 
             #region Read in voxel and set main cube space.
 
-            //ccubic = new CubeType[9, 9, 9];
+            // Staggered star.
 
-            //for (int i = 2; i < 7; i++)
-            //{
-            //    for (int j = 2; j < 7; j++)
-            //    {
-            //        ccubic[i, j, 4] = CubeType.Cube;
-            //        ccubic[i, 4, j] = CubeType.Cube;
-            //        ccubic[4, i, j] = CubeType.Cube;
-            //    }
-            //}
+            var ccubic = new CubeType[9, 9, 9];
 
-            //for (int i = 0; i < 9; i++)
-            //{
-            //    ccubic[i, 4, 4] = CubeType.Cube;
-            //    ccubic[4, i, 4] = CubeType.Cube;
-            //    ccubic[4, 4, i] = CubeType.Cube;
-            //}
+            for (var i = 2; i < 7; i++)
+            {
+                for (var j = 2; j < 7; j++)
+                {
+                    ccubic[i, j, 4] = CubeType.Cube;
+                    ccubic[i, 4, j] = CubeType.Cube;
+                    ccubic[4, i, j] = CubeType.Cube;
+                }
+            }
+
+            for (var i = 0; i < 9; i++)
+            {
+                ccubic[i, 4, 4] = CubeType.Cube;
+                ccubic[4, i, 4] = CubeType.Cube;
+                ccubic[4, 4, i] = CubeType.Cube;
+            }
 
             #endregion
 
             #region Read in voxel and set main cube space.
 
-            ccubic = new CubeType[12, 12, 12];
+            //// Tray shape
 
-            for (int i = 0; i < 12; i++)
-            {
-                for (int j = 0; j < 12; j++)
-                {
-                    ccubic[i, j, 0] = CubeType.Cube;
-                }
-            }
+            //var ccubic = new CubeType[12, 12, 12];
 
-            for (int i = 0; i < 12; i++)
-            {
-                ccubic[i, 0, 1] = CubeType.Cube;
-                ccubic[i, 11, 1] = CubeType.Cube;
-                ccubic[0, i, 1] = CubeType.Cube;
-                ccubic[11, i, 1] = CubeType.Cube;
-            }
+            //for (int i = 0; i < 12; i++)
+            //{
+            //    for (int j = 0; j < 12; j++)
+            //    {
+            //        ccubic[i, j, 0] = CubeType.Cube;
+            //    }
+            //}
+
+            //for (int i = 0; i < 12; i++)
+            //{
+            //    ccubic[i, 0, 1] = CubeType.Cube;
+            //    ccubic[i, 11, 1] = CubeType.Cube;
+            //    ccubic[0, i, 1] = CubeType.Cube;
+            //    ccubic[11, i, 1] = CubeType.Cube;
+            //}
 
             #endregion
 
@@ -624,19 +627,18 @@
 
         #region BuildEntity
 
-        public MyObjectBuilder_EntityBase BuildEntity()
+        public MyObjectBuilder_CubeGrid BuildEntity()
         {
-            MyObjectBuilder_CubeGrid entity = new MyObjectBuilder_CubeGrid();
-            entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
-            entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
+            var entity = new MyObjectBuilder_CubeGrid
+            {
+                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Skeleton = new System.Collections.Generic.List<BoneInfo>(),
+                LinearVelocity = new VRageMath.Vector3(0, 0, 0),
+                AngularVelocity = new VRageMath.Vector3(0, 0, 0)
+            };
 
-            entity.Skeleton = new System.Collections.Generic.List<BoneInfo>();
-            entity.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
-            entity.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-
-            //double scaleFactor = 2.5;
-
-            string blockPrefix = "";
+            var blockPrefix = "";
             switch (this.ClassType)
             {
                 case ImportClassType.SmallShip:
@@ -680,12 +682,11 @@
             // Small|Block|ArmorSlope,
             // Small|HeavyBlock|ArmorCorner,
 
-            SubtypeId blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock");
-            SubtypeId slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorSlope");
-            SubtypeId cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCorner");
-            SubtypeId inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCornerInv");
+            var blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock");
+            var slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorSlope");
+            var cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCorner");
+            var inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCornerInv");
 
-            CubeType[, ,] ccubic;
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
 
             var fixScale = 0;
@@ -705,8 +706,8 @@
             var smoothObject = true;
 
 
-            ccubic = ReadTemporaryVolmetic(this.Filename, fixScale, fillObject);
-            //ccubic = ReadObjectVolmetic(this.Filename, 3, fillObject);
+            var ccubic = ReadTemporaryVolmetic(this.Filename, fixScale, fillObject);
+            //var ccubic = ReadModelVolmetic(this.Filename, 1);
 
             if (smoothObject)
             {
@@ -727,28 +728,28 @@
         private CubeType[, ,] ReadTemporaryVolmetic(string modelFile, int fixScale, bool fillObject)
         {
             CubeType[, ,] ccubic = null;
-            bool gapless = false;
-            bool foundShape = false;
+            var gapless = false;
+            var foundShape = false;
             int tries = 0;
 
             while (!foundShape && tries < 2)
             {
                 var voxFilename = ToolboxExtensions.ConvertPolyToVox(modelFile, fixScale, gapless);
 
-                using (BinaryReader reader = new BinaryReader(File.Open(voxFilename, FileMode.Open)))
+                using (var reader = new BinaryReader(File.Open(voxFilename, FileMode.Open)))
                 {
                     // switch the Z and Y axis about, and reverse the Y axis to get the dimension in the right order from the Vox file.
 
-                    int xCount = reader.ReadInt32();
-                    int zCount = reader.ReadInt32();
-                    int yCount = reader.ReadInt32();
+                    var xCount = reader.ReadInt32();
+                    var zCount = reader.ReadInt32();
+                    var yCount = reader.ReadInt32();
                     ccubic = new CubeType[xCount, yCount, zCount];
 
-                    for (int x = 0; x < xCount; x++)
+                    for (var x = 0; x < xCount; x++)
                     {
-                        for (int z = 0; z < zCount; z++)
+                        for (var z = 0; z < zCount; z++)
                         {
-                            for (int y = yCount - 1; y >= 0; y--)
+                            for (var y = yCount - 1; y >= 0; y--)
                             {
                                 var b = reader.ReadByte();
 
@@ -793,38 +794,38 @@
             return ccubic;
         }
 
-        private static readonly object Locker = new object();
-
-
-
         /// <summary>
         /// Volumes are calculated across axis where they are whole numbers (rounded to 0 decimal places).
         /// </summary>
         /// <param name="modelFile"></param>
-        /// <param name="fixScale"></param>
+        /// <param name="scaleMultiplyier"></param>
         /// <returns></returns>
-        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double fixScale)
+        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyier)
         {
             var model = MeshHelper.Load(modelFile, IgnoreErrors: true);
 
-            if (fixScale > 0 && fixScale != 1)
+            // Workaround: Random small offset as RayIntersetTriangle() is unable to detect if the ray is exactly on the Edge of the Triangle.
+            // Which is usually because the Model's Verticies were placed with some sort of SnapTo turned on in the Designer.
+            const double offset = 0.00000456f;
+
+            if (scaleMultiplyier > 0 && scaleMultiplyier != 1.0f)
             {
-                model.TransformScale(fixScale);
+                model.TransformScale(scaleMultiplyier);
             }
 
-            int xMin = (int)Math.Floor(model.Bounds.X);
-            int yMin = (int)Math.Floor(model.Bounds.Y);
-            int zMin = (int)Math.Floor(model.Bounds.Z);
+            var xMin = (int)Math.Floor(model.Bounds.X);
+            var yMin = (int)Math.Floor(model.Bounds.Y);
+            var zMin = (int)Math.Floor(model.Bounds.Z);
 
-            int xMax = (int)Math.Ceiling(model.Bounds.X + model.Bounds.SizeX);
-            int yMax = (int)Math.Ceiling(model.Bounds.Y + model.Bounds.SizeY);
-            int zMax = (int)Math.Ceiling(model.Bounds.Z + model.Bounds.SizeZ);
+            var xMax = (int)Math.Ceiling(model.Bounds.X + model.Bounds.SizeX);
+            var yMax = (int)Math.Ceiling(model.Bounds.Y + model.Bounds.SizeY);
+            var zMax = (int)Math.Ceiling(model.Bounds.Z + model.Bounds.SizeZ);
 
-            int xCount = xMax - xMin;
-            int yCount = yMax - yMin;
-            int zCount = zMax - zMin;
+            var xCount = xMax - xMin;
+            var yCount = yMax - yMin;
+            var zCount = zMax - zMin;
 
-            CubeType[, ,] ccubic = new CubeType[xCount, yCount, zCount];
+            var ccubic = new CubeType[xCount, yCount, zCount];
 
             #region basic ray trace of every individual triangle.
 
@@ -832,7 +833,7 @@
             {
                 var g = gm.Geometry as MeshGeometry3D;
 
-                for (int t = 0; t < g.TriangleIndices.Count; t += 3)
+                for (var t = 0; t < g.TriangleIndices.Count; t += 3)
                 {
                     var p1 = g.Positions[g.TriangleIndices[t]];
                     var p2 = g.Positions[g.TriangleIndices[t + 1]];
@@ -845,15 +846,15 @@
                     {
                         for (var z = minBound.Z; z < maxBound.Z; z++)
                         {
-                            var r1 = new Point3D(xMin, y, z);
-                            var r2 = new Point3D(xMax, y, z);
-
+                            var r1 = new Point3D(xMin + offset, y + offset, z + offset);
+                            var r2 = new Point3D(xMax + offset, y + offset, z + offset);
                             Point3D intersect;
-                            if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+
+                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersect)) // Ray
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
-                            else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                            else if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
@@ -864,15 +865,15 @@
                     {
                         for (var z = minBound.Z; z < maxBound.Z; z++)
                         {
-                            var r1 = new Point3D(x, yMin, z);
-                            var r2 = new Point3D(x, yMax, z);
-
+                            var r1 = new Point3D(x + offset, yMin + offset, z + offset);
+                            var r2 = new Point3D(x + offset, yMax + offset, z + offset);
                             Point3D intersect;
-                            if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+
+                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersect)) // Ray
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
-                            else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                            else if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
@@ -883,15 +884,15 @@
                     {
                         for (var y = minBound.Y; y < maxBound.Y; y++)
                         {
-                            var r1 = new Point3D(x, y, zMin);
-                            var r2 = new Point3D(x, y, zMax);
-
+                            var r1 = new Point3D(x + offset, y + offset, zMin + offset);
+                            var r2 = new Point3D(x + offset, y + offset, zMax + offset);
                             Point3D intersect;
-                            if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersect)) // Ray
+
+                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersect)) // Ray
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
-                            else if (MeshHelper.RayIntersetTriangle(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
+                            else if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r2, r1, out intersect)) // Reverse Ray
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
@@ -919,8 +920,8 @@
             //int yCount = yMax - yMin;
             //int zCount = zMax - zMin;
 
-            //CubeType[, ,] ccubic = new CubeType[xCount, yCount, zCount];
-            CubeType[, ,] ccubic = new CubeType[0, 0, 0];
+            //var ccubic = new CubeType[xCount, yCount, zCount];
+            var ccubic = new CubeType[0, 0, 0];
             var blockDict = new Dictionary<Point3D, byte[]>();
 
             #region basic ray trace of every individual triangle.
@@ -1418,16 +1419,16 @@
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
             var zCount = ccubic.GetLength(2);
-            MyObjectBuilder_CubeBlock newCube;
 
-            for (int x = 0; x < xCount; x++)
+            for (var x = 0; x < xCount; x++)
             {
-                for (int y = 0; y < yCount; y++)
+                for (var y = 0; y < yCount; y++)
                 {
-                    for (int z = 0; z < zCount; z++)
+                    for (var z = 0; z < zCount; z++)
                     {
                         if (ccubic[x, y, z] != CubeType.None && ccubic[x, y, z] != CubeType.Interior)
                         {
+                            MyObjectBuilder_CubeBlock newCube;
                             entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
 
                             if (ccubic[x, y, z].ToString().StartsWith("Cube"))
