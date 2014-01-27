@@ -41,7 +41,9 @@
         <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding CharacterModels}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}" />
         <Label Grid.Row="3" Content="Player:"/>
         <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
-        <Label Grid.Row="4" Content="Distance:"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+        <Label Grid.Row="4" Content="Speed:"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
+        <Label Grid.Row="5" Content="Distance:"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
     </Grid>
 </UserControl>

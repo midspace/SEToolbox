@@ -172,17 +172,14 @@ namespace SEToolbox.Interop.Asteroids
         //  Same as GetMaterial() - but this is for indestructible content
         public byte GetIndestructibleContent(ref Vector3I voxelCoordInCell)
         {
-            return 0xFF;  // Anything but full 255 isn't working quite right in SE.
-            // Perhaps SE Alpha team haven't quite worked out if this is still to be supported in SE.
-
-            //if (m_singleMaterialForWholeCell == true)
-            //{
-            //    return m_singleIndestructibleContent;
-            //}
-            //else
-            //{
-            //    return m_indestructibleContent[voxelCoordInCell.X * xStep + voxelCoordInCell.Y * yStep + voxelCoordInCell.Z * zStep];
-            //}
+            if (_singleMaterialForWholeCell == true)
+            {
+                return _singleIndestructibleContent;
+            }
+            else
+            {
+                return _indestructibleContent[voxelCoordInCell.X * XStep + voxelCoordInCell.Y * YStep + voxelCoordInCell.Z * ZStep];
+            }
         }
 
         #endregion

@@ -50,6 +50,14 @@
             }
         }
 
+        public ICommand MaxVelocityAtPlayerCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(MaxVelocityAtPlayerExecuted), new Func<bool>(MaxVelocityAtPlayerCanExecute));
+            }
+        }
+
         public ICommand ConvertCommand
         {
             get
@@ -271,6 +279,18 @@
         public void ReverseVelocityExecuted()
         {
             this.DataModel.ReverseVelocity();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool MaxVelocityAtPlayerCanExecute()
+        {
+            return true;
+        }
+
+        public void MaxVelocityAtPlayerExecuted()
+        {
+            var position = ((ExplorerViewModel)this.OwnerViewModel).ThePlayerCharacter.PositionAndOrientation.Value.Position;
+            this.DataModel.MaxVelocityAtPlayer(position);
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 

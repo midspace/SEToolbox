@@ -76,6 +76,14 @@ namespace SEToolbox.ViewModels
             }
         }
 
+        public double Speed
+        {
+            get
+            {
+                return this.DataModel.Speed;
+            }
+        }
+
         #endregion
 
         #region methods

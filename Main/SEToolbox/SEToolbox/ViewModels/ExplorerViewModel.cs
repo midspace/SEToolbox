@@ -234,6 +234,22 @@
             }
         }
 
+        public ICommand Test5Command
+        {
+            get
+            {
+                return new DelegateCommand(new Action(Test5Executed), new Func<bool>(Test5CanExecute));
+            }
+        }
+
+        public ICommand Test6Command
+        {
+            get
+            {
+                return new DelegateCommand(new Action(Test6Executed), new Func<bool>(Test6CanExecute));
+            }
+        }
+
         public ICommand OpenUpdatesLinkCommand
         {
             get
@@ -347,6 +363,13 @@
             set
             {
                 this._dataModel.ActiveWorld = value;
+            }
+        }
+
+        public StructureCharacterModel ThePlayerCharacter
+        {
+            get{
+                return this._dataModel.ThePlayerCharacter;
             }
         }
 
@@ -693,7 +716,7 @@
 
             // Split object where X=28|29.
             //newEntity.CubeBlocks.RemoveAll(c => c.Min.X <= 3);
-            newEntity.CubeBlocks.RemoveAll(c => c.Min.X > 4);
+            //newEntity.CubeBlocks.RemoveAll(c => c.Min.X > 4);
 
             this._selectNewStructure = true;
             this._dataModel.CollisionCorrectEntity(newEntity);
@@ -755,6 +778,26 @@
         public void Test4Executed()
         {
             this.MirrorModel(false, this.Selections.ToArray());
+        }
+
+        public bool Test5CanExecute()
+        {
+            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+        }
+
+        public void Test5Executed()
+        {
+            this._dataModel.Test(this.Selections[0].DataModel as StructureCubeGridModel);
+        }
+
+        public bool Test6CanExecute()
+        {
+            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+        }
+
+        public void Test6Executed()
+        {
+            this._dataModel.TestConvert(this.Selections[0].DataModel as StructureCubeGridModel);
         }
 
         public bool OpenUpdatesLinkCanExecute()
@@ -897,23 +940,17 @@
 
         public void OptimizeModel(params IStructureViewBase[] viewModels)
         {
-            foreach (var viewModel in viewModels)
+            foreach (var viewModel in viewModels.OfType<StructureCubeGridViewModel>())
             {
-                if (viewModel is StructureCubeGridViewModel)
-                {
-                    this._dataModel.OptimizeModel(((StructureCubeGridViewModel)viewModel).DataModel as StructureCubeGridModel);
-                }
+                this._dataModel.OptimizeModel((viewModel).DataModel as StructureCubeGridModel);
             }
         }
 
         public void MirrorModel(bool oddMirror, params IStructureViewBase[] viewModels)
         {
-            foreach (var viewModel in viewModels)
+            foreach (var model in viewModels.OfType<StructureCubeGridViewModel>())
             {
-                if (viewModel is StructureCubeGridViewModel)
-                {
-                    this._dataModel.MirrorModel(((StructureCubeGridViewModel)viewModel).DataModel as StructureCubeGridModel, oddMirror);
-                }
+                this._dataModel.MirrorModel(model.DataModel as StructureCubeGridModel, oddMirror);
             }
         }
 
@@ -930,13 +967,13 @@
 
         public void ImportSandboxObjectFromFile()
         {
-            IOpenFileDialog openFileDialog = this._openFileDialogFactory();
+            var openFileDialog = this._openFileDialogFactory();
             openFileDialog.Filter = Resources.ImportSandboxObjectFilter;
             openFileDialog.Title = Resources.ImportSandboxObjectTitle;
             openFileDialog.Multiselect = true;
 
             // Open the dialog
-            DialogResult result = this._dialogService.ShowOpenFileDialog(this, openFileDialog);
+            var result = this._dialogService.ShowOpenFileDialog(this, openFileDialog);
 
             if (result == DialogResult.OK)
             {
@@ -970,14 +1007,14 @@
                     var structure = (StructureCubeGridViewModel)viewModel;
                     //structure.IsPiloted // TODO: preemptively remove pilots?
 
-                    ISaveFileDialog saveFileDialog = this._saveFileDialogFactory();
+                    var saveFileDialog = this._saveFileDialogFactory();
                     saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.EntityId);
                     saveFileDialog.OverwritePrompt = true;
 
                     // Open the dialog
-                    DialogResult result = this._dialogService.ShowSaveFileDialog(this, saveFileDialog);
+                    var result = this._dialogService.ShowSaveFileDialog(this, saveFileDialog);
 
                     if (result == DialogResult.OK)
                     {

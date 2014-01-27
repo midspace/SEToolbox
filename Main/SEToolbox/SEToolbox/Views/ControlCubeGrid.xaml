@@ -45,6 +45,7 @@
                         </MenuItem.Icon>
                         <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}"/>
                         <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}"/>
+                        <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}"/>
                     </MenuItem>
                     <MenuItem Header="Convert" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                         <MenuItem.Icon>
@@ -73,7 +74,7 @@
         <Label Grid.Row="4" Content="Damage:"/>
         <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
         <Label Grid.Row="5" Content="Speed:"/>
-        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed}" />
+        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
         <Label Grid.Row="6" Content="Mass:"/>
         <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0} Kg'}" />
         <Label Grid.Row="7" Content="Distance:"/>

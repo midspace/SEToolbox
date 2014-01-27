@@ -427,7 +427,7 @@
                 originalFile = this.SourceFile;
 
                 var asteroid = new MyVoxelMap();
-                asteroid.Load(this.SourceFile, null, false);
+                asteroid.Load(this.SourceFile, SpaceEngineersAPI.GetMaterialName(0), false);
                 asteroidCenter = asteroid.ContentCenter;
                 asteroidSize = asteroid.ContentSize;
             }

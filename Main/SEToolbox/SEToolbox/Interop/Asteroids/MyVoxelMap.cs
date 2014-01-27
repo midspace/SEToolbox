@@ -115,7 +115,7 @@ namespace SEToolbox.Interop.Asteroids
                     this._voxelMaterialCells[x][y] = new MyVoxelMaterialCell[_dataCellsCount.Z];
                     for (var z = 0; z < this._dataCellsCount.Z; z++)
                     {
-                        this._voxelMaterialCells[x][y][z] = new MyVoxelMaterialCell(this.VoxelMaterial, 0x00);
+                        this._voxelMaterialCells[x][y][z] = new MyVoxelMaterialCell(this.VoxelMaterial, 0xFF);
                     }
                 }
             }
@@ -447,7 +447,7 @@ namespace SEToolbox.Interop.Asteroids
         internal void SetVoxelContent(byte content, ref Vector3I voxelCoord, bool needLock = true)
         {
             //  We don't change voxel if it's a border voxel and it would be an empty voxel (not full). Because that would make voxel map with wrong/missing edges.
-            if ((content > 0) && (this.IsVoxelAtBorder(ref voxelCoord))) return;
+            if ((content > 0) && (this.IsVoxelAtBorder(ref voxelCoord))) return;  
 
             var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
             var voxelCell = this.GetCell(ref cellCoord);
@@ -518,6 +518,10 @@ namespace SEToolbox.Interop.Asteroids
             this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].SetMaterialAndIndestructibleContent(SpaceEngineersAPI.GetMaterialIndex(materialName), indestructibleContent, ref voxelCoordInCell);
         }
 
+        /// <summary>
+        /// This will now randomize the asteroid content with a little bit of Stone, to match the needs of SE's agorithm for hiding rare ore inside of nonrare ore.
+        /// </summary>
+        /// <param name="materialName"></param>
         public void ForceBaseMaterial(string materialName)
         {
             var materialIndex = SpaceEngineersAPI.GetMaterialIndex(materialName);
@@ -603,12 +607,12 @@ namespace SEToolbox.Interop.Asteroids
         //  Return true if this voxel is on voxel map border
         private bool IsVoxelAtBorder(ref Vector3I voxelCoord)
         {
-            if (voxelCoord.X <= 0 + MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_FLOAT) return true;
-            if (voxelCoord.Y <= 0 + MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_FLOAT) return true;
-            if (voxelCoord.Z <= 0 + MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_FLOAT) return true;
-            if (voxelCoord.X >= this._sizeMinusOne.X - MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_FLOAT) return true;
-            if (voxelCoord.Y >= this._sizeMinusOne.Y - MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_FLOAT) return true;
-            if (voxelCoord.Z >= this._sizeMinusOne.Z - MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_FLOAT) return true;
+            if (voxelCoord.X <= 0) return true;
+            if (voxelCoord.Y <= 0) return true;
+            if (voxelCoord.Z <= 0) return true;
+            if (voxelCoord.X >= this._sizeMinusOne.X - 1) return true;
+            if (voxelCoord.Y >= this._sizeMinusOne.Y - 1) return true;
+            if (voxelCoord.Z >= this._sizeMinusOne.Z - 1) return true;
             return false;
         }
 
