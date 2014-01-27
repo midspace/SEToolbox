@@ -1,14 +1,12 @@
-﻿using System.Collections.ObjectModel;
-
-namespace SEToolbox.Models
+﻿namespace SEToolbox.Models
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
-    using System.Linq;
 
     [Serializable]
     public class StructureCharacterModel : StructureBaseModel
@@ -92,6 +90,15 @@ namespace SEToolbox.Models
                     this.isPlayer = value;
                     this.RaisePropertyChanged(() => IsPlayer);
                 }
+            }
+        }
+
+        [XmlIgnore]
+        public double Speed
+        {
+            get
+            {
+                return this.Character.LinearVelocity.LinearVector();
             }
         }
 

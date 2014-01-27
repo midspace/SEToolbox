@@ -481,7 +481,7 @@
             // process colors.
             image = ToolboxExtensions.OptimizeImagePalette(image);
 
-            using (Bitmap palatteImage = new Bitmap(image))
+            using (var palatteImage = new Bitmap(image))
             {
                 var palatteNames = ToolboxExtensions.GetPalatteNames();
 
@@ -510,11 +510,11 @@
                 //}
 
                 // Optimal order load. from grid 0,0,0 and out.
-                for (int x = palatteImage.Width - 1; x >= 0; x--)
+                for (var x = palatteImage.Width - 1; x >= 0; x--)
                 {
-                    for (int y = palatteImage.Height - 1; y >= 0; y--)
+                    for (var y = palatteImage.Height - 1; y >= 0; y--)
                     {
-                        int z = 0;
+                        var z = 0;
                         var color = palatteImage.GetPixel(x, y);
                         var armorColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
 
@@ -522,13 +522,13 @@
                         if (armorColor.Value != null)
                         {
                             // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
-                            SubtypeId armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock" + armorColor.Value);
+                            var armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock" + armorColor.Value);
 
                             entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
                             newCube.SubtypeName = armor.ToString();
                             newCube.EntityId = 0;
                             newCube.PersistentFlags = MyPersistentEntityFlags2.None;
-                            SpaceEngineersAPI.SetCubeOrientation(newCube, CubeType.Cube);
+                            newCube.Orientation = SpaceEngineersAPI.GetCubeOrientation(CubeType.Cube);
                             newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
                             newCube.Max = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
                         }

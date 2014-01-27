@@ -623,31 +623,130 @@
 
         public void OptimizeModel(StructureCubeGridModel viewModel)
         {
-            // Optimise ordering of CubeBlocks within structure, so that loops can load quickly based on {X++, Y++, Z++}.
-            //var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenBy(c => c.Min.Y).ThenBy(c => c.Min.X).ToList();
+            if (viewModel == null)
+                return;
 
+            // Optimise ordering of CubeBlocks within structure, so that loops can load quickly based on {X+, Y+, Z+}.
             var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenBy(c => c.Min.Y).ThenBy(c => c.Min.X).ToList();
-            //var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenByDescending(c => c.Min.Y).ThenBy(c => c.Min.X).ToList(); // {X++, Y--, Z++}.
             viewModel.CubeGrid.CubeBlocks = neworder;
             this.IsModified = true;
         }
 
+        public void Test(StructureCubeGridModel viewModel)
+        {
+            //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("ArmorCorner")).ToList();
+            var corners = viewModel.CubeGrid.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().ToArray();
+
+            var list = new List<Quaternion>();
+            var list2 = new List<string>();
+
+            foreach (var corner in corners.Where(corner => !list.Contains(corner.Orientation) && !SpaceEngineersAPI.Orientations.Contains(corner.Orientation)))
+            {
+                list.Add(corner.Orientation);
+            }
+
+            var z = list.Count;
+
+        }
+
+        public void TestConvert(StructureCubeGridModel viewModel)
+        {
+            // Trim Horse image.
+            //viewModel.CubeGrid.CubeBlocks.RemoveAll(b => b.SubtypeName.EndsWith("White"));
+
+            //foreach (var block in viewModel.CubeGrid.CubeBlocks)
+            //{
+            //    if (block.SubtypeName == SubtypeId.SmallBlockArmorBlock.ToString())
+            //    {
+            //        block.SubtypeName = SubtypeId.SmallBlockArmorBlockRed.ToString();
+            //    }
+            //}
+            //this.IsModified = true;
+
+            //viewModel.CubeGrid.CubeBlocks.RemoveAll(b => b.SubtypeName == SubtypeId.SmallLight.ToString());
+
+            //var newBlocks = new List<MyObjectBuilder_CubeBlock>();
+
+            foreach (var block in viewModel.CubeGrid.CubeBlocks)
+            {
+
+                if (block.SubtypeName == SubtypeId.SmallBlockArmorBlock.ToString())
+                {
+                    block.SubtypeName = SubtypeId.SmallBlockArmorBlockBlack.ToString();
+
+                    //var light = block as MyObjectBuilder_ReflectorLight;
+                    //light.Intensity = 5;
+                    //light.Radius = 5;
+                }
+                //if (block.SubtypeName == SubtypeId.LargeBlockArmorBlockBlack.ToString())
+                //{
+                //    for (var i = 0; i < 3; i++)
+                //    {
+                //        var newBlock = new MyObjectBuilder_CubeBlock()
+                //        {
+                //            SubtypeName = block.SubtypeName, // SubtypeId.LargeBlockArmorBlockWhite.ToString(),
+                //            EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId(),
+                //            PersistentFlags = block.PersistentFlags,
+                //            Min = new Vector3I(block.Min.X, block.Min.Y, block.Min.Z + 1 + i),
+                //            Max = new Vector3I(block.Max.X, block.Max.Y, block.Max.Z + 1 + i),
+                //            Orientation = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up))
+                //        };
+
+                //        newBlocks.Add(newBlock);
+                //    }
+                //}
+
+                //if (block.SubtypeName == SubtypeId.LargeBlockArmorBlockWhite.ToString())
+                //{
+                //    var newBlock = new MyObjectBuilder_CubeBlock()
+                //    {
+                //        SubtypeName = block.SubtypeName, // SubtypeId.LargeBlockArmorBlockWhite.ToString(),
+                //        EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId(),
+                //        PersistentFlags = block.PersistentFlags,
+                //        Min = new Vector3I(block.Min.X, block.Min.Y, block.Min.Z + 3),
+                //        Max = new Vector3I(block.Max.X, block.Max.Y, block.Max.Z + 3),
+                //        Orientation = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up))
+                //    };
+
+                //    newBlocks.Add(newBlock);
+                //}
+
+                //if (block.Min.Z == 3 && block.Min.X % 2 == 1 && block.Min.Y % 2 == 1)
+                //{
+                //    var newBlock = new MyObjectBuilder_InteriorLight()
+                //    {
+                //        SubtypeName = SubtypeId.SmallLight.ToString(),
+                //        EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                //        PersistentFlags = MyPersistentEntityFlags2.Enabled | MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                //        Min = new Vector3I(block.Min.X, block.Min.Y, 1),
+                //        Max = new Vector3I(block.Max.X, block.Max.Y, 1),
+                //        Orientation = new Quaternion(1, 0, 0, 0),
+                //        Radius = 3.6f,
+                //        Falloff = 1.3f,
+                //        Intensity = 1.5f,
+                //        PositionAndOrientation = new MyPositionAndOrientation()
+                //        {
+                //            Position = new Vector3(),
+                //            //Position = new Vector3(-7.5f, -10, 27.5f),
+                //            Forward = new Vector3(0,-1,0),
+                //            Up = new Vector3(1,0,0)
+                //        }
+
+                //    };
+
+                //    newBlocks.Add(newBlock);
+                //}
+            }
+
+            //viewModel.CubeGrid.CubeBlocks.AddRange(newBlocks);
+
+            //OptimizeModel(viewModel);
+        }
+
         public void MirrorModel(StructureCubeGridModel viewModel, bool oddMirror)
         {
-            // Find mirror Axis.
-            var minX = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.X);
-            var maxX = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.X);
-            var minY = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.Y);
-            var maxY = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.Y);
-            var minZ = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.Z);
-            var maxZ = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.Z);
-
-            var countMinX = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.X == minX);
-            var countMinY = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Y == minY);
-            var countMinZ = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Z == minZ);
-            var countMaxX = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.X == maxX);
-            var countMaxY = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Y == maxY);
-            var countMaxZ = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Z == maxZ);
+            if (viewModel == null)
+                return;
 
             var xMirror = Mirror.None;
             var yMirror = Mirror.None;
@@ -656,143 +755,418 @@
             var yAxis = 0;
             var zAxis = 0;
 
-            if (countMinX > countMinY && countMinX > countMinZ && countMinX > countMaxX && countMinX > countMaxY && countMinX > countMaxZ)
+            // Find mirror Axis.
+            if (!viewModel.CubeGrid.XMirroxPlane.HasValue && !viewModel.CubeGrid.YMirroxPlane.HasValue && !viewModel.CubeGrid.ZMirroxPlane.HasValue)
             {
-                xMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
-                xAxis = minX;
-            }
-            else if (countMinY > countMinX && countMinY > countMinZ && countMinY > countMaxX && countMinY > countMaxY && countMinY > countMaxZ)
-            {
-                yMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
-                yAxis = minY;
-            }
-            else if (countMinZ > countMinX && countMinZ > countMinY && countMinZ > countMaxX && countMinZ > countMaxY && countMinZ > countMaxZ)
-            {
-                zMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
-                zAxis = minZ;
-            }
-            else if (countMaxX > countMinX && countMaxX > countMinY && countMaxX > countMinZ && countMaxX > countMaxY && countMaxX > countMaxZ)
-            {
-                xMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
-                xAxis = maxX;
-            }
-            else if (countMaxY > countMinX && countMaxY > countMinY && countMaxY > countMinZ && countMaxY > countMaxX && countMaxY > countMaxZ)
-            {
-                yMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
-                yAxis = maxY;
-            }
-            else if (countMaxZ > countMinX && countMaxZ > countMinY && countMaxZ > countMinZ && countMaxZ > countMaxX && countMaxZ > countMaxY)
-            {
-                zMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
-                zAxis = maxZ;
-            }
+                // Find the largest contigious exterior surface to use as the mirror.
+                var minX = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.X);
+                var maxX = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.X);
+                var minY = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.Y);
+                var maxY = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.Y);
+                var minZ = viewModel.CubeGrid.CubeBlocks.Min(c => c.Min.Z);
+                var maxZ = viewModel.CubeGrid.CubeBlocks.Max(c => c.Min.Z);
 
-            var blocks = new List<MyObjectBuilder_CubeBlock>();
+                var countMinX = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.X == minX);
+                var countMinY = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Y == minY);
+                var countMinZ = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Z == minZ);
+                var countMaxX = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.X == maxX);
+                var countMaxY = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Y == maxY);
+                var countMaxZ = viewModel.CubeGrid.CubeBlocks.Count(c => c.Min.Z == maxZ);
 
-            foreach (var block in viewModel.CubeGrid.CubeBlocks)
-            {
-                if (block.SubtypeName.Contains("Armor"))
+                if (countMinX > countMinY && countMinX > countMinZ && countMinX > countMaxX && countMinX > countMaxY && countMinX > countMaxZ)
                 {
-                    var newBlock = new MyObjectBuilder_CubeBlock()
-                    {
-                        SubtypeName = block.SubtypeName,
-                        EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId(),
-                        PersistentFlags = block.PersistentFlags,
-                        Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis),
-                        Max = block.Max.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis),
-                        Orientation = block.Orientation
-                        //Orientation = MirrorCubeOrientation(block.SubtypeName, block.Orientation, xMirror, yMirror, zMirror)
-                    };
-                    MirrorCubeOrientation(ref newBlock, block.Orientation, xMirror, yMirror, zMirror);
+                    xMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
+                    xAxis = minX;
+                }
+                else if (countMinY > countMinX && countMinY > countMinZ && countMinY > countMaxX && countMinY > countMaxY && countMinY > countMaxZ)
+                {
+                    yMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
+                    yAxis = minY;
+                }
+                else if (countMinZ > countMinX && countMinZ > countMinY && countMinZ > countMaxX && countMinZ > countMaxY && countMinZ > countMaxZ)
+                {
+                    zMirror = oddMirror ? Mirror.Odd : Mirror.EvenDown;
+                    zAxis = minZ;
+                }
+                else if (countMaxX > countMinX && countMaxX > countMinY && countMaxX > countMinZ && countMaxX > countMaxY && countMaxX > countMaxZ)
+                {
+                    xMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
+                    xAxis = maxX;
+                }
+                else if (countMaxY > countMinX && countMaxY > countMinY && countMaxY > countMinZ && countMaxY > countMaxX && countMaxY > countMaxZ)
+                {
+                    yMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
+                    yAxis = maxY;
+                }
+                else if (countMaxZ > countMinX && countMaxZ > countMinY && countMaxZ > countMinZ && countMaxZ > countMaxX && countMaxZ > countMaxY)
+                {
+                    zMirror = oddMirror ? Mirror.Odd : Mirror.EvenUp;
+                    zAxis = maxZ;
+                }
 
-                    if (block.PositionAndOrientation.HasValue)
-                        newBlock.PositionAndOrientation = new MyPositionAndOrientation()
-                        {
-                            Forward = block.PositionAndOrientation.Value.Forward,
-                            Position = block.PositionAndOrientation.Value.Position,
-                            Up = block.PositionAndOrientation.Value.Up,
-                        };
-
-                    blocks.Add(newBlock);
+                viewModel.CubeGrid.CubeBlocks.AddRange(MirrorCubes(viewModel, false, xMirror, xAxis, yMirror, yAxis, zMirror, zAxis));
+            }
+            else
+            {
+                // Use the built in Mirror plane defined in game.
+                if (viewModel.CubeGrid.XMirroxPlane.HasValue)
+                {
+                    xMirror = viewModel.CubeGrid.XMirroxOdd ? Mirror.EvenDown : Mirror.Odd; // Meaning is back to front? Or is it my reasoning?
+                    xAxis = viewModel.CubeGrid.XMirroxPlane.Value.X;
+                    viewModel.CubeGrid.CubeBlocks.AddRange(MirrorCubes(viewModel, true, xMirror, xAxis, Mirror.None, 0, Mirror.None, 0));
+                }
+                if (viewModel.CubeGrid.YMirroxPlane.HasValue)
+                {
+                    yMirror = viewModel.CubeGrid.YMirroxOdd ? Mirror.EvenDown : Mirror.Odd;
+                    yAxis = viewModel.CubeGrid.YMirroxPlane.Value.Y;
+                    viewModel.CubeGrid.CubeBlocks.AddRange(MirrorCubes(viewModel, true, Mirror.None, 0, yMirror, yAxis, Mirror.None, 0));
+                }
+                if (viewModel.CubeGrid.ZMirroxPlane.HasValue)
+                {
+                    zMirror = viewModel.CubeGrid.ZMirroxOdd ? Mirror.EvenUp : Mirror.Odd;
+                    zAxis = viewModel.CubeGrid.ZMirroxPlane.Value.Z;
+                    viewModel.CubeGrid.CubeBlocks.AddRange(MirrorCubes(viewModel, true, Mirror.None, 0, Mirror.None, 0, zMirror, zAxis));
                 }
             }
 
-            viewModel.CubeGrid.CubeBlocks.AddRange(blocks);
+            // OptimizeModel(viewModel);
             viewModel.UpdateFromEntityBase();
             this.IsModified = true;
         }
 
-        private static void MirrorCubeOrientation(ref MyObjectBuilder_CubeBlock block, /*string subtypeName, */ Quaternion orientation, Mirror xMirror, Mirror yMirror, Mirror zMirror)
-        {
-            var normal = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up));
+        #region ValidMirrorBlocks
 
+        private static readonly SubtypeId[] ValidMirrorBlocks = new SubtypeId[] {
+            SubtypeId.LargeBlockArmorBlock,
+            SubtypeId.LargeBlockArmorBlockRed,
+            SubtypeId.LargeBlockArmorBlockYellow,
+            SubtypeId.LargeBlockArmorBlockBlue,
+            SubtypeId.LargeBlockArmorBlockGreen,
+            SubtypeId.LargeBlockArmorBlockBlack,
+            SubtypeId.LargeBlockArmorBlockWhite,
+            SubtypeId.LargeBlockArmorSlope,
+            SubtypeId.LargeBlockArmorSlopeRed,
+            SubtypeId.LargeBlockArmorSlopeYellow,
+            SubtypeId.LargeBlockArmorSlopeBlue,
+            SubtypeId.LargeBlockArmorSlopeGreen,
+            SubtypeId.LargeBlockArmorSlopeBlack,
+            SubtypeId.LargeBlockArmorSlopeWhite,
+            SubtypeId.LargeBlockArmorCorner,
+            SubtypeId.LargeBlockArmorCornerRed,
+            SubtypeId.LargeBlockArmorCornerYellow,
+            SubtypeId.LargeBlockArmorCornerBlue,
+            SubtypeId.LargeBlockArmorCornerGreen,
+            SubtypeId.LargeBlockArmorCornerBlack,
+            SubtypeId.LargeBlockArmorCornerWhite,
+            SubtypeId.LargeBlockArmorCornerInv,
+            SubtypeId.LargeBlockArmorCornerInvRed,
+            SubtypeId.LargeBlockArmorCornerInvYellow,
+            SubtypeId.LargeBlockArmorCornerInvBlue,
+            SubtypeId.LargeBlockArmorCornerInvGreen,
+            SubtypeId.LargeBlockArmorCornerInvBlack,
+            SubtypeId.LargeBlockArmorCornerInvWhite,
+            SubtypeId.LargeHeavyBlockArmorBlock,
+            SubtypeId.LargeHeavyBlockArmorBlockRed,
+            SubtypeId.LargeHeavyBlockArmorBlockYellow,
+            SubtypeId.LargeHeavyBlockArmorBlockBlue,
+            SubtypeId.LargeHeavyBlockArmorBlockGreen,
+            SubtypeId.LargeHeavyBlockArmorBlockBlack,
+            SubtypeId.LargeHeavyBlockArmorBlockWhite,
+            SubtypeId.LargeHeavyBlockArmorSlope,
+            SubtypeId.LargeHeavyBlockArmorSlopeRed,
+            SubtypeId.LargeHeavyBlockArmorSlopeYellow,
+            SubtypeId.LargeHeavyBlockArmorSlopeBlue,
+            SubtypeId.LargeHeavyBlockArmorSlopeGreen,
+            SubtypeId.LargeHeavyBlockArmorSlopeBlack,
+            SubtypeId.LargeHeavyBlockArmorSlopeWhite,
+            SubtypeId.LargeHeavyBlockArmorCorner,
+            SubtypeId.LargeHeavyBlockArmorCornerRed,
+            SubtypeId.LargeHeavyBlockArmorCornerYellow,
+            SubtypeId.LargeHeavyBlockArmorCornerBlue,
+            SubtypeId.LargeHeavyBlockArmorCornerGreen,
+            SubtypeId.LargeHeavyBlockArmorCornerBlack,
+            SubtypeId.LargeHeavyBlockArmorCornerWhite,
+            SubtypeId.LargeHeavyBlockArmorCornerInv,
+            SubtypeId.LargeHeavyBlockArmorCornerInvRed,
+            SubtypeId.LargeHeavyBlockArmorCornerInvYellow,
+            SubtypeId.LargeHeavyBlockArmorCornerInvBlue,
+            SubtypeId.LargeHeavyBlockArmorCornerInvGreen,
+            SubtypeId.LargeHeavyBlockArmorCornerInvBlack,
+            SubtypeId.LargeHeavyBlockArmorCornerInvWhite,
+            SubtypeId.SmallBlockArmorBlock,
+            SubtypeId.SmallBlockArmorBlockRed,
+            SubtypeId.SmallBlockArmorBlockYellow,
+            SubtypeId.SmallBlockArmorBlockBlue,
+            SubtypeId.SmallBlockArmorBlockGreen,
+            SubtypeId.SmallBlockArmorBlockBlack,
+            SubtypeId.SmallBlockArmorBlockWhite,
+            SubtypeId.SmallBlockArmorSlope,
+            SubtypeId.SmallBlockArmorSlopeRed,
+            SubtypeId.SmallBlockArmorSlopeYellow,
+            SubtypeId.SmallBlockArmorSlopeBlue,
+            SubtypeId.SmallBlockArmorSlopeGreen,
+            SubtypeId.SmallBlockArmorSlopeBlack,
+            SubtypeId.SmallBlockArmorSlopeWhite,
+            SubtypeId.SmallBlockArmorCorner,
+            SubtypeId.SmallBlockArmorCornerRed,
+            SubtypeId.SmallBlockArmorCornerYellow,
+            SubtypeId.SmallBlockArmorCornerBlue,
+            SubtypeId.SmallBlockArmorCornerGreen,
+            SubtypeId.SmallBlockArmorCornerBlack,
+            SubtypeId.SmallBlockArmorCornerWhite,
+            SubtypeId.SmallBlockArmorCornerInv,
+            SubtypeId.SmallBlockArmorCornerInvRed,
+            SubtypeId.SmallBlockArmorCornerInvYellow,
+            SubtypeId.SmallBlockArmorCornerInvBlue,
+            SubtypeId.SmallBlockArmorCornerInvGreen,
+            SubtypeId.SmallBlockArmorCornerInvBlack,
+            SubtypeId.SmallBlockArmorCornerInvWhite,
+            SubtypeId.SmallHeavyBlockArmorBlock,
+            SubtypeId.SmallHeavyBlockArmorBlockRed,
+            SubtypeId.SmallHeavyBlockArmorBlockYellow,
+            SubtypeId.SmallHeavyBlockArmorBlockBlue,
+            SubtypeId.SmallHeavyBlockArmorBlockGreen,
+            SubtypeId.SmallHeavyBlockArmorBlockBlack,
+            SubtypeId.SmallHeavyBlockArmorBlockWhite,
+            SubtypeId.SmallHeavyBlockArmorSlope,
+            SubtypeId.SmallHeavyBlockArmorSlopeRed,
+            SubtypeId.SmallHeavyBlockArmorSlopeYellow,
+            SubtypeId.SmallHeavyBlockArmorSlopeBlue,
+            SubtypeId.SmallHeavyBlockArmorSlopeGreen,
+            SubtypeId.SmallHeavyBlockArmorSlopeBlack,
+            SubtypeId.SmallHeavyBlockArmorSlopeWhite,
+            SubtypeId.SmallHeavyBlockArmorCorner,
+            SubtypeId.SmallHeavyBlockArmorCornerRed,
+            SubtypeId.SmallHeavyBlockArmorCornerYellow,
+            SubtypeId.SmallHeavyBlockArmorCornerBlue,
+            SubtypeId.SmallHeavyBlockArmorCornerGreen,
+            SubtypeId.SmallHeavyBlockArmorCornerBlack,
+            SubtypeId.SmallHeavyBlockArmorCornerWhite,
+            SubtypeId.SmallHeavyBlockArmorCornerInv,
+            SubtypeId.SmallHeavyBlockArmorCornerInvRed,
+            SubtypeId.SmallHeavyBlockArmorCornerInvYellow,
+            SubtypeId.SmallHeavyBlockArmorCornerInvBlue,
+            SubtypeId.SmallHeavyBlockArmorCornerInvGreen,
+            SubtypeId.SmallHeavyBlockArmorCornerInvBlack,
+            SubtypeId.SmallHeavyBlockArmorCornerInvWhite,
+            SubtypeId.LargeRamp,
+        }; 
+
+        #endregion
+
+        private static IEnumerable<MyObjectBuilder_CubeBlock> MirrorCubes(StructureCubeGridModel viewModel, bool integrate, Mirror xMirror, int xAxis, Mirror yMirror, int yAxis, Mirror zMirror, int zAxis)
+        {
+            var blocks = new List<MyObjectBuilder_CubeBlock>();
+            SubtypeId outVal;
+
+            foreach (var block in viewModel.CubeGrid.CubeBlocks.Where(b => Enum.TryParse<SubtypeId>(b.SubtypeName, out outVal) && ValidMirrorBlocks.Contains(outVal)))
+            {
+                var newBlock = new MyObjectBuilder_CubeBlock()
+                {
+                    SubtypeName = block.SubtypeName,
+                    EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId(),
+                    PersistentFlags = block.PersistentFlags,
+                    Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis),
+                    Max = block.Max.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis),
+                    Orientation = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up))
+                    //Orientation = MirrorCubeOrientation(block.SubtypeName, block.Orientation, xMirror, yMirror, zMirror);
+                };
+                MirrorCubeOrientation(block.SubtypeName, block.Orientation, xMirror, yMirror, zMirror, ref newBlock);
+
+                // Don't place a block it one already exists there in the mirror.
+                if (integrate && viewModel.CubeGrid.CubeBlocks.Any(b => b.Min == newBlock.Min || b.Max == newBlock.Min))
+                    continue;
+
+                if (block.PositionAndOrientation.HasValue)
+                    newBlock.PositionAndOrientation = new MyPositionAndOrientation()
+                    {
+                        Forward = block.PositionAndOrientation.Value.Forward,
+                        Position = block.PositionAndOrientation.Value.Position,
+                        Up = block.PositionAndOrientation.Value.Up,
+                    };
+
+                blocks.Add(newBlock);
+            }
+            return blocks;
+        }
+
+        // TODO: change to a return type later when finished testing.
+        private static void MirrorCubeOrientation(string subtypeName, Quaternion orientation, Mirror xMirror, Mirror yMirror, Mirror zMirror, ref MyObjectBuilder_CubeBlock block)
+        {
             if (xMirror != Mirror.None)
             {
-                var nominal = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up));
-
-                // TODO: 
-                if (block.SubtypeName.Contains("ArmorSlope"))
+                if (subtypeName.Contains("ArmorSlope"))
                 {
-                    if (orientation == normal)
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("Slope"));
+                    switch (cubeType.Key)
                     {
-                        block.SubtypeName += "Red";
+                        case CubeType.SlopeCenterBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop]; break;
+                        case CubeType.SlopeRightBackCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter]; break;
+                        case CubeType.SlopeLeftBackCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter]; break;
+                        case CubeType.SlopeCenterBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom]; break;
+                        case CubeType.SlopeRightCenterTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop]; break;
+                        case CubeType.SlopeLeftCenterTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop]; break;
+                        case CubeType.SlopeRightCenterBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom]; break;
+                        case CubeType.SlopeLeftCenterBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom]; break;
+                        case CubeType.SlopeCenterFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop]; break;
+                        case CubeType.SlopeRightFrontCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter]; break;
+                        case CubeType.SlopeLeftFrontCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter]; break;
+                        case CubeType.SlopeCenterFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom]; break;
                     }
-                    block.Orientation.Y = -orientation.Y;
-                    block.Orientation.Z = -orientation.Z;
                 }
-                else if (block.SubtypeName.Contains("ArmorCorner"))
+                else if (subtypeName.Contains("ArmorCornerInv"))
                 {
-                    if (orientation == normal)
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("InverseCorner"));
+                    switch (cubeType.Key)
                     {
-                        block.SubtypeName += "Red";
+                        case CubeType.InverseCornerLeftFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontTop]; break;
+                        case CubeType.InverseCornerRightFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontTop]; break;
+                        case CubeType.InverseCornerRightBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackTop]; break;
+                        case CubeType.InverseCornerLeftBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackTop]; break;
+                        case CubeType.InverseCornerLeftFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontBottom]; break;
+                        case CubeType.InverseCornerRightFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontBottom]; break;
+                        case CubeType.InverseCornerLeftBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackBottom]; break;
+                        case CubeType.InverseCornerRightBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackBottom]; break;
                     }
-                    //block.Orientation.X = -orientation.X;
-                    block.Orientation.Y = -orientation.Y;
-                    block.Orientation.Z = -orientation.Z;
-                    //block.Orientation.W = -orientation.W;
-
-                    //SharpDX.
-                    //orientation.Axis
-                    //Quaternion.
-                    //var zz = orientation * Vector3.Forward;
-                    //orientation.
-
-                    //MathUtil..
-                    
-
+                }
+                else if (subtypeName.Contains("ArmorCorner"))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("NormalCorner"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.NormalCornerLeftFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop]; break;
+                        case CubeType.NormalCornerRightFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop]; break;
+                        case CubeType.NormalCornerLeftBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop]; break;
+                        case CubeType.NormalCornerRightBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop]; break;
+                        case CubeType.NormalCornerLeftFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom]; break;
+                        case CubeType.NormalCornerRightFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom]; break;
+                        case CubeType.NormalCornerLeftBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom]; break;
+                        case CubeType.NormalCornerRightBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
+                    }
+                }
+                else if (subtypeName.Contains("LargeRamp"))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("NormalCorner"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.NormalCornerLeftFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop]; break;
+                        case CubeType.NormalCornerRightFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop]; break;
+                        case CubeType.NormalCornerLeftBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop]; break;
+                        case CubeType.NormalCornerRightBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop]; break;
+                        case CubeType.NormalCornerLeftFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom]; break;
+                        case CubeType.NormalCornerRightFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom]; break;
+                        case CubeType.NormalCornerLeftBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom]; break;
+                        case CubeType.NormalCornerRightBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
+                    }
                 }
                 // TODO: Other block types.
             }
             else if (yMirror != Mirror.None)
             {
-                var nominal = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Right, Vector3.Up));
-                // TODO: 
-
+                if (subtypeName.Contains("ArmorSlope"))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("Slope"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.SlopeCenterBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop]; break;
+                        case CubeType.SlopeRightBackCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter]; break;
+                        case CubeType.SlopeLeftBackCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter]; break;
+                        case CubeType.SlopeCenterBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom]; break;
+                        case CubeType.SlopeRightCenterTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop]; break;
+                        case CubeType.SlopeLeftCenterTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop]; break;
+                        case CubeType.SlopeRightCenterBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom]; break;
+                        case CubeType.SlopeLeftCenterBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom]; break;
+                        case CubeType.SlopeCenterFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop]; break;
+                        case CubeType.SlopeRightFrontCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter]; break;
+                        case CubeType.SlopeLeftFrontCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter]; break;
+                        case CubeType.SlopeCenterFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom]; break;
+                    }
+                }
+                else if (subtypeName.Contains("ArmorCornerInv"))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("InverseCorner"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.InverseCornerLeftFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackTop]; break;
+                        case CubeType.InverseCornerRightFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackTop]; break;
+                        case CubeType.InverseCornerRightBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontTop]; break;
+                        case CubeType.InverseCornerLeftBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontTop]; break;
+                        case CubeType.InverseCornerLeftFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackBottom]; break;
+                        case CubeType.InverseCornerRightFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackBottom]; break;
+                        case CubeType.InverseCornerLeftBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontBottom]; break;
+                        case CubeType.InverseCornerRightBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontBottom]; break;
+                    }
+                }
+                else if (subtypeName.Contains("ArmorCorner"))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("NormalCorner"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.NormalCornerLeftFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop]; break;
+                        case CubeType.NormalCornerRightFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop]; break;
+                        case CubeType.NormalCornerLeftBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop]; break;
+                        case CubeType.NormalCornerRightBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop]; break;
+                        case CubeType.NormalCornerLeftFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
+                        case CubeType.NormalCornerRightFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom]; break;
+                        case CubeType.NormalCornerLeftBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom]; break;
+                        case CubeType.NormalCornerRightBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom]; break;
+                    }
+                }
+                // TODO: Other block types.
             }
             else if (zMirror != Mirror.None)
             {
-                var nominal = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Right));
-                // TODO: 
-
+                if (subtypeName.Contains("ArmorSlope"))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("Slope"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.SlopeCenterBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom]; break;
+                        case CubeType.SlopeRightBackCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter]; break;
+                        case CubeType.SlopeLeftBackCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter]; break;
+                        case CubeType.SlopeCenterBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop]; break;
+                        case CubeType.SlopeRightCenterTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom]; break;
+                        case CubeType.SlopeLeftCenterTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom]; break;
+                        case CubeType.SlopeRightCenterBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop]; break;
+                        case CubeType.SlopeLeftCenterBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop]; break;
+                        case CubeType.SlopeCenterFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom]; break;
+                        case CubeType.SlopeRightFrontCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter]; break;
+                        case CubeType.SlopeLeftFrontCenter: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter]; break;
+                        case CubeType.SlopeCenterFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop]; break;
+                    }
+                }
+                else if (subtypeName.Contains("ArmorCornerInv"))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("InverseCorner"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.InverseCornerLeftFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontBottom]; break;
+                        case CubeType.InverseCornerRightFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontBottom]; break;
+                        case CubeType.InverseCornerRightBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackBottom]; break;
+                        case CubeType.InverseCornerLeftBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackBottom]; break;
+                        case CubeType.InverseCornerLeftFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontTop]; break;
+                        case CubeType.InverseCornerRightFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontTop]; break;
+                        case CubeType.InverseCornerLeftBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackTop]; break;
+                        case CubeType.InverseCornerRightBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackTop]; break;
+                    }
+                }
+                else if (subtypeName.Contains("ArmorCorner"))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value == orientation && x.Key.ToString().StartsWith("NormalCorner"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.NormalCornerLeftFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom]; break;
+                        case CubeType.NormalCornerRightFrontTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom]; break;
+                        case CubeType.NormalCornerLeftBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
+                        case CubeType.NormalCornerRightBackTop: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom]; break;
+                        case CubeType.NormalCornerLeftFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop]; break;
+                        case CubeType.NormalCornerRightFrontBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop]; break;
+                        case CubeType.NormalCornerLeftBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop]; break;
+                        case CubeType.NormalCornerRightBackBottom: block.Orientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop]; break;
+                    }
+                }
+                // TODO: Other block types.
             }
-            //var m = Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up);
-
-            //newOrientation = Quaternion.Add(orientation, Quaternion.Subtract(normal, orientation));
-
-            // nominal
-            // normal
-
-            //MathUtil.matrix
-            //MathUtil.MatrixToEulerXYZ();
-
-            //Matrix.
-            //m = Matrix.Invert(m);
-            //m = Matrix.Normalize(m);
-            //newOrientation =  Quaternion.CreateFromRotationMatrix(m);
-            //newOrientation = Quaternion.Negate(orientation);
-            //newOrientation = Quaternion.Inverse(orientation);
-
-            //return newOrientation;
         }
 
         #endregion

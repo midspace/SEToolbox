@@ -144,6 +144,8 @@
                     <Button Content="Test2" ToolTip="Optimise structure" Command="{Binding Test2Command}"/>
                     <Button Content="Test3" ToolTip="Create 1/2 test model" Command="{Binding Test3Command}"/>
                     <Button Content="Test4" ToolTip="Mirror Structure" Command="{Binding Test4Command}"/>
+                    <Button Content="Test5" ToolTip="Count orientations" Command="{Binding Test5Command}"/>
+                    <Button Content="Test6" ToolTip="Test converter" Command="{Binding Test6Command}"/>
                 </ToolBar>
             </ToolBarPanel>
             <StatusBar DockPanel.Dock="Bottom">

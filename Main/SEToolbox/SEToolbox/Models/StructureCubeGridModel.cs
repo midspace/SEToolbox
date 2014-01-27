@@ -3,6 +3,7 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,6 +11,7 @@
     using System.Text;
     using System.Windows.Media.Media3D;
     using System.Xml.Serialization;
+    using VRageMath;
 
     [Serializable]
     public class StructureCubeGridModel : StructureBaseModel
@@ -185,7 +187,7 @@
         {
             get
             {
-                return (double)this.CubeGrid.LinearVelocity.Sum();
+                return this.CubeGrid.LinearVelocity.LinearVector();
             }
         }
 
@@ -349,6 +351,17 @@
         {
             this.CubeGrid.LinearVelocity = new VRageMath.Vector3(this.CubeGrid.LinearVelocity.X * -1, this.CubeGrid.LinearVelocity.Y * -1, this.CubeGrid.LinearVelocity.Z * -1);
             this.CubeGrid.AngularVelocity = new VRageMath.Vector3(this.CubeGrid.AngularVelocity.X * -1, this.CubeGrid.AngularVelocity.Y * -1, this.CubeGrid.AngularVelocity.Z * -1);
+            this.RaisePropertyChanged(() => Speed);
+        }
+
+        public void MaxVelocityAtPlayer(Vector3 playerPosition)
+        {
+            var v = playerPosition - this.CubeGrid.PositionAndOrientation.Value.Position;
+            v.Normalize();
+            v = Vector3.Multiply(v, 104.375f);
+
+            this.CubeGrid.LinearVelocity = v;
+            this.CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
             this.RaisePropertyChanged(() => Speed);
         }
 

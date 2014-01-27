@@ -129,48 +129,86 @@ namespace SEToolbox.Interop
 
         #region SetCubeOrientation
 
-        public static void SetCubeOrientation(MyObjectBuilder_CubeBlock cube, CubeType type)
+        public static readonly VRageMath.Quaternion[] Orientations = new VRageMath.Quaternion[] {
+            new VRageMath.Quaternion(0, 0, 0, 1),
+            new VRageMath.Quaternion(0, 0, 1, 0),
+            new VRageMath.Quaternion(0, 1, 0, 0),
+            new VRageMath.Quaternion(1, 0, 0, 0),
+            new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, 0.5f),
+            new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f),
+            new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f),
+            new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, -0.5f),
+            new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f),
+            new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, -0.5f),
+            new VRageMath.Quaternion(0.5f, -0.5f, -0.5f, 0.5f),
+            new VRageMath.Quaternion(0.5f, -0.5f, -0.5f, -0.5f),
+            new VRageMath.Quaternion(-0.5f, 0.5f, 0.5f, 0.5f),
+            new VRageMath.Quaternion(-0.5f, 0.5f, 0.5f, -0.5f),
+            new VRageMath.Quaternion(-0.5f, 0.5f, -0.5f, 0.5f),
+            new VRageMath.Quaternion(-0.5f, 0.5f, -0.5f, -0.5f),
+            new VRageMath.Quaternion(-0.5f, -0.5f, 0.5f, 0.5f),
+            new VRageMath.Quaternion(-0.5f, -0.5f, 0.5f, -0.5f),
+            new VRageMath.Quaternion(-0.5f, -0.5f, -0.5f, 0.5f),
+            new VRageMath.Quaternion(-0.5f, -0.5f, -0.5f, -0.5f),
+            new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f),
+            new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f),
+            new VRageMath.Quaternion(0, 0.707106769f, 0, 0.707106769f),
+            new VRageMath.Quaternion(0, -0.707106769f, 0, 0.707106769f),
+            new VRageMath.Quaternion(0, 0.707106769f, 0.707106769f, 0),
+            new VRageMath.Quaternion(0, 0.707106769f, -0.707106769f, 0),
+            new VRageMath.Quaternion(0, -0.707106769f, 0.707106769f, 0),
+            new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f),
+            new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f),
+            new VRageMath.Quaternion(0.707106769f, 0, 0.707106769f, 0),
+            new VRageMath.Quaternion(-0.707106769f, 0, 0.707106769f, 0),
+            new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0),
+            new VRageMath.Quaternion(0.707106769f, -0.707106769f, 0, 0),
+        };
+
+        // float d0.707 = Math.Sqrt(1 / 2);
+        public static readonly Dictionary<CubeType, VRageMath.Quaternion> CubeOrientations = new Dictionary<CubeType, Quaternion>()
         {
-            //float d45 = Math.Sqrt(1 / 2);
+            {CubeType.Cube, new VRageMath.Quaternion(0, 0, 0, 1)},
 
-            switch (type)
-            {
-                case CubeType.Cube: cube.Orientation = new VRageMath.Quaternion(0, 0, 0, 1); break;
+            {CubeType.SlopeCenterBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.SlopeRightBackCenter, new VRageMath.Quaternion(0.5f, -0.5f, -0.5f, -0.5f)},
+            {CubeType.SlopeLeftBackCenter, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
+            {CubeType.SlopeCenterBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},
+            {CubeType.SlopeRightCenterTop, new VRageMath.Quaternion(0.707106769f, -0.707106769f, 0, 0)},
+            {CubeType.SlopeLeftCenterTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
+            {CubeType.SlopeRightCenterBottom, new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f)},
+            {CubeType.SlopeLeftCenterBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},
+            {CubeType.SlopeCenterFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},
+            {CubeType.SlopeRightFrontCenter, new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f)},
+            {CubeType.SlopeLeftFrontCenter, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
+            {CubeType.SlopeCenterFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
 
-                case CubeType.SlopeCenterBackTop: cube.Orientation = new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f); break;
-                case CubeType.SlopeRightBackCenter: cube.Orientation = new VRageMath.Quaternion(0.5f, -0.5f, -0.5f, -0.5f); break;
-                case CubeType.SlopeLeftBackCenter: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f); break;
-                case CubeType.SlopeCenterBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, 0, 1); break;
-                case CubeType.SlopeRightCenterTop: cube.Orientation = new VRageMath.Quaternion(0.707106769f, -0.707106769f, 0, 0); break;
-                case CubeType.SlopeLeftCenterTop: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0); break;
-                case CubeType.SlopeRightCenterBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f); break;
-                case CubeType.SlopeLeftCenterBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f); break;
-                case CubeType.SlopeCenterFrontTop: cube.Orientation = new VRageMath.Quaternion(1, 0, 0, 0); break;
-                case CubeType.SlopeRightFrontCenter: cube.Orientation = new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f); break;
-                case CubeType.SlopeLeftFrontCenter: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f); break;
-                case CubeType.SlopeCenterFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f); break;
+            // Probably got the names of these all messed up in relation to their actual orientation.
+            {CubeType.NormalCornerLeftFrontTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
+            {CubeType.NormalCornerRightFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},
+            {CubeType.NormalCornerLeftBackTop, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
+            {CubeType.NormalCornerRightBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.NormalCornerLeftFrontBottom, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
+            {CubeType.NormalCornerRightFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.NormalCornerLeftBackBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},
+            {CubeType.NormalCornerRightBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},
+            
+            {CubeType.InverseCornerLeftFrontTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
+            {CubeType.InverseCornerRightFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},
+            {CubeType.InverseCornerLeftBackTop, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
+            {CubeType.InverseCornerRightBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.InverseCornerLeftFrontBottom, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
+            {CubeType.InverseCornerRightFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.InverseCornerLeftBackBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},
+            {CubeType.InverseCornerRightBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},
+        };
 
-                // Probably got the names of these all messed up in relation to their actual orientation.
-                case CubeType.CornerLeftFrontTop: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f); break;
-                case CubeType.CornerRightFrontTop: cube.Orientation = new VRageMath.Quaternion(1, 0, 0, 0); break;
-                case CubeType.CornerLeftBackTop: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0); break;
-                case CubeType.CornerRightBackTop: cube.Orientation = new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f); break;
-                case CubeType.CornerLeftFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f); break;
-                case CubeType.CornerRightFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f); break;
-                case CubeType.CornerLeftBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f); break;
-                case CubeType.CornerRightBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, 0, 1); break;
-                case CubeType.InverseCornerLeftFrontTop: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f); break;
-                case CubeType.InverseCornerRightFrontTop: cube.Orientation = new VRageMath.Quaternion(1, 0, 0, 0); break;
-                case CubeType.InverseCornerLeftBackTop: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0); break;
-                case CubeType.InverseCornerRightBackTop: cube.Orientation = new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f); break;
-                case CubeType.InverseCornerLeftFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f); break;
-                case CubeType.InverseCornerRightFrontBottom: cube.Orientation = new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f); break;
-                case CubeType.InverseCornerLeftBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f); break;
-                case CubeType.InverseCornerRightBackBottom: cube.Orientation = new VRageMath.Quaternion(0, 0, 0, 1); break;
+        public static VRageMath.Quaternion GetCubeOrientation(CubeType type)
+        {
+            if (CubeOrientations.ContainsKey(type))
+                return CubeOrientations[type];
 
-                default:
-                    throw new NotImplementedException(string.Format("SetCubeOrientation of type [{0}] not yet implmented.", type));
-            }
+            throw new NotImplementedException(string.Format("SetCubeOrientation of type [{0}] not yet implmented.", type));
         }
 
         #endregion

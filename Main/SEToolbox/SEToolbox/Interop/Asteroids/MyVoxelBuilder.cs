@@ -1,9 +1,11 @@
 ﻿namespace SEToolbox.Interop.Asteroids
 {
+    using SEToolbox.ViewModels;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.Windows.Media.Media3D;
     using VRageMath;
 
     public static class MyVoxelBuilder
@@ -97,6 +99,46 @@
                 else //if (!hollow)
                 {
                     e.Volume = 0xFF;
+                }
+            };
+
+            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, action);
+        }
+
+        public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename,
+        string material, bool fillObject, string interiorMaterial, bool highres, double scale, Transform3D transform)
+        {
+            var volmeticMap = Import3dModelViewModel.ReadModelVolmetic(sourceVolumetricFile, scale, transform, highres);
+            var size = new Vector3I(volmeticMap.GetLength(0) + 2, volmeticMap.GetLength(1) + 2, volmeticMap.GetLength(2) + 2);
+
+            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            {
+                if (e.CoordinatePoint.X > 0 && e.CoordinatePoint.Y > 0 && e.CoordinatePoint.Z > 0 &&
+                    e.CoordinatePoint.X <= volmeticMap.GetLength(0) && e.CoordinatePoint.Y <= volmeticMap.GetLength(1) && e.CoordinatePoint.Z <= volmeticMap.GetLength(2))
+                {
+                    var cube = volmeticMap[e.CoordinatePoint.X - 1, e.CoordinatePoint.Y - 1, e.CoordinatePoint.Z - 1];
+                    if (cube == CubeType.Interior && fillObject)
+                    {
+                        e.Volume = 0xff;    // 100%
+                        if (interiorMaterial != null)
+                        {
+                            e.Material = interiorMaterial;
+                        }
+                    }
+                    else if (cube == CubeType.Cube)
+                        e.Volume = 0xff;    // 100%
+                    else if (cube.ToString().StartsWith("InverseCorner"))
+                        e.Volume = 0xBD;    // 75%
+                    else if (cube.ToString().StartsWith("Slope"))
+                        e.Volume = 0x7F;    // 50%
+                    else if (cube.ToString().StartsWith("NormalCorner"))
+                        e.Volume = 0x3F;    // 25%
+                    else
+                        e.Volume = 0x00;    // 0%
+                }
+                else
+                {
+                    e.Volume = 0x00;
                 }
             };
 

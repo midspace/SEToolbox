@@ -9,14 +9,14 @@
 
     public static class MeshHelper
     {
-        public static Model3DGroup Load(string path, Dispatcher dispatcher = null, bool freeze = false, bool IgnoreErrors = false)
+        public static Model3DGroup Load(string path, Dispatcher dispatcher = null, bool freeze = false, bool ignoreErrors = false)
         {
-            Material DefaultMaterial = Materials.Blue;
-
             if (path == null)
             {
                 return null;
             }
+
+            var defaultMaterial = Materials.Blue;
 
             if (dispatcher == null)
             {
@@ -34,43 +34,42 @@
             {
                 case ".3ds":
                     {
-                        var r = new StudioReader(dispatcher) { DefaultMaterial = DefaultMaterial, Freeze = freeze };
+                        var r = new StudioReader(dispatcher) { DefaultMaterial = defaultMaterial, Freeze = freeze };
                         model = r.Read(path);
                         break;
                     }
 
                 case ".lwo":
                     {
-                        var r = new LwoReader(dispatcher) { DefaultMaterial = DefaultMaterial, Freeze = freeze };
+                        var r = new LwoReader(dispatcher) { DefaultMaterial = defaultMaterial, Freeze = freeze };
                         model = r.Read(path);
-
                         break;
                     }
 
                 case ".obj":
                     {
-                        var r = new ObjReader(dispatcher) { DefaultMaterial = DefaultMaterial, Freeze = freeze, IgnoreErrors = IgnoreErrors };
+                        var r = new ObjReader(dispatcher) { DefaultMaterial = defaultMaterial, Freeze = freeze, IgnoreErrors = ignoreErrors };
                         model = r.Read(path);
                         break;
                     }
 
                 case ".objz":
                     {
-                        var r = new ObjReader(dispatcher) { DefaultMaterial = DefaultMaterial, Freeze = freeze, IgnoreErrors = IgnoreErrors };
+                        var r = new ObjReader(dispatcher) { DefaultMaterial = defaultMaterial, Freeze = freeze, IgnoreErrors = ignoreErrors };
                         model = r.ReadZ(path);
                         break;
                     }
 
                 case ".stl":
                     {
-                        var r = new StLReader(dispatcher) { DefaultMaterial = DefaultMaterial, Freeze = freeze };
+                        var r = new StLReader(dispatcher) { DefaultMaterial = defaultMaterial, Freeze = freeze };
                         model = r.Read(path);
                         break;
                     }
 
                 case ".off":
                     {
-                        var r = new OffReader(dispatcher) { DefaultMaterial = DefaultMaterial, Freeze = freeze };
+                        var r = new OffReader(dispatcher) { DefaultMaterial = defaultMaterial, Freeze = freeze };
                         model = r.Read(path);
                         break;
                     }
@@ -78,11 +77,6 @@
                 default:
                     throw new InvalidOperationException("File format not supported.");
             }
-
-            //if (!freeze)
-            //{
-            //    dispatcher.Invoke(new Action(() => model.SetName(Path.GetFileName(path))));
-            //}
 
             return model;
         }
@@ -169,6 +163,19 @@
             intersection = intersectPos;
 
             return true;
+        }
+
+        public static bool RayIntersetTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D[] rays, out Point3D intersection)
+        {
+            for (var i = 0; i < rays.Length; i += 2)
+            {
+                if (RayIntersetTriangleRound(p1, p2, p3, rays[i], rays[i + 1], out intersection)) // Ray
+                    return true;
+                if (RayIntersetTriangleRound(p1, p2, p3, rays[i + 1], rays[i], out intersection)) // Reverse Ray
+                    return true;
+            }
+            intersection = default(Point3D);
+            return false;
         }
 
         public static bool RayIntersetTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection)
@@ -307,5 +314,19 @@
             return newVector;
         }
 
+        internal static double LinearVector(this Vector3 vector)
+        {
+            return Math.Sqrt(Math.Pow(vector.X, 2) + Math.Pow(vector.Y, 2) + Math.Pow(vector.Z, 2));
+        }
+
+        public static Transform3D TransformVector(Vector3D origin, double xAngle, double yAngle, double zAngle)
+        {
+            var transform = new Transform3DGroup();
+            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), zAngle)));
+            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), yAngle)));
+            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(-1, 0, 0), xAngle)));
+            transform.Children.Add(new TranslateTransform3D(origin));
+            return transform;
+        }
     }
 }
