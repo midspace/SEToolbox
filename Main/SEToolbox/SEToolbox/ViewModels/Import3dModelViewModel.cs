@@ -495,7 +495,7 @@
 
             var blockPrefix = "Small";
             entity.IsStatic = false;
-            blockPrefix += "Block";
+            blockPrefix += "HeavyBlock";
 
             // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
             var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
