@@ -99,6 +99,9 @@
     <Content Include="TestAssets\7242630_scale432.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestAssets\Earth.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestAssets\test.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -310,7 +310,7 @@
 
         #region helpers
 
-        private static int ScaleMod(double value, int scale)
+        public static int ScaleMod(double value, int scale)
         {
             return (int)Math.Ceiling(value / scale) * scale;
         }

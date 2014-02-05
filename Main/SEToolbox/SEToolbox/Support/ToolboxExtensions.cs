@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Support
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
@@ -91,7 +92,7 @@
         /// Maps the colors used in optimzation to color names used in Space Engineers Armor Cube names.
         /// </summary>
         /// <returns></returns>
-        internal static Dictionary<Color, string> GetPalatteNames()
+        public static Dictionary<Color, string> GetPalatteNames()
         {
             Dictionary<Color, string> palette = new Dictionary<Color, string>()
                 {
@@ -339,5 +340,75 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// map 3D coordinates to long/lat to plannar X/Y image.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        /// <param name="altitude"></param>
+        /// <param name="planarWidth"></param>
+        /// <param name="planarHeight"></param>
+        public static Point? Cartesian3DToSphericalPlanar(double x, double y, double z, double altitude, int planarWidth, int planarHeight)
+        {
+            var latitude = Math.Asin(y / altitude);
+            var longitude = Math.Atan2(z, x);
+
+            if (double.IsNaN(latitude) || double.IsNaN(longitude))
+                return null;
+
+            // planarWidth  : 0 to width -1
+            // longitude  : -PI to PI?
+
+            var x2 = Math.Round((longitude + Math.PI) / (2 * Math.PI) * (planarWidth - 1), 0);
+
+            // planarHeight  : 0 to height -1
+            // latitude  : -PI/2 to PI/2
+
+            var y2 = Math.Round((latitude + (Math.PI / 2)) / Math.PI * (planarHeight - 1), 0);
+
+
+            //if (longitude <= -Math.PI)
+            //{
+            //}
+            //if (longitude >= Math.PI )
+            //{
+            //}
+            //if (latitude <= -Math.PI / 2)
+            //{
+            //}
+            //if (latitude >= Math.PI / 2)
+            //{
+            //}
+            //if (x2 <= 2)
+            //{
+            //}
+            //if (x2 >= planarWidth)
+            //{
+            //}
+            //if (y2 < 0)
+            //{
+            //}
+            //if (y2 >= planarHeight)
+            //{
+            //}
+
+            // TODO: map long/lat to image X/Y
+
+            //if (!double.IsNaN(longitude))
+            //{
+            //    min = Math.Min(longitude, min);
+            //    max = Math.Max(longitude, max);
+            //}
+
+            //Debug.WriteLine(latitude);
+            Point planarPoint = new Point((int)x2, (int)y2);
+
+            return planarPoint;
+        }
+
+        //public static double min = double.MaxValue;
+        //public static double max = double.MinValue;
     }
 }

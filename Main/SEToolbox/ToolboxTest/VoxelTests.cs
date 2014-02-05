@@ -404,6 +404,98 @@
         }
 
         [TestMethod]
+        public void VoxelGenerateSphereLargeHollow()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_350_10_radi.vox", 350, materials[0].Name, true, 10);    // 00:01:32.6580269 | VoxCells 3,801,278,432. | Is culled.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_355_10_radi.vox", 355, materials[0].Name, true, 10);    // 00:01:57.0029873 | VoxCells 3,912,545,848. | Is culled.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_356_10_radi.vox", 356, materials[0].Name, true, 10);    // 00:01:56.1288918 | VoxCells 3,935,432,712. |
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_357_10_radi.vox", 357, materials[0].Name, true, 10);    // 00:01:58.6494562 | VoxCells 3,957,704,936. | no reponse.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_358_10_radi.vox", 358, materials[0].Name, true, 10);    // 00:02:01.1396811 | VoxCells 3,980,026,368. | Crash
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_360_10_radi.vox", 360, materials[0].Name, true, 10);    // 00:02:00.2852452 | VoxCells 4,025,973,228. | >2mins, no response.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_370_10_radi.vox", 370, materials[0].Name, true, 10);    // 00:02:02.8729741 | VoxCells 4,255,404,456. |
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_382_10_radi.vox", 382, materials[0].Name, true, 10);    // 00:02:01.4779420 | VoxCells 4,540,873,728. | Won't load
+
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_380_radi.vox", 380, materials[0].Name, false, 0);  // 00:01:37.7515161 | VoxCells 58,379,415,373. | culling. VoxCells 58,387,542,901
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_390_radi.vox", 390, materials[0].Name, false, 0);  // 00:02:07.8909152 | VoxCells 63,116,794,109. |
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_400_radi.vox", 400, materials[0].Name, false, 0);  // 00:02:05.2804642 | VoxCells 68,104,580,085. | culling. Alt Tab part works, then crash. VoxCells 68,104,580,085
+        }
+
+        [TestMethod]
+        public void VoxelPlanetSurfaceMapper()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_05"));
+            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            var heliumMaterial = materials.FirstOrDefault(m => m.Name.Contains("Helium"));
+
+            var imageFile = @".\TestAssets\Earth.png";
+            var fileNew = @".\TestAssets\Earth.vox";
+            double radius = 60;
+
+            var length = MyVoxelBuilder.ScaleMod((radius * 2) + 2, 64);
+            var size = new Vector3I(length, length, length);
+            var origin = new Vector3I(size.X / 2, size.Y / 2, size.Z / 2);
+
+            var bmp = ToolboxExtensions.OptimizeImagePalette(imageFile);
+            var palatteNames = ToolboxExtensions.GetPalatteNames();
+
+            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            {
+                double x = e.CoordinatePoint.X - origin.X;
+                double y = e.CoordinatePoint.Y - origin.Y;
+                double z = e.CoordinatePoint.Z - origin.Z;
+
+                var dist = Math.Sqrt(Math.Abs(x * x) + Math.Abs(y * y) + Math.Abs(z * z));
+                if (dist >= radius)
+                {
+                    e.Volume = 0x00;
+                }
+                else if (dist > radius - 1)
+                {
+                    e.Volume = (byte)((radius - dist) * 255);
+                    var point = ToolboxExtensions.Cartesian3DToSphericalPlanar(x, y, z, dist, bmp.Width, bmp.Height);
+                    if (point.HasValue)
+                    {
+                        var color = bmp.GetPixel(point.Value.X, point.Value.Y);
+                        var materialColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
+                        if (materialColor.Value == "Blue")
+                        {
+                            e.Material = heliumMaterial.Name;
+                        }
+                    }
+                }
+                else
+                {
+                    e.Volume = 0xFF;
+                    var point = ToolboxExtensions.Cartesian3DToSphericalPlanar(x, y, z, dist, bmp.Width, bmp.Height);
+                    if (point.HasValue)
+                    {
+                        var color = bmp.GetPixel(point.Value.X, point.Value.Y);
+                        var materialColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
+                        if (materialColor.Value == "Blue")
+                        {
+                            e.Material = heliumMaterial.Name;
+                        }
+                    }
+                }
+            };
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(false, fileNew, size, stoneMaterial.Name, action);
+
+            //var m1 = ToolboxExtensions.min;
+            //var m2 = ToolboxExtensions.max;
+
+
+            // TODO:
+        }
+
+        [TestMethod]
         public void VoxelGenerateSpikeWall()
         {
             var materials = SpaceEngineersAPI.GetMaterialList();
@@ -434,6 +526,21 @@
             var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, materials[0].Name, action);
 
             var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(52171, lengthNew, "New file size must match.");
+
+            Assert.AreEqual(1024, voxelMap.Size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(1024, voxelMap.Size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
+
+            Assert.AreEqual(1022, voxelMap.ContentSize.X, "Voxel Content size must match.");
+            Assert.AreEqual(1022, voxelMap.ContentSize.Y, "Voxel Content size must match.");
+            Assert.AreEqual(2, voxelMap.ContentSize.Z, "Voxel Content size must match.");
+
+            // Centered in the middle of the 512x512x512 cell.
+            Assert.AreEqual(511.5, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(511.5, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(5.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
         //[TestMethod]
