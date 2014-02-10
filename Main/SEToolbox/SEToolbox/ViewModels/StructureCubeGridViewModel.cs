@@ -82,6 +82,13 @@
             }
         }
 
+        public ICommand FrameworkCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(FrameworkExecuted), new Func<bool>(FrameworkCanExecute));
+            }
+        }
 
         public ICommand ConvertToFrameworkCommand
         {
@@ -112,6 +119,30 @@
             get
             {
                 return new DelegateCommand(new Action(ConvertToShipExecuted), new Func<bool>(ConvertToShipCanExecute));
+            }
+        }
+
+        public ICommand MirrorStructureByPlaneCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(MirrorStructureByPlaneExecuted), new Func<bool>(MirrorStructureByPlaneCanExecute));
+            }
+        }
+
+        public ICommand MirrorStructureGuessOddCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(MirrorStructureGuessOddExecuted), new Func<bool>(MirrorStructureGuessOddCanExecute));
+            }
+        }
+
+        public ICommand MirrorStructureGuessEvenCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(MirrorStructureGuessEvenExecuted), new Func<bool>(MirrorStructureGuessEvenCanExecute));
             }
         }
 
@@ -325,6 +356,16 @@
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 
+        public bool FrameworkCanExecute()
+        {
+            return true;
+        }
+
+        public void FrameworkExecuted()
+        {
+            // placeholder.
+        }
+
         public bool ConvertToFrameworkCanExecute()
         {
             return true;
@@ -367,6 +408,39 @@
         public void ConvertToShipExecuted()
         {
             this.DataModel.ConvertToShip();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool MirrorStructureByPlaneCanExecute()
+        {
+            return true;
+        }
+
+        public void MirrorStructureByPlaneExecuted()
+        {
+            this.DataModel.MirrorModel(true, false);
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool MirrorStructureGuessOddCanExecute()
+        {
+            return true;
+        }
+
+        public void MirrorStructureGuessOddExecuted()
+        {
+            this.DataModel.MirrorModel(false, true);
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool MirrorStructureGuessEvenCanExecute()
+        {
+            return true;
+        }
+
+        public void MirrorStructureGuessEvenExecuted()
+        {
+            this.DataModel.MirrorModel(false, false);
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 

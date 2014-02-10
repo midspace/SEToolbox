@@ -55,7 +55,7 @@
                             <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}"/>
                             <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}"/>
                         </MenuItem>
-                        <MenuItem Header="Framework">
+                        <MenuItem Header="Framework" Command="{Binding FrameworkCommand}" ToolTip="Does not work currently.">
                             <MenuItem Header="To Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed."/>
                             <MenuItem Header="To Complete Structure" Command="{Binding ConvertToCompleteStructureCommand}" ToolTip="Any unconstructed components are constructed."/>
                         </MenuItem>
@@ -63,6 +63,11 @@
                             <MenuItem Header="To Station" Command="{Binding ConvertToStationCommand}" />
                             <MenuItem Header="To Ship" Command="{Binding ConvertToShipCommand}" />
                         </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Mirror">
+                        <MenuItem Header="Using predefined X/Y/Z Planes" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="Uses planes as defined on the ship/station within Space Engineers." />
+                        <MenuItem Header="Find largest surface / odd [left&gt;|center|&lt;right]" Command="{Binding MirrorStructureGuessOddCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
+                        <MenuItem Header="Find largest surface / even [left&gt;|&lt;right]" Command="{Binding MirrorStructureGuessEvenCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
                     </MenuItem>
                 </Menu>
             </ToolBar>

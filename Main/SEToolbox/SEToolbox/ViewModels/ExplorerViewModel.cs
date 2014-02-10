@@ -950,7 +950,7 @@
         {
             foreach (var model in viewModels.OfType<StructureCubeGridViewModel>())
             {
-                this._dataModel.MirrorModel(model.DataModel as StructureCubeGridModel, oddMirror);
+                ((StructureCubeGridModel)model.DataModel).MirrorModel(true, false);
             }
         }
 
