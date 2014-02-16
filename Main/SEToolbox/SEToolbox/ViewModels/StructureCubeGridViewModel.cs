@@ -26,6 +26,14 @@
 
         #region command Properties
 
+        public ICommand OptimizeObjectCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(OptimizeObjectExecuted), new Func<bool>(OptimizeObjectCanExecute));
+            }
+        }
+
         public ICommand RepairObjectCommand
         {
             get
@@ -279,6 +287,16 @@
         #endregion
 
         #region methods
+
+        public bool OptimizeObjectCanExecute()
+        {
+            return true;
+        }
+
+        public void OptimizeObjectExecuted()
+        {
+            ((ExplorerViewModel)this.OwnerViewModel).OptimizeModel(this);
+        }
 
         public bool RepairObjectCanExecute()
         {

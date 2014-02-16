@@ -116,6 +116,7 @@
     <Compile Include="Models\BindableVector3DModel.cs" />
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
+    <Compile Include="Models\BindableSize3DIModel.cs" />
     <Compile Include="Models\GenerateVoxelDetailModel.cs" />
     <Compile Include="Models\GenerateVoxelModel.cs" />
     <Compile Include="Models\GenerateVoxelFieldModel.cs" />
@@ -353,6 +354,7 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\sort_descending.png" />
     <None Include="Resources\Toolbox_logo.jpg" />
     <None Include="Resources\server_to_client.png" />
     <None Include="Resources\message_edit.png" />

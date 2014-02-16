@@ -2,7 +2,9 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
     using SEToolbox.ViewModels;
+    using System.Linq;
 
     [TestClass]
     public class VolumentricTests
@@ -12,7 +14,7 @@
         {
             var modelFile = @".\TestAssets\algos.obj";
 
-            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 1, null, false);
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 1, null, ModelTraceVoxel.Thin);
 
             Assert.AreEqual(1290600, cubic.Length, "Array length size must match.");
 
@@ -38,7 +40,7 @@
         {
             var modelFile = @".\TestAssets\algos.obj";
 
-            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0.5, null, false);
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0.5, null, ModelTraceVoxel.Thin);
 
             Assert.AreEqual(168480, cubic.Length, "Array length size must match.");
 
@@ -48,12 +50,53 @@
         }
 
         [TestMethod]
-        public void GenerateModelSimpleVolumentric()
+        public void GenerateModelSimpleThinVolumentric()
         {
             var modelFile = @".\TestAssets\t25.obj";
 
-            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, false);
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
 
+            var cubicCount = Import3dModelViewModel.CountCubic(cubic);
+
+            Assert.AreEqual(72, cubic.Length, "Array length size must match.");
+
+            Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
+            Assert.AreEqual(6, cubic.GetLength(1), "Array size must match.");
+            Assert.AreEqual(3, cubic.GetLength(2), "Array size must match.");
+
+            Assert.AreEqual(36, cubicCount[CubeType.Cube], "Cube count must match.");
+            Assert.AreEqual(4, cubicCount[CubeType.Interior], "Interoir count must match.");
+        }
+
+        [TestMethod]
+        public void GenerateModelSimpleThinSmoothedVolumentric()
+        {
+            var modelFile = @".\TestAssets\t25.obj";
+
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.ThinSmoothed);
+
+            var cubicCount = Import3dModelViewModel.CountCubic(cubic);
+
+            Assert.AreEqual(72, cubic.Length, "Array length size must match.");
+
+            Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
+            Assert.AreEqual(6, cubic.GetLength(1), "Array size must match.");
+            Assert.AreEqual(3, cubic.GetLength(2), "Array size must match.");
+
+            Assert.AreEqual(36, cubicCount[CubeType.Cube], "Cube count must match.");
+            Assert.AreEqual(4, cubicCount[CubeType.Interior], "Interoir count must match.");
+        }
+
+        [TestMethod]
+        public void GenerateModelSimpleThickVolumentric()
+        {
+            var modelFile = @".\TestAssets\t25.obj";
+
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thick);
+
+            var cubicCount = Import3dModelViewModel.CountCubic(cubic);
+
+            Assert.AreEqual(58, cubicCount[CubeType.Cube], "Cube count must match.");
             Assert.AreEqual(72, cubic.Length, "Array length size must match.");
 
             Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
@@ -81,7 +124,7 @@
         {
             var modelFile = @".\TestAssets\t25.obj";
 
-            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 2, null, false);
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 2, null, ModelTraceVoxel.Thin);
 
             Import3dModelViewModel.CalculateInverseCorners(cubic);
             Import3dModelViewModel.CalculateSlopes(cubic);

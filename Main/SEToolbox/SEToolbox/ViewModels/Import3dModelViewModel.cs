@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using HelixToolkit.Wpf;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -143,6 +142,19 @@
             }
         }
 
+        public Model3D Model
+        {
+            get
+            {
+                return this.dataModel.Model;
+            }
+
+            set
+            {
+                this.dataModel.Model = value;
+            }
+        }
+
         public bool IsValidModel
         {
             get
@@ -169,7 +181,7 @@
             }
         }
 
-        public BindableSize3DModel NewModelSize
+        public BindableSize3DIModel NewModelSize
         {
             get
             {
@@ -232,6 +244,19 @@
             set
             {
                 this.dataModel.Up = value;
+            }
+        }
+
+        public ModelTraceVoxel TraceType
+        {
+            get
+            {
+                return this.dataModel.TraceType;
+            }
+
+            set
+            {
+                this.dataModel.TraceType = value;
             }
         }
 
@@ -394,14 +419,16 @@
             this.IsBusy = true;
 
             this.OriginalModelSize = new BindableSize3DModel(0, 0, 0);
-            this.NewModelSize = new BindableSize3DModel(0, 0, 0);
+            this.NewModelSize = new BindableSize3DIModel(0, 0, 0);
             this.Position = new BindablePoint3DModel(0, 0, 0);
 
             if (File.Exists(filename))
             {
                 // validate file is a real model.
                 // read model properties.
-                var size = Preview3DModel(filename);
+                Model3D model;
+                var size = PreviewModelVolmetic(filename, out model);
+                this.Model = model;
 
                 if (size != null && size.Height != 0 && size.Width != 0 && size.Depth != 0)
                 {
@@ -413,27 +440,6 @@
             }
 
             this.IsBusy = false;
-        }
-
-        private BindableSize3DModel Preview3DModel(string filename)
-        {
-            var voxFilename = ToolboxExtensions.ConvertPolyToVox(filename, 0, false);
-            BindableSize3DModel size = new BindableSize3DModel();
-
-            if (voxFilename != null)
-            {
-                using (BinaryReader reader = new BinaryReader(File.Open(voxFilename, FileMode.Open)))
-                {
-                    size.Width = reader.ReadInt32();
-                    size.Depth = reader.ReadInt32();
-                    size.Height = reader.ReadInt32();
-                }
-
-                File.Delete(voxFilename);
-                return size;
-            }
-
-            return null;
         }
 
         private void ProcessModelScale()
@@ -495,7 +501,7 @@
 
             var blockPrefix = "Small";
             entity.IsStatic = false;
-            blockPrefix += "HeavyBlock";
+            blockPrefix += "Block"; // "HeavyBlock";
 
             // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
             var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
@@ -535,18 +541,75 @@
                 fixScale = Math.Max(Math.Max(this.NewModelSize.Height, this.NewModelSize.Width), this.NewModelSize.Depth);
             }
 
-            // TODO: fillobject.
-            // TODO: smoothing.
-
             var smoothObject = true;
 
             #region Read in voxel and set main cube space.
 
+            //// Splayed diagonal plane.
+            //var max = 40;
+            //var ccubic = new CubeType[max, max, max];
+
+            //for (var z = 0; z < max; z++)
+            //{
+            //    for (var j = 0; j < max; j++)
+            //    {
+            //        {
+            //            var x = j + z;
+            //            var y = j;
+            //            if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
+            //        }
+            //        {
+            //            var x = j;
+            //            var y = j + z;
+            //            if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
+            //        }
+            //        {
+            //            var x = j + z;
+            //            var y = max - j;
+            //            if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
+            //        }
+            //        {
+            //            var x = j;
+            //            var y = max - (j + z);
+            //            if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
+            //        }
+            //    }
+            //}
+
+            #endregion
+
+            #region Read in voxel and set main cube space.
+
+            // Sloped diagonal plane.
+            //var max = 20;
+            //var ccubic = new CubeType[max, max, max];
+            //var dx = 1;
+            //var dy = 6;
+            //var dz = 0;
+
+            //for (var i = 0; i < max; i++)
+            //{
+            //    for (var j = 0; j < max; j++)
+            //    {
+            //        if (dx + j >= 0 && dy + j - i >= 0 && dz + i >= 0 &&
+            //            dx + j < max && dy + j - i < max && dz + i < max)
+            //        {
+            //            ccubic[dx + j, dy + j - i, dz + i] = CubeType.Cube;
+            //        }
+            //    }
+            //}
+
+            #endregion
+
+            #region Read in voxel and set main cube space.
+
+            //// Staggered star.
+
             //var ccubic = new CubeType[9, 9, 9];
 
-            //for (int i = 3; i < 6; i++)
+            //for (var i = 2; i < 7; i++)
             //{
-            //    for (int j = 3; j < 6; j++)
+            //    for (var j = 2; j < 7; j++)
             //    {
             //        ccubic[i, j, 4] = CubeType.Cube;
             //        ccubic[i, 4, j] = CubeType.Cube;
@@ -554,7 +617,7 @@
             //    }
             //}
 
-            //for (int i = 0; i < 9; i++)
+            //for (var i = 0; i < 9; i++)
             //{
             //    ccubic[i, 4, 4] = CubeType.Cube;
             //    ccubic[4, i, 4] = CubeType.Cube;
@@ -565,50 +628,38 @@
 
             #region Read in voxel and set main cube space.
 
-            // Staggered star.
+            // Tray shape
 
-            var ccubic = new CubeType[9, 9, 9];
+            var max = 20;
+            var offset = 5;
 
-            for (var i = 2; i < 7; i++)
+            var ccubic = new CubeType[max, max, max];
+
+            for (var x = 0; x < max; x++)
             {
-                for (var j = 2; j < 7; j++)
+                for (var y = 0; y < max; y++)
                 {
-                    ccubic[i, j, 4] = CubeType.Cube;
-                    ccubic[i, 4, j] = CubeType.Cube;
-                    ccubic[4, i, j] = CubeType.Cube;
+                    ccubic[2,x, y] = CubeType.Cube;
                 }
             }
 
-            for (var i = 0; i < 9; i++)
+            for (var z = 1; z < 4; z += 2)
             {
-                ccubic[i, 4, 4] = CubeType.Cube;
-                ccubic[4, i, 4] = CubeType.Cube;
-                ccubic[4, 4, i] = CubeType.Cube;
+                for (int i = 0; i < max; i++)
+                {
+                    ccubic[z, i, 0] = CubeType.Cube;
+                    ccubic[z, i, max - 1] = CubeType.Cube;
+                    ccubic[z, 0, i] = CubeType.Cube;
+                    ccubic[z, max - 1, i] = CubeType.Cube;
+                }
+
+                for (int i = 0 + offset; i < max - offset; i++)
+                {
+                    ccubic[z, i, i] = CubeType.Cube;
+                    ccubic[z, max - i - 1, i] = CubeType.Cube;
+                }
             }
 
-            #endregion
-
-            #region Read in voxel and set main cube space.
-
-            //// Tray shape
-
-            //var ccubic = new CubeType[12, 12, 12];
-
-            //for (int i = 0; i < 12; i++)
-            //{
-            //    for (int j = 0; j < 12; j++)
-            //    {
-            //        ccubic[i, j, 0] = CubeType.Cube;
-            //    }
-            //}
-
-            //for (int i = 0; i < 12; i++)
-            //{
-            //    ccubic[i, 0, 1] = CubeType.Cube;
-            //    ccubic[i, 11, 1] = CubeType.Cube;
-            //    ccubic[0, i, 1] = CubeType.Cube;
-            //    ccubic[11, i, 1] = CubeType.Cube;
-            //}
 
             #endregion
 
@@ -670,14 +721,6 @@
                 case ImportArmorType.Light: blockPrefix += "Block"; break;
             }
 
-            entity.PositionAndOrientation = new MyPositionAndOrientation()
-            {
-                // TODO: reposition based scale.
-                Position = this.Position.ToVector3(),
-                Forward = this.Forward.ToVector3(),
-                Up = this.Up.ToVector3()
-            };
-
             // Large|Block|ArmorCorner
             // Large|HeavyBlock|ArmorBlock,
             // Small|Block|ArmorSlope,
@@ -690,34 +733,30 @@
 
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
 
-            var fixScale = 0;
-            if (this.IsMultipleScale && this.MultipleScale == 1)
+            double multiplier = 1;
+            if (this.IsMultipleScale)
             {
-                fixScale = 0;
+                multiplier = this.MultipleScale;
             }
             else
             {
-                fixScale = Math.Max(Math.Max(this.NewModelSize.Height, this.NewModelSize.Width), this.NewModelSize.Depth);
+                multiplier = this.MaxLengthScale / Math.Max(Math.Max(this.OriginalModelSize.Height, this.OriginalModelSize.Width), this.OriginalModelSize.Depth);
             }
+
+            var ccubic = ReadModelVolmetic(this.Filename, multiplier, null, this.TraceType);
 
             // TODO: fillobject UI.
-            // TODO: smoothing UI.
-
-            var fillObject = false;
-            var smoothObject = true;
-
-
-            var ccubic = ReadTemporaryVolmetic(this.Filename, fixScale, fillObject);
-            //var ccubic = ReadModelVolmetic(this.Filename, 1);
-
-            if (smoothObject)
-            {
-                CalculateInverseCorners(ccubic);
-                CalculateSlopes(ccubic);
-                CalculateCorners(ccubic);
-            }
+            //var fillObject = false;
 
             BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
+
+            entity.PositionAndOrientation = new MyPositionAndOrientation()
+            {
+                // TODO: reposition based scale.
+                Position = this.Position.ToVector3(),
+                Forward = this.Forward.ToVector3(),
+                Up = this.Up.ToVector3()
+            };
 
             return entity;
         }
@@ -795,13 +834,51 @@
             return ccubic;
         }
 
+        #endregion
+
+        #region ReadModelVolmetic
+
+        public static BindableSize3DModel PreviewModelVolmetic(string modelFile, out Model3D model)
+        {
+            var size = new BindableSize3DModel();
+
+            if (modelFile != null)
+            {
+                try
+                {
+                    model = MeshHelper.Load(modelFile, ignoreErrors: true);
+                }
+                catch
+                {
+                    model = null;
+                    return null;
+                }
+
+                if (model.Bounds == Rect3D.Empty)
+                {
+                    model = null;
+                    return null;
+                }
+
+                return new BindableSize3DModel(model.Bounds);
+            }
+
+            model = null;
+            return null;
+        }
+
+        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyier, Transform3D transform, ModelTraceVoxel traceType)
+        {
+            return ReadModelVolmetic(modelFile, scaleMultiplyier, scaleMultiplyier, scaleMultiplyier, transform, traceType);
+        }
+
         /// <summary>
         /// Volumes are calculated across axis where they are whole numbers (rounded to 0 decimal places).
         /// </summary>
         /// <param name="modelFile"></param>
         /// <param name="scaleMultiplyier"></param>
         /// <returns></returns>
-        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyier, Transform3D transform, bool smoothObject)
+        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyierX, double scaleMultiplyierY, double scaleMultiplyierZ, Transform3D transform, ModelTraceVoxel traceType)
         {
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);
 
@@ -809,9 +886,9 @@
             // Which is usually because the Model's Verticies were placed with some sort of SnapTo turned on in the Designer.
             const double offset = 0.00000456f;
 
-            if (scaleMultiplyier > 0 && scaleMultiplyier != 1.0f)
+            if (scaleMultiplyierX > 0 && scaleMultiplyierY > 0 && scaleMultiplyierZ > 0 && scaleMultiplyierX != 1.0f && scaleMultiplyierY != 1.0f && scaleMultiplyierZ != 1.0f)
             {
-                model.TransformScale(scaleMultiplyier);
+                model.TransformScale(scaleMultiplyierX, scaleMultiplyierY, scaleMultiplyierZ);
             }
 
             var tbounds = model.Bounds;
@@ -831,6 +908,7 @@
             var zCount = zMax - zMin;
 
             var ccubic = new CubeType[xCount + 0, yCount + 0, zCount + 0];
+            Point3D[] rays;
 
             #region basic ray trace of every individual triangle.
 
@@ -858,15 +936,25 @@
                     {
                         for (var z = minBound.Z; z < maxBound.Z; z++)
                         {
-                            Point3D intersect;
-                            var rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
+                            if (traceType == ModelTraceVoxel.Thin || traceType == ModelTraceVoxel.ThinSmoothed)
                             {
-                                new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset),  
-                                new Point3D(xMin, y + 1 - offset, z + offset),new Point3D(xMax, y + 1 - offset, z + offset),
-                                new Point3D(xMin, y + offset, z + 1 - offset), new Point3D(xMax, y + offset, z + 1 - offset),
-                                new Point3D(xMin, y + 1 - offset, z + 1 - offset), new Point3D(xMax, y + 1 - offset, z + 1 - offset)
-                            };
+                                rays = new Point3D[] // 1 point ray trace in the center.
+                                {
+                                    new Point3D(xMin, y + 0.5 + offset, z + 0.5 + offset), new Point3D(xMax, y + 0.5 + offset, z + 0.5 + offset)
+                                };
+                            }
+                            else
+                            {
+                                rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
+                                {
+                                    new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset),  
+                                    new Point3D(xMin, y + 1 - offset, z + offset),new Point3D(xMax, y + 1 - offset, z + offset),
+                                    new Point3D(xMin, y + offset, z + 1 - offset), new Point3D(xMax, y + offset, z + 1 - offset),
+                                    new Point3D(xMin, y + 1 - offset, z + 1 - offset), new Point3D(xMax, y + 1 - offset, z + 1 - offset)
+                                };
+                            }
 
+                            Point3D intersect;
                             if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
@@ -878,15 +966,25 @@
                     {
                         for (var z = minBound.Z; z < maxBound.Z; z++)
                         {
-                            Point3D intersect;
-                            var rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
+                            if (traceType == ModelTraceVoxel.Thin || traceType == ModelTraceVoxel.ThinSmoothed)
                             {
-                                new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset),
-                                new Point3D(x + 1 - offset, yMin, z + offset),new Point3D(x + 1 - offset, yMax, z + offset),
-                                new Point3D(x + offset, yMin, z + 1 - offset), new Point3D(x + offset, yMax, z + 1 - offset),
-                                new Point3D(x + 1 - offset, yMin, z + 1 - offset), new Point3D(x + 1 - offset, yMax, z + 1 - offset)
-                            };
+                                rays = new Point3D[] // 1 point ray trace in the center.
+                                {
+                                    new Point3D(x + 0.5 + offset, yMin, z + 0.5 + offset), new Point3D(x + 0.5 + offset, yMax, z + 0.5 + offset)
+                                };
+                            }
+                            else
+                            {
+                                rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
+                                {
+                                    new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset),
+                                    new Point3D(x + 1 - offset, yMin, z + offset),new Point3D(x + 1 - offset, yMax, z + offset),
+                                    new Point3D(x + offset, yMin, z + 1 - offset), new Point3D(x + offset, yMax, z + 1 - offset),
+                                    new Point3D(x + 1 - offset, yMin, z + 1 - offset), new Point3D(x + 1 - offset, yMax, z + 1 - offset)
+                                };
+                            }
 
+                            Point3D intersect;
                             if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
@@ -898,15 +996,25 @@
                     {
                         for (var y = minBound.Y; y < maxBound.Y; y++)
                         {
-                            Point3D intersect;
-                            var rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
+                            if (traceType == ModelTraceVoxel.Thin || traceType == ModelTraceVoxel.ThinSmoothed)
                             {
-                                new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax),
-                                new Point3D(x + 1 - offset, y + offset, zMin),new Point3D(x + 1 - offset, y + offset, zMax),
-                                new Point3D(x + offset, y + 1 - offset, zMin), new Point3D(x + offset, y + 1 - offset, zMax),
-                                new Point3D(x + 1 - offset, y + 1 - offset, zMin), new Point3D(x + 1 - offset, y + 1 - offset, zMax)
-                            };
+                                rays = new Point3D[] // 1 point ray trace in the center.
+                                {
+                                    new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMin), new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMax),
+                                };
+                            }
+                            else
+                            {
+                                rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
+                                {
+                                    new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax),
+                                    new Point3D(x + 1 - offset, y + offset, zMin),new Point3D(x + 1 - offset, y + offset, zMax),
+                                    new Point3D(x + offset, y + 1 - offset, zMin), new Point3D(x + offset, y + 1 - offset, zMax),
+                                    new Point3D(x + 1 - offset, y + 1 - offset, zMin), new Point3D(x + 1 - offset, y + 1 - offset, zMax)
+                                };
+                            }
 
+                            Point3D intersect;
                             if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
@@ -914,18 +1022,18 @@
                         }
                     }
                 }
-            } 
+            }
 
             #endregion
 
-            if (smoothObject)
+            CrawlExterior(ccubic);
+
+            if (traceType == ModelTraceVoxel.ThinSmoothed || traceType == ModelTraceVoxel.ThickSmoothed)
             {
                 CalculateInverseCorners(ccubic);
                 CalculateSlopes(ccubic);
                 CalculateCorners(ccubic);
             }
-
-            CrawlExterior(ccubic);
 
             return ccubic;
         }
@@ -1126,6 +1234,31 @@
             }
         }
 
+        public static Dictionary<CubeType, int> CountCubic(CubeType[, ,] cubic)
+        {
+            var assetCount = new Dictionary<CubeType, int>();
+
+            for (var x = 0; x < cubic.GetLength(0); x++)
+            {
+                for (var y = 0; y < cubic.GetLength(1); y++)
+                {
+                    for (var z = 0; z < cubic.GetLength(2); z++)
+                    {
+                        if (assetCount.ContainsKey(cubic[x, y, z]))
+                        {
+                            assetCount[cubic[x, y, z]]++;
+                        }
+                        else
+                        {
+                            assetCount.Add(cubic[x, y, z], 1);
+                        }
+                    }
+                }
+            }
+
+            return assetCount;
+        }
+
         #endregion
 
 
@@ -1232,51 +1365,200 @@
                         {
                             if ((CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeLeftFrontCenter, -1, 0, 0, CubeType.SlopeCenterFrontTop)) ||
                                 (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeLeftFrontCenter, 0, +1, 0, CubeType.SlopeLeftCenterTop)) ||
-                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontTop, 0, +1, 0, CubeType.SlopeLeftCenterTop)))
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontTop, 0, +1, 0, CubeType.SlopeLeftCenterTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackBottom, 0, +1, 0, CubeType.InverseCornerRightBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackBottom, 0, 0, +1, CubeType.InverseCornerRightBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.InverseCornerRightBackBottom, 0, 0, +1, CubeType.InverseCornerRightBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontTop, 0, +1, 0, CubeType.InverseCornerRightBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackBottom, 0, +1, 0, CubeType.SlopeLeftCenterTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontTop, 0, 0, +1, CubeType.InverseCornerRightBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackBottom, 0, 0, +1, CubeType.SlopeLeftFrontCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.InverseCornerRightBackBottom, 0, 0, +1, CubeType.SlopeLeftFrontCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.SlopeLeftCenterTop, 0, 0, +1, CubeType.InverseCornerRightBackBottom)))
                             {
                                 ccubic[x, y, z] = CubeType.NormalCornerLeftFrontTop;
                             }
                             else if ((CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeRightFrontCenter, +1, 0, 0, CubeType.SlopeCenterFrontTop)) ||
                                 (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeRightFrontCenter, 0, +1, 0, CubeType.SlopeRightCenterTop)) ||
-                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontTop, 0, +1, 0, CubeType.SlopeRightCenterTop)))
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontTop, 0, +1, 0, CubeType.SlopeRightCenterTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackBottom, 0, +1, 0, CubeType.InverseCornerLeftBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackBottom, 0, 0, +1, CubeType.InverseCornerLeftBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.InverseCornerLeftBackBottom, 0, 0, +1, CubeType.InverseCornerLeftBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackBottom, 0, +1, 0, CubeType.SlopeRightCenterTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontTop, 0, +1, 0, CubeType.InverseCornerLeftBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackBottom, 0, 0, +1, CubeType.SlopeRightFrontCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontTop, 0, 0, +1, CubeType.InverseCornerLeftBackBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.InverseCornerLeftBackBottom, 0, 0, +1, CubeType.SlopeRightFrontCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.SlopeRightCenterTop, 0, 0, +1, CubeType.InverseCornerLeftBackBottom)))
                             {
                                 ccubic[x, y, z] = CubeType.NormalCornerRightFrontTop;
                             }
                             else if ((CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeLeftFrontCenter, -1, 0, 0, CubeType.SlopeCenterFrontBottom)) ||
-                               (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeLeftFrontCenter, 0, +1, 0, CubeType.SlopeLeftCenterBottom)) ||
-                               (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, +1, 0, CubeType.SlopeLeftCenterBottom)))
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeLeftFrontCenter, 0, +1, 0, CubeType.SlopeLeftCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, +1, 0, CubeType.SlopeLeftCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackTop, 0, +1, 0, CubeType.InverseCornerRightBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackTop, 0, 0, -1, CubeType.InverseCornerRightBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.InverseCornerRightBackTop, 0, 0, -1, CubeType.InverseCornerRightBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, +1, 0, CubeType.InverseCornerRightBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackTop, 0, +1, 0, CubeType.SlopeLeftCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, 0, -1, CubeType.InverseCornerRightBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackTop, 0, 0, -1, CubeType.SlopeLeftFrontCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.InverseCornerRightBackTop, 0, 0, -1, CubeType.SlopeLeftFrontCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.SlopeLeftCenterBottom, 0, 0, -1, CubeType.InverseCornerRightBackTop)))
                             {
                                 ccubic[x, y, z] = CubeType.NormalCornerLeftFrontBottom;
                             }
                             else if ((CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeRightFrontCenter, +1, 0, 0, CubeType.SlopeCenterFrontBottom)) ||
-                              (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeRightFrontCenter, 0, +1, 0, CubeType.SlopeRightCenterBottom)) ||
-                              (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, +1, 0, CubeType.SlopeRightCenterBottom)))
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeRightFrontCenter, 0, +1, 0, CubeType.SlopeRightCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, +1, 0, CubeType.SlopeRightCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackTop, 0, +1, 0, CubeType.InverseCornerLeftBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackTop, 0, 0, -1, CubeType.InverseCornerLeftBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.InverseCornerLeftBackTop, 0, 0, -1, CubeType.InverseCornerLeftBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackTop, 0, +1, 0, CubeType.SlopeRightCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, +1, 0, CubeType.InverseCornerLeftBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackTop, 0, 0, -1, CubeType.SlopeRightFrontCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, 0, -1, CubeType.InverseCornerLeftBackTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.InverseCornerLeftBackTop, 0, 0, -1, CubeType.SlopeRightFrontCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, 0, CubeType.SlopeRightCenterBottom, 0, 0, -1, CubeType.InverseCornerLeftBackTop)))
                             {
                                 ccubic[x, y, z] = CubeType.NormalCornerRightFrontBottom;
                             }
                             else if ((CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeLeftBackCenter, -1, 0, 0, CubeType.SlopeCenterBackTop)) ||
                                 (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeLeftBackCenter, 0, -1, 0, CubeType.SlopeLeftCenterTop)) ||
-                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackTop, 0, -1, 0, CubeType.SlopeLeftCenterTop)))
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackTop, 0, -1, 0, CubeType.SlopeLeftCenterTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontBottom, 0, -1, 0, CubeType.InverseCornerRightFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontBottom, 0, 0, +1, CubeType.InverseCornerRightFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.InverseCornerRightFrontBottom, 0, 0, +1, CubeType.InverseCornerRightFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackTop, 0, -1, 0, CubeType.InverseCornerRightFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontBottom, 0, -1, 0, CubeType.SlopeLeftCenterTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackTop, 0, 0, +1, CubeType.InverseCornerRightFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontBottom, 0, 0, +1, CubeType.SlopeLeftBackCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.InverseCornerRightFrontBottom, 0, 0, +1, CubeType.SlopeLeftBackCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.SlopeLeftCenterTop, 0, 0, +1, CubeType.InverseCornerRightFrontBottom)))
                             {
                                 ccubic[x, y, z] = CubeType.NormalCornerLeftBackTop;
                             }
                             else if ((CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeRightBackCenter, +1, 0, 0, CubeType.SlopeCenterBackTop)) ||
                                 (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeRightBackCenter, 0, -1, 0, CubeType.SlopeRightCenterTop)) ||
-                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackTop, 0, -1, 0, CubeType.SlopeRightCenterTop)))
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackTop, 0, -1, 0, CubeType.SlopeRightCenterTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontBottom, 0, -1, 0, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontBottom, 0, 0, +1, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.InverseCornerLeftFrontBottom, 0, 0, +1, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontBottom, 0, -1, 0, CubeType.SlopeRightCenterTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackTop, 0, -1, 0, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontBottom, 0, 0, +1, CubeType.SlopeRightBackCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackTop, 0, 0, +1, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.SlopeRightCenterTop, 0, 0, +1, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.InverseCornerLeftFrontBottom, 0, 0, +1, CubeType.SlopeRightBackCenter)))
                             {
                                 ccubic[x, y, z] = CubeType.NormalCornerRightBackTop;
                             }
                             else if ((CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeLeftBackCenter, -1, 0, 0, CubeType.SlopeCenterBackBottom)) ||
-                               (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeLeftBackCenter, 0, -1, 0, CubeType.SlopeLeftCenterBottom)) ||
-                               (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackBottom, 0, -1, 0, CubeType.SlopeLeftCenterBottom)))
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeLeftBackCenter, 0, -1, 0, CubeType.SlopeLeftCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackBottom, 0, -1, 0, CubeType.SlopeLeftCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontTop, 0, -1, 0, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontTop, 0, 0, -1, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.InverseCornerRightFrontTop, 0, 0, -1, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackBottom, 0, -1, 0, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontTop, 0, -1, 0, CubeType.SlopeLeftCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackBottom, 0, 0, -1, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontTop, 0, 0, -1, CubeType.SlopeLeftBackCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.SlopeLeftCenterBottom, 0, 0, -1, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.InverseCornerRightFrontTop, 0, 0, -1, CubeType.SlopeLeftBackCenter)))
                             {
                                 ccubic[x, y, z] = CubeType.NormalCornerLeftBackBottom;
                             }
                             else if ((CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeRightBackCenter, +1, 0, 0, CubeType.SlopeCenterBackBottom)) ||
                                 (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, -1, CubeType.SlopeRightBackCenter, 0, -1, 0, CubeType.SlopeRightCenterBottom)) ||
-                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackBottom, 0, -1, 0, CubeType.SlopeRightCenterBottom)))
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackBottom, 0, -1, 0, CubeType.SlopeRightCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontTop, 0, -1, 0, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontTop, 0, 0, -1, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.InverseCornerLeftFrontTop, 0, 0, -1, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontTop, 0, -1, 0, CubeType.SlopeRightCenterBottom)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackBottom, 0, -1, 0, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontTop, 0, 0, -1, CubeType.SlopeRightBackCenter)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackBottom, 0, 0, -1, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.SlopeRightCenterBottom, 0, 0, -1, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 0, CubeType.InverseCornerLeftFrontTop, 0, 0, -1, CubeType.SlopeRightBackCenter)))
                             {
                                 ccubic[x, y, z] = CubeType.NormalCornerRightBackBottom;
+                            }
+
+
+                            // ########### Triplet checks
+                            else if ((CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontTop, 0, -1, 0, CubeType.InverseCornerLeftFrontTop, 0, 0, -1, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackBottom, 0, -1, 0, CubeType.InverseCornerLeftFrontTop, 0, 0, -1, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontTop, 0, -1, 0, CubeType.SlopeRightCenterBottom, 0, 0, -1, CubeType.InverseCornerLeftFrontTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontTop, 0, -1, 0, CubeType.InverseCornerLeftFrontTop, 0, 0, -1, CubeType.SlopeRightBackCenter))
+                                // TODO: other checks.
+                                )
+                            {
+                                ccubic[x, y, z] = CubeType.NormalCornerRightBackBottom;
+                            }
+                            else if ((CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackBottom, 0, +1, 0, CubeType.InverseCornerRightBackBottom, 0, 0, +1, CubeType.InverseCornerRightBackBottom)) ||
+                                  (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontTop, 0, +1, 0, CubeType.InverseCornerRightBackBottom, 0, 0, +1, CubeType.InverseCornerRightBackBottom)) ||
+                                  (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackBottom, 0, +1, 0, CubeType.SlopeLeftCenterTop, 0, 0, +1, CubeType.InverseCornerRightBackBottom)) ||
+                                  (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackBottom, 0, +1, 0, CubeType.InverseCornerRightBackBottom, 0, 0, +1, CubeType.SlopeLeftFrontCenter))
+                                // TODO: other checks.
+                                )
+                            {
+                                ccubic[x, y, z] = CubeType.NormalCornerLeftFrontTop;
+                            }
+                            else if ((CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontTop, 0, -1, 0, CubeType.InverseCornerRightFrontTop, 0, 0, -1, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackBottom, 0, -1, 0, CubeType.InverseCornerRightFrontTop, 0, 0, -1, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontTop, 0, -1, 0, CubeType.SlopeLeftCenterBottom, 0, 0, -1, CubeType.InverseCornerRightFrontTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontTop, 0, -1, 0, CubeType.InverseCornerRightFrontTop, 0, 0, -1, CubeType.SlopeLeftBackCenter))
+                                // TODO: other checks.
+                                )
+                            {
+                                ccubic[x, y, z] = CubeType.NormalCornerLeftBackBottom;
+                            }
+                            else if ((CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackBottom, 0, +1, 0, CubeType.InverseCornerLeftBackBottom, 0, 0, +1, CubeType.InverseCornerLeftBackBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontTop, 0, +1, 0, CubeType.InverseCornerLeftBackBottom, 0, 0, +1, CubeType.InverseCornerLeftBackBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackBottom, 0, +1, 0, CubeType.SlopeRightCenterTop, 0, 0, +1, CubeType.InverseCornerLeftBackBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackBottom, 0, +1, 0, CubeType.InverseCornerLeftBackBottom, 0, 0, +1, CubeType.SlopeRightFrontCenter))
+                                // TODO: other checks.
+                                )
+                            {
+                                ccubic[x, y, z] = CubeType.NormalCornerRightFrontTop;
+                            }
+                            else if ((CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackTop, 0, +1, 0, CubeType.InverseCornerLeftBackTop, 0, 0, -1, CubeType.InverseCornerLeftBackTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, +1, 0, CubeType.InverseCornerLeftBackTop, 0, 0, -1, CubeType.InverseCornerLeftBackTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackTop, 0, +1, 0, CubeType.SlopeRightCenterBottom, 0, 0, -1, CubeType.InverseCornerLeftBackTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftBackTop, 0, +1, 0, CubeType.InverseCornerLeftBackTop, 0, 0, -1, CubeType.SlopeRightFrontCenter))
+
+                                // TODO: other checks.
+                                )
+                            {
+                                ccubic[x, y, z] = CubeType.NormalCornerRightFrontBottom;
+                            }
+                            else if ((CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontBottom, 0, -1, 0, CubeType.InverseCornerRightFrontBottom, 0, 0, +1, CubeType.InverseCornerRightFrontBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterBackTop, 0, -1, 0, CubeType.InverseCornerRightFrontBottom, 0, 0, +1, CubeType.InverseCornerRightFrontBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontBottom, 0, -1, 0, CubeType.SlopeLeftCenterTop, 0, 0, +1, CubeType.InverseCornerRightFrontBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightFrontBottom, 0, -1, 0, CubeType.InverseCornerRightFrontBottom, 0, 0, +1, CubeType.SlopeLeftBackCenter))
+
+                                // TODO: other checks.
+                                )
+                            {
+                                ccubic[x, y, z] = CubeType.NormalCornerLeftBackTop;
+                            }
+                            else if ((CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackTop, 0, +1, 0, CubeType.InverseCornerRightBackTop, 0, 0, -1, CubeType.InverseCornerRightBackTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.SlopeCenterFrontBottom, 0, +1, 0, CubeType.InverseCornerRightBackTop, 0, 0, -1, CubeType.InverseCornerRightBackTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackTop, 0, +1, 0, CubeType.SlopeLeftCenterBottom, 0, 0, -1, CubeType.InverseCornerRightBackTop)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 0, CubeType.InverseCornerRightBackTop, 0, +1, 0, CubeType.InverseCornerRightBackTop, 0, 0, -1, CubeType.SlopeLeftFrontCenter))
+                                // TODO: other checks.
+                                )
+                            {
+                                ccubic[x, y, z] = CubeType.NormalCornerLeftFrontBottom;
+                            }
+                            else if ((CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontBottom, 0, -1, 0, CubeType.InverseCornerLeftFrontBottom, 0, 0, +1, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.SlopeCenterBackTop, 0, -1, 0, CubeType.InverseCornerLeftFrontBottom, 0, 0, +1, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontBottom, 0, -1, 0, CubeType.SlopeRightCenterTop, 0, 0, +1, CubeType.InverseCornerLeftFrontBottom)) ||
+                                (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.InverseCornerLeftFrontBottom, 0, -1, 0, CubeType.InverseCornerLeftFrontBottom, 0, 0, +1, CubeType.SlopeRightBackCenter))
+                                // TODO: other checks.
+                                )
+                            {
+                                ccubic[x, y, z] = CubeType.NormalCornerRightBackTop;
                             }
                         }
                     }
@@ -1420,11 +1702,11 @@
             int xDelta2, int yDelta2, int zDelta2, CubeType cubeType2,
             int xDelta3, int yDelta3, int zDelta3, CubeType cubeType3)
         {
-            if (IsValidRange(x, y, z, xCount, yCount, zCount, xDelta1, yDelta1, zDelta1) 
+            if (IsValidRange(x, y, z, xCount, yCount, zCount, xDelta1, yDelta1, zDelta1)
                 && IsValidRange(x, y, z, xCount, yCount, zCount, xDelta2, yDelta2, zDelta2)
                 && IsValidRange(x, y, z, xCount, yCount, zCount, xDelta3, yDelta3, zDelta3))
             {
-                return ccubic[x + xDelta1, y + yDelta1, z + zDelta1] == cubeType1 
+                return ccubic[x + xDelta1, y + yDelta1, z + zDelta1] == cubeType1
                     && ccubic[x + xDelta2, y + yDelta2, z + zDelta2] == cubeType2
                     && ccubic[x + xDelta3, y + yDelta3, z + zDelta3] == cubeType3;
             }

@@ -6,8 +6,9 @@
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:interop="clr-namespace:SEToolbox.Interop"
+        xmlns:ht="http://helixtoolkit.codeplex.com"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import 3D Model" Height="380" Width="520" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Import 3D Model" Height="400" Width="520" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -22,8 +23,9 @@
     </Window.Cursor>
     <Grid>
         <StackPanel Margin="8" Orientation="Vertical">
-            <Grid Margin="0,0,0,8" Height="280">
+            <Grid Margin="0,0,0,8" Height="300">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -36,6 +38,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Model:" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -44,23 +47,40 @@
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>
-                <Label Content="Type:" Grid.Row="1" />
-                <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ClassTypeEnum}}" SelectedValue="{Binding ClassType}">
+                <Label Content="Calculation:" Grid.Row="1" />
+                <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ModelTraceVoxelEnum}}" SelectedValue="{Binding TraceType}" Margin="0,2">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Label Content="Armor:" Grid.Row="2" />
-                <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ArmorTypeEnum}}" SelectedValue="{Binding ArmorType}">
+                <Label Content="Type:" Grid.Row="2" />
+                <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ClassTypeEnum}}" SelectedValue="{Binding ClassType}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Label Content="Armor:" Grid.Row="3" />
+                <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <ht:HelixViewport3D >
+                            <ht:DefaultLights/>
+                            <ht:CoordinateSystemVisual3D/>
+                            <ModelVisual3D Content="{Binding Model}"/>
+                        </ht:HelixViewport3D>
+                    </Border>
+                </Grid>
+                <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ArmorTypeEnum}}" SelectedValue="{Binding ArmorType}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal">
                     <GroupBox Header="Original Size" MinWidth="120">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -73,11 +93,11 @@
                                 <ColumnDefinition Width="65"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Width:" Margin="0,0,0,0" />
-                            <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Width, StringFormat={}{0:#,##0}}" />
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Width, StringFormat={}{0:#,##0.00}}" />
                             <TextBlock Text="Height:" Margin="0,0,0,0" Grid.Row="1" />
-                            <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Height, StringFormat={}{0:#,##0}}" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Height, StringFormat={}{0:#,##0.00}}" />
                             <TextBlock Text="Depth:" Margin="0,0,0,0" Grid.Row="2" />
-                            <TextBlock Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Depth, StringFormat={}{0:#,##0}}" />
+                            <TextBlock Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Depth, StringFormat={}{0:#,##0.00}}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Scale" MinWidth="120">
@@ -95,7 +115,7 @@
                                 <TextBox.Text>
                                     <Binding Path="MultipleScale" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                                         <Binding.ValidationRules>
-                                            <converters:RangeRuleD Min="0" Max="1000"/>
+                                            <converters:RangeRuleD Min="0" Max="10000"/>
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </TextBox.Text>
@@ -105,7 +125,7 @@
                                 <TextBox.Text>
                                     <Binding Path="MaxLengthScale" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                                         <Binding.ValidationRules>
-                                            <converters:RangeRuleD Min="5" Max="1024"/>
+                                            <converters:RangeRuleD Min="5" Max="10240"/>
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </TextBox.Text>
@@ -113,7 +133,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="New Size" MinWidth="120" Margin="8,0,0,0">
+                    <GroupBox Header="Approximate New Size" MinWidth="120" Margin="8,0,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -140,7 +160,7 @@
                         </Grid>
                     </GroupBox>
                 </StackPanel>
-                <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal">
                     <GroupBox Header="Position" MinWidth="120">
                         <Grid>
                             <Grid.RowDefinitions>

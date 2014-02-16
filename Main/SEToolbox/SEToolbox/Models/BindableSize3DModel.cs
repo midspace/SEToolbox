@@ -7,82 +7,73 @@
     {
         #region fields
 
-        private int width;
-        private int height;
-        private int depth;
+        private Size3D size;
 
         #endregion
 
         public BindableSize3DModel()
         {
-            this.Width = 0;
-            this.Height = 0;
-            this.Depth = 0;
+            this.size = new Size3D(0, 0, 0);
         }
 
         public BindableSize3DModel(int width, int height, int depth)
-            : this()
         {
-            this.Width = width;
-            this.Height = height;
-            this.Depth = depth;
+            this.size = new Size3D(width, height, depth);
         }
 
-        public BindableSize3DModel(Size size)
-            : this()
+        public BindableSize3DModel(Rect3D size)
         {
-            this.Width = size.Width;
-            this.Height = size.Height;
+            this.size = new Size3D(size.SizeX, size.SizeY, size.SizeZ);
         }
 
         #region Properties
 
-        public int Width
+        public double Width
         {
             get
             {
-                return this.width;
+                return this.size.X;
             }
 
             set
             {
-                if (value != this.width)
+                if (value != this.size.X)
                 {
-                    this.width = value;
+                    this.size.X = value;
                     this.RaisePropertyChanged(() => Width);
                 }
             }
         }
 
-        public int Height
+        public double Height
         {
             get
             {
-                return this.height;
+                return this.size.Y;
             }
 
             set
             {
-                if (value != this.height)
+                if (value != this.size.Y)
                 {
-                    this.height = value;
+                    this.size.Y = value;
                     this.RaisePropertyChanged(() => Height);
                 }
             }
         }
 
-        public int Depth
+        public double Depth
         {
             get
             {
-                return this.depth;
+                return this.size.Z;
             }
 
             set
             {
-                if (value != this.depth)
+                if (value != this.size.Z)
                 {
-                    this.depth = value;
+                    this.size.Z = value;
                     this.RaisePropertyChanged(() => Depth);
                 }
             }
@@ -92,7 +83,7 @@
         {
             get
             {
-                return new Size3D(this.Width, this.Height, this.Depth);
+                return size;
             }
         }
 

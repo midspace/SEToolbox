@@ -640,7 +640,7 @@
             var list = new List<Quaternion>();
             var list2 = new List<string>();
 
-            foreach (var corner in corners.Where(corner => !list.Contains(corner.Orientation) && !SpaceEngineersAPI.Orientations.Contains(corner.Orientation)))
+            foreach (var corner in corners.Where(corner => !list.Contains(corner.Orientation) && !SpaceEngineersAPI.ValidOrientations.Contains(corner.Orientation)))
             {
                 list.Add(corner.Orientation);
             }
@@ -672,7 +672,7 @@
 
                 if (block.SubtypeName == SubtypeId.SmallBlockArmorBlock.ToString())
                 {
-                    block.SubtypeName = SubtypeId.SmallBlockArmorBlockBlack.ToString();
+                    //block.SubtypeName = SubtypeId.SmallBlockArmorBlockBlack.ToString();
 
                     //var light = block as MyObjectBuilder_ReflectorLight;
                     //light.Intensity = 5;
@@ -740,7 +740,7 @@
 
             //viewModel.CubeGrid.CubeBlocks.AddRange(newBlocks);
 
-            //OptimizeModel(viewModel);
+            OptimizeModel(viewModel);
         }
 
         #endregion

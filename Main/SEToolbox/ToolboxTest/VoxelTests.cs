@@ -422,7 +422,22 @@
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_380_radi.vox", 380, materials[0].Name, false, 0);  // 00:01:37.7515161 | VoxCells 58,379,415,373. | culling. VoxCells 58,387,542,901
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_390_radi.vox", 390, materials[0].Name, false, 0);  // 00:02:07.8909152 | VoxCells 63,116,794,109. |
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_400_radi.vox", 400, materials[0].Name, false, 0);  // 00:02:05.2804642 | VoxCells 68,104,580,085. | culling. Alt Tab part works, then crash. VoxCells 68,104,580,085
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_450_radi.vox", 450, materials[0].Name, false, 0);  // works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_460_radi.vox", 460, materials[0].Name, false, 0);  // works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_465_radi.vox", 465, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_470_radi.vox", 470, materials[0].Name, false, 0);  // works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_471_radi.vox", 471, materials[0].Name, false, 0); // 00:03:41.2510726  | VoxCells 111,251,164,251 | Works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_472_radi.vox", 472, materials[0].Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_473_radi.vox", 473, materials[0].Name, false, 0); // 00:03:40.2173012  | VoxCells 112,675,647,555 | Crash.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_474_radi.vox", 474, materials[0].Name, false, 0); // 00:03:46.7690005  | VoxCells 113,392,787,817 | 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_475_radi.vox", 475, materials[0].Name, false, 0);  // no response?
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_480_radi.vox", 480, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_485_radi.vox", 485, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_490_radi.vox", 490, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_495_radi.vox", 495, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_500_radi.vox", 500, materials[0].Name, false, 0); // 00:04:43.9200838  | VoxCells 133,115,971,161. | Crash.
         }
+
 
         [TestMethod]
         public void VoxelPlanetSurfaceMapper()
@@ -432,11 +447,14 @@
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_05"));
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            var ironMaterial = materials.FirstOrDefault(m => m.Name.Contains("Iron"));
             var heliumMaterial = materials.FirstOrDefault(m => m.Name.Contains("Helium"));
+            var iceMaterial = materials.FirstOrDefault(m => m.Name.Contains("Ice"));
 
             var imageFile = @".\TestAssets\Earth.png";
             var fileNew = @".\TestAssets\Earth.vox";
-            double radius = 60;
+            //fileNew = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Builder Toolset\Earth0.vox";
+            double radius = 300;
 
             var length = MyVoxelBuilder.ScaleMod((radius * 2) + 2, 64);
             var size = new Vector3I(length, length, length);
@@ -464,10 +482,18 @@
                     {
                         var color = bmp.GetPixel(point.Value.X, point.Value.Y);
                         var materialColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
+                        if (materialColor.Value == "" || materialColor.Value == "White")
+                        {
+                            e.Material = iceMaterial.Name;
+                        }
                         if (materialColor.Value == "Blue")
                         {
                             e.Material = heliumMaterial.Name;
                         }
+                        //else
+                        //{
+                        //    e.Material = ironMaterial.Name;
+                        //}
                     }
                 }
                 else
@@ -478,21 +504,27 @@
                     {
                         var color = bmp.GetPixel(point.Value.X, point.Value.Y);
                         var materialColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
+                        if (materialColor.Value == "" || materialColor.Value == "White")
+                        {
+                            e.Material = iceMaterial.Name;
+                        }
                         if (materialColor.Value == "Blue")
                         {
                             e.Material = heliumMaterial.Name;
                         }
+                        //else
+                        //{
+                        //    e.Material = ironMaterial.Name;
+                        //}
                     }
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(false, fileNew, size, stoneMaterial.Name, action);
+            // TODO: Get the surface calculations working right.
+            //var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, stoneMaterial.Name, action);
 
             //var m1 = ToolboxExtensions.min;
             //var m2 = ToolboxExtensions.max;
-
-
-            // TODO:
         }
 
         [TestMethod]
@@ -572,7 +604,7 @@
 
             var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 180, 0, 0);
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, modelFile, voxelFile, materials[15].Name, true, materials[1].Name, true, 0.766, transform);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, modelFile, voxelFile, materials[15].Name, true, materials[1].Name, ModelTraceVoxel.ThinSmoothed, 0.766, transform);
 
             Assert.AreEqual(50, voxelMap.ContentSize.X, "Voxel Content size must match.");
             Assert.AreEqual(46, voxelMap.ContentSize.Y, "Voxel Content size must match.");

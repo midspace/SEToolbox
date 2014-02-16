@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Interop.Asteroids
 {
+    using SEToolbox.Support;
     using SEToolbox.ViewModels;
     using System;
     using System.ComponentModel;
@@ -105,10 +106,9 @@
             return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, action);
         }
 
-        public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename,
-        string material, bool fillObject, string interiorMaterial, bool highres, double scale, Transform3D transform)
+        public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform)
         {
-            var volmeticMap = Import3dModelViewModel.ReadModelVolmetic(sourceVolumetricFile, scale, transform, highres);
+            var volmeticMap = Import3dModelViewModel.ReadModelVolmetic(sourceVolumetricFile, scale, transform, traceType);
             var size = new Vector3I(volmeticMap.GetLength(0) + 2, volmeticMap.GetLength(1) + 2, volmeticMap.GetLength(2) + 2);
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
@@ -128,11 +128,11 @@
                     else if (cube == CubeType.Cube)
                         e.Volume = 0xff;    // 100%
                     else if (cube.ToString().StartsWith("InverseCorner"))
-                        e.Volume = 0xBD;    // 75%
+                        e.Volume = 0xD4;    // 83%
                     else if (cube.ToString().StartsWith("Slope"))
                         e.Volume = 0x7F;    // 50%
                     else if (cube.ToString().StartsWith("NormalCorner"))
-                        e.Volume = 0x3F;    // 25%
+                        e.Volume = 0x2B;    // 16%
                     else
                         e.Volume = 0x00;    // 0%
                 }
