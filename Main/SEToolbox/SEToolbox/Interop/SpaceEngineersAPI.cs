@@ -129,11 +129,27 @@ namespace SEToolbox.Interop
 
         #region SetCubeOrientation
 
-        public static readonly VRageMath.Quaternion[] Orientations = new VRageMath.Quaternion[] {
-            new VRageMath.Quaternion(0, 0, 0, 1),
-            new VRageMath.Quaternion(0, 0, 1, 0),
-            new VRageMath.Quaternion(0, 1, 0, 0),
-            new VRageMath.Quaternion(1, 0, 0, 0),
+        public static readonly VRageMath.Quaternion[] ValidOrientations = new VRageMath.Quaternion[] {
+            new VRageMath.Quaternion(0, 0, 0, 1),   // no rotation
+            new VRageMath.Quaternion(1, 0, 0, 0),   // 180 around X
+            new VRageMath.Quaternion(0, 1, 0, 0),   // 180 around Y
+            new VRageMath.Quaternion(0, 0, 1, 0),   // 180 around Z
+            
+            new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f),     // +90 around X
+            new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f),    // -90 around X
+            new VRageMath.Quaternion(0, 0.707106769f, 0, 0.707106769f),     // +90 around Y
+            new VRageMath.Quaternion(0, -0.707106769f, 0, 0.707106769f),    // -90 around Y
+            new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f),     // +90 around Z
+            new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f),    // -90 around Z
+
+            new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0),
+            new VRageMath.Quaternion(0.707106769f, -0.707106769f, 0, 0),
+            new VRageMath.Quaternion(0.707106769f, 0, 0.707106769f, 0),
+            new VRageMath.Quaternion(-0.707106769f, 0, 0.707106769f, 0),
+            new VRageMath.Quaternion(0, 0.707106769f, 0.707106769f, 0),
+            new VRageMath.Quaternion(0, 0.707106769f, -0.707106769f, 0),
+            new VRageMath.Quaternion(0, -0.707106769f, 0.707106769f, 0),
+
             new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, 0.5f),
             new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f),
             new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f),
@@ -150,19 +166,6 @@ namespace SEToolbox.Interop
             new VRageMath.Quaternion(-0.5f, -0.5f, 0.5f, -0.5f),
             new VRageMath.Quaternion(-0.5f, -0.5f, -0.5f, 0.5f),
             new VRageMath.Quaternion(-0.5f, -0.5f, -0.5f, -0.5f),
-            new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f),
-            new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f),
-            new VRageMath.Quaternion(0, 0.707106769f, 0, 0.707106769f),
-            new VRageMath.Quaternion(0, -0.707106769f, 0, 0.707106769f),
-            new VRageMath.Quaternion(0, 0.707106769f, 0.707106769f, 0),
-            new VRageMath.Quaternion(0, 0.707106769f, -0.707106769f, 0),
-            new VRageMath.Quaternion(0, -0.707106769f, 0.707106769f, 0),
-            new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f),
-            new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f),
-            new VRageMath.Quaternion(0.707106769f, 0, 0.707106769f, 0),
-            new VRageMath.Quaternion(-0.707106769f, 0, 0.707106769f, 0),
-            new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0),
-            new VRageMath.Quaternion(0.707106769f, -0.707106769f, 0, 0),
         };
 
         // float d0.707 = Math.Sqrt(1 / 2);
@@ -170,37 +173,44 @@ namespace SEToolbox.Interop
         {
             {CubeType.Cube, new VRageMath.Quaternion(0, 0, 0, 1)},
 
-            {CubeType.SlopeCenterBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.SlopeCenterBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},     // -90 around X
             {CubeType.SlopeRightBackCenter, new VRageMath.Quaternion(0.5f, -0.5f, -0.5f, -0.5f)},
             {CubeType.SlopeLeftBackCenter, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
-            {CubeType.SlopeCenterBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},
+            {CubeType.SlopeCenterBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},                         // no rotation
             {CubeType.SlopeRightCenterTop, new VRageMath.Quaternion(0.707106769f, -0.707106769f, 0, 0)},
             {CubeType.SlopeLeftCenterTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
-            {CubeType.SlopeRightCenterBottom, new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f)},
-            {CubeType.SlopeLeftCenterBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},
-            {CubeType.SlopeCenterFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},
+            {CubeType.SlopeRightCenterBottom, new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f)},  // +90 around Z
+            {CubeType.SlopeLeftCenterBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},  // -90 around Z
+            {CubeType.SlopeCenterFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},                           // 180 around X
             {CubeType.SlopeRightFrontCenter, new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f)},
             {CubeType.SlopeLeftFrontCenter, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
-            {CubeType.SlopeCenterFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.SlopeCenterFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},  // +90 around X
 
             // Probably got the names of these all messed up in relation to their actual orientation.
             {CubeType.NormalCornerLeftFrontTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
-            {CubeType.NormalCornerRightFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},
+            {CubeType.NormalCornerRightFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},                             // 180 around X
             {CubeType.NormalCornerLeftBackTop, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
-            {CubeType.NormalCornerRightBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.NormalCornerRightBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},       // -90 around X
             {CubeType.NormalCornerLeftFrontBottom, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
-            {CubeType.NormalCornerRightFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
-            {CubeType.NormalCornerLeftBackBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},
-            {CubeType.NormalCornerRightBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},
+            {CubeType.NormalCornerRightFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},    // +90 around X 
+            {CubeType.NormalCornerLeftBackBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},     // -90 around Z
+            {CubeType.NormalCornerRightBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},                           // no rotation
             
             {CubeType.InverseCornerLeftFrontTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
-            {CubeType.InverseCornerRightFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},
+            {CubeType.InverseCornerRightFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},                            // 180 around X
             {CubeType.InverseCornerLeftBackTop, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
-            {CubeType.InverseCornerRightBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},
+            {CubeType.InverseCornerRightBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},      // -90 around X
             {CubeType.InverseCornerLeftFrontBottom, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
-            {CubeType.InverseCornerRightFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
-            {CubeType.InverseCornerLeftBackBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},
-            {CubeType.InverseCornerRightBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},
+            {CubeType.InverseCornerRightFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},   // +90 around X
+            {CubeType.InverseCornerLeftBackBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},    // -90 around Z
+            {CubeType.InverseCornerRightBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},                          // no rotation
+
+
+            //{CubeType.LargeRamp..., new VRageMath.Quaternion(0, -0.707106769f, 0.707106769f, 0)},
+            //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f)},
+            //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
+            //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
+
         };
 
         public static VRageMath.Quaternion GetCubeOrientation(CubeType type)

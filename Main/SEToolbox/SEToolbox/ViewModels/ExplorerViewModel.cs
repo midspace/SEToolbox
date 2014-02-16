@@ -17,6 +17,7 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Windows.Forms;
     using System.Windows.Input;
     using VRageMath;
@@ -612,10 +613,13 @@
             {
                 this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
-                this._selectNewStructure = true;
-                this._dataModel.CollisionCorrectEntity(newEntity);
-                var structure = this._dataModel.AddEntity(newEntity);
-                this._selectNewStructure = false;
+                if (newEntity.CubeBlocks.Count > 0)
+                {
+                    this._selectNewStructure = true;
+                    this._dataModel.CollisionCorrectEntity(newEntity);
+                    var structure = this._dataModel.AddEntity(newEntity);
+                    this._selectNewStructure = false;
+                }
                 this.IsBusy = false;
             }
         }
@@ -732,7 +736,8 @@
 
         public void Test2Executed()
         {
-            this.OptimizeModel(this.Selections.ToArray());
+            this.CalcCubesModel(this.Selections.ToArray());
+            //this.OptimizeModel(this.Selections.ToArray());
         }
 
         public bool Test3CanExecute()
@@ -942,7 +947,7 @@
         {
             foreach (var viewModel in viewModels.OfType<StructureCubeGridViewModel>())
             {
-                this._dataModel.OptimizeModel((viewModel).DataModel as StructureCubeGridModel);
+                this._dataModel.OptimizeModel(viewModel.DataModel as StructureCubeGridModel);
             }
         }
 
@@ -1022,6 +1027,58 @@
                     }
                 }
             }
+        }
+
+        public void CalcCubesModel(params IStructureViewBase[] viewModels)
+        {
+            var bld = new StringBuilder();
+
+            foreach (var viewModel in viewModels.OfType<StructureCubeGridViewModel>())
+            {
+                var model = viewModel.DataModel as StructureCubeGridModel;
+                var list = model.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("Red") ||
+                    b.SubtypeName.Contains("Blue") ||
+                    b.SubtypeName.Contains("Green") ||
+                    b.SubtypeName.Contains("Yellow") ||
+                    b.SubtypeName.Contains("White") ||
+                    b.SubtypeName.Contains("Black")).ToArray();
+
+                foreach (var b in list)
+                {
+                    CubeType cubeType = CubeType.Exterior;
+
+                    if (b.SubtypeName.Contains("ArmorSlope"))
+                    {
+                        var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("Slope")).ToArray();
+                        cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value == b.Orientation).Key;
+                    }
+                    else if (b.SubtypeName.Contains("ArmorCornerInv"))
+                    {
+                        var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("InverseCorner")).ToArray();
+                        cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value == b.Orientation).Key;
+                    }
+                    else if (b.SubtypeName.Contains("ArmorCorner"))
+                    {
+                        var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("NormalCorner")).ToArray();
+                        cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value == b.Orientation).Key;
+                    }
+
+                    //SpaceEngineersAPI.CubeOrientations
+
+                    // XYZ= (7, 15, 3)   Orientation = (0, 0, 0, 1)  SmallBlockArmorSlopeBlue               CubeType.SlopeCenterBackBottom
+                    // XYZ= (8, 14, 3)   Orientation = (1, 0, 0, 0)  SmallBlockArmorCornerInvBlue           CubeType.InverseCornerRightFrontTop
+                    // XYZ= (8, 15, 3)   Orientation = (0, 0, -0.7071068, 0.7071068)  SmallBlockArmorCornerBlue     CubeType.NormalCornerLeftBackBottom
+
+                    // XYZ= (13, 9, 3)   Orientation = (1, 0, 0, 0)  SmallBlockArmorCornerInvGreen          CubeType.InverseCornerRightFrontTop
+                    // XYZ= (14, 8, 3)   Orientation = (0, 0, -0.7071068, 0.7071068)  SmallBlockArmorSlopeGreen     CubeType.SlopeLeftCenterBottom
+                    // XYZ= (14, 9, 3)   Orientation = (0, 0, -0.7071068, 0.7071068)  SmallBlockArmorCornerGreen        CubeType.NormalCornerLeftBackBottom
+
+
+                    bld.AppendFormat("// XYZ= ({0}, {1}, {2})   Orientation = ({3}, {4}, {5}, {6})  {7}    CubeType.{8}\r\n",
+                        b.Min.X, b.Min.Y, b.Min.Z, b.Orientation.X, b.Orientation.Y, b.Orientation.Z, b.Orientation.W, b.SubtypeName, cubeType);
+                }
+            }
+            Debug.Write(bld.ToString());
         }
 
         #endregion

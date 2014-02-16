@@ -2,20 +2,24 @@
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
+    using System.Windows.Media.Media3D;
 
     public class Import3dModelModel : BaseModel
     {
         #region Fields
 
         private string filename;
+        private Model3D model;
         private bool isValidModel;
 
         private BindableSize3DModel originalModelSize;
-        private BindableSize3DModel newModelSize;
+        private BindableSize3DIModel newModelSize;
         private BindablePoint3DModel newModelScale;
         private BindablePoint3DModel position;
         private BindableVector3DModel forward;
         private BindableVector3DModel up;
+        private ModelTraceVoxel traceType;
         private ImportClassType classType;
         private ImportArmorType armorType;
         private MyPositionAndOrientation characterPosition;
@@ -31,6 +35,7 @@
 
         public Import3dModelModel()
         {
+            this.TraceType = ModelTraceVoxel.ThinSmoothed;
         }
 
         #endregion
@@ -53,6 +58,24 @@
                 }
             }
         }
+
+        public Model3D Model
+        {
+            get
+            {
+                return this.model;
+            }
+
+            set
+            {
+                if (value != this.model)
+                {
+                    this.model = value;
+                    this.RaisePropertyChanged(() => Model);
+                }
+            }
+        }
+
 
         public bool IsValidModel
         {
@@ -88,7 +111,7 @@
             }
         }
 
-        public BindableSize3DModel NewModelSize
+        public BindableSize3DIModel NewModelSize
         {
             get
             {
@@ -169,6 +192,23 @@
                 {
                     this.up = value;
                     this.RaisePropertyChanged(() => Up);
+                }
+            }
+        }
+
+        public ModelTraceVoxel TraceType
+        {
+            get
+            {
+                return this.traceType;
+            }
+
+            set
+            {
+                if (value != this.traceType)
+                {
+                    this.traceType = value;
+                    this.RaisePropertyChanged(() => TraceType);
                 }
             }
         }

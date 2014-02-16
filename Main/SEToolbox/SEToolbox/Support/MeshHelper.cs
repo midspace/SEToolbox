@@ -53,7 +53,7 @@
                         break;
                     }
 
-                case ".objz":
+                case ".objx":
                     {
                         var r = new ObjReader(dispatcher) { DefaultMaterial = defaultMaterial, Freeze = freeze, IgnoreErrors = ignoreErrors };
                         model = r.ReadZ(path);

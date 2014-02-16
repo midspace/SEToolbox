@@ -188,7 +188,7 @@
     <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ImportModelFilter" xml:space="preserve">
-    <value>Polygon files (*.asc;*.3ds;*.md2;*.md3;*.obj;*.stl)|*.asc;*.3ds;*.md2;*.md3;*.obj;*.stl|All files (*.*)|*.*</value>
+    <value>All supported files|*.3ds;*.lwo;*.obj;*.objx;*.stl;*.off|3D Studio (*.3ds)|*.3ds|Lightwave (*.lwo)|*.lwo|Wavefront (*.obj)|*.obj;*.objx|StereoLithography (*.stl)|*.stl|OFF (*.off)|*.off</value>
   </data>
   <data name="ImportModelTitle" xml:space="preserve">
     <value>Select Model to Import</value>
@@ -330,5 +330,20 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   </data>
   <data name="ImportSandboxObjectFilter" xml:space="preserve">
     <value>Sandbox Content files (*.sbc)|*.sbc;*.sbo|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
+  </data>
+  <data name="sort_descending" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sort_descending.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ModelTraceVoxel_Thick" xml:space="preserve">
+    <value>Thick Shell</value>
+  </data>
+  <data name="ModelTraceVoxel_ThickSmoothed" xml:space="preserve">
+    <value>Thick Shell with Smoothing</value>
+  </data>
+  <data name="ModelTraceVoxel_Thin" xml:space="preserve">
+    <value>Thin Shell</value>
+  </data>
+  <data name="ModelTraceVoxel_ThinSmoothed" xml:space="preserve">
+    <value>Thin Shell with Smoothing</value>
   </data>
 </root>

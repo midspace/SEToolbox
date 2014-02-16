@@ -19,6 +19,15 @@
         Odd
     };
 
+    public enum ModelTraceVoxel
+    {
+        Thin,
+        ThinSmoothed,
+        Thick,
+        ThickSmoothed,
+        //SurfaceCalculated
+    };
+
     internal class AppConstants
     {
         public const string HomepageUrl = "http://forums.keenswh.com/post/custom-importereditor-tool-setoolbox-6638984";
