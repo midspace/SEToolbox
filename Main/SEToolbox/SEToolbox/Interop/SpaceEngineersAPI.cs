@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using System.Diagnostics;
-
-namespace SEToolbox.Interop
+﻿namespace SEToolbox.Interop
 {
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.CommonLib.ObjectBuilders;
-    using Sandbox.CommonLib.ObjectBuilders.Definitions;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Xml;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.CommonLib.ObjectBuilders.Definitions;
+    using SEToolbox.Support;
     using VRageMath;
 
     public class SpaceEngineersAPI
@@ -27,6 +24,30 @@ namespace SEToolbox.Interop
         #endregion
 
         #region Serializers
+
+        public static T ReadSpaceEngineersFile<T, S>(Stream stream)
+        where S : XmlSerializer1
+        {
+            var settings = new XmlReaderSettings()
+            {
+                IgnoreComments = true,
+                IgnoreWhitespace = true,
+            };
+
+            object obj = null;
+
+            using (var xmlReader = XmlReader.Create(stream, settings))
+            {
+
+                var serializer = (S)Activator.CreateInstance(typeof(S));
+                //serializer.UnknownAttribute += serializer_UnknownAttribute;
+                //serializer.UnknownElement += serializer_UnknownElement;
+                //serializer.UnknownNode += serializer_UnknownNode;
+                obj = serializer.Deserialize(xmlReader);
+            }
+
+            return (T)obj;
+        }
 
         public static T ReadSpaceEngineersFile<T, S>(string filename)
         where S : XmlSerializer1
@@ -91,7 +112,7 @@ namespace SEToolbox.Interop
                 return false;
             }
 
-            //// How they should be doing it.
+            //// How they should be doing it to support Unicode.
             //var settingsDestination = new XmlWriterSettings()
             //{
             //    Indent = true, // Set indent to false to compress.

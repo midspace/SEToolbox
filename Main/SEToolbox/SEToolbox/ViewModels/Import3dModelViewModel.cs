@@ -1,12 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.CommonLib.ObjectBuilders;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
-    using SEToolbox.Properties;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -15,18 +8,27 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
+    using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
+    using SEToolbox.Properties;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
     using VRageMath;
 
     public class Import3dModelViewModel : BaseViewModel
     {
         #region Fields
 
-        private readonly IDialogService dialogService;
-        private readonly Func<IOpenFileDialog> openFileDialogFactory;
-        private Import3dModelModel dataModel;
+        private static readonly object Locker = new object();
 
-        private bool? closeResult;
-        private bool isBusy;
+        private readonly IDialogService _dialogService;
+        private readonly Func<IOpenFileDialog> _openFileDialogFactory;
+        private readonly Import3dModelModel _dataModel;
+
+        private bool? _closeResult;
+        private bool _isBusy;
 
         #endregion
 
@@ -43,10 +45,10 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
 
-            this.dialogService = dialogService;
-            this.openFileDialogFactory = openFileDialogFactory;
-            this.dataModel = dataModel;
-            this.dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            this._dialogService = dialogService;
+            this._openFileDialogFactory = openFileDialogFactory;
+            this._dataModel = dataModel;
+            this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
                 this.OnPropertyChanged(e.PropertyName);
@@ -94,12 +96,12 @@
         {
             get
             {
-                return this.closeResult;
+                return this._closeResult;
             }
 
             set
             {
-                this.closeResult = value;
+                this._closeResult = value;
                 this.RaisePropertyChanged(() => CloseResult);
             }
         }
@@ -111,16 +113,16 @@
         {
             get
             {
-                return this.isBusy;
+                return this._isBusy;
             }
 
             set
             {
-                if (value != this.isBusy)
+                if (value != this._isBusy)
                 {
-                    this.isBusy = value;
+                    this._isBusy = value;
                     this.RaisePropertyChanged(() => IsBusy);
-                    if (this.isBusy)
+                    if (this._isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -132,12 +134,12 @@
         {
             get
             {
-                return this.dataModel.Filename;
+                return this._dataModel.Filename;
             }
 
             set
             {
-                this.dataModel.Filename = value;
+                this._dataModel.Filename = value;
                 this.FilenameChanged();
             }
         }
@@ -146,12 +148,12 @@
         {
             get
             {
-                return this.dataModel.Model;
+                return this._dataModel.Model;
             }
 
             set
             {
-                this.dataModel.Model = value;
+                this._dataModel.Model = value;
             }
         }
 
@@ -159,12 +161,12 @@
         {
             get
             {
-                return this.dataModel.IsValidModel;
+                return this._dataModel.IsValidModel;
             }
 
             set
             {
-                this.dataModel.IsValidModel = value;
+                this._dataModel.IsValidModel = value;
             }
         }
 
@@ -172,12 +174,12 @@
         {
             get
             {
-                return this.dataModel.OriginalModelSize;
+                return this._dataModel.OriginalModelSize;
             }
 
             set
             {
-                this.dataModel.OriginalModelSize = value;
+                this._dataModel.OriginalModelSize = value;
             }
         }
 
@@ -185,12 +187,12 @@
         {
             get
             {
-                return this.dataModel.NewModelSize;
+                return this._dataModel.NewModelSize;
             }
 
             set
             {
-                this.dataModel.NewModelSize = value;
+                this._dataModel.NewModelSize = value;
                 this.ProcessModelScale();
             }
         }
@@ -199,12 +201,12 @@
         {
             get
             {
-                return this.dataModel.NewModelScale;
+                return this._dataModel.NewModelScale;
             }
 
             set
             {
-                this.dataModel.NewModelScale = value;
+                this._dataModel.NewModelScale = value;
             }
         }
 
@@ -212,12 +214,12 @@
         {
             get
             {
-                return this.dataModel.Position;
+                return this._dataModel.Position;
             }
 
             set
             {
-                this.dataModel.Position = value;
+                this._dataModel.Position = value;
             }
         }
 
@@ -225,12 +227,12 @@
         {
             get
             {
-                return this.dataModel.Forward;
+                return this._dataModel.Forward;
             }
 
             set
             {
-                this.dataModel.Forward = value;
+                this._dataModel.Forward = value;
             }
         }
 
@@ -238,12 +240,12 @@
         {
             get
             {
-                return this.dataModel.Up;
+                return this._dataModel.Up;
             }
 
             set
             {
-                this.dataModel.Up = value;
+                this._dataModel.Up = value;
             }
         }
 
@@ -251,12 +253,12 @@
         {
             get
             {
-                return this.dataModel.TraceType;
+                return this._dataModel.TraceType;
             }
 
             set
             {
-                this.dataModel.TraceType = value;
+                this._dataModel.TraceType = value;
             }
         }
 
@@ -264,12 +266,12 @@
         {
             get
             {
-                return this.dataModel.ClassType;
+                return this._dataModel.ClassType;
             }
 
             set
             {
-                this.dataModel.ClassType = value;
+                this._dataModel.ClassType = value;
                 this.ProcessModelScale();
             }
         }
@@ -278,12 +280,12 @@
         {
             get
             {
-                return this.dataModel.ArmorType;
+                return this._dataModel.ArmorType;
             }
 
             set
             {
-                this.dataModel.ArmorType = value;
+                this._dataModel.ArmorType = value;
             }
         }
 
@@ -292,12 +294,12 @@
         {
             get
             {
-                return this.dataModel.MultipleScale;
+                return this._dataModel.MultipleScale;
             }
 
             set
             {
-                this.dataModel.MultipleScale = value;
+                this._dataModel.MultipleScale = value;
                 this.ProcessModelScale();
             }
         }
@@ -306,12 +308,12 @@
         {
             get
             {
-                return this.dataModel.MaxLengthScale;
+                return this._dataModel.MaxLengthScale;
             }
 
             set
             {
-                this.dataModel.MaxLengthScale = value;
+                this._dataModel.MaxLengthScale = value;
                 this.ProcessModelScale();
             }
         }
@@ -320,12 +322,12 @@
         {
             get
             {
-                return this.dataModel.BuildDistance;
+                return this._dataModel.BuildDistance;
             }
 
             set
             {
-                this.dataModel.BuildDistance = value;
+                this._dataModel.BuildDistance = value;
                 this.ProcessModelScale();
             }
         }
@@ -334,12 +336,12 @@
         {
             get
             {
-                return this.dataModel.IsMultipleScale;
+                return this._dataModel.IsMultipleScale;
             }
 
             set
             {
-                this.dataModel.IsMultipleScale = value;
+                this._dataModel.IsMultipleScale = value;
                 this.ProcessModelScale();
             }
         }
@@ -348,12 +350,12 @@
         {
             get
             {
-                return this.dataModel.IsMaxLengthScale;
+                return this._dataModel.IsMaxLengthScale;
             }
 
             set
             {
-                this.dataModel.IsMaxLengthScale = value;
+                this._dataModel.IsMaxLengthScale = value;
                 this.ProcessModelScale();
             }
         }
@@ -371,12 +373,12 @@
         {
             this.IsValidModel = false;
 
-            IOpenFileDialog openFileDialog = openFileDialogFactory();
+            IOpenFileDialog openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Resources.ImportModelFilter;
             openFileDialog.Title = Resources.ImportModelTitle;
 
             // Open the dialog
-            DialogResult result = dialogService.ShowOpenFileDialog(this, openFileDialog);
+            DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
 
             if (result == DialogResult.OK)
             {
@@ -474,12 +476,12 @@
                 this.NewModelScale = new BindablePoint3DModel(this.NewModelSize.Width * scaleMultiplyer, this.NewModelSize.Height * scaleMultiplyer, this.NewModelSize.Depth * scaleMultiplyer);
 
                 // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
-                var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
+                var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
                 vector.Normalize();
                 vector = Vector3D.Multiply(vector, vectorDistance);
-                this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
-                this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward);
-                this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
+                this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
+                this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward);
+                this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
             }
         }
 
@@ -504,12 +506,12 @@
             blockPrefix += "Block"; // "HeavyBlock";
 
             // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
-            var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
+            var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
             vector.Normalize();
             vector = Vector3D.Multiply(vector, 6);
-            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
-            this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward);
-            this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
+            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
+            this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward);
+            this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
 
             entity.PositionAndOrientation = new MyPositionAndOrientation()
             {
@@ -639,7 +641,7 @@
             {
                 for (var y = 0; y < max; y++)
                 {
-                    ccubic[2,x, y] = CubeType.Cube;
+                    ccubic[2, x, y] = CubeType.Cube;
                 }
             }
 
@@ -876,14 +878,19 @@
         /// Volumes are calculated across axis where they are whole numbers (rounded to 0 decimal places).
         /// </summary>
         /// <param name="modelFile"></param>
-        /// <param name="scaleMultiplyier"></param>
+        /// <param name="scaleMultiplyierX"></param>
+        /// <param name="scaleMultiplyierY"></param>
+        /// <param name="scaleMultiplyierZ"></param>
+        /// <param name="transform"></param>
+        /// <param name="traceType"></param>
         /// <returns></returns>
         public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyierX, double scaleMultiplyierY, double scaleMultiplyierZ, Transform3D transform, ModelTraceVoxel traceType)
         {
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);
 
-            // Workaround: Random small offset as RayIntersetTriangle() is unable to detect if the ray is exactly on the Edge of the Triangle.
-            // Which is usually because the Model's Verticies were placed with some sort of SnapTo turned on in the Designer.
+            // How far to check in from the proposed Volumetric edge.
+            // This number is just made up, but small enough that it still represents the corner edge of the Volumetric space.
+            // But still large enough that it isn't the exact corner.
             const double offset = 0.00000456f;
 
             if (scaleMultiplyierX > 0 && scaleMultiplyierY > 0 && scaleMultiplyierZ > 0 && scaleMultiplyierX != 1.0f && scaleMultiplyierY != 1.0f && scaleMultiplyierZ != 1.0f)
@@ -908,12 +915,12 @@
             var zCount = zMax - zMin;
 
             var ccubic = new CubeType[xCount + 0, yCount + 0, zCount + 0];
-            Point3D[] rays;
 
             #region basic ray trace of every individual triangle.
 
-            foreach (GeometryModel3D gm in model.Children)
+            foreach (var model3D in model.Children)
             {
+                var gm = (GeometryModel3D) model3D;
                 var g = gm.Geometry as MeshGeometry3D;
 
                 for (var t = 0; t < g.TriangleIndices.Count; t += 3)
@@ -932,6 +939,8 @@
                     var minBound = MeshHelper.Min(p1, p2, p3).Floor();
                     var maxBound = MeshHelper.Max(p1, p2, p3).Ceiling();
 
+                    Point3D[] rays;
+
                     for (var y = minBound.Y; y < maxBound.Y; y++)
                     {
                         for (var z = minBound.Z; z < maxBound.Z; z++)
@@ -939,19 +948,19 @@
                             if (traceType == ModelTraceVoxel.Thin || traceType == ModelTraceVoxel.ThinSmoothed)
                             {
                                 rays = new Point3D[] // 1 point ray trace in the center.
-                                {
-                                    new Point3D(xMin, y + 0.5 + offset, z + 0.5 + offset), new Point3D(xMax, y + 0.5 + offset, z + 0.5 + offset)
-                                };
+                                    {
+                                        new Point3D(xMin, y + 0.5 + offset, z + 0.5 + offset), new Point3D(xMax, y + 0.5 + offset, z + 0.5 + offset)
+                                    };
                             }
                             else
                             {
-                                rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
-                                {
-                                    new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset),  
-                                    new Point3D(xMin, y + 1 - offset, z + offset),new Point3D(xMax, y + 1 - offset, z + offset),
-                                    new Point3D(xMin, y + offset, z + 1 - offset), new Point3D(xMax, y + offset, z + 1 - offset),
-                                    new Point3D(xMin, y + 1 - offset, z + 1 - offset), new Point3D(xMax, y + 1 - offset, z + 1 - offset)
-                                };
+                                rays = new Point3D[] // 4 point ray trace within each corner of the expected Volumetric cube.
+                                    {
+                                        new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset),
+                                        new Point3D(xMin, y + 1 - offset, z + offset), new Point3D(xMax, y + 1 - offset, z + offset),
+                                        new Point3D(xMin, y + offset, z + 1 - offset), new Point3D(xMax, y + offset, z + 1 - offset),
+                                        new Point3D(xMin, y + 1 - offset, z + 1 - offset), new Point3D(xMax, y + 1 - offset, z + 1 - offset)
+                                    };
                             }
 
                             Point3D intersect;
@@ -969,19 +978,19 @@
                             if (traceType == ModelTraceVoxel.Thin || traceType == ModelTraceVoxel.ThinSmoothed)
                             {
                                 rays = new Point3D[] // 1 point ray trace in the center.
-                                {
-                                    new Point3D(x + 0.5 + offset, yMin, z + 0.5 + offset), new Point3D(x + 0.5 + offset, yMax, z + 0.5 + offset)
-                                };
+                                    {
+                                        new Point3D(x + 0.5 + offset, yMin, z + 0.5 + offset), new Point3D(x + 0.5 + offset, yMax, z + 0.5 + offset)
+                                    };
                             }
                             else
                             {
-                                rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
-                                {
-                                    new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset),
-                                    new Point3D(x + 1 - offset, yMin, z + offset),new Point3D(x + 1 - offset, yMax, z + offset),
-                                    new Point3D(x + offset, yMin, z + 1 - offset), new Point3D(x + offset, yMax, z + 1 - offset),
-                                    new Point3D(x + 1 - offset, yMin, z + 1 - offset), new Point3D(x + 1 - offset, yMax, z + 1 - offset)
-                                };
+                                rays = new Point3D[] // 4 point ray trace within each corner of the expected Volumetric cube.
+                                    {
+                                        new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset),
+                                        new Point3D(x + 1 - offset, yMin, z + offset), new Point3D(x + 1 - offset, yMax, z + offset),
+                                        new Point3D(x + offset, yMin, z + 1 - offset), new Point3D(x + offset, yMax, z + 1 - offset),
+                                        new Point3D(x + 1 - offset, yMin, z + 1 - offset), new Point3D(x + 1 - offset, yMax, z + 1 - offset)
+                                    };
                             }
 
                             Point3D intersect;
@@ -999,19 +1008,19 @@
                             if (traceType == ModelTraceVoxel.Thin || traceType == ModelTraceVoxel.ThinSmoothed)
                             {
                                 rays = new Point3D[] // 1 point ray trace in the center.
-                                {
-                                    new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMin), new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMax),
-                                };
+                                    {
+                                        new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMin), new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMax),
+                                    };
                             }
                             else
                             {
-                                rays = new Point3D[] // 4 point ray trace in each corner of the expected voxel.
-                                {
-                                    new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax),
-                                    new Point3D(x + 1 - offset, y + offset, zMin),new Point3D(x + 1 - offset, y + offset, zMax),
-                                    new Point3D(x + offset, y + 1 - offset, zMin), new Point3D(x + offset, y + 1 - offset, zMax),
-                                    new Point3D(x + 1 - offset, y + 1 - offset, zMin), new Point3D(x + 1 - offset, y + 1 - offset, zMax)
-                                };
+                                rays = new Point3D[] // 4 point ray trace within each corner of the expected Volumetric cube.
+                                    {
+                                        new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax),
+                                        new Point3D(x + 1 - offset, y + offset, zMin), new Point3D(x + 1 - offset, y + offset, zMax),
+                                        new Point3D(x + offset, y + 1 - offset, zMin), new Point3D(x + offset, y + 1 - offset, zMax),
+                                        new Point3D(x + 1 - offset, y + 1 - offset, zMin), new Point3D(x + 1 - offset, y + 1 - offset, zMax)
+                                    };
                             }
 
                             Point3D intersect;

@@ -52,6 +52,9 @@
     <Reference Include="HelixToolkit.Wpf">
       <HintPath>..\References\HelixToolkit.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\References\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Sandbox.CommonLib">
       <HintPath>..\References\Sandbox.CommonLib.dll</HintPath>
     </Reference>
@@ -191,11 +194,13 @@
     <Compile Include="Interop\ClassType.cs" />
     <Compile Include="Support\ToolboxUpdater.cs" />
     <Compile Include="Support\VisualTreeEnumeration.cs" />
+    <Compile Include="Support\ZipTools.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\GenerateVoxelFieldViewModel.cs" />
     <Compile Include="ViewModels\DataBaseViewModel.cs" />
     <Compile Include="ViewModels\ImportVoxelViewModel.cs" />
+    <Compile Include="ViewModels\Import3dModelBackgroundWorker.cs" />
     <Compile Include="ViewModels\StructureFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\Import3dModelViewModel.cs" />
     <Compile Include="ViewModels\ImportImageViewModel.cs" />

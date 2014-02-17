@@ -87,6 +87,9 @@
       <Component Id="comp5B10E5BF2D0D4C9EAF44EDE183D113EF">
         <File Id="fileAD5B37B3F8524F6594A80B1BF9660D69" Source="$(var.SEToolbox.TargetDir)HelixToolkit.Wpf.dll"/>
       </Component>
+      <Component Id="compEDC13D521AB34560924EFE013C7BCC58">
+        <File Id="file4CCC1D5F89354510910F24ECF6734F72" Source="$(var.SEToolbox.TargetDir)ICSharpCode.SharpZipLib.dll"/>
+      </Component>
     </ComponentGroup>
 
     <DirectoryRef Id="ApplicationProgramsFolder">

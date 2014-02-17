@@ -128,6 +128,9 @@
     <None Include="TestAssets\LibertyStatue.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestAssets\Sample World.sbw">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestAssets\small2_asteroids.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

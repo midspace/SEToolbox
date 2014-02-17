@@ -84,6 +84,24 @@
         }
 
         [XmlIgnore]
+        public bool Dampeners
+        {
+            get
+            {
+                return this.CubeGrid.DampenersEnabled;
+            }
+
+            set
+            {
+                if (value != this.CubeGrid.DampenersEnabled)
+                {
+                    this.CubeGrid.DampenersEnabled = value;
+                    this.RaisePropertyChanged(() => Dampeners);
+                }
+            }
+        }
+
+        [XmlIgnore]
         public Point3D Min
         {
             get
@@ -295,6 +313,15 @@
             this.Size = size;
             this.Mass = calcMass;
 
+            this.Name = null;
+            // Substitue Beacon detail for the name.
+            var beacons = this.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString() || b.SubtypeName == SubtypeId.SmallBlockBeacon.ToString()).ToArray();
+            if (beacons.Length > 0)
+            {
+                var a = beacons.Select(b => ((MyObjectBuilder_Beacon)b).CustomName).ToArray();
+                this.Name = String.Join("|", a);
+            }
+            
             this.Description = string.Format("{0} | {1:#,##0}Kg", this.Size, this.Mass);
 
             var bld = new StringBuilder();

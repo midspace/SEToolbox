@@ -6,6 +6,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{06B6FC47-A535-42AC-8ACA-78DB66F28445}"
 	ProjectSection(SolutionItems) = preProject
 		References\HelixToolkit.Wpf.dll = References\HelixToolkit.Wpf.dll
+		References\ICSharpCode.SharpZipLib.dll = References\ICSharpCode.SharpZipLib.dll
 		References\poly2vox.exe = References\poly2vox.exe
 		References\Sandbox.CommonLib.dll = References\Sandbox.CommonLib.dll
 		References\Sandbox.CommonLib.XmlSerializers.dll = References\Sandbox.CommonLib.XmlSerializers.dll

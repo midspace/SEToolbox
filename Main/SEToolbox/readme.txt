@@ -39,4 +39,11 @@ Developer/Build Requirements:
 	-	Issues:
 		http://blogs.msdn.com/b/chuckw/archive/2011/12/09/known-issue-directx-sdk-june-2010-setup-and-the-s1023-error.aspx
 
+Resources:
+*	HelixToolkit
+	https://helixtoolkit.codeplex.com/
+
+*	SharpZipLib
+	http://www.icsharpcode.net/OpenSource/SharpZipLib
+
 ========--------~~~~~~~~

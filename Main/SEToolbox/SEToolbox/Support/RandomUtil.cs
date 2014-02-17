@@ -5,17 +5,18 @@
     public class RandomUtil
     {
         [ThreadStatic]
-        static Random m_secretRandom;
+        static Random _mSecretRandom;
 
         static Random random
         {
             get
             {
-                if (m_secretRandom == null)
+                if (_mSecretRandom == null)
                 {
-                    m_secretRandom = new Random((int)DateTime.Now.Ticks);
+                    _mSecretRandom = new Random((int)DateTime.Now.Ticks);
                 }
-                return m_secretRandom;
+
+                return _mSecretRandom;
             }
         }
 
