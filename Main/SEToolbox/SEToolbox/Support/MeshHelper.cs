@@ -1,10 +1,10 @@
 ﻿namespace SEToolbox.Support
 {
-    using HelixToolkit.Wpf;
     using System;
     using System.IO;
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
+    using HelixToolkit.Wpf;
     using VRageMath;
 
     public static class MeshHelper
@@ -92,14 +92,14 @@
             {
                 var g = gm.Geometry as MeshGeometry3D;
 
-                for (int i = 0; i < g.Positions.Count; i++)
+                for (var i = 0; i < g.Positions.Count; i++)
                 {
                     g.Positions[i] = new Point3D(g.Positions[i].X * scaleX, g.Positions[i].Y * scaleY, g.Positions[i].Z * scaleZ);
                 }
 
                 if (g.Normals != null)
                 {
-                    for (int i = 0; i < g.Normals.Count; i++)
+                    for (var i = 0; i < g.Normals.Count; i++)
                     {
                         g.Normals[i] = new Vector3D(g.Normals[i].X * scaleX, g.Normals[i].Y * scaleY, g.Normals[i].Z * scaleZ);
                         g.Normals[i].Normalize();

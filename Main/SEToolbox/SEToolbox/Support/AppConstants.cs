@@ -21,10 +21,27 @@
 
     public enum ModelTraceVoxel
     {
+        /// <summary>
+        /// Thin Shell calculation.
+        /// </summary>
         Thin,
+
+        /// <summary>
+        /// Thin Shell calculation + slope additions.
+        /// </summary>
         ThinSmoothed,
+
+        /// <summary>
+        /// Thick Shell calculation.
+        /// </summary>
         Thick,
+
+        /// <summary>
+        /// Thick Shell calculation + slope additions.
+        /// </summary>
         ThickSmoothed,
+
+
         //SurfaceCalculated
     };
 

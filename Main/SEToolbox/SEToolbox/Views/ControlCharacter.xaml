@@ -30,20 +30,37 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label>Character</Label>
-        <!--<ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+        <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
+                <Menu Style="{StaticResource ToolBarMenu}">
+                    <MenuItem Header="Speed" Style="{StaticResource ToolBarTopMenuitem}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
+                        </MenuItem.Icon>
+                        <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}"/>
+                        <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}"/>
+                    </MenuItem>
+                </Menu>
             </ToolBar>
-        </ToolBarPanel>-->
+        </ToolBarPanel>
         <Label Grid.Row="2" Content="Suit:"/>
         <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding CharacterModels}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}" />
-        <Label Grid.Row="3" Content="Player:"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
-        <Label Grid.Row="4" Content="Speed:"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
-        <Label Grid.Row="5" Content="Distance:"/>
-        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+        <Label Grid.Row="3" Content="Light:"/>
+        <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Light, Mode=TwoWay}" />
+        <Label Grid.Row="4" Content="Jet Pack:"/>
+        <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding JetPack, Mode=TwoWay}" />
+        <Label Grid.Row="5" Content="Dampeners:"/>
+        <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
+        <Label Grid.Row="6" Content="Player:"/>
+        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
+        <Label Grid.Row="7" Content="Speed:"/>
+        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
+        <Label Grid.Row="8" Content="Distance:"/>
+        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
     </Grid>
 </UserControl>

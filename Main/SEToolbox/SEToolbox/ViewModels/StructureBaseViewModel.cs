@@ -90,6 +90,19 @@
             }
         }
 
+        public string Name
+        {
+            get
+            {
+                return this.DataModel.Name;
+            }
+
+            set
+            {
+                this.DataModel.Name = value;
+            }
+        }
+
         public string Description
         {
             get

@@ -62,6 +62,60 @@
         }
 
         [XmlIgnore]
+        public bool Light
+        {
+            get
+            {
+                return this.Character.LightEnabled;
+            }
+
+            set
+            {
+                if (value != this.Character.LightEnabled)
+                {
+                    this.Character.LightEnabled = value;
+                    this.RaisePropertyChanged(() => Light);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public bool JetPack
+        {
+            get
+            {
+                return this.Character.JetpackEnabled;
+            }
+
+            set
+            {
+                if (value != this.Character.JetpackEnabled)
+                {
+                    this.Character.JetpackEnabled = value;
+                    this.RaisePropertyChanged(() => JetPack);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public bool Dampeners
+        {
+            get
+            {
+                return this.Character.DampenersEnabled;
+            }
+
+            set
+            {
+                if (value != this.Character.DampenersEnabled)
+                {
+                    this.Character.DampenersEnabled = value;
+                    this.RaisePropertyChanged(() => Dampeners);
+                }
+            }
+        }
+
+        [XmlIgnore]
         public List<string> CharacterModels
         {
             get { return this.characterModels; }
@@ -122,6 +176,18 @@
         {
             this.ClassType = ClassType.Character;
             this.Description = string.Format("{0}", this.CharacterModel);
+        }
+
+        public void ResetVelocity()
+        {
+            this.Character.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
+            this.RaisePropertyChanged(() => Speed);
+        }
+
+        public void ReverseVelocity()
+        {
+            this.Character.LinearVelocity = new VRageMath.Vector3(this.Character.LinearVelocity.X * -1, this.Character.LinearVelocity.Y * -1, this.Character.LinearVelocity.Z * -1);
+            this.RaisePropertyChanged(() => Speed);
         }
 
         #endregion

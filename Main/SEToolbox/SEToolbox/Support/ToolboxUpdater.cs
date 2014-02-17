@@ -28,19 +28,17 @@
             {
                 return key.GetValue("InstallLocation") as string;
             }
-            else
-            {
-                // Backup check, but no choice if the above goes to pot.
-                // Using the [Software\Valve\Steam\SteamPath] as a base for "\steamapps\common\SpaceEngineers", is unreliable, as the Steam Library is customizable and could be on another drive and directory.
-                if (Environment.Is64BitProcess)
-                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Valve\Steam", false);
-                else
-                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam", false);
 
-                if (key != null)
-                {
-                    return (string)key.GetValue("InstallPath") + @"\SteamApps\common\SpaceEngineers";
-                }
+            // Backup check, but no choice if the above goes to pot.
+            // Using the [Software\Valve\Steam\SteamPath] as a base for "\steamapps\common\SpaceEngineers", is unreliable, as the Steam Library is customizable and could be on another drive and directory.
+            if (Environment.Is64BitProcess)
+                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Valve\Steam", false);
+            else
+                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam", false);
+
+            if (key != null)
+            {
+                return (string)key.GetValue("InstallPath") + @"\SteamApps\common\SpaceEngineers";
             }
 
             return null;
@@ -98,16 +96,14 @@
                 // If it cannot connect, then there may be an intermittant connection issue, either with the internet, or codeplex (which has happened before).
             }
 
-            if (rssFeed != null)
-            {
-                var items = (from item in rssFeed.Descendants("item")
-                             select new RssFeedItem { Title = item.Element("title").Value, Link = item.Element("link").Value }).ToList();
+            if (rssFeed == null)
+                return null;
 
-                var newItem = items.FirstOrDefault(i => i.GetVersion() > currentVersion);
-                return newItem;
-            }
+            var items = (from item in rssFeed.Descendants("item")
+                         select new RssFeedItem { Title = item.Element("title").Value, Link = item.Element("link").Value }).ToList();
 
-            return null;
+            var newItem = items.FirstOrDefault(i => i.GetVersion() > currentVersion);
+            return newItem;
         }
 
         #endregion
@@ -149,7 +145,7 @@
             var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
             var appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
 
-            var files = new string[]{
+            var files = new[]{
             "Sandbox.CommonLib.dll",
             "Sandbox.CommonLib.XmlSerializers.dll",
             "VRage.Common.dll",

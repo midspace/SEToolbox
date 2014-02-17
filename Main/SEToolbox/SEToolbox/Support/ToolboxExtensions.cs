@@ -6,6 +6,7 @@
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
+    using System.IO.Compression;
     using System.Reflection;
     using System.Windows.Media.Imaging;
     using System.Xml;
@@ -21,69 +22,72 @@
         /// <returns></returns>
         internal static Dictionary<Color, Color> GetOptimizerPalatte()
         {
-            Dictionary<Color, Color> palette = new Dictionary<Color, Color>()
-                {
-                    {Color.FromArgb(255, 0, 0, 0), Color.Black},
-                    {Color.FromArgb(255, 20, 20, 20), Color.Black},
-                    {Color.FromArgb(255, 40, 40, 40), Color.Black},
+            var palette = new Dictionary<Color, Color>
+            {
+                {Color.FromArgb(255, 0, 0, 0), Color.Black},
+                {Color.FromArgb(255, 20, 20, 20), Color.Black},
+                {Color.FromArgb(255, 40, 40, 40), Color.Black},
 
-                    {Color.FromArgb(255, 128, 128, 128), Color.Gray},
-                    {Color.FromArgb(255, 92, 92, 92), Color.Gray},
+                {Color.FromArgb(255, 128, 128, 128), Color.Gray},
+                {Color.FromArgb(255, 92, 92, 92), Color.Gray},
 
-                    {Color.FromArgb(255, 255, 255, 255), Color.White},
-                    {Color.FromArgb(255, 192, 192, 192), Color.White},
+                {Color.FromArgb(255, 255, 255, 255), Color.White},
+                {Color.FromArgb(255, 192, 192, 192), Color.White},
 
-                    {Color.FromArgb(255, 255, 0, 0), Color.Red},
-                    {Color.FromArgb(255, 192, 110, 110), Color.Red},
-                    {Color.FromArgb(255, 160, 110, 110), Color.Red},
-                    {Color.FromArgb(255, 120, 80, 80), Color.Red},
-                    {Color.FromArgb(255, 148, 40, 40), Color.Red},
-                    {Color.FromArgb(255, 148, 0, 0), Color.Red},
-                    {Color.FromArgb(255, 128, 0, 0), Color.Red},
-                    {Color.FromArgb(255, 92, 20, 20), Color.Red},
-                    {Color.FromArgb(255, 64, 0, 0), Color.Red},
-                    {Color.FromArgb(255, 64, 32, 32), Color.Red},
+                {Color.FromArgb(255, 255, 0, 0), Color.Red},
+                {Color.FromArgb(255, 255, 110, 110), Color.Red},
+                {Color.FromArgb(255, 192, 110, 110), Color.Red},
+                {Color.FromArgb(255, 160, 110, 110), Color.Red},
+                {Color.FromArgb(255, 120, 80, 80), Color.Red},
+                {Color.FromArgb(255, 148, 40, 40), Color.Red},
+                {Color.FromArgb(255, 148, 0, 0), Color.Red},
+                {Color.FromArgb(255, 128, 0, 0), Color.Red},
+                {Color.FromArgb(255, 92, 20, 20), Color.Red},
+                {Color.FromArgb(255, 64, 0, 0), Color.Red},
+                {Color.FromArgb(255, 64, 32, 32), Color.Red},
 
-                    {Color.FromArgb(255, 0, 255, 0), Color.Green},
-                    {Color.FromArgb(255, 110, 192, 110), Color.Green},
-                    {Color.FromArgb(255, 110, 160, 110), Color.Green},
-                    {Color.FromArgb(255, 80, 120, 80), Color.Green},
-                    {Color.FromArgb(255, 40, 148, 40), Color.Green},
-                    {Color.FromArgb(255, 0, 148, 0), Color.Green},
-                    {Color.FromArgb(255, 0, 128, 0), Color.Green},
-                    {Color.FromArgb(255, 0, 64, 0), Color.Green},
-                    {Color.FromArgb(255, 32, 64, 32), Color.Green},
+                {Color.FromArgb(255, 0, 255, 0), Color.Green},
+                {Color.FromArgb(255, 110, 255, 110), Color.Green},
+                {Color.FromArgb(255, 110, 192, 110), Color.Green},
+                {Color.FromArgb(255, 110, 160, 110), Color.Green},
+                {Color.FromArgb(255, 80, 120, 80), Color.Green},
+                {Color.FromArgb(255, 40, 148, 40), Color.Green},
+                {Color.FromArgb(255, 0, 148, 0), Color.Green},
+                {Color.FromArgb(255, 0, 128, 0), Color.Green},
+                {Color.FromArgb(255, 0, 64, 0), Color.Green},
+                {Color.FromArgb(255, 32, 64, 32), Color.Green},
 
-                    {Color.FromArgb(255, 0, 0, 255), Color.Blue},
-                    {Color.FromArgb(255, 110, 110, 192), Color.Blue},
-                    {Color.FromArgb(255, 110, 110, 160), Color.Blue},
-                    {Color.FromArgb(255, 80, 90, 120), Color.Blue},
-                    {Color.FromArgb(255, 40, 40, 148), Color.Blue},
-                    {Color.FromArgb(255, 0, 0, 148), Color.Blue},
-                    {Color.FromArgb(255, 0, 0, 128), Color.Blue},
-                    {Color.FromArgb(255, 0, 0, 64), Color.Blue},
-                    {Color.FromArgb(255, 32, 32, 64), Color.Blue},
+                {Color.FromArgb(255, 0, 0, 255), Color.Blue},
+                {Color.FromArgb(255, 110, 110, 255), Color.Blue},
+                {Color.FromArgb(255, 110, 110, 192), Color.Blue},
+                {Color.FromArgb(255, 110, 110, 160), Color.Blue},
+                {Color.FromArgb(255, 80, 90, 120), Color.Blue},
+                {Color.FromArgb(255, 40, 40, 148), Color.Blue},
+                {Color.FromArgb(255, 0, 0, 148), Color.Blue},
+                {Color.FromArgb(255, 0, 0, 128), Color.Blue},
+                {Color.FromArgb(255, 0, 0, 64), Color.Blue},
+                {Color.FromArgb(255, 32, 32, 64), Color.Blue},
 
-                    {Color.FromArgb(255, 128, 128, 0), Color.Yellow},
-                    {Color.FromArgb(255, 215, 128, 0), Color.Yellow},
-                    {Color.FromArgb(255, 192, 128, 0), Color.Yellow},
-                    {Color.FromArgb(255, 215, 64, 0), Color.Yellow},
-                    {Color.FromArgb(255, 192, 64, 0), Color.Yellow},
-                    {Color.FromArgb(255, 215, 192, 128), Color.Yellow},
-                    {Color.FromArgb(255, 215, 192, 96), Color.Yellow},
-                    {Color.FromArgb(255, 215, 192, 64), Color.Yellow},
-                    {Color.FromArgb(255, 192, 172, 96), Color.Yellow},
-                    {Color.FromArgb(255, 192, 160, 96), Color.Yellow},
-                    {Color.FromArgb(255, 192, 160, 64), Color.Yellow},
-                    {Color.FromArgb(255, 192, 160, 32), Color.Yellow},
-                    {Color.FromArgb(255, 128, 96, 48), Color.Yellow},
-                    {Color.FromArgb(255, 128, 96, 32), Color.Yellow},
-                    {Color.FromArgb(255, 128, 96, 16), Color.Yellow},
-                    {Color.FromArgb(255, 92, 64, 16), Color.Yellow},
+                {Color.FromArgb(255, 128, 128, 0), Color.Yellow},
+                {Color.FromArgb(255, 215, 192, 128), Color.Yellow},
+                {Color.FromArgb(255, 215, 192, 96), Color.Yellow},
+                {Color.FromArgb(255, 215, 192, 64), Color.Yellow},
+                {Color.FromArgb(255, 215, 128, 0), Color.Yellow},
+                {Color.FromArgb(255, 215, 92, 0), Color.Yellow},
+                {Color.FromArgb(255, 192, 172, 96), Color.Yellow},
+                {Color.FromArgb(255, 192, 160, 96), Color.Yellow},
+                {Color.FromArgb(255, 192, 160, 64), Color.Yellow},
+                {Color.FromArgb(255, 192, 160, 32), Color.Yellow},
+                {Color.FromArgb(255, 192, 128, 0), Color.Yellow},
+                {Color.FromArgb(255, 192, 96, 0), Color.Yellow},
+                {Color.FromArgb(255, 128, 96, 48), Color.Yellow},
+                {Color.FromArgb(255, 128, 96, 32), Color.Yellow},
+                {Color.FromArgb(255, 128, 96, 16), Color.Yellow},
+                {Color.FromArgb(255, 92, 64, 16), Color.Yellow},
 
-                    // Make 'Transparent' last, to give preference to 'White' above, otherwise white can be mistakenly made transparent.
-                    {Color.Transparent, Color.Transparent},
-                };
+                // Make 'Transparent' last, to give preference to 'White' above, otherwise white can be mistakenly made transparent.
+                {Color.Transparent, Color.Transparent},
+            };
 
             return palette;
         }
@@ -94,16 +98,16 @@
         /// <returns></returns>
         public static Dictionary<Color, string> GetPalatteNames()
         {
-            Dictionary<Color, string> palette = new Dictionary<Color, string>()
-                {
-                    {Color.Black, "Black"},
-                    {Color.Gray, ""},
-                    {Color.White, "White"},
-                    {Color.Red, "Red"},
-                    {Color.Green, "Green"},
-                    {Color.Blue, "Blue"},
-                    {Color.Yellow, "Yellow"},
-                };
+            var palette = new Dictionary<Color, string>
+            {
+                {Color.Black, "Black"},
+                {Color.Gray, ""},
+                {Color.White, "White"},
+                {Color.Red, "Red"},
+                {Color.Green, "Green"},
+                {Color.Blue, "Blue"},
+                {Color.Yellow, "Yellow"},
+            };
 
             return palette;
         }
@@ -115,7 +119,7 @@
         public static Bitmap OptimizeImagePalette(string imageFilename)
         {
             imageFilename = Path.GetFullPath(imageFilename);
-            Bitmap bmp = new Bitmap(imageFilename);
+            var bmp = new Bitmap(imageFilename);
             return OptimizeImagePalette(bmp);
         }
 
@@ -123,11 +127,10 @@
         {
             Bitmap palatteImage;
 
-            using (Bitmap image = new Bitmap(bmp))
+            using (var image = new Bitmap(bmp))
             {
                 var palette = GetOptimizerPalatte();
-                PaletteReplacerQuantizer paletteQuantizer = new PaletteReplacerQuantizer(palette);
-
+                var paletteQuantizer = new PaletteReplacerQuantizer(palette);
                 palatteImage = paletteQuantizer.Quantize(image);
             }
 
@@ -158,16 +161,16 @@
                 File.Delete(fileDestination);
             }
 
-            var settingsSource = new XmlReaderSettings()
+            var settingsSource = new XmlReaderSettings
             {
                 IgnoreComments = true,
                 IgnoreWhitespace = true
             };
 
-            var settingsDestination = new XmlWriterSettings()
+            var settingsDestination = new XmlWriterSettings
             {
                 Indent = false,
-                NewLineHandling = System.Xml.NewLineHandling.None,
+                NewLineHandling = NewLineHandling.None,
                 NewLineOnAttributes = false
             };
 
@@ -212,10 +215,9 @@
         /// Resize the image to the specified width and height.
         /// </summary>
         /// <param name="image">The image to resize.</param>
-        /// <param name="width">The width to resize to.</param>
-        /// <param name="height">The height to resize to.</param>
+        /// <param name="size">The width and height to resize to.</param>
         /// <returns>The resized image.</returns>
-        public static System.Drawing.Bitmap ResizeImage(System.Drawing.Image image, Size size)
+        public static Bitmap ResizeImage(Image image, Size size)
         {
             if (size.Width < 1 || size.Height < 1)
             {
@@ -223,7 +225,7 @@
             }
 
             // a holder for the result
-            Bitmap result = new Bitmap(size.Width, size.Height);
+            var result = new Bitmap(size.Width, size.Height);
             //set the resolutions the same to avoid cropping due to resolution differences
             result.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
@@ -248,13 +250,12 @@
 
         public static BitmapImage ConvertBitmapToBitmapImage(Bitmap bitmap)
         {
-            MemoryStream memoryStream = new MemoryStream();
+            var memoryStream = new MemoryStream();
             bitmap.Save(memoryStream, ImageFormat.Png);
-            BitmapImage bitmapImage = new BitmapImage();
+            var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
             bitmapImage.StreamSource = new MemoryStream(memoryStream.ToArray());
             bitmapImage.EndInit();
-
             return bitmapImage;
         }
 
@@ -285,13 +286,13 @@
             if (fixScale > 1024)
                 fixScale = 1024;
 
-            string tempfilename = TempfileUtil.NewFilename(".vox");
+            var tempfilename = TempfileUtil.NewFilename(".vox");
 
-            Process p = new Process();
-            string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var p = new Process();
+            var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             p.StartInfo.FileName = Path.Combine(directory, "poly2vox.exe");
             p.StartInfo.WorkingDirectory = directory;
-            string arguments = string.Format("\"{0}\" \"{1}\"", polyFilename, tempfilename);
+            var arguments = string.Format("\"{0}\" \"{1}\"", polyFilename, tempfilename);
 
             if (fixScale > 1)
             {
@@ -333,13 +334,15 @@
             {
                 n--;
                 var k = RandomUtil.GetInt(n + 1);
-                T value = list[k];
+                var value = list[k];
                 list[k] = list[n];
                 list[n] = value;
             }
         }
 
         #endregion
+
+        #region Cartesian3DToSphericalPlanar
 
         /// <summary>
         /// map 3D coordinates to long/lat to plannar X/Y image.
@@ -403,12 +406,14 @@
             //}
 
             //Debug.WriteLine(latitude);
-            Point planarPoint = new Point((int)x2, (int)y2);
+            var planarPoint = new Point((int)x2, (int)y2);
 
             return planarPoint;
         }
 
         //public static double min = double.MaxValue;
-        //public static double max = double.MinValue;
+        //public static double max = double.MinValue; 
+
+        #endregion
     }
 }

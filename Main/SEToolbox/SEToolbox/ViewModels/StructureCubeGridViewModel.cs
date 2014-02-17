@@ -208,6 +208,20 @@
             }
         }
 
+        public bool Dampeners
+        {
+            get
+            {
+                return this.DataModel.Dampeners;
+            }
+
+            set
+            {
+                this.DataModel.Dampeners = value;
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
+        }
+
         public Point3D Min
         {
             get

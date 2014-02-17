@@ -7,15 +7,15 @@
 
     public static class TempfileUtil
     {
-        private static List<string> _tempfiles;
-        private static string _tempPath;
+        private static readonly List<string> Tempfiles;
+        private static readonly string TempPath;
 
         static TempfileUtil()
         {
-            _tempfiles = new List<string>();
-            _tempPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location));
-            if (!Directory.Exists(_tempPath))
-                Directory.CreateDirectory(_tempPath);
+            Tempfiles = new List<string>();
+            TempPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location));
+            if (!Directory.Exists(TempPath))
+                Directory.CreateDirectory(TempPath);
         }
 
         /// <summary>
@@ -38,14 +38,14 @@
 
             if (string.IsNullOrEmpty(fileExtension))
             {
-                filename = Path.Combine(_tempPath, Guid.NewGuid() + ".tmp");
+                filename = Path.Combine(TempPath, Guid.NewGuid() + ".tmp");
             }
             else
             {
-                filename = Path.Combine(_tempPath, Guid.NewGuid() + fileExtension);
+                filename = Path.Combine(TempPath, Guid.NewGuid() + fileExtension);
             }
 
-            _tempfiles.Add(filename);
+            Tempfiles.Add(filename);
 
             return filename;
         }
@@ -55,7 +55,7 @@
         /// </summary>
         public static void Dispose()
         {
-            foreach (var filename in _tempfiles)
+            foreach (var filename in Tempfiles)
             {
                 if (File.Exists(filename))
                 {
@@ -63,7 +63,7 @@
                 }
             }
 
-            _tempfiles.Clear();
+            Tempfiles.Clear();
         }
     }
 }

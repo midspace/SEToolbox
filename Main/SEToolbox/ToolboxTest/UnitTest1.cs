@@ -1,9 +1,12 @@
 ﻿namespace ToolboxTest
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using SEToolbox.Support;
     using System.Drawing.Imaging;
     using System.IO;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
 
     [TestClass]
     public class UnitTest1
@@ -62,6 +65,43 @@
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "SpaceEgineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
+        }
+
+        [TestMethod]
+        public void ExtractZipFileToFolder()
+        {
+            var filename = @".\TestAssets\Sample World.sbw";
+            var folder = @".\TestAssets\Sample World";
+
+            ZipTools.MakeClearDirectory(folder);
+            ZipTools.ExtractZipFile(filename, null, folder);
+        }
+
+        [TestMethod]
+        public void ExtractSandboxFromZip()
+        {
+            var filename = @".\TestAssets\Sample World.sbw";
+
+            MyObjectBuilder_Checkpoint checkpoint;
+            using (var stream = ZipTools.ReadFile(filename, null, "Sandbox.sbc"))
+            {
+                checkpoint = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(stream);
+            }
+
+            Assert.AreEqual("Quad Scissor Doors", checkpoint.SessionName, "Checkpoint SessionName must match!");
+        }
+
+        [TestMethod]
+        public void ExtractZipAndRepack()
+        {
+            var filename = @".\TestAssets\Sample World.sbw";
+            var folder = @".\TestAssets\Sample World";
+
+            ZipTools.MakeClearDirectory(folder);
+            ZipTools.ExtractZipFile(filename, null, folder);
+
+            var newFilename = @".\TestAssets\New World.sbw";
+            ZipTools.ZipFolder(folder, null, newFilename);
         }
     }
 }

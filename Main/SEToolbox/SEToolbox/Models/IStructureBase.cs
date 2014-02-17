@@ -13,6 +13,8 @@
 
         ClassType ClassType { get; set; }
 
+        string Name { get; set; }
+
         string Description { get; set; }
 
         double PlayerDistance { get; set; }

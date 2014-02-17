@@ -16,14 +16,10 @@
   * Preview.
   * Scale.
 - Improve Import 3D Model:
-  * Recode Poly2Vox to VisualC CLR to integrate with app, and enhance.
-  * 3D Preview?
+  * 3D Preview of Volmetric?
 
 - Exit Pilot from ship to Astronaut.
-- Set/Reset Astronaut Vector. (Direction and Speed)
 - Move Astronaut to position.
-- Switch Jetpack on/off.
-- Switch Inertia Dampeners on/off.
 
 - Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
   Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
@@ -53,6 +49,12 @@ Completed:
 - Import Asteroid/Voxel.
 - Link to open Workshop ID.
 - Add collection for temporary files, to allow cleanup during shutdown.
+- Improve Import 3D Model:
+  * Recode Poly2Vox to VisualC CLR to integrate with app, and enhance.
+- Switch Jetpack on/off.
+- Set/Reset Astronaut Vector. (Direction and Speed)
+- Switch Inertia Dampeners on/off.
+- Strip beacon's for name of ship.
 
 ========--------~~~~~~~~
 

@@ -28,6 +28,26 @@ namespace SEToolbox.ViewModels
 
         #region Properties
 
+        #region command Properties
+
+        public ICommand ResetVelocityCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ResetVelocityExecuted), new Func<bool>(ResetVelocityCanExecute));
+            }
+        }
+
+        public ICommand ReverseVelocityCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ReverseVelocityExecuted), new Func<bool>(ReverseVelocityCanExecute));
+            }
+        }
+
+        #endregion
+
         protected new StructureCharacterModel DataModel
         {
             get
@@ -63,6 +83,48 @@ namespace SEToolbox.ViewModels
             }
         }
 
+        public bool Light
+        {
+            get
+            {
+                return this.DataModel.Light;
+            }
+
+            set
+            {
+                this.DataModel.Light = value;
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
+        }
+
+        public bool JetPack
+        {
+            get
+            {
+                return this.DataModel.JetPack;
+            }
+
+            set
+            {
+                this.DataModel.JetPack = value;
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
+        }
+
+        public bool Dampeners
+        {
+            get
+            {
+                return this.DataModel.Dampeners;
+            }
+
+            set
+            {
+                this.DataModel.Dampeners = value;
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
+        }
+
         public List<string> CharacterModels
         {
             get
@@ -87,6 +149,28 @@ namespace SEToolbox.ViewModels
         #endregion
 
         #region methods
+
+        public bool ResetVelocityCanExecute()
+        {
+            return true;
+        }
+
+        public void ResetVelocityExecuted()
+        {
+            this.DataModel.ResetVelocity();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ReverseVelocityCanExecute()
+        {
+            return true;
+        }
+
+        public void ReverseVelocityExecuted()
+        {
+            this.DataModel.ReverseVelocity();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
 
         #endregion
     }

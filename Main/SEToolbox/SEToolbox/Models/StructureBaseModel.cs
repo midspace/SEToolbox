@@ -13,18 +13,21 @@
         #region fields
 
         [NonSerialized]
-        private MyObjectBuilder_EntityBase entityBase;
+        private MyObjectBuilder_EntityBase _entityBase;
 
         [NonSerialized]
-        private ClassType classType;
+        private ClassType _classType;
 
         [NonSerialized]
-        private string description;
+        private string _name;
 
         [NonSerialized]
-        private double playerDistance;
+        private string _description;
 
-        private string serializedEntity;
+        [NonSerialized]
+        private double _playerDistance;
+
+        private string _serializedEntity;
 
         #endregion
 
@@ -48,13 +51,13 @@
         {
             get
             {
-                return this.entityBase;
+                return this._entityBase;
             }
             set
             {
-                if (value != this.entityBase)
+                if (value != this._entityBase)
                 {
-                    this.entityBase = value;
+                    this._entityBase = value;
                     this.UpdateFromEntityBase();
                     this.RaisePropertyChanged(() => EntityBase);
                 }
@@ -66,14 +69,14 @@
         {
             get
             {
-                return this.entityBase.EntityId;
+                return this._entityBase.EntityId;
             }
 
             set
             {
-                if (value != this.entityBase.EntityId)
+                if (value != this._entityBase.EntityId)
                 {
-                    this.entityBase.EntityId = value;
+                    this._entityBase.EntityId = value;
                     this.RaisePropertyChanged(() => EntityId);
                 }
             }
@@ -84,15 +87,15 @@
         {
             get
             {
-                return this.entityBase.PositionAndOrientation;
+                return this._entityBase.PositionAndOrientation;
             }
 
             set
             {
-                if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, this.entityBase.PositionAndOrientation))
+                if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, this._entityBase.PositionAndOrientation))
                 //if (value != this.entityBase.PositionAndOrientation)
                 {
-                    this.entityBase.PositionAndOrientation = value;
+                    this._entityBase.PositionAndOrientation = value;
                     this.RaisePropertyChanged(() => PositionAndOrientation);
                 }
             }
@@ -103,15 +106,33 @@
         {
             get
             {
-                return this.classType;
+                return this._classType;
             }
 
             set
             {
-                if (value != this.classType)
+                if (value != this._classType)
                 {
-                    this.classType = value;
+                    this._classType = value;
                     this.RaisePropertyChanged(() => ClassType);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public string Name
+        {
+            get
+            {
+                return this._name;
+            }
+
+            set
+            {
+                if (value != this._name)
+                {
+                    this._name = value;
+                    this.RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -121,14 +142,14 @@
         {
             get
             {
-                return this.description;
+                return this._description;
             }
 
             set
             {
-                if (value != this.description)
+                if (value != this._description)
                 {
-                    this.description = value;
+                    this._description = value;
                     this.RaisePropertyChanged(() => Description);
                 }
             }
@@ -139,14 +160,14 @@
         {
             get
             {
-                return this.playerDistance;
+                return this._playerDistance;
             }
 
             set
             {
-                if (value != this.playerDistance)
+                if (value != this._playerDistance)
                 {
-                    this.playerDistance = value;
+                    this._playerDistance = value;
                     this.RaisePropertyChanged(() => PlayerDistance);
                 }
             }
@@ -156,14 +177,14 @@
         {
             get
             {
-                return this.serializedEntity;
+                return this._serializedEntity;
             }
 
             set
             {
-                if (value != this.serializedEntity)
+                if (value != this._serializedEntity)
                 {
-                    this.serializedEntity = value;
+                    this._serializedEntity = value;
                     this.RaisePropertyChanged(() => SerializedEntity);
                 }
             }
