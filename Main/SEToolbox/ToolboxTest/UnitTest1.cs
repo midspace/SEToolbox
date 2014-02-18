@@ -1,5 +1,7 @@
 ﻿namespace ToolboxTest
 {
+    using System.Diagnostics;
+    using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -89,6 +91,16 @@
             }
 
             Assert.AreEqual("Quad Scissor Doors", checkpoint.SessionName, "Checkpoint SessionName must match!");
+        }
+
+        [TestMethod]
+        public void ExtractContentFromCompressedSandbox()
+        {
+            var filename = @".\TestAssets\SANDBOX_0_0_0_.sbs";
+
+            var xmlfilename = @".\TestAssets\SANDBOX_0_0_0_.xml";
+
+            ZipTools.GZipUncompress(filename, xmlfilename);
         }
 
         [TestMethod]

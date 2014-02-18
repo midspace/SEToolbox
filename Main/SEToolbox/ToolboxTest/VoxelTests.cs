@@ -452,7 +452,7 @@
             var iceMaterial = materials.FirstOrDefault(m => m.Name.Contains("Ice"));
 
             var imageFile = @".\TestAssets\Earth.png";
-            var fileNew = @".\TestAssets\Earth.vox";
+            //var fileNew = @".\TestAssets\Earth.vox";
             //fileNew = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Builder Toolset\Earth0.vox";
             double radius = 300;
 

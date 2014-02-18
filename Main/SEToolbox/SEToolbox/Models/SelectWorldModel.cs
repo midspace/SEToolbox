@@ -1,10 +1,12 @@
 ﻿namespace SEToolbox.Models
 {
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Text;
+    using System.Linq;
 
     public class SelectWorldModel : BaseModel
     {
@@ -300,19 +302,27 @@
 
                 foreach (var userPath in userPaths)
                 {
-                    var savePaths = Directory.GetDirectories(userPath);
+                    var lastLoadedFile = Path.Combine(userPath, SpaceEngineersConsts.LoadLoadedFilename);
 
-                    foreach (var savePath in savePaths)
+                    if (File.Exists(lastLoadedFile))
                     {
-                        SaveResource saveResource;
-                        this.Worlds.Add(saveResource = new SaveResource()
-                        {
-                            Savename = Path.GetFileName(savePath),
-                            Username = Path.GetFileName(userPath),
-                            Savepath = savePath
-                        });
+                        var lastLoaded = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes, MyObjectBuilder_LastLoadedTimesSerializer>(lastLoadedFile);
 
-                        saveResource.LoadCheckpoint();
+                        var list = lastLoaded.LastLoaded.Dictionary.OrderByDescending(k => k.Value);
+
+                        foreach (var kvp in list)
+                        {
+                            SaveResource saveResource;
+                            this.Worlds.Add(saveResource = new SaveResource()
+                            {
+                                Savename = Path.GetFileName(kvp.Key),
+                                Username = Path.GetFileName(userPath),
+                                Savepath = kvp.Key,
+                                LastLoadTime = kvp.Value
+                            });
+
+                            saveResource.LoadCheckpoint();
+                        }
                     }
                 }
 

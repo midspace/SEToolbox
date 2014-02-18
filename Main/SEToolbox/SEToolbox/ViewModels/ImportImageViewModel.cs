@@ -1,22 +1,22 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics.Contracts;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Windows.Forms;
-    using System.Windows.Input;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Media.Media3D;
     using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.CommonLib.ObjectBuilders.VRageData;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.Drawing;
+    using System.IO;
+    using System.Windows.Forms;
+    using System.Windows.Input;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Media.Media3D;
 
     public class ImportImageViewModel : BaseViewModel
     {
@@ -397,9 +397,6 @@
 
                 if (image != null)
                 {
-                    // process colors.
-                    image = ToolboxExtensions.OptimizeImagePalette(image);
-
                     this.NewImage = ToolboxExtensions.ConvertBitmapToBitmapImage(image);
 
                     //ToolboxExtensions.SavePng(@"C:\temp\test.png", image);
@@ -467,48 +464,16 @@
                 Up = this.Up.ToVector3()
             };
 
-
-            // Large|Block|ArmorCorner|Yellow
+            // Large|Block|ArmorCorner
             // Large|HeavyBlock|ArmorBlock,
             // Small|Block|ArmorBlock,
             // Small|HeavyBlock|ArmorBlock,
 
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
-
-            MyObjectBuilder_CubeBlock newCube;
-
             var image = ToolboxExtensions.ResizeImage(this.sourceImage, this.NewImageSize.Size);
-            // process colors.
-            image = ToolboxExtensions.OptimizeImagePalette(image);
 
             using (var palatteImage = new Bitmap(image))
             {
-                var palatteNames = ToolboxExtensions.GetPalatteNames();
-
-
-                //for (int x = 0; x < palatteImage.Width; x++)
-                //{
-                //    for (int y = 0; y < palatteImage.Height; y++)
-                //    {
-                //        int z = 0;
-                //        var color = palatteImage.GetPixel(x, y);
-
-                //        var cname = palatteNames.First(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B).Value;
-                //        // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
-                //        SubtypeId armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock" + cname);
-
-                //        entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
-                //        newCube.SubtypeName = armor.ToString();
-                //        newCube.EntityId = 0;
-                //        newCube.PersistentFlags = MyPersistentEntityFlags2.None;
-                //        SpaceEngineersAPI.SetCubeOrientation(newCube, CubeType.Cube);
-                //        //newCube.Min = new VRageMath.Vector3I(x, y, z);
-                //        //newCube.Max = new VRageMath.Vector3I(x, y, z);
-                //        newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
-                //        newCube.Max = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
-                //    }
-                //}
-
                 // Optimal order load. from grid 0,0,0 and out.
                 for (var x = palatteImage.Width - 1; x >= 0; x--)
                 {
@@ -516,21 +481,20 @@
                     {
                         var z = 0;
                         var color = palatteImage.GetPixel(x, y);
-                        var armorColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
 
-                        // This will specifically ignore the "Transparent" Color, as there is no matching color specified in the palatteNames.
-                        if (armorColor.Value != null)
+                        // Specifically ignore anything with "Transparent" Alpha.
+                        if (color.A == 0xFF)
                         {
                             // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
-                            var armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock" + armorColor.Value);
+                            var armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock");
 
+                            MyObjectBuilder_CubeBlock newCube;
                             entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
                             newCube.SubtypeName = armor.ToString();
                             newCube.EntityId = 0;
-                            newCube.PersistentFlags = MyPersistentEntityFlags2.None;
-                            newCube.Orientation = SpaceEngineersAPI.GetCubeOrientation(CubeType.Cube);
+                            newCube.BlockOrientation = SpaceEngineersAPI.GetCubeOrientation(CubeType.Cube);
                             newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
-                            newCube.Max = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
+                            newCube.ColorMaskHSV = new SerializableVector3(color.GetHue() / 360f, color.GetSaturation() * 2 - 1, color.GetBrightness() * 2 - 1);
                         }
                     }
                 }

@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
     using System.Xml;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
@@ -10,6 +12,7 @@
     using Sandbox.CommonLib.ObjectBuilders.Definitions;
     using SEToolbox.Support;
     using VRageMath;
+using Sandbox.CommonLib.ObjectBuilders.VRageData;
 
     public class SpaceEngineersAPI
     {
@@ -66,9 +69,6 @@
                 {
 
                     var serializer = (S)Activator.CreateInstance(typeof(S));
-                    //serializer.UnknownAttribute += serializer_UnknownAttribute;
-                    //serializer.UnknownElement += serializer_UnknownElement;
-                    //serializer.UnknownNode += serializer_UnknownNode;
                     obj = serializer.Deserialize(xmlReader);
                 }
             }
@@ -150,91 +150,88 @@
 
         #region SetCubeOrientation
 
-        public static readonly VRageMath.Quaternion[] ValidOrientations = new VRageMath.Quaternion[] {
-            new VRageMath.Quaternion(0, 0, 0, 1),   // no rotation
-            new VRageMath.Quaternion(1, 0, 0, 0),   // 180 around X
-            new VRageMath.Quaternion(0, 1, 0, 0),   // 180 around Y
-            new VRageMath.Quaternion(0, 0, 1, 0),   // 180 around Z
-            
-            new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f),     // +90 around X
-            new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f),    // -90 around X
-            new VRageMath.Quaternion(0, 0.707106769f, 0, 0.707106769f),     // +90 around Y
-            new VRageMath.Quaternion(0, -0.707106769f, 0, 0.707106769f),    // -90 around Y
-            new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f),     // +90 around Z
-            new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f),    // -90 around Z
+        public static readonly SerializableBlockOrientation[] ValidOrientations = new SerializableBlockOrientation[] {
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up),      // no rotation
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down),// 180 around X
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Up),// 180 around Y
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Down), // 180 around Z
 
-            new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0),
-            new VRageMath.Quaternion(0.707106769f, -0.707106769f, 0, 0),
-            new VRageMath.Quaternion(0.707106769f, 0, 0.707106769f, 0),
-            new VRageMath.Quaternion(-0.707106769f, 0, 0.707106769f, 0),
-            new VRageMath.Quaternion(0, 0.707106769f, 0.707106769f, 0),
-            new VRageMath.Quaternion(0, 0.707106769f, -0.707106769f, 0),
-            new VRageMath.Quaternion(0, -0.707106769f, 0.707106769f, 0),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward),// +90 around X
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward),// -90 around X
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Up), // +90 around Y
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Up),// -90 around Y
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Left),// +90 around Z
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right),// -90 around Z
 
-            new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, 0.5f),
-            new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f),
-            new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f),
-            new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, -0.5f),
-            new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f),
-            new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, -0.5f),
-            new VRageMath.Quaternion(0.5f, -0.5f, -0.5f, 0.5f),
-            new VRageMath.Quaternion(0.5f, -0.5f, -0.5f, -0.5f),
-            new VRageMath.Quaternion(-0.5f, 0.5f, 0.5f, 0.5f),
-            new VRageMath.Quaternion(-0.5f, 0.5f, 0.5f, -0.5f),
-            new VRageMath.Quaternion(-0.5f, 0.5f, -0.5f, 0.5f),
-            new VRageMath.Quaternion(-0.5f, 0.5f, -0.5f, -0.5f),
-            new VRageMath.Quaternion(-0.5f, -0.5f, 0.5f, 0.5f),
-            new VRageMath.Quaternion(-0.5f, -0.5f, 0.5f, -0.5f),
-            new VRageMath.Quaternion(-0.5f, -0.5f, -0.5f, 0.5f),
-            new VRageMath.Quaternion(-0.5f, -0.5f, -0.5f, -0.5f),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Left),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Down),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Down),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Backward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Forward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Forward),
+
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Backward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Forward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Left),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Forward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Backward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Left),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Left),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Backward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Forward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Left),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Forward),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right),
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Backward),
         };
 
-        // float d0.707 = Math.Sqrt(1 / 2);
-        public static readonly Dictionary<CubeType, VRageMath.Quaternion> CubeOrientations = new Dictionary<CubeType, Quaternion>()
+        public static readonly Dictionary<CubeType, SerializableBlockOrientation> CubeOrientations = new Dictionary<CubeType, SerializableBlockOrientation>()
         {
-            {CubeType.Cube, new VRageMath.Quaternion(0, 0, 0, 1)},
+            {CubeType.Cube, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)},
 
-            {CubeType.SlopeCenterBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},     // -90 around X
-            {CubeType.SlopeRightBackCenter, new VRageMath.Quaternion(0.5f, -0.5f, -0.5f, -0.5f)},
-            {CubeType.SlopeLeftBackCenter, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
-            {CubeType.SlopeCenterBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},                         // no rotation
-            {CubeType.SlopeRightCenterTop, new VRageMath.Quaternion(0.707106769f, -0.707106769f, 0, 0)},
-            {CubeType.SlopeLeftCenterTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
-            {CubeType.SlopeRightCenterBottom, new VRageMath.Quaternion(0, 0, 0.707106769f, 0.707106769f)},  // +90 around Z
-            {CubeType.SlopeLeftCenterBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},  // -90 around Z
-            {CubeType.SlopeCenterFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},                           // 180 around X
-            {CubeType.SlopeRightFrontCenter, new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f)},
-            {CubeType.SlopeLeftFrontCenter, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
-            {CubeType.SlopeCenterFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},  // +90 around X
+            {CubeType.SlopeCenterBackTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward)}, // -90 around X
+            {CubeType.SlopeRightBackCenter, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Left)},
+            {CubeType.SlopeLeftBackCenter, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.SlopeCenterBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)}, // no rotation
+            {CubeType.SlopeRightCenterTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Left)},
+            {CubeType.SlopeLeftCenterTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.SlopeRightCenterBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Left)}, // +90 around Z
+            {CubeType.SlopeLeftCenterBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right)}, // -90 around Z
+            {CubeType.SlopeCenterFrontTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down)}, // 180 around X
+            {CubeType.SlopeRightFrontCenter, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Left)},
+            {CubeType.SlopeLeftFrontCenter, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.SlopeCenterFrontBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward)},// +90 around X
 
-            // Probably got the names of these all messed up in relation to their actual orientation.
-            {CubeType.NormalCornerLeftFrontTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
-            {CubeType.NormalCornerRightFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},                             // 180 around X
-            {CubeType.NormalCornerLeftBackTop, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
-            {CubeType.NormalCornerRightBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},       // -90 around X
-            {CubeType.NormalCornerLeftFrontBottom, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
-            {CubeType.NormalCornerRightFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},    // +90 around X 
-            {CubeType.NormalCornerLeftBackBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},     // -90 around Z
-            {CubeType.NormalCornerRightBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},                           // no rotation
-            
-            {CubeType.InverseCornerLeftFrontTop, new VRageMath.Quaternion(0.707106769f, 0.707106769f, 0, 0)},
-            {CubeType.InverseCornerRightFrontTop, new VRageMath.Quaternion(1, 0, 0, 0)},                            // 180 around X
-            {CubeType.InverseCornerLeftBackTop, new VRageMath.Quaternion(0.5f, 0.5f, 0.5f, -0.5f)},
-            {CubeType.InverseCornerRightBackTop, new VRageMath.Quaternion(-0.707106769f, 0, 0, 0.707106769f)},      // -90 around X
-            {CubeType.InverseCornerLeftFrontBottom, new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
-            {CubeType.InverseCornerRightFrontBottom, new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},   // +90 around X
-            {CubeType.InverseCornerLeftBackBottom, new VRageMath.Quaternion(0, 0, -0.707106769f, 0.707106769f)},    // -90 around Z
-            {CubeType.InverseCornerRightBackBottom, new VRageMath.Quaternion(0, 0, 0, 1)},                          // no rotation
+             // Probably got the names of these all messed up in relation to their actual orientation.
+            {CubeType.NormalCornerLeftFrontTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.NormalCornerRightFrontTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down)}, // 180 around X
+            {CubeType.NormalCornerLeftBackTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.NormalCornerRightBackTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward)}, // -90 around X
+            {CubeType.NormalCornerLeftFrontBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.NormalCornerRightFrontBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward)},// +90 around X 
+            {CubeType.NormalCornerLeftBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right)},// -90 around Z
+            {CubeType.NormalCornerRightBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)},  // no rotation
 
+            {CubeType.InverseCornerLeftFrontTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.InverseCornerRightFrontTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down)}, // 180 around X
+            {CubeType.InverseCornerLeftBackTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.InverseCornerRightBackTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward)},  // -90 around X
+            {CubeType.InverseCornerLeftFrontBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.InverseCornerRightFrontBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward)}, // +90 around X
+            {CubeType.InverseCornerLeftBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right)}, // -90 around Z
+            {CubeType.InverseCornerRightBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)},  // no rotation
 
             //{CubeType.LargeRamp..., new VRageMath.Quaternion(0, -0.707106769f, 0.707106769f, 0)},
             //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f)},
             //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
             //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
-
         };
 
-        public static VRageMath.Quaternion GetCubeOrientation(CubeType type)
+        public static SerializableBlockOrientation GetCubeOrientation(CubeType type)
         {
             if (CubeOrientations.ContainsKey(type))
                 return CubeOrientations[type];
@@ -410,9 +407,10 @@
                 min.X = Math.Min(min.X, block.Min.X);
                 min.Y = Math.Min(min.Y, block.Min.Y);
                 min.Z = Math.Min(min.Z, block.Min.Z);
-                max.X = Math.Max(max.X, block.Max.X);
-                max.Y = Math.Max(max.Y, block.Max.Y);
-                max.Z = Math.Max(max.Z, block.Max.Z);
+#warning resolve cubetype size.
+                max.X = Math.Max(max.X, block.Min.X);       // TODO: resolve cubetype size.
+                max.Y = Math.Max(max.Y, block.Min.Y);
+                max.Z = Math.Max(max.Z, block.Min.Z);
             }
 
             // scale box to GridSize

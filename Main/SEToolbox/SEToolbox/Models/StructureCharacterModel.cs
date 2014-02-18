@@ -152,7 +152,7 @@
         {
             get
             {
-                return this.Character.LinearVelocity.LinearVector();
+                return this.Character.LinearVelocity.ToVector3().LinearVector();
             }
         }
 
