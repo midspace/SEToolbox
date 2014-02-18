@@ -5,6 +5,7 @@
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
     using HelixToolkit.Wpf;
+    using Sandbox.CommonLib.ObjectBuilders.VRageData;
     using VRageMath;
 
     public static class MeshHelper
@@ -290,7 +291,7 @@
             return Math.Round(Math.Round(Math.Round(vector1.X * vector2.X, 14) + Math.Round(vector1.Y * vector2.Y, 14), 14) + Math.Round(vector1.Z * vector2.Z, 14), 14);
         }
 
-        internal static Vector3I Mirror(this Vector3I vector, Mirror xMirror, int xAxis, Mirror yMirror, int yAxis, Mirror zMirror, int zAxis)
+        internal static SerializableVector3I Mirror(this SerializableVector3I vector, Mirror xMirror, int xAxis, Mirror yMirror, int yAxis, Mirror zMirror, int zAxis)
         {
             var newVector = new Vector3I(vector.X, vector.Y, vector.Z);
             switch (xMirror)
@@ -327,6 +328,16 @@
             transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(-1, 0, 0), xAngle)));
             transform.Children.Add(new TranslateTransform3D(origin));
             return transform;
+        }
+
+        public static VRageMath.Vector3I ToVector3I(this SerializableVector3I vector)
+        {
+            return new VRageMath.Vector3I(vector.X, vector.Y, vector.Z);
+        }
+
+        public static VRageMath.Vector3 ToVector3(this SerializableVector3 vector)
+        {
+            return new VRageMath.Vector3(vector.X, vector.Y, vector.Z);
         }
     }
 }

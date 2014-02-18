@@ -15,6 +15,11 @@
         private string savepath;
         private MyObjectBuilder_Checkpoint content;
 
+        /// <summary>
+        /// Populated from LastLoadedTimes
+        /// </summary>
+        private DateTime _lastLoadTime;
+
         #endregion
 
         #region Properties
@@ -127,21 +132,18 @@
             }
         }
 
-        public DateTime? LastLoadTime
+        public DateTime LastLoadTime
         {
             get
             {
-                if (this.content == null)
-                    return null;
-
-                return this.content.LastLoadTime;
+                return this._lastLoadTime;
             }
 
             set
             {
-                if (value != this.content.LastLoadTime)
+                if (value != this._lastLoadTime)
                 {
-                    this.content.LastLoadTime = value.Value;
+                    this._lastLoadTime = value;
                     this.RaisePropertyChanged(() => LastLoadTime);
                 }
             }

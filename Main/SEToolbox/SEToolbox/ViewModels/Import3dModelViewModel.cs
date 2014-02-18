@@ -605,63 +605,62 @@
 
             #region Read in voxel and set main cube space.
 
-            //// Staggered star.
+            // Staggered star.
 
-            //var ccubic = new CubeType[9, 9, 9];
+            var ccubic = new CubeType[9, 9, 9];
 
-            //for (var i = 2; i < 7; i++)
-            //{
-            //    for (var j = 2; j < 7; j++)
-            //    {
-            //        ccubic[i, j, 4] = CubeType.Cube;
-            //        ccubic[i, 4, j] = CubeType.Cube;
-            //        ccubic[4, i, j] = CubeType.Cube;
-            //    }
-            //}
+            for (var i = 2; i < 7; i++)
+            {
+                for (var j = 2; j < 7; j++)
+                {
+                    ccubic[i, j, 4] = CubeType.Cube;
+                    ccubic[i, 4, j] = CubeType.Cube;
+                    ccubic[4, i, j] = CubeType.Cube;
+                }
+            }
 
-            //for (var i = 0; i < 9; i++)
-            //{
-            //    ccubic[i, 4, 4] = CubeType.Cube;
-            //    ccubic[4, i, 4] = CubeType.Cube;
-            //    ccubic[4, 4, i] = CubeType.Cube;
-            //}
+            for (var i = 0; i < 9; i++)
+            {
+                ccubic[i, 4, 4] = CubeType.Cube;
+                ccubic[4, i, 4] = CubeType.Cube;
+                ccubic[4, 4, i] = CubeType.Cube;
+            }
 
             #endregion
 
             #region Read in voxel and set main cube space.
 
-            // Tray shape
+            //// Tray shape
 
-            var max = 20;
-            var offset = 5;
+            //var max = 20;
+            //var offset = 5;
 
-            var ccubic = new CubeType[max, max, max];
+            //var ccubic = new CubeType[max, max, max];
 
-            for (var x = 0; x < max; x++)
-            {
-                for (var y = 0; y < max; y++)
-                {
-                    ccubic[2, x, y] = CubeType.Cube;
-                }
-            }
+            //for (var x = 0; x < max; x++)
+            //{
+            //    for (var y = 0; y < max; y++)
+            //    {
+            //        ccubic[2, x, y] = CubeType.Cube;
+            //    }
+            //}
 
-            for (var z = 1; z < 4; z += 2)
-            {
-                for (int i = 0; i < max; i++)
-                {
-                    ccubic[z, i, 0] = CubeType.Cube;
-                    ccubic[z, i, max - 1] = CubeType.Cube;
-                    ccubic[z, 0, i] = CubeType.Cube;
-                    ccubic[z, max - 1, i] = CubeType.Cube;
-                }
+            //for (var z = 1; z < 4; z += 2)
+            //{
+            //    for (int i = 0; i < max; i++)
+            //    {
+            //        ccubic[z, i, 0] = CubeType.Cube;
+            //        ccubic[z, i, max - 1] = CubeType.Cube;
+            //        ccubic[z, 0, i] = CubeType.Cube;
+            //        ccubic[z, max - 1, i] = CubeType.Cube;
+            //    }
 
-                for (int i = 0 + offset; i < max - offset; i++)
-                {
-                    ccubic[z, i, i] = CubeType.Cube;
-                    ccubic[z, max - i - 1, i] = CubeType.Cube;
-                }
-            }
-
+            //    for (int i = 0 + offset; i < max - offset; i++)
+            //    {
+            //        ccubic[z, i, i] = CubeType.Cube;
+            //        ccubic[z, max - i - 1, i] = CubeType.Cube;
+            //    }
+            //}
 
             #endregion
 
@@ -1744,10 +1743,8 @@
                             }
 
                             newCube.EntityId = 0;
-                            newCube.PersistentFlags = MyPersistentEntityFlags2.None;
-                            newCube.Orientation = SpaceEngineersAPI.GetCubeOrientation(ccubic[x, y, z]);
+                            newCube.BlockOrientation = SpaceEngineersAPI.GetCubeOrientation(ccubic[x, y, z]);
                             newCube.Min = new VRageMath.Vector3I(x, y, z);
-                            newCube.Max = new VRageMath.Vector3I(x, y, z);
                         }
                     }
                 }

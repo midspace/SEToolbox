@@ -3,6 +3,7 @@
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
+    using Sandbox.CommonLib.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using System;
@@ -20,28 +21,30 @@
         /// <summary>
         /// The base path of the save files, minus the userid.
         /// </summary>
-        private string baseSavePath;
+        private string _baseSavePath;
 
-        private SaveResource activeWorld;
+        private SaveResource _activeWorld;
 
-        private bool isActive;
+        private bool _isActive;
 
-        private bool isBusy;
+        private bool _isBusy;
 
-        private bool isModified;
+        private bool _isModified;
 
-        private bool isBaseSaveChanged;
+        private bool _isBaseSaveChanged;
 
-        private MyObjectBuilder_Sector sectorData;
+        private MyObjectBuilder_Sector _sectorData;
 
-        private StructureCharacterModel thePlayerCharacter;
+        private StructureCharacterModel _thePlayerCharacter;
 
         ///// <summary>
         ///// Collection of <see cref="IStructureBase"/> objects that represent the builds currently configured.
         ///// </summary>
-        private ObservableCollection<IStructureBase> structures;
+        private ObservableCollection<IStructureBase> _structures;
 
-        private List<string> manageDeleteVoxelList;
+        private readonly List<string> manageDeleteVoxelList;
+
+        private bool _compressedFormat;
 
         #endregion
 
@@ -61,14 +64,14 @@
         {
             get
             {
-                return this.baseSavePath;
+                return this._baseSavePath;
             }
 
             set
             {
-                if (value != this.baseSavePath)
+                if (value != this._baseSavePath)
                 {
-                    this.baseSavePath = value;
+                    this._baseSavePath = value;
                     this.RaisePropertyChanged(() => BaseSavePath);
                 }
             }
@@ -78,14 +81,14 @@
         {
             get
             {
-                return this.structures;
+                return this._structures;
             }
 
             set
             {
-                if (value != this.structures)
+                if (value != this._structures)
                 {
-                    this.structures = value;
+                    this._structures = value;
                     this.RaisePropertyChanged(() => Structures);
                 }
             }
@@ -95,14 +98,14 @@
         {
             get
             {
-                return this.thePlayerCharacter;
+                return this._thePlayerCharacter;
             }
 
             set
             {
-                if (value != this.thePlayerCharacter)
+                if (value != this._thePlayerCharacter)
                 {
-                    this.thePlayerCharacter = value;
+                    this._thePlayerCharacter = value;
                     this.RaisePropertyChanged(() => ThePlayerCharacter);
                 }
             }
@@ -112,14 +115,14 @@
         {
             get
             {
-                return this.activeWorld;
+                return this._activeWorld;
             }
 
             set
             {
-                if (value != this.activeWorld)
+                if (value != this._activeWorld)
                 {
-                    this.activeWorld = value;
+                    this._activeWorld = value;
                     this.RaisePropertyChanged(() => ActiveWorld);
                 }
             }
@@ -132,14 +135,14 @@
         {
             get
             {
-                return this.isActive;
+                return this._isActive;
             }
 
             set
             {
-                if (value != this.isActive)
+                if (value != this._isActive)
                 {
-                    this.isActive = value;
+                    this._isActive = value;
                     this.RaisePropertyChanged(() => IsActive);
                 }
             }
@@ -152,14 +155,14 @@
         {
             get
             {
-                return this.isBusy;
+                return this._isBusy;
             }
 
             set
             {
-                if (value != this.isBusy)
+                if (value != this._isBusy)
                 {
-                    this.isBusy = value;
+                    this._isBusy = value;
                     this.RaisePropertyChanged(() => IsBusy);
                     this.SetActiveStatus();
                 }
@@ -173,14 +176,14 @@
         {
             get
             {
-                return this.isModified;
+                return this._isModified;
             }
 
             set
             {
-                if (value != this.isModified)
+                if (value != this._isModified)
                 {
-                    this.isModified = value;
+                    this._isModified = value;
                     this.RaisePropertyChanged(() => IsModified);
                 }
             }
@@ -193,14 +196,14 @@
         {
             get
             {
-                return this.isBaseSaveChanged;
+                return this._isBaseSaveChanged;
             }
 
             set
             {
-                if (value != this.isBaseSaveChanged)
+                if (value != this._isBaseSaveChanged)
                 {
-                    this.isBaseSaveChanged = value;
+                    this._isBaseSaveChanged = value;
                     this.RaisePropertyChanged(() => IsBaseSaveChanged);
                 }
             }
@@ -210,14 +213,14 @@
         {
             get
             {
-                return this.sectorData;
+                return this._sectorData;
             }
 
             set
             {
-                if (value != this.sectorData)
+                if (value != this._sectorData)
                 {
-                    this.sectorData = value;
+                    this._sectorData = value;
                     this.RaisePropertyChanged(() => SectorData);
                 }
             }
@@ -253,7 +256,24 @@
                     else
                     {
                         var filename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
-                        this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+
+                        var tempFilename = TempfileUtil.NewFilename();
+                        try
+                        {
+                            // New file format is compressed.
+
+                            // These steps could probably be combined, but would have to use a MemoryStream, which has memory limits before it causes performance issues when chunking memory.
+                            // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
+                            ZipTools.GZipUncompress(filename, tempFilename);
+                            this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
+                            _compressedFormat = true;
+                        }
+                        catch
+                        {
+                            // Old file format is raw XML.
+                            this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+                            _compressedFormat = false;
+                        }
                     }
                     this.LoadSectorDetail();
                     this.IsModified = false;
@@ -270,7 +290,14 @@
             SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
 
             var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
-            SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
+            if (_compressedFormat)
+            {
+                var tempFilename = TempfileUtil.NewFilename();
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);
+                ZipTools.GZipCompress(tempFilename, sectorFilename);
+            }
+            else
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
 
             // Manages the adding of new voxel files.
             foreach (var entity in this.Structures)
@@ -299,6 +326,17 @@
 
             this.IsModified = false;
             this.IsBusy = false;
+        }
+
+        public string SaveTemporarySandbox()
+        {
+            this.IsBusy = true;
+
+            var tempFilename = TempfileUtil.NewFilename() + ".xml";
+            SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);
+
+            this.IsBusy = false;
+            return tempFilename;
         }
 
         /// <summary>
@@ -353,7 +391,7 @@
                 {
                     foreach (var structure in this.Structures)
                     {
-                        structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position - structure.PositionAndOrientation.Value.Position).Length();
+                        structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
                     }
                 }
             }
@@ -420,7 +458,7 @@
             {
                 this.SectorData.SectorObjects.Add(entity);
                 var structure = StructureBaseModel.Create(entity, this.ActiveWorld.Savepath);
-                structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position - structure.PositionAndOrientation.Value.Position).Length();
+                structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
                 this.Structures.Add(structure);
                 this.IsModified = true;
                 return structure;
@@ -597,12 +635,6 @@
                 {
                     ((MyObjectBuilder_Cockpit)cubeGrid).Pilot = null;  // remove any pilots.
                 }
-
-                if (cubeGrid is MyObjectBuilder_MotorStator)
-                {
-                    // reattach motor/rotor to correct entity.
-                    ((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId = MergeId(((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId, ref idReplacementTable);
-                }
             }
 
             this.AddEntity(cubeGridObject);
@@ -637,16 +669,15 @@
             //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("ArmorCorner")).ToList();
             var corners = viewModel.CubeGrid.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().ToArray();
 
-            var list = new List<Quaternion>();
+            var list = new List<SerializableBlockOrientation>();
             var list2 = new List<string>();
 
-            foreach (var corner in corners.Where(corner => !list.Contains(corner.Orientation) && !SpaceEngineersAPI.ValidOrientations.Contains(corner.Orientation)))
+            foreach (var corner in corners.Where(corner => !list.Contains(corner.BlockOrientation) && !SpaceEngineersAPI.ValidOrientations.Contains(corner.BlockOrientation)))
             {
-                list.Add(corner.Orientation);
+                list.Add(corner.BlockOrientation);
             }
 
             var z = list.Count;
-
         }
 
         public void TestConvert(StructureCubeGridModel viewModel)

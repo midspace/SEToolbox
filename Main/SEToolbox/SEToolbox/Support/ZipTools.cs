@@ -1,7 +1,9 @@
 ﻿namespace SEToolbox.Support
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
+    using System.IO.Compression;
     using ICSharpCode.SharpZipLib.Core;
     using ICSharpCode.SharpZipLib.Zip;
 
@@ -173,6 +175,48 @@
             foreach (var folder in folders)
             {
                 CompressFolder(folder, zipStream, folderOffset);
+            }
+        }
+
+        public static void GZipUncompress(string sourceFilename, string destinationFilename)
+        {
+            // Low memory, fast extract.
+            using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open))
+            {
+                var reader = new BinaryReader(compressedByteStream);
+
+                if (File.Exists(destinationFilename))
+                    File.Delete(destinationFilename);
+
+                using (var outStream = new FileStream(destinationFilename, FileMode.CreateNew))
+                {
+                    using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
+                    {
+                        zip.CopyTo(outStream);
+
+                        Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
+                    }
+                }
+            }
+        }
+
+        public static void GZipCompress(string sourceFilename, string destinationFilename)
+        {
+            // Low memory, fast compress.
+            using (var originalByteStream = new FileStream(sourceFilename, FileMode.Open))
+            {
+                if (File.Exists(destinationFilename))
+                    File.Delete(destinationFilename);
+
+                using (var compressedByteStream = new FileStream(destinationFilename, FileMode.CreateNew))
+                {
+                    using (var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true))
+                    {
+                        originalByteStream.CopyTo(compressionStream);
+                    }
+
+                    Debug.WriteLine("Compressed from {0:#,###0} bytes to {1:#,###0} bytes.", originalByteStream.Length, compressedByteStream.Length);
+                }
             }
         }
     }
