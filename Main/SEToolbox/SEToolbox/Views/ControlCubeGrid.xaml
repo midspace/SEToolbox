@@ -74,7 +74,7 @@
                             <MenuItem Header="To Corner Armor" Command="{Binding ConvertToCornerArmorCommand}"/>
                             <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}"/>
                         </MenuItem>
-                        <MenuItem Header="Ladder to Passage" Command="{Binding ConvertLadderToPassageCommand}"/>
+                        <!--<MenuItem Header="Ladder to Passage" Command="{Binding ConvertLadderToPassageCommand}"/>-->
                     </MenuItem>
                     <MenuItem Header="Mirror">
                         <MenuItem Header="Using predefined X/Y/Z Planes" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="Uses planes as defined on the ship/station within Space Engineers." />
