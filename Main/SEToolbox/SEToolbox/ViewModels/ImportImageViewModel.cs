@@ -452,8 +452,8 @@
 
             switch (this.ArmorType)
             {
-                case ImportArmorType.Heavy: blockPrefix += "HeavyBlock"; break;
-                case ImportArmorType.Light: blockPrefix += "Block"; break;
+                case ImportArmorType.Heavy: blockPrefix += "HeavyBlockArmor"; break;
+                case ImportArmorType.Light: blockPrefix += "BlockArmor"; break;
             }
 
             entity.PositionAndOrientation = new MyPositionAndOrientation()
@@ -464,10 +464,11 @@
                 Up = this.Up.ToVector3()
             };
 
-            // Large|Block|ArmorCorner
-            // Large|HeavyBlock|ArmorBlock,
-            // Small|Block|ArmorBlock,
-            // Small|HeavyBlock|ArmorBlock,
+            // Large|BlockArmor|Corner
+            // Large|RoundArmor_|Corner
+            // Large|HeavyBlockArmor|Block,
+            // Small|BlockArmor|Slope,
+            // Small|HeavyBlockArmor|Corner,
 
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
             var image = ToolboxExtensions.ResizeImage(this.sourceImage, this.NewImageSize.Size);
@@ -486,7 +487,7 @@
                         if (color.A == 0xFF)
                         {
                             // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
-                            var armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock");
+                            var armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Block");
 
                             MyObjectBuilder_CubeBlock newCube;
                             entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());

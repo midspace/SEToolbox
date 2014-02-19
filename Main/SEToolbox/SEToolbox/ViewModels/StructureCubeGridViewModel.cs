@@ -130,6 +130,30 @@
             }
         }
 
+        public ICommand ConvertToCornerArmorCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertToCornerArmorExecuted), new Func<bool>(ConvertToCornerArmorCanExecute));
+            }
+        }
+
+        public ICommand ConvertToRoundArmorCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertToRoundArmorExecuted), new Func<bool>(ConvertToRoundArmorCanExecute));
+            }
+        }
+
+        public ICommand ConvertLadderToPassageCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ConvertLadderToPassageExecuted), new Func<bool>(ConvertLadderToPassageCanExecute));
+            }
+        }
+
         public ICommand MirrorStructureByPlaneCommand
         {
             get
@@ -441,6 +465,41 @@
         {
             this.DataModel.ConvertToShip();
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ConvertToCornerArmorCanExecute()
+        {
+            return this.DataModel.GridSize == MyCubeSize.Large;
+        }
+
+        public void ConvertToCornerArmorExecuted()
+        {
+            this.DataModel.ConvertToCornerArmor();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ConvertToRoundArmorCanExecute()
+        {
+            return this.DataModel.GridSize == MyCubeSize.Large;
+        }
+
+        public void ConvertToRoundArmorExecuted()
+        {
+            this.DataModel.ConvertToRoundArmor();
+            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+        }
+
+        public bool ConvertLadderToPassageCanExecute()
+        {
+            return this.DataModel.GridSize == MyCubeSize.Large;
+        }
+
+        public void ConvertLadderToPassageExecuted()
+        {
+            if (this.DataModel.ConvertLadderToPassage())
+            {
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
         }
 
         public bool MirrorStructureByPlaneCanExecute()
