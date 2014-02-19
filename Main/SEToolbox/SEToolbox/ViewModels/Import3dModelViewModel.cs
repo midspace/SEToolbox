@@ -498,12 +498,15 @@
                 Skeleton = new System.Collections.Generic.List<BoneInfo>(),
                 LinearVelocity = new VRageMath.Vector3(0, 0, 0),
                 AngularVelocity = new VRageMath.Vector3(0, 0, 0),
-                GridSizeEnum = MyCubeSize.Small
+                GridSizeEnum = MyCubeSize.Large
             };
 
-            var blockPrefix = "Small";
+            var blockPrefix = entity.GridSizeEnum.ToString();
+            var cornerBlockPrefix = entity.GridSizeEnum.ToString();
+
             entity.IsStatic = false;
-            blockPrefix += "Block"; // "HeavyBlock";
+            blockPrefix += "BlockArmor";        // HeavyBlockArmor|BlockArmor;
+            cornerBlockPrefix += "BlockArmor"; // HeavyBlockArmor|BlockArmor|RoundArmor_;
 
             // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
             var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
@@ -521,15 +524,16 @@
                 Up = this.Up.ToVector3()
             };
 
-            // Large|Block|ArmorCorner
-            // Large|HeavyBlock|ArmorBlock,
-            // Small|Block|ArmorSlope,
-            // Small|HeavyBlock|ArmorCorner,
+            // Large|BlockArmor|Corner
+            // Large|RoundArmor_|Corner
+            // Large|HeavyBlockArmor|Block,
+            // Small|BlockArmor|Slope,
+            // Small|HeavyBlockArmor|Corner,
 
-            var blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock");
-            var slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorSlope");
-            var cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCorner");
-            var inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCornerInv");
+            var blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Block");
+            var slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), cornerBlockPrefix + "Slope");
+            var cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), cornerBlockPrefix + "Corner");
+            var inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), cornerBlockPrefix + "CornerInv");
 
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
 
@@ -718,19 +722,21 @@
 
             switch (this.ArmorType)
             {
-                case ImportArmorType.Heavy: blockPrefix += "HeavyBlock"; break;
-                case ImportArmorType.Light: blockPrefix += "Block"; break;
+                case ImportArmorType.Heavy: blockPrefix += "HeavyBlockArmor"; break;
+                case ImportArmorType.Light: blockPrefix += "BlockArmor"; break;
+                // TODO: Rounded Armor.
             }
 
-            // Large|Block|ArmorCorner
-            // Large|HeavyBlock|ArmorBlock,
-            // Small|Block|ArmorSlope,
-            // Small|HeavyBlock|ArmorCorner,
+            // Large|BlockArmor|Corner
+            // Large|RoundArmor_|Corner
+            // Large|HeavyBlockArmor|Block,
+            // Small|BlockArmor|Slope,
+            // Small|HeavyBlockArmor|Corner,
 
-            var blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorBlock");
-            var slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorSlope");
-            var cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCorner");
-            var inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "ArmorCornerInv");
+            var blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Block");
+            var slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Slope");
+            var cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Corner");
+            var inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "CornerInv");
 
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
 
@@ -919,7 +925,7 @@
 
             foreach (var model3D in model.Children)
             {
-                var gm = (GeometryModel3D) model3D;
+                var gm = (GeometryModel3D)model3D;
                 var g = gm.Geometry as MeshGeometry3D;
 
                 for (var t = 0; t < g.TriangleIndices.Count; t += 3)

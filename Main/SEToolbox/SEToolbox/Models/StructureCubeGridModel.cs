@@ -432,7 +432,7 @@
         {
             foreach (var cube in this.CubeGrid.CubeBlocks)
             {
-                cube.BuildPercent = 0.1f;
+                cube.BuildPercent = 0.0f;
             }
 
             this.UpdateFromEntityBase();
@@ -459,6 +459,43 @@
         {
             this.CubeGrid.IsStatic = false;
             this.UpdateFromEntityBase();
+        }
+
+        public void ConvertToCornerArmor()
+        {
+            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Corner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCorner.ToString(); return c; }).ToList();
+            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Slope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorSlope.ToString(); return c; }).ToList();
+            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_CornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCornerInv.ToString(); return c; }).ToList();
+        }
+
+        public void ConvertToRoundArmor()
+        {
+            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCorner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Corner.ToString(); return c; }).ToList();
+            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorSlope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Slope.ToString(); return c; }).ToList();
+            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_CornerInv.ToString(); return c; }).ToList();
+        }
+
+        public bool ConvertLadderToPassage()
+        {
+            var list = this.CubeGrid.CubeBlocks.Where(c => c is MyObjectBuilder_Ladder).ToArray();
+
+            for (var i = 0; i < list.Length; i++)
+            {
+                var c = new MyObjectBuilder_Passage()
+                {
+                    EntityId = list[i].EntityId,
+                    BlockOrientation = list[i].BlockOrientation,
+                    BuildPercent = list[i].BuildPercent,
+                    ColorMaskHSV = list[i].ColorMaskHSV,
+                    IntegrityPercent = list[i].IntegrityPercent,
+                    Min = list[i].Min,
+                    SubtypeName = list[i].SubtypeName
+                };
+                this.CubeGrid.CubeBlocks.Remove(list[i]);
+                this.CubeGrid.CubeBlocks.Add(c);
+            }
+
+            return list.Length > 0;
         }
 
         #region Mirror
