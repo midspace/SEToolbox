@@ -44,7 +44,7 @@
 
         private readonly List<string> manageDeleteVoxelList;
 
-        private bool _compressedFormat;
+        private bool _compressedSectorFormat;
 
         #endregion
 
@@ -257,22 +257,21 @@
                     {
                         var filename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
 
-                        var tempFilename = TempfileUtil.NewFilename();
-                        try
+                        if (ZipTools.IsGzipedFile(filename))
                         {
                             // New file format is compressed.
-
                             // These steps could probably be combined, but would have to use a MemoryStream, which has memory limits before it causes performance issues when chunking memory.
                             // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
+                            var tempFilename = TempfileUtil.NewFilename();
                             ZipTools.GZipUncompress(filename, tempFilename);
                             this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
-                            _compressedFormat = true;
+                            _compressedSectorFormat = true;
                         }
-                        catch
+                        else
                         {
                             // Old file format is raw XML.
                             this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
-                            _compressedFormat = false;
+                            _compressedSectorFormat = false;
                         }
                     }
                     this.LoadSectorDetail();
@@ -287,10 +286,20 @@
             this.ActiveWorld.LastSaveTime = DateTime.Now;
 
             var checkpointFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
-            SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
+
+            if (this.ActiveWorld.CompressedCheckpointFormat)
+            {
+                var tempFilename = TempfileUtil.NewFilename();
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, tempFilename);
+                ZipTools.GZipCompress(tempFilename, checkpointFilename);
+            }
+            else
+            {
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
+            }
 
             var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
-            if (_compressedFormat)
+            if (_compressedSectorFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
                 SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);

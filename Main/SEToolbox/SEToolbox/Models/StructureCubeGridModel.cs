@@ -394,38 +394,46 @@
             this.RaisePropertyChanged(() => Speed);
         }
 
-        public void ConvertFromLightToHeavyArmor()
+        public bool ConvertFromLightToHeavyArmor()
         {
+            var count = 0;
             foreach (var cube in this.CubeGrid.CubeBlocks)
             {
                 if (cube.SubtypeName.StartsWith("LargeBlockArmor"))
                 {
                     cube.SubtypeName = cube.SubtypeName.Replace("LargeBlockArmor", "LargeHeavyBlockArmor");
+                    count++;
                 }
                 else if (cube.SubtypeName.StartsWith("SmallBlockArmor"))
                 {
                     cube.SubtypeName = cube.SubtypeName.Replace("SmallBlockArmor", "SmallHeavyBlockArmor");
+                    count++;
                 }
             }
 
             this.UpdateFromEntityBase();
+            return count > 0;
         }
 
-        public void ConvertFromHeavyToLightArmor()
+        public bool ConvertFromHeavyToLightArmor()
         {
+            var count = 0;
             foreach (var cube in this.CubeGrid.CubeBlocks)
             {
                 if (cube.SubtypeName.StartsWith("LargeHeavyBlockArmor"))
                 {
                     cube.SubtypeName = cube.SubtypeName.Replace("LargeHeavyBlockArmor", "LargeBlockArmor");
+                    count++;
                 }
                 else if (cube.SubtypeName.StartsWith("SmallHeavyBlockArmor"))
                 {
                     cube.SubtypeName = cube.SubtypeName.Replace("SmallHeavyBlockArmor", "SmallBlockArmor");
+                    count++;
                 }
             }
 
             this.UpdateFromEntityBase();
+            return count > 0;
         }
 
         public void ConvertToFramework()
@@ -461,18 +469,22 @@
             this.UpdateFromEntityBase();
         }
 
-        public void ConvertToCornerArmor()
+        public bool ConvertToCornerArmor()
         {
-            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Corner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCorner.ToString(); return c; }).ToList();
-            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Slope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorSlope.ToString(); return c; }).ToList();
-            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_CornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCornerInv.ToString(); return c; }).ToList();
+            var count = 0;
+            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Corner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCorner.ToString(); return c; }).ToList().Count;
+            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Slope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorSlope.ToString(); return c; }).ToList().Count;
+            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_CornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCornerInv.ToString(); return c; }).ToList().Count;
+            return count > 0;
         }
 
-        public void ConvertToRoundArmor()
+        public bool ConvertToRoundArmor()
         {
-            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCorner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Corner.ToString(); return c; }).ToList();
-            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorSlope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Slope.ToString(); return c; }).ToList();
-            this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_CornerInv.ToString(); return c; }).ToList();
+            var count = 0;
+            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCorner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Corner.ToString(); return c; }).ToList().Count;
+            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorSlope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Slope.ToString(); return c; }).ToList().Count;
+            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_CornerInv.ToString(); return c; }).ToList().Count;
+            return count > 0;
         }
 
         public bool ConvertLadderToPassage()
@@ -598,6 +610,9 @@
             SubtypeId.LargeHeavyBlockArmorSlope,
             SubtypeId.LargeHeavyBlockArmorCorner,
             SubtypeId.LargeHeavyBlockArmorCornerInv,
+            SubtypeId.LargeRoundArmor_Slope,
+            SubtypeId.LargeRoundArmor_Corner,
+            SubtypeId.LargeRoundArmor_CornerInv,
             SubtypeId.SmallBlockArmorBlock,
             SubtypeId.SmallBlockArmorSlope,
             SubtypeId.SmallBlockArmorCorner,
@@ -639,7 +654,6 @@
                 if (integrate && viewModel.CubeGrid.CubeBlocks.Any(b => b.Min.X == newBlock.Min.X && b.Min.Y == newBlock.Min.Y && b.Min.Z == newBlock.Min.Z /*|| b.Max == newBlock.Min*/))  // TODO: check cubeblock size.
                     continue;
 
-
                 blocks.Add(newBlock);
             }
             return blocks;
@@ -650,7 +664,7 @@
         {
             if (xMirror != Mirror.None)
             {
-                if (subtypeName.Contains("ArmorSlope"))
+                if (subtypeName.Contains("ArmorSlope") || subtypeName.Contains("Armor_Slope"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
                     switch (cubeType.Key)
@@ -669,22 +683,7 @@
                         case CubeType.SlopeCenterFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom]; break;
                     }
                 }
-                else if (subtypeName.Contains("ArmorCornerInv"))
-                {
-                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("InverseCorner"));
-                    switch (cubeType.Key)
-                    {
-                        case CubeType.InverseCornerLeftFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontTop]; break;
-                        case CubeType.InverseCornerRightFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontTop]; break;
-                        case CubeType.InverseCornerRightBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackTop]; break;
-                        case CubeType.InverseCornerLeftBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackTop]; break;
-                        case CubeType.InverseCornerLeftFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontBottom]; break;
-                        case CubeType.InverseCornerRightFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontBottom]; break;
-                        case CubeType.InverseCornerLeftBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackBottom]; break;
-                        case CubeType.InverseCornerRightBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackBottom]; break;
-                    }
-                }
-                else if (subtypeName.Contains("ArmorCorner"))
+                else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)
@@ -699,6 +698,8 @@
                         case CubeType.NormalCornerRightBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
                     }
                 }
+
+
                 //else if (subtypeName.Contains("LargeRamp"))
                 //{
                 //    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
@@ -718,7 +719,7 @@
             }
             else if (yMirror != Mirror.None)
             {
-                if (subtypeName.Contains("ArmorSlope"))
+                if (subtypeName.Contains("ArmorSlope") || subtypeName.Contains("Armor_Slope"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
                     switch (cubeType.Key)
@@ -737,22 +738,7 @@
                         case CubeType.SlopeCenterFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom]; break;
                     }
                 }
-                else if (subtypeName.Contains("ArmorCornerInv"))
-                {
-                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("InverseCorner"));
-                    switch (cubeType.Key)
-                    {
-                        case CubeType.InverseCornerLeftFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackTop]; break;
-                        case CubeType.InverseCornerRightFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackTop]; break;
-                        case CubeType.InverseCornerRightBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontTop]; break;
-                        case CubeType.InverseCornerLeftBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontTop]; break;
-                        case CubeType.InverseCornerLeftFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackBottom]; break;
-                        case CubeType.InverseCornerRightFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackBottom]; break;
-                        case CubeType.InverseCornerLeftBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontBottom]; break;
-                        case CubeType.InverseCornerRightBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontBottom]; break;
-                    }
-                }
-                else if (subtypeName.Contains("ArmorCorner"))
+                else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)
@@ -771,7 +757,7 @@
             }
             else if (zMirror != Mirror.None)
             {
-                if (subtypeName.Contains("ArmorSlope"))
+                if (subtypeName.Contains("ArmorSlope") || subtypeName.Contains("Armor_Slope"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
                     switch (cubeType.Key)
@@ -790,22 +776,7 @@
                         case CubeType.SlopeCenterFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop]; break;
                     }
                 }
-                else if (subtypeName.Contains("ArmorCornerInv"))
-                {
-                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("InverseCorner"));
-                    switch (cubeType.Key)
-                    {
-                        case CubeType.InverseCornerLeftFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontBottom]; break;
-                        case CubeType.InverseCornerRightFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontBottom]; break;
-                        case CubeType.InverseCornerRightBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackBottom]; break;
-                        case CubeType.InverseCornerLeftBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackBottom]; break;
-                        case CubeType.InverseCornerLeftFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftFrontTop]; break;
-                        case CubeType.InverseCornerRightFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightFrontTop]; break;
-                        case CubeType.InverseCornerLeftBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerLeftBackTop]; break;
-                        case CubeType.InverseCornerRightBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.InverseCornerRightBackTop]; break;
-                    }
-                }
-                else if (subtypeName.Contains("ArmorCorner"))
+                else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)

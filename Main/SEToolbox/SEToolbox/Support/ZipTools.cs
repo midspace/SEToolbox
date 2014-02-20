@@ -219,5 +219,31 @@
                 }
             }
         }
+
+        /// <summary>
+        /// check for Magic Number: 1f 8b
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static bool IsGzipedFile(string filename)
+        {
+            using (var stream = File.OpenRead(filename))
+            {
+                try
+                {
+                    var b1 = stream.ReadByte();
+                    var b2 = stream.ReadByte();
+                    return (b1 == 0x1f && b2 == 0x8b);
+                }
+                catch
+                {
+                    return false;
+                }
+                finally
+                {
+                    stream.Close();
+                }
+            }
+        }
     }
 }

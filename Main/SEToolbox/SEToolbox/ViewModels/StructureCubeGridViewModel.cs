@@ -397,8 +397,10 @@
 
         public void ConvertToHeavyArmorExecuted()
         {
-            this.DataModel.ConvertFromLightToHeavyArmor();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            if (this.DataModel.ConvertFromLightToHeavyArmor())
+            {
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
         }
 
         public bool ConvertToLightArmorCanExecute()
@@ -408,8 +410,10 @@
 
         public void ConvertToLightArmorExecuted()
         {
-            this.DataModel.ConvertFromHeavyToLightArmor();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            if (this.DataModel.ConvertFromHeavyToLightArmor())
+            {
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
         }
 
         public bool FrameworkCanExecute()
@@ -419,7 +423,7 @@
 
         public void FrameworkExecuted()
         {
-            // placeholder.
+            // placeholder for menu only.
         }
 
         public bool ConvertToFrameworkCanExecute()
@@ -443,7 +447,6 @@
             this.DataModel.ConvertToCompleteStructure();
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
-
 
         public bool ConvertToStationCanExecute()
         {
@@ -474,8 +477,10 @@
 
         public void ConvertToCornerArmorExecuted()
         {
-            this.DataModel.ConvertToCornerArmor();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            if (this.DataModel.ConvertToCornerArmor())
+            {
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
         }
 
         public bool ConvertToRoundArmorCanExecute()
@@ -485,8 +490,10 @@
 
         public void ConvertToRoundArmorExecuted()
         {
-            this.DataModel.ConvertToRoundArmor();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            if (this.DataModel.ConvertToRoundArmor())
+            {
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
         }
 
         public bool ConvertLadderToPassageCanExecute()

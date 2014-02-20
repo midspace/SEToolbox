@@ -85,7 +85,7 @@
             var filename = @".\TestAssets\Sample World.sbw";
 
             MyObjectBuilder_Checkpoint checkpoint;
-            using (var stream = ZipTools.ReadFile(filename, null, "Sandbox.sbc"))
+            using (var stream = ZipTools.ReadFile(filename, null, SpaceEngineersConsts.SandBoxCheckpointFilename))
             {
                 checkpoint = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(stream);
             }
