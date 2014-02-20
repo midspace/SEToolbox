@@ -3,6 +3,7 @@
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.IO;
 
@@ -14,6 +15,7 @@
         private string savename;
         private string savepath;
         private MyObjectBuilder_Checkpoint content;
+        private bool _compressedCheckpointFormat;
 
         /// <summary>
         /// Populated from LastLoadedTimes
@@ -88,6 +90,23 @@
                 {
                     this.content = value;
                     this.RaisePropertyChanged(() => Content, () => SessionName, () => LastSaveTime, () => IsValid);
+                }
+            }
+        }
+
+        public bool CompressedCheckpointFormat
+        {
+            get
+            {
+                return this._compressedCheckpointFormat;
+            }
+
+            set
+            {
+                if (value != this._compressedCheckpointFormat)
+                {
+                    this._compressedCheckpointFormat = value;
+                    this.RaisePropertyChanged(() => CompressedCheckpointFormat);
                 }
             }
         }
@@ -198,6 +217,29 @@
                 try
                 {
                     this.Content = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
+                }
+                catch
+                {
+                    this.Content = null;
+                }
+
+                try
+                {
+                    if (ZipTools.IsGzipedFile(filename))
+                    {
+                        // New file format is compressed.
+                        // These steps could probably be combined, but would have to use a MemoryStream, which has memory limits before it causes performance issues when chunking memory.
+                        // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
+                        var tempFilename = TempfileUtil.NewFilename();
+                        ZipTools.GZipUncompress(filename, tempFilename);
+                        this.Content = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(tempFilename);
+                        this.CompressedCheckpointFormat = true;
+                    }
+                    else
+                    {
+                        this.Content = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
+                        this.CompressedCheckpointFormat = false;
+                    }
                 }
                 catch
                 {
