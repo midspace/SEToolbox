@@ -757,7 +757,7 @@
 
         public void Test2Executed()
         {
-            this.CalcCubesModel(this.Selections.ToArray());
+            this.TestCalcCubesModel(this.Selections.ToArray());
             //this.OptimizeModel(this.Selections.ToArray());
         }
 
@@ -1050,39 +1050,42 @@
             }
         }
 
-        public void CalcCubesModel(params IStructureViewBase[] viewModels)
+        public void TestCalcCubesModel(params IStructureViewBase[] viewModels)
         {
             var bld = new StringBuilder();
 
             foreach (var viewModel in viewModels.OfType<StructureCubeGridViewModel>())
             {
                 var model = viewModel.DataModel as StructureCubeGridModel;
-                var list = model.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("Red") ||
-                    b.SubtypeName.Contains("Blue") ||
-                    b.SubtypeName.Contains("Green") ||
-                    b.SubtypeName.Contains("Yellow") ||
-                    b.SubtypeName.Contains("White") ||
-                    b.SubtypeName.Contains("Black")).ToArray();
+                //var list = model.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("Red") ||
+                //    b.SubtypeName.Contains("Blue") ||
+                //    b.SubtypeName.Contains("Green") ||
+                //    b.SubtypeName.Contains("Yellow") ||
+                //    b.SubtypeName.Contains("White") ||
+                //    b.SubtypeName.Contains("Black")).ToArray();
+
+                var list = model.CubeGrid.CubeBlocks.Where(b => b is MyObjectBuilder_Cockpit).ToArray();
+                //var list = model.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("Conveyor")).ToArray();
 
                 foreach (var b in list)
                 {
                     CubeType cubeType = CubeType.Exterior;
 
-                    if (b.SubtypeName.Contains("ArmorSlope"))
-                    {
-                        var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("Slope")).ToArray();
-                        cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value.Forward == b.BlockOrientation.Forward && c.Value.Up == b.BlockOrientation.Up).Key;
-                    }
-                    else if (b.SubtypeName.Contains("ArmorCornerInv"))
-                    {
-                        var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("InverseCorner")).ToArray();
-                        cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value.Forward == b.BlockOrientation.Forward && c.Value.Up == b.BlockOrientation.Up).Key;
-                    }
-                    else if (b.SubtypeName.Contains("ArmorCorner"))
-                    {
-                        var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("NormalCorner")).ToArray();
-                        cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value.Forward == b.BlockOrientation.Forward && c.Value.Up == b.BlockOrientation.Up).Key;
-                    }
+                    //if (b.SubtypeName.Contains("ArmorSlope"))
+                    //{
+                    //    var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("Slope")).ToArray();
+                    //    cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value.Forward == b.BlockOrientation.Forward && c.Value.Up == b.BlockOrientation.Up).Key;
+                    //}
+                    //else if (b.SubtypeName.Contains("ArmorCornerInv"))
+                    //{
+                    //    var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("InverseCorner")).ToArray();
+                    //    cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value.Forward == b.BlockOrientation.Forward && c.Value.Up == b.BlockOrientation.Up).Key;
+                    //}
+                    //else if (b.SubtypeName.Contains("ArmorCorner"))
+                    //{
+                    //    var keys = SpaceEngineersAPI.CubeOrientations.Keys.Where(k => k.ToString().Contains("NormalCorner")).ToArray();
+                    //    cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(c => keys.Contains(c.Key) && c.Value.Forward == b.BlockOrientation.Forward && c.Value.Up == b.BlockOrientation.Up).Key;
+                    //}
 
                     //SpaceEngineersAPI.CubeOrientations
 

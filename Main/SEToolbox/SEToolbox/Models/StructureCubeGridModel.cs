@@ -255,7 +255,7 @@
         {
             this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_CubeGrid>(this.CubeGrid);
         }
-        
+
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
@@ -323,7 +323,7 @@
                 var a = beacons.Select(b => ((MyObjectBuilder_Beacon)b).CustomName).ToArray();
                 this.Name = String.Join("|", a);
             }
-            
+
             this.Description = string.Format("{0} | {1:#,##0}Kg", this.Size, this.Mass);
 
             var bld = new StringBuilder();
@@ -512,7 +512,7 @@
 
         #region Mirror
 
-        public void MirrorModel(bool usePlane, bool oddMirror)
+        public bool MirrorModel(bool usePlane, bool oddMirror)
         {
             var xMirror = Mirror.None;
             var yMirror = Mirror.None;
@@ -520,6 +520,7 @@
             var xAxis = 0;
             var yAxis = 0;
             var zAxis = 0;
+            var count = 0;
 
             if (!usePlane)
             // Find mirror Axis.
@@ -571,7 +572,9 @@
                     zAxis = maxZ;
                 }
 
-                this.CubeGrid.CubeBlocks.AddRange(MirrorCubes(this, false, xMirror, xAxis, yMirror, yAxis, zMirror, zAxis));
+                var cubes = MirrorCubes(this, false, xMirror, xAxis, yMirror, yAxis, zMirror, zAxis).ToArray();
+                this.CubeGrid.CubeBlocks.AddRange(cubes);
+                count += cubes.Length;
             }
             else
             {
@@ -580,23 +583,30 @@
                 {
                     xMirror = this.CubeGrid.XMirroxOdd ? Mirror.EvenDown : Mirror.Odd; // Meaning is back to front? Or is it my reasoning?
                     xAxis = this.CubeGrid.XMirroxPlane.Value.X;
-                    this.CubeGrid.CubeBlocks.AddRange(MirrorCubes(this, true, xMirror, xAxis, Mirror.None, 0, Mirror.None, 0));
+                    var cubes = MirrorCubes(this, true, xMirror, xAxis, Mirror.None, 0, Mirror.None, 0).ToArray();
+                    this.CubeGrid.CubeBlocks.AddRange(cubes);
+                    count += cubes.Length;
                 }
                 if (this.CubeGrid.YMirroxPlane.HasValue)
                 {
                     yMirror = this.CubeGrid.YMirroxOdd ? Mirror.EvenDown : Mirror.Odd;
                     yAxis = this.CubeGrid.YMirroxPlane.Value.Y;
-                    this.CubeGrid.CubeBlocks.AddRange(MirrorCubes(this, true, Mirror.None, 0, yMirror, yAxis, Mirror.None, 0));
+                    var cubes = MirrorCubes(this, true, Mirror.None, 0, yMirror, yAxis, Mirror.None, 0).ToArray();
+                    this.CubeGrid.CubeBlocks.AddRange(cubes);
+                    count += cubes.Length;
                 }
                 if (this.CubeGrid.ZMirroxPlane.HasValue)
                 {
                     zMirror = this.CubeGrid.ZMirroxOdd ? Mirror.EvenUp : Mirror.Odd;
                     zAxis = this.CubeGrid.ZMirroxPlane.Value.Z;
-                    this.CubeGrid.CubeBlocks.AddRange(MirrorCubes(this, true, Mirror.None, 0, Mirror.None, 0, zMirror, zAxis));
+                    var cubes = MirrorCubes(this, true, Mirror.None, 0, Mirror.None, 0, zMirror, zAxis).ToArray();
+                    this.CubeGrid.CubeBlocks.AddRange(cubes);
+                    count += cubes.Length;
                 }
             }
 
             this.UpdateFromEntityBase();
+            return count > 0;
         }
 
         #region ValidMirrorBlocks
@@ -621,8 +631,46 @@
             SubtypeId.SmallHeavyBlockArmorSlope,
             SubtypeId.SmallHeavyBlockArmorCorner,
             SubtypeId.SmallHeavyBlockArmorCornerInv,
-            //SubtypeId.LargeRamp,
+
+            // Single block cubes that should work generically with Axis24.
+            SubtypeId.LargeBlockCockpit,
+            SubtypeId.LargeBlockConveyor,
+            SubtypeId.LargeBlockSmallContainer,
+            SubtypeId.LargeWarhead,
+            SubtypeId.LargeWarhead,
+            SubtypeId.LargeBlockSmallGenerator,
+            SubtypeId.LargeInteriorPillar,
+            SubtypeId.LargeWindowSquare,
+            SubtypeId.LargeWindowEdge,
+            SubtypeId.LargeSteelCatwalk,
+            SubtypeId.LargeCoverWall,
+            SubtypeId.LargeCoverWallHalf,
+            SubtypeId.LargeBlockInteriorWall,
+            SubtypeId.LargeBlockFrontLight,
+            SubtypeId.LargeBlockGyro,
+            SubtypeId.LargeInteriorTurret,
+            SubtypeId.SmallLight,
+            SubtypeId.SmallBlockConveyor,
+            SubtypeId.SmallBlockSmallContainer,
+            SubtypeId.SmallWarhead,
+            SubtypeId.SmallWarhead,
+            SubtypeId.SmallBlockSmallGenerator,
+            SubtypeId.SmallBlockFrontLight,
+            SubtypeId.SmallBlockGyro,
+
+            // Still Testing multi block components...
+            //SubtypeId.LargeRamp
         };
+
+        // Object's without a SubtypeId
+        private static readonly Type[] ValidMirrorTypes = new Type[] {
+            typeof(MyObjectBuilder_Door),
+            typeof(MyObjectBuilder_GravityGenerator),
+            typeof(MyObjectBuilder_Passage),
+            //typeof(MyObjectBuilder_Ladder),   // Obsolete? It's still defined however.
+            //typeof(MyObjectBuilder_LargeGatlingTurret),
+            //typeof(MyObjectBuilder_LargeMissileTurret),
+         };
 
         #endregion
 
@@ -634,21 +682,25 @@
             if (xMirror == Mirror.None && yMirror == Mirror.None && zMirror == Mirror.None)
                 return blocks;
 
-            foreach (var block in viewModel.CubeGrid.CubeBlocks.Where(b => Enum.TryParse<SubtypeId>(b.SubtypeName, out outVal) && ValidMirrorBlocks.Contains(outVal)))
+            foreach (var block in viewModel.CubeGrid.CubeBlocks.Where(b => (Enum.TryParse<SubtypeId>(b.SubtypeName, out outVal) && ValidMirrorBlocks.Contains(outVal)) || ValidMirrorTypes.Contains(b.GetType())))
             {
-                var newBlock = new MyObjectBuilder_CubeBlock()
+                var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
+                newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId();
+                newBlock.Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis);
+                newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
+
+                var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), block.SubtypeName);
+                if (definition.Size.X > 1 || definition.Size.Y > 1 || definition.Size.z > 1)
                 {
-                    SubtypeName = block.SubtypeName,
-                    EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId(),
-                    Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis),
-                    ColorMaskHSV = block.ColorMaskHSV,
-                    BuildPercent = block.BuildPercent,
-                    IntegrityPercent = block.IntegrityPercent,
-                    //Orientation = VRageMath.Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up))
-                    //Orientation = MirrorCubeOrientation(block.SubtypeName, block.Orientation, xMirror, yMirror, zMirror);
-                    BlockOrientation = block.BlockOrientation
-                };
-                MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror, ref newBlock);
+                    // TODO: rotate the Size acording to the new Orientation.
+                    //Quaternion.
+                    //SerializableBlockOrientation
+                    //newBlock.BlockOrientation.
+
+                    //newBlock.Min.X += definition.Size.X - 1;
+                    //newBlock.Min.Y += definition.Size.Y - 1;
+                    //newBlock.Min.Z += definition.Size.Z - 1;
+                }              
 
                 // Don't place a block it one already exists there in the mirror.
                 if (integrate && viewModel.CubeGrid.CubeBlocks.Any(b => b.Min.X == newBlock.Min.X && b.Min.Y == newBlock.Min.Y && b.Min.Z == newBlock.Min.Z /*|| b.Max == newBlock.Min*/))  // TODO: check cubeblock size.
@@ -659,8 +711,7 @@
             return blocks;
         }
 
-        // TODO: change to a return type later when finished testing.
-        private static void MirrorCubeOrientation(string subtypeName, SerializableBlockOrientation orientation, Mirror xMirror, Mirror yMirror, Mirror zMirror, ref MyObjectBuilder_CubeBlock block)
+        private static SerializableBlockOrientation MirrorCubeOrientation(string subtypeName, SerializableBlockOrientation orientation, Mirror xMirror, Mirror yMirror, Mirror zMirror)
         {
             if (xMirror != Mirror.None)
             {
@@ -669,18 +720,18 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.SlopeCenterBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop]; break;
-                        case CubeType.SlopeRightBackCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter]; break;
-                        case CubeType.SlopeLeftBackCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter]; break;
-                        case CubeType.SlopeCenterBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom]; break;
-                        case CubeType.SlopeRightCenterTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop]; break;
-                        case CubeType.SlopeLeftCenterTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop]; break;
-                        case CubeType.SlopeRightCenterBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom]; break;
-                        case CubeType.SlopeLeftCenterBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom]; break;
-                        case CubeType.SlopeCenterFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop]; break;
-                        case CubeType.SlopeRightFrontCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter]; break;
-                        case CubeType.SlopeLeftFrontCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter]; break;
-                        case CubeType.SlopeCenterFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom]; break;
+                        case CubeType.SlopeCenterBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop];
+                        case CubeType.SlopeRightBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter];
+                        case CubeType.SlopeLeftBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter];
+                        case CubeType.SlopeCenterBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom];
+                        case CubeType.SlopeRightCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop];
+                        case CubeType.SlopeLeftCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop];
+                        case CubeType.SlopeRightCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom];
+                        case CubeType.SlopeLeftCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom];
+                        case CubeType.SlopeCenterFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop];
+                        case CubeType.SlopeRightFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter];
+                        case CubeType.SlopeLeftFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter];
+                        case CubeType.SlopeCenterFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom];
                     }
                 }
                 else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
@@ -688,34 +739,47 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.NormalCornerLeftFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop]; break;
-                        case CubeType.NormalCornerRightFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop]; break;
-                        case CubeType.NormalCornerLeftBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop]; break;
-                        case CubeType.NormalCornerRightBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop]; break;
-                        case CubeType.NormalCornerLeftFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom]; break;
-                        case CubeType.NormalCornerRightFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom]; break;
-                        case CubeType.NormalCornerLeftBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom]; break;
-                        case CubeType.NormalCornerRightBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
+                        case CubeType.NormalCornerLeftFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop];
+                        case CubeType.NormalCornerRightFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop];
+                        case CubeType.NormalCornerLeftBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop];
+                        case CubeType.NormalCornerRightBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop];
+                        case CubeType.NormalCornerLeftFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom];
+                        case CubeType.NormalCornerRightFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom];
+                        case CubeType.NormalCornerLeftBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom];
+                        case CubeType.NormalCornerRightBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom];
                     }
                 }
-
-
-                //else if (subtypeName.Contains("LargeRamp"))
-                //{
-                //    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
-                //    switch (cubeType.Key)
-                //    {
-                //        case CubeType.NormalCornerLeftFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop]; break;
-                //        case CubeType.NormalCornerRightFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop]; break;
-                //        case CubeType.NormalCornerLeftBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop]; break;
-                //        case CubeType.NormalCornerRightBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop]; break;
-                //        case CubeType.NormalCornerLeftFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom]; break;
-                //        case CubeType.NormalCornerRightFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom]; break;
-                //        case CubeType.NormalCornerLeftBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom]; break;
-                //        case CubeType.NormalCornerRightBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
-                //    }
-                //}
-                // TODO: Other block types.
+                else
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                    }
+                }
             }
             else if (yMirror != Mirror.None)
             {
@@ -724,18 +788,18 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.SlopeCenterBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop]; break;
-                        case CubeType.SlopeRightBackCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter]; break;
-                        case CubeType.SlopeLeftBackCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter]; break;
-                        case CubeType.SlopeCenterBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom]; break;
-                        case CubeType.SlopeRightCenterTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop]; break;
-                        case CubeType.SlopeLeftCenterTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop]; break;
-                        case CubeType.SlopeRightCenterBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom]; break;
-                        case CubeType.SlopeLeftCenterBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom]; break;
-                        case CubeType.SlopeCenterFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop]; break;
-                        case CubeType.SlopeRightFrontCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter]; break;
-                        case CubeType.SlopeLeftFrontCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter]; break;
-                        case CubeType.SlopeCenterFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom]; break;
+                        case CubeType.SlopeCenterBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop];
+                        case CubeType.SlopeRightBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter];
+                        case CubeType.SlopeLeftBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter];
+                        case CubeType.SlopeCenterBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom];
+                        case CubeType.SlopeRightCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop];
+                        case CubeType.SlopeLeftCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop];
+                        case CubeType.SlopeRightCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom];
+                        case CubeType.SlopeLeftCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom];
+                        case CubeType.SlopeCenterFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop];
+                        case CubeType.SlopeRightFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter];
+                        case CubeType.SlopeLeftFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter];
+                        case CubeType.SlopeCenterFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom];
                     }
                 }
                 else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
@@ -743,17 +807,47 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.NormalCornerLeftFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop]; break;
-                        case CubeType.NormalCornerRightFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop]; break;
-                        case CubeType.NormalCornerLeftBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop]; break;
-                        case CubeType.NormalCornerRightBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop]; break;
-                        case CubeType.NormalCornerLeftFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
-                        case CubeType.NormalCornerRightFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom]; break;
-                        case CubeType.NormalCornerLeftBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom]; break;
-                        case CubeType.NormalCornerRightBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom]; break;
+                        case CubeType.NormalCornerLeftFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop];
+                        case CubeType.NormalCornerRightFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop];
+                        case CubeType.NormalCornerLeftBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop];
+                        case CubeType.NormalCornerRightBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop];
+                        case CubeType.NormalCornerLeftFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom];
+                        case CubeType.NormalCornerRightFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom];
+                        case CubeType.NormalCornerLeftBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom];
+                        case CubeType.NormalCornerRightBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom];
                     }
                 }
-                // TODO: Other block types.
+                else
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                    }
+                }
             }
             else if (zMirror != Mirror.None)
             {
@@ -762,18 +856,18 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.SlopeCenterBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom]; break;
-                        case CubeType.SlopeRightBackCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter]; break;
-                        case CubeType.SlopeLeftBackCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter]; break;
-                        case CubeType.SlopeCenterBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop]; break;
-                        case CubeType.SlopeRightCenterTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom]; break;
-                        case CubeType.SlopeLeftCenterTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom]; break;
-                        case CubeType.SlopeRightCenterBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop]; break;
-                        case CubeType.SlopeLeftCenterBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop]; break;
-                        case CubeType.SlopeCenterFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom]; break;
-                        case CubeType.SlopeRightFrontCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter]; break;
-                        case CubeType.SlopeLeftFrontCenter: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter]; break;
-                        case CubeType.SlopeCenterFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop]; break;
+                        case CubeType.SlopeCenterBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom];
+                        case CubeType.SlopeRightBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter];
+                        case CubeType.SlopeLeftBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter];
+                        case CubeType.SlopeCenterBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop];
+                        case CubeType.SlopeRightCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom];
+                        case CubeType.SlopeLeftCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom];
+                        case CubeType.SlopeRightCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop];
+                        case CubeType.SlopeLeftCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop];
+                        case CubeType.SlopeCenterFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom];
+                        case CubeType.SlopeRightFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter];
+                        case CubeType.SlopeLeftFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter];
+                        case CubeType.SlopeCenterFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop];
                     }
                 }
                 else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
@@ -781,21 +875,52 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.NormalCornerLeftFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom]; break;
-                        case CubeType.NormalCornerRightFrontTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom]; break;
-                        case CubeType.NormalCornerLeftBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom]; break;
-                        case CubeType.NormalCornerRightBackTop: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom]; break;
-                        case CubeType.NormalCornerLeftFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop]; break;
-                        case CubeType.NormalCornerRightFrontBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop]; break;
-                        case CubeType.NormalCornerLeftBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop]; break;
-                        case CubeType.NormalCornerRightBackBottom: block.BlockOrientation = SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop]; break;
+                        case CubeType.NormalCornerLeftFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontBottom];
+                        case CubeType.NormalCornerRightFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontBottom];
+                        case CubeType.NormalCornerLeftBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackBottom];
+                        case CubeType.NormalCornerRightBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackBottom];
+                        case CubeType.NormalCornerLeftFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftFrontTop];
+                        case CubeType.NormalCornerRightFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightFrontTop];
+                        case CubeType.NormalCornerLeftBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerLeftBackTop];
+                        case CubeType.NormalCornerRightBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.NormalCornerRightBackTop];
                     }
                 }
-                // TODO: Other block types.
+                else
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                    }
+                }
             }
+            
+            return orientation;
         }
 
-        
         #endregion
 
         #endregion

@@ -516,8 +516,10 @@
 
         public void MirrorStructureByPlaneExecuted()
         {
-            this.DataModel.MirrorModel(true, false);
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            if (this.DataModel.MirrorModel(true, false))
+            {
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
         }
 
         public bool MirrorStructureGuessOddCanExecute()
@@ -527,8 +529,10 @@
 
         public void MirrorStructureGuessOddExecuted()
         {
-            this.DataModel.MirrorModel(false, true);
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            if (this.DataModel.MirrorModel(false, true))
+            {
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
         }
 
         public bool MirrorStructureGuessEvenCanExecute()
@@ -538,8 +542,10 @@
 
         public void MirrorStructureGuessEvenExecuted()
         {
-            this.DataModel.MirrorModel(false, false);
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            if (this.DataModel.MirrorModel(false, false))
+            {
+                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            }
         }
 
         #endregion

@@ -1,14 +1,14 @@
 ﻿namespace ToolboxTest
 {
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.CommonLib.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
 
     [TestClass]
     public class UnitTest1
@@ -114,6 +114,22 @@
 
             var newFilename = @".\TestAssets\New World.sbw";
             ZipTools.ZipFolder(folder, null, newFilename);
+        }
+
+
+        [TestMethod]
+        public void ColorTest()
+        {
+            var c1 = Color.FromArgb(255, 255, 255);
+            var c2 = Color.FromArgb(0, 0, 0);
+            var c3 = Color.FromArgb(0, 1, 1);   //PS = H:180, S:100%, B:1%
+
+            var h3 = c3.GetHue();
+            var s3 = c3.GetSaturation();
+            var b3 = c3.GetBrightness();
+
+            var v3 = new SerializableVector3(c3.GetHue() / 360f, c3.GetSaturation() * 2 - 1, c3.GetBrightness() * 2 - 1);
+
         }
     }
 }
