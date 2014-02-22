@@ -344,16 +344,20 @@
 
                         foreach (var kvp in list)
                         {
-                            SaveResource saveResource;
-                            this.Worlds.Add(saveResource = new SaveResource()
+                            // SE sometimes does not clean up the LastLoaded list correctly, and leaves dead (previously deleted) entries.
+                            if (Directory.Exists(kvp.Key))
                             {
-                                Savename = Path.GetFileName(kvp.Key),
-                                Username = Path.GetFileName(userPath),
-                                Savepath = kvp.Key,
-                                LastLoadTime = kvp.Value
-                            });
+                                SaveResource saveResource;
+                                this.Worlds.Add(saveResource = new SaveResource()
+                                {
+                                    Savename = Path.GetFileName(kvp.Key),
+                                    Username = Path.GetFileName(userPath),
+                                    Savepath = kvp.Key,
+                                    LastLoadTime = kvp.Value
+                                });
 
-                            saveResource.LoadCheckpoint();
+                                saveResource.LoadCheckpoint();
+                            }
                         }
                     }
                 }

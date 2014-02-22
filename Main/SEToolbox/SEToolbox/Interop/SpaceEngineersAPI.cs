@@ -152,16 +152,16 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
 
         public static readonly SerializableBlockOrientation[] ValidOrientations = new SerializableBlockOrientation[] {
             new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up),      // no rotation
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down),// 180 around X
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Up),// 180 around Y
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Down), // 180 around Z
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down),   // 180 around X
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Up),     // 180 around Y
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Down),    // 180 around Z
 
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward),// +90 around X
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward),// -90 around X
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Up), // +90 around Y
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Up),// -90 around Y
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Left),// +90 around Z
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right),// -90 around Z
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward),     // +90 around X
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward),    // -90 around X
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Up),         // +90 around Y
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Up),        // -90 around Y
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Left),    // +90 around Z
+            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right),   // -90 around Z
 
             new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right),
             new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Left),
@@ -191,8 +191,10 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
 
         public static readonly Dictionary<CubeType, SerializableBlockOrientation> CubeOrientations = new Dictionary<CubeType, SerializableBlockOrientation>()
         {
+            // TODO: Remove the Cube Armor orientation, as these appear to work fine with the Generic.
             {CubeType.Cube, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)},
 
+            // TODO: Remove the Slope Armor orientations, as these appear to work fine with the Generic.
             {CubeType.SlopeCenterBackTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward)}, // -90 around X
             {CubeType.SlopeRightBackCenter, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Left)},
             {CubeType.SlopeLeftBackCenter, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right)},
@@ -216,10 +218,40 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
             {CubeType.NormalCornerLeftBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right)},// -90 around Z
             {CubeType.NormalCornerRightBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)},  // no rotation
 
-            //{CubeType.LargeRamp..., new VRageMath.Quaternion(0, -0.707106769f, 0.707106769f, 0)},
-            //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.5f, -0.5f, 0.5f, 0.5f)},
-            //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.707106769f, 0, 0, 0.707106769f)},
-            //{CubeType.LargeRamp..., new VRageMath.Quaternion(0.5f, 0.5f, -0.5f, 0.5f)},
+            {CubeType.InverseCornerLeftFrontTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.InverseCornerRightFrontTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down)}, // 180 around X
+            {CubeType.InverseCornerLeftBackTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.InverseCornerRightBackTop, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward)},  // -90 around X
+            {CubeType.InverseCornerLeftFrontBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.InverseCornerRightFrontBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward)}, // +90 around X
+            {CubeType.InverseCornerLeftBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right)}, // -90 around Z
+            {CubeType.InverseCornerRightBackBottom, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)},  // no rotation
+
+            // Generic, which seems to work for everything but Corner armor blocks.
+            {CubeType.Axis24_Backward_Down, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down)},
+            {CubeType.Axis24_Backward_Left, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Left)},
+            {CubeType.Axis24_Backward_Right, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.Axis24_Backward_Up, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Up)},
+            {CubeType.Axis24_Down_Backward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Backward)},
+            {CubeType.Axis24_Down_Forward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward)},
+            {CubeType.Axis24_Down_Left, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Left)},
+            {CubeType.Axis24_Down_Right, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.Axis24_Forward_Down, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Down)},
+            {CubeType.Axis24_Forward_Left, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Left)},
+            {CubeType.Axis24_Forward_Right, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right)},
+            {CubeType.Axis24_Forward_Up, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)},
+            {CubeType.Axis24_Left_Backward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Backward)},
+            {CubeType.Axis24_Left_Down, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Down)},
+            {CubeType.Axis24_Left_Forward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Forward)},
+            {CubeType.Axis24_Left_Up, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Up)},
+            {CubeType.Axis24_Right_Backward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Backward)},
+            {CubeType.Axis24_Right_Down, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Down)},
+            {CubeType.Axis24_Right_Forward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Forward)},
+            {CubeType.Axis24_Right_Up, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Up)},
+            {CubeType.Axis24_Up_Backward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward)},
+            {CubeType.Axis24_Up_Forward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Forward)},
+            {CubeType.Axis24_Up_Left, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Left)},
+            {CubeType.Axis24_Up_Right, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right)},
         };
 
         public static SerializableBlockOrientation GetCubeOrientation(CubeType type)
@@ -227,7 +259,7 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
             if (CubeOrientations.ContainsKey(type))
                 return CubeOrientations[type];
 
-            throw new NotImplementedException(string.Format("SetCubeOrientation of type [{0}] not yet implmented.", type));
+            throw new NotImplementedException(string.Format("SetCubeOrientation of type [{0}] not yet implemented.", type));
         }
 
         #endregion
@@ -240,6 +272,7 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
         static MyObjectBuilder_PhysicalItemDefinitions _physicalItemDefinitions;
         static MyObjectBuilder_VoxelMaterialDefinitions _voxelMaterialDefinitions;
         static Dictionary<string, byte> _materialIndex;
+        static Dictionary<Type, MyObjectBuilderTypeEnum> _myObjectBuilderTypeList;
 
         public static void ReadCubeBlockDefinitions()
         {
@@ -248,6 +281,20 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
             _componentDefinitions = LoadContentFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>("Components.sbc");
             _cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>("CubeBlocks.sbc");
             _blueprintDefinitions = LoadContentFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>("Blueprints.sbc");
+
+            _myObjectBuilderTypeList = new Dictionary<Type,MyObjectBuilderTypeEnum>();
+            foreach(MyObjectBuilderTypeEnum e in Enum.GetValues(typeof(MyObjectBuilderTypeEnum)))
+            {
+                try
+                {
+                    var t = MyObjectBuilder_Base.GetObjectBuilderToType(e);
+                    _myObjectBuilderTypeList.Add(t, e);
+                }
+                catch
+                { 
+                    // Ignore any that don't have a Type defined.
+                }
+            }
 
             _materialIndex = new Dictionary<string, byte>();
         }
@@ -385,6 +432,17 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
         }
 
         #endregion
+
+        public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, string subtypeId)
+        {
+            if (string.IsNullOrEmpty(subtypeId))
+            {
+                return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == _myObjectBuilderTypeList[typeId]);
+            }
+
+            return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.SubtypeId == subtypeId);
+            // TODO: this will return the LargeGatlingTurret Defition by default for some reason if it doesn't find the required SubtypeId.
+        }
 
         #region GetBoundingBox
 
