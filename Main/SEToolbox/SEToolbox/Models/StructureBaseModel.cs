@@ -120,7 +120,7 @@
         }
 
         [XmlIgnore]
-        public string Name
+        public string DisplayName
         {
             get
             {
@@ -132,7 +132,7 @@
                 if (value != this._name)
                 {
                     this._name = value;
-                    this.RaisePropertyChanged(() => Name);
+                    this.RaisePropertyChanged(() => DisplayName);
                 }
             }
         }

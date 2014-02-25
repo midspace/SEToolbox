@@ -199,10 +199,10 @@
                                 <ListView.View>
                                     <GridView>
                                         <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
-                                        <GridViewColumn Header="Type" Width="100" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
-                                        <GridViewColumn Header="Name" Width="50" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Header="Description" Width="150" DisplayMemberBinding="{Binding Description}"/>
-                                        <GridViewColumn Header="Distance" Width="80" DisplayMemberBinding="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}"/>
+                                        <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
+                                        <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding DisplayName}"/>
+                                        <GridViewColumn Header="Description" Width="100" DisplayMemberBinding="{Binding Description}"/>
+                                        <GridViewColumn Header="Distance" Width="70" DisplayMemberBinding="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}"/>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>

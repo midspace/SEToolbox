@@ -19,12 +19,13 @@
     {
         #region Fields
 
-        private Point3D min;
-        private Point3D max;
-        private Vector3D size;
-        private int pilots;
-        private string report;
-        private float mass;
+        private Point3D _min;
+        private Point3D _max;
+        private Vector3D _scale;
+        private Size3D _size;
+        private int _pilots;
+        private string _report;
+        private float _mass;
 
         #endregion
 
@@ -107,14 +108,14 @@
         {
             get
             {
-                return this.min;
+                return this._min;
             }
 
             set
             {
-                if (value != this.min)
+                if (value != this._min)
                 {
-                    this.min = value;
+                    this._min = value;
                     this.RaisePropertyChanged(() => Min);
                 }
             }
@@ -125,32 +126,50 @@
         {
             get
             {
-                return this.max;
+                return this._max;
             }
 
             set
             {
-                if (value != this.max)
+                if (value != this._max)
                 {
-                    this.max = value;
+                    this._max = value;
                     this.RaisePropertyChanged(() => Max);
                 }
             }
         }
 
         [XmlIgnore]
-        public Vector3D Size
+        public Vector3D Scale
         {
             get
             {
-                return this.size;
+                return this._scale;
             }
 
             set
             {
-                if (value != this.size)
+                if (value != this._scale)
                 {
-                    this.size = value;
+                    this._scale = value;
+                    this.RaisePropertyChanged(() => Scale);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public Size3D Size
+        {
+            get
+            {
+                return this._size;
+            }
+
+            set
+            {
+                if (value != this._size)
+                {
+                    this._size = value;
                     this.RaisePropertyChanged(() => Size);
                 }
             }
@@ -161,14 +180,14 @@
         {
             get
             {
-                return this.pilots;
+                return this._pilots;
             }
 
             set
             {
-                if (value != this.pilots)
+                if (value != this._pilots)
                 {
-                    this.pilots = value;
+                    this._pilots = value;
                     this.RaisePropertyChanged(() => Pilots);
                 }
             }
@@ -215,14 +234,14 @@
         {
             get
             {
-                return this.report;
+                return this._report;
             }
 
             set
             {
-                if (value != this.report)
+                if (value != this._report)
                 {
-                    this.report = value;
+                    this._report = value;
                     this.RaisePropertyChanged(() => Report);
                 }
             }
@@ -233,14 +252,14 @@
         {
             get
             {
-                return this.mass;
+                return this._mass;
             }
 
             set
             {
-                if (value != this.mass)
+                if (value != this._mass)
                 {
-                    this.mass = value;
+                    this._mass = value;
                     this.RaisePropertyChanged(() => Mass);
                 }
             }
@@ -264,6 +283,7 @@
 
         public override void UpdateFromEntityBase()
         {
+            double scaleMultiplyer = 2.5;
             if (this.IsStatic && this.CubeGrid.GridSizeEnum == MyCubeSize.Large)
             {
                 this.ClassType = ClassType.Station;
@@ -275,6 +295,7 @@
             else if (!this.IsStatic && this.CubeGrid.GridSizeEnum == MyCubeSize.Small)
             {
                 this.ClassType = ClassType.SmallShip;
+                scaleMultiplyer = 0.5f;
             }
 
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
@@ -282,7 +303,6 @@
             float calcMass = 0;
             var ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
             var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
-            //MyObjectBuilder_BlueprintDefinition requirements2 = new MyObjectBuilder_BlueprintDefinition();
             var timeTaken = new TimeSpan();
 
             foreach (var block in this.CubeGrid.CubeBlocks)
@@ -290,14 +310,14 @@
                 min.X = Math.Min(min.X, block.Min.X);
                 min.Y = Math.Min(min.Y, block.Min.Y);
                 min.Z = Math.Min(min.Z, block.Min.Z);
-#warning resolve cubetype size.
+#warning resolve cubetype size to the cube's orientation.
                 max.X = Math.Max(max.X, block.Min.X);       // TODO: resolve cubetype size.
                 max.Y = Math.Max(max.Y, block.Min.Y);
                 max.Z = Math.Max(max.Z, block.Min.Z);
 
-                calcMass += SpaceEngineersAPI.FetchCubeBlockMass(block.SubtypeName, this.CubeGrid.GridSizeEnum);
+                calcMass += SpaceEngineersAPI.FetchCubeBlockMass(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
-                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(block.SubtypeName, this.CubeGrid.GridSizeEnum, 1, ingotRequirements, ref timeTaken);
+                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(block.GetType(), block.SubtypeName, this.CubeGrid.GridSizeEnum, 1, ingotRequirements, ref timeTaken);
             }
 
             foreach (var kvp in ingotRequirements)
@@ -305,26 +325,27 @@
                 SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount, oreRequirements, ref timeTaken);
             }
 
-            var size = max - min;
-            size.X++;
-            size.Y++;
-            size.Z++;
+            var scale = max - min;
+            scale.X++;
+            scale.Y++;
+            scale.Z++;
 
             this.Min = min;
             this.Max = max;
-            this.Size = size;
+            this.Scale = scale;
+            this.Size = new Size3D(scale.X * scaleMultiplyer, scale.Y * scaleMultiplyer, scale.Z * scaleMultiplyer);
             this.Mass = calcMass;
 
-            this.Name = null;
-            // Substitue Beacon detail for the name.
+            this.DisplayName = null;
+            // Substitue Beacon detail for the DisplayName.
             var beacons = this.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString() || b.SubtypeName == SubtypeId.SmallBlockBeacon.ToString()).ToArray();
             if (beacons.Length > 0)
             {
                 var a = beacons.Select(b => ((MyObjectBuilder_Beacon)b).CustomName).ToArray();
-                this.Name = String.Join("|", a);
+                this.DisplayName = String.Join("|", a);
             }
 
-            this.Description = string.Format("{0} | {1:#,##0}Kg", this.Size, this.Mass);
+            this.Description = string.Format("{0} | {1:#,##0}Kg", this.Scale, this.Mass);
 
             var bld = new StringBuilder();
             bld.AppendLine("Construction Requirements:");
@@ -689,7 +710,7 @@
                 newBlock.Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis);
                 newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
 
-                var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), block.SubtypeName);
+                var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), viewModel.GridSize, block.SubtypeName);
                 if (definition.Size.X > 1 || definition.Size.Y > 1 || definition.Size.z > 1)
                 {
                     // TODO: rotate the Size acording to the new Orientation.

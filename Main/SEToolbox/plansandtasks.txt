@@ -1,10 +1,8 @@
 ﻿TODO: list of tasks:
-- Double the Voxel shell thickness and double count of 3D objects, and use this to generate the slopes/corners/inversecorners instead of trying to interpret them.
 - Refresh/Save needs to check if save directory no longer exists.
 - tree view.
-- Property Grid.
+- Property Grid, to edit properties and sub items.
 - Close Dialog on IsModified.
-- Auto Updater, detect current and available version, prompt for update.
 - Wix installer project,
   * Desktop Icon.
 - View subscribed workshop Items (to allow exporting/copying from).
@@ -15,7 +13,10 @@
 - Improve Import Image:
   * Preview.
   * Scale.
+
 - Improve Import 3D Model:
+  * Double the Voxel shell thickness and double count of 3D objects, and use this to generate the slopes/corners/inversecorners instead of trying to interpret them.
+  * Import model colors or average model textures.
   * 3D Preview of Volmetric?
 
 - Exit Pilot from ship to Astronaut.
@@ -24,15 +25,15 @@
 - Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
   Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
 
+- Asteroid contents (list of ores in quantity cubic meters-m³ and percent %).
 - Replace Asteroid/Voxel.
 - Move Asteroid/Voxel.
 - Rotate Asteroid/Voxel (not supported by sandbox currently, but procedual voxel rotation could be accomplished.)
 
 - Show ship status. Size. Item count. Weight. Thrust.
 - Switch power on/off.
-- Switch Inertia Dampeners on/off.
 - Set/Reset Ship Vector. (Direction and Speed)
-- Move Ship to position.
+- Move Ship/s to position.
 - Replace Armor light/heavy/color.
 
 ========--------~~~~~~~~
@@ -55,6 +56,8 @@ Completed:
 - Set/Reset Astronaut Vector. (Direction and Speed)
 - Switch Inertia Dampeners on/off.
 - Strip beacon's for name of ship.
+- Auto Updater, detect current and available version, prompt for update.
+- Switch Ship Inertia Dampeners on/off.
 
 ========--------~~~~~~~~
 

@@ -157,6 +157,15 @@
             }
         }
 
+        [XmlIgnore]
+        public double Volume
+        {
+            get
+            {
+                return (double)this._voxCells / 255;
+            }
+        }
+
         #endregion
 
         #region methods
@@ -176,7 +185,7 @@
         public override void UpdateFromEntityBase()
         {
             this.ClassType = ClassType.Voxel;
-            this.Description = Path.GetFileNameWithoutExtension(this.VoxelMap.Filename);
+            this.DisplayName = Path.GetFileNameWithoutExtension(this.VoxelMap.Filename);
         }
 
         private void ReadVoxelDetails(string filename)

@@ -1,25 +1,39 @@
 ﻿namespace SEToolboxUpdate
 {
-    using Microsoft.Win32;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Security.Principal;
+    using Microsoft.Win32;
 
     class Program
     {
         static void Main(string[] args)
         {
+            var attemptedAlready = args.Any(a => a.ToUpper() == "/A");
+
             var appFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
             var appFilePath = Path.GetDirectoryName(appFile);
 
-            if (CheckIsRuningElevated(appFile, string.Join(" ", args)))
+            if (CheckIsRuningElevated())
             {
                 UpdateBaseFiles(appFilePath);
+                RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/U", false);
             }
-
-            RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/U", false);
+            else
+            {
+                if (attemptedAlready)
+                {
+                    RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/U /A", false);
+                }
+                else
+                {
+                    // TODO: check the return condition.
+                    RunElevated(appFile, string.Join(" ", args) + " /A", true);
+                }
+            }
         }
 
         private static bool UpdateBaseFiles(string appFilePath)
@@ -77,17 +91,10 @@
             return null;
         }
 
-        private static bool CheckIsRuningElevated(string appFile, string arguments)
+        private static bool CheckIsRuningElevated()
         {
             var pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-            var hasAdministrativeRight = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
-
-            if (!hasAdministrativeRight)
-            {
-                return RunElevated(appFile, arguments, true);
-            }
-
-            return hasAdministrativeRight;
+            return pricipal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
         private static bool RunElevated(string fileName, string arguments, bool elevate)

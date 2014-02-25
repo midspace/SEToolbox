@@ -335,12 +335,11 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
 
         #region FetchCubeBlockMass
 
-        public static float FetchCubeBlockMass(string subTypeid, MyCubeSize cubeSize)
+        public static float FetchCubeBlockMass(Type typeId, MyCubeSize cubeSize, string subTypeid)
         {
             float mass = 0;
 
-            var cubeBlockDefinition = _cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
-                && (subTypeid == c.Id.SubtypeId || (c.Variants != null && c.Variants.Any(v => subTypeid == c.Id.SubtypeId + v.Color))));
+            var cubeBlockDefinition = GetCubeDefinition(typeId, cubeSize, subTypeid);
 
             if (cubeBlockDefinition != null)
             {
@@ -353,10 +352,9 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
             return mass;
         }
 
-        public static void AccumulateCubeBlueprintRequirements(string subTypeid, MyCubeSize cubeSize, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, ref TimeSpan timeTaken)
+        public static void AccumulateCubeBlueprintRequirements(Type typeId, string subTypeid, MyCubeSize cubeSize, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, ref TimeSpan timeTaken)
         {
-            var cubeBlockDefinition = _cubeBlockDefinitions.Definitions.FirstOrDefault(c => cubeSize == c.CubeSize
-                && (subTypeid == c.Id.SubtypeId || (c.Variants != null && c.Variants.Any(v => subTypeid == c.Id.SubtypeId + v.Color))));
+            var cubeBlockDefinition = GetCubeDefinition(typeId, cubeSize, subTypeid);
 
             if (cubeBlockDefinition != null)
             {
@@ -433,15 +431,15 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
 
         #endregion
 
-        public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, string subtypeId)
+        public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, MyCubeSize cubeSize, string subtypeId)
         {
             if (string.IsNullOrEmpty(subtypeId))
             {
-                return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == _myObjectBuilderTypeList[typeId]);
+                return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == _myObjectBuilderTypeList[typeId]);
             }
 
-            return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.SubtypeId == subtypeId);
-            // TODO: this will return the LargeGatlingTurret Defition by default for some reason if it doesn't find the required SubtypeId.
+            return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
+            // Returns null if it doesn't find the required SubtypeId.
         }
 
         #region GetBoundingBox
@@ -456,7 +454,7 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
                 min.X = Math.Min(min.X, block.Min.X);
                 min.Y = Math.Min(min.Y, block.Min.Y);
                 min.Z = Math.Min(min.Z, block.Min.Z);
-#warning resolve cubetype size.
+#warning resolve cubetype size to the cube's orientation.
                 max.X = Math.Max(max.X, block.Min.X);       // TODO: resolve cubetype size.
                 max.Y = Math.Max(max.Y, block.Min.Y);
                 max.Z = Math.Max(max.Z, block.Min.Z);

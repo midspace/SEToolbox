@@ -3,10 +3,12 @@
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;
+    using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
-    using System.Text;
     using System.Linq;
+    using System.Text;
 
     public class SelectWorldModel : BaseModel
     {
@@ -331,36 +333,43 @@
             if (Directory.Exists(this.BaseSavePath))
             {
                 var userPaths = Directory.GetDirectories(this.BaseSavePath);
+                var list = new List<SaveResource>();
 
                 foreach (var userPath in userPaths)
                 {
                     var lastLoadedFile = Path.Combine(userPath, SpaceEngineersConsts.LoadLoadedFilename);
 
+                    // Ignore any other base Save paths without the LastLoaded file.
                     if (File.Exists(lastLoadedFile))
                     {
                         var lastLoaded = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes, MyObjectBuilder_LastLoadedTimesSerializer>(lastLoadedFile);
+                        var savePaths = Directory.GetDirectories(userPath);
 
-                        var list = lastLoaded.LastLoaded.Dictionary.OrderByDescending(k => k.Value);
-
-                        foreach (var kvp in list)
+                        // Still check every potential game world path.
+                        foreach (var savePath in savePaths)
                         {
-                            // SE sometimes does not clean up the LastLoaded list correctly, and leaves dead (previously deleted) entries.
-                            if (Directory.Exists(kvp.Key))
+                            SaveResource saveResource;
+                            list.Add(saveResource = new SaveResource()
                             {
-                                SaveResource saveResource;
-                                this.Worlds.Add(saveResource = new SaveResource()
-                                {
-                                    Savename = Path.GetFileName(kvp.Key),
-                                    Username = Path.GetFileName(userPath),
-                                    Savepath = kvp.Key,
-                                    LastLoadTime = kvp.Value
-                                });
+                                Savename = Path.GetFileName(savePath),
+                                Username = Path.GetFileName(userPath),
+                                Savepath = savePath
+                            });
 
-                                saveResource.LoadCheckpoint();
+                            var last = lastLoaded.LastLoaded.Dictionary.FirstOrDefault(d => d.Key.Equals(savePath, StringComparison.OrdinalIgnoreCase));
+                            if (last.Key != null)
+                            {
+                                saveResource.LastLoadTime = last.Value;
                             }
+                            
+                            // This should still allow Games to be copied into the Save path manually.
+
+                            saveResource.LoadCheckpoint();
                         }
                     }
                 }
+
+                this.Worlds = new ObservableCollection<SaveResource>(list.OrderByDescending(w => w.LastLoadTime));
 
                 this.IsValidSaveDirectory = true;
             }

@@ -346,4 +346,21 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   <data name="ModelTraceVoxel_ThinSmoothed" xml:space="preserve">
     <value>Thin Shell with Smoothing</value>
   </data>
+  <data name="VoxelDetail" xml:space="preserve">
+    <value>Filename:	{0}
+Bounding Size:	{1}
+Size:		{2} m × {3} m × {4} m
+Volume:		{5:#,##0.00} m³
+VoxCells:		{6:#,##0}
+Distance:		{7:#,###0.0} m</value>
+  </data>
+  <data name="CubeDetail" xml:space="preserve">
+    <value>Piloted:		{0}
+Damage:		{1}
+Speed:		{2:#,###0.000} m/s
+Distance:		{3:#,###0.0} m
+Scale:		{4} blocks
+Size:		{5} m × {6} m × {7} m
+Mass:		{8:#,###0} Kg</value>
+  </data>
 </root>
