@@ -90,16 +90,16 @@
             }
         }
 
-        public string Name
+        public string DisplayName
         {
             get
             {
-                return this.DataModel.Name;
+                return this.DataModel.DisplayName;
             }
 
             set
             {
-                this.DataModel.Name = value;
+                this.DataModel.DisplayName = value;
             }
         }
 

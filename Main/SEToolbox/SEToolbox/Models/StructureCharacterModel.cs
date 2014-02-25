@@ -176,6 +176,7 @@
         {
             this.ClassType = ClassType.Character;
             this.Description = string.Format("{0}", this.CharacterModel);
+            this.DisplayName = this.Character.Name;
         }
 
         public void ResetVelocity()

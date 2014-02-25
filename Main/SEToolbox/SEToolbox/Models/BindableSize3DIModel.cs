@@ -2,6 +2,7 @@
 {
     using System.Drawing;
     using System.Windows.Media.Media3D;
+    using VRageMath;
 
     public class BindableSize3DIModel : BaseModel
     {
@@ -26,6 +27,13 @@
             this.Width = width;
             this.Height = height;
             this.Depth = depth;
+        }
+
+        public BindableSize3DIModel(Vector3I size)
+        {
+            this.Width = size.X;
+            this.Height = size.Y;
+            this.Depth = size.Z;
         }
 
         public BindableSize3DIModel(Size size)
@@ -97,5 +105,10 @@
         }
 
         #endregion
+
+        public Vector3I ToVector3I()
+        {
+            return new Vector3I(this.Width, this.Height, this.Depth);
+        }
     }
 }

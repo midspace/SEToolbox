@@ -26,6 +26,11 @@
             this.size = new Size3D(size.SizeX, size.SizeY, size.SizeZ);
         }
 
+        public BindableSize3DModel(Size3D size)
+        {
+            this.size = new Size3D(size.X, size.Y, size.Z);
+        }
+
         #region Properties
 
         public double Width

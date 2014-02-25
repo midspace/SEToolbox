@@ -129,7 +129,25 @@
             var b3 = c3.GetBrightness();
 
             var v3 = new SerializableVector3(c3.GetHue() / 360f, c3.GetSaturation() * 2 - 1, c3.GetBrightness() * 2 - 1);
-
         }
+
+        [TestMethod]
+        public void ApiInterop()
+        {
+            var d1 = SpaceEngineersAPI.GetCubeDefinition(typeof(MyObjectBuilder_GravityGenerator), MyCubeSize.Large, "");
+            Assert.AreEqual("GravityGenerator", d1.DisplayName, "Must match");
+            Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
+
+            var d2 = SpaceEngineersAPI.GetCubeDefinition(typeof(MyObjectBuilder_GravityGenerator), MyCubeSize.Small, "");
+            Assert.IsNull(d2, "Must be null");
+
+            var d3 = SpaceEngineersAPI.GetCubeDefinition(typeof(MyObjectBuilder_Gyro), MyCubeSize.Small, "SmallBlockGyro");
+            Assert.AreEqual("Gyroscope", d3.DisplayName, "Must match");
+            Assert.AreEqual(MyCubeSize.Small, d3.CubeSize, "Must match");
+
+            var d4 = SpaceEngineersAPI.GetCubeDefinition(typeof(MyObjectBuilder_Gyro), MyCubeSize.Small, "Fake");
+            Assert.IsNull(d4, "Must be null");
+        }
+
     }
 }

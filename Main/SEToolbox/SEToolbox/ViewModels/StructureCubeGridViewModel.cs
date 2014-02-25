@@ -272,16 +272,24 @@
             }
         }
 
-        public Vector3D Size
+        public Vector3D Scale
         {
             get
             {
-                return this.DataModel.Size;
+                return this.DataModel.Scale;
             }
 
             set
             {
-                this.DataModel.Size = value;
+                this.DataModel.Scale = value;
+            }
+        }
+
+        public BindableSize3DModel Size
+        {
+            get
+            {
+                return new BindableSize3DModel(this.DataModel.Size);
             }
         }
 

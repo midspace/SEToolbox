@@ -56,16 +56,16 @@
             }
         }
 
-        public Vector3I ContentSize
+        public BindableSize3DIModel ContentSize
         {
             get
             {
-                return this.DataModel.ContentSize;
+                return new BindableSize3DIModel(this.DataModel.ContentSize);
             }
 
             set
             {
-                this.DataModel.ContentSize = value;
+                this.DataModel.ContentSize = value.ToVector3I();
             }
         }
 
@@ -79,6 +79,14 @@
             set
             {
                 this.DataModel.VoxCells = value;
+            }
+        }
+
+        public double Volume
+        {
+            get
+            {
+                return this.DataModel.Volume;
             }
         }
 
