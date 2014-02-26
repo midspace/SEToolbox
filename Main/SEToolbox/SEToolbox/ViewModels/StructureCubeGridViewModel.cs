@@ -524,10 +524,12 @@
 
         public void MirrorStructureByPlaneExecuted()
         {
+            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = true;
             if (this.DataModel.MirrorModel(true, false))
             {
                 ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
             }
+            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = false;
         }
 
         public bool MirrorStructureGuessOddCanExecute()
@@ -537,10 +539,12 @@
 
         public void MirrorStructureGuessOddExecuted()
         {
+            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = true;
             if (this.DataModel.MirrorModel(false, true))
             {
                 ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
             }
+            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = false;
         }
 
         public bool MirrorStructureGuessEvenCanExecute()
@@ -550,10 +554,12 @@
 
         public void MirrorStructureGuessEvenExecuted()
         {
+            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = true;
             if (this.DataModel.MirrorModel(false, false))
             {
                 ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
             }
+            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = false;
         }
 
         #endregion

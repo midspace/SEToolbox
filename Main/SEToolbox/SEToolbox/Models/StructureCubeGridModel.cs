@@ -630,98 +630,41 @@
             return count > 0;
         }
 
-        #region ValidMirrorBlocks
-
-        private static readonly SubtypeId[] ValidMirrorBlocks = new SubtypeId[] {
-            SubtypeId.LargeBlockArmorBlock,
-            SubtypeId.LargeBlockArmorSlope,
-            SubtypeId.LargeBlockArmorCorner,
-            SubtypeId.LargeBlockArmorCornerInv,
-            SubtypeId.LargeHeavyBlockArmorBlock,
-            SubtypeId.LargeHeavyBlockArmorSlope,
-            SubtypeId.LargeHeavyBlockArmorCorner,
-            SubtypeId.LargeHeavyBlockArmorCornerInv,
-            SubtypeId.LargeRoundArmor_Slope,
-            SubtypeId.LargeRoundArmor_Corner,
-            SubtypeId.LargeRoundArmor_CornerInv,
-            SubtypeId.SmallBlockArmorBlock,
-            SubtypeId.SmallBlockArmorSlope,
-            SubtypeId.SmallBlockArmorCorner,
-            SubtypeId.SmallBlockArmorCornerInv,
-            SubtypeId.SmallHeavyBlockArmorBlock,
-            SubtypeId.SmallHeavyBlockArmorSlope,
-            SubtypeId.SmallHeavyBlockArmorCorner,
-            SubtypeId.SmallHeavyBlockArmorCornerInv,
-
-            // Single block cubes that should work generically with Axis24.
-            SubtypeId.LargeBlockCockpit,
-            SubtypeId.LargeBlockConveyor,
-            SubtypeId.LargeBlockSmallContainer,
-            SubtypeId.LargeWarhead,
-            SubtypeId.LargeWarhead,
-            SubtypeId.LargeBlockSmallGenerator,
-            SubtypeId.LargeInteriorPillar,
-            SubtypeId.LargeWindowSquare,
-            SubtypeId.LargeWindowEdge,
-            SubtypeId.LargeSteelCatwalk,
-            SubtypeId.LargeCoverWall,
-            SubtypeId.LargeCoverWallHalf,
-            SubtypeId.LargeBlockInteriorWall,
-            SubtypeId.LargeBlockFrontLight,
-            SubtypeId.LargeBlockGyro,
-            SubtypeId.LargeInteriorTurret,
-            SubtypeId.SmallLight,
-            SubtypeId.SmallBlockConveyor,
-            SubtypeId.SmallBlockSmallContainer,
-            SubtypeId.SmallWarhead,
-            SubtypeId.SmallWarhead,
-            SubtypeId.SmallBlockSmallGenerator,
-            SubtypeId.SmallBlockFrontLight,
-            SubtypeId.SmallBlockGyro,
-
-            // Still Testing multi block components...
-            //SubtypeId.LargeRamp
-        };
-
-        // Object's without a SubtypeId
-        private static readonly Type[] ValidMirrorTypes = new Type[] {
-            typeof(MyObjectBuilder_Door),
-            typeof(MyObjectBuilder_GravityGenerator),
-            typeof(MyObjectBuilder_Passage),
-            //typeof(MyObjectBuilder_Ladder),   // Obsolete? It's still defined however.
-            //typeof(MyObjectBuilder_LargeGatlingTurret),
-            //typeof(MyObjectBuilder_LargeMissileTurret),
-         };
-
-        #endregion
-
         private static IEnumerable<MyObjectBuilder_CubeBlock> MirrorCubes(StructureCubeGridModel viewModel, bool integrate, Mirror xMirror, int xAxis, Mirror yMirror, int yAxis, Mirror zMirror, int zAxis)
         {
             var blocks = new List<MyObjectBuilder_CubeBlock>();
-            SubtypeId outVal;
 
             if (xMirror == Mirror.None && yMirror == Mirror.None && zMirror == Mirror.None)
                 return blocks;
 
-            foreach (var block in viewModel.CubeGrid.CubeBlocks.Where(b => (Enum.TryParse<SubtypeId>(b.SubtypeName, out outVal) && ValidMirrorBlocks.Contains(outVal)) || ValidMirrorTypes.Contains(b.GetType())))
+            foreach (var block in viewModel.CubeGrid.CubeBlocks)
             {
                 var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
                 newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId();
-                newBlock.Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis);
-                newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
 
                 var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), viewModel.GridSize, block.SubtypeName);
-                if (definition.Size.X > 1 || definition.Size.Y > 1 || definition.Size.z > 1)
-                {
-                    // TODO: rotate the Size acording to the new Orientation.
-                    //Quaternion.
-                    //SerializableBlockOrientation
-                    //newBlock.BlockOrientation.
+                newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
 
-                    //newBlock.Min.X += definition.Size.X - 1;
-                    //newBlock.Min.Y += definition.Size.Y - 1;
-                    //newBlock.Min.Z += definition.Size.Z - 1;
-                }              
+                if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
+                {
+                    newBlock.Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis);
+                }
+                else
+                {
+                    // resolve size of component, and transform to original orientation.
+                    var orientSize = definition.Size.Add(-1).Transform(block.BlockOrientation).Abs();
+
+                    var min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis);
+                    var blockMax = new SerializableVector3I(block.Min.X + orientSize.X, block.Min.Y + orientSize.Y, block.Min.Z + orientSize.Z);
+                    var max = blockMax.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis);
+
+                    if (xMirror != Mirror.None)
+                        newBlock.Min = new SerializableVector3I(max.X, min.Y, min.Z);
+                    if (yMirror != Mirror.None)
+                        newBlock.Min = new SerializableVector3I(min.X, max.Y, min.Z);
+                    if (zMirror != Mirror.None)
+                        newBlock.Min = new SerializableVector3I(min.X, min.Y, max.Z);
+                }
 
                 // Don't place a block it one already exists there in the mirror.
                 if (integrate && viewModel.CubeGrid.CubeBlocks.Any(b => b.Min.X == newBlock.Min.X && b.Min.Y == newBlock.Min.Y && b.Min.Z == newBlock.Min.Z /*|| b.Max == newBlock.Min*/))  // TODO: check cubeblock size.

@@ -5,8 +5,6 @@
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
     using HelixToolkit.Wpf;
-    using Sandbox.CommonLib.ObjectBuilders.VRageData;
-    using VRageMath;
 
     public static class MeshHelper
     {
@@ -291,35 +289,6 @@
             return Math.Round(Math.Round(Math.Round(vector1.X * vector2.X, 14) + Math.Round(vector1.Y * vector2.Y, 14), 14) + Math.Round(vector1.Z * vector2.Z, 14), 14);
         }
 
-        internal static SerializableVector3I Mirror(this SerializableVector3I vector, Mirror xMirror, int xAxis, Mirror yMirror, int yAxis, Mirror zMirror, int zAxis)
-        {
-            var newVector = new Vector3I(vector.X, vector.Y, vector.Z);
-            switch (xMirror)
-            {
-                case Support.Mirror.Odd: newVector.X = xAxis - (vector.X - xAxis); break;
-                case Support.Mirror.EvenUp: newVector.X = xAxis - (vector.X - xAxis) + 1; break;
-                case Support.Mirror.EvenDown: newVector.X = xAxis - (vector.X - xAxis) - 1; break;
-            }
-            switch (yMirror)
-            {
-                case Support.Mirror.Odd: newVector.Y = yAxis - (vector.Y - yAxis); break;
-                case Support.Mirror.EvenUp: newVector.Y = yAxis - (vector.Y - yAxis) + 1; break;
-                case Support.Mirror.EvenDown: newVector.Y = yAxis - (vector.Y - yAxis) - 1; break;
-            }
-            switch (zMirror)
-            {
-                case Support.Mirror.Odd: newVector.Z = zAxis - (vector.Z - zAxis); break;
-                case Support.Mirror.EvenUp: newVector.Z = zAxis - (vector.Z - zAxis) + 1; break;
-                case Support.Mirror.EvenDown: newVector.Z = zAxis - (vector.Z - zAxis) - 1; break;
-            }
-            return newVector;
-        }
-
-        internal static double LinearVector(this Vector3 vector)
-        {
-            return Math.Sqrt(Math.Pow(vector.X, 2) + Math.Pow(vector.Y, 2) + Math.Pow(vector.Z, 2));
-        }
-
         public static Transform3D TransformVector(Vector3D origin, double xAngle, double yAngle, double zAngle)
         {
             var transform = new Transform3DGroup();
@@ -328,16 +297,6 @@
             transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(-1, 0, 0), xAngle)));
             transform.Children.Add(new TranslateTransform3D(origin));
             return transform;
-        }
-
-        public static VRageMath.Vector3I ToVector3I(this SerializableVector3I vector)
-        {
-            return new VRageMath.Vector3I(vector.X, vector.Y, vector.Z);
-        }
-
-        public static VRageMath.Vector3 ToVector3(this SerializableVector3 vector)
-        {
-            return new VRageMath.Vector3(vector.X, vector.Y, vector.Z);
         }
     }
 }
