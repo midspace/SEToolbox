@@ -119,6 +119,7 @@
     <Compile Include="Interop\Asteroids\MyVoxelContentCellContent.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelMap.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelMaterialCell.cs" />
+    <Compile Include="Interop\InteropHelper.cs" />
     <Compile Include="Interop\SpaceEngineersAPI.cs" />
     <Compile Include="Models\BindableVector3DModel.cs" />
     <Compile Include="Models\BindablePoint3DModel.cs" />

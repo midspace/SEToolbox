@@ -53,8 +53,8 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 
-// First 3 mnumbers to match the current SpaceEngineers release.
+// First 3 numbers to match the current SpaceEngineers release.
 // http://forums.keenswh.com/post/about-change-log-6578819
 // Forth number to indicate my own build of ShipReport to match. Remember to reset it back to 1 every time there is a new release of SpaceEngineers.
-[assembly: AssemblyFileVersion("01.019.010.1")]
+[assembly: AssemblyFileVersion("01.019.012.1")]
 
