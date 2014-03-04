@@ -310,10 +310,23 @@
                 min.X = Math.Min(min.X, block.Min.X);
                 min.Y = Math.Min(min.Y, block.Min.Y);
                 min.Z = Math.Min(min.Z, block.Min.Z);
-#warning resolve cubetype size to the cube's orientation.
-                max.X = Math.Max(max.X, block.Min.X);       // TODO: resolve cubetype size.
-                max.Y = Math.Max(max.Y, block.Min.Y);
-                max.Z = Math.Max(max.Z, block.Min.Z);
+
+                var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
+
+                if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
+                {
+                    max.X = Math.Max(max.X, block.Min.X);
+                    max.Y = Math.Max(max.Y, block.Min.Y);
+                    max.Z = Math.Max(max.Z, block.Min.Z);
+                }
+                else
+                {
+                    // resolve the cube size acording to the cube's orientation.
+                    var orientSize = definition.Size.Add(-1).Transform(block.BlockOrientation).Abs();
+                    max.X = Math.Max(max.X, block.Min.X + orientSize.X);
+                    max.Y = Math.Max(max.Y, block.Min.Y + orientSize.Y);
+                    max.Z = Math.Max(max.Z, block.Min.Z + orientSize.Z);
+                }
 
                 calcMass += SpaceEngineersAPI.FetchCubeBlockMass(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
@@ -457,21 +470,11 @@
             return count > 0;
         }
 
-        public void ConvertToFramework()
+        public void ConvertToFramework(float value)
         {
             foreach (var cube in this.CubeGrid.CubeBlocks)
             {
-                cube.BuildPercent = 0.0f;
-            }
-
-            this.UpdateFromEntityBase();
-        }
-
-        public void ConvertToCompleteStructure()
-        {
-            foreach (var cube in this.CubeGrid.CubeBlocks)
-            {
-                cube.BuildPercent = 1;
+                cube.BuildPercent = value;
             }
 
             this.UpdateFromEntityBase();
@@ -641,9 +644,8 @@
             {
                 var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
                 newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId();
-
-                var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), viewModel.GridSize, block.SubtypeName);
                 newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
+                var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), viewModel.GridSize, block.SubtypeName);
 
                 if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
                 {
@@ -679,26 +681,7 @@
         {
             if (xMirror != Mirror.None)
             {
-                if (subtypeName.Contains("ArmorSlope") || subtypeName.Contains("Armor_Slope"))
-                {
-                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
-                    switch (cubeType.Key)
-                    {
-                        case CubeType.SlopeCenterBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop];
-                        case CubeType.SlopeRightBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter];
-                        case CubeType.SlopeLeftBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter];
-                        case CubeType.SlopeCenterBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom];
-                        case CubeType.SlopeRightCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop];
-                        case CubeType.SlopeLeftCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop];
-                        case CubeType.SlopeRightCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom];
-                        case CubeType.SlopeLeftCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom];
-                        case CubeType.SlopeCenterFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop];
-                        case CubeType.SlopeRightFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter];
-                        case CubeType.SlopeLeftFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter];
-                        case CubeType.SlopeCenterFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom];
-                    }
-                }
-                else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
+                if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)
@@ -747,26 +730,7 @@
             }
             else if (yMirror != Mirror.None)
             {
-                if (subtypeName.Contains("ArmorSlope") || subtypeName.Contains("Armor_Slope"))
-                {
-                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
-                    switch (cubeType.Key)
-                    {
-                        case CubeType.SlopeCenterBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop];
-                        case CubeType.SlopeRightBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter];
-                        case CubeType.SlopeLeftBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter];
-                        case CubeType.SlopeCenterBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom];
-                        case CubeType.SlopeRightCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop];
-                        case CubeType.SlopeLeftCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop];
-                        case CubeType.SlopeRightCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom];
-                        case CubeType.SlopeLeftCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom];
-                        case CubeType.SlopeCenterFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop];
-                        case CubeType.SlopeRightFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter];
-                        case CubeType.SlopeLeftFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter];
-                        case CubeType.SlopeCenterFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom];
-                    }
-                }
-                else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
+                if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)
@@ -815,26 +779,7 @@
             }
             else if (zMirror != Mirror.None)
             {
-                if (subtypeName.Contains("ArmorSlope") || subtypeName.Contains("Armor_Slope"))
-                {
-                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Slope"));
-                    switch (cubeType.Key)
-                    {
-                        case CubeType.SlopeCenterBackTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackBottom];
-                        case CubeType.SlopeRightBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightBackCenter];
-                        case CubeType.SlopeLeftBackCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftBackCenter];
-                        case CubeType.SlopeCenterBackBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterBackTop];
-                        case CubeType.SlopeRightCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterBottom];
-                        case CubeType.SlopeLeftCenterTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterBottom];
-                        case CubeType.SlopeRightCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightCenterTop];
-                        case CubeType.SlopeLeftCenterBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftCenterTop];
-                        case CubeType.SlopeCenterFrontTop: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontBottom];
-                        case CubeType.SlopeRightFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeRightFrontCenter];
-                        case CubeType.SlopeLeftFrontCenter: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeLeftFrontCenter];
-                        case CubeType.SlopeCenterFrontBottom: return SpaceEngineersAPI.CubeOrientations[CubeType.SlopeCenterFrontTop];
-                    }
-                }
-                else if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
+                if (subtypeName.Contains("ArmorCorner") || subtypeName.Contains("Armor_Corner"))
                 {
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("NormalCorner"));
                     switch (cubeType.Key)

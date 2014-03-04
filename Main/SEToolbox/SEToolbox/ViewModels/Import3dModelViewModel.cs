@@ -724,7 +724,10 @@
             {
                 case ImportArmorType.Heavy: blockPrefix += "HeavyBlockArmor"; break;
                 case ImportArmorType.Light: blockPrefix += "BlockArmor"; break;
+
                 // TODO: Rounded Armor.
+                // Currently in development, and only specified as 'Light' on the 'Large' structures.
+                //case ImportArmorType.Round: blockPrefix += "RoundArmor_"; break;
             }
 
             // Large|BlockArmor|Corner

@@ -2,17 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
-    using System.IO.Compression;
     using System.Linq;
     using System.Xml;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Definitions;
+    using Sandbox.CommonLib.ObjectBuilders.VRageData;
     using SEToolbox.Support;
     using VRageMath;
-using Sandbox.CommonLib.ObjectBuilders.VRageData;
 
     public class SpaceEngineersAPI
     {
@@ -282,8 +280,8 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
             _cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>("CubeBlocks.sbc");
             _blueprintDefinitions = LoadContentFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>("Blueprints.sbc");
 
-            _myObjectBuilderTypeList = new Dictionary<Type,MyObjectBuilderTypeEnum>();
-            foreach(MyObjectBuilderTypeEnum e in Enum.GetValues(typeof(MyObjectBuilderTypeEnum)))
+            _myObjectBuilderTypeList = new Dictionary<Type, MyObjectBuilderTypeEnum>();
+            foreach (MyObjectBuilderTypeEnum e in Enum.GetValues(typeof(MyObjectBuilderTypeEnum)))
             {
                 try
                 {
@@ -291,7 +289,7 @@ using Sandbox.CommonLib.ObjectBuilders.VRageData;
                     _myObjectBuilderTypeList.Add(t, e);
                 }
                 catch
-                { 
+                {
                     // Ignore any that don't have a Type defined.
                 }
             }

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:SEToolbox.Converters"
              xmlns:props="clr-namespace:SEToolbox.Properties"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -63,18 +64,40 @@
                         <MenuItem Header="Armor">
                             <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}"/>
                             <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}"/>
+                            <Separator/>
+                            <MenuItem Header="To Corner Armor" Command="{Binding ConvertToCornerArmorCommand}"/>
+                            <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}"/>
                         </MenuItem>
                         <MenuItem Header="Framework" Command="{Binding FrameworkCommand}">
-                            <MenuItem Header="To Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed."/>
-                            <MenuItem Header="To Complete Structure" Command="{Binding ConvertToCompleteStructureCommand}" ToolTip="Any unconstructed components are constructed."/>
+                            <MenuItem Header="To 0% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                                <MenuItem.CommandParameter>
+                                    <s:Double>0.00</s:Double>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="To 25% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                                <MenuItem.CommandParameter>
+                                    <s:Double>0.25</s:Double>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="To 50% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                                <MenuItem.CommandParameter>
+                                    <s:Double>0.50</s:Double>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="To 75% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                                <MenuItem.CommandParameter>
+                                    <s:Double>0.75</s:Double>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="To 100% Complete Structure" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any unconstructed components are constructed.">
+                                <MenuItem.CommandParameter>
+                                    <s:Double>1.00</s:Double>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
                         </MenuItem>
                         <MenuItem Header="Station/Ship">
                             <MenuItem Header="To Station" Command="{Binding ConvertToStationCommand}" />
                             <MenuItem Header="To Ship" Command="{Binding ConvertToShipCommand}" />
-                        </MenuItem>
-                        <MenuItem Header="Corner/Round Armor">
-                            <MenuItem Header="To Corner Armor" Command="{Binding ConvertToCornerArmorCommand}"/>
-                            <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}"/>
                         </MenuItem>
                         <!--<MenuItem Header="Ladder to Passage" Command="{Binding ConvertLadderToPassageCommand}"/>-->
                     </MenuItem>
