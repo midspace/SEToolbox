@@ -102,15 +102,7 @@
         {
             get
             {
-                return new DelegateCommand(new Action(ConvertToFrameworkExecuted), new Func<bool>(ConvertToFrameworkCanExecute));
-            }
-        }
-
-        public ICommand ConvertToCompleteStructureCommand
-        {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertToCompleteStructureExecuted), new Func<bool>(ConvertToCompleteStructureCanExecute));
+                return new DelegateCommand<double>(new Action<double>(ConvertToFrameworkExecuted), new Func<double, bool>(ConvertToFrameworkCanExecute));
             }
         }
 
@@ -434,25 +426,14 @@
             // placeholder for menu only.
         }
 
-        public bool ConvertToFrameworkCanExecute()
+        public bool ConvertToFrameworkCanExecute(double value)
         {
             return true;
         }
 
-        public void ConvertToFrameworkExecuted()
+        public void ConvertToFrameworkExecuted(double value)
         {
-            this.DataModel.ConvertToFramework();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
-        }
-
-        public bool ConvertToCompleteStructureCanExecute()
-        {
-            return true;
-        }
-
-        public void ConvertToCompleteStructureExecuted()
-        {
-            this.DataModel.ConvertToCompleteStructure();
+            this.DataModel.ConvertToFramework((float)value);
             ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
         }
 

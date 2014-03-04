@@ -13,6 +13,7 @@
     using System.Linq;
     using System.Windows.Threading;
     using VRageMath;
+    using Microsoft.VisualBasic.FileIO;
 
     public class ExplorerModel : BaseModel
     {
@@ -284,8 +285,18 @@
         {
             this.IsBusy = true;
             this.ActiveWorld.LastSaveTime = DateTime.Now;
-
             var checkpointFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
+            var checkpointBackupFilename = checkpointFilename + ".bak";
+            var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+            var sectorBackupFilename = sectorFilename + ".bak";
+
+            if (File.Exists(checkpointBackupFilename))
+            {
+                File.Delete(checkpointBackupFilename);
+                //FileSystem.DeleteFile(checkpointBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            }
+
+            File.Move(checkpointFilename, checkpointBackupFilename);
 
             if (this.ActiveWorld.CompressedCheckpointFormat)
             {
@@ -298,7 +309,14 @@
                 SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
             }
 
-            var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+            if (File.Exists(sectorBackupFilename))
+            {
+                File.Delete(sectorBackupFilename);
+                //FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            }
+
+            File.Move(sectorFilename, sectorBackupFilename);
+
             if (_compressedSectorFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();

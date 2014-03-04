@@ -55,6 +55,7 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\References\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Sandbox.CommonLib">
       <HintPath>..\References\Sandbox.CommonLib.dll</HintPath>
     </Reference>
@@ -364,6 +365,7 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\document_view.png" />
     <None Include="Resources\sort_descending.png" />
     <None Include="Resources\Toolbox_logo.jpg" />
     <None Include="Resources\server_to_client.png" />

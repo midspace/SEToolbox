@@ -58,6 +58,7 @@ Completed:
 - Strip beacon's for name of ship.
 - Auto Updater, detect current and available version, prompt for update.
 - Switch Ship Inertia Dampeners on/off.
+- Create backup of checkpoint and sandbox files when saving.
 
 ========--------~~~~~~~~
 
@@ -82,7 +83,7 @@ Offical file extensions in use.
 Unoffical file extensions.
 ".sbo" Sand Box Object. I made this one up for import and export of ships (MyObjectBuilder_CubeGrid).  .sbc seemed like it would conflict with the other offical extensions.
   Though looking at content assets, prefab fighters use the ".sbc" extension which are MyObjectBuilder_CubeGrid, so I will change this now.
-  // TODO: remove this file extention from use in a couple of weeks.
+  Have now removed this file extension from use.
 
 
 Why are the blocks 0.5 and 2.5 meter blocks?
