@@ -28,35 +28,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.ColumnSpan="2">Asteroid</Label>
-        <!--<ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
-            <ToolBar>
-            </ToolBar>
-        </ToolBarPanel>-->
-        <!--<Label Grid.Row="2" Grid.Column="0" Content="Filename"/>
-        <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Filename}"/>
-        <Label Grid.Row="3" Grid.Column="0" Content="Bounding Size:"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Size}" />
-        <Label Grid.Row="4" Grid.Column="0" Content="Size:"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{}{0}m × {1}m × {2}m">
-                    <Binding Path="ContentSize.Width" />
-                    <Binding Path="ContentSize.Height" />
-                    <Binding Path="ContentSize.Depth" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
-        <Label Grid.Row="5" Grid.Column="0" Content="Volume:"/>
-        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Volume, StringFormat={}{0:#,##0.00}m³}" />
-        <Label Grid.Row="6" Grid.Column="0" Content="VoxCells:"/>
-        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding VoxCells, StringFormat={}{0:#,##0}}" />
-        <Label Grid.Row="7" Grid.Column="0" Content="Distance:"/>
-        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />-->
         <TextBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="2">
             <TextBox.Text>
                 <MultiBinding StringFormat="{x:Static props:Resources.VoxelDetail}">
                     <Binding Path="Filename"/>
-                    <Binding Path="Size"/>
+                    <Binding Path="Size.Width" />
+                    <Binding Path="Size.Height" />
+                    <Binding Path="Size.Depth" />
                     <Binding Path="ContentSize.Width"/>
                     <Binding Path="ContentSize.Height"/>
                     <Binding Path="ContentSize.Depth"/>

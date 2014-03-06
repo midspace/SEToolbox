@@ -110,5 +110,10 @@
         {
             return new Vector3I(this.Width, this.Height, this.Depth);
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0},{1},{2}", this.Width, this.Height, this.Depth);
+        }
     }
 }

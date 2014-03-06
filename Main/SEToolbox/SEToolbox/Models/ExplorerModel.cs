@@ -166,6 +166,10 @@
                     this._isBusy = value;
                     this.RaisePropertyChanged(() => IsBusy);
                     this.SetActiveStatus();
+                    if (this._isBusy)
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                    }
                 }
             }
         }

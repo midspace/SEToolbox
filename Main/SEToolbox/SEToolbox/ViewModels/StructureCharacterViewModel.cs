@@ -146,13 +146,60 @@ namespace SEToolbox.ViewModels
             }
         }
 
+        public decimal PositionX
+        {
+            get
+            {
+                return this.DataModel.PositionX;
+            }
+
+            set
+            {
+                this.DataModel.PositionX = value;
+            }
+        }
+
+        public decimal PositionY
+        {
+            get
+            {
+                return this.DataModel.PositionY;
+            }
+
+            set
+            {
+                this.DataModel.PositionY = value;
+            }
+        }
+
+        public decimal PositionZ
+        {
+            get
+            {
+                return this.DataModel.PositionZ;
+            }
+
+            set
+            {
+                this.DataModel.PositionZ = value;
+            }
+        }
+
+        public BindablePoint3DModel Position
+        {
+            get
+            {
+                return this.DataModel.Position;
+            }
+        }
+
         #endregion
 
         #region methods
 
         public bool ResetVelocityCanExecute()
         {
-            return true;
+            return this.DataModel.Speed != 0f;
         }
 
         public void ResetVelocityExecuted()
@@ -163,7 +210,7 @@ namespace SEToolbox.ViewModels
 
         public bool ReverseVelocityCanExecute()
         {
-            return true;
+            return this.DataModel.Speed != 0f;
         }
 
         public void ReverseVelocityExecuted()

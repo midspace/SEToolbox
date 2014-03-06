@@ -235,6 +235,9 @@
     <Compile Include="Views\ControlFloatingObject.xaml.cs">
       <DependentUpon>ControlFloatingObject.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ControlPosition.xaml.cs">
+      <DependentUpon>ControlPosition.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WindowGenerateVoxelField.xaml.cs">
       <DependentUpon>WindowGenerateVoxelField.xaml</DependentUpon>
     </Compile>
@@ -285,6 +288,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ControlFloatingObject.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ControlPosition.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

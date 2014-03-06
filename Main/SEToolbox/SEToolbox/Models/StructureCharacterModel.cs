@@ -156,6 +156,78 @@
             }
         }
 
+        [XmlIgnore]
+        public decimal PositionX
+        {
+            get
+            {
+                return this.Character.PositionAndOrientation.Value.Position.X.ToDecimal();
+            }
+
+            set
+            {
+                if (value != this.Character.PositionAndOrientation.Value.Position.X.ToDecimal())
+                {
+                    var pos = this.Character.PositionAndOrientation.Value;
+                    pos.Position.X = (float)value;
+                    this.Character.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionX);
+                    this.RaisePropertyChanged(() => Position);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public decimal PositionY
+        {
+            get
+            {
+                return this.Character.PositionAndOrientation.Value.Position.Y.ToDecimal();
+            }
+
+            set
+            {
+                if (value != this.Character.PositionAndOrientation.Value.Position.Y.ToDecimal())
+                {
+                    var pos = this.Character.PositionAndOrientation.Value;
+                    pos.Position.Y = (float)value;
+                    this.Character.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionY);
+                    this.RaisePropertyChanged(() => Position);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public decimal PositionZ
+        {
+            get
+            {
+                return this.Character.PositionAndOrientation.Value.Position.Z.ToDecimal();
+            }
+
+            set
+            {
+                if (value != this.Character.PositionAndOrientation.Value.Position.Z.ToDecimal())
+                {
+                    var pos = this.Character.PositionAndOrientation.Value;
+                    pos.Position.Z = (float)value;
+                    this.Character.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionZ);
+                    this.RaisePropertyChanged(() => Position);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public BindablePoint3DModel Position
+        {
+            get
+            {
+                return new BindablePoint3DModel(this.Character.PositionAndOrientation.Value.Position);
+            }
+        }
+
         #endregion
 
         #region methods
