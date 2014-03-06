@@ -452,7 +452,6 @@
                 min.X = Math.Min(min.X, block.Min.X);
                 min.Y = Math.Min(min.Y, block.Min.Y);
                 min.Z = Math.Min(min.Z, block.Min.Z);
-#warning resolve cubetype size to the cube's orientation.
                 max.X = Math.Max(max.X, block.Min.X);       // TODO: resolve cubetype size.
                 max.Y = Math.Max(max.Y, block.Min.Y);
                 max.Z = Math.Max(max.Z, block.Min.Z);

@@ -322,6 +322,11 @@
             }
         }
 
+        public int BlockCount
+        {
+            get { return this.DataModel.BlockCount; }
+        }
+
         #endregion
 
         #region methods

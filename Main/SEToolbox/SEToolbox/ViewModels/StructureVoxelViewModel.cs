@@ -43,16 +43,16 @@
             }
         }
 
-        public Vector3I Size
+        public BindableSize3DIModel Size
         {
             get
             {
-                return this.DataModel.Size;
+                return new BindableSize3DIModel(this.DataModel.Size);
             }
 
             set
             {
-                this.DataModel.Size = value;
+                this.DataModel.Size = value.ToVector3I();
             }
         }
 

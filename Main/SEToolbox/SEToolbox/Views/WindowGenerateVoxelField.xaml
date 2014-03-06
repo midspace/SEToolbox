@@ -32,7 +32,7 @@
                     <TextBox.Text>
                         <Binding Path="MinimumRange" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                             <Binding.ValidationRules>
-                                <converters:RangeRuleI Min="0" Max="1000"/>
+                                <converters:RangeRuleI Min="0" Max="10000"/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
@@ -42,7 +42,7 @@
                     <TextBox.Text>
                         <Binding Path="MaximumRange" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                             <Binding.ValidationRules>
-                                <converters:RangeRuleI Min="0" Max="5000"/>
+                                <converters:RangeRuleI Min="0" Max="50000"/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>

@@ -23,11 +23,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
@@ -109,45 +104,27 @@
                 </Menu>
             </ToolBar>
         </ToolBarPanel>
-        <Label Grid.Row="2" Content="Dampeners:"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="Dampeners:"/>
         <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
         <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="2">
             <TextBox.Text>
                 <MultiBinding StringFormat="{x:Static props:Resources.CubeDetail}" Mode="OneWay">
                     <Binding Path="IsPiloted"/>
-                    <Binding Path="DamageCount" Mode="OneWay"/>
-                    <Binding Path="Speed" Mode="OneWay"/>
+                    <Binding Path="DamageCount"/>
+                    <Binding Path="Speed"/>
                     <Binding Path="PlayerDistance"/>
-                    <Binding Path="Scale"/>
+                    <Binding Path="Scale.X"/>
+                    <Binding Path="Scale.Y"/>
+                    <Binding Path="Scale.Z"/>
                     <Binding Path="Size.Width"/>
                     <Binding Path="Size.Height"/>
                     <Binding Path="Size.Depth"/>
-                    <Binding Path="Mass" Mode="OneWay"/>
+                    <Binding Path="Mass"/>
+                    <Binding Path="BlockCount"/>
                 </MultiBinding>
             </TextBox.Text>
         </TextBox>
-        <!--<Label Grid.Row="3" Content="Piloted:"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPiloted}" />
-        <Label Grid.Row="4" Content="Damage:"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
-        <Label Grid.Row="5" Content="Speed:"/>
-        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
-        <Label Grid.Row="6" Content="Distance:"/>
-        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
-        <Label Grid.Row="7" Content="Scale:"/>
-        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Scale, StringFormat='{}{0} blocks'}" />
-        <Label Grid.Row="8" Grid.Column="0" Content="Size:"/>
-        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{}{0}m × {1}m × {2}m">
-                    <Binding Path="Size.Width" />
-                    <Binding Path="Size.Height" />
-                    <Binding Path="Size.Depth" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
-        <Label Grid.Row="9" Content="Mass:"/>
-        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0} Kg'}" />-->
-        <TextBox Grid.Row="10" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Report}" />
+        <Separator Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2"/>
+        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="2" Text="{Binding Report}" />
     </Grid>
 </UserControl>

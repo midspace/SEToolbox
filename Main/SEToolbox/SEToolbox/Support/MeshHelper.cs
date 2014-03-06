@@ -298,5 +298,15 @@
             transform.Children.Add(new TranslateTransform3D(origin));
             return transform;
         }
+
+        public static decimal ToDecimal(this float value)
+        {
+            return Convert.ToDecimal(value.ToString("G9", null));
+        }
+        
+        public static double ToDouble(this float value)
+        {
+            return Convert.ToDouble(value.ToString("G9", null));
+        }
     }
 }

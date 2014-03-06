@@ -161,10 +161,14 @@
                 <StatusBarItem>
                     <views:ControlBaseState/>
                 </StatusBarItem>
+                <Separator/>
                 <StatusBarItem>
                     <!-- placeholder to maintain correct height for text -->
                     <TextBlock />
                 </StatusBarItem>
+                <!--<StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0">
+                    <views:ControlBusyState />
+                </StatusBarItem>-->
             </StatusBar>
             <Grid>
                 <Grid.Style>

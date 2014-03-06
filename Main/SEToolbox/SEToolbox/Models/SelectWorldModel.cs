@@ -17,15 +17,15 @@
         /// <summary>
         /// The base path of the save files, minus the userid.
         /// </summary>
-        private string baseSavePath;
+        private string _baseSavePath;
 
-        private bool isValidSaveDirectory;
+        private bool _isValidSaveDirectory;
 
-        private SaveResource selectedWorld;
+        private SaveResource _selectedWorld;
 
-        private ObservableCollection<SaveResource> worlds;
+        private ObservableCollection<SaveResource> _worlds;
 
-        private bool isBusy;
+        private bool _isBusy;
 
         #endregion
 
@@ -45,14 +45,14 @@
         {
             get
             {
-                return this.baseSavePath;
+                return this._baseSavePath;
             }
 
             set
             {
-                if (value != this.baseSavePath)
+                if (value != this._baseSavePath)
                 {
-                    this.baseSavePath = value;
+                    this._baseSavePath = value;
                     this.RaisePropertyChanged(() => BaseSavePath);
                 }
             }
@@ -62,14 +62,14 @@
         {
             get
             {
-                return this.isValidSaveDirectory;
+                return this._isValidSaveDirectory;
             }
 
             set
             {
-                if (value != this.isValidSaveDirectory)
+                if (value != this._isValidSaveDirectory)
                 {
-                    this.isValidSaveDirectory = value;
+                    this._isValidSaveDirectory = value;
                     this.RaisePropertyChanged(() => IsValidSaveDirectory);
                 }
             }
@@ -79,14 +79,14 @@
         {
             get
             {
-                return this.selectedWorld;
+                return this._selectedWorld;
             }
 
             set
             {
-                if (value != this.selectedWorld)
+                if (value != this._selectedWorld)
                 {
-                    this.selectedWorld = value;
+                    this._selectedWorld = value;
                     this.RaisePropertyChanged(() => SelectedWorld);
                 }
             }
@@ -96,14 +96,14 @@
         {
             get
             {
-                return this.worlds;
+                return this._worlds;
             }
 
             set
             {
-                if (value != this.worlds)
+                if (value != this._worlds)
                 {
-                    this.worlds = value;
+                    this._worlds = value;
                     this.RaisePropertyChanged(() => Worlds);
                 }
             }
@@ -116,16 +116,16 @@
         {
             get
             {
-                return this.isBusy;
+                return this._isBusy;
             }
 
             set
             {
-                if (value != this.isBusy)
+                if (value != this._isBusy)
                 {
-                    this.isBusy = value;
+                    this._isBusy = value;
                     this.RaisePropertyChanged(() => IsBusy);
-                    if (this.isBusy)
+                    if (this._isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -145,12 +145,14 @@
 
         public string RepairSandBox()
         {
-            StringBuilder str = new StringBuilder();
-            bool statusNormal = true;
-            bool missingFiles = false;
+            var str = new StringBuilder();
+            var statusNormal = true;
+            var missingFiles = false;
 
-            ExplorerModel model = new ExplorerModel();
-            model.ActiveWorld = this.SelectedWorld;
+            var model = new ExplorerModel
+            {
+                ActiveWorld = this.SelectedWorld
+            };
             model.ActiveWorld.LoadCheckpoint();
             model.LoadSandBox();
 
@@ -280,6 +282,9 @@
                             str.AppendLine(string.Format("! {0} 'Ladder' converted to 'Passage'.", list.Length));
                             saveAfterScan = true;
                         }
+
+                        // TODO: search for cubeblocks that don't exist in the definitions.
+                        //var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
                     }
 
                     //if (entity is MyObjectBuilder_CubeGrid)

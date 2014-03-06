@@ -265,6 +265,15 @@
             }
         }
 
+        [XmlIgnore]
+        public int BlockCount
+        {
+            get
+            {
+                return this.CubeGrid.CubeBlocks.Count;
+            }
+        }
+
         #endregion
 
         #region methods
@@ -313,7 +322,8 @@
 
                 var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
-                if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
+                // definition is null when the block no longer exists in the Cube definitions. Ie, Ladder, or a Mod that was removed.
+                if (definition == null || (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1))
                 {
                     max.X = Math.Max(max.X, block.Min.X);
                     max.Y = Math.Max(max.Y, block.Min.Y);
@@ -630,6 +640,7 @@
             }
 
             this.UpdateFromEntityBase();
+            this.RaisePropertyChanged(() => BlockCount);
             return count > 0;
         }
 
