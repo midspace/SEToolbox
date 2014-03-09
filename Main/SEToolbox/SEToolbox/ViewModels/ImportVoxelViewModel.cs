@@ -433,7 +433,7 @@
             }
 
             // automatically number all files, and check for duplicate filenames.
-            this.Filename = ((ExplorerViewModel)this.OwnerViewModel).CreateUniqueVoxelFilename(originalFile);
+            this.Filename = this.MainViewModel.CreateUniqueVoxelFilename(originalFile);
 
 
             // Figure out where the Character is facing, and plant the new constrcut right in front.

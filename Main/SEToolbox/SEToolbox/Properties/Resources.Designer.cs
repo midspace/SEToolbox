@@ -579,6 +579,16 @@ namespace SEToolbox.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap media_stop {
+            get {
+                object obj = ResourceManager.GetObject("media_stop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap message_edit {
             get {
                 object obj = ResourceManager.GetObject("message_edit", resourceCulture);
@@ -691,6 +701,26 @@ namespace SEToolbox.Properties {
         public static string MyCharacterModelEnum_Soldier {
             get {
                 return ResourceManager.GetString("MyCharacterModelEnum_Soldier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap navigate_left2 {
+            get {
+                object obj = ResourceManager.GetObject("navigate_left2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap navigate_right2 {
+            get {
+                object obj = ResourceManager.GetObject("navigate_right2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

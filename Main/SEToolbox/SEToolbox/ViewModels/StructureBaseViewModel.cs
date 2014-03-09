@@ -2,20 +2,20 @@
 {
     using System.Collections.Generic;
     using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interfaces;
     using SEToolbox.Interop;
-    using SEToolbox.Models;
 
     public abstract class StructureBaseViewModel<TModel> : DataBaseViewModel, /*IDragable,*/ IStructureViewBase where TModel : IStructureBase
     {
         #region fields
 
-        private bool isSelected;
+        private bool _isSelected;
 
         #endregion
 
         #region ctor
 
-        public StructureBaseViewModel(BaseViewModel parentViewModel, TModel dataModel)
+        protected StructureBaseViewModel(BaseViewModel parentViewModel, TModel dataModel)
             : base(parentViewModel, dataModel)
         {
         }
@@ -26,13 +26,13 @@
 
         public bool IsSelected
         {
-            get { return this.isSelected; }
+            get { return this._isSelected; }
 
             set
             {
-                if (value != this.isSelected)
+                if (value != this._isSelected)
                 {
-                    this.isSelected = value;
+                    this._isSelected = value;
                     this.RaisePropertyChanged(() => IsSelected);
                 }
             }

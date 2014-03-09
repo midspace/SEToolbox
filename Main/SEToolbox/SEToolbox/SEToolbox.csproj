@@ -112,6 +112,7 @@
     <Compile Include="Converters\NullImageConverter.cs" />
     <Compile Include="Converters\ResouceToImageConverter.cs" />
     <Compile Include="Converters\StringFormatMultiValueConverter.cs" />
+    <Compile Include="Interfaces\IMainView.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBackgroundWorker.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilder.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilderArgs.cs" />
@@ -144,7 +145,7 @@
     <Compile Include="Models\StructureBaseModel.cs" />
     <Compile Include="Models\Import3dModelModel.cs" />
     <Compile Include="Models\ImportImageModel.cs" />
-    <Compile Include="Models\IStructureBase.cs" />
+    <Compile Include="Interfaces\IStructureBase.cs" />
     <Compile Include="Models\StructureCubeGridModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -211,7 +212,7 @@
     <Compile Include="ViewModels\Import3dModelViewModel.cs" />
     <Compile Include="ViewModels\ImportImageViewModel.cs" />
     <Compile Include="ViewModels\ExplorerViewModel.cs" />
-    <Compile Include="ViewModels\IStructureViewBase.cs" />
+    <Compile Include="Interfaces\IStructureViewBase.cs" />
     <Compile Include="ViewModels\SelectWorldViewModel.cs" />
     <Compile Include="ViewModels\StructureBaseViewModel.cs" />
     <Compile Include="ViewModels\StructureCharacterViewModel.cs" />
@@ -372,6 +373,9 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\media_stop.png" />
+    <None Include="Resources\navigate_right2.png" />
+    <None Include="Resources\navigate_left2.png" />
     <None Include="Resources\document_view.png" />
     <None Include="Resources\sort_descending.png" />
     <None Include="Resources\Toolbox_logo.jpg" />

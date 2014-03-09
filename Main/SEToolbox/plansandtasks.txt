@@ -20,7 +20,7 @@
   * 3D Preview of Volmetric?
 
 - Exit Pilot from ship to Astronaut.
-- Move Astronaut to position.
+- Replace missing tools.
 
 - Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
   Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
@@ -59,6 +59,7 @@ Completed:
 - Auto Updater, detect current and available version, prompt for update.
 - Switch Ship Inertia Dampeners on/off.
 - Create backup of checkpoint and sandbox files when saving.
+- Move Astronaut to position.
 
 ========--------~~~~~~~~
 

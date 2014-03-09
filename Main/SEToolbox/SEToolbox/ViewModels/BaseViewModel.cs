@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using SEToolbox.Interfaces;
     using SEToolbox.Support;
     using System;
     using System.ComponentModel;
@@ -9,8 +10,7 @@
     {
         #region fields
 
-        private BaseViewModel ownerViewModel;
-        //protected object dataModel;
+        private BaseViewModel _ownerViewModel;
 
         #endregion
 
@@ -19,27 +19,35 @@
         public BaseViewModel(BaseViewModel ownerViewModel)
             : base()
         {
-            this.ownerViewModel = ownerViewModel;
+            this._ownerViewModel = ownerViewModel;
         }
 
         #endregion
 
         #region properties
 
-        public BaseViewModel OwnerViewModel
+        public virtual BaseViewModel OwnerViewModel
         {
             get
             {
-                return this.ownerViewModel;
+                return this._ownerViewModel;
             }
 
             set
             {
-                if (this.ownerViewModel != value)
+                if (this._ownerViewModel != value)
                 {
-                    this.ownerViewModel = value;
+                    this._ownerViewModel = value;
                     PropertyChanged.Raise(() => OwnerViewModel);
                 }
+            }
+        }
+
+        public IMainView MainViewModel
+        {
+            get
+            {
+                return (IMainView)this._ownerViewModel;
             }
         }
 
