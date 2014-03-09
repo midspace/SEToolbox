@@ -4,6 +4,7 @@
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using Sandbox.CommonLib.ObjectBuilders.VRageData;
+    using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using System;
@@ -12,8 +13,6 @@
     using System.IO;
     using System.Linq;
     using System.Windows.Threading;
-    using VRageMath;
-    using Microsoft.VisualBasic.FileIO;
 
     public class ExplorerModel : BaseModel
     {
@@ -43,7 +42,7 @@
         ///// </summary>
         private ObservableCollection<IStructureBase> _structures;
 
-        private readonly List<string> manageDeleteVoxelList;
+        private readonly List<string> _manageDeleteVoxelList;
 
         private bool _compressedSectorFormat;
 
@@ -54,7 +53,7 @@
         public ExplorerModel()
         {
             this.Structures = new ObservableCollection<IStructureBase>();
-            this.manageDeleteVoxelList = new List<string>();
+            this._manageDeleteVoxelList = new List<string>();
         }
 
         #endregion
@@ -345,7 +344,7 @@
             }
 
             // Manages the removal old voxels files.
-            foreach (var file in this.manageDeleteVoxelList)
+            foreach (var file in this._manageDeleteVoxelList)
             {
                 var filename = Path.Combine(this.ActiveWorld.Savepath, file);
                 if (File.Exists(filename))
@@ -353,7 +352,7 @@
                     File.Delete(filename);
                 }
             }
-            this.manageDeleteVoxelList.Clear();
+            this._manageDeleteVoxelList.Clear();
 
             this.IsModified = false;
             this.IsBusy = false;
@@ -376,7 +375,7 @@
         private void LoadSectorDetail()
         {
             this.Structures.Clear();
-            this.manageDeleteVoxelList.Clear();
+            this._manageDeleteVoxelList.Clear();
             this.ThePlayerCharacter = null;
 
             if (this.SectorData != null)
@@ -403,11 +402,12 @@
                         foreach (var cockpit in list)
                         {
                             cubeGrid.Pilots++;
-                            var character = StructureBaseModel.Create(cockpit.Pilot, null);
+                            var character = (StructureCharacterModel)StructureBaseModel.Create(cockpit.Pilot, null);
+                            character.IsPilot = true;
 
                             if (this.ActiveWorld.Content != null && cockpit.EntityId == this.ActiveWorld.Content.ControlledObject)
                             {
-                                this.ThePlayerCharacter = character as StructureCharacterModel;
+                                this.ThePlayerCharacter = character;
                                 this.ThePlayerCharacter.IsPlayer = true;
                             }
 
@@ -418,16 +418,21 @@
                     this.Structures.Add(structure);
                 }
 
-                if (this.ThePlayerCharacter != null)
-                {
-                    foreach (var structure in this.Structures)
-                    {
-                        structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
-                    }
-                }
+                this.CalcDistances();
             }
 
             this.RaisePropertyChanged(() => Structures);
+        }
+
+        public void CalcDistances()
+        {
+            if (this.SectorData != null && this.ThePlayerCharacter != null)
+            {
+                foreach (var structure in this.Structures)
+                {
+                    structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
+                }
+            }
         }
 
         public void SaveEntity(IStructureBase strucutre, string filename)
@@ -505,7 +510,7 @@
                 {
                     if (entity is MyObjectBuilder_VoxelMap)
                     {
-                        manageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).Filename);
+                        _manageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).Filename);
                     }
 
                     this.SectorData.SectorObjects.Remove(entity);
@@ -546,7 +551,7 @@
 
         public bool ContainsVoxelFilename(string filename, MyObjectBuilder_EntityBase[] additionalList)
         {
-            bool contains = this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this.manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
+            bool contains = this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this._manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
 
             if (contains || additionalList == null)
             {

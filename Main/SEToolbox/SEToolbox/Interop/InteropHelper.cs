@@ -83,5 +83,28 @@
         {
             return new Vector3I(Math.Abs(size.X), Math.Abs(size.Y), Math.Abs(size.Z));
         }
+
+        public static SerializableVector3 RoundOff(this SerializableVector3 vector, float roundTo)
+        {
+            return new SerializableVector3((float)Math.Round(vector.X / roundTo, 0, MidpointRounding.ToEven) * roundTo, (float)Math.Round(vector.Y / roundTo, 0, MidpointRounding.ToEven) * roundTo, (float)Math.Round(vector.Z / roundTo, 0, MidpointRounding.ToEven) * roundTo);
+        }
+
+        public static SerializableVector3 RoundToAxis(this SerializableVector3 vector)
+        {
+            if (Math.Abs(vector.X) > Math.Abs(vector.Y) && Math.Abs(vector.X) > Math.Abs(vector.Z))
+            {
+                return new SerializableVector3(Math.Sign(vector.X), 0, 0);
+            }
+            else if (Math.Abs(vector.Y) > Math.Abs(vector.X) && Math.Abs(vector.Y) > Math.Abs(vector.Z))
+            {
+                return new SerializableVector3(0, Math.Sign(vector.Y), 0);
+            }
+            else if (Math.Abs(vector.Z) > Math.Abs(vector.X) && Math.Abs(vector.Z) > Math.Abs(vector.Y))
+            {
+                return new SerializableVector3(0, 0, Math.Sign(vector.Z));
+            }
+
+            return new SerializableVector3();
+        }
     }
 }

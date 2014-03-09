@@ -355,7 +355,7 @@ namespace SEToolbox.ViewModels
                     asteroid.Save(tempfilename);
 
                     // automatically number all files, and check for duplicate filenames.
-                    var filename = ((ExplorerViewModel)this.OwnerViewModel).CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox", entities.ToArray());
+                    var filename = this.MainViewModel.CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox", entities.ToArray());
 
                     var radius = RandomUtil.GetDouble(this.MinimumRange, this.MaximumRange);
                     var longitude = RandomUtil.GetDouble(0, 2 * Math.PI);

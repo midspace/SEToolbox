@@ -7,7 +7,7 @@
              xmlns:props="clr-namespace:SEToolbox.Properties"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
@@ -31,12 +31,6 @@
         </StackPanel>
         <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             <ToolBar>
-                <Button Command="{Binding OptimizeObjectCommand}" ToolTip="Only useful for enormous ships. Reorganises order of cubes within the file, to speed up loading time.">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=sort_descending}" Margin="0,0,2,0" />
-                        <AccessText>Optimize</AccessText>
-                    </StackPanel>
-                </Button>
                 <Button Command="{Binding RepairObjectCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" Margin="0,0,2,0" />
@@ -48,20 +42,32 @@
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
                         </MenuItem.Icon>
-                        <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}"/>
-                        <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}"/>
-                        <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}"/>
+                        <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}" ToolTip="Set Linear and Rotation Velocity to zero (0).">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}" ToolTip="Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="Sets the object velocity directly at the player at maximum speed.">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_right2}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                     <MenuItem Header="Convert" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
                         </MenuItem.Icon>
                         <MenuItem Header="Armor">
-                            <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}"/>
-                            <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}"/>
+                            <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}" ToolTip="Convert any Light armor blocks to Heavy Armor blocks."/>
+                            <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}" ToolTip="Convert any Heavy armor block to Light armor blocks."/>
                             <Separator/>
-                            <MenuItem Header="To Corner Armor" Command="{Binding ConvertToCornerArmorCommand}"/>
-                            <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}"/>
+                            <MenuItem Header="To Corner Armor" Command="{Binding ConvertToCornerArmorCommand}" ToolTip="Convert any Round armor edge blocks to Corner armor edge blocks."/>
+                            <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="Convert any Corner armor edge blocks to Round armor edge blocks."/>
                         </MenuItem>
                         <MenuItem Header="Framework" Command="{Binding FrameworkCommand}">
                             <MenuItem Header="To 0% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
@@ -69,30 +75,31 @@
                                     <s:Double>0.00</s:Double>
                                 </MenuItem.CommandParameter>
                             </MenuItem>
-                            <MenuItem Header="To 25% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                            <MenuItem Header="To 25% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 25% constructed state.">
                                 <MenuItem.CommandParameter>
                                     <s:Double>0.25</s:Double>
                                 </MenuItem.CommandParameter>
                             </MenuItem>
-                            <MenuItem Header="To 50% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                            <MenuItem Header="To 50% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 50% constructed state.">
                                 <MenuItem.CommandParameter>
                                     <s:Double>0.50</s:Double>
                                 </MenuItem.CommandParameter>
                             </MenuItem>
-                            <MenuItem Header="To 75% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                            <MenuItem Header="To 75% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 75% constructed state.">
                                 <MenuItem.CommandParameter>
                                     <s:Double>0.75</s:Double>
                                 </MenuItem.CommandParameter>
                             </MenuItem>
-                            <MenuItem Header="To 100% Complete Structure" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any unconstructed components are constructed.">
+                            <MenuItem Header="To 100% Complete Structure" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any unconstructed components are 100% constructed.">
                                 <MenuItem.CommandParameter>
                                     <s:Double>1.00</s:Double>
                                 </MenuItem.CommandParameter>
                             </MenuItem>
                         </MenuItem>
                         <MenuItem Header="Station/Ship">
-                            <MenuItem Header="To Station" Command="{Binding ConvertToStationCommand}" />
-                            <MenuItem Header="To Ship" Command="{Binding ConvertToShipCommand}" />
+                            <MenuItem Header="To Ship" Command="{Binding ConvertToShipCommand}" ToolTip="Change a Station into a Large Ship." />
+                            <MenuItem Header="To Station" Command="{Binding ConvertToStationCommand}" ToolTip="Change a Large Ship into a Station." />
+                            <MenuItem Header="Reorient Station to Axis" Command="{Binding ReorientStationCommand}" ToolTip="Reorients a Station to the major axis, and corrects the position to match standard Space Engineers block locations." />
                         </MenuItem>
                         <!--<MenuItem Header="Ladder to Passage" Command="{Binding ConvertLadderToPassageCommand}"/>-->
                     </MenuItem>
@@ -102,6 +109,12 @@
                         <MenuItem Header="Find largest surface / even [left&gt;|&lt;right]" Command="{Binding MirrorStructureGuessEvenCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
                     </MenuItem>
                 </Menu>
+                <Button Command="{Binding OptimizeObjectCommand}" ToolTip="Only useful for enormous ships of more than 200,000 blocks. Reorganises order of cubes within the file, to speed up loading time.">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=sort_descending}" Margin="0,0,2,0" />
+                        <AccessText>Optimize</AccessText>
+                    </StackPanel>
+                </Button>
             </ToolBar>
         </ToolBarPanel>
         <Label Grid.Row="2" Grid.Column="0" Content="Dampeners:"/>

@@ -1,4 +1,4 @@
-﻿namespace SEToolbox.Models
+﻿namespace SEToolbox.Interfaces
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using SEToolbox.Interop;

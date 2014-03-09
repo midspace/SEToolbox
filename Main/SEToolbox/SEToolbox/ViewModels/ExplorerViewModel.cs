@@ -22,7 +22,7 @@
     using System.Windows.Input;
     using VRageMath;
 
-    public class ExplorerViewModel : BaseViewModel, IDropable
+    public class ExplorerViewModel : BaseViewModel, IDropable, IMainView
     {
         #region Fields
 
@@ -377,7 +377,8 @@
 
         public StructureCharacterModel ThePlayerCharacter
         {
-            get{
+            get
+            {
                 return this._dataModel.ThePlayerCharacter;
             }
         }
@@ -1103,6 +1104,11 @@
                 }
             }
             Debug.Write(bld.ToString());
+        }
+
+        public void CalcDistances()
+        {
+            this._dataModel.CalcDistances();
         }
 
         #endregion

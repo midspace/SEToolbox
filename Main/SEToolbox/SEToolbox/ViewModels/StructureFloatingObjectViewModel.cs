@@ -1,11 +1,9 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interfaces;
     using SEToolbox.Models;
-    using SEToolbox.Services;
-    using System;
     using System.ComponentModel;
-    using System.Windows.Input;
 
     public class StructureFloatingObjectViewModel : StructureBaseViewModel<StructureFloatingObjectModel>
     {
@@ -53,10 +51,6 @@
                 return this.DataModel.Item.Content.SubtypeName;
             }
         }
-
-        #endregion
-
-        #region methods
 
         #endregion
     }

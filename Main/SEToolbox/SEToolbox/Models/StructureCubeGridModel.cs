@@ -229,6 +229,16 @@
             }
         }
 
+        /// This is not to be taken as an accurate representation.
+        [XmlIgnore]
+        public double AngularSpeed
+        {
+            get
+            {
+                return this.CubeGrid.AngularVelocity.ToVector3().LinearVector();
+            }
+        }
+
         [XmlIgnore]
         public string Report
         {
@@ -495,6 +505,15 @@
             this.ResetVelocity();
             this.CubeGrid.IsStatic = true;
             this.UpdateFromEntityBase();
+        }
+
+        public void ReorientStation()
+        {
+            var pos = this.CubeGrid.PositionAndOrientation.Value;
+            pos.Position = pos.Position.RoundOff(2.5f);
+            pos.Forward = pos.Forward.RoundToAxis();
+            pos.Up = pos.Up.RoundToAxis();
+            this.CubeGrid.PositionAndOrientation = pos;
         }
 
         public void ConvertToShip()

@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
@@ -111,6 +112,14 @@
             get
             {
                 return new DelegateCommand(new Action(ConvertToStationExecuted), new Func<bool>(ConvertToStationCanExecute));
+            }
+        }
+
+        public ICommand ReorientStationCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ReorientStationExecuted), new Func<bool>(ReorientStationCanExecute));
             }
         }
 
@@ -234,7 +243,7 @@
             set
             {
                 this.DataModel.Dampeners = value;
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -338,7 +347,7 @@
 
         public void OptimizeObjectExecuted()
         {
-            ((ExplorerViewModel)this.OwnerViewModel).OptimizeModel(this);
+            this.MainViewModel.OptimizeModel(this);
         }
 
         public bool RepairObjectCanExecute()
@@ -349,29 +358,29 @@
         public void RepairObjectExecuted()
         {
             this.DataModel.RepairAllDamage();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
         }
 
         public bool ResetVelocityCanExecute()
         {
-            return true;
+            return this.DataModel.Speed != 0f || this.DataModel.AngularSpeed != 0f;
         }
 
         public void ResetVelocityExecuted()
         {
             this.DataModel.ResetVelocity();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
         }
 
         public bool ReverseVelocityCanExecute()
         {
-            return true;
+            return this.DataModel.Speed != 0f || this.DataModel.AngularSpeed != 0f;
         }
 
         public void ReverseVelocityExecuted()
         {
             this.DataModel.ReverseVelocity();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
         }
 
         public bool MaxVelocityAtPlayerCanExecute()
@@ -381,9 +390,9 @@
 
         public void MaxVelocityAtPlayerExecuted()
         {
-            var position = ((ExplorerViewModel)this.OwnerViewModel).ThePlayerCharacter.PositionAndOrientation.Value.Position;
+            var position = this.MainViewModel.ThePlayerCharacter.PositionAndOrientation.Value.Position;
             this.DataModel.MaxVelocityAtPlayer(position);
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
         }
 
         public bool ConvertCanExecute()
@@ -404,7 +413,7 @@
         {
             if (this.DataModel.ConvertFromLightToHeavyArmor())
             {
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -417,7 +426,7 @@
         {
             if (this.DataModel.ConvertFromHeavyToLightArmor())
             {
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -439,7 +448,7 @@
         public void ConvertToFrameworkExecuted(double value)
         {
             this.DataModel.ConvertToFramework((float)value);
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
         }
 
         public bool ConvertToStationCanExecute()
@@ -450,7 +459,18 @@
         public void ConvertToStationExecuted()
         {
             this.DataModel.ConvertToStation();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
+        }
+
+        public bool ReorientStationCanExecute()
+        {
+            return this.DataModel.IsStatic && this.DataModel.GridSize == MyCubeSize.Large;
+        }
+
+        public void ReorientStationExecuted()
+        {
+            this.DataModel.ReorientStation();
+            this.MainViewModel.IsModified = true;
         }
 
         public bool ConvertToShipCanExecute()
@@ -461,7 +481,7 @@
         public void ConvertToShipExecuted()
         {
             this.DataModel.ConvertToShip();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
         }
 
         public bool ConvertToCornerArmorCanExecute()
@@ -473,7 +493,7 @@
         {
             if (this.DataModel.ConvertToCornerArmor())
             {
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -486,7 +506,7 @@
         {
             if (this.DataModel.ConvertToRoundArmor())
             {
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -499,7 +519,7 @@
         {
             if (this.DataModel.ConvertLadderToPassage())
             {
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -510,12 +530,12 @@
 
         public void MirrorStructureByPlaneExecuted()
         {
-            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = true;
+            this.MainViewModel.IsBusy = true;
             if (this.DataModel.MirrorModel(true, false))
             {
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
-            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = false;
+            this.MainViewModel.IsBusy = false;
         }
 
         public bool MirrorStructureGuessOddCanExecute()
@@ -525,12 +545,12 @@
 
         public void MirrorStructureGuessOddExecuted()
         {
-            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = true;
+            this.MainViewModel.IsBusy = true;
             if (this.DataModel.MirrorModel(false, true))
             {
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
-            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = false;
+            this.MainViewModel.IsBusy = false;
         }
 
         public bool MirrorStructureGuessEvenCanExecute()
@@ -540,12 +560,12 @@
 
         public void MirrorStructureGuessEvenExecuted()
         {
-            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = true;
+            this.MainViewModel.IsBusy = true;
             if (this.DataModel.MirrorModel(false, false))
             {
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
-            ((ExplorerViewModel)this.OwnerViewModel).IsBusy = false;
+            this.MainViewModel.IsBusy = false;
         }
 
         #endregion

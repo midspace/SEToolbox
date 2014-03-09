@@ -1,8 +1,7 @@
-﻿using System.Windows.Documents;
-
-namespace SEToolbox.ViewModels
+﻿namespace SEToolbox.ViewModels
 {
     using Sandbox.CommonLib.ObjectBuilders;
+    using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
@@ -56,6 +55,19 @@ namespace SEToolbox.ViewModels
             }
         }
 
+        public bool IsPilot
+        {
+            get
+            {
+                return this.DataModel.IsPilot;
+            }
+
+            set
+            {
+                this.DataModel.IsPilot = value;
+            }
+        }
+
         public bool IsPlayer
         {
             get
@@ -79,7 +91,7 @@ namespace SEToolbox.ViewModels
             set
             {
                 this.DataModel.CharacterModel = (MyCharacterModelEnum)Enum.Parse(typeof(MyCharacterModelEnum), value);
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -93,7 +105,7 @@ namespace SEToolbox.ViewModels
             set
             {
                 this.DataModel.Light = value;
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -107,7 +119,7 @@ namespace SEToolbox.ViewModels
             set
             {
                 this.DataModel.JetPack = value;
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -121,7 +133,7 @@ namespace SEToolbox.ViewModels
             set
             {
                 this.DataModel.Dampeners = value;
-                ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+                this.MainViewModel.IsModified = true;
             }
         }
 
@@ -146,7 +158,7 @@ namespace SEToolbox.ViewModels
             }
         }
 
-        public decimal PositionX
+        public double PositionX
         {
             get
             {
@@ -156,10 +168,11 @@ namespace SEToolbox.ViewModels
             set
             {
                 this.DataModel.PositionX = value;
+                this.MainViewModel.CalcDistances();
             }
         }
 
-        public decimal PositionY
+        public double PositionY
         {
             get
             {
@@ -169,10 +182,11 @@ namespace SEToolbox.ViewModels
             set
             {
                 this.DataModel.PositionY = value;
+                this.MainViewModel.CalcDistances();
             }
         }
 
-        public decimal PositionZ
+        public double PositionZ
         {
             get
             {
@@ -182,16 +196,22 @@ namespace SEToolbox.ViewModels
             set
             {
                 this.DataModel.PositionZ = value;
+                this.MainViewModel.CalcDistances();
             }
         }
 
-        public BindablePoint3DModel Position
-        {
-            get
-            {
-                return this.DataModel.Position;
-            }
-        }
+        //public BindablePoint3DModel Position
+        //{
+        //    get
+        //    {
+        //        return this.DataModel.Position;
+        //    }
+
+        //    set
+        //    {
+        //        this.DataModel.Position = value;
+        //    }
+        //}
 
         #endregion
 
@@ -205,7 +225,7 @@ namespace SEToolbox.ViewModels
         public void ResetVelocityExecuted()
         {
             this.DataModel.ResetVelocity();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
         }
 
         public bool ReverseVelocityCanExecute()
@@ -216,7 +236,7 @@ namespace SEToolbox.ViewModels
         public void ReverseVelocityExecuted()
         {
             this.DataModel.ReverseVelocity();
-            ((ExplorerViewModel)this.OwnerViewModel).IsModified = true;
+            this.MainViewModel.IsModified = true;
         }
 
         #endregion

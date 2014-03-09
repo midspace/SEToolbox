@@ -2,6 +2,7 @@
 {
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
+    using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;

@@ -1,5 +1,6 @@
 ﻿namespace ToolboxTest
 {
+    using System;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
@@ -129,6 +130,27 @@
             var b3 = c3.GetBrightness();
 
             var v3 = new SerializableVector3(c3.GetHue() / 360f, c3.GetSaturation() * 2 - 1, c3.GetBrightness() * 2 - 1);
+        }
+
+        [TestMethod]
+        public void SingleConversionTest()
+        {
+            Single f1 = -17.6093254f;
+            Single f2 = 72.215f;
+            Single f3 = -218.569977f;
+
+            Double d1 = Convert.ToDouble(f1);
+            Single g1 = Convert.ToSingle(d1);
+
+            Double d2 = Convert.ToDouble(f2);
+            Single g2 = Convert.ToSingle(d2);
+
+            Double d3 = Convert.ToDouble(f3);
+            Single g3 = Convert.ToSingle(d3);
+
+            Assert.AreEqual(f1, g1, "Should Equal");
+            Assert.AreEqual(f2, g2, "Should Equal");
+            Assert.AreEqual(f3, g3, "Should Equal");
         }
     }
 }

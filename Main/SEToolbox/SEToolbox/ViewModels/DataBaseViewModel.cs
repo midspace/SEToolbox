@@ -1,6 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Models;
+    using SEToolbox.Interfaces;
     using SEToolbox.Services;
 
     public class DataBaseViewModel : BaseViewModel, IDragable
@@ -52,6 +52,5 @@
         }
 
         #endregion
-
     }
 }

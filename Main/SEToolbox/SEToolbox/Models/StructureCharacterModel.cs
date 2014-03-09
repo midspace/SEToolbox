@@ -14,10 +14,13 @@
         #region Fields
 
         [NonSerialized]
-        private bool isPlayer;
+        private bool _isPlayer;
 
         [NonSerialized]
-        private List<string> characterModels;
+        private bool _isPilot;
+
+        [NonSerialized]
+        private List<string> _characterModels;
 
         #endregion
 
@@ -118,12 +121,12 @@
         [XmlIgnore]
         public List<string> CharacterModels
         {
-            get { return this.characterModels; }
+            get { return this._characterModels; }
             set
             {
-                if (value != this.characterModels)
+                if (value != this._characterModels)
                 {
-                    this.characterModels = value;
+                    this._characterModels = value;
                     this.RaisePropertyChanged(() => CharacterModels);
                 } 
             }
@@ -134,14 +137,14 @@
         {
             get
             {
-                return this.isPlayer;
+                return this._isPlayer;
             }
 
             set
             {
-                if (value != this.isPlayer)
+                if (value != this._isPlayer)
                 {
-                    this.isPlayer = value;
+                    this._isPlayer = value;
                     this.RaisePropertyChanged(() => IsPlayer);
                 }
             }
@@ -157,76 +160,108 @@
         }
 
         [XmlIgnore]
-        public decimal PositionX
+        public bool IsPilot
         {
             get
             {
-                return this.Character.PositionAndOrientation.Value.Position.X.ToDecimal();
+                return this._isPilot;
             }
 
             set
             {
-                if (value != this.Character.PositionAndOrientation.Value.Position.X.ToDecimal())
+                if (value != this._isPilot)
+                {
+                    this._isPilot = value;
+                    this.RaisePropertyChanged(() => IsPilot);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionX
+        {
+            get
+            {
+                return this.Character.PositionAndOrientation.Value.Position.X.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this.Character.PositionAndOrientation.Value.Position.X)
                 {
                     var pos = this.Character.PositionAndOrientation.Value;
                     pos.Position.X = (float)value;
                     this.Character.PositionAndOrientation = pos;
                     this.RaisePropertyChanged(() => PositionX);
-                    this.RaisePropertyChanged(() => Position);
+                    //this.RaisePropertyChanged(() => Position);
                 }
             }
         }
 
         [XmlIgnore]
-        public decimal PositionY
+        public double PositionY
         {
             get
             {
-                return this.Character.PositionAndOrientation.Value.Position.Y.ToDecimal();
+                return this.Character.PositionAndOrientation.Value.Position.Y.ToDouble();
             }
 
             set
             {
-                if (value != this.Character.PositionAndOrientation.Value.Position.Y.ToDecimal())
+                if ((float)value != this.Character.PositionAndOrientation.Value.Position.Y)
                 {
                     var pos = this.Character.PositionAndOrientation.Value;
                     pos.Position.Y = (float)value;
                     this.Character.PositionAndOrientation = pos;
                     this.RaisePropertyChanged(() => PositionY);
-                    this.RaisePropertyChanged(() => Position);
+                    //this.RaisePropertyChanged(() => Position);
                 }
             }
         }
 
         [XmlIgnore]
-        public decimal PositionZ
+        public double PositionZ
         {
             get
             {
-                return this.Character.PositionAndOrientation.Value.Position.Z.ToDecimal();
+                return this.Character.PositionAndOrientation.Value.Position.Z.ToDouble();
             }
 
             set
             {
-                if (value != this.Character.PositionAndOrientation.Value.Position.Z.ToDecimal())
+                if ((float)value != this.Character.PositionAndOrientation.Value.Position.Z)
                 {
                     var pos = this.Character.PositionAndOrientation.Value;
                     pos.Position.Z = (float)value;
                     this.Character.PositionAndOrientation = pos;
                     this.RaisePropertyChanged(() => PositionZ);
-                    this.RaisePropertyChanged(() => Position);
+                    //this.RaisePropertyChanged(() => Position);
                 }
             }
         }
 
-        [XmlIgnore]
-        public BindablePoint3DModel Position
-        {
-            get
-            {
-                return new BindablePoint3DModel(this.Character.PositionAndOrientation.Value.Position);
-            }
-        }
+        // Very messy.
+        //[XmlIgnore]
+        //public BindablePoint3DModel Position
+        //{
+        //    get
+        //    {
+        //        var m = new BindablePoint3DModel(this.Character.PositionAndOrientation.Value.Position);
+        //        m.PropertyChanged += delegate(object sender, PropertyChangedEventArgs args)
+        //        {
+        //            this.Position = ((BindablePoint3DModel) sender);
+        //        };
+        //        return m;
+        //    }
+
+        //    set
+        //    {
+        //        var pos = this.Character.PositionAndOrientation.Value;
+        //        pos.Position = value.ToVector3();
+        //        this.Character.PositionAndOrientation = pos;
+        //        this.RaisePropertyChanged(() => Position);
+        //    }
+        //}
 
         #endregion
 

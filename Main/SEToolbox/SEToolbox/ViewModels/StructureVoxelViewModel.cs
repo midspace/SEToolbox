@@ -1,8 +1,8 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using System.ComponentModel;
-    using VRageMath;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -89,10 +89,6 @@
                 return this.DataModel.Volume;
             }
         }
-
-        #endregion
-
-        #region methods
 
         #endregion
     }

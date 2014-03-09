@@ -9,6 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,8 +38,16 @@
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
                         </MenuItem.Icon>
-                        <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}"/>
-                        <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}"/>
+                        <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
             </ToolBar>
@@ -51,15 +60,68 @@
         <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding JetPack, Mode=TwoWay}" />
         <Label Grid.Row="5" Content="Dampeners:"/>
         <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
-        <!--<Label Grid.Row="6" Content="Position:"/>
-        <views:ControlPosition Grid.Column="1" Grid.Row="6" />-->
-        <Label Grid.Row="7" Content="Player:"/>
-        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
-        <Label Grid.Row="8" Content="Speed:"/>
-        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
-        <Label Grid.Row="9" Content="Distance:"/>
-        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
-        <!--<Label Grid.Row="10" Content="Position:"/>
-        <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Position, Mode=OneWay}" />-->
+        <Label Grid.Row="6" Content="Position:"/>
+        <views:ControlPosition Grid.Column="1" Grid.Row="6" IsEnabled="{Binding IsPilot, Converter={StaticResource InverseBooleanConverter}}" />
+        <!--<Label Grid.Row="7" Content="Position:"/>
+        <ContentControl Grid.Row="7" Grid.Column="1" Content="{Binding Position}">
+            <ContentControl.ContentTemplate>
+                <DataTemplate DataType="{x:Type m:BindablePoint3DModel}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" ToolTip="X">
+                            <TextBox.Text>
+                                <Binding Path="X" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBox Grid.Column="1" ToolTip="Y">
+                            <TextBox.Text>
+                                <Binding Path="Y" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBox Grid.Column="2" ToolTip="Z">
+                            <TextBox.Text>
+                                <Binding Path="Z" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </TextBox.Text>
+                        </TextBox>
+                    </Grid>
+                </DataTemplate>
+            </ContentControl.ContentTemplate>
+        </ContentControl>-->
+        <!--<Grid Grid.Row="7" Grid.Column="1" DataContext="{Binding Position}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" ToolTip="X">
+                <TextBox.Text>
+                    <Binding Path="X" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+            <TextBox Grid.Column="1" ToolTip="Y">
+                <TextBox.Text>
+                    <Binding Path="Y" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+            <TextBox Grid.Column="2" ToolTip="Z">
+                <TextBox.Text>
+                    <Binding Path="Z" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+        </Grid>-->
+        <!--<TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Position, Mode=OneWay}" />-->
+
+        <Label Grid.Row="7" Content="Pilot:"/>
+        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPilot}" />
+        <Label Grid.Row="8" Content="Player:"/>
+        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
+        <Label Grid.Row="9" Content="Speed:"/>
+        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
+        <Label Grid.Row="10" Content="Distance:"/>
+        <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
     </Grid>
 </UserControl>
