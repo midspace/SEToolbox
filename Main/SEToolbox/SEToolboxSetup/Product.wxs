@@ -54,9 +54,6 @@
       <Component Id="comp2EA1FC447B50410DA2CE55F182C0E00C">
         <File Id="file184705D6F44643D48E157FDD3FBF37D7" Source="$(var.SEToolbox.TargetDir)SEToolbox.exe" Checksum="yes"/>
       </Component>
-      <Component Id="comp971B9491681C49D5827078EAA03C7894">
-        <File Id="file231E559E7FD14DDD9FD7DF0958D6D2A9" Source="$(var.SEToolbox.TargetDir)poly2vox.exe"/>
-      </Component>
       <Component Id="comp88066F31283E44A79F1D679F4B9D80AE">
         <File Id="file61275B9FC2AE484BA7A2BDB7459A3647" Source="$(var.SEToolbox.TargetDir)Sandbox.CommonLib.dll"/>
       </Component>

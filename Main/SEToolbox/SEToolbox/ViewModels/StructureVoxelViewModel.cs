@@ -90,6 +90,48 @@
             }
         }
 
+        public double PositionX
+        {
+            get
+            {
+                return this.DataModel.PositionX;
+            }
+
+            set
+            {
+                this.DataModel.PositionX = value;
+                this.MainViewModel.CalcDistances();
+            }
+        }
+
+        public double PositionY
+        {
+            get
+            {
+                return this.DataModel.PositionY;
+            }
+
+            set
+            {
+                this.DataModel.PositionY = value;
+                this.MainViewModel.CalcDistances();
+            }
+        }
+
+        public double PositionZ
+        {
+            get
+            {
+                return this.DataModel.PositionZ;
+            }
+
+            set
+            {
+                this.DataModel.PositionZ = value;
+                this.MainViewModel.CalcDistances();
+            }
+        }
+
         #endregion
     }
 }

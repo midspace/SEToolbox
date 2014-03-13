@@ -269,56 +269,6 @@
 
         #endregion
 
-        #region ConvertPolyToVox
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="polyFilename"></param>
-        /// <param name="fixScale">Specify voxel size of longest dimension. 1-1024, &lt;=256 for KVX</param>
-        /// <param name="gaplessModel">Enable an experimental xor-style converter. It's useful for gap-less models but has buggy color conversion</param>
-        /// <returns></returns>
-        public static string ConvertPolyToVox(string polyFilename, int fixScale, bool gaplessModel)
-        {
-            string voxFilename = null;
-
-            if (fixScale > 1024)
-                fixScale = 1024;
-
-            var tempfilename = TempfileUtil.NewFilename(".vox");
-
-            var p = new Process();
-            var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            p.StartInfo.FileName = Path.Combine(directory, "poly2vox.exe");
-            p.StartInfo.WorkingDirectory = directory;
-            var arguments = string.Format("\"{0}\" \"{1}\"", polyFilename, tempfilename);
-
-            if (fixScale > 1)
-            {
-                arguments += string.Format(" /v{0}", fixScale);
-            }
-
-            if (gaplessModel)
-            {
-                arguments += string.Format(" /x");
-            }
-
-            p.StartInfo.Arguments = arguments;
-
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-            var ret = p.Start();
-            p.WaitForExit();
-
-            if (ret && File.Exists(tempfilename))
-            {
-                voxFilename = tempfilename;
-            }
-
-            return voxFilename;
-        }
-
-        #endregion
-
         #region Shuffle
 
         /// <summary>

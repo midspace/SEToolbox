@@ -4,6 +4,7 @@
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Support;
     using System;
     using System.IO;
     using System.Runtime.Serialization;
@@ -163,6 +164,66 @@
             get
             {
                 return (double)this._voxCells / 255;
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionX
+        {
+            get
+            {
+                return this.VoxelMap.PositionAndOrientation.Value.Position.X.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this.VoxelMap.PositionAndOrientation.Value.Position.X)
+                {
+                    var pos = this.VoxelMap.PositionAndOrientation.Value;
+                    pos.Position.X = (float)value;
+                    this.VoxelMap.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionX);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionY
+        {
+            get
+            {
+                return this.VoxelMap.PositionAndOrientation.Value.Position.Y.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this.VoxelMap.PositionAndOrientation.Value.Position.Y)
+                {
+                    var pos = this.VoxelMap.PositionAndOrientation.Value;
+                    pos.Position.Y = (float)value;
+                    this.VoxelMap.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionY);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionZ
+        {
+            get
+            {
+                return this.VoxelMap.PositionAndOrientation.Value.Position.Z.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this.VoxelMap.PositionAndOrientation.Value.Position.Z)
+                {
+                    var pos = this.VoxelMap.PositionAndOrientation.Value;
+                    pos.Position.Z = (float)value;
+                    this.VoxelMap.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionZ);
+                }
             }
         }
 

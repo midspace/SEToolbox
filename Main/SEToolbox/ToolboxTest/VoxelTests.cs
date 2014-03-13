@@ -544,11 +544,11 @@
                 if (e.CoordinatePoint.X > 0 && e.CoordinatePoint.Y > 0 && e.CoordinatePoint.Z > 0
                     && e.CoordinatePoint.X < size.X - 1 && e.CoordinatePoint.Y < size.Y - 1 && e.CoordinatePoint.Z < size.Z - 1)
                 {
-                    if (e.CoordinatePoint.Z >= 5 && e.CoordinatePoint.Z <= 5 && (e.CoordinatePoint.X % 2 == 0) && (e.CoordinatePoint.Y % 2 == 0))
+                    if (e.CoordinatePoint.Z == 5 && (e.CoordinatePoint.X % 2 == 0) && (e.CoordinatePoint.Y % 2 == 0))
                     {
                         e.Volume = 0x92;
                     }
-                    if (e.CoordinatePoint.Z >= 6 && e.CoordinatePoint.Z <= 6 && ((e.CoordinatePoint.X + 1) % 2 == 0) && ((e.CoordinatePoint.Y + 1) % 2 == 0))
+                    if (e.CoordinatePoint.Z == 6 && ((e.CoordinatePoint.X + 1) % 2 == 0) && ((e.CoordinatePoint.Y + 1) % 2 == 0))
                     {
                         e.Volume = 0x92;
                     }
@@ -573,6 +573,75 @@
             Assert.AreEqual(511.5, voxelMap.ContentCenter.X, "Voxel Center must match.");
             Assert.AreEqual(511.5, voxelMap.ContentCenter.Y, "Voxel Center must match.");
             Assert.AreEqual(5.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
+        }
+
+        [TestMethod]
+        public void VoxelGenerateSpikeCube()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var fileNew = @".\TestAssets\test_spike_cube256.vox";
+
+            var length = 256;
+            var min = 4;
+            var max = length - 4;
+
+            var size = new Vector3I(length, length, length);
+
+            var buildparams = new int[][]
+            {
+                new[] { min, 0 }, 
+                new[] { min + 1, 1 }, 
+                new[] { max, 0 }, 
+                new[] { max - 1, -1 }
+            };
+
+            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            {
+                e.Volume = 0x00;
+
+                if (e.CoordinatePoint.X > 0 && e.CoordinatePoint.Y > 0 && e.CoordinatePoint.Z > 0
+                  && e.CoordinatePoint.X < size.X - 1 && e.CoordinatePoint.Y < size.Y - 1 && e.CoordinatePoint.Z < size.Z - 1
+                && e.CoordinatePoint.X >= min && e.CoordinatePoint.Y >= min && e.CoordinatePoint.Z >= min
+                    && e.CoordinatePoint.X <= max && e.CoordinatePoint.Y <= max && e.CoordinatePoint.Z <= max)
+                {
+                    foreach (int[] t in buildparams)
+                    {
+                        if (e.CoordinatePoint.X == t[0] && ((e.CoordinatePoint.Z + t[1]) % 2 == 0) && ((e.CoordinatePoint.Y + t[1]) % 2 == 0))
+                        {
+                            e.Volume = 0x92;
+                        }
+                        if (e.CoordinatePoint.Y == t[0] && ((e.CoordinatePoint.X + t[1]) % 2 == 0) && ((e.CoordinatePoint.Z + t[1]) % 2 == 0))
+                        {
+                            e.Volume = 0x92;
+                        }
+                        if (e.CoordinatePoint.Z == t[0] && ((e.CoordinatePoint.X + t[1]) % 2 == 0) && ((e.CoordinatePoint.Y + t[1]) % 2 == 0))
+                        {
+                            e.Volume = 0x92;
+                        }
+                    }
+                }
+            };
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, materials[0].Name, action);
+
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(23465, lengthNew, "New file size must match.");
+
+            Assert.AreEqual(256, voxelMap.Size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(256, voxelMap.Size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(256, voxelMap.Size.Z, "Voxel Bounding size must match.");
+
+            Assert.AreEqual(249, voxelMap.ContentSize.X, "Voxel Content size must match.");
+            Assert.AreEqual(249, voxelMap.ContentSize.Y, "Voxel Content size must match.");
+            Assert.AreEqual(249, voxelMap.ContentSize.Z, "Voxel Content size must match.");
+
+            // Centered in the middle of the 256x256x256 cell.
+            Assert.AreEqual(128, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(128, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(128, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
         //[TestMethod]

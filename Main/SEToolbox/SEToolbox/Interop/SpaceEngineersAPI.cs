@@ -394,12 +394,50 @@
             }
         }
 
+        public static float GetItemMass(Type type, string subTypeId)
+        {
+            return GetItemMass(_myObjectBuilderTypeList[type], subTypeId);
+        }
+
         public static float GetItemMass(MyObjectBuilderTypeEnum typeId, string subTypeId)
         {
             var item = _physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
             if (item != null)
             {
                 return item.Mass;
+            }
+            else
+            {
+                var component = _componentDefinitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
+                if (component != null)
+                {
+                    return component.Mass;
+                }
+            }
+            return 0;
+        }
+
+        public static float GetItemVolume(Type type, string subTypeId)
+        {
+            return GetItemVolume(_myObjectBuilderTypeList[type], subTypeId);
+        }
+
+        public static float GetItemVolume(MyObjectBuilderTypeEnum typeId, string subTypeId)
+        {
+            var item = _physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            if (item != null)
+            {
+                if (item.Volume.HasValue)
+                    return item.Volume.Value;
+            }
+            else
+            {
+                var component = _componentDefinitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
+                if (component != null)
+                {
+                    if (component.Volume.HasValue)
+                        return component.Volume.Value;
+                }
             }
             return 0;
         }
@@ -439,6 +477,16 @@
             return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
         }
+
+
+        //public static MyObjectBuilder_ComponentDefinition GetComponentDefinition()
+        //{
+        //    //_componentDefinitions.Components[0].Id
+
+        //    var x= _componentDefinitions.Components.FirstOrDefault(c => c.);
+
+        //    return x;
+        //}
 
         #region GetBoundingBox
 
