@@ -100,6 +100,7 @@
             set
             {
                 this.DataModel.PositionX = value;
+                this.MainViewModel.IsModified = true;
                 this.MainViewModel.CalcDistances();
             }
         }
@@ -114,6 +115,7 @@
             set
             {
                 this.DataModel.PositionY = value;
+                this.MainViewModel.IsModified = true;
                 this.MainViewModel.CalcDistances();
             }
         }
@@ -128,6 +130,7 @@
             set
             {
                 this.DataModel.PositionZ = value;
+                this.MainViewModel.IsModified = true;
                 this.MainViewModel.CalcDistances();
             }
         }
