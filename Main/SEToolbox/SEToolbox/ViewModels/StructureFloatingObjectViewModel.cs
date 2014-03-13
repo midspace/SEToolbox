@@ -52,6 +52,88 @@
             }
         }
 
+        public double PositionX
+        {
+            get
+            {
+                return this.DataModel.PositionX;
+            }
+
+            set
+            {
+                this.DataModel.PositionX = value;
+                this.MainViewModel.CalcDistances();
+            }
+        }
+
+        public double PositionY
+        {
+            get
+            {
+                return this.DataModel.PositionY;
+            }
+
+            set
+            {
+                this.DataModel.PositionY = value;
+                this.MainViewModel.CalcDistances();
+            }
+        }
+
+        public double PositionZ
+        {
+            get
+            {
+                return this.DataModel.PositionZ;
+            }
+
+            set
+            {
+                this.DataModel.PositionZ = value;
+                this.MainViewModel.CalcDistances();
+            }
+        }
+
+
+        public double? Volume
+        {
+            get
+            {
+                return this.DataModel.Volume;
+            }
+
+            set
+            {
+                this.DataModel.Volume = value;
+            }
+        }
+
+        public double? Mass
+        {
+            get
+            {
+                return this.DataModel.Mass;
+            }
+
+            set
+            {
+                this.DataModel.Mass = value;
+            }
+        }
+
+        public double? Units
+        {
+            get
+            {
+                return this.DataModel.Units;
+            }
+
+            set
+            {
+                this.DataModel.Units = value;
+            }
+        }
+
         #endregion
     }
 }

@@ -284,6 +284,66 @@
             }
         }
 
+        [XmlIgnore]
+        public double PositionX
+        {
+            get
+            {
+                return this.CubeGrid.PositionAndOrientation.Value.Position.X.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this.CubeGrid.PositionAndOrientation.Value.Position.X)
+                {
+                    var pos = this.CubeGrid.PositionAndOrientation.Value;
+                    pos.Position.X = (float)value;
+                    this.CubeGrid.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionX);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionY
+        {
+            get
+            {
+                return this.CubeGrid.PositionAndOrientation.Value.Position.Y.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this.CubeGrid.PositionAndOrientation.Value.Position.Y)
+                {
+                    var pos = this.CubeGrid.PositionAndOrientation.Value;
+                    pos.Position.Y = (float)value;
+                    this.CubeGrid.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionY);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionZ
+        {
+            get
+            {
+                return this.CubeGrid.PositionAndOrientation.Value.Position.Z.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this.CubeGrid.PositionAndOrientation.Value.Position.Z)
+                {
+                    var pos = this.CubeGrid.PositionAndOrientation.Value;
+                    pos.Position.Z = (float)value;
+                    this.CubeGrid.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionZ);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -378,7 +438,7 @@
                 this.DisplayName = String.Join("|", a);
             }
 
-            this.Description = string.Format("{0} | {1:#,##0}Kg", this.Scale, this.Mass);
+            this.Description = string.Format("{0} | {1:#,##0} Kg", this.Scale, this.Mass);
 
             var bld = new StringBuilder();
             bld.AppendLine("Construction Requirements:");

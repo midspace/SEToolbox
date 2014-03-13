@@ -398,9 +398,6 @@
     <None Include="Resources\photo_scenery.png" />
     <None Include="Resources\refresh.png" />
     <None Include="Resources\folder.png" />
-    <Content Include="poly2vox.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -366,7 +366,7 @@
 
             if (File.Exists(filename))
             {
-                this.IsValidVoxelFile = true;
+                this.IsValidVoxelFile = MyVoxelMap.IsVoxelMapFile(filename);
                 this.IsFileVoxel = true;
             }
             else
