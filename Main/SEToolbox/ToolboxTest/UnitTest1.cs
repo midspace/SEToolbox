@@ -73,8 +73,8 @@
         [TestMethod]
         public void ExtractZipFileToFolder()
         {
-            var filename = @".\TestAssets\Sample World.sbw";
-            var folder = @".\TestAssets\Sample World";
+            const string filename = @".\TestAssets\Sample World.sbw";
+            const string folder = @".\TestAssets\Sample World";
 
             ZipTools.MakeClearDirectory(folder);
             ZipTools.ExtractZipFile(filename, null, folder);
@@ -83,7 +83,7 @@
         [TestMethod]
         public void ExtractSandboxFromZip()
         {
-            var filename = @".\TestAssets\Sample World.sbw";
+            const string filename = @".\TestAssets\Sample World.sbw";
 
             MyObjectBuilder_Checkpoint checkpoint;
             using (var stream = ZipTools.ReadFile(filename, null, SpaceEngineersConsts.SandBoxCheckpointFilename))
@@ -97,9 +97,9 @@
         [TestMethod]
         public void ExtractContentFromCompressedSandbox()
         {
-            var filename = @".\TestAssets\SANDBOX_0_0_0_.sbs";
+            const string filename = @".\TestAssets\SANDBOX_0_0_0_.sbs";
 
-            var xmlfilename = @".\TestAssets\SANDBOX_0_0_0_.xml";
+            const string xmlfilename = @".\TestAssets\SANDBOX_0_0_0_.xml";
 
             ZipTools.GZipUncompress(filename, xmlfilename);
         }
@@ -107,13 +107,13 @@
         [TestMethod]
         public void ExtractZipAndRepack()
         {
-            var filename = @".\TestAssets\Sample World.sbw";
-            var folder = @".\TestAssets\Sample World";
+            const string filename = @".\TestAssets\Sample World.sbw";
+            const string folder = @".\TestAssets\Sample World";
 
             ZipTools.MakeClearDirectory(folder);
             ZipTools.ExtractZipFile(filename, null, folder);
 
-            var newFilename = @".\TestAssets\New World.sbw";
+            const string newFilename = @".\TestAssets\New World.sbw";
             ZipTools.ZipFolder(folder, null, newFilename);
         }
 

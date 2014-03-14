@@ -551,7 +551,21 @@
             var assetNameCount = new Dictionary<string, int>();
             foreach (var kvp in assetCount)
             {
-                assetNameCount.Add(SpaceEngineersAPI.GetMaterialName(kvp.Key), kvp.Value);
+                string name;
+
+                if (kvp.Key >= _voxelMaterialDefinitions.Materials.Length)
+                    name = _voxelMaterialDefinitions.Materials[0].Name;
+                else
+                    name = _voxelMaterialDefinitions.Materials[kvp.Key].Name;
+
+                if (assetNameCount.ContainsKey(name))
+                {
+                    assetNameCount[name] += kvp.Value;
+                }
+                else
+                {
+                    assetNameCount.Add(name, kvp.Value);
+                }
             }
 
             return assetNameCount;

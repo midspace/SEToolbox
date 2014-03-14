@@ -207,7 +207,8 @@
         {
             get
             {
-                return this.CubeGrid.Skeleton.Count > 0;
+                // TODO: check the CubeBlocks/ cube.IntegrityPercent
+                return true; //this.CubeGrid.Skeleton.Count > 0;
             }
         }
 
@@ -216,6 +217,7 @@
         {
             get
             {
+                // TODO: create a seperate property for the CubeBlocks/ cube.IntegrityPercent
                 return this.CubeGrid.Skeleton.Count;
             }
         }
@@ -445,7 +447,8 @@
             foreach (var kvp in oreRequirements)
             {
                 var mass = SpaceEngineersAPI.GetItemMass(kvp.Value.TypeId, kvp.Value.SubtypeId);
-                bld.AppendFormat("{0} {1}: {2:###,##0.000} L or {3:###,##0.000} Kg\r\n", kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount * 1000, kvp.Value.Amount * (decimal)mass);
+                var volume = SpaceEngineersAPI.GetItemVolume(kvp.Value.TypeId, kvp.Value.SubtypeId);
+                bld.AppendFormat("{0} {1}: {2:###,##0.000} L or {3:###,##0.000} Kg\r\n", kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount * (decimal)volume, kvp.Value.Amount * (decimal)mass);
             }
             bld.AppendLine();
             bld.AppendFormat("Time to produce: {0:hh\\:mm\\:ss}\r\n", timeTaken);
@@ -479,6 +482,12 @@
                 this.CubeGrid.Skeleton = new System.Collections.Generic.List<BoneInfo>();
             else
                 this.CubeGrid.Skeleton.Clear();
+
+            foreach (var cube in this.CubeGrid.CubeBlocks)
+            {
+                cube.IntegrityPercent = cube.BuildPercent;
+            }
+
             this.RaisePropertyChanged(() => IsDamaged);
             this.RaisePropertyChanged(() => DamageCount);
         }
@@ -554,6 +563,7 @@
         {
             foreach (var cube in this.CubeGrid.CubeBlocks)
             {
+                cube.IntegrityPercent = value;
                 cube.BuildPercent = value;
             }
 

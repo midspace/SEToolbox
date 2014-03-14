@@ -3,11 +3,9 @@
     using SEToolbox.ImageLibrary;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
-    using System.Reflection;
     using System.Windows.Media.Imaging;
     using System.Xml;
 
@@ -175,13 +173,10 @@
 
             using (var xmlWriter = XmlWriter.Create(fileDestination, settingsDestination))
             {
-
                 using (XmlReader xmlReader = XmlReader.Create(fileSource, settingsSource))
                 {
                     xmlWriter.WriteNode(xmlReader, true);
                 }
-
-                //xmlWriter.Close();
             }
 
             return true;

@@ -195,14 +195,14 @@
             if (this.FloatingObject.Item.Content is MyObjectBuilder_Ore)
             {
                 this.DisplayName = string.Format("{0} Ore", this.FloatingObject.Item.Content.SubtypeName);
-                this.Volume = this.FloatingObject.Item.Amount * 1000;
+                this.Volume = compVolume * this.FloatingObject.Item.Amount;
                 this.Mass = compMass * this.FloatingObject.Item.Amount;
                 this.Description = string.Format("{0:#,##0.00} Kg", this.Mass);
             }
             else if (this.FloatingObject.Item.Content is MyObjectBuilder_Ingot)
             {
                 this.DisplayName = string.Format("{0} Ingot", this.FloatingObject.Item.Content.SubtypeName);
-                this.Volume = this.FloatingObject.Item.Amount * 1000;
+                this.Volume = compVolume * this.FloatingObject.Item.Amount;
                 this.Mass = compMass * this.FloatingObject.Item.Amount;
                 this.Description = string.Format("{0:#,##0.00} Kg", this.Mass);
             }
