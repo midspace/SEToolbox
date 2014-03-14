@@ -27,13 +27,11 @@
 
 - Asteroid contents (list of ores in quantity cubic meters-m³ and percent %).
 - Replace Asteroid/Voxel.
-- Move Asteroid/Voxel.
 - Rotate Asteroid/Voxel (not supported by sandbox currently, but procedual voxel rotation could be accomplished.)
 
 - Show ship status. Size. Item count. Weight. Thrust.
 - Switch power on/off.
 - Set/Reset Ship Vector. (Direction and Speed)
-- Move Ship/s to position.
 - Replace Armor light/heavy/color.
 
 ========--------~~~~~~~~
@@ -60,6 +58,8 @@ Completed:
 - Switch Ship Inertia Dampeners on/off.
 - Create backup of checkpoint and sandbox files when saving.
 - Move Astronaut to position.
+- Move Asteroid/Voxel.
+- Move Ship/s to position.
 
 ========--------~~~~~~~~
 
