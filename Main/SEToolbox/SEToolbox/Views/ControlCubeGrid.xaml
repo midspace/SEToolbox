@@ -72,9 +72,9 @@
                             <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="Convert any Corner armor edge blocks to Round armor edge blocks."/>
                         </MenuItem>
                         <MenuItem Header="Framework" Command="{Binding FrameworkCommand}">
-                            <MenuItem Header="To 1% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                            <MenuItem Header="To 0.5% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
                                 <MenuItem.CommandParameter>
-                                    <s:Double>0.01</s:Double>
+                                    <s:Double>0.005</s:Double>
                                 </MenuItem.CommandParameter>
                             </MenuItem>
                             <MenuItem Header="To 25% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 25% constructed state.">
