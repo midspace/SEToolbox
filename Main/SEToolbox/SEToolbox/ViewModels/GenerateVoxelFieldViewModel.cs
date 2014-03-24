@@ -306,7 +306,10 @@ namespace SEToolbox.ViewModels
                     var asteroid = new MyVoxelMap();
                     asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value);
 
-                    var baseAssets = asteroid.CalculateMaterialAssets();
+                    IList<byte> baseAssets;
+                    Dictionary<byte, int> materialVoxelCells;
+
+                    asteroid.CalculateMaterialCellAssets(out baseAssets, out materialVoxelCells);
 
                     var distribution = new List<double> { Double.NaN };
                     var materialSelection = new List<byte> { SpaceEngineersAPI.GetMaterialIndex(voxelDesign.MainMaterial.Value) };

@@ -59,7 +59,7 @@
                 {
                     this.Character.CharacterModel = value;
                     this.RaisePropertyChanged(() => CharacterModel);
-                    this.UpdateFromEntityBase();
+                    this.UpdateGeneralFromEntityBase();
                 }
             }
         }
@@ -279,7 +279,7 @@
             this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_Character>(this.SerializedEntity);
         }
 
-        public override void UpdateFromEntityBase()
+        public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.Character;
             this.Description = string.Format("{0}", this.CharacterModel);

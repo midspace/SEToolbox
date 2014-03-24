@@ -1,5 +1,10 @@
 ﻿namespace SEToolbox.Models
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Windows.Documents;
     using Sandbox.CommonLib.ObjectBuilders;
     using Sandbox.CommonLib.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
@@ -8,17 +13,24 @@
     using System;
     using System.IO;
     using System.Runtime.Serialization;
+    using System.Text;
     using System.Xml.Serialization;
     using VRageMath;
 
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
     {
+        [XmlIgnore]
+        private static readonly object Locker = new object();
+
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
         private Vector3I _contentSize;
         private long _voxCells;
+
+        [XmlIgnore]
+        private List<VoxelMaterialAssetModel> _materialAssets;
 
         #region ctor
 
@@ -227,6 +239,27 @@
             }
         }
 
+        /// <summary>
+        /// This is text detail of the breakdown of ores in the asteroid.
+        /// </summary>
+        [XmlIgnore]
+        public List<VoxelMaterialAssetModel> MaterialAssets
+        {
+            get
+            {
+                return this._materialAssets;
+            }
+
+            set
+            {
+                if (value != this._materialAssets)
+                {
+                    this._materialAssets = value;
+                    this.RaisePropertyChanged(() => MaterialAssets);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -243,10 +276,43 @@
             this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_VoxelMap>(this.SerializedEntity);
         }
 
-        public override void UpdateFromEntityBase()
+        public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.Voxel;
             this.DisplayName = Path.GetFileNameWithoutExtension(this.VoxelMap.Filename);
+        }
+
+        public override void InitializeAsync()
+        {
+            var worker = new BackgroundWorker();
+
+            worker.DoWork += delegate(object s, DoWorkEventArgs workArgs)
+            {
+                lock (Locker)
+                {
+                    if (this.MaterialAssets == null || this.MaterialAssets.Count == 0)
+                    {
+                        this.IsBusy = true;
+                        var filename = this.SourceVoxelFilepath;
+                        if (string.IsNullOrEmpty(filename))
+                            filename = this.VoxelFilepath;
+                        var details = MyVoxelMap.GetMaterialAssetDetails(filename);
+                        var sum = details.Values.ToList().Sum();
+                        var list = new List<VoxelMaterialAssetModel>();
+
+                        foreach (var kvp in details)
+                        {
+                            list.Add(new VoxelMaterialAssetModel() { OreName = kvp.Key, Mass = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
+                        }
+
+                        this.MaterialAssets = list;
+                        this.IsBusy = false;
+                    }
+                }
+
+            };
+
+            worker.RunWorkerAsync();
         }
 
         private void ReadVoxelDetails(string filename)

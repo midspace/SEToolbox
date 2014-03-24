@@ -362,7 +362,7 @@
             this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_CubeGrid>(this.SerializedEntity);
         }
 
-        public override void UpdateFromEntityBase()
+        public override void UpdateGeneralFromEntityBase()
         {
             double scaleMultiplyer = 2.5;
             if (this.IsStatic && this.CubeGrid.GridSizeEnum == MyCubeSize.Large)
@@ -534,7 +534,7 @@
                 }
             }
 
-            this.UpdateFromEntityBase();
+            this.UpdateGeneralFromEntityBase();
             return count > 0;
         }
 
@@ -555,7 +555,7 @@
                 }
             }
 
-            this.UpdateFromEntityBase();
+            this.UpdateGeneralFromEntityBase();
             return count > 0;
         }
 
@@ -567,14 +567,14 @@
                 cube.BuildPercent = value;
             }
 
-            this.UpdateFromEntityBase();
+            this.UpdateGeneralFromEntityBase();
         }
 
         public void ConvertToStation()
         {
             this.ResetVelocity();
             this.CubeGrid.IsStatic = true;
-            this.UpdateFromEntityBase();
+            this.UpdateGeneralFromEntityBase();
         }
 
         public void ReorientStation()
@@ -589,7 +589,7 @@
         public void ConvertToShip()
         {
             this.CubeGrid.IsStatic = false;
-            this.UpdateFromEntityBase();
+            this.UpdateGeneralFromEntityBase();
         }
 
         public bool ConvertToCornerArmor()
@@ -728,7 +728,7 @@
                 }
             }
 
-            this.UpdateFromEntityBase();
+            this.UpdateGeneralFromEntityBase();
             this.RaisePropertyChanged(() => BlockCount);
             return count > 0;
         }
