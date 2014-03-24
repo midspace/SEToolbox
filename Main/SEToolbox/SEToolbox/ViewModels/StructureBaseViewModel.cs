@@ -5,7 +5,7 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
 
-    public abstract class StructureBaseViewModel<TModel> : DataBaseViewModel, /*IDragable,*/ IStructureViewBase where TModel : IStructureBase
+    public abstract class StructureBaseViewModel<TModel> : DataBaseViewModel, IStructureViewBase where TModel : IStructureBase
     {
         #region fields
 
@@ -35,6 +35,22 @@
                     this._isSelected = value;
                     this.RaisePropertyChanged(() => IsSelected);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the View is currently in the middle of an asynchonise operation.
+        /// </summary>
+        public bool IsBusy
+        {
+            get
+            {
+                return this.dataModel.IsBusy;
+            }
+
+            set
+            {
+                this.dataModel.IsBusy = value;
             }
         }
 

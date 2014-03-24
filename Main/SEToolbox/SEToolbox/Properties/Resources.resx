@@ -349,10 +349,14 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   <data name="VoxelDetail" xml:space="preserve">
     <value>Filename:	{0}
 Bounding Size:	{1} × {2} × {3} blocks
-Size:		{4} m × {5} m × {6} m
-Volume:		{7:#,##0.00} m³
-VoxCells:		{8:#,##0}
-Distance:		{9:#,##0.0} m</value>
+Size:	{4} m × {5} m × {6} m
+Volume:	{7:#,##0.00} m³
+VoxCells:	{8:#,##0}
+Distance:	{9:#,##0.0} m
+Position:	{10}, {11}, {12}
+
+Ore	Mass	Percent
+{13}</value>
   </data>
   <data name="CubeDetail" xml:space="preserve">
     <value>Piloted:		{0}
@@ -382,5 +386,8 @@ Distance:		{1:#,##0.0} m
 Volume:		{2:#,##0.000} L
 Mass:		{3:#,##0.00} Kg
 Units:		{4:#,##0}</value>
+  </data>
+  <data name="copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\copy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

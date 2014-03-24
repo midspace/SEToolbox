@@ -478,16 +478,6 @@
             // Returns null if it doesn't find the required SubtypeId.
         }
 
-
-        //public static MyObjectBuilder_ComponentDefinition GetComponentDefinition()
-        //{
-        //    //_componentDefinitions.Components[0].Id
-
-        //    var x= _componentDefinitions.Components.FirstOrDefault(c => c.);
-
-        //    return x;
-        //}
-
         #region GetBoundingBox
 
         public static BoundingBox GetBoundingBox(MyObjectBuilder_CubeGrid entity)
@@ -527,48 +517,6 @@
 
 
             return bb;
-        }
-
-        #endregion
-
-        #region CountAssets
-
-        public static Dictionary<string, int> CountAssets(IList<byte> materialAssets)
-        {
-            var assetCount = new Dictionary<byte, int>();
-            for (var i = 0; i < materialAssets.Count; i++)
-            {
-                if (assetCount.ContainsKey(materialAssets[i]))
-                {
-                    assetCount[materialAssets[i]]++;
-                }
-                else
-                {
-                    assetCount.Add(materialAssets[i], 1);
-                }
-            }
-
-            var assetNameCount = new Dictionary<string, int>();
-            foreach (var kvp in assetCount)
-            {
-                string name;
-
-                if (kvp.Key >= _voxelMaterialDefinitions.Materials.Length)
-                    name = _voxelMaterialDefinitions.Materials[0].Name;
-                else
-                    name = _voxelMaterialDefinitions.Materials[kvp.Key].Name;
-
-                if (assetNameCount.ContainsKey(name))
-                {
-                    assetNameCount[name] += kvp.Value;
-                }
-                else
-                {
-                    assetNameCount.Add(name, kvp.Value);
-                }
-            }
-
-            return assetNameCount;
         }
 
         #endregion

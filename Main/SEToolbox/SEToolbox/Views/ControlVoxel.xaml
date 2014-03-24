@@ -3,38 +3,130 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:SEToolbox.Controls"
+             xmlns:converters="clr-namespace:SEToolbox.Converters"
              xmlns:props="clr-namespace:SEToolbox.Properties"
              xmlns:views="clr-namespace:SEToolbox.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Label Grid.ColumnSpan="2">Asteroid</Label>
-        <Label Grid.Column="0" Grid.Row="1" Content="Position:"/>
-        <views:ControlPosition Grid.Column="1" Grid.Row="1"/>
-        <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="2">
-            <TextBox.Text>
-                <MultiBinding StringFormat="{x:Static props:Resources.VoxelDetail}">
-                    <Binding Path="Filename"/>
-                    <Binding Path="Size.Width" />
-                    <Binding Path="Size.Height" />
-                    <Binding Path="Size.Depth" />
-                    <Binding Path="ContentSize.Width"/>
-                    <Binding Path="ContentSize.Height"/>
-                    <Binding Path="ContentSize.Depth"/>
-                    <Binding Path="Volume" Mode="OneWay"/>
-                    <Binding Path="VoxCells"/>
-                    <Binding Path="PlayerDistance"/>
-                </MultiBinding>
-            </TextBox.Text>
-        </TextBox>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Grid.ColumnSpan="2">Asteroid</Label>
+            <Menu Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" DockPanel.Dock="Top">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel HorizontalAlignment="Stretch" Height="22"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+                <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Copy text detail to Clipboard" Command="{Binding CopyDetailCommand}">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </Menu>
+            <Label Grid.Row="2" Grid.Column="0" Content="Position:"/>
+            <views:ControlPosition Grid.Row="2" Grid.Column="1"/>
+
+
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="4 0 4 0" Text="Filename:"/>
+            <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Filename}"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="4 0 4 0" Text="Bounding Size:"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} × {1} × {2} blocks">
+                        <Binding Path="Size.Width" />
+                        <Binding Path="Size.Height" />
+                        <Binding Path="Size.Depth" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Size:"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}m × {1}m × {2}m">
+                        <Binding Path="ContentSize.Width" />
+                        <Binding Path="ContentSize.Height" />
+                        <Binding Path="ContentSize.Depth" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="Volume:"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Volume, StringFormat={}{0:#,##0.00}m³}" />
+            <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="VoxCells:"/>
+            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding VoxCells, StringFormat={}{0:#,##0}}" />
+            <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
+            <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+
+
+
+            <!--<TextBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="2">
+                <TextBox.Text>
+                    <MultiBinding StringFormat="{x:Static props:Resources.VoxelDetail}">
+                        <Binding Path="Filename"/>
+                        <Binding Path="Size.Width" />
+                        <Binding Path="Size.Height" />
+                        <Binding Path="Size.Depth" />
+                        <Binding Path="ContentSize.Width"/>
+                        <Binding Path="ContentSize.Height"/>
+                        <Binding Path="ContentSize.Depth"/>
+                        <Binding Path="Volume" Mode="OneWay"/>
+                        <Binding Path="VoxCells"/>
+                        <Binding Path="PlayerDistance"/>
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>-->
+
+
+            <controls:SortableListView Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding MaterialAssets}"
+            ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding OreName}" Width="95"/>
+                        <GridViewColumn Header="Mass" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} m³'}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Percent">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Percent, StringFormat='{}{0:P2}'}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </controls:SortableListView>
+        </Grid>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

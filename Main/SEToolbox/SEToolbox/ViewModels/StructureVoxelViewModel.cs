@@ -1,8 +1,14 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Input;
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using System.ComponentModel;
+    using SEToolbox.Services;
+    using System.Text;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -16,6 +22,18 @@
                 // Will bubble property change events from the Model to the ViewModel.
                 this.OnPropertyChanged(e.PropertyName);
             };
+        }
+
+        #endregion
+
+        #region command properties
+
+        public ICommand CopyDetailCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(CopyDetailExecuted), new Func<bool>(CopyDetailCanExecute));
+            }
         }
 
         #endregion
@@ -133,6 +151,53 @@
                 this.MainViewModel.IsModified = true;
                 this.MainViewModel.CalcDistances();
             }
+        }
+
+        public List<VoxelMaterialAssetModel> MaterialAssets
+        {
+            get
+            {
+                return this.DataModel.MaterialAssets;
+            }
+
+            set
+            {
+                this.DataModel.MaterialAssets = value;
+            }
+        }
+
+        #endregion
+
+        #region methods
+
+        public bool CopyDetailCanExecute()
+        {
+            return true;
+        }
+
+        public void CopyDetailExecuted()
+        {
+            var ore = new StringBuilder();
+
+            if (this.DataModel.MaterialAssets != null)
+            {
+                foreach (var mat in this.DataModel.MaterialAssets)
+                {
+                    ore.AppendFormat("{0}\t{1:#,##0.00} m³\t{2:P2}\r\n", mat.OreName, mat.Mass, mat.Percent);
+                }
+            }
+
+            var detail = string.Format(Properties.Resources.VoxelDetail,
+                Filename,
+                Size.Width, Size.Height, Size.Depth,
+                ContentSize.Width, ContentSize.Height, ContentSize.Depth,
+                Volume,
+                VoxCells,
+                PlayerDistance,
+                PositionAndOrientation.Value.Position.X, PositionAndOrientation.Value.Position.Y, PositionAndOrientation.Value.Position.Z,
+                ore.ToString());
+
+            Clipboard.SetText(detail);
         }
 
         #endregion

@@ -33,6 +33,7 @@
         private bool? _closeResult;
 
         private IStructureViewBase _selectedStructure;
+        private IStructureViewBase _preSelectedStructure;
         private ObservableCollection<IStructureViewBase> _selections;
 
         private ObservableCollection<IStructureViewBase> _structures;
@@ -341,6 +342,7 @@
                 if (value != this._selectedStructure)
                 {
                     this._selectedStructure = value;
+                    this._selectedStructure.DataModel.InitializeAsync();
                     this.RaisePropertyChanged(() => SelectedStructure);
                 }
             }
@@ -463,7 +465,7 @@
 
         #endregion
 
-        #region Methods
+        #region Command Methods
 
         public bool ClosingCanExecute(CancelEventArgs e)
         {
@@ -496,9 +498,9 @@
 
         public void OpenExecuted()
         {
-            SelectWorldModel model = new SelectWorldModel();
+            var model = new SelectWorldModel();
             model.Load(this._dataModel.BaseSavePath);
-            SelectWorldViewModel loadVm = new SelectWorldViewModel(this, model);
+            var loadVm = new SelectWorldViewModel(this, model);
 
             var result = this._dialogService.ShowDialog<WindowLoad>(this, loadVm);
             if (result == true)
@@ -574,10 +576,10 @@
             {
                 this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
-                this._selectNewStructure = true;
                 var structure = this._dataModel.AddEntity(newEntity);
                 ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
-                this._selectNewStructure = false;
+                if (this._preSelectedStructure != null)
+                    this.SelectedStructure = this._preSelectedStructure;
                 this.IsBusy = false;
             }
         }
@@ -868,6 +870,10 @@
             this.DeleteModel(this.Selections.ToArray());
         }
 
+        #endregion
+
+        #region methods
+
         void Structures_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -899,6 +905,7 @@
             if (item != null)
             {
                 this._structures.Add(item);
+                this._preSelectedStructure = item;
 
                 if (this._selectNewStructure)
                 {

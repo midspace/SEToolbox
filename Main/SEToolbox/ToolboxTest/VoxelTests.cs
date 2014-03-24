@@ -141,7 +141,10 @@
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
-            var materialAssets = voxelMap.CalculateMaterialAssets();
+            
+            IList<byte> materialAssets;
+            Dictionary<byte, int> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
             Assert.AreEqual(44135, materialAssets.Count, "Asset count should be equal.");
 
@@ -149,7 +152,7 @@
 
             Assert.AreEqual(0, otherAssets.Count, "Other Asset count should be equal.");
 
-            var assetNameCount = SpaceEngineersAPI.CountAssets(materialAssets);
+            var assetNameCount = voxelMap.CountAssets(materialAssets);
             Assert.IsTrue(assetNameCount.Count > 0, "Contains assets.");
         }
 
@@ -166,13 +169,19 @@
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
-            var materialAssets = voxelMap.CalculateMaterialAssets();
+
+            var cellCount = voxelMap.SumVoxelCells();
+            Assert.AreEqual(8 * 255, cellCount, "Cell count should be equal.");
+
+            IList<byte> materialAssets;
+            Dictionary<byte, int> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
             Assert.AreEqual(8, materialAssets.Count, "Asset count should be equal.");
 
             var stoneAssets = materialAssets.Where(c => c == 1).ToList();
             Assert.AreEqual(8, stoneAssets.Count, "Stone Asset count should be equal.");
 
-            var assetNameCount = SpaceEngineersAPI.CountAssets(materialAssets);
+            var assetNameCount = voxelMap.CountAssets(materialAssets);
             Assert.IsTrue(assetNameCount.Count > 0, "Contains assets.");
         }
 
@@ -189,12 +198,14 @@
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
-            var materialAssets = voxelMap.CalculateMaterialAssets();
+            var cellCount = voxelMap.SumVoxelCells();
+            IList<byte> materialAssets;
+            Dictionary<byte, int> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
+            var assetNameCount = voxelMap.CountAssets(materialAssets);
 
+            Assert.AreEqual(8 * 255, cellCount, "Cell count should be equal.");
             Assert.AreEqual(8, materialAssets.Count, "Asset count should be equal.");
-
-            var assetNameCount = SpaceEngineersAPI.CountAssets(materialAssets);
-
             Assert.AreEqual(8, assetNameCount.Count, "Asset Mertials count should be equal.");
         }
 
@@ -216,7 +227,9 @@
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
-            var materialAssets = voxelMap.CalculateMaterialAssets();
+            IList<byte> materialAssets;
+            Dictionary<byte, int> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
             Assert.AreEqual(35465, materialAssets.Count, "Asset count should be equal.");
 
@@ -241,7 +254,7 @@
 
             newDistributiuon.Shuffle();
 
-            var assetNameCount = SpaceEngineersAPI.CountAssets(newDistributiuon);
+            var assetNameCount = voxelMap.CountAssets(newDistributiuon);
 
             Assert.AreEqual(3, assetNameCount.Count, "Asset Mertials count should be equal.");
             Assert.AreEqual(8867, assetNameCount[stoneMaterial.Name], "Asset Mertials count should be equal.");
@@ -249,6 +262,10 @@
             Assert.AreEqual(8866, assetNameCount[uraniumMaterial.Name], "Asset Mertials count should be equal.");
 
             voxelMap.SetMaterialAssets(newDistributiuon);
+
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
+            var cellCount = voxelMap.SumVoxelCells();
+
             voxelMap.Save(fileNewVoxel);
         }
 
@@ -270,7 +287,10 @@
 
                     var voxelMap = new MyVoxelMap();
                     voxelMap.Load(fileOriginal, materials[0].Name);
-                    var materialAssets = voxelMap.CalculateMaterialAssets();
+
+                    IList<byte> materialAssets;
+                    Dictionary<byte, int> materialVoxelCells;
+                    voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
                     var distribution = new double[] {Double.NaN, .99,};
                     var materialSelection = new byte[] {0, SpaceEngineersAPI.GetMaterialIndex(material.Name)};
@@ -309,8 +329,11 @@
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
 
-            var materialAssets = voxelMap.CalculateMaterialAssets();
-            var assetNameCount = SpaceEngineersAPI.CountAssets(materialAssets);
+            IList<byte> materialAssets;
+            Dictionary<byte, int> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
+
+            var assetNameCount = voxelMap.CountAssets(materialAssets);
         }
 
         [TestMethod]

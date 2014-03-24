@@ -186,7 +186,7 @@
             this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_FloatingObject>(this.SerializedEntity);
         }
 
-        public override void UpdateFromEntityBase()
+        public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.FloatingObject;
             var compMass = SpaceEngineersAPI.GetItemMass(this.FloatingObject.Item.Content.GetType(), this.FloatingObject.Item.Content.SubtypeName);

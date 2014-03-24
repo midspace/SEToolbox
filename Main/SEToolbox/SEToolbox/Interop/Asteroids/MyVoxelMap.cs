@@ -17,6 +17,7 @@ namespace SEToolbox.Interop.Asteroids
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
+    using System.Linq;
     using SEToolbox.Support;
     using VRageMath;
 
@@ -136,6 +137,18 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
+        public static Dictionary<string, int> GetMaterialAssetDetails(string filename)
+        {
+            var map = new MyVoxelMap();
+            map.Load(filename, SpaceEngineersAPI.GetMaterialName(0), true);
+
+            IList<byte> materialAssetList;
+            Dictionary<byte, int> materialVoxelCells;
+
+            map.CalculateMaterialCellAssets(out materialAssetList, out materialVoxelCells);
+            return map.CountAssets(materialVoxelCells);
+        }
+
         #region IsVoxelMapFile
 
         /// <summary>
@@ -166,7 +179,7 @@ namespace SEToolbox.Interop.Asteroids
                     stream.Close();
                 }
             }
-        } 
+        }
 
         #endregion
 
@@ -481,7 +494,7 @@ namespace SEToolbox.Interop.Asteroids
         internal void SetVoxelContent(byte content, ref Vector3I voxelCoord, bool needLock = true)
         {
             //  We don't change voxel if it's a border voxel and it would be an empty voxel (not full). Because that would make voxel map with wrong/missing edges.
-            if ((content > 0) && (this.IsVoxelAtBorder(ref voxelCoord))) return;  
+            if ((content > 0) && (this.IsVoxelAtBorder(ref voxelCoord))) return;
 
             var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
             var voxelCell = this.GetCell(ref cellCoord);
@@ -559,7 +572,11 @@ namespace SEToolbox.Interop.Asteroids
         public void ForceBaseMaterial(string materialName)
         {
             var materialIndex = SpaceEngineersAPI.GetMaterialIndex(materialName);
-            var materialAssets = CalculateMaterialAssets();
+
+            IList<byte> materialAssets;
+            Dictionary<byte, int> materialVoxelCells;
+
+            CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
             for (var i = 0; i < materialAssets.Count; i++)
                 materialAssets[i] = materialIndex;
@@ -571,7 +588,7 @@ namespace SEToolbox.Interop.Asteroids
             materialAssets.Shuffle();
             SetMaterialAssets(materialAssets);
         }
-    
+
         //  Coordinates are relative to voxel map
         private byte GetVoxelContent(ref Vector3I voxelCoord)
         {
@@ -687,10 +704,12 @@ namespace SEToolbox.Interop.Asteroids
             return sum;
         }
 
-        public IList<byte> CalculateMaterialAssets()
+        public void CalculateMaterialCellAssets(out IList<byte> materialAssetList, out Dictionary<byte, int> materialVoxelCells)
         {
-            var materialAssetList = new List<byte>();
+            materialAssetList = new List<byte>();
+            materialVoxelCells = new Dictionary<byte, int>();
             Vector3I cellCoord;
+
             for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
             {
                 for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
@@ -706,7 +725,14 @@ namespace SEToolbox.Interop.Asteroids
                             if (matCell.IsSingleMaterialForWholeCell)
                             {
                                 for (var i = 0; i < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL; i++)
+                                {
                                     materialAssetList.Add(matCell.SingleMaterial);
+
+                                    if (materialVoxelCells.ContainsKey(matCell.SingleMaterial))
+                                        materialVoxelCells[matCell.SingleMaterial] += MyVoxelConstants.VOXEL_CONTENT_FULL;
+                                    else
+                                        materialVoxelCells.Add(matCell.SingleMaterial, MyVoxelConstants.VOXEL_CONTENT_FULL);
+                                }
                             }
                             else
                             {
@@ -718,7 +744,13 @@ namespace SEToolbox.Interop.Asteroids
                                     {
                                         for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
                                         {
-                                            materialAssetList.Add(matCell.GetMaterial(ref voxelCoordInCell));
+                                            var material = matCell.GetMaterial(ref voxelCoordInCell);
+                                            materialAssetList.Add(material);
+
+                                            if (materialVoxelCells.ContainsKey(material))
+                                                materialVoxelCells[material] += MyVoxelConstants.VOXEL_CONTENT_FULL;
+                                            else
+                                                materialVoxelCells.Add(material, MyVoxelConstants.VOXEL_CONTENT_FULL);
                                         }
                                     }
                                 }
@@ -741,6 +773,11 @@ namespace SEToolbox.Interop.Asteroids
                                             if (content != MyVoxelConstants.VOXEL_CONTENT_EMPTY)
                                             {
                                                 materialAssetList.Add(matCell.SingleMaterial);
+
+                                                if (materialVoxelCells.ContainsKey(matCell.SingleMaterial))
+                                                    materialVoxelCells[matCell.SingleMaterial] += content;
+                                                else
+                                                    materialVoxelCells.Add(matCell.SingleMaterial, content);
                                             }
                                         }
                                     }
@@ -760,7 +797,13 @@ namespace SEToolbox.Interop.Asteroids
 
                                             if (content != MyVoxelConstants.VOXEL_CONTENT_EMPTY)
                                             {
-                                                materialAssetList.Add(matCell.GetMaterial(ref voxelCoordInCell));
+                                                var material = matCell.GetMaterial(ref voxelCoordInCell);
+                                                materialAssetList.Add(material);
+
+                                                if (materialVoxelCells.ContainsKey(material))
+                                                    materialVoxelCells[material] += content;
+                                                else
+                                                    materialVoxelCells.Add(material, content);
                                             }
                                         }
                                     }
@@ -770,8 +813,6 @@ namespace SEToolbox.Interop.Asteroids
                     }
                 }
             }
-
-            return materialAssetList;
         }
 
         public void SetMaterialAssets(IList<byte> materialsList)
@@ -857,7 +898,7 @@ namespace SEToolbox.Interop.Asteroids
                                             this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
                                             this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
                                         }
-                                    
+
                                     }
                                 }
                             }
@@ -868,5 +909,77 @@ namespace SEToolbox.Interop.Asteroids
         }
 
         #endregion
+
+        #region CountAssets
+
+        public Dictionary<string, int> CountAssets(IList<byte> materialAssets)
+        {
+            var assetCount = new Dictionary<byte, int>();
+            for (var i = 0; i < materialAssets.Count; i++)
+            {
+                if (assetCount.ContainsKey(materialAssets[i]))
+                {
+                    assetCount[materialAssets[i]]++;
+                }
+                else
+                {
+                    assetCount.Add(materialAssets[i], 1);
+                }
+            }
+
+            var materialDefinitions = SpaceEngineersAPI.GetMaterialList();
+            var assetNameCount = new Dictionary<string, int>();
+
+            foreach (var kvp in assetCount)
+            {
+                string name;
+
+                if (kvp.Key >= materialDefinitions.Count)
+                    name = materialDefinitions[this.VoxelMaterial].Name;
+                else
+                    name = materialDefinitions[kvp.Key].Name;
+
+                if (assetNameCount.ContainsKey(name))
+                {
+                    assetNameCount[name] += kvp.Value;
+                }
+                else
+                {
+                    assetNameCount.Add(name, kvp.Value);
+                }
+            }
+
+            return assetNameCount;
+        }
+
+        public Dictionary<string, int> CountAssets(Dictionary<byte, int> assetCount)
+        {
+            var materialDefinitions = SpaceEngineersAPI.GetMaterialList();
+            var assetNameCount = new Dictionary<string, int>();
+
+            foreach (var kvp in assetCount)
+            {
+                string name;
+
+                if (kvp.Key >= materialDefinitions.Count)
+                    name = materialDefinitions[this.VoxelMaterial].Name;
+                else
+                    name = materialDefinitions[kvp.Key].Name;
+
+                if (assetNameCount.ContainsKey(name))
+                {
+                    assetNameCount[name] += kvp.Value;
+                }
+                else
+                {
+                    assetNameCount.Add(name, kvp.Value);
+                }
+            }
+
+            return assetNameCount;
+        }
+
+        #endregion
+
     }
 }

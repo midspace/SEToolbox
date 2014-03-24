@@ -2,6 +2,8 @@
 - Refresh/Save needs to check if save directory no longer exists.
 - tree view.
 - Property Grid, to edit properties and sub items.
+  * https://wpg.codeplex.com/
+  * https://wpftoolkit.codeplex.com/wikipage?title=PropertyGrid
 - Close Dialog on IsModified.
 - Wix installer project,
   * Desktop Icon.
@@ -25,7 +27,6 @@
 - Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
   Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
 
-- Asteroid contents (list of ores in quantity cubic meters-m³ and percent %).
 - Replace Asteroid/Voxel.
 - Rotate Asteroid/Voxel (not supported by sandbox currently, but procedual voxel rotation could be accomplished.)
 
@@ -60,6 +61,7 @@ Completed:
 - Move Astronaut to position.
 - Move Asteroid/Voxel.
 - Move Ship/s to position.
+- Asteroid contents (list of ores in quantity cubic meters-m³ and percent %).
 
 ========--------~~~~~~~~
 

@@ -28,6 +28,9 @@
         [NonSerialized]
         private double _playerDistance;
 
+        [NonSerialized]
+        private bool _isBusy;
+
         private string _serializedEntity;
 
         #endregion
@@ -59,7 +62,7 @@
                 if (value != this._entityBase)
                 {
                     this._entityBase = value;
-                    this.UpdateFromEntityBase();
+                    this.UpdateGeneralFromEntityBase();
                     this.RaisePropertyChanged(() => EntityBase);
                 }
             }
@@ -191,11 +194,30 @@
             }
         }
 
+        [XmlIgnore]
+        public bool IsBusy
+        {
+            get { return this._isBusy; }
+
+            set
+            {
+                if (value != this._isBusy)
+                {
+                    this._isBusy = value;
+                    this.RaisePropertyChanged(() => IsBusy);
+                    if (this._isBusy)
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region methods
 
-        public virtual void UpdateFromEntityBase()
+        public virtual void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.Unknown;
         }
@@ -222,6 +244,11 @@
             {
                 throw new NotImplementedException(string.Format("A new object has not been catered for in the StructureBase, of type '{0}'.", entityBase.GetType()));
             }
+        }
+
+        public virtual void InitializeAsync()
+        {
+            // to be overridden.
         }
 
         #endregion

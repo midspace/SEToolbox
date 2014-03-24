@@ -21,6 +21,10 @@
 
         string SerializedEntity { get; set; }
 
-        void UpdateFromEntityBase();
+        void UpdateGeneralFromEntityBase();
+
+        bool IsBusy { get; set; }
+
+        void InitializeAsync();
     }
 }
