@@ -4,6 +4,7 @@
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
+    using System.Windows.Input;
     using SEToolbox.Support;
 
     public class SortableListView : ListView
@@ -39,6 +40,7 @@
 
             // add the event handler to the GridViewColumnHeader. This strongly ties this ListView to a GridView.
             this.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(GridViewColumnHeaderClickedHandler));
+            this.AddHandler(ListView.MouseDoubleClickEvent, new RoutedEventHandler(MouseDoubleClickedHandler));
         }
 
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
@@ -80,7 +82,7 @@
                         header = headerClicked.Column.Header as string;
                     }
 
-                    this.Sort(listView, header, direction);
+                    Sort(listView, header, direction);
 
                     if (direction == ListSortDirection.Ascending)
                     {
@@ -114,18 +116,82 @@
             }
         }
 
-        private void Sort(ListView lv, string sortBy, ListSortDirection direction)
+        private static void Sort(ItemsControl lv, string sortBy, ListSortDirection direction)
         {
             if (lv.ItemsSource != null)
             {
-                ICollectionView dataView = CollectionViewSource.GetDefaultView(lv.ItemsSource);
+                var dataView = CollectionViewSource.GetDefaultView(lv.ItemsSource);
                 //ICollectionView dataView = lv.Items as ICollectionView;
 
                 dataView.SortDescriptions.Clear();
-                SortDescription sd = new SortDescription(sortBy, direction);
+                var sd = new SortDescription(sortBy, direction);
                 dataView.SortDescriptions.Add(sd);
                 dataView.Refresh();
             }
         }
+
+        public static readonly RoutedEvent MouseDoubleClickItemEvent = EventManager.RegisterRoutedEvent("MouseDoubleClickItem", RoutingStrategy.Direct, typeof(MouseButtonEventHandler), typeof(SortableListView));
+
+        // Events
+        public event MouseButtonEventHandler MouseDoubleClickItem;
+
+        private void MouseDoubleClickedHandler(object sender, RoutedEventArgs e)
+        {
+            var item = GetHitControl((ListView)sender, (MouseEventArgs)e);
+            if (item != null)
+            {
+                if (this.MouseDoubleClickItem != null)
+                {
+                    var args = e as MouseButtonEventArgs;
+                    this.MouseDoubleClickItem(sender, args);
+                }
+            }
+        }
+
+        #region GetHitControl
+
+        /// <summary>
+        /// Used to determine what ListViewItem was clicked on during a DoubleClick event, or a Context menu open
+        ///     If a MouseDoubleClick, pass in the MouseButtonEventArgs.
+        ///     If a ContextMenu Opened, pass in Null.
+        /// </summary>
+        /// <param name="listControl"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private static ListViewItem GetHitControl(UIElement listControl, MouseEventArgs e)
+        {
+            Point hit;
+
+            if (e == null)
+                hit = Mouse.GetPosition(listControl);
+            else
+                hit = e.GetPosition(listControl);
+            object obj = listControl.InputHitTest(hit);
+
+            if ((obj != null) && (obj is FrameworkElement))
+            {
+                object control = obj;
+                while (control != null)
+                {
+                    if (control.GetType().GetProperty("TemplatedParent").GetValue(control, null) != null)
+                        control = (FrameworkElement)obj.GetType().GetProperty("TemplatedParent").GetValue(control, null);
+                    else if (control == listControl)
+                        break;
+                    else if (control is FrameworkElement)
+                        control = ((FrameworkElement)control).Parent;
+                    else
+                        break;
+
+                    if (control is ListViewItem)
+                    {
+                        return control as ListViewItem;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
     }
 }
