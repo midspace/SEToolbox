@@ -196,5 +196,7 @@
         SmallStator,
         SmallRotor,
         LargeRailStraight,
+        LargeBlockSolarPanel,
+        SmallBlockSolarPanel,
     };
 }

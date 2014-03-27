@@ -1,7 +1,7 @@
 ﻿namespace SEToolbox.Models
 {
     using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;
@@ -181,7 +181,7 @@
                     if (character != null)
                     {
                         model.ActiveWorld.Content.ControlledObject = character.EntityId;
-                        model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
+                        model.ActiveWorld.Content.CameraController = Sandbox.Common.ObjectBuilders.MyCameraControllerEnum.Entity;
                         model.ActiveWorld.Content.CameraEntity = character.EntityId;
                         str.AppendLine("* Found and Set new active Player.");
                         model.SaveCheckPointAndSandBox();
@@ -193,7 +193,7 @@
                         if (cockpit != null)
                         {
                             model.ActiveWorld.Content.ControlledObject = cockpit.EntityId;
-                            model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.ThirdPersonSpectator;
+                            model.ActiveWorld.Content.CameraController = Sandbox.Common.ObjectBuilders.MyCameraControllerEnum.ThirdPersonSpectator;
                             model.ActiveWorld.Content.CameraEntity = 0;
                             str.AppendLine("* Found and Set new active Player.");
                             model.SaveCheckPointAndSandBox();
@@ -202,12 +202,12 @@
                         else
                         {
                             str.AppendLine("! Could not find any Player Characters.");
-                            character = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Character();
+                            character = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Character();
                             character.EntityId = SpaceEngineersAPI.GenerateEntityId();
-                            character.PersistentFlags = Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.CommonLib.ObjectBuilders.MyPersistentEntityFlags2.InScene;
-                            character.PositionAndOrientation = new Sandbox.CommonLib.ObjectBuilders.MyPositionAndOrientation(VRageMath.Vector3.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
-                            character.CharacterModel = Sandbox.CommonLib.ObjectBuilders.MyCharacterModelEnum.Astronaut_White;
-                            character.Battery = new Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
+                            character.PersistentFlags = Sandbox.Common.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.Common.ObjectBuilders.MyPersistentEntityFlags2.InScene;
+                            character.PositionAndOrientation = new Sandbox.Common.ObjectBuilders.MyPositionAndOrientation(VRageMath.Vector3.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
+                            character.CharacterModel = Sandbox.Common.ObjectBuilders.MyCharacterModelEnum.Astronaut_White;
+                            character.Battery = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
                             character.LightEnabled = false;
                             character.HeadAngle = new VRageMath.Vector2();
                             character.LinearVelocity = new VRageMath.Vector3();
@@ -235,7 +235,7 @@
                             item.Content = new MyObjectBuilder_AutomaticRifle() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None, CurrentAmmo = 0 };
 
                             model.ActiveWorld.Content.ControlledObject = character.EntityId;
-                            model.ActiveWorld.Content.CameraController = Sandbox.CommonLib.ObjectBuilders.MyCameraControllerEnum.Entity;
+                            model.ActiveWorld.Content.CameraController = Sandbox.Common.ObjectBuilders.MyCameraControllerEnum.Entity;
                             model.ActiveWorld.Content.CameraEntity = character.EntityId;
 
                             model.SectorData.SectorObjects.Add(character);

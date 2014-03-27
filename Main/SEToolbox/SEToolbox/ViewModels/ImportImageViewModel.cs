@@ -1,7 +1,7 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.CommonLib.ObjectBuilders;
-    using Sandbox.CommonLib.ObjectBuilders.VRageData;
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;

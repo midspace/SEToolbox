@@ -1,8 +1,8 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.CommonLib.ObjectBuilders;
-    using Sandbox.CommonLib.ObjectBuilders.Definitions;
-    using Sandbox.CommonLib.ObjectBuilders.VRageData;
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using System;
@@ -50,7 +50,7 @@
         }
 
         [XmlIgnore]
-        public Sandbox.CommonLib.ObjectBuilders.MyCubeSize GridSize
+        public Sandbox.Common.ObjectBuilders.MyCubeSize GridSize
         {
             get
             {

@@ -118,11 +118,11 @@
 
             var update = false;
 
-            update = DoFilesDiffer(baseFilePath, appFilePath, "Sandbox.CommonLib.dll");
+            update = DoFilesDiffer(baseFilePath, appFilePath, "Sandbox.Common.dll");
             if (update)
                 return update;
 
-            update = DoFilesDiffer(baseFilePath, appFilePath, "Sandbox.CommonLib.XmlSerializers.dll");
+            update = DoFilesDiffer(baseFilePath, appFilePath, "Sandbox.Common.XmlSerializers.dll");
             if (update)
                 return update;
 
@@ -146,8 +146,8 @@
             var appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
 
             var files = new[]{
-            "Sandbox.CommonLib.dll",
-            "Sandbox.CommonLib.XmlSerializers.dll",
+            "Sandbox.Common.dll",
+            "Sandbox.Common.XmlSerializers.dll",
             "VRage.Common.dll",
             "VRage.Library.dll",
             "VRage.Math.dll",};
