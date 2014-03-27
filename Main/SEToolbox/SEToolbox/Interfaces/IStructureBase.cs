@@ -1,6 +1,6 @@
 ﻿namespace SEToolbox.Interfaces
 {
-    using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
 
     public interface IStructureBase

@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.021.029.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.023.013.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -55,10 +55,10 @@
         <File Id="file184705D6F44643D48E157FDD3FBF37D7" Source="$(var.SEToolbox.TargetDir)SEToolbox.exe" Checksum="yes"/>
       </Component>
       <Component Id="comp88066F31283E44A79F1D679F4B9D80AE">
-        <File Id="file61275B9FC2AE484BA7A2BDB7459A3647" Source="$(var.SEToolbox.TargetDir)Sandbox.CommonLib.dll"/>
+        <File Id="file61275B9FC2AE484BA7A2BDB7459A3647" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.dll"/>
       </Component>
       <Component Id="compB0198B4AB39348F5B20741B39BD36F84">
-        <File Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Source="$(var.SEToolbox.TargetDir)Sandbox.CommonLib.XmlSerializers.dll"/>
+        <File Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.XmlSerializers.dll"/>
       </Component>
       <Component Id="compD92E196604CA4CDBB739699BCB446CAE">
         <File Id="fileA1ED1B028B6F45868D48799D4DDE0D94" Source="$(var.SEToolbox.TargetDir)SEToolbox.ImageLibrary.dll"/>

@@ -1,7 +1,7 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using System.Collections.Generic;
-    using Sandbox.CommonLib.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
 

@@ -42,8 +42,8 @@
             var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
 
             var files = new string[]{
-            "Sandbox.CommonLib.dll",
-            "Sandbox.CommonLib.XmlSerializers.dll",
+            "Sandbox.Common.dll",
+            "Sandbox.Common.XmlSerializers.dll",
             "VRage.Common.dll",
             "VRage.Library.dll",
             "VRage.Math.dll",};

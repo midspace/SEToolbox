@@ -6,9 +6,9 @@
     using System.Linq;
     using System.Xml;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.CommonLib.ObjectBuilders;
-    using Sandbox.CommonLib.ObjectBuilders.Definitions;
-    using Sandbox.CommonLib.ObjectBuilders.VRageData;
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Support;
     using VRageMath;
 

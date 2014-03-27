@@ -1,7 +1,7 @@
 ﻿namespace SEToolbox.Interop
 {
     using System;
-    using Sandbox.CommonLib.ObjectBuilders.VRageData;
+    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Support;
     using VRageMath;
 
