@@ -264,6 +264,7 @@
 
         #region ReadCubeBlockDefinitions
 
+        static MyObjectBuilder_AmmoMagazineDefinitions _ammoMagazineDefinitions;
         static MyObjectBuilder_CubeBlockDefinitions _cubeBlockDefinitions;
         static MyObjectBuilder_ComponentDefinitions _componentDefinitions;
         static MyObjectBuilder_BlueprintDefinitions _blueprintDefinitions;
@@ -274,6 +275,7 @@
 
         public static void ReadCubeBlockDefinitions()
         {
+            _ammoMagazineDefinitions = LoadContentFile<MyObjectBuilder_AmmoMagazineDefinitions, MyObjectBuilder_AmmoMagazineDefinitionsSerializer>("AmmoMagazines.sbc");
             _voxelMaterialDefinitions = LoadContentFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>("VoxelMaterials.sbc");
             _physicalItemDefinitions = LoadContentFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>("PhysicalItems.sbc");
             _componentDefinitions = LoadContentFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>("Components.sbc");
@@ -331,6 +333,11 @@
 
         #endregion
 
+        public static MyObjectBuilder_ComponentDefinition[] ComponentDefinitions
+        {
+            get { return _componentDefinitions.Components; }
+        }
+
         #region FetchCubeBlockMass
 
         public static float FetchCubeBlockMass(Type typeId, MyCubeSize cubeSize, string subTypeid)
@@ -350,21 +357,9 @@
             return mass;
         }
 
-        public static void AccumulateCubeBlueprintRequirements(Type typeId, string subTypeid, MyCubeSize cubeSize, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, ref TimeSpan timeTaken)
+        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderTypeEnum type, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, out TimeSpan timeTaken)
         {
-            var cubeBlockDefinition = GetCubeDefinition(typeId, cubeSize, subTypeid);
-
-            if (cubeBlockDefinition != null)
-            {
-                foreach (var component in cubeBlockDefinition.Components)
-                {
-                    AccumulateCubeBlueprintRequirements(component.Subtype, component.Type, amount, requirements, ref timeTaken);
-                }
-            }
-        }
-
-        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderTypeEnum type, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, ref TimeSpan timeTaken)
-        {
+            TimeSpan time = new TimeSpan();
             var bp = _blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.TypeId == type);
             if (bp != null)
             {
@@ -389,9 +384,11 @@
 
                     var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount;
                     var ts = new TimeSpan((long)ticks);
-                    timeTaken += ts;
+                    time += ts;
                 }
             }
+
+            timeTaken = time;
         }
 
         public static float GetItemMass(Type type, string subTypeId)
@@ -415,6 +412,45 @@
                 }
             }
             return 0;
+        }
+
+        public static string GetObjectBuilderName(Type type)
+        {
+            if (_myObjectBuilderTypeList.ContainsKey(type))
+            {
+                return _myObjectBuilderTypeList[type].ToString();
+            }
+
+            return null;
+        }
+
+        public static MyObjectBuilder_DefinitionBase GetDefinition(MyObjectBuilderTypeEnum typeId, string subTypeId)
+        {
+            var cube = _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            if (cube != null)
+            {
+                return cube;
+            }
+
+            var item = _physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            if (item != null)
+            {
+                return item;
+            }
+
+            var component = _componentDefinitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
+            if (component != null)
+            {
+                return component;
+            }
+
+            var magazine = _ammoMagazineDefinitions.AmmoMagazines.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
+            if (magazine != null)
+            {
+                return magazine;
+            }
+
+            return null;
         }
 
         public static float GetItemVolume(Type type, string subTypeId)
@@ -467,6 +503,8 @@
 
         #endregion
 
+        #region GetCubeDefinition
+
         public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, MyCubeSize cubeSize, string subtypeId)
         {
             if (string.IsNullOrEmpty(subtypeId))
@@ -477,6 +515,8 @@
             return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
         }
+
+        #endregion
 
         #region GetBoundingBox
 

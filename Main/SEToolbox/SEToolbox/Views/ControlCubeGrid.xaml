@@ -4,14 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:SEToolbox.Converters"
+             xmlns:controls="clr-namespace:SEToolbox.Controls"
              xmlns:props="clr-namespace:SEToolbox.Properties"
              xmlns:views="clr-namespace:SEToolbox.Views"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="400">
+             d:DesignHeight="400" d:DesignWidth="400">
     <UserControl.Resources>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -23,125 +27,297 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Label>Structure - </Label>
+            <Label>Structure -</Label>
             <TextBlock VerticalAlignment="Center" Text="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}" />
         </StackPanel>
-        <ToolBarPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
-            <ToolBar>
-                <Button Command="{Binding RepairObjectCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" Margin="0,0,2,0" />
-                        <AccessText>Repair</AccessText>
-                    </StackPanel>
-                </Button>
-                <Menu Style="{StaticResource ToolBarMenu}">
-                    <MenuItem Header="Speed" Style="{StaticResource ToolBarTopMenuitem}">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
-                        </MenuItem.Icon>
-                        <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}" ToolTip="Set Linear and Rotation Velocity to zero (0).">
-                            <MenuItem.Icon>
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}" ToolTip="Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.">
-                            <MenuItem.Icon>
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="Sets the object velocity directly at the player at maximum speed.">
-                            <MenuItem.Icon>
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_right2}" />
-                            </MenuItem.Icon>
-                        </MenuItem>
+        <Menu Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" DockPanel.Dock="Top">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel HorizontalAlignment="Stretch" Height="22"/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Header="Repair" Command="{Binding RepairObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Speed" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
+                </MenuItem.Icon>
+                <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}" ToolTip="Set Linear and Rotation Velocity to zero (0).">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}" ToolTip="Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="Sets the object velocity directly at the player at maximum speed.">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_right2}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Convert" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
+                </MenuItem.Icon>
+                <MenuItem Header="Armor">
+                    <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}" ToolTip="Convert any Light armor blocks to Heavy Armor blocks."/>
+                    <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}" ToolTip="Convert any Heavy armor block to Light armor blocks."/>
+                    <Separator/>
+                    <MenuItem Header="To Corner Armor" Command="{Binding ConvertToCornerArmorCommand}" ToolTip="Convert any Round armor edge blocks to Corner armor edge blocks."/>
+                    <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="Convert any Corner armor edge blocks to Round armor edge blocks."/>
+                </MenuItem>
+                <MenuItem Header="Framework" Command="{Binding FrameworkCommand}">
+                    <MenuItem Header="To 0.5% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                        <MenuItem.CommandParameter>
+                            <s:Double>0.005</s:Double>
+                        </MenuItem.CommandParameter>
                     </MenuItem>
-                    <MenuItem Header="Convert" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
-                        </MenuItem.Icon>
-                        <MenuItem Header="Armor">
-                            <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}" ToolTip="Convert any Light armor blocks to Heavy Armor blocks."/>
-                            <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}" ToolTip="Convert any Heavy armor block to Light armor blocks."/>
-                            <Separator/>
-                            <MenuItem Header="To Corner Armor" Command="{Binding ConvertToCornerArmorCommand}" ToolTip="Convert any Round armor edge blocks to Corner armor edge blocks."/>
-                            <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="Convert any Corner armor edge blocks to Round armor edge blocks."/>
-                        </MenuItem>
-                        <MenuItem Header="Framework" Command="{Binding FrameworkCommand}">
-                            <MenuItem Header="To 0.5% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
-                                <MenuItem.CommandParameter>
-                                    <s:Double>0.005</s:Double>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                            <MenuItem Header="To 25% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 25% constructed state.">
-                                <MenuItem.CommandParameter>
-                                    <s:Double>0.25</s:Double>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                            <MenuItem Header="To 50% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 50% constructed state.">
-                                <MenuItem.CommandParameter>
-                                    <s:Double>0.50</s:Double>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                            <MenuItem Header="To 75% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 75% constructed state.">
-                                <MenuItem.CommandParameter>
-                                    <s:Double>0.75</s:Double>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                            <MenuItem Header="To 100% Complete Structure" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any unconstructed components are 100% constructed.">
-                                <MenuItem.CommandParameter>
-                                    <s:Double>1.00</s:Double>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                        </MenuItem>
-                        <MenuItem Header="Station/Ship">
-                            <MenuItem Header="To Ship" Command="{Binding ConvertToShipCommand}" ToolTip="Change a Station into a Large Ship." />
-                            <MenuItem Header="To Station" Command="{Binding ConvertToStationCommand}" ToolTip="Change a Large Ship into a Station." />
-                            <MenuItem Header="Reorient Station to Axis" Command="{Binding ReorientStationCommand}" ToolTip="Reorients a Station to the major axis, and corrects the position to match standard Space Engineers block locations." />
-                        </MenuItem>
-                        <!--<MenuItem Header="Ladder to Passage" Command="{Binding ConvertLadderToPassageCommand}"/>-->
+                    <MenuItem Header="To 25% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 25% constructed state.">
+                        <MenuItem.CommandParameter>
+                            <s:Double>0.25</s:Double>
+                        </MenuItem.CommandParameter>
                     </MenuItem>
-                    <MenuItem Header="Mirror">
-                        <MenuItem Header="Using predefined X/Y/Z Planes" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="Uses planes as defined on the ship/station within Space Engineers." />
-                        <MenuItem Header="Find largest surface / odd [left&gt;|center|&lt;right]" Command="{Binding MirrorStructureGuessOddCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
-                        <MenuItem Header="Find largest surface / even [left&gt;|&lt;right]" Command="{Binding MirrorStructureGuessEvenCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
+                    <MenuItem Header="To 50% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 50% constructed state.">
+                        <MenuItem.CommandParameter>
+                            <s:Double>0.50</s:Double>
+                        </MenuItem.CommandParameter>
                     </MenuItem>
-                </Menu>
-                <Button Command="{Binding OptimizeObjectCommand}" ToolTip="Only useful for enormous ships of more than 200,000 blocks. Reorganises order of cubes within the file, to speed up loading time.">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=sort_descending}" Margin="0,0,2,0" />
-                        <AccessText>Optimize</AccessText>
-                    </StackPanel>
-                </Button>
-            </ToolBar>
-        </ToolBarPanel>
+                    <MenuItem Header="To 75% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 75% constructed state.">
+                        <MenuItem.CommandParameter>
+                            <s:Double>0.75</s:Double>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="To 100% Complete Structure" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any unconstructed components are 100% constructed.">
+                        <MenuItem.CommandParameter>
+                            <s:Double>1.00</s:Double>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Station/Ship">
+                    <MenuItem Header="To Ship" Command="{Binding ConvertToShipCommand}" ToolTip="Change a Station into a Large Ship." />
+                    <MenuItem Header="To Station" Command="{Binding ConvertToStationCommand}" ToolTip="Change a Large Ship into a Station." />
+                    <MenuItem Header="Reorient Station to Axis" Command="{Binding ReorientStationCommand}" ToolTip="Reorients a Station to the major axis, and corrects the position to match standard Space Engineers block locations." />
+                </MenuItem>
+                <!--<MenuItem Header="Ladder to Passage" Command="{Binding ConvertLadderToPassageCommand}"/>-->
+            </MenuItem>
+            <MenuItem Header="Mirror">
+                <MenuItem Header="Using predefined X/Y/Z Planes" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="Uses planes as defined on the ship/station within Space Engineers." />
+                <MenuItem Header="Find largest surface / odd [left&gt;|center|&lt;right]" Command="{Binding MirrorStructureGuessOddCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
+                <MenuItem Header="Find largest surface / even [left&gt;|&lt;right]" Command="{Binding MirrorStructureGuessEvenCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
+            </MenuItem>
+            <MenuItem Header="Optimize" Command="{Binding OptimizeObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Only useful for enormous ships of more than 200,000 blocks. Reorganises order of cubes within the file, to speed up loading time.">
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=sort_descending}" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Copy text detail to Clipboard" Command="{Binding CopyDetailCommand}">
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </Menu>
         <Label Grid.Row="2" Grid.Column="0" Content="Dampeners:"/>
         <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
         <Label Grid.Column="0" Grid.Row="3" Content="Position:"/>
         <views:ControlPosition Grid.Column="1" Grid.Row="3"/>
-        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="2">
-            <TextBox.Text>
-                <MultiBinding StringFormat="{x:Static props:Resources.CubeDetail}" Mode="OneWay">
-                    <Binding Path="IsPiloted"/>
-                    <Binding Path="DamageCount"/>
-                    <Binding Path="Speed"/>
-                    <Binding Path="PlayerDistance"/>
-                    <Binding Path="Scale.X"/>
-                    <Binding Path="Scale.Y"/>
-                    <Binding Path="Scale.Z"/>
-                    <Binding Path="Size.Width"/>
-                    <Binding Path="Size.Height"/>
-                    <Binding Path="Size.Depth"/>
-                    <Binding Path="Mass"/>
-                    <Binding Path="BlockCount"/>
-                </MultiBinding>
-            </TextBox.Text>
-        </TextBox>
-        <Separator Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2"/>
-        <TextBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="2" Text="{Binding Report}" />
+
+        <ScrollViewer Grid.Row="4" Grid.ColumnSpan="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Margin="4 0 4 0" Text="Piloted:"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPiloted}" />
+                <TextBlock Grid.Row="1" Margin="4 0 4 0" Text="Damage:"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
+                <TextBlock Grid.Row="2" Margin="4 0 4 0" Text="Speed:"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
+                <TextBlock Grid.Row="3" Margin="4 0 4 0" Text="Distance:"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+                <TextBlock Grid.Row="4" Margin="4 0 4 0" Text="Scale:"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} × {1} × {2} blocks">
+                            <Binding Path="Scale.X" />
+                            <Binding Path="Scale.Y" />
+                            <Binding Path="Scale.Z" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Size:"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}m × {1}m × {2}m">
+                            <Binding Path="Size.Width" />
+                            <Binding Path="Size.Height" />
+                            <Binding Path="Size.Depth" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Grid.Row="6" Margin="4 0 4 0" Text="Mass:"/>
+                <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0.00} Kg'}" />
+                <TextBlock Grid.Row="7" Margin="4 0 4 0" Text="Blocks:"/>
+                <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding BlockCount, StringFormat='{}{0:#,###0}'}" />
+                <TextBlock Grid.Row="8" Margin="4 0 4 0" Text="Time to produce parts:"/>
+                <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding TimeToProduce, StringFormat='{}{0:dd} days, {0:hh} hours, {0:mm\\:ss\\.ff}'}"/>
+
+                <Separator Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="2"/>
+
+                <controls:SortableListView Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding CubeAssets}"
+                        ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Cubes" DisplayMemberBinding="{Binding Name}" Width="175"/>
+                            <GridViewColumn Header="Count" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Count, StringFormat='{}{0:#,##0}'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Mass" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </controls:SortableListView>
+                <controls:SortableListView Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ComponentAssets}"
+                    ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Components" DisplayMemberBinding="{Binding Name}" Width="175"/>
+                            <GridViewColumn Header="Count" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Count, StringFormat='{}{0:#,##0}'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Mass" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Volume" Width="90">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Time" Width="90">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Time, StringFormat='{}{0:hh\\:mm\\:ss\\.ff}'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </controls:SortableListView>
+                <controls:SortableListView Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding IngotAssets}"
+                    ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Ingots" DisplayMemberBinding="{Binding Name}" Width="175"/>
+                            <GridViewColumn Header="Amount" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Amount, StringFormat='{}{0:#,##0.00}'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Mass" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Volume" Width="90">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Time" Width="90">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Time, StringFormat='{}{0:hh\\:mm\\:ss\\.ff}'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </controls:SortableListView>
+                <controls:SortableListView Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding OreAssets}"
+                    ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding Name}" Width="175"/>
+                            <GridViewColumn Header="Amount" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Amount, StringFormat='{}{0:#,##0.00}'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Mass" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Volume" Width="90">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </controls:SortableListView>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

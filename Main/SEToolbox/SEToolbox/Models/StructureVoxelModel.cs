@@ -240,7 +240,7 @@
         }
 
         /// <summary>
-        /// This is text detail of the breakdown of ores in the asteroid.
+        /// This is detail of the breakdown of ores in the asteroid.
         /// </summary>
         [XmlIgnore]
         public List<VoxelMaterialAssetModel> MaterialAssets
@@ -302,7 +302,7 @@
 
                         foreach (var kvp in details)
                         {
-                            list.Add(new VoxelMaterialAssetModel() { OreName = kvp.Key, Mass = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
+                            list.Add(new VoxelMaterialAssetModel() { OreName = kvp.Key, Volume = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
                         }
 
                         this.MaterialAssets = list;

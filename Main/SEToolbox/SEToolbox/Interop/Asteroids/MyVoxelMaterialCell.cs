@@ -33,7 +33,7 @@ namespace SEToolbox.Interop.Asteroids
         private byte[] _materials;
         private byte[] _indestructibleContent;
         private byte _averageCellMaterial;
-        private static readonly Dictionary<byte, int> CellMaterialCounts = new Dictionary<byte, int>();
+        private static readonly Dictionary<byte, long> CellMaterialCounts = new Dictionary<byte, long>();
 
         #endregion
 
@@ -139,7 +139,7 @@ namespace SEToolbox.Interop.Asteroids
                         CellMaterialCounts[material]++;
                 }
 
-                var maxNum = 0;
+                long maxNum = 0;
 
                 var keys = CellMaterialCounts.Keys.ToArray();
                 foreach (var key in keys)

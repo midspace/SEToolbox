@@ -18,6 +18,7 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Windows;
     using System.Windows.Forms;
     using System.Windows.Input;
     using VRageMath;
@@ -342,7 +343,8 @@
                 if (value != this._selectedStructure)
                 {
                     this._selectedStructure = value;
-                    this._selectedStructure.DataModel.InitializeAsync();
+                    if (this._selectedStructure != null)
+                        this._selectedStructure.DataModel.InitializeAsync();
                     this.RaisePropertyChanged(() => SelectedStructure);
                 }
             }

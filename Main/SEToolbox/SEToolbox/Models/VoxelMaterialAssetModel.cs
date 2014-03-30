@@ -7,7 +7,7 @@
     {
         private string _oreName;
 
-        private double _mass;
+        private double _volume;
 
         private double _percent;
 
@@ -30,19 +30,19 @@
             }
         }
 
-        public double Mass
+        public double Volume
         {
             get
             {
-                return this._mass;
+                return this._volume;
             }
 
             set
             {
-                if (value != this._mass)
+                if (value != this._volume)
                 {
-                    this._mass = value;
-                    this.RaisePropertyChanged(() => Mass);
+                    this._volume = value;
+                    this.RaisePropertyChanged(() => Volume);
                 }
             }
         }

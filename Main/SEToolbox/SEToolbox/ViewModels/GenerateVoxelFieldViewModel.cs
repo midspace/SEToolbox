@@ -307,7 +307,7 @@ namespace SEToolbox.ViewModels
                     asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value);
 
                     IList<byte> baseAssets;
-                    Dictionary<byte, int> materialVoxelCells;
+                    Dictionary<byte, long> materialVoxelCells;
 
                     asteroid.CalculateMaterialCellAssets(out baseAssets, out materialVoxelCells);
 

@@ -24,8 +24,20 @@
         private Vector3D _scale;
         private Size3D _size;
         private int _pilots;
-        private string _report;
         private float _mass;
+        private TimeSpan _timeToProduce;
+
+        [XmlIgnore]
+        private List<CubeAssetModel> _cubeAssets;
+
+        [XmlIgnore]
+        private List<CubeAssetModel> _componentAssets;
+
+        [XmlIgnore]
+        private List<OreAssetModel> _ingotAssets;
+
+        [XmlIgnore]
+        private List<OreAssetModel> _oreAssets;
 
         #endregion
 
@@ -242,19 +254,19 @@
         }
 
         [XmlIgnore]
-        public string Report
+        public TimeSpan TimeToProduce
         {
             get
             {
-                return this._report;
+                return this._timeToProduce;
             }
 
             set
             {
-                if (value != this._report)
+                if (value != this._timeToProduce)
                 {
-                    this._report = value;
-                    this.RaisePropertyChanged(() => Report);
+                    this._timeToProduce = value;
+                    this.RaisePropertyChanged(() => TimeToProduce);
                 }
             }
         }
@@ -346,6 +358,90 @@
             }
         }
 
+        /// <summary>
+        /// This is detail of the breakdown of cubes in the ship.
+        /// </summary>
+        [XmlIgnore]
+        public List<CubeAssetModel> CubeAssets
+        {
+            get
+            {
+                return this._cubeAssets;
+            }
+
+            set
+            {
+                if (value != this._cubeAssets)
+                {
+                    this._cubeAssets = value;
+                    this.RaisePropertyChanged(() => CubeAssets);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This is detail of the breakdown of components in the ship.
+        /// </summary>
+        [XmlIgnore]
+        public List<CubeAssetModel> ComponentAssets
+        {
+            get
+            {
+                return this._componentAssets;
+            }
+
+            set
+            {
+                if (value != this._componentAssets)
+                {
+                    this._componentAssets = value;
+                    this.RaisePropertyChanged(() => ComponentAssets);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This is detail of the breakdown of ingots in the ship.
+        /// </summary>
+        [XmlIgnore]
+        public List<OreAssetModel> IngotAssets
+        {
+            get
+            {
+                return this._ingotAssets;
+            }
+
+            set
+            {
+                if (value != this._ingotAssets)
+                {
+                    this._ingotAssets = value;
+                    this.RaisePropertyChanged(() => IngotAssets);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This is detail of the breakdown of ore in the ship.
+        /// </summary>
+        [XmlIgnore]
+        public List<OreAssetModel> OreAssets
+        {
+            get
+            {
+                return this._oreAssets;
+            }
+
+            set
+            {
+                if (value != this._oreAssets)
+                {
+                    this._oreAssets = value;
+                    this.RaisePropertyChanged(() => OreAssets);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -381,10 +477,18 @@
 
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
-            float calcMass = 0;
+            float totalMass = 0;
             var ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
             var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
             var timeTaken = new TimeSpan();
+
+            this.CubeAssets = new List<CubeAssetModel>();
+            this.ComponentAssets = new List<CubeAssetModel>();
+            this.IngotAssets = new List<OreAssetModel>();
+            this.OreAssets = new List<OreAssetModel>();
+
+            var cubeAssetDict = new Dictionary<string, CubeAssetModel>();
+            var componentAssetDict = new Dictionary<string, CubeAssetModel>();
 
             foreach (var block in this.CubeGrid.CubeBlocks)
             {
@@ -410,14 +514,72 @@
                     max.Z = Math.Max(max.Z, block.Min.Z + orientSize.Z);
                 }
 
-                calcMass += SpaceEngineersAPI.FetchCubeBlockMass(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                var blockName = block.SubtypeName;
+                if (string.IsNullOrEmpty(blockName))
+                {
+                    blockName = SpaceEngineersAPI.GetObjectBuilderName(block.GetType());
+                }
 
-                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(block.GetType(), block.SubtypeName, this.CubeGrid.GridSizeEnum, 1, ingotRequirements, ref timeTaken);
+
+                var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
+
+                float cubeMass = 0;
+                if (cubeBlockDefinition != null)
+                {
+                    foreach (var component in cubeBlockDefinition.Components)
+                    {
+                        TimeSpan componentTime;
+                        SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(component.Subtype, component.Type, component.Count, ingotRequirements, out componentTime);
+                        timeTaken += componentTime;
+
+                        var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+                        float componentMass = cd.Mass * component.Count;
+                        float componentVolume = cd.Volume.Value * component.Count;
+                        cubeMass += componentMass;
+
+                        var componentName = component.Subtype;
+                        if (componentAssetDict.ContainsKey(componentName))
+                        {
+                            componentAssetDict[componentName].Count += component.Count;
+                            componentAssetDict[componentName].Mass += componentMass;
+                            componentAssetDict[componentName].Volume += componentVolume;
+                            componentAssetDict[componentName].Time += componentTime;
+                        }
+                        else
+                        {
+                            var m = new CubeAssetModel() { Name = componentName, Mass = componentMass, Volume = componentVolume, Count = component.Count, Time = componentTime };
+                            this.ComponentAssets.Add(m);
+                            componentAssetDict.Add(componentName, m);
+                        }
+                    }
+                }
+
+                totalMass += cubeMass;
+
+                if (cubeAssetDict.ContainsKey(blockName))
+                {
+                    cubeAssetDict[blockName].Count++;
+                    cubeAssetDict[blockName].Mass += cubeMass;
+                    //cubeAssetDict[blockName].Volume += cubeVolume;
+                    //cubeAssetDict[blockName].Time
+                }
+                else
+                {
+                    var m = new CubeAssetModel() { Name = blockName, Mass = cubeMass, /*Volume = cubeVolume,*/ Count = 1 };
+                    this.CubeAssets.Add(m);
+                    cubeAssetDict.Add(blockName, m);
+                }
+
+                //SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(block.GetType(), block.SubtypeName, this.CubeGrid.GridSizeEnum, ingotRequirements, ref timeTaken);
             }
 
             foreach (var kvp in ingotRequirements)
             {
-                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount, oreRequirements, ref timeTaken);
+                TimeSpan ingotTime;
+                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
+                var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
+                IngotAssets.Add(new OreAssetModel() { Name = kvp.Key, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime });
+                timeTaken += ingotTime;
             }
 
             var scale = max - min;
@@ -429,7 +591,7 @@
             this.Max = max;
             this.Scale = scale;
             this.Size = new Size3D(scale.X * scaleMultiplyer, scale.Y * scaleMultiplyer, scale.Z * scaleMultiplyer);
-            this.Mass = calcMass;
+            this.Mass = totalMass;
 
             this.DisplayName = null;
             // Substitue Beacon detail for the DisplayName.
@@ -442,19 +604,15 @@
 
             this.Description = string.Format("{0} | {1:#,##0} Kg", this.Scale, this.Mass);
 
-            var bld = new StringBuilder();
-            bld.AppendLine("Construction Requirements:");
             foreach (var kvp in oreRequirements)
             {
-                var mass = SpaceEngineersAPI.GetItemMass(kvp.Value.TypeId, kvp.Value.SubtypeId);
-                var volume = SpaceEngineersAPI.GetItemVolume(kvp.Value.TypeId, kvp.Value.SubtypeId);
-                bld.AppendFormat("{0} {1}: {2:###,##0.000} L or {3:###,##0.000} Kg\r\n", kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount * (decimal)volume, kvp.Value.Amount * (decimal)mass);
+                var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
+                OreAssets.Add(new OreAssetModel() { Name = kvp.Key, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value });
             }
-            bld.AppendLine();
-            bld.AppendFormat("Time to produce: {0:hh\\:mm\\:ss}\r\n", timeTaken);
 
-            this.Report = bld.ToString();
+            this.TimeToProduce = timeTaken;
 
+            // TODO:
             // Report:
             // Reflectors On
             // Mass:      9,999,999 Kg
@@ -926,7 +1084,7 @@
                     }
                 }
             }
-            
+
             return orientation;
         }
 

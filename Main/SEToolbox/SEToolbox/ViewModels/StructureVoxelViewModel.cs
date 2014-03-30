@@ -1,14 +1,14 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Windows;
-    using System.Windows.Input;
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
-    using System.ComponentModel;
     using SEToolbox.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Text;
+    using System.Windows;
+    using System.Windows.Input;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -179,11 +179,11 @@
         {
             var ore = new StringBuilder();
 
-            if (this.DataModel.MaterialAssets != null)
+            if (this.MaterialAssets != null)
             {
-                foreach (var mat in this.DataModel.MaterialAssets)
+                foreach (var mat in this.MaterialAssets)
                 {
-                    ore.AppendFormat("{0}\t{1:#,##0.00} m³\t{2:P2}\r\n", mat.OreName, mat.Mass, mat.Percent);
+                    ore.AppendFormat("{0}\t{1:#,##0.00} m³\t{2:P2}\r\n", mat.OreName, mat.Volume, mat.Percent);
                 }
             }
 
