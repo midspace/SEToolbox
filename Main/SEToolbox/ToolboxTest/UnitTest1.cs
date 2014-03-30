@@ -15,7 +15,7 @@
     public class UnitTest1
     {
         [TestMethod]
-        public void GenreateTempFiles()
+        public void GenerateTempFiles()
         {
             for (var i = 0; i < 10; i++)
             {
@@ -116,7 +116,6 @@
             const string newFilename = @".\TestAssets\New World.sbw";
             ZipTools.ZipFolder(folder, null, newFilename);
         }
-
 
         [TestMethod]
         public void ColorTest()

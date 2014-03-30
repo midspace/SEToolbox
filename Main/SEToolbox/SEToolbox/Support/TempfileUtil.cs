@@ -59,7 +59,14 @@
             {
                 if (File.Exists(filename))
                 {
-                    File.Delete(filename);
+                    try
+                    {
+                        File.Delete(filename);
+                    }
+                    catch
+                    {
+                        // Unable to delete any locked files.
+                    }
                 }
             }
 

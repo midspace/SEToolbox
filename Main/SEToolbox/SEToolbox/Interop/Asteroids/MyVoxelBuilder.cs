@@ -300,7 +300,7 @@
             voxelMap.UpdateContentBounds();
             var count = voxelMap.SumVoxelCells();
 
-            Debug.WriteLine(" Done. | {0}  | VoxCells {1:#,##0}", timer.Elapsed, count);
+            Debug.WriteLine(string.Format(" Done. | {0}  | VoxCells {1:#,##0}", timer.Elapsed, count));
             voxelMap.Save(filename);
 
             return voxelMap;

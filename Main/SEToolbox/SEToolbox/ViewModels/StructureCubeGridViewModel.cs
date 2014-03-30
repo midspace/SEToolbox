@@ -4,7 +4,10 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Text;
+    using System.Windows;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
 
@@ -178,6 +181,14 @@
             }
         }
 
+        public ICommand CopyDetailCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(CopyDetailExecuted), new Func<bool>(CopyDetailCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -317,16 +328,16 @@
             }
         }
 
-        public string Report
+        public TimeSpan TimeToProduce
         {
             get
             {
-                return this.DataModel.Report;
+                return this.DataModel.TimeToProduce;
             }
 
             set
             {
-                this.DataModel.Report = value;
+                this.DataModel.TimeToProduce = value;
             }
         }
 
@@ -377,6 +388,58 @@
                 this.DataModel.PositionZ = value;
                 this.MainViewModel.IsModified = true;
                 this.MainViewModel.CalcDistances();
+            }
+        }
+
+        public List<CubeAssetModel> CubeAssets
+        {
+            get
+            {
+                return this.DataModel.CubeAssets;
+            }
+
+            set
+            {
+                this.DataModel.CubeAssets = value;
+            }
+        }
+
+        public List<CubeAssetModel> ComponentAssets
+        {
+            get
+            {
+                return this.DataModel.ComponentAssets;
+            }
+
+            set
+            {
+                this.DataModel.ComponentAssets = value;
+            }
+        }
+
+        public List<OreAssetModel> IngotAssets
+        {
+            get
+            {
+                return this.DataModel.IngotAssets;
+            }
+
+            set
+            {
+                this.DataModel.IngotAssets = value;
+            }
+        }
+
+        public List<OreAssetModel> OreAssets
+        {
+            get
+            {
+                return this.DataModel.OreAssets;
+            }
+
+            set
+            {
+                this.DataModel.OreAssets = value;
             }
         }
 
@@ -610,6 +673,68 @@
                 this.MainViewModel.IsModified = true;
             }
             this.MainViewModel.IsBusy = false;
+        }
+
+        public bool CopyDetailCanExecute()
+        {
+            return true;
+        }
+
+        public void CopyDetailExecuted()
+        {
+            var cubes = new StringBuilder();
+            if (this.CubeAssets != null)
+            {
+                foreach (var mat in this.CubeAssets)
+                {
+                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\r\n", mat.Name, mat.Count, mat.Mass);
+                }
+            }
+
+            var components = new StringBuilder();
+            if (this.ComponentAssets != null)
+            {
+                foreach (var mat in this.ComponentAssets)
+                {
+                    components.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.Name, mat.Count, mat.Mass, mat.Volume, mat.Time);
+                }
+            }
+
+            var ingots = new StringBuilder();
+            if (this.IngotAssets != null)
+            {
+                foreach (var mat in this.IngotAssets)
+                {
+                    ingots.AppendFormat("{0}\t{1:#,##0.00}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.Name, mat.Amount, mat.Mass, mat.Volume, mat.Time);
+                }
+            }
+
+            var ores = new StringBuilder();
+            if (this.OreAssets != null)
+            {
+                foreach (var mat in this.OreAssets)
+                {
+                    ores.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\r\n", mat.Name, mat.Amount, mat.Mass, mat.Volume);
+                }
+            }
+
+            var detail = string.Format(Properties.Resources.CubeDetail,
+                IsPiloted,
+                DamageCount,
+                Speed,
+                PlayerDistance,
+                Scale.X, Scale.Y, Scale.Z,
+                Size.Width, Size.Height, Size.Depth,
+                Mass,
+                BlockCount,
+                PositionAndOrientation.Value.Position.X, PositionAndOrientation.Value.Position.Y, PositionAndOrientation.Value.Position.Z,
+                TimeToProduce,
+                cubes.ToString(),
+                components.ToString(),
+                ingots.ToString(),
+                ores.ToString());
+
+            Clipboard.SetText(detail);
         }
 
         #endregion

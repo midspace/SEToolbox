@@ -137,13 +137,13 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
-        public static Dictionary<string, int> GetMaterialAssetDetails(string filename)
+        public static Dictionary<string, long> GetMaterialAssetDetails(string filename)
         {
             var map = new MyVoxelMap();
             map.Load(filename, SpaceEngineersAPI.GetMaterialName(0), true);
 
             IList<byte> materialAssetList;
-            Dictionary<byte, int> materialVoxelCells;
+            Dictionary<byte, long> materialVoxelCells;
 
             map.CalculateMaterialCellAssets(out materialAssetList, out materialVoxelCells);
             return map.CountAssets(materialVoxelCells);
@@ -210,7 +210,7 @@ namespace SEToolbox.Interop.Asteroids
 
         public void LoadUncompressed(Vector3 position, string displayName, BinaryReader reader, string defaultMaterial, bool loadMaterial)
         {
-            Debug.WriteLine("Load: '{0}'", displayName);
+            Debug.WriteLine(string.Format("Load: '{0}'", displayName));
 
             this.FileVersion = reader.ReadInt32();
 
@@ -574,7 +574,7 @@ namespace SEToolbox.Interop.Asteroids
             var materialIndex = SpaceEngineersAPI.GetMaterialIndex(materialName);
 
             IList<byte> materialAssets;
-            Dictionary<byte, int> materialVoxelCells;
+            Dictionary<byte, long> materialVoxelCells;
 
             CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
@@ -704,10 +704,10 @@ namespace SEToolbox.Interop.Asteroids
             return sum;
         }
 
-        public void CalculateMaterialCellAssets(out IList<byte> materialAssetList, out Dictionary<byte, int> materialVoxelCells)
+        public void CalculateMaterialCellAssets(out IList<byte> materialAssetList, out Dictionary<byte, long> materialVoxelCells)
         {
             materialAssetList = new List<byte>();
-            materialVoxelCells = new Dictionary<byte, int>();
+            materialVoxelCells = new Dictionary<byte, long>();
             Vector3I cellCoord;
 
             for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
@@ -847,8 +847,7 @@ namespace SEToolbox.Interop.Asteroids
 
                                         if (content != MyVoxelConstants.VOXEL_CONTENT_EMPTY) // Only working with cells that aren't empty.
                                         {
-                                            matCell.SetMaterialAndIndestructibleContent(
-                                                materialsList[materialsIndex++], 0xff, ref voxelCoordInCell);
+                                            matCell.SetMaterialAndIndestructibleContent(materialsList[materialsIndex++], 0xff, ref voxelCoordInCell);
                                         }
                                     }
                                 }
@@ -912,9 +911,9 @@ namespace SEToolbox.Interop.Asteroids
 
         #region CountAssets
 
-        public Dictionary<string, int> CountAssets(IList<byte> materialAssets)
+        public Dictionary<string, long> CountAssets(IList<byte> materialAssets)
         {
-            var assetCount = new Dictionary<byte, int>();
+            var assetCount = new Dictionary<byte, long>();
             for (var i = 0; i < materialAssets.Count; i++)
             {
                 if (assetCount.ContainsKey(materialAssets[i]))
@@ -928,7 +927,7 @@ namespace SEToolbox.Interop.Asteroids
             }
 
             var materialDefinitions = SpaceEngineersAPI.GetMaterialList();
-            var assetNameCount = new Dictionary<string, int>();
+            var assetNameCount = new Dictionary<string, long>();
 
             foreach (var kvp in assetCount)
             {
@@ -952,10 +951,10 @@ namespace SEToolbox.Interop.Asteroids
             return assetNameCount;
         }
 
-        public Dictionary<string, int> CountAssets(Dictionary<byte, int> assetCount)
+        public Dictionary<string, long> CountAssets(Dictionary<byte, long> assetCount)
         {
             var materialDefinitions = SpaceEngineersAPI.GetMaterialList();
-            var assetNameCount = new Dictionary<string, int>();
+            var assetNameCount = new Dictionary<string, long>();
 
             foreach (var kvp in assetCount)
             {

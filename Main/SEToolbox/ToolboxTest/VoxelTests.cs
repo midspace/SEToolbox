@@ -141,9 +141,9 @@
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
-            
+
             IList<byte> materialAssets;
-            Dictionary<byte, int> materialVoxelCells;
+            Dictionary<byte, long> materialVoxelCells;
             voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
             Assert.AreEqual(44135, materialAssets.Count, "Asset count should be equal.");
@@ -174,7 +174,7 @@
             Assert.AreEqual(8 * 255, cellCount, "Cell count should be equal.");
 
             IList<byte> materialAssets;
-            Dictionary<byte, int> materialVoxelCells;
+            Dictionary<byte, long> materialVoxelCells;
             voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
             Assert.AreEqual(8, materialAssets.Count, "Asset count should be equal.");
 
@@ -200,7 +200,7 @@
             voxelMap.Load(fileOriginal, materials[0].Name);
             var cellCount = voxelMap.SumVoxelCells();
             IList<byte> materialAssets;
-            Dictionary<byte, int> materialVoxelCells;
+            Dictionary<byte, long> materialVoxelCells;
             voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
             var assetNameCount = voxelMap.CountAssets(materialAssets);
 
@@ -228,12 +228,12 @@
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
             IList<byte> materialAssets;
-            Dictionary<byte, int> materialVoxelCells;
+            Dictionary<byte, long> materialVoxelCells;
             voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
             Assert.AreEqual(35465, materialAssets.Count, "Asset count should be equal.");
 
-            var distribution = new double[] {Double.NaN, .5, .25};
+            var distribution = new double[] { Double.NaN, .5, .25 };
             var materialSelection = new byte[] { SpaceEngineersAPI.GetMaterialIndex(stoneMaterial.Name), SpaceEngineersAPI.GetMaterialIndex(goldMaterial.Name), SpaceEngineersAPI.GetMaterialIndex(uraniumMaterial.Name) };
 
             var newDistributiuon = new List<byte>();
@@ -289,17 +289,17 @@
                     voxelMap.Load(fileOriginal, materials[0].Name);
 
                     IList<byte> materialAssets;
-                    Dictionary<byte, int> materialVoxelCells;
+                    Dictionary<byte, long> materialVoxelCells;
                     voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
-                    var distribution = new double[] {Double.NaN, .99,};
-                    var materialSelection = new byte[] {0, SpaceEngineersAPI.GetMaterialIndex(material.Name)};
+                    var distribution = new double[] { Double.NaN, .99, };
+                    var materialSelection = new byte[] { 0, SpaceEngineersAPI.GetMaterialIndex(material.Name) };
 
                     var newDistributiuon = new List<byte>();
                     int count;
                     for (var i = 1; i < distribution.Count(); i++)
                     {
-                        count = (int) Math.Floor(distribution[i]*materialAssets.Count); // Round down.
+                        count = (int)Math.Floor(distribution[i] * materialAssets.Count); // Round down.
                         for (var j = 0; j < count; j++)
                         {
                             newDistributiuon.Add(materialSelection[i]);
@@ -317,23 +317,6 @@
                     voxelMap.Save(fileNewVoxel);
                 }
             }
-        }
-
-        //[TestMethod]
-        public void MemoryTest_NoOfMaterials()
-        {
-            var materials = SpaceEngineersAPI.GetMaterialList();
-            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
-
-            const string fileOriginal = @".\TestAssets\sphere_mix_large_365radi.vox";
-            var voxelMap = new MyVoxelMap();
-            voxelMap.Load(fileOriginal, materials[0].Name);
-
-            IList<byte> materialAssets;
-            Dictionary<byte, int> materialVoxelCells;
-            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
-
-            var assetNameCount = voxelMap.CountAssets(materialAssets);
         }
 
         [TestMethod]
@@ -427,132 +410,6 @@
             Assert.AreEqual(256, voxelMap.ContentCenter.X, "Voxel Center must match.");
             Assert.AreEqual(256, voxelMap.ContentCenter.Y, "Voxel Center must match.");
             Assert.AreEqual(256, voxelMap.ContentCenter.Z, "Voxel Center must match.");
-        }
-
-        //[TestMethod]
-        public void VoxelGenerateSphereLargeHollow()
-        {
-            var materials = SpaceEngineersAPI.GetMaterialList();
-            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
-
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_350_10_radi.vox", 350, materials[0].Name, true, 10);    // 00:01:32.6580269 | VoxCells 3,801,278,432. | Is culled.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_355_10_radi.vox", 355, materials[0].Name, true, 10);    // 00:01:57.0029873 | VoxCells 3,912,545,848. | Is culled.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_356_10_radi.vox", 356, materials[0].Name, true, 10);    // 00:01:56.1288918 | VoxCells 3,935,432,712. |
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_357_10_radi.vox", 357, materials[0].Name, true, 10);    // 00:01:58.6494562 | VoxCells 3,957,704,936. | no reponse.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_358_10_radi.vox", 358, materials[0].Name, true, 10);    // 00:02:01.1396811 | VoxCells 3,980,026,368. | Crash
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_360_10_radi.vox", 360, materials[0].Name, true, 10);    // 00:02:00.2852452 | VoxCells 4,025,973,228. | >2mins, no response.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_370_10_radi.vox", 370, materials[0].Name, true, 10);    // 00:02:02.8729741 | VoxCells 4,255,404,456. |
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_382_10_radi.vox", 382, materials[0].Name, true, 10);    // 00:02:01.4779420 | VoxCells 4,540,873,728. | Won't load
-
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_380_radi.vox", 380, materials[0].Name, false, 0);  // 00:01:37.7515161 | VoxCells 58,379,415,373. | culling. VoxCells 58,387,542,901
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_390_radi.vox", 390, materials[0].Name, false, 0);  // 00:02:07.8909152 | VoxCells 63,116,794,109. |
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_400_radi.vox", 400, materials[0].Name, false, 0);  // 00:02:05.2804642 | VoxCells 68,104,580,085. | culling. Alt Tab part works, then crash. VoxCells 68,104,580,085
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_450_radi.vox", 450, materials[0].Name, false, 0);  // works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_460_radi.vox", 460, materials[0].Name, false, 0);  // works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_465_radi.vox", 465, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_470_radi.vox", 470, materials[0].Name, false, 0);  // works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_471_radi.vox", 471, materials[0].Name, false, 0); // 00:03:41.2510726  | VoxCells 111,251,164,251 | Works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_472_radi.vox", 472, materials[0].Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_473_radi.vox", 473, materials[0].Name, false, 0); // 00:03:40.2173012  | VoxCells 112,675,647,555 | Crash.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_474_radi.vox", 474, materials[0].Name, false, 0); // 00:03:46.7690005  | VoxCells 113,392,787,817 | 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_475_radi.vox", 475, materials[0].Name, false, 0);  // no response?
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_480_radi.vox", 480, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_485_radi.vox", 485, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_490_radi.vox", 490, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_495_radi.vox", 495, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_500_radi.vox", 500, materials[0].Name, false, 0); // 00:04:43.9200838  | VoxCells 133,115,971,161. | Crash.
-        }
-
-        //[TestMethod]
-        public void VoxelPlanetSurfaceMapper()
-        {
-            // As of update 01.021.024, Helium_01, Helium_02, Ice_01 no longer exist.
-
-            var materials = SpaceEngineersAPI.GetMaterialList();
-            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
-
-            var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_05"));
-            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
-            var ironMaterial = materials.FirstOrDefault(m => m.Name.Contains("Iron"));
-            var heliumMaterial = materials.FirstOrDefault(m => m.Name.Contains("Helium"));
-            Assert.IsNotNull(heliumMaterial, "Helium material should exist.");
-            var iceMaterial = materials.FirstOrDefault(m => m.Name.Contains("Ice"));
-            Assert.IsNotNull(iceMaterial, "Ice material should exist.");
-
-            var imageFile = @".\TestAssets\Earth.png";
-            //var fileNew = @".\TestAssets\Earth.vox";
-            //fileNew = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Builder Toolset\Earth0.vox";
-            double radius = 300;
-
-            var length = MyVoxelBuilder.ScaleMod((radius * 2) + 2, 64);
-            var size = new Vector3I(length, length, length);
-            var origin = new Vector3I(size.X / 2, size.Y / 2, size.Z / 2);
-
-            var bmp = ToolboxExtensions.OptimizeImagePalette(imageFile);
-            var palatteNames = ToolboxExtensions.GetPalatteNames();
-
-            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
-            {
-                double x = e.CoordinatePoint.X - origin.X;
-                double y = e.CoordinatePoint.Y - origin.Y;
-                double z = e.CoordinatePoint.Z - origin.Z;
-
-                var dist = Math.Sqrt(Math.Abs(x * x) + Math.Abs(y * y) + Math.Abs(z * z));
-                if (dist >= radius)
-                {
-                    e.Volume = 0x00;
-                }
-                else if (dist > radius - 1)
-                {
-                    e.Volume = (byte)((radius - dist) * 255);
-                    var point = ToolboxExtensions.Cartesian3DToSphericalPlanar(x, y, z, dist, bmp.Width, bmp.Height);
-                    if (point.HasValue)
-                    {
-                        var color = bmp.GetPixel(point.Value.X, point.Value.Y);
-                        var materialColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
-                        if (materialColor.Value == "" || materialColor.Value == "White")
-                        {
-                            e.Material = iceMaterial.Name;
-                        }
-                        if (materialColor.Value == "Blue")
-                        {
-                            e.Material = heliumMaterial.Name;
-                        }
-                        //else
-                        //{
-                        //    e.Material = ironMaterial.Name;
-                        //}
-                    }
-                }
-                else
-                {
-                    e.Volume = 0xFF;
-                    var point = ToolboxExtensions.Cartesian3DToSphericalPlanar(x, y, z, dist, bmp.Width, bmp.Height);
-                    if (point.HasValue)
-                    {
-                        var color = bmp.GetPixel(point.Value.X, point.Value.Y);
-                        var materialColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
-                        if (materialColor.Value == "" || materialColor.Value == "White")
-                        {
-                            e.Material = iceMaterial.Name;
-                        }
-                        if (materialColor.Value == "Blue")
-                        {
-                            e.Material = heliumMaterial.Name;
-                        }
-                        //else
-                        //{
-                        //    e.Material = ironMaterial.Name;
-                        //}
-                    }
-                }
-            };
-
-            // TODO: Get the surface calculations working right.
-            //var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, stoneMaterial.Name, action);
-
-            //var m1 = ToolboxExtensions.min;
-            //var m2 = ToolboxExtensions.max;
         }
 
         [TestMethod]
@@ -672,24 +529,6 @@
             Assert.AreEqual(128, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
-        //[TestMethod]
-        public void VoxelGenerateSphereAssets()
-        {
-            var materials = SpaceEngineersAPI.GetMaterialList();
-            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
-
-            const string fileOriginal = @".\TestAssets\sphere_hollow_316radi.vox";
-
-            foreach (var material in materials)
-            {
-                var fileNewVoxel =
-                    Path.Combine(Path.GetDirectoryName(Path.GetFullPath(fileOriginal)),
-                        Path.GetFileNameWithoutExtension(fileOriginal) + "_" + material.Name + ".vox").ToLower();
-
-                var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, fileNewVoxel, 316, material.Name, true, 10);
-            }
-        }
-
         [TestMethod]
         public void Voxel3DImportStl()
         {
@@ -711,6 +550,22 @@
             Assert.AreEqual(50, voxelMap.ContentSize.X, "Voxel Content size must match.");
             Assert.AreEqual(46, voxelMap.ContentSize.Y, "Voxel Content size must match.");
             Assert.AreEqual(70, voxelMap.ContentSize.Z, "Voxel Content size must match.");
+        }
+
+        [TestMethod]
+        public void LoadAllVoxelFiles()
+        {
+            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
+
+            foreach (var filename in files)
+            {
+                var voxelMap = new MyVoxelMap();
+                voxelMap.Load(filename, SpaceEngineersAPI.GetMaterialName(0), true);
+
+                Assert.IsTrue(voxelMap.Size.X > 0, "Voxel Size must be greater than zero.");
+                Assert.IsTrue(voxelMap.Size.Y > 0, "Voxel Size must be greater than zero.");
+                Assert.IsTrue(voxelMap.Size.Z > 0, "Voxel Size must be greater than zero.");
+            }
         }
     }
 }

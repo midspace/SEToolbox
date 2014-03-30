@@ -127,6 +127,8 @@
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
     <Compile Include="Models\BindableSize3DIModel.cs" />
+    <Compile Include="Models\OreAssetModel.cs" />
+    <Compile Include="Models\CubeAssetModel.cs" />
     <Compile Include="Models\VoxelMaterialAssetModel.cs" />
     <Compile Include="Models\GenerateVoxelDetailModel.cs" />
     <Compile Include="Models\GenerateVoxelModel.cs" />
