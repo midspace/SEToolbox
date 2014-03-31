@@ -86,10 +86,10 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding OreName}" Width="95"/>
-                        <GridViewColumn Header="Mass" Width="100">
+                        <GridViewColumn Header="Volume" Width="100">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} m³'}" />
+                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} m³'}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
