@@ -69,6 +69,9 @@
                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
                 </MenuItem.Icon>
                 <MenuItem Header="Armor">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=shield}" />
+                    </MenuItem.Icon>
                     <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}" ToolTip="Convert any Light armor blocks to Heavy Armor blocks."/>
                     <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}" ToolTip="Convert any Heavy armor block to Light armor blocks."/>
                     <Separator/>
@@ -76,6 +79,9 @@
                     <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="Convert any Corner armor edge blocks to Round armor edge blocks."/>
                 </MenuItem>
                 <MenuItem Header="Framework" Command="{Binding FrameworkCommand}">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                    </MenuItem.Icon>
                     <MenuItem Header="To 0.5% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
                         <MenuItem.CommandParameter>
                             <s:Double>0.005</s:Double>

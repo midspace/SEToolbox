@@ -6,6 +6,7 @@
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows.Media.Media3D;
@@ -565,6 +566,12 @@
                 Assert.IsTrue(voxelMap.Size.X > 0, "Voxel Size must be greater than zero.");
                 Assert.IsTrue(voxelMap.Size.Y > 0, "Voxel Size must be greater than zero.");
                 Assert.IsTrue(voxelMap.Size.Z > 0, "Voxel Size must be greater than zero.");
+
+                Debug.WriteLine(string.Format("Filename:\t{0}.vox", voxelMap.DisplayName));
+                Debug.WriteLine(string.Format("Bounding Size:\t{0} × {1} × {2} blocks", voxelMap.Size.X, voxelMap.Size.Y, voxelMap.Size.Z));
+                Debug.WriteLine(string.Format("Size:\t{0} m × {1} m × {2} m", voxelMap.ContentSize.X, voxelMap.ContentSize.Y, voxelMap.ContentSize.Z));
+                Debug.WriteLine(string.Format("Volume:\t{0:##,###.00} m³", (double)voxelMap.SumVoxelCells() / 255));
+                Debug.WriteLine("");
             }
         }
     }

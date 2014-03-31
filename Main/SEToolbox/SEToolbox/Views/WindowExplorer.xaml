@@ -51,7 +51,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Command="{Binding ReloadCommand}" Header="_Reload" Padding="0,2,4,2">
+                <MenuItem Command="{Binding ReloadCommand}" Header="_Reload" Padding="0,2,4,2" ToolTip="Undo any changes, and reload world again.">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}"/>
                     </MenuItem.Icon>
@@ -71,23 +71,23 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Image" Command="{Binding ImportImageCommand}">
+                    <MenuItem Header="Image" Command="{Binding ImportImageCommand}" ToolTip="Import a image into a flat array of armor, with color matched to each pixel in the image.">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=photo_scenery}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}">
                         <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=icecube}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Sandbox Content files" Command="{Binding ImportSandboxObjectCommand}">
+                    <MenuItem Header="Sandbox Content files" Command="{Binding ImportSandboxObjectCommand}" ToolTip="Import previously exported ships and station .xml files.">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SECubes16}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Export" Command="{Binding ExportSandboxObjectCommand}" Padding="0,2,4,2">
+                <MenuItem Header="Export" Command="{Binding ExportSandboxObjectCommand}" Padding="0,2,4,2" ToolTip="Export ships ans stations to a .xml file, to store, and import into other worlds.">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                     </MenuItem.Icon>
