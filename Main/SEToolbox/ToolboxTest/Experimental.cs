@@ -41,6 +41,56 @@
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
+            var materialStone_01 = materials.FirstOrDefault(m => m.Name.Contains("Stone_01"));
+            Assert.IsNotNull(materialStone_01, "Stone_01 material should exist.");
+
+            var materialStone_02 = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
+            Assert.IsNotNull(materialStone_02, "Stone_02 material should exist.");
+
+            var materialStone_03 = materials.FirstOrDefault(m => m.Name.Contains("Stone_03"));
+            Assert.IsNotNull(materialStone_03, "Stone_03 material should exist.");
+
+            var materialStone_04 = materials.FirstOrDefault(m => m.Name.Contains("Stone_04"));
+            Assert.IsNotNull(materialStone_04, "Stone_04 material should exist.");
+
+            var materialStone_05 = materials.FirstOrDefault(m => m.Name.Contains("Stone_05"));
+            Assert.IsNotNull(materialStone_05, "Stone_05 material should exist.");
+
+            var materialIron_01 = materials.FirstOrDefault(m => m.Name.Contains("Iron_01"));
+            Assert.IsNotNull(materialIron_01, "Iron_01 material should exist.");
+
+            var materialIron_02 = materials.FirstOrDefault(m => m.Name.Contains("Iron_02"));
+            Assert.IsNotNull(materialIron_02, "Iron_02 material should exist.");
+
+            var materialNickel_01 = materials.FirstOrDefault(m => m.Name.Contains("Nickel_01"));
+            Assert.IsNotNull(materialNickel_01, "Nickel_01 material should exist.");
+
+            var materialCobalt_01 = materials.FirstOrDefault(m => m.Name.Contains("Cobalt_01"));
+            Assert.IsNotNull(materialCobalt_01, "Cobalt_01 material should exist.");
+
+            var materialMagnesium_01 = materials.FirstOrDefault(m => m.Name.Contains("Magnesium_01"));
+            Assert.IsNotNull(materialMagnesium_01, "Magnesium_01 material should exist.");
+
+            var materialSilicon_01 = materials.FirstOrDefault(m => m.Name.Contains("Silicon_01"));
+            Assert.IsNotNull(materialSilicon_01, "Silicon_01 material should exist.");
+
+            var materialSilver_01 = materials.FirstOrDefault(m => m.Name.Contains("Silver_01"));
+            Assert.IsNotNull(materialSilver_01, "Silver_01 material should exist.");
+
+            var materialGold_01 = materials.FirstOrDefault(m => m.Name.Contains("Gold_01"));
+            Assert.IsNotNull(materialGold_01, "Gold_01 material should exist.");
+
+            var materialPlatinum_01 = materials.FirstOrDefault(m => m.Name.Contains("Platinum_01"));
+            Assert.IsNotNull(materialPlatinum_01, "Platinum_01 material should exist.");
+
+            var materialUraninite_01 = materials.FirstOrDefault(m => m.Name.Contains("Uraninite_01"));
+            Assert.IsNotNull(materialUraninite_01, "Uraninite_01 material should exist.");
+
+
+            // 316 Current hollow dwarf planet.
+            // 355 Current GFX test dwarf planet.
+            // 365 Current dwarf planet ore layers.
+
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_350_10_radi.vox", 350, materials[0].Name, true, 10);    // 00:01:32.6580269 | VoxCells 3,801,278,432. | Is culled.
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_355_10_radi.vox", 355, materials[0].Name, true, 10);    // 00:01:57.0029873 | VoxCells 3,912,545,848. | Is culled.
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_356_10_radi.vox", 356, materials[0].Name, true, 10);    // 00:01:56.1288918 | VoxCells 3,935,432,712. |
@@ -58,7 +108,8 @@
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_465_radi.vox", 465, materials[0].Name, false, 0);  // 
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_470_radi.vox", 470, materials[0].Name, false, 0);  // works.
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_471_radi.vox", 471, materials[0].Name, false, 0); // 00:03:41.2510726  | VoxCells 111,251,164,251 | Works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_472_radi.vox", 472, materials[0].Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_472_radi.vox", 472, materials[0].Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.  Crash under explosives.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\Uraninite_01_sphere_solid_472_radi.vox", 472, materialUraninite_01.Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.  Crash under explosives.
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_473_radi.vox", 473, materials[0].Name, false, 0); // 00:03:40.2173012  | VoxCells 112,675,647,555 | Crash.
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_474_radi.vox", 474, materials[0].Name, false, 0); // 00:03:46.7690005  | VoxCells 113,392,787,817 | 
             //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_475_radi.vox", 475, materials[0].Name, false, 0);  // no response?
