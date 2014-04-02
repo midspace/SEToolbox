@@ -560,17 +560,13 @@
                 {
                     cubeAssetDict[blockName].Count++;
                     cubeAssetDict[blockName].Mass += cubeMass;
-                    //cubeAssetDict[blockName].Volume += cubeVolume;
-                    //cubeAssetDict[blockName].Time
                 }
                 else
                 {
-                    var m = new CubeAssetModel() { Name = blockName, Mass = cubeMass, /*Volume = cubeVolume,*/ Count = 1 };
+                    var m = new CubeAssetModel() { Name = blockName, Mass = cubeMass, Count = 1 };
                     this.CubeAssets.Add(m);
                     cubeAssetDict.Add(blockName, m);
                 }
-
-                //SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(block.GetType(), block.SubtypeName, this.CubeGrid.GridSizeEnum, ingotRequirements, ref timeTaken);
             }
 
             foreach (var kvp in ingotRequirements)

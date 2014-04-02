@@ -70,6 +70,11 @@
             this._dataModel = dataModel;
 
             this.Selections = new ObservableCollection<IStructureViewBase>();
+            this.Selections.CollectionChanged  += delegate(object sender, NotifyCollectionChangedEventArgs e)
+            {
+                this.RaisePropertyChanged(() => IsMultipleSelections);
+            };
+
             this.Structures = new ObservableCollection<IStructureViewBase>();
             foreach (var item in this._dataModel.Structures)
             {
@@ -364,6 +369,14 @@
                     this._selections = value;
                     this.RaisePropertyChanged(() => Selections);
                 }
+            }
+        }
+
+        public bool IsMultipleSelections
+        {
+            get
+            {
+                return this._selections.Count > 1;
             }
         }
 
