@@ -128,6 +128,7 @@
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
     <Compile Include="Models\BindableSize3DIModel.cs" />
+    <Compile Include="Models\StructureUnknownModel.cs" />
     <Compile Include="Models\OreAssetModel.cs" />
     <Compile Include="Models\CubeAssetModel.cs" />
     <Compile Include="Models\VoxelMaterialAssetModel.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Support\ZipTools.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\StructureUnknownViewModel.cs" />
     <Compile Include="ViewModels\GenerateVoxelFieldViewModel.cs" />
     <Compile Include="ViewModels\DataBaseViewModel.cs" />
     <Compile Include="ViewModels\ImportVoxelViewModel.cs" />
@@ -245,6 +247,9 @@
     </Compile>
     <Compile Include="Views\ControlMultiple.xaml.cs">
       <DependentUpon>ControlMultiple.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlUnknown.xaml.cs">
+      <DependentUpon>ControlUnknown.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowGenerateVoxelField.xaml.cs">
       <DependentUpon>WindowGenerateVoxelField.xaml</DependentUpon>
@@ -304,6 +309,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlMultiple.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ControlUnknown.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

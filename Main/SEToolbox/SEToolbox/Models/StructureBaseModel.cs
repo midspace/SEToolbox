@@ -242,7 +242,8 @@
             }
             else
             {
-                throw new NotImplementedException(string.Format("A new object has not been catered for in the StructureBase, of type '{0}'.", entityBase.GetType()));
+                return new StructureUnknownModel(entityBase);
+                //throw new NotImplementedException(string.Format("A new object has not been catered for in the StructureBase, of type '{0}'.", entityBase.GetType()));
             }
         }
 
