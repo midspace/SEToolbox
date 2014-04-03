@@ -912,9 +912,11 @@
                 item = new StructureVoxelViewModel(this, structureBase as StructureVoxelModel);
             else if (structureBase is StructureFloatingObjectModel)
                 item = new StructureFloatingObjectViewModel(this, structureBase as StructureFloatingObjectModel);
+            else if (structureBase is StructureUnknownModel)
+                item = new StructureUnknownViewModel(this, structureBase as StructureUnknownModel);
             else
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("As yet undefined ViewModel has been called.");
             }
 
             if (item != null)

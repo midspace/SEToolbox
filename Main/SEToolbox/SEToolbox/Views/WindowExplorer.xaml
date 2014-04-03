@@ -256,9 +256,9 @@
                             <DataTemplate DataType="{x:Type vm:StructureFloatingObjectViewModel}">
                                 <views:ControlFloatingObject />
                             </DataTemplate>
-                            <!--<DataTemplate DataType="{x:Type vm:StructureBaseViewModel}">
-                                <Label Content="nothing" />
-                            </DataTemplate>-->
+                            <DataTemplate DataType="{x:Type vm:StructureUnknownViewModel}">
+                                <views:ControlUnknown />
+                            </DataTemplate>
                         </ContentControl.Resources>
                         <ContentControl.Style>
                             <Style TargetType="ContentControl">

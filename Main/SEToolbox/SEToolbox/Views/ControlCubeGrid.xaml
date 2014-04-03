@@ -29,7 +29,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
             <Label>Structure -</Label>
             <TextBlock VerticalAlignment="Center" Text="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}" />
         </StackPanel>

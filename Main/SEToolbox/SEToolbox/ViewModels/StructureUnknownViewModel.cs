@@ -1,15 +1,13 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using System.ComponentModel;
 
-    public class StructureFloatingObjectViewModel : StructureBaseViewModel<StructureFloatingObjectModel>
+    public class StructureUnknownViewModel : StructureBaseViewModel<StructureUnknownModel>
     {
         #region ctor
 
-        public StructureFloatingObjectViewModel(BaseViewModel parentViewModel, StructureFloatingObjectModel dataModel)
+        public StructureUnknownViewModel(BaseViewModel parentViewModel, StructureUnknownModel dataModel)
             : base(parentViewModel, dataModel)
         {
             this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
@@ -23,32 +21,11 @@
 
         #region Properties
 
-        protected new StructureFloatingObjectModel DataModel
+        protected new StructureUnknownModel DataModel
         {
             get
             {
-                return base.DataModel as StructureFloatingObjectModel;
-            }
-        }
-
-        public MyObjectBuilder_InventoryItem Item
-        {
-            get
-            {
-                return this.DataModel.Item;
-            }
-
-            set
-            {
-                this.DataModel.Item = value;
-            }
-        }
-
-        public string SubTypeName
-        {
-            get
-            {
-                return this.DataModel.Item.Content.SubtypeName;
+                return base.DataModel as StructureUnknownModel;
             }
         }
 
@@ -94,45 +71,6 @@
                 this.DataModel.PositionZ = value;
                 this.MainViewModel.IsModified = true;
                 this.MainViewModel.CalcDistances();
-            }
-        }
-
-        public double? Volume
-        {
-            get
-            {
-                return this.DataModel.Volume;
-            }
-
-            set
-            {
-                this.DataModel.Volume = value;
-            }
-        }
-
-        public double? Mass
-        {
-            get
-            {
-                return this.DataModel.Mass;
-            }
-
-            set
-            {
-                this.DataModel.Mass = value;
-            }
-        }
-
-        public double? Units
-        {
-            get
-            {
-                return this.DataModel.Units;
-            }
-
-            set
-            {
-                this.DataModel.Units = value;
             }
         }
 
