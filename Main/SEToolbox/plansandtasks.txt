@@ -12,6 +12,12 @@
   * It's not until the user presses "Copy & Load" that it's acually saved there.
   * The workshopId may or may not be present, depending on if it is the first version, or a subsequent upload by the author.
 
+- Drag drop files direct into the interface.
+  * Detect .vox files for asteroids.
+  * Detect .sbc files for other content.
+  * Detect 3D models?
+  * Detect image files?
+
 - Improve Import Image:
   * Preview.
   * Scale.
@@ -27,8 +33,11 @@
 - Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
   Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
 
+- Import 3D model.
 - Replace Asteroid/Voxel.
 - Rotate Asteroid/Voxel (not supported by sandbox currently, but procedual voxel rotation could be accomplished.)
+- Generate box/sphere asteroid menu.
+- Remove the prebuilt asteroids.
 
 - Show ship status. Size. Item count. Weight. Thrust.
 - Switch power on/off.

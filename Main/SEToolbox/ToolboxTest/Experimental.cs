@@ -435,5 +435,27 @@
             var voxelMap = MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, materialStone_01.Name, action);
         }
 
+        //[TestMethod]
+        public void VoxelGenerateCubeCollection()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var materialStone_01 = materials.FirstOrDefault(m => m.Name.Contains("Stone_01"));
+            Assert.IsNotNull(materialStone_01, "Stone_01 material should exist.");
+
+            for (var i = 1; i <= 16; i++)
+            {
+                var fileNew = string.Format(@".\TestAssets\cube_solid_{0}x{0}x{0}_gold.vox", i);
+                var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, fileNew, i, i, i, materialStone_01.Name, false, 0);
+            }
+
+            for (var i = 20; i <= 100; i += 10)
+            {
+                var fileNew = string.Format(@".\TestAssets\cube_solid_{0}x{0}x{0}_gold.vox", i);
+                var voxelMap = MyVoxelBuilder.BuildAsteroidCube(true, fileNew, i, i, i, materialStone_01.Name, false, 0);
+            }
+        }
+
     }
 }
