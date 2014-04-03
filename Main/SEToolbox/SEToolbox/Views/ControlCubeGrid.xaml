@@ -205,20 +205,20 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Cubes" DisplayMemberBinding="{Binding Name}" Width="175"/>
-                            <GridViewColumn Header="Count" Width="80">
+                            <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Count, StringFormat='{}{0:#,##0}'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Mass" Width="100">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            </controls:SortableGridViewColumn>
                         </GridView>
                     </ListView.View>
                 </controls:SortableListView>
@@ -227,34 +227,34 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Components" DisplayMemberBinding="{Binding Name}" Width="175"/>
-                            <GridViewColumn Header="Count" Width="80">
+                            <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Count, StringFormat='{}{0:#,##0}'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Mass" Width="100">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Volume" Width="90">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Volume" Width="90" SortBinding="{Binding Volume}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Time" Width="90">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Time" Width="90" SortBinding="{Binding Time}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Time, StringFormat='{}{0:hh\\:mm\\:ss\\.ff}'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            </controls:SortableGridViewColumn>
                         </GridView>
                     </ListView.View>
                 </controls:SortableListView>
@@ -263,34 +263,34 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Ingots" DisplayMemberBinding="{Binding Name}" Width="175"/>
-                            <GridViewColumn Header="Amount" Width="80">
+                            <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Amount, StringFormat='{}{0:#,##0.00}'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Mass" Width="100">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Volume" Width="90">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Volume" Width="90" SortBinding="{Binding Volume}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Time" Width="90">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Time" Width="90" SortBinding="{Binding Time}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Time, StringFormat='{}{0:hh\\:mm\\:ss\\.ff}'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            </controls:SortableGridViewColumn>
                         </GridView>
                     </ListView.View>
                 </controls:SortableListView>
@@ -299,27 +299,27 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding Name}" Width="175"/>
-                            <GridViewColumn Header="Amount" Width="80">
+                            <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Amount, StringFormat='{}{0:#,##0.00}'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Mass" Width="100">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Volume" Width="90">
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Header="Volume" Width="90" SortBinding="{Binding Volume}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            </controls:SortableGridViewColumn>
                         </GridView>
                     </ListView.View>
                 </controls:SortableListView>

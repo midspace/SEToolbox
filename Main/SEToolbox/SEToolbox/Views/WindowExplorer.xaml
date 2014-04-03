@@ -207,13 +207,13 @@
                                         <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
                                         <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding DisplayName}"/>
                                         <GridViewColumn Header="Description" Width="100" DisplayMemberBinding="{Binding Description}"/>
-                                        <GridViewColumn Header="Distance" Width="70">
+                                        <controls:SortableGridViewColumn Header="Distance" Width="70" SortBinding="{Binding PlayerDistance}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                        </controls:SortableGridViewColumn>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>

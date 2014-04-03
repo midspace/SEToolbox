@@ -86,20 +86,20 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding OreName}" Width="95"/>
-                        <GridViewColumn Header="Volume" Width="100">
+                        <controls:SortableGridViewColumn Header="Volume" Width="100" SortBinding="{Binding Volume}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} m³'}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Percent">
+                        </controls:SortableGridViewColumn>
+                        <controls:SortableGridViewColumn Header="Percent" SortBinding="{Binding Percent}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Percent, StringFormat='{}{0:P2}'}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                        </controls:SortableGridViewColumn>
                     </GridView>
                 </ListView.View>
             </controls:SortableListView>

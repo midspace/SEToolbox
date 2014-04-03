@@ -6,6 +6,7 @@
     using System.Windows.Data;
     using System.Windows.Input;
     using SEToolbox.Support;
+    using SEToolbox.Services;
 
     public class SortableListView : ListView
     {
@@ -72,7 +73,12 @@
                     }
 
                     string header;
-                    if (headerClicked.Column.DisplayMemberBinding is Binding)
+                    if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is Binding)
+                    {
+                        Binding binding = ((SortableGridViewColumn)headerClicked.Column).SortBinding as Binding;
+                        header = binding.Path.Path;
+                    }
+                    else if (headerClicked.Column.DisplayMemberBinding is Binding)
                     {
                         Binding binding = headerClicked.Column.DisplayMemberBinding as Binding;
                         header = binding.Path.Path;
