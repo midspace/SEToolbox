@@ -22,13 +22,10 @@
         private BindableVector3DModel _up;
         private MyPositionAndOrientation _characterPosition;
         private bool _isStockVoxel;
-        private bool _isCustomVoxel;
         private bool _isFileVoxel;
         private string _stockVoxel;
         private MaterialSelectionModel _stockMaterial;
-        private string _customVoxel;
         private List<string> _stockVoxelFileList;
-        private List<string> _customVoxelFileList;
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
 
         #endregion
@@ -38,7 +35,6 @@
         public ImportVoxelModel()
         {
             _stockVoxelFileList = new List<string>();
-            _customVoxelFileList = new List<string>();
             _materialsCollection = new ObservableCollection<MaterialSelectionModel>
             {
                 new MaterialSelectionModel() {Value = null, DisplayName = "No change"}
@@ -188,23 +184,6 @@
             }
         }
 
-        public bool IsCustomVoxel
-        {
-            get
-            {
-                return this._isCustomVoxel;
-            }
-
-            set
-            {
-                if (value != this._isCustomVoxel)
-                {
-                    this._isCustomVoxel = value;
-                    this.RaisePropertyChanged(() => IsCustomVoxel);
-                }
-            }
-        }
-
         public bool IsFileVoxel
         {
             get
@@ -244,24 +223,6 @@
             }
         }
 
-        public string CustomVoxel
-        {
-            get
-            {
-                return this._customVoxel;
-            }
-
-            set
-            {
-                if (value != this._customVoxel)
-                {
-                    this._customVoxel = value;
-                    this.RaisePropertyChanged(() => CustomVoxel);
-                    this.IsCustomVoxel = true;
-                }
-            }
-        }
-
         public List<string> StockVoxelFileList
         {
             get
@@ -275,23 +236,6 @@
                 {
                     this._stockVoxelFileList = value;
                     this.RaisePropertyChanged(() => StockVoxelFileList);
-                }
-            }
-        }
-
-        public List<string> CustomVoxelFileList
-        {
-            get
-            {
-                return this._customVoxelFileList;
-            }
-
-            set
-            {
-                if (value != this._customVoxelFileList)
-                {
-                    this._customVoxelFileList = value;
-                    this.RaisePropertyChanged(() => CustomVoxelFileList);
                 }
             }
         }
@@ -334,17 +278,6 @@
             foreach (var file in files)
             {
                 this.StockVoxelFileList.Add(Path.GetFileNameWithoutExtension(file));
-            }
-
-            var resourceSet = Properties.Resources.ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, false, false);
-
-            foreach (DictionaryEntry entry in resourceSet)
-            {
-                var name = (string)entry.Key;
-                if (name.StartsWith("asteroid_", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    this.CustomVoxelFileList.Add(name);
-                }
             }
         }
 

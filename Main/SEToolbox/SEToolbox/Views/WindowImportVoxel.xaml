@@ -8,7 +8,6 @@
         Title="Import Asteroid" Height="190" Width="440" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
-        xmlns:wb="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -21,15 +20,7 @@
     <Grid>
         <StackPanel Margin="8">
             <Grid Height="100">
-                <Grid.Resources>
-                    <CollectionViewSource Source="{Binding Path=CustomVoxelFileList}" x:Key="SortedCustomVoxelFileList">
-                        <CollectionViewSource.SortDescriptions>
-                            <wb:SortDescription />
-                        </CollectionViewSource.SortDescriptions>
-                    </CollectionViewSource>
-                </Grid.Resources>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
@@ -43,10 +34,8 @@
                 <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding StockVoxelFileList}" SelectedValue="{Binding StockVoxel}"/>
                 <ComboBox Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="130" ItemsSource="{Binding MaterialsCollection}" SelectedValue="{Binding StockMaterial}" DisplayMemberPath="DisplayName"/>
                 
-                <RadioButton Content="Custom" Grid.Row="1" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsCustomVoxel}"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource SortedCustomVoxelFileList}}" SelectedValue="{Binding CustomVoxel}"/>
-                <RadioButton Content="File" Grid.Row="2" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
-                <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="2" Grid.Column="1" >
+                <RadioButton Content="File" Grid.Row="1" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
+                <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" >
                     <TextBox Width="180" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="Must be valid Space Engineers Asteroid VOX file."/>
                     <Button ToolTip="Browse for Image" Command="{Binding BrowseVoxelCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />

@@ -397,25 +397,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Resources\asteroid_Gold1.vox" />
-    <None Include="Resources\asteroid_Gold2.vox" />
-    <None Include="Resources\asteroid_Gold3.vox" />
-    <None Include="Resources\asteroid_Ice_Magnesium.vox" />
-    <None Include="Resources\asteroid_Iron1.vox" />
-    <None Include="Resources\asteroid_Iron2.vox" />
-    <None Include="Resources\asteroid_Iron_Cobalt.vox" />
-    <None Include="Resources\asteroid_Iron_Nickel1.vox" />
-    <None Include="Resources\asteroid_Nickel_Gold1.vox" />
-    <None Include="Resources\asteroid_Platinum1.vox" />
-    <None Include="Resources\asteroid_Platinum_Nickel1.vox" />
-    <None Include="Resources\asteroid_Platinum_Nickel2.vox" />
-    <None Include="Resources\asteroid_Silicon1.vox" />
-    <None Include="Resources\asteroid_Silicon_Cobalt.vox" />
-    <None Include="Resources\asteroid_Silver1.vox" />
-    <None Include="Resources\asteroid_Silver2.vox" />
-    <None Include="Resources\asteroid_Silver_Iron_Cobalt.vox" />
-    <None Include="Resources\asteroid_Silver_Platinum_small.vox" />
-    <None Include="Resources\asteroid_Uranium1.vox" />
     <None Include="SEToolbox.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -479,6 +460,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\fit_to_size.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\package_add.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
