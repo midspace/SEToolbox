@@ -2,7 +2,6 @@
 {
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
@@ -128,7 +127,7 @@
                 {
                     this._characterModels = value;
                     this.RaisePropertyChanged(() => CharacterModels);
-                } 
+                }
             }
         }
 
@@ -151,7 +150,7 @@
         }
 
         [XmlIgnore]
-        public double Speed
+        public double LinearVelocity
         {
             get
             {
@@ -176,92 +175,6 @@
                 }
             }
         }
-
-        [XmlIgnore]
-        public double PositionX
-        {
-            get
-            {
-                return this.Character.PositionAndOrientation.Value.Position.X.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.Character.PositionAndOrientation.Value.Position.X)
-                {
-                    var pos = this.Character.PositionAndOrientation.Value;
-                    pos.Position.X = (float)value;
-                    this.Character.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionX);
-                    //this.RaisePropertyChanged(() => Position);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionY
-        {
-            get
-            {
-                return this.Character.PositionAndOrientation.Value.Position.Y.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.Character.PositionAndOrientation.Value.Position.Y)
-                {
-                    var pos = this.Character.PositionAndOrientation.Value;
-                    pos.Position.Y = (float)value;
-                    this.Character.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionY);
-                    //this.RaisePropertyChanged(() => Position);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionZ
-        {
-            get
-            {
-                return this.Character.PositionAndOrientation.Value.Position.Z.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.Character.PositionAndOrientation.Value.Position.Z)
-                {
-                    var pos = this.Character.PositionAndOrientation.Value;
-                    pos.Position.Z = (float)value;
-                    this.Character.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionZ);
-                    //this.RaisePropertyChanged(() => Position);
-                }
-            }
-        }
-
-        // Very messy.
-        //[XmlIgnore]
-        //public BindablePoint3DModel Position
-        //{
-        //    get
-        //    {
-        //        var m = new BindablePoint3DModel(this.Character.PositionAndOrientation.Value.Position);
-        //        m.PropertyChanged += delegate(object sender, PropertyChangedEventArgs args)
-        //        {
-        //            this.Position = ((BindablePoint3DModel) sender);
-        //        };
-        //        return m;
-        //    }
-
-        //    set
-        //    {
-        //        var pos = this.Character.PositionAndOrientation.Value;
-        //        pos.Position = value.ToVector3();
-        //        this.Character.PositionAndOrientation = pos;
-        //        this.RaisePropertyChanged(() => Position);
-        //    }
-        //}
 
         #endregion
 
@@ -289,13 +202,13 @@
         public void ResetVelocity()
         {
             this.Character.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.RaisePropertyChanged(() => Speed);
+            this.RaisePropertyChanged(() => LinearVelocity);
         }
 
         public void ReverseVelocity()
         {
             this.Character.LinearVelocity = new VRageMath.Vector3(this.Character.LinearVelocity.X * -1, this.Character.LinearVelocity.Y * -1, this.Character.LinearVelocity.Z * -1);
-            this.RaisePropertyChanged(() => Speed);
+            this.RaisePropertyChanged(() => LinearVelocity);
         }
 
         #endregion

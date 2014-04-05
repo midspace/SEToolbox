@@ -8,7 +8,8 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:interfaces="clr-namespace:SEToolbox.Interfaces"
-        Height="600" Width="800" MinHeight="320" MinWidth="480" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
+        Height="600" Width="800" MinHeight="320" MinWidth="480" ResizeMode="CanResizeWithGrip" 
+        WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         commands:DialogService.IsRegisteredView="True">
     <i:Interaction.Triggers>
@@ -141,6 +142,11 @@
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Command="{Binding GroupMoveCommand}" Header="Group Move" Padding="0,2,4,2">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </Menu>
             <ToolBarPanel DockPanel.Dock="Top" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ToolBar>
@@ -255,6 +261,9 @@
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type vm:StructureFloatingObjectViewModel}">
                                 <views:ControlFloatingObject />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type vm:StructureMeteorViewModel}">
+                                <views:ControlMeteor />
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type vm:StructureUnknownViewModel}">
                                 <views:ControlUnknown />

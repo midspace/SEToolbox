@@ -1,0 +1,125 @@
+﻿<Window x:Class="SEToolbox.Views.WindowGroupMove"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="Group Move" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        commands:DialogService.IsRegisteredView="True"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        FocusManager.FocusedElement="{Binding ElementName=uxStartBox}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:NullImageConverter x:Key="NullImageConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
+        <converters:DistanceConverter x:Key="DistanceConverter"/>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+    </Window.Resources>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
+    <Grid>
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,4">
+                <Grid HorizontalAlignment="Left" Width="420">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Content="Offset Position:"/>
+                    <TextBox Grid.Column="1" ToolTip="X" x:Name="uxStartBox">
+                        <TextBox.Text>
+                            <Binding Path="GlobalOffsetPositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBox Grid.Column="2" ToolTip="Y">
+                        <TextBox.Text>
+                            <Binding Path="GlobalOffsetPositionY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBox Grid.Column="3" ToolTip="Z">
+                        <TextBox.Text>
+                            <Binding Path="GlobalOffsetPositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                </Grid>
+            </Grid>
+            <controls:SortableListView Grid.Row="1" ItemsSource="{Binding Selections}" VerticalAlignment="Stretch"
+                ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding Item.DataModel.ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
+                        <controls:SortableGridViewColumn Header="Position" Width="210" SortBinding="{Binding Item.DataModel.PlayerDistance}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0}, {1}, {2}">
+                                                <Binding Path="Item.DataModel.PositionX" />
+                                                <Binding Path="Item.DataModel.PositionY" />
+                                                <Binding Path="Item.DataModel.PositionZ" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </controls:SortableGridViewColumn>
+                        <controls:SortableGridViewColumn Header="New Position" Width="210" SortBinding="{Binding PlayerDistance}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0}, {1}, {2}">
+                                                <Binding Path="PositionX" />
+                                                <Binding Path="PositionY" />
+                                                <Binding Path="PositionZ" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </controls:SortableGridViewColumn>
+                        <controls:SortableGridViewColumn Header="Distance" Width="70" SortBinding="{Binding Item.DataModel.PlayerDistance}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Item.DataModel.PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </controls:SortableGridViewColumn>
+                        <controls:SortableGridViewColumn Header="New Distance" Width="70" SortBinding="{Binding PlayerDistance}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </controls:SortableGridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </controls:SortableListView>
+            <GridSplitter Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4"/>
+            <Grid Grid.Row="3" Margin="0,8,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <Button Width="90" Command="{Binding ApplyCommand}" Content="Apply" IsDefault="True" Margin="0,0,8,0" />
+                    <Button Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <!--<controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
+    </Grid>
+</Window>

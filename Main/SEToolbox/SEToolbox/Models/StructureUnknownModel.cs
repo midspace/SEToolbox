@@ -21,66 +21,6 @@
 
         #region Properties
 
-        [XmlIgnore]
-        public double PositionX
-        {
-            get
-            {
-                return this.EntityBase.PositionAndOrientation.Value.Position.X.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.EntityBase.PositionAndOrientation.Value.Position.X)
-                {
-                    var pos = this.EntityBase.PositionAndOrientation.Value;
-                    pos.Position.X = (float)value;
-                    this.EntityBase.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionX);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionY
-        {
-            get
-            {
-                return this.EntityBase.PositionAndOrientation.Value.Position.Y.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.EntityBase.PositionAndOrientation.Value.Position.Y)
-                {
-                    var pos = this.EntityBase.PositionAndOrientation.Value;
-                    pos.Position.Y = (float)value;
-                    this.EntityBase.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionY);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionZ
-        {
-            get
-            {
-                return this.EntityBase.PositionAndOrientation.Value.Position.Z.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.EntityBase.PositionAndOrientation.Value.Position.Z)
-                {
-                    var pos = this.EntityBase.PositionAndOrientation.Value;
-                    pos.Position.Z = (float)value;
-                    this.EntityBase.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionZ);
-                }
-            }
-        }
-
         #endregion
 
         #region methods

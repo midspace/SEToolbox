@@ -312,11 +312,11 @@
             }
         }
 
-        public double Speed
+        public double LinearVelocity
         {
             get
             {
-                return this.DataModel.Speed;
+                return this.DataModel.LinearVelocity;
             }
         }
 
@@ -344,51 +344,6 @@
         public int BlockCount
         {
             get { return this.DataModel.BlockCount; }
-        }
-
-        public double PositionX
-        {
-            get
-            {
-                return this.DataModel.PositionX;
-            }
-
-            set
-            {
-                this.DataModel.PositionX = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
-            }
-        }
-
-        public double PositionY
-        {
-            get
-            {
-                return this.DataModel.PositionY;
-            }
-
-            set
-            {
-                this.DataModel.PositionY = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
-            }
-        }
-
-        public double PositionZ
-        {
-            get
-            {
-                return this.DataModel.PositionZ;
-            }
-
-            set
-            {
-                this.DataModel.PositionZ = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
-            }
         }
 
         public List<CubeAssetModel> CubeAssets
@@ -470,7 +425,7 @@
 
         public bool ResetVelocityCanExecute()
         {
-            return this.DataModel.Speed != 0f || this.DataModel.AngularSpeed != 0f;
+            return this.DataModel.LinearVelocity != 0f || this.DataModel.AngularSpeed != 0f;
         }
 
         public void ResetVelocityExecuted()
@@ -481,7 +436,7 @@
 
         public bool ReverseVelocityCanExecute()
         {
-            return this.DataModel.Speed != 0f || this.DataModel.AngularSpeed != 0f;
+            return this.DataModel.LinearVelocity != 0f || this.DataModel.AngularSpeed != 0f;
         }
 
         public void ReverseVelocityExecuted()
@@ -721,7 +676,7 @@
             var detail = string.Format(Properties.Resources.CubeDetail,
                 IsPiloted,
                 DamageCount,
-                Speed,
+                LinearVelocity,
                 PlayerDistance,
                 Scale.X, Scale.Y, Scale.Z,
                 Size.Width, Size.Height, Size.Depth,

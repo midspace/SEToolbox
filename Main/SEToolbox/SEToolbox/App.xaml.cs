@@ -7,6 +7,7 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Services;
     using SEToolbox.Support;
+    using SEToolbox.Views;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -21,6 +22,9 @@
 
         private void OnStartup(Object sender, StartupEventArgs e)
         {
+            Splasher.Splash = new WindowSplashScreen();
+            Splasher.ShowSplash();
+
             var update = ToolboxUpdater.CheckForUpdates();
             if (update != null)
             {

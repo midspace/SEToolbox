@@ -128,6 +128,9 @@
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
     <Compile Include="Models\BindableSize3DIModel.cs" />
+    <Compile Include="Models\GroupMoveItemModel.cs" />
+    <Compile Include="Models\GroupMoveModel.cs" />
+    <Compile Include="Models\StructureMeteorModel.cs" />
     <Compile Include="Models\StructureUnknownModel.cs" />
     <Compile Include="Models\OreAssetModel.cs" />
     <Compile Include="Models\CubeAssetModel.cs" />
@@ -176,6 +179,7 @@
     <Compile Include="Interfaces\ISaveFileDialog.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\DispatcherHelper.cs" />
     <Compile Include="Services\FileDialogViewModel.cs" />
     <Compile Include="Services\FolderBrowserDialog.cs" />
     <Compile Include="Services\IDragable.cs" />
@@ -184,6 +188,7 @@
     <Compile Include="Services\ListBoxDropAdorner.cs" />
     <Compile Include="Services\ListBoxDropBehavior.cs" />
     <Compile Include="Services\ListBoxItemDragBehavior.cs" />
+    <Compile Include="Services\MessageListener.cs" />
     <Compile Include="Services\OpenFileDialog.cs" />
     <Compile Include="Services\OpenFileDialogViewModel.cs" />
     <Compile Include="Services\SaveFileDialog.cs" />
@@ -201,6 +206,7 @@
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\RandomUtil.cs" />
     <Compile Include="Support\RssFeedItem.cs" />
+    <Compile Include="Support\Splasher.cs" />
     <Compile Include="Support\TempfileUtil.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
     <Compile Include="Interop\ClassType.cs" />
@@ -209,6 +215,8 @@
     <Compile Include="Support\ZipTools.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\GroupMoveViewModel.cs" />
+    <Compile Include="ViewModels\StructureMeteorViewModel.cs" />
     <Compile Include="ViewModels\StructureUnknownViewModel.cs" />
     <Compile Include="ViewModels\GenerateVoxelFieldViewModel.cs" />
     <Compile Include="ViewModels\DataBaseViewModel.cs" />
@@ -250,6 +258,15 @@
     </Compile>
     <Compile Include="Views\ControlUnknown.xaml.cs">
       <DependentUpon>ControlUnknown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlMeteor.xaml.cs">
+      <DependentUpon>ControlMeteor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowGroupMove.xaml.cs">
+      <DependentUpon>WindowGroupMove.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowSplashScreen.xaml.cs">
+      <DependentUpon>WindowSplashScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowGenerateVoxelField.xaml.cs">
       <DependentUpon>WindowGenerateVoxelField.xaml</DependentUpon>
@@ -313,6 +330,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlUnknown.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ControlMeteor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowGroupMove.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WindowSplashScreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -444,6 +473,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icecube.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SEToolbox_splash copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fit_to_size.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
