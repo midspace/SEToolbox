@@ -2,7 +2,6 @@
 {
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
@@ -52,66 +51,6 @@
                 {
                     this.FloatingObject.Item = value;
                     this.RaisePropertyChanged(() => Item);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionX
-        {
-            get
-            {
-                return this.FloatingObject.PositionAndOrientation.Value.Position.X.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.FloatingObject.PositionAndOrientation.Value.Position.X)
-                {
-                    var pos = this.FloatingObject.PositionAndOrientation.Value;
-                    pos.Position.X = (float)value;
-                    this.FloatingObject.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionX);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionY
-        {
-            get
-            {
-                return this.FloatingObject.PositionAndOrientation.Value.Position.Y.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.FloatingObject.PositionAndOrientation.Value.Position.Y)
-                {
-                    var pos = this.FloatingObject.PositionAndOrientation.Value;
-                    pos.Position.Y = (float)value;
-                    this.FloatingObject.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionY);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionZ
-        {
-            get
-            {
-                return this.FloatingObject.PositionAndOrientation.Value.Position.Z.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.FloatingObject.PositionAndOrientation.Value.Position.Z)
-                {
-                    var pos = this.FloatingObject.PositionAndOrientation.Value;
-                    pos.Position.Z = (float)value;
-                    this.FloatingObject.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionZ);
                 }
             }
         }

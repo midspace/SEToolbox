@@ -9,7 +9,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Text;
     using System.Windows.Media.Media3D;
     using System.Xml.Serialization;
     using VRageMath;
@@ -235,7 +234,7 @@
         }
 
         [XmlIgnore]
-        public double Speed
+        public double LinearVelocity
         {
             get
             {
@@ -295,66 +294,6 @@
             get
             {
                 return this.CubeGrid.CubeBlocks.Count;
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionX
-        {
-            get
-            {
-                return this.CubeGrid.PositionAndOrientation.Value.Position.X.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.CubeGrid.PositionAndOrientation.Value.Position.X)
-                {
-                    var pos = this.CubeGrid.PositionAndOrientation.Value;
-                    pos.Position.X = (float)value;
-                    this.CubeGrid.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionX);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionY
-        {
-            get
-            {
-                return this.CubeGrid.PositionAndOrientation.Value.Position.Y.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.CubeGrid.PositionAndOrientation.Value.Position.Y)
-                {
-                    var pos = this.CubeGrid.PositionAndOrientation.Value;
-                    pos.Position.Y = (float)value;
-                    this.CubeGrid.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionY);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionZ
-        {
-            get
-            {
-                return this.CubeGrid.PositionAndOrientation.Value.Position.Z.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.CubeGrid.PositionAndOrientation.Value.Position.Z)
-                {
-                    var pos = this.CubeGrid.PositionAndOrientation.Value;
-                    pos.Position.Z = (float)value;
-                    this.CubeGrid.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionZ);
-                }
             }
         }
 
@@ -650,25 +589,25 @@
         {
             this.CubeGrid.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
             this.CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.RaisePropertyChanged(() => Speed);
+            this.RaisePropertyChanged(() => LinearVelocity);
         }
 
         public void ReverseVelocity()
         {
             this.CubeGrid.LinearVelocity = new VRageMath.Vector3(this.CubeGrid.LinearVelocity.X * -1, this.CubeGrid.LinearVelocity.Y * -1, this.CubeGrid.LinearVelocity.Z * -1);
             this.CubeGrid.AngularVelocity = new VRageMath.Vector3(this.CubeGrid.AngularVelocity.X * -1, this.CubeGrid.AngularVelocity.Y * -1, this.CubeGrid.AngularVelocity.Z * -1);
-            this.RaisePropertyChanged(() => Speed);
+            this.RaisePropertyChanged(() => LinearVelocity);
         }
 
         public void MaxVelocityAtPlayer(Vector3 playerPosition)
         {
             var v = playerPosition - this.CubeGrid.PositionAndOrientation.Value.Position;
             v.Normalize();
-            v = Vector3.Multiply(v, 104.375f);
+            v = Vector3.Multiply(v, SpaceEngineersConsts.MaxShipVelocity);
 
             this.CubeGrid.LinearVelocity = v;
             this.CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.RaisePropertyChanged(() => Speed);
+            this.RaisePropertyChanged(() => LinearVelocity);
         }
 
         public bool ConvertFromLightToHeavyArmor()

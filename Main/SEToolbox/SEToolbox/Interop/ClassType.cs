@@ -4,11 +4,12 @@
     {
         Unknown,
         Character,
-        Voxel,
+        FloatingObject,
+        LargeShip,
         Station,
         SmallShip,
-        LargeShip,
-        FloatingObject
+        Meteor,
+        Voxel,
     };
 
     public enum ImportClassType

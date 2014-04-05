@@ -4,6 +4,7 @@
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Xml.Serialization;
@@ -101,6 +102,66 @@
                 {
                     this._entityBase.PositionAndOrientation = value;
                     this.RaisePropertyChanged(() => PositionAndOrientation);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionX
+        {
+            get
+            {
+                return this._entityBase.PositionAndOrientation.Value.Position.X.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this._entityBase.PositionAndOrientation.Value.Position.X)
+                {
+                    var pos = this._entityBase.PositionAndOrientation.Value;
+                    pos.Position.X = (float)value;
+                    this._entityBase.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionX);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionY
+        {
+            get
+            {
+                return this._entityBase.PositionAndOrientation.Value.Position.Y.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this._entityBase.PositionAndOrientation.Value.Position.Y)
+                {
+                    var pos = this._entityBase.PositionAndOrientation.Value;
+                    pos.Position.Y = (float)value;
+                    this._entityBase.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionY);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double PositionZ
+        {
+            get
+            {
+                return this._entityBase.PositionAndOrientation.Value.Position.Z.ToDouble();
+            }
+
+            set
+            {
+                if ((float)value != this._entityBase.PositionAndOrientation.Value.Position.Z)
+                {
+                    var pos = this._entityBase.PositionAndOrientation.Value;
+                    pos.Position.Z = (float)value;
+                    this._entityBase.PositionAndOrientation = pos;
+                    this.RaisePropertyChanged(() => PositionZ);
                 }
             }
         }
@@ -239,6 +300,10 @@
             else if (entityBase is MyObjectBuilder_FloatingObject)
             {
                 return new StructureFloatingObjectModel(entityBase);
+            }
+            else if (entityBase is MyObjectBuilder_Meteor)
+            {
+                return new StructureMeteorModel(entityBase);
             }
             else
             {

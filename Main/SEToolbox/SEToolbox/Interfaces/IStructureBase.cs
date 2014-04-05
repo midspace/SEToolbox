@@ -26,5 +26,11 @@
         bool IsBusy { get; set; }
 
         void InitializeAsync();
+
+        double PositionX { get; set; }
+
+        double PositionY { get; set; }
+
+        double PositionZ { get; set; }
     }
 }

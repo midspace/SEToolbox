@@ -1,9 +1,9 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System.Collections.Generic;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
+    using System.Collections.Generic;
 
     public abstract class StructureBaseViewModel<TModel> : DataBaseViewModel, IStructureViewBase where TModel : IStructureBase
     {
@@ -142,6 +142,51 @@
             set
             {
                 this.DataModel.PlayerDistance = value;
+            }
+        }
+
+        public double PositionX
+        {
+            get
+            {
+                return this.DataModel.PositionX;
+            }
+
+            set
+            {
+                this.DataModel.PositionX = value;
+                this.MainViewModel.IsModified = true;
+                this.MainViewModel.CalcDistances();
+            }
+        }
+
+        public double PositionY
+        {
+            get
+            {
+                return this.DataModel.PositionY;
+            }
+
+            set
+            {
+                this.DataModel.PositionY = value;
+                this.MainViewModel.IsModified = true;
+                this.MainViewModel.CalcDistances();
+            }
+        }
+
+        public double PositionZ
+        {
+            get
+            {
+                return this.DataModel.PositionZ;
+            }
+
+            set
+            {
+                this.DataModel.PositionZ = value;
+                this.MainViewModel.IsModified = true;
+                this.MainViewModel.CalcDistances();
             }
         }
 

@@ -298,6 +298,14 @@
             }
         }
 
+        public ICommand GroupMoveCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(GroupMoveExecuted), new Func<bool>(GroupMoveCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -885,6 +893,26 @@
             this.DeleteModel(this.Selections.ToArray());
         }
 
+        public bool GroupMoveCanExecute()
+        {
+            return this._dataModel.ActiveWorld != null && this.Selections.Count > 1;
+        }
+
+        public void GroupMoveExecuted()
+        {
+            var model = new GroupMoveModel();
+            model.Load(this.Selections, this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3());
+            var loadVm = new GroupMoveViewModel(this, model);
+
+            var result = this._dialogService.ShowDialog<WindowGroupMove>(this, loadVm);
+            if (result == true)
+            {
+                model.ApplyNewPositions();
+                this._dataModel.CalcDistances();
+                this.IsModified = true;
+            }
+        }
+
         #endregion
 
         #region methods
@@ -912,6 +940,8 @@
                 item = new StructureVoxelViewModel(this, structureBase as StructureVoxelModel);
             else if (structureBase is StructureFloatingObjectModel)
                 item = new StructureFloatingObjectViewModel(this, structureBase as StructureFloatingObjectModel);
+            else if (structureBase is StructureMeteorModel)
+                item = new StructureMeteorViewModel(this, structureBase as StructureMeteorModel);
             else if (structureBase is StructureUnknownModel)
                 item = new StructureUnknownViewModel(this, structureBase as StructureUnknownModel);
             else
@@ -1053,6 +1083,10 @@
                 {
                     this._dialogService.ShowMessageBox(this, "Cannot export Floating objects currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
+                else if (viewModel is StructureMeteorViewModel)
+                {
+                    this._dialogService.ShowMessageBox(this, "Cannot export Meteors currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
                 else if (viewModel is StructureCubeGridViewModel)
                 {
                     var structure = (StructureCubeGridViewModel)viewModel;
@@ -1071,6 +1105,10 @@
                     {
                         this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
                     }
+                }
+                else if (viewModel is StructureUnknownViewModel)
+                {
+                    this._dialogService.ShowMessageBox(this, "Cannot export Unknown currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
             }
         }

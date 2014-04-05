@@ -4,15 +4,14 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Windows.Input;
 
-    public class StructureCharacterViewModel : StructureBaseViewModel<StructureCharacterModel>
+    public class StructureMeteorViewModel : StructureBaseViewModel<StructureMeteorModel>
     {
         #region ctor
 
-        public StructureCharacterViewModel(BaseViewModel parentViewModel, StructureCharacterModel dataModel)
+        public StructureMeteorViewModel(BaseViewModel parentViewModel, StructureMeteorModel dataModel)
             : base(parentViewModel, dataModel)
         {
             this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
@@ -23,8 +22,6 @@
         }
 
         #endregion
-
-        #region Properties
 
         #region command Properties
 
@@ -44,108 +41,69 @@
             }
         }
 
+        public ICommand MaxVelocityAtPlayerCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(MaxVelocityAtPlayerExecuted), new Func<bool>(MaxVelocityAtPlayerCanExecute));
+            }
+        }
         #endregion
 
-        protected new StructureCharacterModel DataModel
+        #region Properties
+
+        protected new StructureMeteorModel DataModel
         {
             get
             {
-                return base.DataModel as StructureCharacterModel;
+                return base.DataModel as StructureMeteorModel;
             }
         }
 
-        public bool IsPilot
+        public MyObjectBuilder_InventoryItem Item
         {
             get
             {
-                return this.DataModel.IsPilot;
+                return this.DataModel.Item;
             }
 
             set
             {
-                this.DataModel.IsPilot = value;
+                this.DataModel.Item = value;
             }
         }
 
-        public bool IsPlayer
+        public string SubTypeName
         {
             get
             {
-                return this.DataModel.IsPlayer;
+                return this.DataModel.Item.Content.SubtypeName;
+            }
+        }
+
+        public double? Volume
+        {
+            get
+            {
+                return this.DataModel.Volume;
             }
 
             set
             {
-                this.DataModel.IsPlayer = value;
+                this.DataModel.Volume = value;
             }
         }
 
-        public string CharacterModel
+        public double? Mass
         {
             get
             {
-                return this.DataModel.CharacterModel.ToString();
+                return this.DataModel.Mass;
             }
 
             set
             {
-                this.DataModel.CharacterModel = (MyCharacterModelEnum)Enum.Parse(typeof(MyCharacterModelEnum), value);
-                this.MainViewModel.IsModified = true;
-            }
-        }
-
-        public bool Light
-        {
-            get
-            {
-                return this.DataModel.Light;
-            }
-
-            set
-            {
-                this.DataModel.Light = value;
-                this.MainViewModel.IsModified = true;
-            }
-        }
-
-        public bool JetPack
-        {
-            get
-            {
-                return this.DataModel.JetPack;
-            }
-
-            set
-            {
-                this.DataModel.JetPack = value;
-                this.MainViewModel.IsModified = true;
-            }
-        }
-
-        public bool Dampeners
-        {
-            get
-            {
-                return this.DataModel.Dampeners;
-            }
-
-            set
-            {
-                this.DataModel.Dampeners = value;
-                this.MainViewModel.IsModified = true;
-            }
-        }
-
-        public List<string> CharacterModels
-        {
-            get
-            {
-                return this.DataModel.CharacterModels;
-            }
-
-            set
-            {
-                this.DataModel.CharacterModels = value;
+                this.DataModel.Mass = value;
             }
         }
 
@@ -163,7 +121,7 @@
 
         public bool ResetVelocityCanExecute()
         {
-            return this.DataModel.LinearVelocity != 0f;
+            return this.DataModel.LinearVelocity != 0f || this.DataModel.AngularSpeed != 0f;
         }
 
         public void ResetVelocityExecuted()
@@ -174,12 +132,24 @@
 
         public bool ReverseVelocityCanExecute()
         {
-            return this.DataModel.LinearVelocity != 0f;
+            return this.DataModel.LinearVelocity != 0f || this.DataModel.AngularSpeed != 0f;
         }
 
         public void ReverseVelocityExecuted()
         {
             this.DataModel.ReverseVelocity();
+            this.MainViewModel.IsModified = true;
+        }
+
+        public bool MaxVelocityAtPlayerCanExecute()
+        {
+            return true;
+        }
+
+        public void MaxVelocityAtPlayerExecuted()
+        {
+            var position = this.MainViewModel.ThePlayerCharacter.PositionAndOrientation.Value.Position;
+            this.DataModel.MaxVelocityAtPlayer(position);
             this.MainViewModel.IsModified = true;
         }
 

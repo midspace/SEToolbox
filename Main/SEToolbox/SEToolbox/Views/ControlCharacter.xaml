@@ -120,7 +120,7 @@
         <Label Grid.Column="0" Grid.Row="8" Content="Player:"/>
         <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
         <Label Grid.Column="0" Grid.Row="9" Content="Speed:"/>
-        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed, StringFormat='{}{0:#,###0.000} m/s'}" />
+        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
         <Label Grid.Column="0" Grid.Row="10" Content="Distance:"/>
         <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
     </Grid>

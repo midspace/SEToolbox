@@ -21,5 +21,14 @@
         /// Contains list of save 'worlds'.
         /// </summary>
         public const string LoadLoadedFilename = "LastLoaded.sbl";
+
+        // Current set max speed m/s for Ships.
+        public const float MaxShipVelocity = 104.375f;
+
+        // Current set max speed m/s for Players - as of update 01.023.
+        public const float MaxPlayerVelocity = 111.531f;
+
+        // Estimated max speed m/s for Meteors - as of update 01.024.
+        public const float MaxMeteorVelocity = 202.812f;
     }
 }
