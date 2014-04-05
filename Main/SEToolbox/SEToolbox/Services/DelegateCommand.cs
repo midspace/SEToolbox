@@ -31,13 +31,16 @@
         /// <summary>
         ///     Constructor
         /// </summary>
+        public DelegateCommand(Func<bool> canExecuteMethod)
+            : this(null, canExecuteMethod, false)
+        {
+        }
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
         public DelegateCommand(Action executeMethod, Func<bool> canExecuteMethod, bool isAutomaticRequeryDisabled)
         {
-            if (executeMethod == null)
-            {
-                throw new ArgumentNullException("executeMethod");
-            }
-
             _executeMethod = executeMethod;
             _canExecuteMethod = canExecuteMethod;
             _isAutomaticRequeryDisabled = isAutomaticRequeryDisabled;

@@ -16,7 +16,8 @@
     {
         SmallShip,
         LargeShip,
-        Station
+        Station,
+        Asteroid
     };
 
     public enum ImportArmorType

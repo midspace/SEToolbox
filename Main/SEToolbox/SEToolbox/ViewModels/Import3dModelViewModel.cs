@@ -1,20 +1,23 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Voxels;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Models;
+    using SEToolbox.Properties;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
-    using SEToolbox.Properties;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
     using VRageMath;
 
     public class Import3dModelViewModel : BaseViewModel
@@ -63,7 +66,7 @@
 
         #endregion
 
-        #region Properties
+        #region command Properties
 
         public ICommand Browse3dModelCommand
         {
@@ -88,6 +91,10 @@
                 return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
             }
         }
+
+        #endregion
+
+        #region properties
 
         /// <summary>
         /// Gets or sets the DialogResult of the View.  If True or False is passed, this initiates the Close().
@@ -276,6 +283,22 @@
             }
         }
 
+        public bool IsAsteroid
+        {
+            get
+            {
+                return this._dataModel.IsAsteroid;
+            }
+        }
+
+        public bool IsShip
+        {
+            get
+            {
+                return this._dataModel.IsShip;
+            }
+        }
+
         public ImportArmorType ArmorType
         {
             get
@@ -357,6 +380,62 @@
             {
                 this._dataModel.IsMaxLengthScale = value;
                 this.ProcessModelScale();
+            }
+        }
+
+        public ObservableCollection<MaterialSelectionModel> OutsideMaterialsCollection
+        {
+            get
+            {
+                return this._dataModel.OutsideMaterialsCollection;
+            }
+        }
+
+
+        public ObservableCollection<MaterialSelectionModel> InsideMaterialsCollection
+        {
+            get
+            {
+                return this._dataModel.InsideMaterialsCollection;
+            }
+        }
+
+        public MaterialSelectionModel OutsideStockMaterial
+        {
+            get
+            {
+                return this._dataModel.OutsideStockMaterial;
+            }
+
+            set
+            {
+                this._dataModel.OutsideStockMaterial = value;
+            }
+        }
+
+        public MaterialSelectionModel InsideStockMaterial
+        {
+            get
+            {
+                return this._dataModel.InsideStockMaterial;
+            }
+
+            set
+            {
+                this._dataModel.InsideStockMaterial = value;
+            }
+        }
+
+        public string SourceFile
+        {
+            get
+            {
+                return this._dataModel.SourceFile;
+            }
+
+            set
+            {
+                this._dataModel.SourceFile = value;
             }
         }
 
@@ -471,6 +550,7 @@
                     case ImportClassType.SmallShip: scaleMultiplyer = 0.5; break;
                     case ImportClassType.LargeShip: scaleMultiplyer = 2.5; break;
                     case ImportClassType.Station: scaleMultiplyer = 2.5; break;
+                    case ImportClassType.Asteroid: scaleMultiplyer = 1; break;
                 }
                 vectorDistance += this.NewModelSize.Depth * scaleMultiplyer;
                 this.NewModelScale = new BindablePoint3DModel(this.NewModelSize.Width * scaleMultiplyer, this.NewModelSize.Height * scaleMultiplyer, this.NewModelSize.Depth * scaleMultiplyer);
@@ -684,7 +764,59 @@
 
         #region BuildEntity
 
-        public MyObjectBuilder_CubeGrid BuildEntity()
+        public MyObjectBuilder_EntityBase BuildEntity()
+        {
+            if (this.ClassType == ImportClassType.Asteroid)
+            {
+                return BuildAsteroidEntity();
+            }
+            else
+            {
+                return BuildShipEntity();
+            }
+        }
+
+        private MyObjectBuilder_VoxelMap BuildAsteroidEntity()
+        {
+            var filenamepart = Path.GetFileNameWithoutExtension(this.Filename);
+            var filename = this.MainViewModel.CreateUniqueVoxelFilename(filenamepart + ".vox");
+            this.Position = this.Position.RoundOff(2.5);
+            this.Forward = this.Forward.RoundToAxis();
+            this.Up = this.Up.RoundToAxis();
+
+            var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3(), filename)
+            {
+                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+            };
+
+            double multiplier = 1;
+            if (this.IsMultipleScale)
+            {
+                multiplier = this.MultipleScale;
+            }
+            else
+            {
+                multiplier = this.MaxLengthScale / Math.Max(Math.Max(this.OriginalModelSize.Height, this.OriginalModelSize.Width), this.OriginalModelSize.Depth);
+            }
+
+            var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            this.SourceFile = TempfileUtil.NewFilename();
+            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, this.Filename, this.SourceFile, this.OutsideStockMaterial.Value, this.InsideStockMaterial.Value != null, this.InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform);
+
+            entity.PositionAndOrientation = new MyPositionAndOrientation()
+            {
+                Position = this.Position.ToVector3(),
+                Forward = this.Forward.ToVector3(),
+                Up = this.Up.ToVector3()
+            };
+
+            this.IsValidModel = voxelMap.ContentSize.X > 0 && voxelMap.ContentSize.Y > 0 && voxelMap.ContentSize.Z > 0;
+
+            return entity;
+        }
+
+        private MyObjectBuilder_CubeGrid BuildShipEntity()
         {
             var entity = new MyObjectBuilder_CubeGrid
             {
@@ -767,6 +899,8 @@
                 Forward = this.Forward.ToVector3(),
                 Up = this.Up.ToVector3()
             };
+
+            this.IsValidModel = entity.CubeBlocks.Count > 0;
 
             return entity;
         }

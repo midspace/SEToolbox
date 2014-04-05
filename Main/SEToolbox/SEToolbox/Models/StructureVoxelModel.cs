@@ -296,7 +296,17 @@
                         var filename = this.SourceVoxelFilepath;
                         if (string.IsNullOrEmpty(filename))
                             filename = this.VoxelFilepath;
-                        var details = MyVoxelMap.GetMaterialAssetDetails(filename);
+
+                        Dictionary<string, long> details;
+                        try
+                        {
+                            details = MyVoxelMap.GetMaterialAssetDetails(filename);
+                        }
+                        catch
+                        {
+                            this.IsBusy = false;
+                            return;
+                        }
                         var sum = details.Values.ToList().Sum();
                         var list = new List<VoxelMaterialAssetModel>();
 
@@ -309,7 +319,6 @@
                         this.IsBusy = false;
                     }
                 }
-
             };
 
             worker.RunWorkerAsync();

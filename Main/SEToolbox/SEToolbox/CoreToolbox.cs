@@ -78,6 +78,7 @@
             viewModel.CloseRequested += (object sender, EventArgs e) => { Application.Current.Shutdown(); };
             //}
             var window = new WindowExplorer(viewModel);
+            window.Loaded += (object sender, RoutedEventArgs e) => { Splasher.CloseSplash(); };
             window.ShowDialog();
         }
 
