@@ -45,23 +45,39 @@
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>
-                <Label Content="Calculation:" Grid.Row="1" />
-                <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ModelTraceVoxelEnum}}" SelectedValue="{Binding TraceType}" Margin="0,2">
+                <Label Content="Type:" Grid.Row="1" />
+                <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ClassTypeEnum}}" SelectedValue="{Binding ClassType}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Label Content="Type:" Grid.Row="2" />
-                <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ClassTypeEnum}}" SelectedValue="{Binding ClassType}">
+
+                <!--Import To Ship/Station settings-->
+                <Label Content="Calculation:" Grid.Row="2" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ModelTraceVoxelEnum}}" SelectedValue="{Binding TraceType}" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Label Content="Armor:" Grid.Row="3" />
+                <Label Content="Armor:" Grid.Row="3" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ArmorTypeEnum}}" SelectedValue="{Binding ArmorType}" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!--Import To Asteroid settings-->
+                <Label Content="Ore Shell:" Grid.Row="2" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding OutsideMaterialsCollection}" SelectedValue="{Binding OutsideStockMaterial}" DisplayMemberPath="DisplayName" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Label Content="Ore Inside:" Grid.Row="3" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
                 <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
                     <Border BorderBrush="Black" BorderThickness="1">
                         <helix:HelixViewport3D >
@@ -71,13 +87,6 @@
                         </helix:HelixViewport3D>
                     </Border>
                 </Grid>
-                <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ArmorTypeEnum}}" SelectedValue="{Binding ArmorType}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
                 <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal">
                     <GroupBox Header="Original Size" MinWidth="120">
                         <Grid>

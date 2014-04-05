@@ -134,7 +134,7 @@
         {
             get
             {
-                return new DelegateCommand(new Action(ImportExecuted), new Func<bool>(ImportCanExecute));
+                return new DelegateCommand(new Func<bool>(ImportCanExecute));
             }
         }
 
@@ -174,7 +174,7 @@
         {
             get
             {
-                return new DelegateCommand(new Action(WorldExecuted), new Func<bool>(WorldCanExecute));
+                return new DelegateCommand(new Func<bool>(WorldCanExecute));
             }
         }
 
@@ -578,11 +578,6 @@
             return this._dataModel.ActiveWorld != null;
         }
 
-        public void ImportExecuted()
-        {
-            // do nothing. Only required for base menu.
-        }
-
         public bool ImportVoxelCanExecute()
         {
             return this._dataModel.ActiveWorld != null;
@@ -647,12 +642,18 @@
             {
                 this.IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
-                if (newEntity.CubeBlocks.Count > 0)
+                if (loadVm.IsValidModel)
                 {
-                    this._selectNewStructure = true;
                     this._dataModel.CollisionCorrectEntity(newEntity);
                     var structure = this._dataModel.AddEntity(newEntity);
-                    this._selectNewStructure = false;
+
+                    if (structure is StructureVoxelModel)
+                    {
+                        ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                    }
+
+                    if (this._preSelectedStructure != null)
+                        this.SelectedStructure = this._preSelectedStructure;
                 }
                 this.IsBusy = false;
             }
@@ -671,11 +672,6 @@
         public bool WorldCanExecute()
         {
             return this._dataModel.ActiveWorld != null;
-        }
-
-        public void WorldExecuted()
-        {
-            // do nothing. Only required for base menu.
         }
 
         public bool OpenFolderCanExecute()
@@ -813,7 +809,7 @@
             var newEntity = loadVm.BuildEntity();
 
             // Split object where X=28|29.
-            newEntity.CubeBlocks.RemoveAll(c => c.Min.X <= 28);
+            ((MyObjectBuilder_CubeGrid)newEntity).CubeBlocks.RemoveAll(c => c.Min.X <= 28);
 
             this._selectNewStructure = true;
             this._dataModel.CollisionCorrectEntity(newEntity);

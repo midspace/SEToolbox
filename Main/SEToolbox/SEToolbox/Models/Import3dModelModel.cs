@@ -3,6 +3,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using System.Collections.ObjectModel;
     using System.Windows.Media.Media3D;
 
     public class Import3dModelModel : BaseModel
@@ -28,6 +29,11 @@
         private double buildDistance;
         private bool isMultipleScale;
         private bool isMaxLengthScale;
+        private readonly ObservableCollection<MaterialSelectionModel> _outsideMaterialsCollection;
+        private readonly ObservableCollection<MaterialSelectionModel> _insideMaterialsCollection;
+        private MaterialSelectionModel _outsideStockMaterial;
+        private MaterialSelectionModel _insideStockMaterial;
+        private string _sourceFile;
 
         #endregion
 
@@ -36,6 +42,21 @@
         public Import3dModelModel()
         {
             this.TraceType = ModelTraceVoxel.ThinSmoothed;
+
+            _outsideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>();
+            _insideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>
+            {
+                new MaterialSelectionModel() {Value = null, DisplayName = "Empty"}
+            };
+
+            foreach (var material in SpaceEngineersAPI.GetMaterialList())
+            {
+                _outsideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
+                _insideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
+            }
+
+            this.InsideStockMaterial = this.InsideMaterialsCollection[0];
+            this.OutsideStockMaterial = this.OutsideMaterialsCollection[0];
         }
 
         #endregion
@@ -226,7 +247,25 @@
                 {
                     this.classType = value;
                     this.RaisePropertyChanged(() => ClassType);
+                    this.RaisePropertyChanged(() => IsAsteroid);
+                    this.RaisePropertyChanged(() => IsShip);
                 }
+            }
+        }
+
+        public bool IsAsteroid
+        {
+            get
+            {
+                return this.classType == ImportClassType.Asteroid;
+            }
+        }
+
+        public bool IsShip
+        {
+            get
+            {
+                return this.classType != ImportClassType.Asteroid;
             }
         }
 
@@ -344,6 +383,74 @@
                 {
                     this.isMaxLengthScale = value;
                     this.RaisePropertyChanged(() => IsMaxLengthScale);
+                }
+            }
+        }
+
+        public ObservableCollection<MaterialSelectionModel> OutsideMaterialsCollection
+        {
+            get
+            {
+                return this._outsideMaterialsCollection;
+            }
+        }
+
+
+        public ObservableCollection<MaterialSelectionModel> InsideMaterialsCollection
+        {
+            get
+            {
+                return this._insideMaterialsCollection;
+            }
+        }
+
+        public MaterialSelectionModel OutsideStockMaterial
+        {
+            get
+            {
+                return this._outsideStockMaterial;
+            }
+
+            set
+            {
+                if (value != this._outsideStockMaterial)
+                {
+                    this._outsideStockMaterial = value;
+                    this.RaisePropertyChanged(() => OutsideStockMaterial);
+                }
+            }
+        }
+
+        public MaterialSelectionModel InsideStockMaterial
+        {
+            get
+            {
+                return this._insideStockMaterial;
+            }
+
+            set
+            {
+                if (value != this._insideStockMaterial)
+                {
+                    this._insideStockMaterial = value;
+                    this.RaisePropertyChanged(() => InsideStockMaterial);
+                }
+            }
+        }
+
+        public string SourceFile
+        {
+            get
+            {
+                return this._sourceFile;
+            }
+
+            set
+            {
+                if (value != this._sourceFile)
+                {
+                    this._sourceFile = value;
+                    this.RaisePropertyChanged(() => SourceFile);
                 }
             }
         }

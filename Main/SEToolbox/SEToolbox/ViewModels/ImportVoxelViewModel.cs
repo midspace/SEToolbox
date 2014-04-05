@@ -254,6 +254,7 @@
                 return this._dataModel.MaterialsCollection;
             }
         }
+
         public MaterialSelectionModel StockMaterial
         {
             get

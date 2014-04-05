@@ -262,7 +262,7 @@
                             {
                                 lock (Locker)
                                 {
-                                    System.Windows.Forms.Application.DoEvents();
+                                    //System.Windows.Forms.Application.DoEvents();
                                     workerCounter++;
 
                                     counter += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
@@ -274,7 +274,7 @@
                                         progress = prog;
                                         Debug.Write(string.Format("{0:000},", progress));
                                     }
-                                    System.Windows.Forms.Application.DoEvents();
+                                    //System.Windows.Forms.Application.DoEvents();
                                 }
                             };
 

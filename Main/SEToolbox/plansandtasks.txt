@@ -33,11 +33,9 @@
 - Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
   Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
 
-- Import 3D model.
 - Replace Asteroid/Voxel.
 - Rotate Asteroid/Voxel (not supported by sandbox currently, but procedual voxel rotation could be accomplished.)
 - Generate box/sphere asteroid menu.
-- Remove the prebuilt asteroids.
 
 - Show ship status. Size. Item count. Weight. Thrust.
 - Switch power on/off.
@@ -71,6 +69,8 @@ Completed:
 - Move Asteroid/Voxel.
 - Move Ship/s to position.
 - Asteroid contents (list of ores in quantity cubic meters-m³ and percent %).
+- Asteroid Import 3D model.
+- Remove the prebuilt asteroids.
 
 ========--------~~~~~~~~
 
