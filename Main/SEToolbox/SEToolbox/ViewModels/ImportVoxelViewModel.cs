@@ -213,19 +213,6 @@
             }
         }
 
-        public bool IsCustomVoxel
-        {
-            get
-            {
-                return this._dataModel.IsCustomVoxel;
-            }
-
-            set
-            {
-                this._dataModel.IsCustomVoxel = value;
-            }
-        }
-
         public bool IsFileVoxel
         {
             get
@@ -252,32 +239,11 @@
             }
         }
 
-        public string CustomVoxel
-        {
-            get
-            {
-                return this._dataModel.CustomVoxel;
-            }
-
-            set
-            {
-                this._dataModel.CustomVoxel = value;
-            }
-        }
-
         public List<string> StockVoxelFileList
         {
             get
             {
                 return this._dataModel.StockVoxelFileList;
-            }
-        }
-
-        public List<string> CustomVoxelFileList
-        {
-            get
-            {
-                return this._dataModel.CustomVoxelFileList;
             }
         }
 
@@ -317,7 +283,7 @@
 
         public bool CreateCanExecute()
         {
-            return (this.IsValidVoxelFile && this.IsFileVoxel) || (this.IsCustomVoxel && this.CustomVoxel != null) || (this.IsStockVoxel && this.StockVoxel != null);
+            return (this.IsValidVoxelFile && this.IsFileVoxel) || (this.IsStockVoxel && this.StockVoxel != null);
         }
 
         public void CreateExecuted()
@@ -408,19 +374,6 @@
                     asteroidCenter = asteroid.ContentCenter;
                     asteroidSize = asteroid.ContentSize;
                 }
-            }
-            else if (this.IsCustomVoxel)
-            {
-                this.SourceFile = TempfileUtil.NewFilename(".vox");
-                originalFile = this.CustomVoxel + ".vox";
-
-                // Copy Resource to Temp file.
-                File.WriteAllBytes(this.SourceFile, (byte[])Properties.Resources.ResourceManager.GetObject(this.CustomVoxel));
-
-                var asteroid = new MyVoxelMap();
-                asteroid.Load(this.SourceFile, SpaceEngineersAPI.GetMaterialName(0), false);
-                asteroidCenter = asteroid.ContentCenter;
-                asteroidSize = asteroid.ContentSize;
             }
             else if (this.IsFileVoxel)
             {
