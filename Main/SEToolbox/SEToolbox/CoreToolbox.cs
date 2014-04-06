@@ -1,14 +1,14 @@
 ﻿namespace SEToolbox
 {
+    using SEToolbox.Models;
+    using SEToolbox.Support;
+    using SEToolbox.ViewModels;
+    using SEToolbox.Views;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using SEToolbox.Models;
-    using SEToolbox.Support;
-    using SEToolbox.ViewModels;
-    using SEToolbox.Views;
 
     public class CoreToolbox
     {
@@ -70,6 +70,9 @@
 
             // Load the SpaceEngineers assemblies, or dependant classes after this point.
             var explorerModel = new ExplorerModel();
+
+            SEToolbox.Interop.SpaceEngineersAPI.Init();
+            SEToolbox.ImageLibrary.ImageTextureUtil.Init();
 
             explorerModel.Load();
             var viewModel = new ExplorerViewModel(explorerModel);

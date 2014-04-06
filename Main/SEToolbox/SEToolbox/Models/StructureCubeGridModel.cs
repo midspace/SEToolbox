@@ -7,6 +7,7 @@
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Windows.Media.Media3D;
@@ -414,6 +415,8 @@
                 scaleMultiplyer = 0.5f;
             }
 
+            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
+
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
             float totalMass = 0;
@@ -435,10 +438,10 @@
                 min.Y = Math.Min(min.Y, block.Min.Y);
                 min.Z = Math.Min(min.Z, block.Min.Z);
 
-                var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
                 // definition is null when the block no longer exists in the Cube definitions. Ie, Ladder, or a Mod that was removed.
-                if (definition == null || (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1))
+                if (cubeDefinition == null || (cubeDefinition.Size.X == 1 && cubeDefinition.Size.Y == 1 && cubeDefinition.Size.z == 1))
                 {
                     max.X = Math.Max(max.X, block.Min.X);
                     max.Y = Math.Max(max.Y, block.Min.Y);
@@ -447,7 +450,7 @@
                 else
                 {
                     // resolve the cube size acording to the cube's orientation.
-                    var orientSize = definition.Size.Add(-1).Transform(block.BlockOrientation).Abs();
+                    var orientSize = cubeDefinition.Size.Add(-1).Transform(block.BlockOrientation).Abs();
                     max.X = Math.Max(max.X, block.Min.X + orientSize.X);
                     max.Y = Math.Max(max.Y, block.Min.Y + orientSize.Y);
                     max.Z = Math.Max(max.Z, block.Min.Z + orientSize.Z);
@@ -458,7 +461,6 @@
                 {
                     blockName = SpaceEngineersAPI.GetObjectBuilderName(block.GetType());
                 }
-
 
                 var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
@@ -486,7 +488,8 @@
                         }
                         else
                         {
-                            var m = new CubeAssetModel() { Name = componentName, Mass = componentMass, Volume = componentVolume, Count = component.Count, Time = componentTime };
+                            var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
+                            var m = new CubeAssetModel() { Name = componentName, Mass = componentMass, Volume = componentVolume, Count = component.Count, Time = componentTime, TextureFile = componentTexture };
                             this.ComponentAssets.Add(m);
                             componentAssetDict.Add(componentName, m);
                         }
@@ -495,14 +498,29 @@
 
                 totalMass += cubeMass;
 
+                TimeSpan blockTime = new TimeSpan();
+                if (cubeDefinition != null)
+                {
+                    blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds));
+                }
+
+                timeTaken += blockTime;
+
                 if (cubeAssetDict.ContainsKey(blockName))
                 {
                     cubeAssetDict[blockName].Count++;
                     cubeAssetDict[blockName].Mass += cubeMass;
+                    cubeAssetDict[blockName].Time += blockTime;
                 }
                 else
                 {
-                    var m = new CubeAssetModel() { Name = blockName, Mass = cubeMass, Count = 1 };
+                    string blockTexture = null;
+                    if (cubeDefinition != null)
+                    {
+                        blockTexture = Path.Combine(contentPath, cubeDefinition.Icon + ".dds");
+                    }
+
+                    var m = new CubeAssetModel() { Name = blockName, Mass = cubeMass, Count = 1, TextureFile = blockTexture, Time = blockTime};
                     this.CubeAssets.Add(m);
                     cubeAssetDict.Add(blockName, m);
                 }
@@ -513,7 +531,8 @@
                 TimeSpan ingotTime;
                 SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
                 var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
-                IngotAssets.Add(new OreAssetModel() { Name = kvp.Key, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime });
+                var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
+                IngotAssets.Add(new OreAssetModel() { Name = kvp.Key, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture });
                 timeTaken += ingotTime;
             }
 
@@ -542,7 +561,8 @@
             foreach (var kvp in oreRequirements)
             {
                 var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
-                OreAssets.Add(new OreAssetModel() { Name = kvp.Key, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value });
+                var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
+                OreAssets.Add(new OreAssetModel() { Name = kvp.Key, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, TextureFile = componentTexture });
             }
 
             this.TimeToProduce = timeTaken;

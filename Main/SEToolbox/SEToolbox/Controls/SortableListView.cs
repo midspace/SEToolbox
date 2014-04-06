@@ -73,20 +73,23 @@
                     }
 
                     string header;
-                    if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is Binding)
-                    {
-                        Binding binding = ((SortableGridViewColumn)headerClicked.Column).SortBinding as Binding;
-                        header = binding.Path.Path;
-                    }
-                    else if (headerClicked.Column.DisplayMemberBinding is Binding)
+                    if (headerClicked.Column.DisplayMemberBinding is Binding)
                     {
                         Binding binding = headerClicked.Column.DisplayMemberBinding as Binding;
+                        header = binding.Path.Path;
+                    }
+                    else if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is Binding)
+                    {
+                        Binding binding = ((SortableGridViewColumn)headerClicked.Column).SortBinding as Binding;
                         header = binding.Path.Path;
                     }
                     else
                     {
                         header = headerClicked.Column.Header as string;
                     }
+
+                    if (string.IsNullOrEmpty(header))
+                        return;
 
                     Sort(listView, header, direction);
 

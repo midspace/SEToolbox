@@ -1,15 +1,15 @@
 ﻿namespace SEToolbox.Interop
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Xml;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Support;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
     using VRageMath;
 
     public class SpaceEngineersAPI
@@ -20,6 +20,11 @@
         {
             // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
             ReadCubeBlockDefinitions();
+        }
+
+        public static void Init()
+        {
+            // Placeholder to make sure ctor is called.
         }
 
         #endregion

@@ -1,13 +1,13 @@
 ﻿namespace SEToolbox
 {
-    using System;
-    using System.Diagnostics;
-    using System.Windows;
-    using System.Windows.Threading;
     using SEToolbox.Interfaces;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using SEToolbox.Views;
+    using System;
+    using System.Diagnostics;
+    using System.Windows;
+    using System.Windows.Threading;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -68,17 +68,14 @@
 
             MessageBox.Show(message, "SE Toolbox Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
-            if (!Debugger.IsAttached)
-            {
-                e.Handled = true;
-
-                if (Application.Current != null)
-                {
-                    Application.Current.Shutdown();
-                }
-            }
-
             TempfileUtil.Dispose();
+
+            e.Handled = true;
+
+            if (Application.Current != null)
+            {
+                Application.Current.Shutdown();
+            }
         }
     }
 }
