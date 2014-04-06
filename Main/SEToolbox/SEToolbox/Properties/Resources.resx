@@ -228,7 +228,7 @@
 To use the SEToolbox, you must have SpaceEngineers installed on your computer.</value>
   </data>
   <data name="ExceptionState_NoDirectory" xml:space="preserve">
-    <value>The Space Engineers Directory could not be found.
+    <value>The Space Engineers Directory '{0}' could not be found.
 To use the SEToolbox, you must have SpaceEngineers installed on your computer.</value>
   </data>
   <data name="ExceptionState_NoRegistry" xml:space="preserve">
@@ -311,10 +311,10 @@ Size:	{7} m × {8} m × {9} m
 Mass:	{10:#,##0.00} Kg
 Blocks:	{11:#,##0}
 Position:	{12}, {13}, {14}
-Time to produce parts:	{15:dd} days, {15:hh} hours, {15:mm\:ss\.ff}
+Total time to produce:	{15:dd} days, {15:hh} hours, {15:mm\:ss\.ff}
 
 Construction Requirements:
-Cubes	Count	Mass
+Cubes	Count	Mass	Time to Produce
 {16}
 
 Components	Count	Mass	Volume	Time to Produce

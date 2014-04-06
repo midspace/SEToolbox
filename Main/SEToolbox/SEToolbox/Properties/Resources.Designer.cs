@@ -155,10 +155,10 @@ namespace SEToolbox.Properties {
         ///Mass:	{10:#,##0.00} Kg
         ///Blocks:	{11:#,##0}
         ///Position:	{12}, {13}, {14}
-        ///Time to produce parts:	{15:dd} days, {15:hh} hours, {15:mm\:ss\.ff}
+        ///Total time to produce:	{15:dd} days, {15:hh} hours, {15:mm\:ss\.ff}
         ///
         ///Construction Requirements:
-        ///Cubes	Count	Mass
+        ///Cubes	Count	Mass	Time to Produce
         ///{16}
         ///
         ///Components	Count	Mass	Volume	Time to Produce
@@ -244,7 +244,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Space Engineers Directory could not be found.
+        ///   Looks up a localized string similar to The Space Engineers Directory &apos;{0}&apos; could not be found.
         ///To use the SEToolbox, you must have SpaceEngineers installed on your computer..
         /// </summary>
         public static string ExceptionState_NoDirectory {

@@ -54,7 +54,7 @@
             if (string.IsNullOrEmpty(filePath))
                 throw new ToolboxException(ExceptionState.NoRegistry);
             if (!Directory.Exists(filePath))
-                throw new ToolboxException(ExceptionState.NoDirectory);
+                throw new ToolboxException(ExceptionState.NoDirectory, filePath);
 
             // Skip checking for the .exe. Not required for the Toolbox currently.
             // The new "bin" and "Bin64" directories in the current release make this pointless.

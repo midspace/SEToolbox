@@ -15,6 +15,8 @@
 
         private TimeSpan _time;
 
+        private string _textureFile;
+
         #region Properties
 
         public string Name
@@ -98,6 +100,23 @@
                 {
                     this._time = value;
                     this.RaisePropertyChanged(() => Time);
+                }
+            }
+        }
+
+        public string TextureFile
+        {
+            get
+            {
+                return this._textureFile;
+            }
+
+            set
+            {
+                if (value != this._textureFile)
+                {
+                    this._textureFile = value;
+                    this.RaisePropertyChanged(() => TextureFile);
                 }
             }
         }

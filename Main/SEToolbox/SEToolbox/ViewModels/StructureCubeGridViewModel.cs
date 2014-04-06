@@ -642,7 +642,7 @@
             {
                 foreach (var mat in this.CubeAssets)
                 {
-                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\r\n", mat.Name, mat.Count, mat.Mass);
+                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:hh\\:mm\\:ss\\.ff}\r\n", mat.Name, mat.Count, mat.Mass, mat.Time);
                 }
             }
 
