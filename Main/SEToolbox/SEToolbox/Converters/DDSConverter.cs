@@ -9,7 +9,7 @@
 
     public class DDSConverter : IValueConverter
     {
-        private static readonly Dictionary<string, ImageSource> _cache = new Dictionary<string, ImageSource>();
+        private static readonly Dictionary<string, ImageSource> Cache = new Dictionary<string, ImageSource>();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -19,7 +19,7 @@
             }
             else if (value is string)
             {
-                string sizeParameter = parameter as string;
+                var sizeParameter = parameter as string;
                 var sizeArray = sizeParameter.Split(',');
                 int width = -1;
                 int height = -1;
@@ -36,13 +36,13 @@
                     name += string.Format(",{0},{1}", width, height);
                 }
 
-                if (_cache.ContainsKey(name))
+                if (Cache.ContainsKey(name))
                 {
-                    return _cache[name];
+                    return Cache[name];
                 }
 
-                var image = ImageTextureUtil.CreateImage((string)value, width, height);
-                _cache.Add(name, image);
+                var image = ImageTextureUtil.CreateImage((string)value, 0, width, height);
+                Cache.Add(name, image);
                 return image;
             }
             else
