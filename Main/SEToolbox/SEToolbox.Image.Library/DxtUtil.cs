@@ -50,21 +50,21 @@ namespace SEToolbox.ImageLibrary
 
     public static class DxtUtil
     {
-        internal static Bitmap DecompressDxt5TextureToBitmap(byte[] imageData, int width, int height)
+        internal static Bitmap DecompressDxt5TextureToBitmap(byte[] imageData, int width, int height, bool ignoreAlpha)
         {
-            using (MemoryStream imageStream = new MemoryStream(imageData))
+            using (var imageStream = new MemoryStream(imageData))
             {
                 var pixelColors = DecompressDxt5(imageStream, width, height);
 
                 // Copy the pixel colors into a byte array
-                var bytesPerPixel = 4;
+                const int bytesPerPixel = 4;
                 var pixelRgba = new byte[pixelColors.Length];
                 for (var i = 0; i < pixelColors.Length; i += bytesPerPixel)
                 {
                     pixelRgba[i + 0] = pixelColors[i + 2];
                     pixelRgba[i + 1] = pixelColors[i + 1];
                     pixelRgba[i + 2] = pixelColors[i + 0];
-                    pixelRgba[i + 3] = pixelColors[i + 3];
+                    pixelRgba[i + 3] = ignoreAlpha ? (byte)0xff : pixelColors[i + 3];
                 }
 
                 // Here create the Bitmap to the know height, width and format
@@ -83,14 +83,14 @@ namespace SEToolbox.ImageLibrary
             }
         }
 
-        internal static ImageSource DecompressDxt5TextureToImageSource(byte[] imageData, int width, int height)
+        internal static ImageSource DecompressDxt5TextureToImageSource(byte[] imageData, int width, int height, bool ignoreAlpha)
         {
-            using (MemoryStream imageStream = new MemoryStream(imageData))
+            using (var imageStream = new MemoryStream(imageData))
             {
                 var pixelColors = DecompressDxt5(imageStream, width, height);
 
                 // Copy the pixel colors into a byte array
-                var bytesPerPixel = 4;
+                const int bytesPerPixel = 4;
                 var stride = width * bytesPerPixel;
                 var pixelRgba = new byte[pixelColors.Length];
                 for (var i = 0; i < pixelColors.Length; i += bytesPerPixel)
@@ -98,7 +98,7 @@ namespace SEToolbox.ImageLibrary
                     pixelRgba[i + 0] = pixelColors[i + 2];
                     pixelRgba[i + 1] = pixelColors[i + 1];
                     pixelRgba[i + 2] = pixelColors[i + 0];
-                    pixelRgba[i + 3] = pixelColors[i + 3];
+                    pixelRgba[i + 3] = ignoreAlpha ? (byte)0xff : pixelColors[i + 3];
                 }
 
                 return System.Windows.Media.Imaging.BitmapSource.Create(width, height, 96, 96, System.Windows.Media.PixelFormats.Bgra32, null, pixelRgba, stride);
@@ -107,7 +107,7 @@ namespace SEToolbox.ImageLibrary
 
         internal static byte[] DecompressDxt5(byte[] imageData, int width, int height)
         {
-            using (MemoryStream imageStream = new MemoryStream(imageData))
+            using (var imageStream = new MemoryStream(imageData))
                 return DecompressDxt5(imageStream, width, height);
         }
 

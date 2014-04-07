@@ -6,12 +6,12 @@
 
     public static class ImageTextureUtil
     {
-        static SharpDX.Toolkit.Graphics.GraphicsDevice _graphicsDevice;
+        static readonly SharpDX.Toolkit.Graphics.GraphicsDevice GraphicsDevice;
 
         static ImageTextureUtil()
         {
             // Create the graphics device
-            _graphicsDevice = SharpDX.Toolkit.Graphics.GraphicsDevice.New(SharpDX.Toolkit.Graphics.GraphicsAdapter.Default);
+            GraphicsDevice = SharpDX.Toolkit.Graphics.GraphicsDevice.New(SharpDX.Toolkit.Graphics.GraphicsAdapter.Default);
         }
 
         public static void Init()
@@ -35,10 +35,10 @@
 
         public static ImageSource CreateImage(string filename)
         {
-            return CreateImage(filename, -1, -1);
+            return CreateImage(filename, 0, -1, -1);
         }
 
-        public static ImageSource CreateImage(string filename, int width, int height)
+        public static ImageSource CreateImage(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false)
         {
             try
             {
@@ -46,7 +46,7 @@
                 using (var graphicsDevice = SharpDX.Toolkit.Graphics.GraphicsDevice.New(SharpDX.Toolkit.Graphics.GraphicsAdapter.Default))
                 {
                     // Load the texture
-                    using (var texture = SharpDX.Toolkit.Graphics.Texture2D.Load(graphicsDevice, filename))
+                    using (var texture = SharpDX.Toolkit.Graphics.Texture.Load(graphicsDevice, filename))
                     {
                         var buffer = texture.GetDataAsImage().PixelBuffer;
                         var mipSlice = 0;
@@ -65,14 +65,15 @@
                         width = buffer[mipSlice].Width;
                         height = buffer[mipSlice].Height;
 
-                        var pixelChannel = texture.GetData<byte>(0, mipSlice);
-                        return DxtUtil.DecompressDxt5TextureToImageSource(pixelChannel, width, height);
+                        var pixelChannel = texture.GetData<byte>(depthSlice, mipSlice);
+                        return DxtUtil.DecompressDxt5TextureToImageSource(pixelChannel, width, height, ignoreAlpha);
                     }
                 }
             }
-            catch { }
-
-            return null;
+            catch
+            {
+                return null;
+            }
         }
 
         #endregion
@@ -81,15 +82,15 @@
 
         public static Bitmap CreateBitmap(string filename)
         {
-            return CreateBitmap(filename, -1, -1);
+            return CreateBitmap(filename, 0, -1, -1);
         }
 
-        public static Bitmap CreateBitmap(string filename, int width, int height)
+        public static Bitmap CreateBitmap(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false)
         {
             try
             {
                 // Load the texture
-                using (var texture = SharpDX.Toolkit.Graphics.Texture2D.Load(_graphicsDevice, filename))
+                using (var texture = SharpDX.Toolkit.Graphics.Texture.Load(GraphicsDevice, filename))
                 {
                     var buffer = texture.GetDataAsImage().PixelBuffer;
                     var mipSlice = 0;
@@ -108,19 +109,27 @@
                     width = buffer[mipSlice].Width;
                     height = buffer[mipSlice].Height;
 
-                    var pixelChannel = texture.GetData<byte>(0, mipSlice);
-                    return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height);
+                    var pixelChannel = texture.GetData<byte>(depthSlice, mipSlice);
+                    return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height, ignoreAlpha);
                 }
             }
-            catch { }
-
-            return null;
+            catch
+            {
+                return null;                
+            }
         }
 
         #endregion
 
         #region MergeImages
 
+        /// <summary>
+        /// Merges two specifed Bitmaps, and applies a background brush.
+        /// </summary>
+        /// <param name="image1">Back image</param>
+        /// <param name="image2">Front image</param>
+        /// <param name="backgroundFill">Specify a background brush, or Brushes.Transparent for none.</param>
+        /// <returns></returns>
         public static Bitmap MergeImages(Bitmap image1, Bitmap image2, System.Drawing.Brush backgroundFill)
         {
             var result = new Bitmap(image1.Width, image1.Height);
@@ -133,7 +142,10 @@
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 
                 // Apply any fill.
-                graphics.FillRectangle(backgroundFill, 0, 0, image1.Width, image1.Height);
+                if (backgroundFill != null)
+                {
+                    graphics.FillRectangle(backgroundFill, 0, 0, image1.Width, image1.Height);
+                }
 
                 //draw the image into the target bitmap
                 graphics.DrawImage(image1, 0, 0, result.Width, result.Height);

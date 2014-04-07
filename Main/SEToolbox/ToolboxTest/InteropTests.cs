@@ -1,14 +1,9 @@
 ﻿namespace ToolboxTest
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
-    using SEToolbox.Support;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.IO;
     using VRageMath;
 
     [TestClass]
