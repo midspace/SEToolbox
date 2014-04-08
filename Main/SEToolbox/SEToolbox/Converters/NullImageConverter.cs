@@ -18,7 +18,7 @@
                 return DependencyProperty.UnsetValue;
 
             // Load the image, and prevent locking of the existing file.
-            BitmapImage bitmapImage = new BitmapImage();
+            var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
             bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
             bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;

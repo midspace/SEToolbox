@@ -170,11 +170,11 @@
             }
         }
 
-        public ICommand WorldCommand
+        public ICommand OpenComponentListCommand
         {
             get
             {
-                return new DelegateCommand(new Func<bool>(WorldCanExecute));
+                return new DelegateCommand(new Action(OpenComponentListExecuted), new Func<bool>(OpenComponentListCanExecute));
             }
         }
 
@@ -669,9 +669,17 @@
             this.ImportSandboxObjectFromFile();
         }
 
-        public bool WorldCanExecute()
+        public bool OpenComponentListCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return true;
+        }
+
+        public void OpenComponentListExecuted()
+        {
+            var model = new ComponentListModel();
+            model.Load();
+            var loadVm = new ComponentListViewModel(this, model);
+            var result = this._dialogService.ShowDialog<WindowComponentList>(this, loadVm);
         }
 
         public bool OpenFolderCanExecute()
