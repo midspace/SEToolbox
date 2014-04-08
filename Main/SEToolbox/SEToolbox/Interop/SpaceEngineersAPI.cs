@@ -31,10 +31,10 @@
 
         #region Serializers
 
-        public static T ReadSpaceEngineersFile<T, S>(Stream stream)
-        where S : XmlSerializer1
+        public static T ReadSpaceEngineersFile<T, TS>(Stream stream)
+        where TS : XmlSerializer1
         {
-            var settings = new XmlReaderSettings()
+            var settings = new XmlReaderSettings
             {
                 IgnoreComments = true,
                 IgnoreWhitespace = true,
@@ -45,7 +45,7 @@
             using (var xmlReader = XmlReader.Create(stream, settings))
             {
 
-                var serializer = (S)Activator.CreateInstance(typeof(S));
+                var serializer = (TS)Activator.CreateInstance(typeof(TS));
                 //serializer.UnknownAttribute += serializer_UnknownAttribute;
                 //serializer.UnknownElement += serializer_UnknownElement;
                 //serializer.UnknownNode += serializer_UnknownNode;
@@ -304,7 +304,7 @@
             _materialIndex = new Dictionary<string, byte>();
         }
 
-        private static T LoadContentFile<T, S>(string filename) where S : XmlSerializer1
+        private static T LoadContentFile<T, TS>(string filename) where TS : XmlSerializer1
         {
             object fileContent = null;
 
@@ -317,7 +317,7 @@
 
             try
             {
-                fileContent = SpaceEngineersAPI.ReadSpaceEngineersFile<T, S>(filePath);
+                fileContent = SpaceEngineersAPI.ReadSpaceEngineersFile<T, TS>(filePath);
             }
             catch
             {
@@ -338,14 +338,44 @@
 
         #endregion
 
+        public static MyObjectBuilder_CubeBlockDefinition[] CubeBlockDefinitions
+        {
+            get { return _cubeBlockDefinitions.Definitions; }
+        }
+
+        public static MyBlockPosition[] CubeBlockPositions
+        {
+            get { return _cubeBlockDefinitions.BlockPositions; }
+        }
+
         public static MyObjectBuilder_ComponentDefinition[] ComponentDefinitions
         {
             get { return _componentDefinitions.Components; }
         }
 
+        public static MyObjectBuilder_PhysicalItemDefinition[] PhysicalItemDefinitions
+        {
+            get { return _physicalItemDefinitions.Definitions; }
+        }
+
+        public static MyObjectBuilder_AmmoMagazineDefinition[] AmmoMagazineDefinitions
+        {
+            get { return _ammoMagazineDefinitions.AmmoMagazines; }
+        }
+
+        public static MyObjectBuilder_VoxelMaterialDefinition[] VoxelMaterialDefinitions
+        {
+            get { return _voxelMaterialDefinitions.Materials; }
+        }
+
+        public static MyObjectBuilder_BlueprintDefinition[] BlueprintDefinitions
+        {
+            get { return _blueprintDefinitions.Blueprints; }
+        }
+
         #region FetchCubeBlockMass
 
-        public static float FetchCubeBlockMass(Type typeId, MyCubeSize cubeSize, string subTypeid)
+        public static float FetchCubeBlockMass(MyObjectBuilderTypeEnum typeId, MyCubeSize cubeSize, string subTypeid)
         {
             float mass = 0;
 
@@ -510,15 +540,20 @@
 
         #region GetCubeDefinition
 
-        public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, MyCubeSize cubeSize, string subtypeId)
+        public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(MyObjectBuilderTypeEnum typeId, MyCubeSize cubeSize, string subtypeId)
         {
             if (string.IsNullOrEmpty(subtypeId))
             {
-                return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == _myObjectBuilderTypeList[typeId]);
+                return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
             }
 
             return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
+        }
+
+        public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, MyCubeSize cubeSize, string subtypeId)
+        {
+            return GetCubeDefinition(_myObjectBuilderTypeList[typeId], cubeSize, subtypeId);
         }
 
         #endregion

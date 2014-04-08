@@ -3,11 +3,11 @@
     using System.Windows;
 
     /// <summary>
-    /// Interaction logic for WindowGroupMove.xaml
+    /// Interaction logic for WindowComponentList.xaml
     /// </summary>
-    public partial class WindowGroupMove : Window
+    public partial class WindowComponentList : Window
     {
-        public WindowGroupMove()
+        public WindowComponentList()
         {
             InitializeComponent();
         }

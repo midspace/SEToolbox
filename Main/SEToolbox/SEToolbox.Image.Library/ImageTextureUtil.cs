@@ -10,7 +10,7 @@
 
         static ImageTextureUtil()
         {
-            // Create the graphics device
+            // Create the graphics device. The first time it is called, it may take up to a couple of seconds.
             GraphicsDevice = SharpDX.Toolkit.Graphics.GraphicsDevice.New(SharpDX.Toolkit.Graphics.GraphicsAdapter.Default);
         }
 

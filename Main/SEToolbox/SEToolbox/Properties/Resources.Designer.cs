@@ -81,6 +81,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Boolean_False {
+            get {
+                return ResourceManager.GetString("Boolean_False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Boolean_True {
+            get {
+                return ResourceManager.GetString("Boolean_True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Floating Object.
         /// </summary>
         public static string ClassType_FloatingObject {
@@ -320,6 +338,16 @@ namespace SEToolbox.Properties {
         public static System.Drawing.Bitmap folder {
             get {
                 object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap form_green_view {
+            get {
+                object obj = ResourceManager.GetObject("form_green_view", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -618,6 +646,16 @@ namespace SEToolbox.Properties {
         public static System.Drawing.Bitmap refresh {
             get {
                 object obj = ResourceManager.GetObject("refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap screwdriver {
+            get {
+                object obj = ResourceManager.GetObject("screwdriver", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -129,6 +129,8 @@
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
     <Compile Include="Models\BindableSize3DIModel.cs" />
+    <Compile Include="Models\ComponentListModel.cs" />
+    <Compile Include="Models\ComonentItemModel.cs" />
     <Compile Include="Models\GroupMoveItemModel.cs" />
     <Compile Include="Models\GroupMoveModel.cs" />
     <Compile Include="Models\StructureMeteorModel.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="Support\ZipTools.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\ComponentListViewModel.cs" />
     <Compile Include="ViewModels\GroupMoveViewModel.cs" />
     <Compile Include="ViewModels\StructureMeteorViewModel.cs" />
     <Compile Include="ViewModels\StructureUnknownViewModel.cs" />
@@ -262,6 +265,9 @@
     </Compile>
     <Compile Include="Views\ControlMeteor.xaml.cs">
       <DependentUpon>ControlMeteor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowComponentList.xaml.cs">
+      <DependentUpon>WindowComponentList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowGroupMove.xaml.cs">
       <DependentUpon>WindowGroupMove.xaml</DependentUpon>
@@ -335,6 +341,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlMeteor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowComponentList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -464,6 +474,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\package_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\form_green_view16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\screwdriver.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

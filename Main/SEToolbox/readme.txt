@@ -15,12 +15,16 @@ the permission of Keen Software House.
 ========--------~~~~~~~~
 
 Installation/Runtime requirements:
+*	Space Engineers Game
+	http://www.spaceengineersgame.com/
+	http://store.steampowered.com/app/244850/
+
 *   MS .NET Framework 4.
     http://www.microsoft.com/en-au/download/details.aspx?id=17851
 
 
 Developer/Build Requirements:
-*   7Zip - used in Build script on Setup project, to generate a .Zip of all release files without a .MSI.
+*   7Zip - used in Build script on Setup project, to generate a .Zip of all release files without an .MSI.
     http://www.7-zip.org/
 
 *	Windows Installer XML (WiX) toolset 3.7
@@ -40,10 +44,13 @@ Developer/Build Requirements:
 		http://blogs.msdn.com/b/chuckw/archive/2011/12/09/known-issue-directx-sdk-june-2010-setup-and-the-s1023-error.aspx
 
 Resources:
-*	HelixToolkit
+*	HelixToolkit (for opening 3D mesh files, and displaying).
 	https://helixtoolkit.codeplex.com/
 
 *	SharpZipLib
 	http://www.icsharpcode.net/OpenSource/SharpZipLib
+
+*	SharpDx (for reading .dds texture files).
+	http://sharpdx.org/
 
 ========--------~~~~~~~~
