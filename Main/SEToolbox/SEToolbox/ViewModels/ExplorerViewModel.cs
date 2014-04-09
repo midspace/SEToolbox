@@ -210,6 +210,14 @@
             }
         }
 
+        public ICommand CreateFloatingItemCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(CreateFloatingItemExecuted), new Func<bool>(CreateFloatingItemCanExecute));
+            }
+        }
+
         public ICommand GenerateVoxelFieldCommand
         {
             get
@@ -724,6 +732,35 @@
         public void ExportSandboxObjectExecuted()
         {
             this.ExportSandboxObjectToFile(this.Selections.ToArray());
+        }
+
+        public bool CreateFloatingItemCanExecute()
+        {
+            return this._dataModel.ActiveWorld != null;
+        }
+
+        public void CreateFloatingItemExecuted()
+        {
+            var model = new GenerateFloatingObjectModel();
+            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var loadVm = new GenerateFloatingObjectViewModel(this, model);
+            var result = _dialogService.ShowDialog<WindowGenerateFloatingObject>(this, loadVm);
+            model.Unload();
+            if (result == true)
+            {
+                this.IsBusy = true;
+                // TODO:
+                //string[] sourceVoxelFiles;
+                //var newEntities = loadVm.BuildEntities(out sourceVoxelFiles);
+                //this._selectNewStructure = true;
+                //for (var i = 0; i < newEntities.Length; i++)
+                //{
+                //    var structure = this._dataModel.AddEntity(newEntities[i]);
+                //    ((StructureVoxelModel)structure).SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                //}
+                //this._selectNewStructure = false;
+                this.IsBusy = false;
+            }
         }
 
         public bool GenerateVoxelFieldCanExecute()

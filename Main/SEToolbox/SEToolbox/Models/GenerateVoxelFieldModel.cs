@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace SEToolbox.Models
+﻿namespace SEToolbox.Models
 {
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
@@ -8,6 +6,7 @@ namespace SEToolbox.Models
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
+    using System.Linq;
 
     public class GenerateVoxelFieldModel : BaseModel
     {

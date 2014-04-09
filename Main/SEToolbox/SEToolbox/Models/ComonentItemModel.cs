@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
+    using System.Collections.Generic;
     using Sandbox.Common.ObjectBuilders;
     using System;
 
@@ -33,6 +34,8 @@
         public string OreName { get; set; }
 
         public float MineOreRatio { get; set; }
+
+        public Dictionary<string, string> CustomProperties { get; set; }
 
         #endregion
     }
