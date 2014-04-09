@@ -2,11 +2,13 @@
 {
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
+    using SEToolbox.Properties;
     using SEToolbox.Services;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using System.Windows.Forms;
     using System.Windows.Input;
 
     public class ComponentListViewModel : BaseViewModel
@@ -14,6 +16,7 @@
         #region Fields
 
         private readonly IDialogService _dialogService;
+        private readonly Func<ISaveFileDialog> _saveFileDialogFactory;
         private readonly ComponentListModel _dataModel;
         private bool? _closeResult;
 
@@ -22,15 +25,18 @@
         #region Constructors
 
         public ComponentListViewModel(BaseViewModel parentViewModel, ComponentListModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>())
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<ISaveFileDialog>())
         {
         }
 
-        public ComponentListViewModel(BaseViewModel parentViewModel, ComponentListModel dataModel, IDialogService dialogService)
+        public ComponentListViewModel(BaseViewModel parentViewModel, ComponentListModel dataModel, IDialogService dialogService, Func<ISaveFileDialog> saveFileDialogFactory)
             : base(parentViewModel)
         {
             Contract.Requires(dialogService != null);
+            Contract.Requires(saveFileDialogFactory != null);
+
             this._dialogService = dialogService;
+            this._saveFileDialogFactory = saveFileDialogFactory;
             this._dataModel = dataModel;
             this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
@@ -42,6 +48,14 @@
         #endregion
 
         #region command Properties
+
+        public ICommand ExportReportCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ExportReportExecuted), new Func<bool>(ExportReportCanExecute));
+            }
+        }
 
         public ICommand CloseCommand
         {
@@ -140,9 +154,44 @@
             }
         }
 
+        public ComonentItemModel SelectedCubeAsset
+        {
+            get
+            {
+                return this._dataModel.SelectedCubeAsset;
+            }
+
+            set
+            {
+                this._dataModel.SelectedCubeAsset = value;
+            }
+        }
+
         #endregion
 
         #region methods
+
+        public bool ExportReportCanExecute()
+        {
+            return true;
+        }
+
+        public void ExportReportExecuted()
+        {
+            var saveFileDialog = this._saveFileDialogFactory();
+            saveFileDialog.Filter = Resources.ExportReportFilter;
+            saveFileDialog.Title = string.Format(Resources.ExportReportTitle, "Component Item Report");
+            saveFileDialog.FileName = "Space Engineers Component Item Report";
+            saveFileDialog.OverwritePrompt = true;
+
+            // Open the dialog
+            var result = this._dialogService.ShowSaveFileDialog(this, saveFileDialog);
+
+            if (result == DialogResult.OK)
+            {
+                this._dataModel.GenerateHtmlReport(saveFileDialog.FileName);
+            }
+        }
 
         public bool CloseCanExecute()
         {

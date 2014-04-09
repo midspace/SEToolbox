@@ -5,7 +5,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Complete Component List" Height="400" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Complete Component List" Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}">
     <Window.Resources>
@@ -30,8 +30,13 @@
             </Grid.RowDefinitions>
             <TabControl>
                 <TabItem Header="Cubes">
-                    <controls:SortableListView ItemsSource="{Binding CubeAssets}"
-                        ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="142"/>
+                        </Grid.RowDefinitions>
+                        <controls:SortableListView ItemsSource="{Binding CubeAssets}" SelectedValue="{Binding SelectedCubeAsset}"
+                            ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Width="44">
@@ -46,7 +51,7 @@
                                 <GridViewColumn Header="Sub Type Id" DisplayMemberBinding="{Binding SubtypeId}"/>
                                 <GridViewColumn Header="Cube Size" DisplayMemberBinding="{Binding CubeSize}" Width="85"/>
                                 <controls:SortableGridViewColumn Header="Accessible" Width="80" DisplayMemberBinding="{Binding Accessible, Converter={StaticResource EnumToResouceConverter}}" />
-                                <controls:SortableGridViewColumn Header="Size (W×H×D)" Width="80" SortBinding="{Binding Size}">
+                                <controls:SortableGridViewColumn Header="Size (W×H×D)" Width="80">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock>
@@ -61,10 +66,10 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </controls:SortableGridViewColumn>
-                                <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
+                                <controls:SortableGridViewColumn Header="Mass (Kg)" Width="100" SortBinding="{Binding Mass}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                            <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00}'}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </controls:SortableGridViewColumn>
@@ -77,7 +82,25 @@
                                 </controls:SortableGridViewColumn>
                             </GridView>
                         </ListView.View>
-                    </controls:SortableListView>
+                        </controls:SortableListView>
+                        <Grid Grid.Row="1" Margin="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Border Background="Black" CornerRadius="4" Width="130" Height="130" Margin="0,0,4,0">
+                                <Image Width="128" Height="128" Source="{Binding Path=SelectedCubeAsset.TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='128,128'}" SnapsToDevicePixels="True" />
+                            </Border>
+                            <ListView Grid.Column="1" ItemsSource="{Binding SelectedCubeAsset.CustomProperties}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Property" DisplayMemberBinding="{Binding Key}" Width="160" />
+                                        <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}" Width="290" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Components">
                     <controls:SortableListView ItemsSource="{Binding ComponentAssets}"
@@ -189,6 +212,9 @@
                 </TabItem>
             </TabControl>
             <Grid Grid.Row="1" Margin="0,8,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                    <Button Width="90" Command="{Binding ExportReportCommand}" Content="Export Report"/>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <Button Width="90" Command="{Binding CloseCommand}" Content="Close" IsCancel="True"/>
                 </StackPanel>

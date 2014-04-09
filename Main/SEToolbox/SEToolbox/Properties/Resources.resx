@@ -375,4 +375,10 @@ Units:		{4:#,##0}</value>
   <data name="Boolean_True" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="ExportReportFilter" xml:space="preserve">
+    <value>Sandbox Content files (*.htm)|*.htm</value>
+  </data>
+  <data name="ExportReportTitle" xml:space="preserve">
+    <value>Specify filename to export '{0}' to</value>
+  </data>
 </root>
