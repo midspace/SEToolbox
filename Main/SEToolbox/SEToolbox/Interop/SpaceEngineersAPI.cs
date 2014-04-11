@@ -153,45 +153,6 @@
 
         #region SetCubeOrientation
 
-        public static readonly SerializableBlockOrientation[] ValidOrientations = new SerializableBlockOrientation[] {
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up),      // no rotation
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down),   // 180 around X
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Up),     // 180 around Y
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Down),    // 180 around Z
-
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward),     // +90 around X
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward),    // -90 around X
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Up),         // +90 around Y
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Up),        // -90 around Y
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Left),    // +90 around Z
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right),   // -90 around Z
-
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Left),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Down),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Down),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Backward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Forward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Forward),
-
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Backward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Forward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Left),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Forward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Backward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Left),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Left),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Backward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Forward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Left),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Forward),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right),
-            new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Backward),
-        };
-
         public static readonly Dictionary<CubeType, SerializableBlockOrientation> CubeOrientations = new Dictionary<CubeType, SerializableBlockOrientation>()
         {
             // TODO: Remove the Cube Armor orientation, as these appear to work fine with the Generic.
@@ -292,7 +253,7 @@
         {
             object fileContent = null;
 
-            var filePath = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\Data"), filename);
+            var filePath = Path.Combine(Path.Combine(ToolboxUpdater.GetGameRegistryFilePath(), @"Content\Data"), filename);
 
             if (!File.Exists(filePath))
             {
@@ -321,41 +282,6 @@
         }
 
         #endregion
-
-        public static MyObjectBuilder_CubeBlockDefinition[] CubeBlockDefinitions
-        {
-            get { return _cubeBlockDefinitions.Definitions; }
-        }
-
-        public static MyBlockPosition[] CubeBlockPositions
-        {
-            get { return _cubeBlockDefinitions.BlockPositions; }
-        }
-
-        public static MyObjectBuilder_ComponentDefinition[] ComponentDefinitions
-        {
-            get { return _componentDefinitions.Components; }
-        }
-
-        public static MyObjectBuilder_PhysicalItemDefinition[] PhysicalItemDefinitions
-        {
-            get { return _physicalItemDefinitions.Definitions; }
-        }
-
-        public static MyObjectBuilder_AmmoMagazineDefinition[] AmmoMagazineDefinitions
-        {
-            get { return _ammoMagazineDefinitions.AmmoMagazines; }
-        }
-
-        public static MyObjectBuilder_VoxelMaterialDefinition[] VoxelMaterialDefinitions
-        {
-            get { return _voxelMaterialDefinitions.Materials; }
-        }
-
-        public static MyObjectBuilder_BlueprintDefinition[] BlueprintDefinitions
-        {
-            get { return _blueprintDefinitions.Blueprints; }
-        }
 
         #region FetchCubeBlockMass
 
@@ -548,6 +474,45 @@
 
 
             return bb;
+        }
+
+        #endregion
+
+        #region properties
+
+        public static MyObjectBuilder_CubeBlockDefinition[] CubeBlockDefinitions
+        {
+            get { return _cubeBlockDefinitions.Definitions; }
+        }
+
+        public static MyBlockPosition[] CubeBlockPositions
+        {
+            get { return _cubeBlockDefinitions.BlockPositions; }
+        }
+
+        public static MyObjectBuilder_ComponentDefinition[] ComponentDefinitions
+        {
+            get { return _componentDefinitions.Components; }
+        }
+
+        public static MyObjectBuilder_PhysicalItemDefinition[] PhysicalItemDefinitions
+        {
+            get { return _physicalItemDefinitions.Definitions; }
+        }
+
+        public static MyObjectBuilder_AmmoMagazineDefinition[] AmmoMagazineDefinitions
+        {
+            get { return _ammoMagazineDefinitions.AmmoMagazines; }
+        }
+
+        public static MyObjectBuilder_VoxelMaterialDefinition[] VoxelMaterialDefinitions
+        {
+            get { return _voxelMaterialDefinitions.Materials; }
+        }
+
+        public static MyObjectBuilder_BlueprintDefinition[] BlueprintDefinitions
+        {
+            get { return _blueprintDefinitions.Blueprints; }
         }
 
         #endregion

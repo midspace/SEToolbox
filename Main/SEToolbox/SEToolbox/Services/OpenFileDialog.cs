@@ -11,8 +11,8 @@
     /// </summary>
     public class OpenFileDialog : IDisposable
     {
-        private readonly IOpenFileDialog openFileDialog;
-        private WinFormsOpenFileDialog concreteOpenFileDialog;
+        private readonly IOpenFileDialog _openFileDialog;
+        private WinFormsOpenFileDialog _concreteOpenFileDialog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenFileDialog"/> class.
@@ -22,10 +22,10 @@
         {
             Contract.Requires(openFileDialog != null);
 
-            this.openFileDialog = openFileDialog;
+            this._openFileDialog = openFileDialog;
 
             // Create concrete OpenFileDialog
-            concreteOpenFileDialog = new WinFormsOpenFileDialog
+            _concreteOpenFileDialog = new WinFormsOpenFileDialog
             {
                 AddExtension = openFileDialog.AddExtension,
                 CheckFileExists = openFileDialog.CheckFileExists,
@@ -54,11 +54,11 @@
         {
             Contract.Requires(owner != null);
 
-            DialogResult result = concreteOpenFileDialog.ShowDialog(owner);
+            var result = _concreteOpenFileDialog.ShowDialog(owner);
 
             // Update ViewModel
-            openFileDialog.FileName = concreteOpenFileDialog.FileName;
-            openFileDialog.FileNames = concreteOpenFileDialog.FileNames;
+            _openFileDialog.FileName = _concreteOpenFileDialog.FileName;
+            _openFileDialog.FileNames = _concreteOpenFileDialog.FileNames;
 
             return result;
         }
@@ -84,10 +84,10 @@
         {
             if (disposing)
             {
-                if (concreteOpenFileDialog != null)
+                if (_concreteOpenFileDialog != null)
                 {
-                    concreteOpenFileDialog.Dispose();
-                    concreteOpenFileDialog = null;
+                    _concreteOpenFileDialog.Dispose();
+                    _concreteOpenFileDialog = null;
                 }
             }
         }

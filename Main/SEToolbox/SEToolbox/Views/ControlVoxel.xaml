@@ -33,8 +33,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.ColumnSpan="2">Asteroid</Label>
@@ -85,7 +83,7 @@
                 ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding OreName}" Width="95"/>
+                        <GridViewColumn Header="Material" DisplayMemberBinding="{Binding MaterialName}" Width="95"/>
                         <controls:SortableGridViewColumn Header="Volume" Width="100" SortBinding="{Binding Volume}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -103,7 +101,7 @@
                     </GridView>
                 </ListView.View>
             </controls:SortableListView>
+            <controls:BusyIndicator Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
-        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

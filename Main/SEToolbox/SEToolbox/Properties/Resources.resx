@@ -298,7 +298,7 @@ VoxCells:	{8:#,##0}
 Distance:	{9:#,##0.0} m
 Position:	{10}, {11}, {12}
 
-Ore	Mass	Percent
+Material	Mass	Percent
 {13}</value>
   </data>
   <data name="CubeDetail" xml:space="preserve">
@@ -380,5 +380,14 @@ Units:		{4:#,##0}</value>
   </data>
   <data name="ExportReportTitle" xml:space="preserve">
     <value>Specify filename to export '{0}' to</value>
+  </data>
+  <data name="LocateApplicationFilter" xml:space="preserve">
+    <value>Space Engineers Application|SpaceEngineers.exe</value>
+  </data>
+  <data name="LocateApplicationTitle" xml:space="preserve">
+    <value>Specify location of Space Engineers Application</value>
+  </data>
+  <data name="warning32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

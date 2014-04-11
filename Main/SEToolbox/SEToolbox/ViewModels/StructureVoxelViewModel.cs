@@ -108,51 +108,6 @@
             }
         }
 
-        public double PositionX
-        {
-            get
-            {
-                return this.DataModel.PositionX;
-            }
-
-            set
-            {
-                this.DataModel.PositionX = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
-            }
-        }
-
-        public double PositionY
-        {
-            get
-            {
-                return this.DataModel.PositionY;
-            }
-
-            set
-            {
-                this.DataModel.PositionY = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
-            }
-        }
-
-        public double PositionZ
-        {
-            get
-            {
-                return this.DataModel.PositionZ;
-            }
-
-            set
-            {
-                this.DataModel.PositionZ = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
-            }
-        }
-
         public List<VoxelMaterialAssetModel> MaterialAssets
         {
             get
@@ -183,7 +138,7 @@
             {
                 foreach (var mat in this.MaterialAssets)
                 {
-                    ore.AppendFormat("{0}\t{1:#,##0.00} m³\t{2:P2}\r\n", mat.OreName, mat.Volume, mat.Percent);
+                    ore.AppendFormat("{0}\t{1:#,##0.00} m³\t{2:P2}\r\n", mat.MaterialName, mat.Volume, mat.Percent);
                 }
             }
 

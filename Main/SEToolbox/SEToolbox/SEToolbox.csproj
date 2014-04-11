@@ -126,6 +126,7 @@
     <Compile Include="Interop\Asteroids\MyVoxelMap.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelMaterialCell.cs" />
     <Compile Include="Interop\InteropHelper.cs" />
+    <Compile Include="Interop\Native.cs" />
     <Compile Include="Interop\SpaceEngineersAPI.cs" />
     <Compile Include="Models\BindableVector3DModel.cs" />
     <Compile Include="Models\BindablePoint3DModel.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Models\BindableSize3DIModel.cs" />
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComonentItemModel.cs" />
+    <Compile Include="Models\FindApplicationModel.cs" />
     <Compile Include="Models\GenerateFloatingObjectModel.cs" />
     <Compile Include="Models\GroupMoveItemModel.cs" />
     <Compile Include="Models\GroupMoveModel.cs" />
@@ -206,6 +208,7 @@
     <Compile Include="Services\WindowWrapper.cs" />
     <Compile Include="Models\ExplorerModel.cs" />
     <Compile Include="Interop\SpaceEngineersConsts.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Support\AppConstants.cs" />
     <Compile Include="Support\ExceptionState.cs" />
     <Compile Include="Support\MeshHelper.cs" />
@@ -222,6 +225,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
+    <Compile Include="ViewModels\FindApplicationViewModel.cs" />
     <Compile Include="ViewModels\GenerateFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\GroupMoveViewModel.cs" />
     <Compile Include="ViewModels\StructureMeteorViewModel.cs" />
@@ -269,6 +273,9 @@
     </Compile>
     <Compile Include="Views\ControlMeteor.xaml.cs">
       <DependentUpon>ControlMeteor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowFindApplication.xaml.cs">
+      <DependentUpon>WindowFindApplication.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowGenerateFloatingObject.xaml.cs">
       <DependentUpon>WindowGenerateFloatingObject.xaml</DependentUpon>
@@ -351,6 +358,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\WindowFindApplication.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\WindowGenerateFloatingObject.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -410,6 +421,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Interop\SubtypeId.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SubtypeId.cs</LastGenOutput>
@@ -491,6 +503,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\screwdriver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

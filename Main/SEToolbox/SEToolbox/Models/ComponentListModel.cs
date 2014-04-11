@@ -1,19 +1,19 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Reflection;
     using Sandbox.Common.ObjectBuilders.Definitions;
+    using SEToolbox.Converters;
     using SEToolbox.ImageLibrary;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Drawing;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Web.UI;
-    using SEToolbox.Converters;
 
     public class ComponentListModel : BaseModel
     {
@@ -177,7 +177,7 @@
             this.ItemAssets = new ObservableCollection<ComonentItemModel>();
             this.MaterialAssets = new ObservableCollection<ComonentItemModel>();
 
-            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
+            var contentPath = Path.Combine(ToolboxUpdater.GetGameRegistryFilePath(), "Content");
 
             foreach (var cubeDefinition in SpaceEngineersAPI.CubeBlockDefinitions)
             {

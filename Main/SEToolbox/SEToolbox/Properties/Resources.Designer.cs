@@ -491,6 +491,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Space Engineers Application|SpaceEngineers.exe.
+        /// </summary>
+        public static string LocateApplicationFilter {
+            get {
+                return ResourceManager.GetString("LocateApplicationFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify location of Space Engineers Application.
+        /// </summary>
+        public static string LocateApplicationTitle {
+            get {
+                return ResourceManager.GetString("LocateApplicationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap media_stop {
@@ -777,12 +795,22 @@ namespace SEToolbox.Properties {
         ///Distance:	{9:#,##0.0} m
         ///Position:	{10}, {11}, {12}
         ///
-        ///Ore	Mass	Percent
+        ///Material	Mass	Percent
         ///{13}.
         /// </summary>
         public static string VoxelDetail {
             get {
                 return ResourceManager.GetString("VoxelDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap warning32 {
+            get {
+                object obj = ResourceManager.GetObject("warning32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

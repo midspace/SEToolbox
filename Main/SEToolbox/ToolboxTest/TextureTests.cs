@@ -15,7 +15,7 @@
         [TestMethod]
         public void LoadComponentTextures()
         {
-            var location = ToolboxUpdater.GetApplicationFilePath();
+            var location = ToolboxUpdater.GetGameRegistryFilePath();
             Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
@@ -70,7 +70,7 @@
         [TestMethod]
         public void CreateMenuTextures()
         {
-            var location = ToolboxUpdater.GetApplicationFilePath();
+            var location = ToolboxUpdater.GetGameRegistryFilePath();
             Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
@@ -93,7 +93,7 @@
         [TestMethod]
         public void ReadBackgroundTextures()
         {
-            var location = ToolboxUpdater.GetApplicationFilePath();
+            var location = ToolboxUpdater.GetGameRegistryFilePath();
             Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
@@ -127,7 +127,7 @@
             const int size = 512;
             const bool applyAlpha = true;
 
-            var location = ToolboxUpdater.GetApplicationFilePath();
+            var location = ToolboxUpdater.GetGameRegistryFilePath();
             Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
