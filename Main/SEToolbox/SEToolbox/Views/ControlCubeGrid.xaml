@@ -125,7 +125,7 @@
                         <!--<MenuItem Header="Ladder to Passage" Command="{Binding ConvertLadderToPassageCommand}"/>-->
                     </MenuItem>
                     <MenuItem Header="Mirror">
-                        <MenuItem Header="Using predefined X/Y/Z Planes" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="Uses planes as defined on the ship/station within Space Engineers." />
+                        <MenuItem Header="Using predefined X/Y/Z Symmetry Planes" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="Uses planes as defined on the ship/station within Space Engineers." />
                         <MenuItem Header="Find largest surface / odd [left&gt;|center|&lt;right]" Command="{Binding MirrorStructureGuessOddCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
                         <MenuItem Header="Find largest surface / even [left&gt;|&lt;right]" Command="{Binding MirrorStructureGuessEvenCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
                     </MenuItem>

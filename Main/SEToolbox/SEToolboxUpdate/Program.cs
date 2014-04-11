@@ -1,12 +1,12 @@
 ﻿namespace SEToolboxUpdate
 {
+    using Microsoft.Win32;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Security.Principal;
-    using Microsoft.Win32;
 
     class Program
     {
@@ -38,6 +38,20 @@
 
         private static bool UpdateBaseFiles(string appFilePath)
         {
+            var counter = 0;
+            // Wait until SEToolbox is shut down.
+            while (Process.GetProcessesByName("SEToolbox").Length > 0)
+            {
+                System.Threading.Thread.Sleep(100);
+
+                counter++;
+                if (counter > 100)
+                {
+                    // 10 seconds is too long. Abort.
+                    return false;
+                }
+            }
+
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
             var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
 

@@ -179,66 +179,6 @@
             }
         }
 
-        [XmlIgnore]
-        public double PositionX
-        {
-            get
-            {
-                return this.VoxelMap.PositionAndOrientation.Value.Position.X.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.VoxelMap.PositionAndOrientation.Value.Position.X)
-                {
-                    var pos = this.VoxelMap.PositionAndOrientation.Value;
-                    pos.Position.X = (float)value;
-                    this.VoxelMap.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionX);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionY
-        {
-            get
-            {
-                return this.VoxelMap.PositionAndOrientation.Value.Position.Y.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.VoxelMap.PositionAndOrientation.Value.Position.Y)
-                {
-                    var pos = this.VoxelMap.PositionAndOrientation.Value;
-                    pos.Position.Y = (float)value;
-                    this.VoxelMap.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionY);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double PositionZ
-        {
-            get
-            {
-                return this.VoxelMap.PositionAndOrientation.Value.Position.Z.ToDouble();
-            }
-
-            set
-            {
-                if ((float)value != this.VoxelMap.PositionAndOrientation.Value.Position.Z)
-                {
-                    var pos = this.VoxelMap.PositionAndOrientation.Value;
-                    pos.Position.Z = (float)value;
-                    this.VoxelMap.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionZ);
-                }
-            }
-        }
-
         /// <summary>
         /// This is detail of the breakdown of ores in the asteroid.
         /// </summary>
@@ -312,7 +252,7 @@
 
                         foreach (var kvp in details)
                         {
-                            list.Add(new VoxelMaterialAssetModel() { OreName = kvp.Key, Volume = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
+                            list.Add(new VoxelMaterialAssetModel() { MaterialName = kvp.Key, Volume = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
                         }
 
                         this.MaterialAssets = list;

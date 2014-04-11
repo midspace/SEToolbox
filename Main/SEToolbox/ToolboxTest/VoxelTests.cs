@@ -556,7 +556,7 @@
         [TestMethod]
         public void LoadAllVoxelFiles()
         {
-            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
+            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetGameRegistryFilePath(), @"Content\VoxelMaps"), "*.vox");
 
             foreach (var filename in files)
             {

@@ -14,9 +14,21 @@
 
     public static class ToolboxUpdater
     {
+        private static readonly string[] CoreSpaceEngineersFiles = {
+            "Sandbox.Common.dll",
+            "Sandbox.Common.XmlSerializers.dll",
+            "VRage.Common.dll",
+            "VRage.Library.dll",
+            "VRage.Math.dll",};
+
         #region GetApplicationFilePath
 
-        public static string GetApplicationFilePath()
+        /// <summary>
+        /// Looks for the Space Engineers install location in the Registry, which should return the form:
+        /// "C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers"
+        /// </summary>
+        /// <returns></returns>
+        public static string GetGameRegistryFilePath()
         {
             RegistryKey key;
             if (Environment.Is64BitProcess)
@@ -31,6 +43,28 @@
 
             // Backup check, but no choice if the above goes to pot.
             // Using the [Software\Valve\Steam\SteamPath] as a base for "\steamapps\common\SpaceEngineers", is unreliable, as the Steam Library is customizable and could be on another drive and directory.
+            var steamPath = GetSteamFilePath();
+            if (!string.IsNullOrEmpty(steamPath))
+            {
+                return Path.Combine(steamPath, @"SteamApps\common\SpaceEngineers");
+            }
+
+            return null;
+        }
+        
+        #endregion
+
+        #region GetSteamFilePath
+
+        /// <summary>
+        /// Looks for the Steam install location in the Registry, which should return the form:
+        /// "C:\Program Files (x86)\Steam"
+        /// </summary>
+        /// <returns></returns>
+        public static string GetSteamFilePath()
+        {
+            RegistryKey key;
+
             if (Environment.Is64BitProcess)
                 key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Valve\Steam", false);
             else
@@ -38,7 +72,7 @@
 
             if (key != null)
             {
-                return (string)key.GetValue("InstallPath") + @"\SteamApps\common\SpaceEngineers";
+                return (string)key.GetValue("InstallPath");
             }
 
             return null;
@@ -48,9 +82,9 @@
 
         #region IsSpaceEngineersInstalled
 
-        public static bool IsSpaceEngineersInstalled()
+        public static bool FindSpaceEngineersLocation()
         {
-            var filePath = GetApplicationFilePath();
+            var filePath = GetGameRegistryFilePath();
             if (string.IsNullOrEmpty(filePath))
                 throw new ToolboxException(ExceptionState.NoRegistry);
             if (!Directory.Exists(filePath))
@@ -60,6 +94,21 @@
             // The new "bin" and "Bin64" directories in the current release make this pointless.
             //if (!File.Exists(Path.Combine(filePath, "SpaceEngineers.exe")))
             //    throw new ToolboxException(ExceptionState.NoApplication);
+            return true;
+        }
+
+        public static bool ValidateSpaceEngineersInstall(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+                return false;
+            if (!Directory.Exists(filePath))
+                return false;
+            if (!Directory.Exists(Path.Combine(filePath, "Bin64")))
+                return false;
+            if (!Directory.Exists(Path.Combine(filePath, "Content")))
+                return false;
+
+            // Skip checking for the .exe. Not required for the Toolbox currently.
             return true;
         }
 
@@ -113,46 +162,25 @@
         public static bool IsBaseAssembliesChanged()
         {
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
-            var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
+            var baseFilePath = Path.Combine(GetGameRegistryFilePath(), "Bin64");
             var appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
 
-            var update = false;
+            foreach (var filename in CoreSpaceEngineersFiles)
+            {
+                if (DoFilesDiffer(baseFilePath, appFilePath, filename))
+                    return true;
+            }
 
-            update = DoFilesDiffer(baseFilePath, appFilePath, "Sandbox.Common.dll");
-            if (update)
-                return update;
-
-            update = DoFilesDiffer(baseFilePath, appFilePath, "Sandbox.Common.XmlSerializers.dll");
-            if (update)
-                return update;
-
-            update = DoFilesDiffer(baseFilePath, appFilePath, "VRage.Common.dll");
-            if (update)
-                return update;
-
-            update = DoFilesDiffer(baseFilePath, appFilePath, "VRage.Library.dll");
-            if (update)
-                return update;
-
-            update = DoFilesDiffer(baseFilePath, appFilePath, "VRage.Math.dll");
-
-            return update;
+            return false;
         }
 
         public static bool UpdateBaseFiles()
         {
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
-            var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
+            var baseFilePath = Path.Combine(GetGameRegistryFilePath(), "Bin64");
             var appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
 
-            var files = new[]{
-            "Sandbox.Common.dll",
-            "Sandbox.Common.XmlSerializers.dll",
-            "VRage.Common.dll",
-            "VRage.Library.dll",
-            "VRage.Math.dll",};
-
-            foreach (var filename in files)
+            foreach (var filename in CoreSpaceEngineersFiles)
             {
                 var sourceFile = Path.Combine(baseFilePath, filename);
 

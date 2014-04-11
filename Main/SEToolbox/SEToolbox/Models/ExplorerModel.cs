@@ -10,6 +10,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows.Threading;
@@ -704,13 +705,17 @@
         {
             //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("ArmorCorner")).ToList();
             var corners = viewModel.CubeGrid.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().ToArray();
+            //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.WindowCornerRotationBlocks.Contains(b.SubtypeName)).ToList();
+
+            //WindowRotationBlocks.Contains(subtypeName)
 
             var list = new List<SerializableBlockOrientation>();
             var list2 = new List<string>();
 
-            foreach (var corner in corners.Where(corner => !list.Contains(corner.BlockOrientation) && !SpaceEngineersAPI.ValidOrientations.Contains(corner.BlockOrientation)))
+            foreach (var corner in corners.Where(corner => !list.Contains(corner.BlockOrientation)))
             {
-                list.Add(corner.BlockOrientation);
+                Debug.WriteLine("Axis24_{0}_{1}", corner.BlockOrientation.Forward, corner.BlockOrientation.Up);
+                //list.Add(corner.BlockOrientation);
             }
 
             var z = list.Count;

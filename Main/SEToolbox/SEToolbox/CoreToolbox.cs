@@ -1,5 +1,7 @@
 ﻿namespace SEToolbox
 {
+    using System.Windows.Input;
+    using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Support;
     using SEToolbox.ViewModels;
@@ -20,7 +22,40 @@
 
         public void Startup(string[] args)
         {
-            if (!ToolboxUpdater.IsSpaceEngineersInstalled())
+            string filePath = null;
+            if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) != KeyStates.Down)
+            {
+                // TODO: load User Settings when Shift is not held down.
+                filePath = Properties.Settings.Default.SEInstallLocation; 
+            }
+
+            //// Detection and correction of local settings of SE install location.
+            //if (!ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
+            //{
+            //    filePath = ToolboxUpdater.GetGameRegistryFilePath();
+            //    if (!ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
+            //    {
+            //        var faModel = new FindApplicationModel();
+
+            //        faModel.Load();
+            //        var faViewModel = new FindApplicationViewModel(faModel);
+            //        //if (allowClose)
+            //        //{
+            //        faViewModel.CloseRequested += (object sender, EventArgs e) => { Application.Current.Shutdown(); };
+            //        //}
+            //        var faWindow = new WindowFindApplication(faViewModel);
+            //        //faWindow.Loaded += (object sender, RoutedEventArgs e) => { Splasher.CloseSplash(); };
+            //        faWindow.ShowDialog();
+            //        // TODO:
+            //    }
+            //}
+
+            //Properties.Settings.Default.SEInstallLocation = filePath;
+            //Properties.Settings.Default.Save();
+
+            //// Load the SpaceEngineers assemblies, or dependant classes after this point.
+
+            if (!ToolboxUpdater.FindSpaceEngineersLocation())
             {
                 MessageBox.Show("SEToolbox could not detect the installation of Space Engineers.\r\nPlease make sure you have purchased a legal copy of the game, and installed it correctly.", "Space Engineers Toolbox", MessageBoxButton.OK, MessageBoxImage.Stop);
                 Application.Current.Shutdown();
@@ -75,19 +110,31 @@
             SEToolbox.ImageLibrary.ImageTextureUtil.Init();
 
             explorerModel.Load();
-            var viewModel = new ExplorerViewModel(explorerModel);
+            var eViewModel = new ExplorerViewModel(explorerModel);
+            var eWindow = new WindowExplorer(eViewModel);
             //if (allowClose)
             //{
-            viewModel.CloseRequested += (object sender, EventArgs e) => { Application.Current.Shutdown(); };
+            eViewModel.CloseRequested += (object sender, EventArgs e) =>
+            {
+                SaveSettings(eWindow);
+                Application.Current.Shutdown();
+            };
             //}
-            var window = new WindowExplorer(viewModel);
-            window.Loaded += (object sender, RoutedEventArgs e) => { Splasher.CloseSplash(); };
-            window.ShowDialog();
+            eWindow.Loaded += (object sender, RoutedEventArgs e) => { Splasher.CloseSplash(); };
+            eWindow.ShowDialog();
         }
 
         public void Exit()
         {
             TempfileUtil.Dispose();
+        }
+
+        private void SaveSettings(WindowExplorer eWindow)
+        {
+            // TODO:
+            //eWindow.WindowState
+            //eWindow.Height;
+
         }
 
         #endregion

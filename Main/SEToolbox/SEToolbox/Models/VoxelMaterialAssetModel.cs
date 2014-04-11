@@ -5,7 +5,7 @@
     [Serializable]
     public class VoxelMaterialAssetModel : BaseModel
     {
-        private string _oreName;
+        private string _materialName;
 
         private double _volume;
 
@@ -13,19 +13,19 @@
 
         #region Properties
 
-        public string OreName
+        public string MaterialName
         {
             get
             {
-                return this._oreName;
+                return this._materialName;
             }
 
             set
             {
-                if (value != this._oreName)
+                if (value != this._materialName)
                 {
-                    this._oreName = value;
-                    this.RaisePropertyChanged(() => OreName);
+                    this._materialName = value;
+                    this.RaisePropertyChanged(() => MaterialName);
                 }
             }
         }

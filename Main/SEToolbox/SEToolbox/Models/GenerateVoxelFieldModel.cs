@@ -156,7 +156,7 @@
                 this.MaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
             }
 
-            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
+            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetGameRegistryFilePath(), @"Content\VoxelMaps"), "*.vox");
 
             this.StockVoxelFileList.Clear();
             foreach (var file in files)

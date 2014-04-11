@@ -1,0 +1,61 @@
+﻿<Window x:Class="SEToolbox.Views.WindowFindApplication"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:views="clr-namespace:SEToolbox.Views"
+        xmlns:vm="clr-namespace:SEToolbox.ViewModels"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:interfaces="clr-namespace:SEToolbox.Interfaces"
+        Height="200" Width="400" ResizeMode="NoResize" Title="Location Application"
+        WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        commands:DialogService.IsRegisteredView="True"
+        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <commands:CommandAction Command="{Binding ClosingCommand}" EventArgs="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:StringFormatMultiValueConverter x:Key="StringFormatConverter"/>
+        <converters:DistanceConverter x:Key="DistanceConverter"/>
+    </Window.Resources>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
+    <Grid IsEnabled="{Binding IsActive}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image Width="32" Height="32" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=warning32}" />
+            <TextBlock Grid.Row="0" Grid.Column="1">The Space Engineers application could not be located.</TextBlock>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBox Width="180" Text="{Binding Filename, Mode=TwoWay}" VerticalAlignment="Center" Name="uxInitialElement"/>
+                <Button ToolTip="Browse for Image" Command="{Binding BrowseImageCommand}" VerticalAlignment="Center">
+                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
+                <Button Width="90" Command="{Binding CreateCommand}" Content="Continue" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+            </StackPanel>
+
+        </Grid>
+        <!--<controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
+    </Grid>
+</Window>
