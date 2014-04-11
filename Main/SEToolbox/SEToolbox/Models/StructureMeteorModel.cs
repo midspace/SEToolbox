@@ -129,8 +129,8 @@
         public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.Meteor;
-            var compMass = SpaceEngineersAPI.GetItemMass(this.Meteor.Item.Content.GetType(), this.Meteor.Item.Content.SubtypeName);
-            var compVolume = SpaceEngineersAPI.GetItemVolume(this.Meteor.Item.Content.GetType(), this.Meteor.Item.Content.SubtypeName);
+            var compMass = SpaceEngineersAPI.GetItemMass(this.Meteor.Item.Content.TypeId, this.Meteor.Item.Content.SubtypeName);
+            var compVolume = SpaceEngineersAPI.GetItemVolume(this.Meteor.Item.Content.TypeId, this.Meteor.Item.Content.SubtypeName);
 
             if (this.Meteor.Item.Content is MyObjectBuilder_Ore)
             {

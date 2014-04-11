@@ -438,7 +438,7 @@
                 min.Y = Math.Min(min.Y, block.Min.Y);
                 min.Z = Math.Min(min.Z, block.Min.Z);
 
-                var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
                 // definition is null when the block no longer exists in the Cube definitions. Ie, Ladder, or a Mod that was removed.
                 if (cubeDefinition == null || (cubeDefinition.Size.X == 1 && cubeDefinition.Size.Y == 1 && cubeDefinition.Size.z == 1))
@@ -459,10 +459,10 @@
                 var blockName = block.SubtypeName;
                 if (string.IsNullOrEmpty(blockName))
                 {
-                    blockName = SpaceEngineersAPI.GetObjectBuilderName(block.GetType());
+                    blockName = block.TypeId.ToString();
                 }
 
-                var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
                 float cubeMass = 0;
                 if (cubeBlockDefinition != null)
@@ -846,19 +846,46 @@
             return count > 0;
         }
 
+        #region InvalidMirrorBlocks
+
+        // TODO: As yet uncatered for blocks to Mirror.
+        private static readonly SubtypeId[] InvalidMirrorBlocks = new SubtypeId[] {
+            //SubtypeId.Window1x2Slope,  // Working
+            SubtypeId.Window1x2Inv,
+            SubtypeId.Window1x2Face,
+            SubtypeId.Window1x2SideLeft,
+            SubtypeId.Window1x2SideRight,
+            //SubtypeId.Window1x1Slope, // Working
+            SubtypeId.Window1x1Face,
+            SubtypeId.Window1x1Side,
+            SubtypeId.Window1x1Inv,
+            SubtypeId.Window1x2Flat,
+            SubtypeId.Window1x2FlatInv,
+            SubtypeId.Window1x1Flat,
+            SubtypeId.Window1x1FlatInv,
+            SubtypeId.Window3x3Flat,
+            SubtypeId.Window3x3FlatInv,
+            SubtypeId.Window2x3Flat,
+            SubtypeId.Window2x3FlatInv,
+        };
+
+        #endregion
+
         private static IEnumerable<MyObjectBuilder_CubeBlock> MirrorCubes(StructureCubeGridModel viewModel, bool integrate, Mirror xMirror, int xAxis, Mirror yMirror, int yAxis, Mirror zMirror, int zAxis)
         {
             var blocks = new List<MyObjectBuilder_CubeBlock>();
+            SubtypeId outVal;
 
             if (xMirror == Mirror.None && yMirror == Mirror.None && zMirror == Mirror.None)
                 return blocks;
 
-            foreach (var block in viewModel.CubeGrid.CubeBlocks)
+            foreach (var block in viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == "" || (Enum.TryParse<SubtypeId>(b.SubtypeName, out outVal) && !InvalidMirrorBlocks.Contains(outVal))))
+            //foreach (var block in viewModel.CubeGrid.CubeBlocks)
             {
                 var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
                 newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId();
                 newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
-                var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), viewModel.GridSize, block.SubtypeName);
+                var definition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, viewModel.GridSize, block.SubtypeName);
 
                 if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
                 {

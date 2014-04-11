@@ -276,7 +276,6 @@
         static MyObjectBuilder_PhysicalItemDefinitions _physicalItemDefinitions;
         static MyObjectBuilder_VoxelMaterialDefinitions _voxelMaterialDefinitions;
         static Dictionary<string, byte> _materialIndex;
-        static Dictionary<Type, MyObjectBuilderTypeEnum> _myObjectBuilderTypeList;
 
         public static void ReadCubeBlockDefinitions()
         {
@@ -286,21 +285,6 @@
             _componentDefinitions = LoadContentFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>("Components.sbc");
             _cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>("CubeBlocks.sbc");
             _blueprintDefinitions = LoadContentFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>("Blueprints.sbc");
-
-            _myObjectBuilderTypeList = new Dictionary<Type, MyObjectBuilderTypeEnum>();
-            foreach (MyObjectBuilderTypeEnum e in Enum.GetValues(typeof(MyObjectBuilderTypeEnum)))
-            {
-                try
-                {
-                    var t = MyObjectBuilder_Base.GetObjectBuilderToType(e);
-                    _myObjectBuilderTypeList.Add(t, e);
-                }
-                catch
-                {
-                    // Ignore any that don't have a Type defined.
-                }
-            }
-
             _materialIndex = new Dictionary<string, byte>();
         }
 
@@ -426,39 +410,6 @@
             timeTaken = time;
         }
 
-        public static float GetItemMass(Type type, string subTypeId)
-        {
-            return GetItemMass(_myObjectBuilderTypeList[type], subTypeId);
-        }
-
-        public static float GetItemMass(MyObjectBuilderTypeEnum typeId, string subTypeId)
-        {
-            var item = _physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
-            if (item != null)
-            {
-                return item.Mass;
-            }
-            else
-            {
-                var component = _componentDefinitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
-                if (component != null)
-                {
-                    return component.Mass;
-                }
-            }
-            return 0;
-        }
-
-        public static string GetObjectBuilderName(Type type)
-        {
-            if (_myObjectBuilderTypeList.ContainsKey(type))
-            {
-                return _myObjectBuilderTypeList[type].ToString();
-            }
-
-            return null;
-        }
-
         public static MyObjectBuilder_DefinitionBase GetDefinition(MyObjectBuilderTypeEnum typeId, string subTypeId)
         {
             var cube = _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
@@ -488,28 +439,28 @@
             return null;
         }
 
-        public static float GetItemVolume(Type type, string subTypeId)
+        public static float GetItemMass(MyObjectBuilderTypeEnum typeId, string subTypeId)
         {
-            return GetItemVolume(_myObjectBuilderTypeList[type], subTypeId);
+            var def = GetDefinition(typeId, subTypeId);
+            if (def is MyObjectBuilder_PhysicalItemDefinition)
+            {
+                var item2 = def as MyObjectBuilder_PhysicalItemDefinition;
+                return item2.Mass;
+            }
+
+            return 0;
         }
 
         public static float GetItemVolume(MyObjectBuilderTypeEnum typeId, string subTypeId)
         {
-            var item = _physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
-            if (item != null)
+            var def = GetDefinition(typeId, subTypeId);
+            if (def is MyObjectBuilder_PhysicalItemDefinition)
             {
-                if (item.Volume.HasValue)
-                    return item.Volume.Value;
+                var item2 = def as MyObjectBuilder_PhysicalItemDefinition;
+                if (item2.Volume.HasValue)
+                    return item2.Volume.Value;
             }
-            else
-            {
-                var component = _componentDefinitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
-                if (component != null)
-                {
-                    if (component.Volume.HasValue)
-                        return component.Volume.Value;
-                }
-            }
+
             return 0;
         }
 
@@ -551,10 +502,10 @@
             // Returns null if it doesn't find the required SubtypeId.
         }
 
-        public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, MyCubeSize cubeSize, string subtypeId)
-        {
-            return GetCubeDefinition(_myObjectBuilderTypeList[typeId], cubeSize, subtypeId);
-        }
+        //public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, MyCubeSize cubeSize, string subtypeId)
+        //{
+        //    return GetCubeDefinition(_myObjectBuilderTypeList[typeId], cubeSize, subtypeId);
+        //}
 
         #endregion
 

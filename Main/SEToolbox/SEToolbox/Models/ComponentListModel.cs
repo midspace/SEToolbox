@@ -635,15 +635,19 @@ td.right { text-align: right; }");
         {
             var item = field.GetValue(objt);
 
-            if (item is Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds)
+            if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds))
             {
                 var bounds = (Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds)item;
                 return string.Format("Default:{0}, Min:{1}, max:{2}", bounds.Default, bounds.Min, bounds.Max);
             }
-            else if (item is VRageMath.Vector3)
+            else if (field.FieldType == typeof(VRageMath.Vector3))
             {
                 var vector3 = (VRageMath.Vector3)item;
                 return string.Format("X:{0}, Y:{1}, Z:{2}", vector3.X, vector3.Y, vector3.Z);
+            }
+            else if (field.FieldType == typeof(string))
+            {
+                return item as string;
             }
             else
             {
