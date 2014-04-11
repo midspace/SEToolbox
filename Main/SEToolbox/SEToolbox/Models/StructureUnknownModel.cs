@@ -40,7 +40,7 @@
         public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.Unknown;
-            this.DisplayName = SpaceEngineersAPI.GetObjectBuilderName(this.EntityBase.GetType());
+            this.DisplayName = this.EntityBase.TypeId.ToString();
         }
 
         #endregion

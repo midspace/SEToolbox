@@ -128,8 +128,8 @@
         public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.FloatingObject;
-            var compMass = SpaceEngineersAPI.GetItemMass(this.FloatingObject.Item.Content.GetType(), this.FloatingObject.Item.Content.SubtypeName);
-            var compVolume = SpaceEngineersAPI.GetItemVolume(this.FloatingObject.Item.Content.GetType(), this.FloatingObject.Item.Content.SubtypeName);
+            var compMass = SpaceEngineersAPI.GetItemMass(this.FloatingObject.Item.Content.TypeId, this.FloatingObject.Item.Content.SubtypeName);
+            var compVolume = SpaceEngineersAPI.GetItemVolume(this.FloatingObject.Item.Content.TypeId, this.FloatingObject.Item.Content.SubtypeName);
 
             if (this.FloatingObject.Item.Content is MyObjectBuilder_Ore)
             {

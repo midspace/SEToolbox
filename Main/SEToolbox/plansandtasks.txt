@@ -1,5 +1,6 @@
 ﻿TODO: list of tasks (in no particular order):
 - All the TODO: items in code!
+- Documentation.... lots of it to be added to CodePlex.
 - Refresh/Save needs to check if save directory no longer exists.
 - tree view of everything.
 - Property Grid, to edit properties and sub items.
@@ -24,7 +25,7 @@
   * Orientation options.
 
 - Improve Import 3D Model:
-  * Double the Voxel shell thickness and double count of 3D objects, and use this to generate the slopes/corners/inversecorners instead of trying to interpret them.
+  * New volumetric conversion type calculate the slopes differently to create a more accurate conversion.
   * Import model colors or average model textures.
   * 3D Preview of Volmetric?
   * Orientation options.
