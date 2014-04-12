@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.025.021.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.025.021.2" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -10,6 +10,8 @@
     <WixVariable Id="WixUIDialogBmp" Value="WixUIDialogBmp.bmp" />
 
     <Upgrade Id="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+      <!-- Ignore the ICE61 warning.
+      Maximum version is 99.0.0.0 because users may be forced to regress and install an older version, just incase a new release is screwed up! -->
       <UpgradeVersion Minimum="1.0.0.0" Maximum="99.0.0.0" Property="PREVIOUSVERSIONSINSTALLED" IncludeMinimum="yes" IncludeMaximum="no" />
     </Upgrade>
 

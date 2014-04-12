@@ -25,7 +25,7 @@
             if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) == KeyStates.Down)
             {
                 // Reset User Settings when Shift is held down.
-                Properties.Settings.Default.SEInstallLocation = null; 
+                GlobalSettings.Default.SEInstallLocation = null;
             }
 
             // Detection and correction of local settings of SE install location.
@@ -49,8 +49,8 @@
             }
 
             // Update and save user path.
-            Properties.Settings.Default.SEInstallLocation = filePath;
-            Properties.Settings.Default.Save();
+            GlobalSettings.Default.SEInstallLocation = filePath;
+            GlobalSettings.Default.Save();
 
 
             // Load the SpaceEngineers assemblies, or dependant classes after this point.

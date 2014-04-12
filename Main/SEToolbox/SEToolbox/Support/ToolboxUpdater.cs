@@ -25,7 +25,7 @@
 
         public static string GetApplicationFilePath()
         {
-            var gamePath = Properties.Settings.Default.SEInstallLocation;
+            var gamePath = GlobalSettings.Default.SEInstallLocation;
 
             if (string.IsNullOrEmpty(gamePath))
                 gamePath = GetGameRegistryFilePath();
@@ -60,6 +60,10 @@
             }
 
             return null;
+        }
+
+        public static void GetSettings()
+        {
         }
         
         #endregion

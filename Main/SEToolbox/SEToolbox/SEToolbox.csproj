@@ -211,6 +211,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Support\AppConstants.cs" />
     <Compile Include="Support\ExceptionState.cs" />
+    <Compile Include="Support\GlobalSettings.cs" />
     <Compile Include="Support\MeshHelper.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\RandomUtil.cs" />
@@ -411,11 +412,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -425,10 +421,6 @@
     <None Include="Interop\SubtypeId.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SubtypeId.cs</LastGenOutput>
-    </None>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="SEToolbox.pfx" />
