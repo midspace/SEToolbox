@@ -1,26 +1,19 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
-    using System.IO;
-    using System.Windows.Forms;
     using SEToolbox.Support;
+    using System.IO;
 
     public class FindApplicationModel : BaseModel
     {
         #region Fields
 
-        /// <summary>
-        /// The base path of the save files, minus the userid.
-        /// </summary>
-        private string _baseSavePath;
+        private string _gameApplicationPath;
 
-        private bool _isActive;
+        private string _gameRootPath;
 
-        private bool _isBusy;
+        private bool isValidApplication;
 
-        private bool _isModified;
-
-        private bool _isBaseSaveChanged;
+        private bool _isWrongApplication;
 
         #endregion
 
@@ -34,104 +27,71 @@
 
         #region Properties
 
-        public string BaseSavePath
+        public string GameApplicationPath
         {
             get
             {
-                return this._baseSavePath;
+                return this._gameApplicationPath;
             }
 
             set
             {
-                if (value != this._baseSavePath)
+                if (value != this._gameApplicationPath)
                 {
-                    this._baseSavePath = value;
-                    this.RaisePropertyChanged(() => BaseSavePath);
+                    this._gameApplicationPath = value;
+                    this.RaisePropertyChanged(() => GameApplicationPath);
+                    this.Validate();
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the View is available.  This is based on the IsInError and IsBusy properties
-        /// </summary>
-        public bool IsActive
+        public string GameRootPath
         {
             get
             {
-                return this._isActive;
+                return this._gameRootPath;
             }
 
             set
             {
-                if (value != this._isActive)
+                if (value != this._gameRootPath)
                 {
-                    this._isActive = value;
-                    this.RaisePropertyChanged(() => IsActive);
+                    this._gameRootPath = value;
+                    this.RaisePropertyChanged(() => GameRootPath);
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the View is currently in the middle of an asynchonise operation.
-        /// </summary>
-        public bool IsBusy
+        public bool IsValidApplication
         {
             get
             {
-                return this._isBusy;
+                return this.isValidApplication;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != this.isValidApplication)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    this.SetActiveStatus();
-                    if (this._isBusy)
-                    {
-                        System.Windows.Forms.Application.DoEvents();
-                    }
+                    this.isValidApplication = value;
+                    this.RaisePropertyChanged(() => IsValidApplication);
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the View content has been changed.
-        /// </summary>
-        public bool IsModified
+        public bool IsWrongApplication
         {
             get
             {
-                return this._isModified;
+                return this._isWrongApplication;
             }
 
             set
             {
-                if (value != this._isModified)
+                if (value != this._isWrongApplication)
                 {
-                    this._isModified = value;
-                    this.RaisePropertyChanged(() => IsModified);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the base SE save content has changed.
-        /// </summary>
-        public bool IsBaseSaveChanged
-        {
-            get
-            {
-                return this._isBaseSaveChanged;
-            }
-
-            set
-            {
-                if (value != this._isBaseSaveChanged)
-                {
-                    this._isBaseSaveChanged = value;
-                    this.RaisePropertyChanged(() => IsBaseSaveChanged);
+                    this._isWrongApplication = value;
+                    this.RaisePropertyChanged(() => IsWrongApplication);
                 }
             }
         }
@@ -140,47 +100,25 @@
 
         #region Methods
 
-        public void SetActiveStatus()
+        public void Validate()
         {
-            this.IsActive = !this.IsBusy;
-        }
+            this.GameRootPath = null;
 
-        public void Load()
-        {
-            this.BaseSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves");
-            this.SetActiveStatus();
-        }
-
-        public string UserLocateSpaceEngineersInstall(string startPath)
-        {
-            if (string.IsNullOrEmpty(startPath))
+            if (!string.IsNullOrEmpty(GameApplicationPath))
             {
-                startPath = ToolboxUpdater.GetSteamFilePath();
-                if (!string.IsNullOrEmpty(startPath))
+                try
                 {
-                    startPath = Path.Combine(startPath, @"SteamApps\common");
+                    Path.GetFullPath(GameApplicationPath);
+                    if (File.Exists(GameApplicationPath))
+                    {
+                        this.GameRootPath = Path.GetDirectoryName(Path.GetDirectoryName(GameApplicationPath));
+                    }
                 }
+                catch { }
             }
 
-            var findAppDialog = new System.Windows.Forms.OpenFileDialog
-            {
-                CheckFileExists = true,
-                CheckPathExists = true,
-                DefaultExt = "exe",
-                FileName = "SpaceEngineers",
-                Filter = Properties.Resources.LocateApplicationFilter,
-                InitialDirectory = startPath,
-                Multiselect = false,
-                Title = Properties.Resources.LocateApplicationTitle,
-            };
-
-            var ret = findAppDialog.ShowDialog();
-            if (ret == DialogResult.OK)
-            {
-                return Path.GetDirectoryName(Path.GetDirectoryName(findAppDialog.FileName));
-            }
-
-            return null;
+            this.IsValidApplication = ToolboxUpdater.ValidateSpaceEngineersInstall(this.GameRootPath);
+            this.IsWrongApplication = !this.IsValidApplication;
         }
 
         #endregion

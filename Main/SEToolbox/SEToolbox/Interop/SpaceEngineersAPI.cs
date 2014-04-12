@@ -253,7 +253,7 @@
         {
             object fileContent = null;
 
-            var filePath = Path.Combine(Path.Combine(ToolboxUpdater.GetGameRegistryFilePath(), @"Content\Data"), filename);
+            var filePath = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\Data"), filename);
 
             if (!File.Exists(filePath))
             {

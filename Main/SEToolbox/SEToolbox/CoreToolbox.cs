@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox
 {
-    using System.Windows.Input;
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Support;
@@ -11,6 +10,7 @@
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Input;
 
     public class CoreToolbox
     {
@@ -22,45 +22,38 @@
 
         public void Startup(string[] args)
         {
-            string filePath = null;
-            if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) != KeyStates.Down)
+            if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) == KeyStates.Down)
             {
-                // TODO: load User Settings when Shift is not held down.
-                filePath = Properties.Settings.Default.SEInstallLocation; 
+                // Reset User Settings when Shift is held down.
+                Properties.Settings.Default.SEInstallLocation = null; 
             }
 
-            //// Detection and correction of local settings of SE install location.
-            //if (!ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
-            //{
-            //    filePath = ToolboxUpdater.GetGameRegistryFilePath();
-            //    if (!ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
-            //    {
-            //        var faModel = new FindApplicationModel();
+            // Detection and correction of local settings of SE install location.
+            var filePath = ToolboxUpdater.GetApplicationFilePath();
 
-            //        faModel.Load();
-            //        var faViewModel = new FindApplicationViewModel(faModel);
-            //        //if (allowClose)
-            //        //{
-            //        faViewModel.CloseRequested += (object sender, EventArgs e) => { Application.Current.Shutdown(); };
-            //        //}
-            //        var faWindow = new WindowFindApplication(faViewModel);
-            //        //faWindow.Loaded += (object sender, RoutedEventArgs e) => { Splasher.CloseSplash(); };
-            //        faWindow.ShowDialog();
-            //        // TODO:
-            //    }
-            //}
-
-            //Properties.Settings.Default.SEInstallLocation = filePath;
-            //Properties.Settings.Default.Save();
-
-            //// Load the SpaceEngineers assemblies, or dependant classes after this point.
-
-            if (!ToolboxUpdater.FindSpaceEngineersLocation())
+            if (!ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
             {
-                MessageBox.Show("SEToolbox could not detect the installation of Space Engineers.\r\nPlease make sure you have purchased a legal copy of the game, and installed it correctly.", "Space Engineers Toolbox", MessageBoxButton.OK, MessageBoxImage.Stop);
-                Application.Current.Shutdown();
-                return;
+                var faModel = new FindApplicationModel();
+                var faViewModel = new FindApplicationViewModel(faModel);
+                var faWindow = new WindowFindApplication(faViewModel);
+                var ret = faWindow.ShowDialog();
+                if (ret == true)
+                {
+                    filePath = faModel.GameRootPath;
+                }
+                else
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
             }
+
+            // Update and save user path.
+            Properties.Settings.Default.SEInstallLocation = filePath;
+            Properties.Settings.Default.Save();
+
+
+            // Load the SpaceEngineers assemblies, or dependant classes after this point.
 
             var ignoreUpdates = args.Any(a => a.ToUpper() == "/X");
             var updateAborted = args.Any(a => a.ToUpper() == "/A");

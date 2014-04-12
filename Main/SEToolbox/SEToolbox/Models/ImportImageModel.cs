@@ -8,8 +8,8 @@
     {
         #region Fields
 
-        private string filename;
-        private bool isValidImage;
+        private string _filename;
+        private bool _isValidImage;
 
         private Size originalImageSize;
         private BindableSizeModel newImageSize;
@@ -36,14 +36,14 @@
         {
             get
             {
-                return this.filename;
+                return this._filename;
             }
 
             set
             {
-                if (value != this.filename)
+                if (value != this._filename)
                 {
-                    this.filename = value;
+                    this._filename = value;
                     this.RaisePropertyChanged(() => Filename);
                 }
             }
@@ -53,14 +53,14 @@
         {
             get
             {
-                return this.isValidImage;
+                return this._isValidImage;
             }
 
             set
             {
-                if (value != this.isValidImage)
+                if (value != this._isValidImage)
                 {
-                    this.isValidImage = value;
+                    this._isValidImage = value;
                     this.RaisePropertyChanged(() => IsValidImage);
                 }
             }

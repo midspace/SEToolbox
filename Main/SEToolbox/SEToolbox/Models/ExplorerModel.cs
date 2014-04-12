@@ -701,24 +701,16 @@
             this.IsModified = true;
         }
 
-        public void Test(StructureCubeGridModel viewModel)
+        public void TestDisplayRotation(StructureCubeGridModel viewModel)
         {
             //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("ArmorCorner")).ToList();
-            var corners = viewModel.CubeGrid.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().ToArray();
-            //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.WindowCornerRotationBlocks.Contains(b.SubtypeName)).ToList();
+            //var corners = viewModel.CubeGrid.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().ToArray();
+            var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.WindowEdgeRotationBlocks.Contains(b.SubtypeName)).ToList();
 
-            //WindowRotationBlocks.Contains(subtypeName)
-
-            var list = new List<SerializableBlockOrientation>();
-            var list2 = new List<string>();
-
-            foreach (var corner in corners.Where(corner => !list.Contains(corner.BlockOrientation)))
+            foreach (var corner in corners)
             {
-                Debug.WriteLine("Axis24_{0}_{1}", corner.BlockOrientation.Forward, corner.BlockOrientation.Up);
-                //list.Add(corner.BlockOrientation);
+                Debug.WriteLine("{0}\t = \tAxis24_{1}_{2}", corner.SubtypeName, corner.BlockOrientation.Forward, corner.BlockOrientation.Up);
             }
-
-            var z = list.Count;
         }
 
         public void TestConvert(StructureCubeGridModel viewModel)

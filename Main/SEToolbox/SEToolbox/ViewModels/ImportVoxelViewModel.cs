@@ -353,7 +353,7 @@
             string originalFile = null;
             if (this.IsStockVoxel)
             {
-                var stockfile = Path.Combine(Path.Combine(ToolboxUpdater.GetGameRegistryFilePath(), @"Content\VoxelMaps"), this.StockVoxel + ".vox");
+                var stockfile = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), this.StockVoxel + ".vox");
 
                 if (this.StockMaterial == null || this.StockMaterial.Value == null)
                 {

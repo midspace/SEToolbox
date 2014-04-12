@@ -880,7 +880,7 @@
 
         public void Test5Executed()
         {
-            this._dataModel.Test(this.Selections[0].DataModel as StructureCubeGridModel);
+            this._dataModel.TestDisplayRotation(this.Selections[0].DataModel as StructureCubeGridModel);
         }
 
         public bool Test6CanExecute()
