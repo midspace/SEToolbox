@@ -2,60 +2,56 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:commands="clr-namespace:SEToolbox.Services"
-        xmlns:controls="clr-namespace:SEToolbox.Controls"
-        xmlns:views="clr-namespace:SEToolbox.Views"
         xmlns:vm="clr-namespace:SEToolbox.ViewModels"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
-        xmlns:interfaces="clr-namespace:SEToolbox.Interfaces"
-        Height="200" Width="400" ResizeMode="NoResize" Title="Location Application"
+        Height="200" Width="400" ResizeMode="NoResize" Title="Locate Application"
         WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         commands:DialogService.IsRegisteredView="True"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closing">
-            <commands:CommandAction Command="{Binding ClosingCommand}" EventArgs="True" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
-        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
-        <converters:StringFormatMultiValueConverter x:Key="StringFormatConverter"/>
-        <converters:DistanceConverter x:Key="DistanceConverter"/>
     </Window.Resources>
-    <Window.Cursor>
-        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
-    </Window.Cursor>
     <Grid IsEnabled="{Binding IsActive}">
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="70"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Image Width="32" Height="32" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=warning32}" />
-            <TextBlock Grid.Row="0" Grid.Column="1">The Space Engineers application could not be located.</TextBlock>
-
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <TextBox Width="180" Text="{Binding Filename, Mode=TwoWay}" VerticalAlignment="Center" Name="uxInitialElement"/>
-                <Button ToolTip="Browse for Image" Command="{Binding BrowseImageCommand}" VerticalAlignment="Center">
-                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
-                </Button>
-            </StackPanel>
-
-            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
-                <Button Width="90" Command="{Binding CreateCommand}" Content="Continue" IsDefault="True"/>
+            <Image Width="32" Height="32" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=warning32}" VerticalAlignment="Top" Margin="0,16,0,0" />
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Margin="0,8,0,8">The Space Engineers application could not be located.<LineBreak/>Please specify the location of the Space Engineers Application.</TextBlock>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <TextBox Width="280" Text="{Binding GameApplicationPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Name="uxInitialElement"/>
+                    <Button ToolTip="Browse for Image" Command="{Binding BrowseApplicationCommand}" VerticalAlignment="Center">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,8,0,0" Visibility="{Binding IsValidApplication, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=check24}" VerticalAlignment="Center"/>
+                    <TextBlock Text="Valid location detected." VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,8,0,0" Visibility="{Binding IsWrongApplication, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=error24}" VerticalAlignment="Center"/>
+                    <TextBlock Text="Invalid location specified." VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
+                <Button Width="90" Command="{Binding ContinueCommand}" Content="Continue" IsDefault="True"/>
                 <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
             </StackPanel>
-
         </Grid>
-        <!--<controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
     </Grid>
 </Window>

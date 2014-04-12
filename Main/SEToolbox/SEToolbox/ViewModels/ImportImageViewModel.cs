@@ -22,14 +22,14 @@
     {
         #region Fields
 
-        private readonly IDialogService dialogService;
-        private readonly Func<IOpenFileDialog> openFileDialogFactory;
-        private ImportImageModel dataModel;
+        private readonly IDialogService _dialogService;
+        private readonly Func<IOpenFileDialog> _openFileDialogFactory;
+        private ImportImageModel _dataModel;
 
-        private bool? closeResult;
-        private Image sourceImage;
-        private BitmapImage newImage;
-        private bool isBusy;
+        private bool? _closeResult;
+        private Image _sourceImage;
+        private BitmapImage _newImage;
+        private bool _isBusy;
 
         #endregion
 
@@ -46,10 +46,10 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
 
-            this.dialogService = dialogService;
-            this.openFileDialogFactory = openFileDialogFactory;
-            this.dataModel = dataModel;
-            this.dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            this._dialogService = dialogService;
+            this._openFileDialogFactory = openFileDialogFactory;
+            this._dataModel = dataModel;
+            this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
                 this.OnPropertyChanged(e.PropertyName);
@@ -99,12 +99,12 @@
         {
             get
             {
-                return this.closeResult;
+                return this._closeResult;
             }
 
             set
             {
-                this.closeResult = value;
+                this._closeResult = value;
                 this.RaisePropertyChanged(() => CloseResult);
             }
         }
@@ -113,12 +113,12 @@
         {
             get
             {
-                return this.dataModel.Filename;
+                return this._dataModel.Filename;
             }
 
             set
             {
-                this.dataModel.Filename = value;
+                this._dataModel.Filename = value;
                 this.FilenameChanged();
             }
         }
@@ -127,12 +127,12 @@
         {
             get
             {
-                return this.dataModel.IsValidImage;
+                return this._dataModel.IsValidImage;
             }
 
             set
             {
-                this.dataModel.IsValidImage = value;
+                this._dataModel.IsValidImage = value;
             }
         }
 
@@ -140,12 +140,12 @@
         {
             get
             {
-                return this.dataModel.OriginalImageSize;
+                return this._dataModel.OriginalImageSize;
             }
 
             set
             {
-                this.dataModel.OriginalImageSize = value;
+                this._dataModel.OriginalImageSize = value;
             }
         }
 
@@ -153,12 +153,12 @@
         {
             get
             {
-                return this.dataModel.NewImageSize;
+                return this._dataModel.NewImageSize;
             }
 
             set
             {
-                this.dataModel.NewImageSize = value;
+                this._dataModel.NewImageSize = value;
                 this.ProcessImage();
             }
         }
@@ -167,12 +167,12 @@
         {
             get
             {
-                return this.dataModel.Position;
+                return this._dataModel.Position;
             }
 
             set
             {
-                this.dataModel.Position = value;
+                this._dataModel.Position = value;
             }
         }
 
@@ -180,12 +180,12 @@
         {
             get
             {
-                return this.dataModel.Forward;
+                return this._dataModel.Forward;
             }
 
             set
             {
-                this.dataModel.Forward = value;
+                this._dataModel.Forward = value;
             }
         }
 
@@ -193,12 +193,12 @@
         {
             get
             {
-                return this.dataModel.Up;
+                return this._dataModel.Up;
             }
 
             set
             {
-                this.dataModel.Up = value;
+                this._dataModel.Up = value;
             }
         }
 
@@ -206,12 +206,12 @@
         {
             get
             {
-                return this.dataModel.ClassType;
+                return this._dataModel.ClassType;
             }
 
             set
             {
-                this.dataModel.ClassType = value;
+                this._dataModel.ClassType = value;
             }
         }
 
@@ -219,12 +219,12 @@
         {
             get
             {
-                return this.dataModel.ArmorType;
+                return this._dataModel.ArmorType;
             }
 
             set
             {
-                this.dataModel.ArmorType = value;
+                this._dataModel.ArmorType = value;
             }
         }
 
@@ -232,14 +232,14 @@
         {
             get
             {
-                return this.newImage;
+                return this._newImage;
             }
 
             set
             {
-                if (value != this.newImage)
+                if (value != this._newImage)
                 {
-                    this.newImage = value;
+                    this._newImage = value;
                     this.RaisePropertyChanged(() => NewImage);
                 }
             }
@@ -252,16 +252,16 @@
         {
             get
             {
-                return this.isBusy;
+                return this._isBusy;
             }
 
             set
             {
-                if (value != this.isBusy)
+                if (value != this._isBusy)
                 {
-                    this.isBusy = value;
+                    this._isBusy = value;
                     this.RaisePropertyChanged(() => IsBusy);
-                    if (this.isBusy)
+                    if (this._isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -282,12 +282,12 @@
         {
             this.IsValidImage = false;
 
-            IOpenFileDialog openFileDialog = openFileDialogFactory();
+            IOpenFileDialog openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Resources.ImportImageFilter;
             openFileDialog.Title = Resources.ImportImageTitle;
 
             // Open the dialog
-            DialogResult result = dialogService.ShowOpenFileDialog(this, openFileDialog);
+            DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
 
             if (result == DialogResult.OK)
             {
@@ -307,8 +307,8 @@
 
         public void SetToOriginalSizeExecuted()
         {
-            this.NewImageSize.Height = this.sourceImage.Height;
-            this.NewImageSize.Width = this.sourceImage.Width;
+            this.NewImageSize.Height = this._sourceImage.Height;
+            this.NewImageSize.Width = this._sourceImage.Width;
         }
 
         public bool CreateCanExecute()
@@ -345,15 +345,15 @@
 
                 // TODO: read image properties.
 
-                if (this.sourceImage != null)
+                if (this._sourceImage != null)
                 {
-                    this.sourceImage.Dispose();
+                    this._sourceImage.Dispose();
                 }
 
-                this.sourceImage = Image.FromFile(filename);
-                this.OriginalImageSize = new Size(this.sourceImage.Width, this.sourceImage.Height);
+                this._sourceImage = Image.FromFile(filename);
+                this.OriginalImageSize = new Size(this._sourceImage.Width, this._sourceImage.Height);
 
-                this.NewImageSize = new BindableSizeModel(this.sourceImage.Width, this.sourceImage.Height);
+                this.NewImageSize = new BindableSizeModel(this._sourceImage.Width, this._sourceImage.Height);
                 this.NewImageSize.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
                 {
                     this.ProcessImage();
@@ -366,12 +366,12 @@
 
 
                 // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
-                var vector = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Vector3D;
+                var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
                 vector.Normalize();
                 vector = Vector3D.Multiply(vector, 10);
-                this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this.dataModel.CharacterPosition.Position).Point3D, vector));
-                this.Forward = new BindableVector3DModel(this.dataModel.CharacterPosition.Forward).Negate();
-                this.Up = new BindableVector3DModel(this.dataModel.CharacterPosition.Up);
+                this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
+                this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Negate();
+                this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
 
                 this.ClassType = ImportClassType.SmallShip;
                 this.ArmorType = ImportArmorType.Light;
@@ -391,9 +391,9 @@
 
         private void ProcessImage()
         {
-            if (this.sourceImage != null)
+            if (this._sourceImage != null)
             {
-                var image = ToolboxExtensions.ResizeImage(this.sourceImage, this.NewImageSize.Size);
+                var image = ToolboxExtensions.ResizeImage(this._sourceImage, this.NewImageSize.Size);
 
                 if (image != null)
                 {
@@ -471,7 +471,7 @@
             // Small|HeavyBlockArmor|Corner,
 
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
-            var image = ToolboxExtensions.ResizeImage(this.sourceImage, this.NewImageSize.Size);
+            var image = ToolboxExtensions.ResizeImage(this._sourceImage, this.NewImageSize.Size);
 
             using (var palatteImage = new Bitmap(image))
             {

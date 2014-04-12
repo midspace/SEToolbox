@@ -2,12 +2,13 @@
 {
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
+    using SEToolbox.Properties;
     using SEToolbox.Services;
-    using SEToolbox.Views;
+    using SEToolbox.Support;
     using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Windows.Forms;
     using System.Windows.Input;
 
     public class FindApplicationViewModel : BaseViewModel
@@ -17,38 +18,25 @@
         private readonly FindApplicationModel _dataModel;
         private readonly IDialogService _dialogService;
         private readonly Func<IOpenFileDialog> _openFileDialogFactory;
-        private readonly Func<ISaveFileDialog> _saveFileDialogFactory;
         private bool? _closeResult;
-
-
-        // If true, when adding new models to the collection, the new models will be highlighted as selected in the UI.
-        private bool _selectNewStructure;
-
-        #endregion
-
-        #region event handlers
-
-        public event EventHandler CloseRequested;
 
         #endregion
 
         #region Constructors
 
         public FindApplicationViewModel(FindApplicationModel dataModel)
-            : this(dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>(), () => ServiceLocator.Resolve<ISaveFileDialog>())
+            : this(dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>())
         {
         }
 
-        public FindApplicationViewModel(FindApplicationModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory, Func<ISaveFileDialog> saveFileDialogFactory)
+        public FindApplicationViewModel(FindApplicationModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory)
             : base(null)
         {
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
-            Contract.Requires(saveFileDialogFactory != null);
 
             this._dialogService = dialogService;
             this._openFileDialogFactory = openFileDialogFactory;
-            this._saveFileDialogFactory = saveFileDialogFactory;
             this._dataModel = dataModel;
 
             // Will bubble property change events from the Model to the ViewModel.
@@ -59,27 +47,27 @@
 
         #region Command Properties
 
-        public ICommand ClosingCommand
+        public ICommand BrowseApplicationCommand
         {
             get
             {
-                return new DelegateCommand<CancelEventArgs>(new Action<CancelEventArgs>(ClosingExecuted), new Func<CancelEventArgs, bool>(ClosingCanExecute));
+                return new DelegateCommand(new Action(BrowseApplicationExecuted), new Func<bool>(BrowseApplicationCanExecute));
             }
         }
 
-        public ICommand OpenComponentListCommand
+        public ICommand ContinueCommand
         {
             get
             {
-                return new DelegateCommand(new Action(OpenComponentListExecuted), new Func<bool>(OpenComponentListCanExecute));
+                return new DelegateCommand(new Action(ContinueExecuted), new Func<bool>(ContinueCanExecute));
             }
         }
 
-        public ICommand AboutCommand
+        public ICommand CancelCommand
         {
             get
             {
-                return new DelegateCommand(new Action(AboutExecuted), new Func<bool>(AboutCanExecute));
+                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
             }
         }
 
@@ -104,81 +92,56 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the View is available.  This is based on the IsInError and IsBusy properties
-        /// </summary>
-        public bool IsActive
+        public string GameApplicationPath
         {
             get
             {
-                return this._dataModel.IsActive;
+                return this._dataModel.GameApplicationPath;
             }
 
             set
             {
-                this._dataModel.IsActive = value;
-                //if (this.Dispatcher.CheckAccess())
-                ////{
-                //if (this.isActive != value)
-                //{
-                //    this.isActive = value;
-                //    this.RaisePropertyChanged(() => IsActive);
-                //}
-                //}
-                //else
-                //{
-                //    this.Dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate { this.IsActive = value; });
-                //}
+                this._dataModel.GameApplicationPath = value;
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the View is currently in the middle of an asynchonise operation.
-        /// </summary>
-        public bool IsBusy
+        public string GameRootPath
         {
             get
             {
-                return this._dataModel.IsBusy;
+                return this._dataModel.GameRootPath;
             }
 
             set
             {
-                this._dataModel.IsBusy = value;
+                this._dataModel.GameRootPath = value;
             }
         }
 
-        public bool IsDebugger
-        {
-            get
-            {
-                return Debugger.IsAttached;
-            }
-        }
 
-        public bool IsModified
+        public bool IsValidApplication
         {
             get
             {
-                return this._dataModel.IsModified;
+                return this._dataModel.IsValidApplication;
             }
 
             set
             {
-                this._dataModel.IsModified = value;
+                this._dataModel.IsValidApplication = value;
             }
         }
 
-        public bool IsBaseSaveChanged
+        public bool IsWrongApplication
         {
             get
             {
-                return this._dataModel.IsBaseSaveChanged;
+                return this._dataModel.IsWrongApplication;
             }
 
             set
             {
-                this._dataModel.IsBaseSaveChanged = value;
+                this._dataModel.IsWrongApplication = value;
             }
         }
 
@@ -186,59 +149,66 @@
 
         #region Command Methods
 
-        public bool ClosingCanExecute(CancelEventArgs e)
+        public bool BrowseApplicationCanExecute()
         {
             return true;
         }
 
-        public void ClosingExecuted(CancelEventArgs e)
+        public void BrowseApplicationExecuted()
         {
-            // TODO: dialog on outstanding changes.
-
-
-            //if (this.CheckCloseWindow() == false)
-            //{
-            //e.Cancel = true;
-            //this.CloseResult = null;
-            //}
-            //else
+            var startPath = this.GameApplicationPath;
+            if (string.IsNullOrEmpty(startPath))
             {
-                if (this.CloseRequested != null)
+
+                startPath = ToolboxUpdater.GetSteamFilePath();
+                if (!string.IsNullOrEmpty(startPath))
                 {
-                    this.CloseRequested(this, EventArgs.Empty);
+                    startPath = Path.Combine(startPath, @"SteamApps\common");
                 }
             }
+
+            this.IsValidApplication = false;
+            this.IsWrongApplication = false;
+
+            IOpenFileDialog openFileDialog = _openFileDialogFactory();
+            openFileDialog.CheckFileExists = true;
+            openFileDialog.CheckPathExists = true;
+            openFileDialog.DefaultExt = "exe";
+            openFileDialog.FileName = "SpaceEngineers";
+            openFileDialog.Filter = Resources.LocateApplicationFilter;
+            openFileDialog.InitialDirectory = startPath;
+            openFileDialog.Multiselect = false;
+            openFileDialog.Title = Resources.LocateApplicationTitle;
+
+            // Open the dialog
+            DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
+
+            if (result == DialogResult.OK)
+            {
+                GameApplicationPath = openFileDialog.FileName;
+            }
         }
-      
-        public bool OpenComponentListCanExecute()
+
+        public bool ContinueCanExecute()
+        {
+            return this.IsValidApplication;
+        }
+
+        public void ContinueExecuted()
+        {
+            this.CloseResult = true;
+        }
+
+        public bool CancelCanExecute()
         {
             return true;
         }
 
-        public void OpenComponentListExecuted()
+        public void CancelExecuted()
         {
-            var model = new ComponentListModel();
-            model.Load();
-            var loadVm = new ComponentListViewModel(this, model);
-            var result = this._dialogService.ShowDialog<WindowComponentList>(this, loadVm);
-        }
-
-        public bool AboutCanExecute()
-        {
-            return true;
-        }
-
-        public void AboutExecuted()
-        {
-            var loadVm = new AboutViewModel(this);
-            var result = _dialogService.ShowDialog<WindowAbout>(this, loadVm);
+            this.CloseResult = false;
         }
 
         #endregion
-
-        #region methods
-
-        #endregion
-      
     }
 }

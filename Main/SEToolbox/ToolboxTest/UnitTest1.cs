@@ -65,7 +65,7 @@
         [TestMethod]
         public void LocateSpaceEngineersApplication()
         {
-            var location = ToolboxUpdater.GetGameRegistryFilePath();
+            var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "SpaceEgineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
         }

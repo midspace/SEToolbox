@@ -415,7 +415,7 @@
                 scaleMultiplyer = 0.5f;
             }
 
-            var contentPath = Path.Combine(ToolboxUpdater.GetGameRegistryFilePath(), "Content");
+            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
 
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
@@ -850,14 +850,9 @@
 
         // TODO: As yet uncatered for blocks to Mirror.
         private static readonly SubtypeId[] InvalidMirrorBlocks = new SubtypeId[] {
-            SubtypeId.Window1x1Face,
-            SubtypeId.Window1x1Inv,
-            SubtypeId.Window1x2Inv,
-            SubtypeId.Window1x2Face,
             SubtypeId.Window1x2SideLeft,
             SubtypeId.Window1x2SideRight,
             SubtypeId.Window1x1Side,
-
         };
 
         private static readonly string[] CornerRotationBlocks = new string[] {
@@ -947,11 +942,11 @@
         internal static readonly string[] WindowCornerRotationBlocks = new string[] {
             "Window1x1Face",
             "Window1x1Inv",
+            "Window1x2Inv",
+            "Window1x2Face",
         };
 
         internal static readonly string[] WindowEdgeRotationBlocks = new string[] {
-            "Window1x2Inv",
-            "Window1x2Face",
             "Window1x2SideLeft",
             "Window1x2SideRight",
             "Window1x1Side",
@@ -968,7 +963,6 @@
                 return blocks;
 
             foreach (var block in viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == "" || (Enum.TryParse<SubtypeId>(b.SubtypeName, out outVal) && !InvalidMirrorBlocks.Contains(outVal))))
-            //foreach (var block in viewModel.CubeGrid.CubeBlocks)
             {
                 var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
                 newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersAPI.GenerateEntityId();
@@ -1031,30 +1025,61 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up]; // #
-                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left]; // X
-                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right]; // X
-                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down]; // #
-                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward]; // #
-                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward]; // #
-                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right]; // U
-                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left]; // U
-                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up]; // #
-                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left]; // X
-                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right]; // X
-                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down]; // #
-                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward]; //X
-                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];  // D
-                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward]; // X
-                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down]; // D
-                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward]; // X
-                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];  // D
-                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward]; // X
-                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down]; // D
-                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward]; // #
-                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward]; // #
-                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right]; // U
-                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left]; // U
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                    }
+                }
+                else if (WindowCornerRotationBlocks.Contains(subtypeName))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
                     }
                 }
                 else
@@ -1115,30 +1140,61 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];  //F
-                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right]; //#
-                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left]; //#
-                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up]; //F
-                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward]; //F
-                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];  //F
-                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right]; //D
-                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left]; //D
-                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down]; //F
-                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right]; //#
-                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left]; //#
-                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up]; //F
-                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward]; //#
-                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up]; //D
-                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward]; //#
-                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down]; //U
-                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward]; //#
-                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up]; //U
-                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward]; //#
-                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down]; //D
-                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward]; //F
-                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward]; //F
-                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right]; //D
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
                         case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                    }
+                }
+                else if (WindowCornerRotationBlocks.Contains(subtypeName))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
                     }
                 }
                 else
@@ -1199,30 +1255,61 @@
                     var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
                     switch (cubeType.Key)
                     {
-                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up]; // #
-                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right]; // #
-                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left]; // #
-                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down]; // #
-                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward]; // #
-                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward]; // #
-                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right]; // D
-                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left]; // D
-                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up]; // #
-                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right]; // #
-                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left]; // #
-                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down]; // #
-                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward]; // #
-                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up]; // U
-                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward]; // #
-                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down]; // U
-                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward]; // #
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
                         case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up]; //U
                         case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
-                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down]; // U
-                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward]; // #
-                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward]; // #
-                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right]; // D
-                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left]; // D
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                    }
+                }
+                else if (WindowCornerRotationBlocks.Contains(subtypeName))
+                {
+                    var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
+                    switch (cubeType.Key)
+                    {
+                        case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                        case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                        case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                        case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                        case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                        case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                        case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                        case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                        case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                        case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                        case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                        case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                        case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                        case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                        case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                        case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                        case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                        case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                        case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                        case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                        case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                        case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                        case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                        case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
                     }
                 }
                 else
@@ -1256,6 +1343,35 @@
                         case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
                     }
                 }
+
+                //var cubeType = SpaceEngineersAPI.CubeOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up && x.Key.ToString().StartsWith("Axis24"));
+                //switch (cubeType.Key)
+                //{
+                //    case CubeType.Axis24_Backward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Down];
+                //    case CubeType.Axis24_Backward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Left];
+                //    case CubeType.Axis24_Backward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Right];
+                //    case CubeType.Axis24_Backward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Backward_Up];
+                //    case CubeType.Axis24_Down_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Backward];
+                //    case CubeType.Axis24_Down_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Forward];
+                //    case CubeType.Axis24_Down_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Left];
+                //    case CubeType.Axis24_Down_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+                //    case CubeType.Axis24_Forward_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Down];
+                //    case CubeType.Axis24_Forward_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Left];
+                //    case CubeType.Axis24_Forward_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Right];
+                //    case CubeType.Axis24_Forward_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+                //    case CubeType.Axis24_Left_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Backward];
+                //    case CubeType.Axis24_Left_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Down];
+                //    case CubeType.Axis24_Left_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Forward];
+                //    case CubeType.Axis24_Left_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Left_Up];
+                //    case CubeType.Axis24_Right_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Backward];
+                //    case CubeType.Axis24_Right_Down: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Down];
+                //    case CubeType.Axis24_Right_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Forward];
+                //    case CubeType.Axis24_Right_Up: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Right_Up];
+                //    case CubeType.Axis24_Up_Backward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Backward];
+                //    case CubeType.Axis24_Up_Forward: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Forward];
+                //    case CubeType.Axis24_Up_Left: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Left];
+                //    case CubeType.Axis24_Up_Right: return SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Up_Right];
+                //}
 
                 #endregion
             }
