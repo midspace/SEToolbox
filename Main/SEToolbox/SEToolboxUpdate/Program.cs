@@ -1,6 +1,7 @@
 ﻿namespace SEToolboxUpdate
 {
     using Microsoft.Win32;
+    using SEToolboxUpdate.Support;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -10,6 +11,13 @@
 
     class Program
     {
+        private static readonly string[] CoreSpaceEngineersFiles = {
+            "Sandbox.Common.dll",
+            "Sandbox.Common.XmlSerializers.dll",
+            "VRage.Common.dll",
+            "VRage.Library.dll",
+            "VRage.Math.dll",};
+
         static void Main(string[] args)
         {
             var attemptedAlready = args.Any(a => a.ToUpper() == "/A");
@@ -55,14 +63,7 @@
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
             var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
 
-            var files = new string[]{
-            "Sandbox.Common.dll",
-            "Sandbox.Common.XmlSerializers.dll",
-            "VRage.Common.dll",
-            "VRage.Library.dll",
-            "VRage.Math.dll",};
-
-            foreach (var filename in files)
+            foreach (var filename in CoreSpaceEngineersFiles)
             {
                 var sourceFile = Path.Combine(baseFilePath, filename);
 
@@ -75,7 +76,24 @@
             return true;
         }
 
-        private static string GetApplicationFilePath()
+        #region GetApplicationFilePath
+
+        public static string GetApplicationFilePath()
+        {
+            var gamePath = GlobalSettings.Default.SEInstallLocation;
+
+            if (string.IsNullOrEmpty(gamePath))
+                gamePath = GetGameRegistryFilePath();
+
+            return gamePath;
+        }
+
+        /// <summary>
+        /// Looks for the Space Engineers install location in the Registry, which should return the form:
+        /// "C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers"
+        /// </summary>
+        /// <returns></returns>
+        public static string GetGameRegistryFilePath()
         {
             RegistryKey key;
             if (Environment.Is64BitProcess)
@@ -104,6 +122,8 @@
 
             return null;
         }
+
+        #endregion
 
         private static bool CheckIsRuningElevated()
         {
