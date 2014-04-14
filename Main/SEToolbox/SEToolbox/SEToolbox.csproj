@@ -101,6 +101,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\BusyIndicator.cs" />
+    <Compile Include="Controls\MyWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\SortableGridViewColumn.cs" />
     <Compile Include="Controls\SortableListView.cs" />
     <Compile Include="Converters\DDSConverter.cs" />
@@ -215,7 +218,7 @@
     <Compile Include="Support\MeshHelper.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\RandomUtil.cs" />
-    <Compile Include="Support\RssFeedItem.cs" />
+    <Compile Include="Support\CodeplexReleases.cs" />
     <Compile Include="Support\Splasher.cs" />
     <Compile Include="Support\TempfileUtil.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
@@ -470,6 +473,7 @@
     <ProjectReference Include="..\SEToolboxUpdate\SEToolboxUpdate.csproj">
       <Project>{0914d968-2b68-4fb4-8554-7238c7a78969}</Project>
       <Name>SEToolboxUpdate</Name>
+      <Aliases>global</Aliases>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

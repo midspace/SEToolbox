@@ -25,7 +25,7 @@
             Splasher.Splash = new WindowSplashScreen();
             Splasher.ShowSplash();
 
-            var update = ToolboxUpdater.CheckForUpdates();
+            var update = CodeplexReleases.CheckForUpdates();
             if (update != null)
             {
                 var dialogResult = MessageBox.Show(string.Format("A new version of SEToolbox ({0}) is available.\r\nWould you like to download it now?", update.Version), "New version available", MessageBoxButton.YesNo, MessageBoxImage.Information);

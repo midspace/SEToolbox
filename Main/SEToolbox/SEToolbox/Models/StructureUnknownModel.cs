@@ -25,17 +25,17 @@
 
         #region methods
 
-        //[OnSerializing]
-        //internal void OnSerializingMethod(StreamingContext context)
-        //{
-        //    this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_FloatingObject>(this.FloatingObject);
-        //}
+        [OnSerializing]
+        internal void OnSerializingMethod(StreamingContext context)
+        {
+            this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_EntityBase>(this.EntityBase);
+        }
 
-        //[OnDeserialized]
-        //internal void OnDeserializedMethod(StreamingContext context)
-        //{
-        //    this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_FloatingObject>(this.SerializedEntity);
-        //}
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_EntityBase>(this.SerializedEntity);
+        }
 
         public override void UpdateGeneralFromEntityBase()
         {

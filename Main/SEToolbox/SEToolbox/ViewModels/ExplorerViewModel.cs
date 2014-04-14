@@ -780,7 +780,8 @@
             {
                 this.IsBusy = true;
                 string[] sourceVoxelFiles;
-                var newEntities = loadVm.BuildEntities(out sourceVoxelFiles);
+                MyObjectBuilder_EntityBase[] newEntities;
+                loadVm.BuildEntities(out sourceVoxelFiles, out newEntities);
                 this._selectNewStructure = true;
                 for (var i = 0; i < newEntities.Length; i++)
                 {

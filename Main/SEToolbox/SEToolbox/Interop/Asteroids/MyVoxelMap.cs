@@ -254,10 +254,7 @@ namespace SEToolbox.Interop.Asteroids
                                 this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
                                 this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
                             }
-                            else
-                            {
-                                throw new NotImplementedException();
-                            }
+                            // ignore else condition
                         }
                         else
                         {
@@ -551,10 +548,7 @@ namespace SEToolbox.Interop.Asteroids
                 voxelCell.SetVoxelContent(content, ref voxelCoordInCell);
                 this.CheckIfCellChangedToFull(voxelCell, ref cellCoord);
             }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            // ignore else condition.
         }
 
         public void SetVoxelMaterialAndIndestructibleContent(string materialName, byte indestructibleContent, ref Vector3I voxelCoord)

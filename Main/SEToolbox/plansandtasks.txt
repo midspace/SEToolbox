@@ -34,7 +34,6 @@
   * Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
     Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
   * Export and Import Asteroids/Floating Objects/Meteors to/from files.
-  * Drag-Drop copy Unknown items.
 
 - Character:
   * Exit Pilot from ship to Astronaut.
@@ -52,7 +51,6 @@
   * Change size (mass).
   * Set/Reset Ship Vector. (specify Direction and specify Speed)
   * Set Meteor direction at specific object (calc correct center of object).
-  * Drag-Drop copy.
 
 - Ship/Station:
   * Show ship status. Size. Item count. Weight. Thrust.
@@ -92,6 +90,8 @@ Completed:
 - Remove the prebuilt asteroids.
 - Splash screen (only whilst preloading data).
 - Display list of all Cubes/Components/Items/Materials.
+- Drag-Drop copy Meteors.
+- Drag-Drop copy Unknown items.
 
 ========--------~~~~~~~~
 
@@ -138,4 +138,18 @@ http://research.microsoft.com/en-us/people/mbarnett/ILMerge.aspx
 https://www.nuget.org/packages/ilmerge
 ilmerge /target:winexe /out:SEToolbox.exe SEToolbox.exe SEToolbox.ImageLibrary.dll
 
+
+
+
+
+ Official SE orientation.
+          (top/up)+Y|   /-Z(forward/front)
+                    |  /
+                    | /
+       -X(left)     |/       +X(right)
+       -------------+-----------------
+                   /|
+                  / |
+                 /  |
+        (back)+Z/   |-Y(bottom/down)
 
