@@ -652,6 +652,16 @@
                     var floatObject = item as StructureFloatingObjectModel;
                     this.AddEntity(floatObject.FloatingObject);
                 }
+                else if (item is StructureMeteorModel)
+                {
+                    var meteor = item as StructureMeteorModel;
+                    this.AddEntity(meteor.Meteor);
+                }
+                else if (item is StructureUnknownModel)
+                {
+                    var unknown = item as StructureUnknownModel;
+                    this.AddEntity(unknown.EntityBase);
+                }
 
                 // ignore the StructureCharacterModel.
             }

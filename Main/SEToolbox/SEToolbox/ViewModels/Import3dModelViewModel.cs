@@ -1339,19 +1339,6 @@
 
         #endregion
 
-
-        /*  Official SE orientation.
-                  (top/up)+Y|   /-Z(forward/front)
-                            |  /
-                            | /
-               -X(left)     |/       +X(right)
-               -------------+-----------------
-                           /|
-                          / |
-                         /  |
-                (back)+Z/   |-Y(bottom/down)
-        */
-
         #region CalculateSlopes
 
         public static void CalculateSlopes(CubeType[, ,] ccubic)

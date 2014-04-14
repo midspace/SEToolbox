@@ -1,7 +1,11 @@
-﻿using System.Linq;
-
-namespace SEToolbox.ViewModels
+﻿namespace SEToolbox.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Windows.Input;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
@@ -10,11 +14,6 @@ namespace SEToolbox.ViewModels
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics.Contracts;
-    using System.Windows.Input;
     using VRageMath;
 
     public class GenerateVoxelFieldViewModel : BaseViewModel
@@ -294,106 +293,106 @@ namespace SEToolbox.ViewModels
 
         #region methods
 
-        public MyObjectBuilder_EntityBase[] BuildEntities(out string[] sourceVoxelFiles)
+        public void BuildEntities(out string[] sourceVoxelFiles, out MyObjectBuilder_EntityBase[] sourceEntities)
         {
             var entities = new List<MyObjectBuilder_EntityBase>();
             var sourceFiles = new List<string>();
 
             foreach (var voxelDesign in this.VoxelCollection)
             {
-                if (!string.IsNullOrEmpty(voxelDesign.VoxelFile.SourceFilename))
+                if (string.IsNullOrEmpty(voxelDesign.VoxelFile.SourceFilename) || !MyVoxelMap.IsVoxelMapFile(voxelDesign.VoxelFile.SourceFilename))
+                    continue;
+
+                var asteroid = new MyVoxelMap();
+                asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value);
+
+                IList<byte> baseAssets;
+                Dictionary<byte, long> materialVoxelCells;
+
+                asteroid.CalculateMaterialCellAssets(out baseAssets, out materialVoxelCells);
+
+                var distribution = new List<double> { Double.NaN };
+                var materialSelection = new List<byte> { SpaceEngineersAPI.GetMaterialIndex(voxelDesign.MainMaterial.Value) };
+
+                if (voxelDesign.SecondPercent > 0)
                 {
-                    var asteroid = new MyVoxelMap();
-                    asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value);
+                    distribution.Add((double)voxelDesign.SecondPercent / 100);
+                    materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.SecondMaterial.Value));
+                }
+                if (voxelDesign.ThirdPercent > 0)
+                {
+                    distribution.Add((double)voxelDesign.ThirdPercent / 100);
+                    materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.ThirdMaterial.Value));
+                }
+                if (voxelDesign.ForthPercent > 0)
+                {
+                    distribution.Add((double)voxelDesign.ForthPercent / 100);
+                    materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.ForthMaterial.Value));
+                }
+                if (voxelDesign.FifthPercent > 0)
+                {
+                    distribution.Add((double)voxelDesign.FifthPercent / 100);
+                    materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.FifthMaterial.Value));
+                }
 
-                    IList<byte> baseAssets;
-                    Dictionary<byte, long> materialVoxelCells;
-
-                    asteroid.CalculateMaterialCellAssets(out baseAssets, out materialVoxelCells);
-
-                    var distribution = new List<double> { Double.NaN };
-                    var materialSelection = new List<byte> { SpaceEngineersAPI.GetMaterialIndex(voxelDesign.MainMaterial.Value) };
-
-                    if (voxelDesign.SecondPercent > 0)
-                    {
-                        distribution.Add((double)voxelDesign.SecondPercent / 100);
-                        materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.SecondMaterial.Value));
-                    }
-                    if (voxelDesign.ThirdPercent > 0)
-                    {
-                        distribution.Add((double)voxelDesign.ThirdPercent / 100);
-                        materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.ThirdMaterial.Value));
-                    }
-                    if (voxelDesign.ForthPercent > 0)
-                    {
-                        distribution.Add((double)voxelDesign.ForthPercent / 100);
-                        materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.ForthMaterial.Value));
-                    }
-                    if (voxelDesign.FifthPercent > 0)
-                    {
-                        distribution.Add((double)voxelDesign.FifthPercent / 100);
-                        materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.FifthMaterial.Value));
-                    }
-
-                    var newDistributiuon = new List<byte>();
-                    int count;
-                    for (var i = 1; i < distribution.Count(); i++)
-                    {
-                        count = (int)Math.Floor(distribution[i] * baseAssets.Count); // Round down.
-                        for (var j = 0; j < count; j++)
-                        {
-                            newDistributiuon.Add(materialSelection[i]);
-                        }
-                    }
-                    count = baseAssets.Count - newDistributiuon.Count;
+                var newDistributiuon = new List<byte>();
+                int count;
+                for (var i = 1; i < distribution.Count(); i++)
+                {
+                    count = (int)Math.Floor(distribution[i] * baseAssets.Count); // Round down.
                     for (var j = 0; j < count; j++)
                     {
-                        newDistributiuon.Add(materialSelection[0]);
+                        newDistributiuon.Add(materialSelection[i]);
                     }
-
-                    newDistributiuon.Shuffle();
-                    asteroid.SetMaterialAssets(newDistributiuon);
-
-                    var tempfilename = TempfileUtil.NewFilename();
-                    asteroid.Save(tempfilename);
-
-                    // automatically number all files, and check for duplicate filenames.
-                    var filename = this.MainViewModel.CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox", entities.ToArray());
-
-                    var radius = RandomUtil.GetDouble(this.MinimumRange, this.MaximumRange);
-                    var longitude = RandomUtil.GetDouble(0, 2 * Math.PI);
-                    var latitude = RandomUtil.GetDouble(-Math.PI / 2, (Math.PI / 2) + double.Epsilon);
-
-                    // Test data. Place asteroids items into a circle.
-                    //radius = 500;
-                    //longitude = Math.PI * 2 * ((double)voxelDesign.Index / this.VoxelCollection.Count);
-                    //latitude = 0;
-
-                    var x = radius * Math.Cos(latitude) * Math.Cos(longitude);
-                    var z = radius * Math.Cos(latitude) * Math.Sin(longitude);
-                    var y = radius * Math.Sin(latitude);
-
-                    var position = this._dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
-                    var entity = new MyObjectBuilder_VoxelMap(position, filename)
-                    {
-                        EntityId = SpaceEngineersAPI.GenerateEntityId(),
-                        PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                        Filename = filename,
-                        PositionAndOrientation = new MyPositionAndOrientation()
-                        {
-                            Position = position,
-                            Forward = Vector3.Forward, // Asteroids currently don't have any orientation.
-                            Up = Vector3.Up
-                        }
-                    };
-
-                    entities.Add(entity);
-                    sourceFiles.Add(tempfilename);
                 }
+                count = baseAssets.Count - newDistributiuon.Count;
+                for (var j = 0; j < count; j++)
+                {
+                    newDistributiuon.Add(materialSelection[0]);
+                }
+
+                newDistributiuon.Shuffle();
+                asteroid.SetMaterialAssets(newDistributiuon);
+
+                var tempfilename = TempfileUtil.NewFilename();
+                asteroid.Save(tempfilename);
+
+                // automatically number all files, and check for duplicate filenames.
+                var filename = this.MainViewModel.CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox", entities.ToArray());
+
+                var radius = RandomUtil.GetDouble(this.MinimumRange, this.MaximumRange);
+                var longitude = RandomUtil.GetDouble(0, 2 * Math.PI);
+                var latitude = RandomUtil.GetDouble(-Math.PI / 2, (Math.PI / 2) + double.Epsilon);
+
+                // Test data. Place asteroids items into a circle.
+                //radius = 500;
+                //longitude = Math.PI * 2 * ((double)voxelDesign.Index / this.VoxelCollection.Count);
+                //latitude = 0;
+
+                var x = radius * Math.Cos(latitude) * Math.Cos(longitude);
+                var z = radius * Math.Cos(latitude) * Math.Sin(longitude);
+                var y = radius * Math.Sin(latitude);
+
+                var position = this._dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
+                var entity = new MyObjectBuilder_VoxelMap(position, filename)
+                {
+                    EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                    PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                    Filename = filename,
+                    PositionAndOrientation = new MyPositionAndOrientation()
+                    {
+                        Position = position,
+                        Forward = Vector3.Forward, // Asteroids currently don't have any orientation.
+                        Up = Vector3.Up
+                    }
+                };
+
+                entities.Add(entity);
+                sourceFiles.Add(tempfilename);
             }
 
             sourceVoxelFiles = sourceFiles.ToArray();
-            return entities.ToArray();
+            sourceEntities = entities.ToArray();
         }
 
         #endregion
