@@ -408,6 +408,14 @@
             }
         }
 
+        public static string GetMaterialName(byte materialIndex, byte defaultMaterialIndex)
+        {
+            if (materialIndex <= _voxelMaterialDefinitions.Materials.Length)
+                return _voxelMaterialDefinitions.Materials[materialIndex].Name;
+            else
+                return _voxelMaterialDefinitions.Materials[defaultMaterialIndex].Name;
+        }
+
         public static string GetMaterialName(byte materialIndex)
         {
             return _voxelMaterialDefinitions.Materials[materialIndex].Name;

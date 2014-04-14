@@ -410,7 +410,7 @@ namespace SEToolbox.Interop.Asteroids
                             if (isWholeMaterial)
                             {
                                 writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
-                                writer.Write(SpaceEngineersAPI.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell)));
+                                writer.Write(SpaceEngineersAPI.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), this.VoxelMaterial));
                             }
                             else
                             {
@@ -421,7 +421,7 @@ namespace SEToolbox.Interop.Asteroids
                                         for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
                                         {
                                             writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
-                                            writer.Write(SpaceEngineersAPI.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell)));
+                                            writer.Write(SpaceEngineersAPI.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), this.VoxelMaterial));
                                             writer.Write((byte)0x0);
                                         }
                                     }
