@@ -251,7 +251,7 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
     <value>Sandbox Content files (*.sbc)|*.sbc|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
   </data>
   <data name="ExportSandboxObjectTitle" xml:space="preserve">
-    <value>Specify filename to export '{0}' to</value>
+    <value>Specify filename to export '{0}_{1}' to</value>
   </data>
   <data name="ImportSandboxObjectTitle" xml:space="preserve">
     <value>Specify Sandbox objects to Import</value>

@@ -12,7 +12,7 @@
     using System.Xml;
     using VRageMath;
 
-    public class SpaceEngineersAPI
+    public static class SpaceEngineersAPI
     {
         #region ctor
 
@@ -55,8 +55,23 @@
             return (T)obj;
         }
 
-        public static T ReadSpaceEngineersFile<T, S>(string filename)
-        where S : XmlSerializer1
+        public static bool TryReadSpaceEngineersFile<T, TS>(string filename, out T entity)
+             where TS : XmlSerializer1
+        {
+            try
+            {
+                entity = SpaceEngineersAPI.ReadSpaceEngineersFile<T, TS>(filename);
+                return true;
+            }
+            catch
+            {
+                entity = default(T);
+                return false;
+            }
+        }
+
+        public static T ReadSpaceEngineersFile<T, TS>(string filename)
+        where TS : XmlSerializer1
         {
             var settings = new XmlReaderSettings()
             {
@@ -70,8 +85,7 @@
             {
                 using (var xmlReader = XmlReader.Create(filename, settings))
                 {
-
-                    var serializer = (S)Activator.CreateInstance(typeof(S));
+                    var serializer = (TS)Activator.CreateInstance(typeof(TS));
                     obj = serializer.Deserialize(xmlReader);
                 }
             }
@@ -96,8 +110,8 @@
             }
         }
 
-        public static bool WriteSpaceEngineersFile<T, S>(T sector, string filename)
-            where S : XmlSerializer1
+        public static bool WriteSpaceEngineersFile<T, TS>(T sector, string filename)
+            where TS : XmlSerializer1
         {
             // How they appear to be writing the files currently.
             try
@@ -106,7 +120,7 @@
                 {
                     xmlTextWriter.Formatting = Formatting.Indented;
                     xmlTextWriter.Indentation = 2;
-                    S serializer = (S)Activator.CreateInstance(typeof(S));
+                    var serializer = (TS)Activator.CreateInstance(typeof(TS));
                     serializer.Serialize(xmlTextWriter, sector);
                 }
             }

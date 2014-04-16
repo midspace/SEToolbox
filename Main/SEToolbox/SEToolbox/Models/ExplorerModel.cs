@@ -442,6 +442,18 @@
             {
                 SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>((MyObjectBuilder_CubeGrid)strucutre.EntityBase, filename);
             }
+            else if (strucutre.EntityBase is MyObjectBuilder_Character)
+            {
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Character, MyObjectBuilder_CharacterSerializer>((MyObjectBuilder_Character)strucutre.EntityBase, filename);
+            }
+            else if (strucutre.EntityBase is MyObjectBuilder_FloatingObject)
+            {
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_FloatingObject, MyObjectBuilder_FloatingObjectSerializer>((MyObjectBuilder_FloatingObject)strucutre.EntityBase, filename);
+            }
+            else if (strucutre.EntityBase is MyObjectBuilder_Meteor)
+            {
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Meteor, MyObjectBuilder_MeteorSerializer>((MyObjectBuilder_Meteor)strucutre.EntityBase, filename);
+            }
         }
 
         public List<string> LoadEntities(string[] filenames)
@@ -452,18 +464,34 @@
 
             foreach (var filename in filenames)
             {
-                MyObjectBuilder_CubeGrid entity = null;
+                MyObjectBuilder_CubeGrid cubeEntity = null;
+                MyObjectBuilder_FloatingObject floatingEntity = null;
+                MyObjectBuilder_Meteor meteorEntity = null;
+                MyObjectBuilder_Character characterEntity = null;
 
-                try
+                if (SpaceEngineersAPI.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>(filename, out cubeEntity))
                 {
-                    entity = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>(filename);
+                    this.MergeData((MyObjectBuilder_CubeGrid)cubeEntity, ref idReplacementTable);
                 }
-                catch
+                else if (SpaceEngineersAPI.TryReadSpaceEngineersFile<MyObjectBuilder_FloatingObject, MyObjectBuilder_FloatingObjectSerializer>(filename, out floatingEntity))
+                {
+                    var newEntity = this.AddEntity(floatingEntity);
+                    newEntity.EntityId = MergeId(floatingEntity.EntityId, ref idReplacementTable);
+                }
+                else if (SpaceEngineersAPI.TryReadSpaceEngineersFile<MyObjectBuilder_Meteor, MyObjectBuilder_MeteorSerializer>(filename, out meteorEntity))
+                {
+                    var newEntity = this.AddEntity(meteorEntity);
+                    newEntity.EntityId = MergeId(meteorEntity.EntityId, ref idReplacementTable);
+                }
+                else if (SpaceEngineersAPI.TryReadSpaceEngineersFile<MyObjectBuilder_Character, MyObjectBuilder_CharacterSerializer>(filename, out characterEntity))
+                {
+                    var newEntity = this.AddEntity(characterEntity);
+                    newEntity.EntityId = MergeId(characterEntity.EntityId, ref idReplacementTable);
+                }
+                else
                 {
                     badfiles.Add(filename);
                 }
-
-                this.MergeData(entity, ref idReplacementTable);
             }
 
             this.IsBusy = false;
@@ -641,6 +669,7 @@
                     }
 
                     var entity = (StructureVoxelModel)this.AddEntity(asteroid.VoxelMap);
+                    entity.EntityId = MergeId(asteroid.EntityId, ref idReplacementTable);
 
                     if (asteroid.SourceVoxelFilepath != null)
                         entity.SourceVoxelFilepath = asteroid.SourceVoxelFilepath;  // Source Voxel file is temporary. Hasn't been saved yet.
@@ -650,17 +679,20 @@
                 else if (item is StructureFloatingObjectModel)
                 {
                     var floatObject = item as StructureFloatingObjectModel;
-                    this.AddEntity(floatObject.FloatingObject);
+                    var entity = this.AddEntity(floatObject.FloatingObject);
+                    entity.EntityId = MergeId(floatObject.EntityId, ref idReplacementTable);
                 }
                 else if (item is StructureMeteorModel)
                 {
                     var meteor = item as StructureMeteorModel;
-                    this.AddEntity(meteor.Meteor);
+                    var entity = this.AddEntity(meteor.Meteor);
+                    entity.EntityId = MergeId(meteor.EntityId, ref idReplacementTable);
                 }
                 else if (item is StructureUnknownModel)
                 {
                     var unknown = item as StructureUnknownModel;
-                    this.AddEntity(unknown.EntityBase);
+                    var entity = this.AddEntity(unknown.EntityBase);
+                    entity.EntityId = MergeId(unknown.EntityId, ref idReplacementTable);
                 }
 
                 // ignore the StructureCharacterModel.

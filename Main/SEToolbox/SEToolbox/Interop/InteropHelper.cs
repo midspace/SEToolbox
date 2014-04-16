@@ -54,6 +54,21 @@
             return new Vector3(vector.X, vector.Y, vector.Z);
         }
 
+        public static System.Windows.Media.Media3D.Vector3D ToVector3D(this SerializableVector3 vector)
+        {
+            return new System.Windows.Media.Media3D.Vector3D(vector.X, vector.Y, vector.Z);
+        }
+
+        internal static System.Windows.Media.Media3D.Point3D ToPoint3D(this SerializableVector3 point)
+        {
+            return new System.Windows.Media.Media3D.Point3D(point.X, point.Y, point.Z);
+        }
+
+        internal static Vector3 ToVector3(this System.Windows.Media.Media3D.Point3D point)
+        {
+            return new Vector3((float)point.X, (float)point.Y, (float)point.Z);
+        }
+
         public static Vector3 Transform(this Vector3 vector, CubeType axisCubeType)
         {
             var orientation = SpaceEngineersAPI.CubeOrientations[axisCubeType];

@@ -13,14 +13,6 @@
 
         #endregion
 
-        #region ctor
-
-        public GenerateVoxelDetailModel()
-        {
-        }
-
-        #endregion
-
         #region Properties
 
         public string Name

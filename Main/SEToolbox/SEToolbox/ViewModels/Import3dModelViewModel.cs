@@ -555,7 +555,7 @@
                 vectorDistance += this.NewModelSize.Depth * scaleMultiplyer;
                 this.NewModelScale = new BindablePoint3DModel(this.NewModelSize.Width * scaleMultiplyer, this.NewModelSize.Height * scaleMultiplyer, this.NewModelSize.Depth * scaleMultiplyer);
 
-                // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
+                // Figure out where the Character is facing, and plant the new construct right in front, by "10" units, facing the Character.
                 var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
                 vector.Normalize();
                 vector = Vector3D.Multiply(vector, vectorDistance);
