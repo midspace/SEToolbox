@@ -15,7 +15,7 @@
         [SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public static void DoEvents()
         {
-            DispatcherFrame frame = new DispatcherFrame();
+            var frame = new DispatcherFrame();
             Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background,
                 new DispatcherOperationCallback(ExitFrames), frame);
 
@@ -30,7 +30,7 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="f"></param>
+        /// <param name="frame"></param>
         /// <returns></returns>
         private static object ExitFrames(object frame)
         {

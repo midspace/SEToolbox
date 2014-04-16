@@ -745,20 +745,17 @@
             model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
             var loadVm = new GenerateFloatingObjectViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowGenerateFloatingObject>(this, loadVm);
-            model.Unload();
             if (result == true)
             {
                 this.IsBusy = true;
-                // TODO:
-                //string[] sourceVoxelFiles;
-                //var newEntities = loadVm.BuildEntities(out sourceVoxelFiles);
-                //this._selectNewStructure = true;
-                //for (var i = 0; i < newEntities.Length; i++)
-                //{
-                //    var structure = this._dataModel.AddEntity(newEntities[i]);
-                //    ((StructureVoxelModel)structure).SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
-                //}
-                //this._selectNewStructure = false;
+                var newEntity = loadVm.BuildEntity();
+                if (loadVm.IsValidItemToImport)
+                {
+                    this._selectNewStructure = true;
+                    this._dataModel.CollisionCorrectEntity(newEntity);
+                    var structure = this._dataModel.AddEntity(newEntity);
+                    this._selectNewStructure = false;
+                }
                 this.IsBusy = false;
             }
         }
@@ -1115,41 +1112,75 @@
             {
                 if (viewModel is StructureCharacterViewModel)
                 {
-                    this._dialogService.ShowMessageBox(this, "Cannot export Player Characters.", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    var structure = (StructureCharacterViewModel)viewModel;
+
+                    var saveFileDialog = this._saveFileDialogFactory();
+                    saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
+                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType, structure.Description);
+                    saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.Description);
+                    saveFileDialog.OverwritePrompt = true;
+
+                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    {
+                        this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
+                    }
                 }
                 else if (viewModel is StructureVoxelViewModel)
                 {
+                    // TODO: I don't have a way of managing the .vox file with the export as yet.
+                    // Do we save the .vox file alonside the .sbc file, or attempt to embed the .vox file as CDATA?
                     this._dialogService.ShowMessageBox(this, "Cannot export Asteroids currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
                 else if (viewModel is StructureFloatingObjectViewModel)
                 {
-                    this._dialogService.ShowMessageBox(this, "Cannot export Floating objects currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    var structure = (StructureFloatingObjectViewModel)viewModel;
+
+                    var saveFileDialog = this._saveFileDialogFactory();
+                    saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
+                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
+                    saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
+                    saveFileDialog.OverwritePrompt = true;
+
+                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    {
+                        this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
+                    }
                 }
                 else if (viewModel is StructureMeteorViewModel)
                 {
-                    this._dialogService.ShowMessageBox(this, "Cannot export Meteors currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    var structure = (StructureMeteorViewModel)viewModel;
+
+                    var saveFileDialog = this._saveFileDialogFactory();
+                    saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
+                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
+                    saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
+                    saveFileDialog.OverwritePrompt = true;
+
+                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    {
+                        this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
+                    }
                 }
                 else if (viewModel is StructureCubeGridViewModel)
                 {
                     var structure = (StructureCubeGridViewModel)viewModel;
                     //structure.IsPiloted // TODO: preemptively remove pilots?
 
+                    var partname = string.IsNullOrEmpty(structure.DisplayName) ? structure.EntityId.ToString() : structure.DisplayName.Replace("|", "_").Replace("\\", "_").Replace("/", "_");
                     var saveFileDialog = this._saveFileDialogFactory();
                     saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
-                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType);
-                    saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.EntityId);
+                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType, partname);
+                    saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, partname);
                     saveFileDialog.OverwritePrompt = true;
 
-                    // Open the dialog
-                    var result = this._dialogService.ShowSaveFileDialog(this, saveFileDialog);
-
-                    if (result == DialogResult.OK)
+                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
                         this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
                     }
                 }
                 else if (viewModel is StructureUnknownViewModel)
                 {
+                    // Need to use the specific serializer when exporting to generate the correct XML, so Unknown should never be export.
                     this._dialogService.ShowMessageBox(this, "Cannot export Unknown currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
             }

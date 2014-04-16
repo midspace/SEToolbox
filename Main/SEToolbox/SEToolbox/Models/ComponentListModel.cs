@@ -196,7 +196,7 @@
                 this.CubeAssets.Add(new ComonentItemModel()
                 {
                     Name = cubeDefinition.DisplayName,
-                    TypeId = cubeDefinition.Id.TypeId.ToString(),
+                    TypeId = cubeDefinition.Id.TypeId,
                     SubtypeId = cubeDefinition.Id.SubtypeId,
                     TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds"),
                     Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
@@ -215,7 +215,7 @@
                 this.ComponentAssets.Add(new ComonentItemModel()
                 {
                     Name = componentDefinition.DisplayName,
-                    TypeId = componentDefinition.Id.TypeId.ToString(),
+                    TypeId = componentDefinition.Id.TypeId,
                     SubtypeId = componentDefinition.Id.SubtypeId,
                     Mass = componentDefinition.Mass,
                     TextureFile = componentDefinition.Icon == null ? null : Path.Combine(contentPath, componentDefinition.Icon + ".dds"),
@@ -231,7 +231,7 @@
                 this.ItemAssets.Add(new ComonentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
-                    TypeId = physicalItemDefinition.Id.TypeId.ToString(),
+                    TypeId = physicalItemDefinition.Id.TypeId,
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
@@ -247,7 +247,7 @@
                 this.ItemAssets.Add(new ComonentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
-                    TypeId = physicalItemDefinition.Id.TypeId.ToString(),
+                    TypeId = physicalItemDefinition.Id.TypeId,
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
@@ -592,7 +592,6 @@ td.right { text-align: right; }");
                 writer.RenderEndTag(); // Table 
 
                 #endregion
-
 
                 #region footer
 

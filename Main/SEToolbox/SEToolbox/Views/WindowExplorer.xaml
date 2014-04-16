@@ -92,11 +92,11 @@
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=package_add}" />
                     </MenuItem.Icon>
-                    <!--<MenuItem Header="Create Component/Item" Command="{Binding CreateFloatingItemCommand}">
+                    <MenuItem Header="Create Component/Item" Command="{Binding CreateFloatingItemCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=screwdriver}" />
                         </MenuItem.Icon>
-                    </MenuItem>-->
+                    </MenuItem>
                     <MenuItem Header="Generate Asteroid Field" Command="{Binding GenerateVoxelFieldCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}" />

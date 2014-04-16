@@ -1,17 +1,36 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Collections.Generic;
-    using Sandbox.Common.ObjectBuilders;
     using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+    using Sandbox.Common.ObjectBuilders;
 
     [Serializable]
     public class ComonentItemModel : BaseModel
     {
+        #region fields
+
+        private string _name;
+
+        #endregion
+
         #region Properties
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return this._name; }
+            set
+            {
+                if (value != this._name)
+                {
+                    this._name = value;
+                    this.SetFriendlyName();
+                    this.RaisePropertyChanged(() => Name);
+                }
+            }
+        }
 
-        public string TypeId { get; set; }
+        public MyObjectBuilderTypeEnum TypeId { get; set; }
 
         public string SubtypeId { get; set; }
 
@@ -37,6 +56,29 @@
 
         public Dictionary<string, string> CustomProperties { get; set; }
 
+        public string FriendlyName { get; set; }
+
         #endregion
+
+        private void SetFriendlyName()
+        {
+            if (this.Name == null)
+                this.FriendlyName = null;
+            else
+            {
+                var field = Regex.Replace(this.Name, @"^Item_", "");
+                this.FriendlyName = SplitPropertText(field);
+            }
+        }
+
+        private static string SplitPropertText(string content)
+        {
+            var replacement = content;
+            replacement = Regex.Replace(replacement, @"[_:]", "", RegexOptions.Multiline);
+            replacement = Regex.Replace(replacement, @"(?<first>[a-z])(?<last>[A-Z])", "${first} ${last}", RegexOptions.Multiline);
+            replacement = Regex.Replace(replacement, @"(?<first>[a-zA-Z])(?<last>\d)", "${first} ${last}", RegexOptions.Multiline);
+            replacement = Regex.Replace(replacement, @"(?<first>\w)\.(?<last>\w)", "${first} ${last}", RegexOptions.Multiline);
+            return replacement;
+        }
     }
 }
