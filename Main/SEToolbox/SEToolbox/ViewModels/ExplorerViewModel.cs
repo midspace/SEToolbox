@@ -742,18 +742,20 @@
         public void CreateFloatingItemExecuted()
         {
             var model = new GenerateFloatingObjectModel();
-            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value, this._dataModel.ActiveWorld.Content.MaxFloatingObjects);
             var loadVm = new GenerateFloatingObjectViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowGenerateFloatingObject>(this, loadVm);
             if (result == true)
             {
                 this.IsBusy = true;
-                var newEntity = loadVm.BuildEntity();
+                var newEntities = loadVm.BuildEntities();
                 if (loadVm.IsValidItemToImport)
                 {
                     this._selectNewStructure = true;
-                    this._dataModel.CollisionCorrectEntity(newEntity);
-                    var structure = this._dataModel.AddEntity(newEntity);
+                    for (var i = 0; i < newEntities.Length; i++)
+                    {
+                        this._dataModel.AddEntity(newEntities[i]);
+                    }
                     this._selectNewStructure = false;
                 }
                 this.IsBusy = false;

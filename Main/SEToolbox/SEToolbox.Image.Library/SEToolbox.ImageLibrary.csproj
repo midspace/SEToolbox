@@ -76,6 +76,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SharpDXTextureUtil.cs" />
     <Compile Include="DxtUtil.cs" />
     <Compile Include="ImageTextureUtil.cs" />
     <Compile Include="OctreeQuantizer.cs" />

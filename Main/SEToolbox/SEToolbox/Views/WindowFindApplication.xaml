@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:commands="clr-namespace:SEToolbox.Services"
-        xmlns:vm="clr-namespace:SEToolbox.ViewModels"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         Height="200" Width="400" ResizeMode="NoResize" Title="Locate Application"
         WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"

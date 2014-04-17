@@ -26,6 +26,9 @@
 
         public static CodeplexReleases CheckForUpdates()
         {
+            if (GlobalSettings.Default.AlwaysCheckForUpdates.HasValue && !GlobalSettings.Default.AlwaysCheckForUpdates.Value)
+                return null;
+
 #if DEBUG
             // Skip the load check, as it make take a few seconds.
             if (Debugger.IsAttached)

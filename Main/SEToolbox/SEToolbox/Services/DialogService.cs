@@ -14,14 +14,14 @@
     /// </summary>
     class DialogService : IDialogService
     {
-        private readonly HashSet<FrameworkElement> views;
+        private readonly HashSet<FrameworkElement> _views;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DialogService"/> class.
         /// </summary>
         public DialogService()
         {
-            views = new HashSet<FrameworkElement>();
+            _views = new HashSet<FrameworkElement>();
         }
 
         #region IDialogService Members
@@ -31,7 +31,7 @@
         /// </summary>
         public ReadOnlyCollection<FrameworkElement> Views
         {
-            get { return new ReadOnlyCollection<FrameworkElement>(views.ToList()); }
+            get { return new ReadOnlyCollection<FrameworkElement>(_views.ToList()); }
         }
 
         /// <summary>
@@ -41,7 +41,7 @@
         public void Register(FrameworkElement view)
         {
             // Get owner window
-            Window owner = GetOwner(view);
+            var owner = GetOwner(view);
             if (owner == null)
             {
                 // Perform a late register when the View hasn't been loaded yet.
@@ -54,7 +54,7 @@
             // preventing memory leaks
             owner.Closed += OwnerClosed;
 
-            views.Add(view);
+            _views.Add(view);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@
         /// <param name="view">The unregistered View.</param>
         public void Unregister(FrameworkElement view)
         {
-            views.Remove(view);
+            _views.Remove(view);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@
         public DialogResult ShowOpenFileDialog(object ownerViewModel, IOpenFileDialog openFileDialog)
         {
             // Create OpenFileDialog with specified ViewModel
-            OpenFileDialog dialog = new OpenFileDialog(openFileDialog);
+            var dialog = new OpenFileDialog(openFileDialog);
 
             // Show dialog
             return dialog.ShowDialog(new WindowWrapper(FindOwnerWindow(ownerViewModel)));
@@ -135,7 +135,7 @@
         public DialogResult ShowSaveFileDialog(object ownerViewModel, ISaveFileDialog saveFileDialog)
         {
             // Create SaveFileDialog with specified ViewModel
-            SaveFileDialog dialog = new SaveFileDialog(saveFileDialog);
+            var dialog = new SaveFileDialog(saveFileDialog);
 
             // Show dialog
             return dialog.ShowDialog(new WindowWrapper(FindOwnerWindow(ownerViewModel)));
@@ -152,7 +152,7 @@
         public DialogResult ShowFolderBrowserDialog(object ownerViewModel, IFolderBrowserDialog folderBrowserDialog)
         {
             // Create FolderBrowserDialog with specified ViewModel
-            FolderBrowserDialog dialog = new FolderBrowserDialog(folderBrowserDialog);
+            var dialog = new FolderBrowserDialog(folderBrowserDialog);
 
             // Show dialog
             return dialog.ShowDialog(new WindowWrapper(FindOwnerWindow(ownerViewModel)));
@@ -201,12 +201,12 @@
             // in the ServiceLocator which will cause the Resolve method to throw a ArgumentException.
             if (DesignerProperties.GetIsInDesignMode(target)) return;
 
-            FrameworkElement view = target as FrameworkElement;
+            var view = target as FrameworkElement;
             if (view != null)
             {
                 // Cast values
-                bool newValue = (bool)e.NewValue;
-                bool oldValue = (bool)e.OldValue;
+                var newValue = (bool)e.NewValue;
+                var oldValue = (bool)e.OldValue;
 
                 if (newValue)
                 {
@@ -235,7 +235,7 @@
         private bool? ShowDialog(object ownerViewModel, object viewModel, Type dialogType)
         {
             // Create dialog and set properties
-            Window dialog = (Window)Activator.CreateInstance(dialogType);
+            var dialog = (Window)Activator.CreateInstance(dialogType);
             dialog.Owner = FindOwnerWindow(ownerViewModel);
             dialog.DataContext = viewModel;
 
@@ -252,14 +252,14 @@
         /// </summary>
         private Window FindOwnerWindow(object viewModel)
         {
-            FrameworkElement view = views.SingleOrDefault(v => ReferenceEquals(v.DataContext, viewModel));
+            var view = _views.SingleOrDefault(v => ReferenceEquals(v.DataContext, viewModel));
             if (view == null)
             {
                 throw new ArgumentException("Viewmodel is not referenced by any registered View.");
             }
 
             // Get owner window
-            Window owner = view as Window;
+            var owner = view as Window;
             if (owner == null)
             {
                 owner = Window.GetWindow(view);
@@ -281,7 +281,7 @@
         /// </summary>
         private void LateRegister(object sender, RoutedEventArgs e)
         {
-            FrameworkElement view = sender as FrameworkElement;
+            var view = sender as FrameworkElement;
             if (view != null)
             {
                 // Unregister loaded event
@@ -298,17 +298,17 @@
         /// </summary>
         private void OwnerClosed(object sender, EventArgs e)
         {
-            Window owner = sender as Window;
+            var owner = sender as Window;
             if (owner != null)
             {
                 // Find Views acting within closed window
-                IEnumerable<FrameworkElement> windowViews =
-                    from view in views
+                var windowViews =
+                    from view in _views
                     where Window.GetWindow(view) == owner
                     select view;
 
                 // Unregister Views in window
-                foreach (FrameworkElement view in windowViews.ToArray())
+                foreach (var view in windowViews.ToArray())
                 {
                     Unregister(view);
                 }

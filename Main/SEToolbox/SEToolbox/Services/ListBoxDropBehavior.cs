@@ -22,8 +22,8 @@ namespace SEToolbox.Services
     {
         #region fields
 
-        private Type dataType; // the type of the data that can be dropped into this control/
-        private ListBoxAdornerManager insertAdornerManager;
+        private Type _dataType; // the type of the data that can be dropped into this control.
+        private ListBoxAdornerManager _insertAdornerManager;
 
         #endregion
 
@@ -71,16 +71,16 @@ namespace SEToolbox.Services
         void AssociatedObject_Drop(object sender, DragEventArgs e)
         {
             // if the data type can be dropped.
-            if (this.dataType != null)
+            if (this._dataType != null)
             {
-                if (e.Data.GetDataPresent(dataType))
+                if (e.Data.GetDataPresent(_dataType))
                 {
                     // first find the UIElement that it was dropped over, then we determine if it's 
                     // dropped above or under the UIElement, then insert at the correct index.
-                    ItemsControl dropContainer = sender as ItemsControl;
+                    var dropContainer = sender as ItemsControl;
                     // get the UIElement that was dropped over.
-                    UIElement droppedOverItem = VisualTreeEnumeration.GetUIElement(dropContainer, e.GetPosition(dropContainer));
-                    int dropIndex = -1; // the location where the item will be dropped.
+                    var droppedOverItem = VisualTreeEnumeration.GetUIElement(dropContainer, e.GetPosition(dropContainer));
+                    var dropIndex = -1; // the location where the item will be dropped.
                     if (droppedOverItem != null)
                     {
                         dropIndex = dropContainer.ItemContainerGenerator.IndexFromContainer(droppedOverItem) + 1;
@@ -93,22 +93,22 @@ namespace SEToolbox.Services
                     }
 
                     // remove the data from each source.
-                    foreach (var item in (IList)e.Data.GetData(dataType))
+                    foreach (var item in (IList)e.Data.GetData(_dataType))
                     {
-                        IDragable source = item as IDragable;
+                        var source = item as IDragable;
                         if (source != null)
                             source.Remove(item);
                     }
 
                     // drop the data into destination.
-                    IDropable target = this.AssociatedObject.DataContext as IDropable;
-                    target.Drop(e.Data.GetData(dataType), dropIndex);
+                    var target = this.AssociatedObject.DataContext as IDropable;
+                    target.Drop(e.Data.GetData(_dataType), dropIndex);
                 }
             }
 
-            if (this.insertAdornerManager != null)
+            if (this._insertAdornerManager != null)
             {
-                this.insertAdornerManager.Clear();
+                this._insertAdornerManager.Clear();
             }
 
             e.Handled = true;
@@ -117,9 +117,9 @@ namespace SEToolbox.Services
 
         void AssociatedObject_DragLeave(object sender, DragEventArgs e)
         {
-            if (this.insertAdornerManager != null)
+            if (this._insertAdornerManager != null)
             {
-                this.insertAdornerManager.Clear();
+                this._insertAdornerManager.Clear();
             }
 
             e.Handled = true;
@@ -127,9 +127,9 @@ namespace SEToolbox.Services
 
         void AssociatedObject_DragOver(object sender, DragEventArgs e)
         {
-            if (this.dataType != null)
+            if (this._dataType != null)
             {
-                if (e.Data.GetDataPresent(dataType))
+                if (e.Data.GetDataPresent(_dataType))
                 {
                     if (!this.AllowDropToSource && (string)e.Data.GetData(typeof(string)) == ((FrameworkElement)sender).Uid)
                     {
@@ -139,19 +139,19 @@ namespace SEToolbox.Services
                     }
 
                     this.SetDragDropEffects(e);
-                    if (this.insertAdornerManager != null && this.ShowDropIndicator)
+                    if (this._insertAdornerManager != null && this.ShowDropIndicator)
                     {
-                        ItemsControl dropContainer = sender as ItemsControl;
-                        UIElement droppedOverItem = VisualTreeEnumeration.GetUIElement(dropContainer, e.GetPosition(dropContainer));
+                        var dropContainer = sender as ItemsControl;
+                        var droppedOverItem = VisualTreeEnumeration.GetUIElement(dropContainer, e.GetPosition(dropContainer));
                         if (droppedOverItem != null)
                         {
-                            bool isAboveElement = VisualTreeEnumeration.IsPositionAboveElement(droppedOverItem, e.GetPosition(droppedOverItem));
-                            this.insertAdornerManager.UpdateDropIndicator(droppedOverItem, isAboveElement);
+                            var isAboveElement = VisualTreeEnumeration.IsPositionAboveElement(droppedOverItem, e.GetPosition(droppedOverItem));
+                            this._insertAdornerManager.UpdateDropIndicator(droppedOverItem, isAboveElement);
                         }
                         else
                         {
                             droppedOverItem = (UIElement)dropContainer.ItemContainerGenerator.ContainerFromIndex(dropContainer.Items.Count - 1);
-                            this.insertAdornerManager.UpdateDropIndicator(droppedOverItem, false);
+                            this._insertAdornerManager.UpdateDropIndicator(droppedOverItem, false);
                         }
                     }
                 }
@@ -162,7 +162,7 @@ namespace SEToolbox.Services
 
         void AssociatedObject_DragEnter(object sender, DragEventArgs e)
         {
-            if (this.dataType == null)
+            if (this._dataType == null)
             {
                 // if the DataContext implements IDropable, record the data type that can be dropped.
                 if (this.AssociatedObject.DataContext != null)
@@ -170,16 +170,16 @@ namespace SEToolbox.Services
                     if (this.AssociatedObject.DataContext as IDropable != null)
                     {
                         if (this.DropType != null)
-                            this.dataType = typeof(List<>).MakeGenericType(new[] { this.DropType });
+                            this._dataType = typeof(List<>).MakeGenericType(new[] { this.DropType });
                         else
-                            this.dataType = typeof(List<>).MakeGenericType(new[] { ((IDropable)this.AssociatedObject.DataContext).DataType });
+                            this._dataType = typeof(List<>).MakeGenericType(new[] { ((IDropable)this.AssociatedObject.DataContext).DataType });
                     }
                 }
             }
 
             // initialize adorner manager with the adorner layer of the itemsControl.
-            if (this.insertAdornerManager == null)
-                this.insertAdornerManager = new ListBoxAdornerManager(AdornerLayer.GetAdornerLayer(sender as ItemsControl));
+            if (this._insertAdornerManager == null)
+                this._insertAdornerManager = new ListBoxAdornerManager(AdornerLayer.GetAdornerLayer(sender as ItemsControl));
 
             e.Handled = true;
         }
@@ -195,7 +195,7 @@ namespace SEToolbox.Services
         private void SetDragDropEffects(DragEventArgs e)
         {
             // if the data type can be dropped.
-            if (e.Data.GetDataPresent(dataType))
+            if (e.Data.GetDataPresent(_dataType))
             {
                 e.Effects = DragDropEffects.Copy;
             }

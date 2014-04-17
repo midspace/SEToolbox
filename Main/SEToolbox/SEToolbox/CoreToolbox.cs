@@ -1,16 +1,13 @@
 ﻿namespace SEToolbox
 {
-    using SEToolbox.Interop;
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Windows;
     using SEToolbox.Models;
     using SEToolbox.Support;
     using SEToolbox.ViewModels;
     using SEToolbox.Views;
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Input;
 
     public class CoreToolbox
     {
@@ -22,12 +19,6 @@
 
         public void Startup(string[] args)
         {
-            if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) == KeyStates.Down)
-            {
-                // Reset User Settings when Shift is held down.
-                GlobalSettings.Default.SEInstallLocation = null;
-            }
-
             // Detection and correction of local settings of SE install location.
             var filePath = ToolboxUpdater.GetApplicationFilePath();
 
@@ -66,7 +57,7 @@
             }
 
             // Dot not load any of the SpaceEngineers assemblies, or dependant classes before this point.
-            if (!ignoreUpdates && ToolboxUpdater.IsBaseAssembliesChanged() && !Debugger.IsAttached)
+            if (!ignoreUpdates && ToolboxUpdater.IsBaseAssembliesChanged()) // && !Debugger.IsAttached)
             {
                 // Already running as administrator. Run the updater and shut down.
                 if (ToolboxUpdater.CheckIsRuningElevated())
@@ -99,8 +90,8 @@
             // Load the SpaceEngineers assemblies, or dependant classes after this point.
             var explorerModel = new ExplorerModel();
 
+            // Force pre-loading of any Space Engineers resources.
             SEToolbox.Interop.SpaceEngineersAPI.Init();
-            SEToolbox.ImageLibrary.ImageTextureUtil.Init();
 
             explorerModel.Load();
             var eViewModel = new ExplorerViewModel(explorerModel);
@@ -113,7 +104,15 @@
                 Application.Current.Shutdown();
             };
             //}
-            eWindow.Loaded += (object sender, RoutedEventArgs e) => { Splasher.CloseSplash(); };
+            eWindow.Loaded += (object sender, RoutedEventArgs e) =>
+            {
+                Splasher.CloseSplash();
+                if (GlobalSettings.Default.WindowLeft.HasValue) eWindow.Left = GlobalSettings.Default.WindowLeft.Value;
+                if (GlobalSettings.Default.WindowTop.HasValue) eWindow.Top = GlobalSettings.Default.WindowTop.Value;
+                if (GlobalSettings.Default.WindowWidth.HasValue) eWindow.Width = GlobalSettings.Default.WindowWidth.Value;
+                if (GlobalSettings.Default.WindowHeight.HasValue) eWindow.Height = GlobalSettings.Default.WindowHeight.Value;
+                if (GlobalSettings.Default.WindowState.HasValue) eWindow.WindowState = GlobalSettings.Default.WindowState.Value;
+            };
             eWindow.ShowDialog();
         }
 
@@ -122,12 +121,15 @@
             TempfileUtil.Dispose();
         }
 
-        private void SaveSettings(WindowExplorer eWindow)
+        private static void SaveSettings(WindowExplorer eWindow)
         {
-            // TODO:
-            //eWindow.WindowState
-            //eWindow.Height;
-
+            GlobalSettings.Default.WindowState = eWindow.WindowState;
+            eWindow.WindowState = WindowState.Normal; // Reset the State before getting the window size.
+            GlobalSettings.Default.WindowHeight = eWindow.Height;
+            GlobalSettings.Default.WindowWidth = eWindow.Width;
+            GlobalSettings.Default.WindowTop = eWindow.Top;
+            GlobalSettings.Default.WindowLeft = eWindow.Left;
+            GlobalSettings.Default.Save();
         }
 
         #endregion
