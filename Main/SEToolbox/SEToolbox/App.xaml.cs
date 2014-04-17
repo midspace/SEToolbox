@@ -1,12 +1,14 @@
 ﻿namespace SEToolbox
 {
     using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using SEToolbox.Views;
     using System;
     using System.Diagnostics;
     using System.Windows;
+    using System.Windows.Input;
     using System.Windows.Threading;
 
     /// <summary>
@@ -24,6 +26,12 @@
         {
             Splasher.Splash = new WindowSplashScreen();
             Splasher.ShowSplash();
+
+            if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) == KeyStates.Down)
+            {
+                // Reset User Settings when Shift is held down.
+                GlobalSettings.Default.Reset();
+            }
 
             var update = CodeplexReleases.CheckForUpdates();
             if (update != null)

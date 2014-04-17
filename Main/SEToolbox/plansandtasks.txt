@@ -34,6 +34,9 @@
   * Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
     Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
   * Export and Import Asteroids/Floating Objects/Meteors to/from files.
+  * Duplicate. Clone any object.
+  * Group Move - move all to single point.
+  * Group Move - Disperse over set area. 
 
 - Character:
   * Exit Pilot from ship to Astronaut.
@@ -43,9 +46,10 @@
   * Replace Asteroid/Voxel.
   * Rotate Asteroid/Voxel (not supported by sandbox currently, but procedural voxel rotation could be accomplished.)
   * Dialog to Generate box/sphere asteroid (size, hollow shell size, material).
+  * Generate 'Random' asteroid field.
+  * Improve the material mix in Asteroids somehow by creating clumps with the aim of optimising it along the cell boundaries.
 
 - Items:
-  * Dialog to Create/Drop Components and Items (pipes, weapons, ingots, ores, ammos).
 
 - Meteor:
   * Change size (mass).
@@ -92,6 +96,7 @@ Completed:
 - Display list of all Cubes/Components/Items/Materials.
 - Drag-Drop copy Meteors.
 - Drag-Drop copy Unknown items.
+- Dialog to Create/Drop Components and Items (pipes, weapons, ingots, ores, ammos).
 
 ========--------~~~~~~~~
 

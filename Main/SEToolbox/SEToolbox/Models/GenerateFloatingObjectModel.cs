@@ -21,7 +21,12 @@
 
         private double? _volume;
         private double? _mass;
-        private decimal? _units;
+        private int? _units;
+        private decimal? _decimalUnits;
+        private bool _isDecimal;
+        private bool _isInt;
+        private int _multiplier;
+        private float _maxFloatingObjects;
 
         #endregion
 
@@ -30,6 +35,7 @@
         public GenerateFloatingObjectModel()
         {
             this._stockItemList = new ObservableCollection<ComonentItemModel>();
+            this.Multiplier = 1;
         }
 
         #endregion
@@ -137,7 +143,7 @@
             }
         }
 
-        public decimal? Units
+        public int? Units
         {
             get
             {
@@ -155,12 +161,105 @@
             }
         }
 
+        public decimal? DecimalUnits
+        {
+            get
+            {
+                return this._decimalUnits;
+            }
+
+            set
+            {
+                if (value != this._decimalUnits)
+                {
+                    this._decimalUnits = value;
+                    this.RaisePropertyChanged(() => DecimalUnits);
+                    SetMassVolume();
+                }
+            }
+        }
+
+        public bool IsDecimal
+        {
+            get
+            {
+                return this._isDecimal;
+            }
+
+            set
+            {
+                if (value != this._isDecimal)
+                {
+                    this._isDecimal = value;
+                    this.RaisePropertyChanged(() => IsDecimal);
+                }
+            }
+        }
+
+        public bool IsInt
+        {
+            get
+            {
+                return this._isInt;
+            }
+
+            set
+            {
+                if (value != this._isInt)
+                {
+                    this._isInt = value;
+                    this.RaisePropertyChanged(() => IsInt);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Generates this many individual items.
+        /// </summary>
+        public int Multiplier
+        {
+            get
+            {
+                return this._multiplier;
+            }
+
+            set
+            {
+                if (value != this._multiplier)
+                {
+                    this._multiplier = value;
+                    this.RaisePropertyChanged(() => Multiplier);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The maximum number of floating objects as defined in the World.
+        /// </summary>
+        public float MaxFloatingObjects
+        {
+            get
+            {
+                return this._maxFloatingObjects;
+            }
+
+            set
+            {
+                if (value != this._maxFloatingObjects)
+                {
+                    this._maxFloatingObjects = value;
+                    this.RaisePropertyChanged(() => MaxFloatingObjects);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
 
-        public void Load(MyPositionAndOrientation characterPosition)
+        public void Load(MyPositionAndOrientation characterPosition, float maxFloatingObjects)
         {
+            this.MaxFloatingObjects = maxFloatingObjects;
             this.CharacterPosition = characterPosition;
             this.StockItemList.Clear();
             var list = new SortedList<string, ComonentItemModel>();
@@ -225,15 +324,46 @@
 
         private void SetMassVolume()
         {
-            if (this._stockItem == null)
+            if (this.StockItem == null)
             {
                 this.Mass = null;
                 this.Volume = null;
             }
             else
             {
-                this.Mass = (double)this.Units * this._stockItem.Mass;
-                this.Volume = (double)this.Units * this._stockItem.Volume;
+                if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.Ore ||
+                    this.StockItem.TypeId == MyObjectBuilderTypeEnum.Ingot)
+                {
+                    this.IsDecimal = true;
+                    this.IsInt = false;
+                    if (this.DecimalUnits.HasValue)
+                    {
+                        this.Mass = (double)this.DecimalUnits * this.StockItem.Mass;
+                        this.Volume = (double)this.DecimalUnits * this.StockItem.Volume;
+                    }
+                    else
+                    {
+                        this.Mass = null;
+                        this.Volume = null;
+                    }
+                }
+                if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.Component ||
+                    this.StockItem.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject ||
+                    this.StockItem.TypeId == MyObjectBuilderTypeEnum.AmmoMagazine)
+                {
+                    this.IsInt = true;
+                    this.IsDecimal = false;
+                    if (this.Units.HasValue)
+                    {
+                        this.Mass = (double)this.Units * this.StockItem.Mass;
+                        this.Volume = (double)this.Units * this.StockItem.Volume;
+                    }
+                    else
+                    {
+                        this.Mass = null;
+                        this.Volume = null;
+                    }
+                }
             }
         }
 

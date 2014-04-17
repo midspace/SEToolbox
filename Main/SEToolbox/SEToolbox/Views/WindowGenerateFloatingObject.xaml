@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Create Item" Height="190" Width="340" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Create Item" Height="260" Width="320" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -17,9 +18,14 @@
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
     </Window.Cursor>
     <Grid>
-        <StackPanel Margin="8">
-            <Grid Height="100">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Margin="8,8,8,0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="26"/>
                     <RowDefinition Height="26"/>
                     <RowDefinition Height="26"/>
                     <RowDefinition Height="26"/>
@@ -27,27 +33,36 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Item:" VerticalAlignment="Center"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" Name="uxInitialElement"  VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding StockItemList}" SelectedValue="{Binding StockItem}" IsTextSearchEnabled="True">
+                <!--<ComboBox Grid.Row="0" Grid.Column="1" Name="uxInitialElement"  VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding StockItemList}" SelectedValue="{Binding StockItem}" IsTextSearchEnabled="True" DisplayMemberPath="FriendlyName"/>-->
+                <ComboBox Grid.Row="0" Grid.Column="1" Name="uxInitialElement"  VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding StockItemList}" SelectedValue="{Binding StockItem}" IsTextSearchEnabled="True">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <!--<Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" Margin="0,0,2,0" />-->
+                                <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" Margin="0,0,2,0" />
                                 <TextBlock Text="{Binding FriendlyName}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Units:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center">
+                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" Visibility="{Binding IsDecimal, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBox.Text>
+                        <Binding Path="DecimalUnits" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                            <Binding.ValidationRules>
+                                <converters:RangeRuleD Min="0.000001" Max="1000000"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" Visibility="{Binding IsInt, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBox.Text>
                         <Binding Path="Units" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                             <Binding.ValidationRules>
-                                <converters:RangeRuleD Min="0.000001" Max="1000000"/>
+                                <converters:RangeRuleI Min="1" Max="1000000"/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
@@ -56,12 +71,25 @@
                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Mass, StringFormat='{}{0:#,###0.00} Kg'}" VerticalAlignment="Center"/>
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Volume:" VerticalAlignment="Center"/>
                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Volume, StringFormat='{}{0:#,###0.00} L'}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Multiplier:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center">
+                    <TextBox.Text>
+                        <Binding Path="Multiplier" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                            <Binding.ValidationRules>
+                                <converters:RangeRuleI Min="1" Max="1024"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <StackPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
+                    <TextBlock TextWrapping="Wrap" Text="{Binding Path=MaxFloatingObjects, StringFormat='{}The Maximum number of floating objects in your Save World is defined as {0}.'}"/>
+                </StackPanel>
             </Grid>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8">
-            <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
-            <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
-        </StackPanel>
-        <!--<controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
+                <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+            </StackPanel>
+        </Grid>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

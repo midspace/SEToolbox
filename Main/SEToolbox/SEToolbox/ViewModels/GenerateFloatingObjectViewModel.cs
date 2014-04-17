@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Collections.Generic;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -166,7 +167,7 @@
             }
         }
 
-        public decimal? Units
+        public int? Units
         {
             get
             {
@@ -179,6 +180,71 @@
             }
         }
 
+        public decimal? DecimalUnits
+        {
+            get
+            {
+                return this._dataModel.DecimalUnits;
+            }
+
+            set
+            {
+                this._dataModel.DecimalUnits = value;
+            }
+        }
+
+        public bool IsDecimal
+        {
+            get
+            {
+                return this._dataModel.IsDecimal;
+            }
+
+            set
+            {
+                this._dataModel.IsDecimal = value;
+            }
+        }
+
+        public bool IsInt
+        {
+            get
+            {
+                return this._dataModel.IsInt;
+            }
+
+            set
+            {
+                this._dataModel.IsInt = value;
+            }
+        }
+
+        public int Multiplier
+        {
+            get
+            {
+                return this._dataModel.Multiplier;
+            }
+
+            set
+            {
+                this._dataModel.Multiplier = value;
+            }
+        }
+
+        public float MaxFloatingObjects
+        {
+            get
+            {
+                return this._dataModel.MaxFloatingObjects;
+            }
+
+            set
+            {
+                this._dataModel.MaxFloatingObjects = value;
+            }
+        }
+
         #endregion
 
         #region methods
@@ -187,7 +253,9 @@
 
         public bool CreateCanExecute()
         {
-            return this.StockItem != null && Units.HasValue && Units.Value > 0;
+            return this.StockItem != null &&
+                ((this.IsInt && this.Units.HasValue && this.Units.Value > 0) ||
+                (this.IsDecimal && this.DecimalUnits.HasValue && this.DecimalUnits.Value > 0));
         }
 
         public void CreateExecuted()
@@ -209,21 +277,25 @@
 
         #region BuildEntity
 
-        public MyObjectBuilder_EntityBase BuildEntity()
+        public MyObjectBuilder_EntityBase[] BuildEntities()
         {
             var entity = new MyObjectBuilder_FloatingObject
             {
                 EntityId = SpaceEngineersAPI.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.Enabled | MyPersistentEntityFlags2.InScene,
-                Item = new MyObjectBuilder_InventoryItem { AmountDecimal = this.Units.Value, ItemId = 0 },
+                Item = new MyObjectBuilder_InventoryItem { ItemId = 0 },
             };
+
+            if (this.IsDecimal)
+                entity.Item.AmountDecimal = this.DecimalUnits.Value;
+            if (this.IsInt)
+                entity.Item.AmountDecimal = this.Units.Value;
 
             this.IsValidItemToImport = true;
             entity.Item.PhysicalContent = (MyObjectBuilder_PhysicalObject)MyObjectBuilder_Base.CreateNewObject(this.StockItem.TypeId, this.StockItem.SubtypeId);
 
             switch (this.StockItem.TypeId)
             {
-
                 case MyObjectBuilderTypeEnum.Component:
                 case MyObjectBuilderTypeEnum.Ingot:
                 case MyObjectBuilderTypeEnum.Ore:
@@ -241,7 +313,7 @@
                     //MyObjectBuilder_Welder MyObjectBuilderTypeEnum.Welder
                     //MyObjectBuilder_HandDrill MyObjectBuilderTypeEnum.HandDrill
                     break;
-                
+
                 default:
                     // As yet uncatered for items which may be new.
                     this.IsValidItemToImport = false;
@@ -262,7 +334,16 @@
                 Up = this._dataModel.CharacterPosition.Up
             };
 
-            return entity;
+            var entities = new List<MyObjectBuilder_EntityBase>();
+
+            for (var i = 0; i < this.Multiplier; i++)
+            {
+                var newEntity = entity.Clone() as MyObjectBuilder_FloatingObject;
+                newEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                entities.Add(newEntity);
+            }
+
+            return entities.ToArray();
         }
 
         #endregion

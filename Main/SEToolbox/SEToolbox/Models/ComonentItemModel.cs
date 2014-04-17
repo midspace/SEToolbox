@@ -58,6 +58,11 @@
 
         public string FriendlyName { get; set; }
 
+        public override string ToString()
+        {
+            return this.FriendlyName;
+        }
+
         #endregion
 
         private void SetFriendlyName()
