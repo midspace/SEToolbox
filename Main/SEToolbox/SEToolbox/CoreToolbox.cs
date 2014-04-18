@@ -11,10 +11,6 @@
 
     public class CoreToolbox
     {
-        #region Fields
-
-        #endregion
-
         #region methods
 
         public void Startup(string[] args)

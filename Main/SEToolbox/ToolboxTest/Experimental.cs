@@ -121,6 +121,86 @@
         }
 
         //[TestMethod]
+        public void VoxelGenerateCubeLargeHollow()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var materialStone_01 = materials.FirstOrDefault(m => m.Name.Contains("Stone_01"));
+            Assert.IsNotNull(materialStone_01, "Stone_01 material should exist.");
+
+            var materialStone_02 = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
+            Assert.IsNotNull(materialStone_02, "Stone_02 material should exist.");
+
+            var materialStone_03 = materials.FirstOrDefault(m => m.Name.Contains("Stone_03"));
+            Assert.IsNotNull(materialStone_03, "Stone_03 material should exist.");
+
+            var materialStone_04 = materials.FirstOrDefault(m => m.Name.Contains("Stone_04"));
+            Assert.IsNotNull(materialStone_04, "Stone_04 material should exist.");
+
+            var materialStone_05 = materials.FirstOrDefault(m => m.Name.Contains("Stone_05"));
+            Assert.IsNotNull(materialStone_05, "Stone_05 material should exist.");
+
+            var materialIron_01 = materials.FirstOrDefault(m => m.Name.Contains("Iron_01"));
+            Assert.IsNotNull(materialIron_01, "Iron_01 material should exist.");
+
+            var materialIron_02 = materials.FirstOrDefault(m => m.Name.Contains("Iron_02"));
+            Assert.IsNotNull(materialIron_02, "Iron_02 material should exist.");
+
+            var materialNickel_01 = materials.FirstOrDefault(m => m.Name.Contains("Nickel_01"));
+            Assert.IsNotNull(materialNickel_01, "Nickel_01 material should exist.");
+
+            var materialCobalt_01 = materials.FirstOrDefault(m => m.Name.Contains("Cobalt_01"));
+            Assert.IsNotNull(materialCobalt_01, "Cobalt_01 material should exist.");
+
+            var materialMagnesium_01 = materials.FirstOrDefault(m => m.Name.Contains("Magnesium_01"));
+            Assert.IsNotNull(materialMagnesium_01, "Magnesium_01 material should exist.");
+
+            var materialSilicon_01 = materials.FirstOrDefault(m => m.Name.Contains("Silicon_01"));
+            Assert.IsNotNull(materialSilicon_01, "Silicon_01 material should exist.");
+
+            var materialSilver_01 = materials.FirstOrDefault(m => m.Name.Contains("Silver_01"));
+            Assert.IsNotNull(materialSilver_01, "Silver_01 material should exist.");
+
+            var materialGold_01 = materials.FirstOrDefault(m => m.Name.Contains("Gold_01"));
+            Assert.IsNotNull(materialGold_01, "Gold_01 material should exist.");
+
+            var materialPlatinum_01 = materials.FirstOrDefault(m => m.Name.Contains("Platinum_01"));
+            Assert.IsNotNull(materialPlatinum_01, "Platinum_01 material should exist.");
+
+            var materialUraninite_01 = materials.FirstOrDefault(m => m.Name.Contains("Uraninite_01"));
+            Assert.IsNotNull(materialUraninite_01, "Uraninite_01 material should exist.");
+
+            // Allowable size appears to be Surface Area related, possibly size of memory mapped texture.
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_500_radi.vox", 500, 500, 500, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_700_radi.vox", 700, 700, 700, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_800_radi.vox", 800, 800, 800, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_830_radi.vox", 830, 830, 830, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_832_radi.vox", 832, 832, 832, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_836_radi.vox", 836, 836, 836, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_838_radi.vox", 838, 838, 838, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839_radi.vox", 839, 839, 839, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839x839x840_radi.vox", 839, 839, 840, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_720x900x900_radi.vox", 720, 900, 900, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_729x900x900_radi.vox", 729, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_730x900x900_radi.vox", 730, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839x840x840_radi.vox", 839, 840, 840, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_840_radi.vox", 840, 840, 840, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_848_radi.vox", 848, 848, 848, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_850_radi.vox", 850, 850, 850, materialStone_01.Name, false, 0); //  CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_856_radi.vox", 856, 856, 870, materialStone_01.Name, false, 0);
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_870_radi.vox", 870, 870, 870, materialStone_01.Name, false, 0);
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_900_radi.vox", 900, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x2048x2048_radi.vox", 100, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1024x1024_radi.vox", 100, 1024, 1024, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_50x2048x2048_radi.vox", 50, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1368x1368_radi.vox", 100, 1368, 1368, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1352x1352_radi.vox", 100, 1352, 1352, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1360x1360_radi.vox", 100, 1360, 1360, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_119x1340x1340_radi.vox", 119, 1340, 1340, materialStone_01.Name, false, 0); // Works
+        }
+
+        //[TestMethod]
         public void VoxelGenerateSphereAssets()
         {
             var materials = SpaceEngineersAPI.GetMaterialList();

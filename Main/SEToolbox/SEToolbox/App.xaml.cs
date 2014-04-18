@@ -29,7 +29,7 @@
 
             if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) == KeyStates.Down)
             {
-                // Reset User Settings when Shift is held down.
+                // Reset User Settings when Shift is held down during start up.
                 GlobalSettings.Default.Reset();
             }
 

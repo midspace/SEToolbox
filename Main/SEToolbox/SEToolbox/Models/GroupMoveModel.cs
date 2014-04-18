@@ -154,9 +154,16 @@
         {
             foreach (var selection in this.Selections)
             {
+                // Apply a Global Offset to all objects.
                 selection.PositionX = selection.Item.DataModel.PositionX + this.GlobalOffsetPositionX;
                 selection.PositionY = selection.Item.DataModel.PositionY + this.GlobalOffsetPositionY;
                 selection.PositionZ = selection.Item.DataModel.PositionZ + this.GlobalOffsetPositionZ;
+
+                // TODO: Option to apply a Single Position to all objects.
+                //selection.PositionX = this.SinglePositionX;
+                //selection.PositionY = this.SinglePositionY;
+                //selection.PositionZ = this.SinglePositionZ;
+
                 selection.PlayerDistance = (this._playerPosition - new Vector3((float)selection.PositionX, (float)selection.PositionY, (float)selection.PositionZ)).Length();
             }
         }
