@@ -698,6 +698,56 @@ namespace SEToolbox.Interop.Asteroids
             return sum;
         }
 
+        public long SumFullCells()
+        {
+            long sum = 0;
+
+            for (var x = 0; x < this._voxelContentCells.Length; x++)
+            {
+                for (var y = 0; y < this._voxelContentCells[x].Length; y++)
+                {
+                    for (var z = 0; z < this._voxelContentCells[x][y].Length; z++)
+                    {
+                        if (this._voxelContentCells[x][y][z] != null)
+                        {
+                            sum += this._voxelContentCells[x][y][z].VoxelFullCells;
+                        }
+                        else
+                        {
+                            sum += MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL;
+                        }
+                    }
+                }
+            }
+
+            return sum;
+        }
+
+        public long SumPartCells()
+        {
+            long sum = 0;
+
+            for (var x = 0; x < this._voxelContentCells.Length; x++)
+            {
+                for (var y = 0; y < this._voxelContentCells[x].Length; y++)
+                {
+                    for (var z = 0; z < this._voxelContentCells[x][y].Length; z++)
+                    {
+                        if (this._voxelContentCells[x][y][z] != null)
+                        {
+                            sum += this._voxelContentCells[x][y][z].VoxelPartCells;
+                        }
+                        else
+                        {
+                            sum += MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL;
+                        }
+                    }
+                }
+            }
+
+            return sum;
+        }
+
         public void CalculateMaterialCellAssets(out IList<byte> materialAssetList, out Dictionary<byte, long> materialVoxelCells)
         {
             materialAssetList = new List<byte>();

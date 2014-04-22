@@ -1,22 +1,16 @@
 ﻿namespace SEToolbox.Support
 {
-    using System.Text.RegularExpressions;
     using Microsoft.Win32;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
-    using System.Net;
     using System.Reflection;
     using System.Security.Principal;
-    using System.Windows.Forms;
-    using System.Xml.Linq;
-    using SEToolbox.Controls;
 
     public static class ToolboxUpdater
     {
-        private static readonly string[] CoreSpaceEngineersFiles = {
+        internal static readonly string[] CoreSpaceEngineersFiles = {
             "Sandbox.Common.dll",
             "Sandbox.Common.XmlSerializers.dll",
             "VRage.Common.dll",
@@ -67,7 +61,7 @@
         public static void GetSettings()
         {
         }
-        
+
         #endregion
 
         #region GetSteamFilePath
@@ -126,7 +120,8 @@
         {
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
             var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
-            var appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
+
+            var appFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             foreach (var filename in CoreSpaceEngineersFiles)
             {
@@ -141,7 +136,7 @@
         {
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
             var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
-            var appFilePath = Path.GetDirectoryName(Application.ExecutablePath);
+            var appFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             foreach (var filename in CoreSpaceEngineersFiles)
             {
@@ -199,7 +194,7 @@
 
         #region RunElevated
 
-        internal static bool RunElevated(string fileName, string arguments, bool elevate)
+        internal static int? RunElevated(string fileName, string arguments, bool elevate, bool waitForExit)
         {
             var processInfo = new ProcessStartInfo
             {
@@ -214,14 +209,22 @@
 
             try
             {
-                Process.Start(processInfo);
-                return true;
+                var process = Process.Start(processInfo);
+
+                if (waitForExit)
+                {
+                    process.WaitForExit();
+
+                    return process.ExitCode;
+                }
+
+                return 0;
             }
             catch (Win32Exception)
             {
-                //Do nothing. Probably the user canceled the UAC window
+                // Do nothing. Probably the user canceled the UAC window
+                return null;
             }
-            return false;
         }
 
         #endregion

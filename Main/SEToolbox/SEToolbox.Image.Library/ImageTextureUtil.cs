@@ -363,11 +363,10 @@
                         {
                             var w = header.dwWidth == 0 ? 1 : header.dwWidth;
                             var h = header.dwHeight == 0 ? 1 : header.dwHeight;
-                            var d = header.dwDepth == 0 ? 1 : header.dwDepth;
 
                             for (var map = 0; map < mipCount; map++)
                             {
-                                var size = (int)(bytesPerPixel * w * h * d);
+                                var size = (int)(bytesPerPixel * w * h);
                                 if (depthSlice == slice && ((width <= 0 && height <= 0) || (w == width && h == height)))
                                 {
                                     width = (int)w;
@@ -381,10 +380,8 @@
 
                                 w = w >> 1;
                                 h = h >> 1;
-                                d = d >> 1;
                                 if (w == 0) w = 1;
                                 if (h == 0) h = 1;
-                                if (d == 0) d = 1;
                             }
 
                             reader.BaseStream.Seek(27, SeekOrigin.Current);

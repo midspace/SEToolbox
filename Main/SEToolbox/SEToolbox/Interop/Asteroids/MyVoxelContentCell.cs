@@ -22,7 +22,11 @@ namespace SEToolbox.Interop.Asteroids
         private MyVoxelContentCellContent _cellContent = null;
 
         //  Sums all voxel values. Default is summ of all full voxel in cell, so by subtracting we can switch cell from MIXED to EMPTY.
-        int _voxelContentSum;
+        long _voxelContentSum;
+        long _voxelFullCells;
+        long _voxelPartCells;
+        long _voxelEmptyCells;
+
 
         #endregion
 
@@ -35,6 +39,9 @@ namespace SEToolbox.Interop.Asteroids
 
             //  Sums all voxel values. Default is sum of all full voxel in cell, so be subtracting we can switch cell from MIXED to EMPTY.
             this._voxelContentSum = MyVoxelConstants.VOXEL_CELL_CONTENT_SUM_TOTAL;
+            this._voxelFullCells = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL;
+            this._voxelPartCells = 0;
+            this._voxelEmptyCells = 0;
         }
         #endregion
 
@@ -48,6 +55,21 @@ namespace SEToolbox.Interop.Asteroids
             get { return this._voxelContentSum; }
         }
 
+        public long VoxelFullCells
+        {
+            get { return this._voxelFullCells; }
+        }
+
+        public long VoxelPartCells
+        {
+            get { return this._voxelPartCells; }
+        }
+
+        public long VoxelEmptyCells
+        {
+            get { return this._voxelEmptyCells; }
+        }
+
         #endregion
 
         #region methods
@@ -56,6 +78,9 @@ namespace SEToolbox.Interop.Asteroids
         {
             this.CellType = MyVoxelCellType.EMPTY;
             this._voxelContentSum = 0;
+            this._voxelFullCells = 0;
+            this._voxelPartCells = 0;
+            this._voxelEmptyCells = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL;
             this.CheckCellType();
         }
 
@@ -137,10 +162,16 @@ namespace SEToolbox.Interop.Asteroids
             if (this._voxelContentSum == 0)
             {
                 this.CellType = MyVoxelCellType.EMPTY;
+                this._voxelFullCells = 0;
+                this._voxelPartCells = 0;
+                this._voxelEmptyCells = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL;
             }
             else if (_voxelContentSum == MyVoxelConstants.VOXEL_CELL_CONTENT_SUM_TOTAL)
             {
                 this.CellType = MyVoxelCellType.FULL;
+                this._voxelFullCells = MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_TOTAL;
+                this._voxelPartCells = 0;
+                this._voxelEmptyCells = 0;
             }
             else
             {

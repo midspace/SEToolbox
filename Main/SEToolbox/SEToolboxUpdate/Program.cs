@@ -1,49 +1,169 @@
 ﻿namespace SEToolboxUpdate
 {
-    using Microsoft.Win32;
-    using SEToolboxUpdate.Support;
+    using SEToolbox.Support;
     using System;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Security.Principal;
+    using System.Reflection;
+    using System.Windows;
+    using Res = SEToolboxUpdate.Properties.Resources;
 
     class Program
     {
-        private static readonly string[] CoreSpaceEngineersFiles = {
-            "Sandbox.Common.dll",
-            "Sandbox.Common.XmlSerializers.dll",
-            "VRage.Common.dll",
-            "VRage.Library.dll",
-            "VRage.Math.dll",};
+        #region consts
+
+        private const int NoError = 0;
+        private const int UpdateBinariesFailed = 1;
+        private const int UacDenied = 2;
+        
+        #endregion
+
+        #region Main
 
         static void Main(string[] args)
         {
+            // Install.
+            if (args.Any(a => a.Equals("/I", System.StringComparison.InvariantCultureIgnoreCase) || a.Equals("-I", System.StringComparison.InvariantCultureIgnoreCase)))
+            {
+                InstallConfigurationSettings();
+                return;
+            }
+
+            // Uninstall.
+            if (args.Any(a => a.Equals("/U", System.StringComparison.InvariantCultureIgnoreCase) || a.Equals("-U", System.StringComparison.InvariantCultureIgnoreCase)))
+            {
+                UninstallConfigurationSettings();
+                return;
+            }
+
+            // Binaries.
+            if (args.Any(a => a.Equals("/B", System.StringComparison.InvariantCultureIgnoreCase) || a.Equals("-B", System.StringComparison.InvariantCultureIgnoreCase)))
+            {
+                UpdateBaseLibrariesFromSpaceEngineers(args);
+                return;
+            }
+
+            var appFile = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
+            MessageBox.Show(string.Format(Res.AppParameterHelpMessage, appFile), Res.AppParameterHelpTitle, MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.OK);
+        }
+
+        #endregion
+
+        #region InstallConfigurationSettings
+
+        private static void InstallConfigurationSettings()
+        {
+            var success = DiagnosticsLogging.CreateLog();
+        }
+
+        #endregion
+
+        #region UninstallConfigurationSettings
+
+        private static void UninstallConfigurationSettings()
+        {
+            var success = DiagnosticsLogging.RemoveLog();
+        }
+
+        #endregion
+
+        #region UpdateBaseLibrariesFromSpaceEngineers
+
+        private static void UpdateBaseLibrariesFromSpaceEngineers(string[] args)
+        {
             var attemptedAlready = args.Any(a => a.ToUpper() == "/A");
 
-            var appFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var appFile = Assembly.GetExecutingAssembly().Location;
             var appFilePath = Path.GetDirectoryName(appFile);
 
-            if (CheckIsRuningElevated())
+            if (ToolboxUpdater.CheckIsRuningElevated())
             {
-                UpdateBaseFiles(appFilePath);
-                RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/U", false);
+                if (!attemptedAlready)
+                {
+                    MessageBox.Show(Res.UpdateRequiredMessage, Res.UpdateRequiredTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                // is running elevated permission, update the files.
+                var updateRet = UpdateBaseFiles(appFilePath);
+
+                if (!attemptedAlready)
+                {
+                    if (updateRet)
+                    {
+                        // B = Binaries were updated.
+                        ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/B", false, false);
+                        Environment.Exit(NoError);
+                    }
+                    else
+                    {
+                        // Update failed? Files are readonly. Files are locked. Source Files missing (or renamed).
+                        var dialogResult = MessageBox.Show(Res.UpdateErrorMessage, Res.UpdateErrorTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        if (dialogResult == MessageBoxResult.Yes)
+                        {
+                            // X = Ignore updates.
+                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X", false, false);
+                        }
+                        Environment.Exit(UpdateBinariesFailed);
+                    }
+                }
+
+                if (updateRet)
+                    Environment.Exit(NoError);
+                else
+                    Environment.Exit(UpdateBinariesFailed);
             }
             else
             {
-                if (attemptedAlready)
+                // Does not have elevated permission to run.
+                if (!attemptedAlready)
                 {
-                    RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/U /A", false);
-                }
-                else
-                {
-                    // TODO: check the return condition.
-                    RunElevated(appFile, string.Join(" ", args) + " /A", true);
+                    MessageBox.Show(Res.UpdateRequiredUACMessage, Res.UpdateRequiredTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    var ret = ToolboxUpdater.RunElevated(appFile, string.Join(" ", args) + " /A", true, true);
+                    if (ret.HasValue)
+                    {
+                        if (ret.Value == 0)
+                        {
+                            // B = Binaries were updated.
+                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/B", false, false);
+                            Environment.Exit(NoError);
+                        }
+                        else
+                        {
+                            // Update failed? Files are readonly. Files are locked. Source Files missing (or renamed).
+                            var dialogResult = MessageBox.Show(Res.UpdateErrorMessage, Res.UpdateErrorTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                            if (dialogResult == MessageBoxResult.Yes)
+                            {
+                                // X = Ignore updates.
+                                ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X", false, false);
+                            }
+                            Environment.Exit(ret.Value);
+                        }
+                    }
+                    else
+                    {
+                        var dialogResult = MessageBox.Show(Res.CancelUACMessage, Res.CancelUACTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        if (dialogResult == MessageBoxResult.Yes)
+                        {
+                            // X = Ignore updates.
+                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X", false, false);
+                        }
+                        Environment.Exit(UacDenied);
+                    }
                 }
             }
         }
 
+        #endregion
+
+        #region UpdateBaseFiles
+
+        /// <summary>
+        /// Updates the base library files from the Space Engineers application path.
+        /// </summary>
+        /// <param name="appFilePath"></param>
+        /// <returns>True if it succeeded, False if there was an issue that blocked it.</returns>
         private static bool UpdateBaseFiles(string appFilePath)
         {
             var counter = 0;
@@ -61,99 +181,32 @@
             }
 
             // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
-            var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
+            var baseFilePath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Bin64");
 
-            foreach (var filename in CoreSpaceEngineersFiles)
+            foreach (var filename in ToolboxUpdater.CoreSpaceEngineersFiles)
             {
                 var sourceFile = Path.Combine(baseFilePath, filename);
 
-                if (File.Exists(sourceFile))
+                try
                 {
-                    File.Copy(sourceFile, Path.Combine(appFilePath, filename), true);
+                    if (File.Exists(sourceFile))
+                    {
+                        File.Copy(sourceFile, Path.Combine(appFilePath, filename), true);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch
+                {
+                    return false;
                 }
             }
 
             return true;
         }
 
-        #region GetApplicationFilePath
-
-        public static string GetApplicationFilePath()
-        {
-            var gamePath = GlobalSettings.Default.SEInstallLocation;
-
-            if (string.IsNullOrEmpty(gamePath))
-                gamePath = GetGameRegistryFilePath();
-
-            return gamePath;
-        }
-
-        /// <summary>
-        /// Looks for the Space Engineers install location in the Registry, which should return the form:
-        /// "C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers"
-        /// </summary>
-        /// <returns></returns>
-        public static string GetGameRegistryFilePath()
-        {
-            RegistryKey key;
-            if (Environment.Is64BitProcess)
-                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244850", false);
-            else
-                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244850", false);
-
-            if (key != null)
-            {
-                return key.GetValue("InstallLocation") as string;
-            }
-            else
-            {
-                // Backup check, but no choice if the above goes to pot.
-                // Using the [Software\Valve\Steam\SteamPath] as a base for "\steamapps\common\SpaceEngineers", is unreliable, as the Steam Library is customizable and could be on another drive and directory.
-                if (Environment.Is64BitProcess)
-                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Valve\Steam", false);
-                else
-                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam", false);
-
-                if (key != null)
-                {
-                    return (string)key.GetValue("InstallPath") + @"\SteamApps\common\SpaceEngineers";
-                }
-            }
-
-            return null;
-        }
-
         #endregion
-
-        private static bool CheckIsRuningElevated()
-        {
-            var pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-            return pricipal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-
-        private static bool RunElevated(string fileName, string arguments, bool elevate)
-        {
-            var processInfo = new ProcessStartInfo
-            {
-                FileName = fileName,
-                Arguments = arguments
-            };
-
-            if (elevate)
-            {
-                processInfo.Verb = "runas";
-            }
-
-            try
-            {
-                Process.Start(processInfo);
-                return true;
-            }
-            catch (Win32Exception)
-            {
-                //Do nothing. Probably the user canceled the UAC window
-            }
-            return false;
-        }
     }
 }

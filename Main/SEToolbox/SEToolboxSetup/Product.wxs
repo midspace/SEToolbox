@@ -15,8 +15,18 @@
       <UpgradeVersion Minimum="1.0.0.0" Maximum="99.0.0.0" Property="PREVIOUSVERSIONSINSTALLED" IncludeMinimum="yes" IncludeMaximum="no" />
     </Upgrade>
 
+    <CustomAction Id="Install" Directory="APPLICATIONFOLDER"
+              Execute="deferred" Impersonate="no" Return="ignore"
+              ExeCommand="[APPLICATIONFOLDER]SEToolboxUpdate.exe -i" />
+
+    <CustomAction Id="Uninstall" Directory="APPLICATIONFOLDER"
+                  Execute="deferred" Impersonate="no" Return="ignore"
+                  ExeCommand="[APPLICATIONFOLDER]SEToolboxUpdate.exe -u" />
+    
     <InstallExecuteSequence>
       <RemoveExistingProducts After="InstallInitialize" />
+      <Custom Action='Install' After='InstallFiles'>NOT REMOVE</Custom>
+      <Custom Action='Uninstall' After='InstallInitialize'>Installed AND (REMOVE = "ALL")</Custom>
     </InstallExecuteSequence>
 
     <Feature Id="ProductFeature" Title="!(loc.DirApplicationName)" Level="1">
@@ -32,6 +42,9 @@
             <Component Id="UninstallAppFolder" Guid="6AF1643F-8251-4FAE-A2AF-F3BB96FC931A">
               <CreateFolder />
               <RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
+              <RegistryKey Root="HKLM" Key="Software\MidSpace\SEToolbox">
+                <RegistryValue Id="SEToolboxRegInstallDir" Type="string" Name="InstallDir" Value="[APPLICATIONFOLDER]" />
+              </RegistryKey>
             </Component>
           </Directory>
         </Directory>
@@ -48,22 +61,23 @@
     <!--<UIRef Id="WixUI_CustomInstallDir" />-->
 
     <UIRef Id="WixUI_ErrorProgressText" />
-    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER"/>
     <Property Id="ARPPRODUCTICON" Value="APPLICATIONICON" />
+    <Property Id="APPLICATIONFOLDER">
+      <RegistrySearch Id='SEToolboxRegistry' Type='raw' Root='HKLM' Key='Software\MidSpace\SEToolbox' Name='InstallDir' />
+    </Property>
 
     <!-- All Files, except the .config -->
     <ComponentGroup Id="ProductComponents" Directory="APPLICATIONFOLDER">
+      <!-- Core applications files -->
       <Component Id="comp2EA1FC447B50410DA2CE55F182C0E00C">
         <File Id="file184705D6F44643D48E157FDD3FBF37D7" Source="$(var.SEToolbox.TargetDir)SEToolbox.exe" Checksum="yes"/>
       </Component>
       <Component Id="comp6BB6C5C0D9A0473D8FDD4DBE5744C093">
         <File Id="file1B0A6AE8617640669E830BEF810A5047" Source="$(var.SEToolbox.TargetDir)SEToolbox.exe.config" Checksum="yes"/>
       </Component>
-      <Component Id="comp88066F31283E44A79F1D679F4B9D80AE">
-        <File Id="file61275B9FC2AE484BA7A2BDB7459A3647" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.dll"/>
-      </Component>
-      <Component Id="compB0198B4AB39348F5B20741B39BD36F84">
-        <File Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.XmlSerializers.dll"/>
+      <Component Id="comp12068FFAF2EB4772A897CB41720E056F">
+        <File Id="file64DEAD08B7A14DCCAD1984564BC6EA1C" Source="$(var.SEToolbox.TargetDir)SEToolboxUpdate.exe"/>
       </Component>
       <Component Id="compD92E196604CA4CDBB739699BCB446CAE">
         <File Id="fileA1ED1B028B6F45868D48799D4DDE0D94" Source="$(var.SEToolbox.TargetDir)SEToolbox.ImageLibrary.dll"/>
@@ -71,8 +85,13 @@
       <Component Id="compA66C0B6FB6834A2A8140C5FC2039296B">
         <File Id="file82AB916AB2C147F5A839E3EC2DDA7993" Source="$(var.SEToolbox.TargetDir)SEToolbox.ImageShaders.dll"/>
       </Component>
-      <Component Id="comp4FF0A2172F244A5FA36AE80475BE0F8E">
-        <File Id="file97FBC095E9A34E86AA664F4C5C9967B7" Source="$(var.SEToolbox.TargetDir)System.Windows.Interactivity.dll"/>
+
+      <!-- Space Engineers dependancies -->
+      <Component Id="comp88066F31283E44A79F1D679F4B9D80AE">
+        <File Id="file61275B9FC2AE484BA7A2BDB7459A3647" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.dll"/>
+      </Component>
+      <Component Id="compB0198B4AB39348F5B20741B39BD36F84">
+        <File Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.XmlSerializers.dll"/>
       </Component>
       <Component Id="comp8C20AE654FFF46DA894F7056064AA6EF">
         <File Id="fileDE67BBEC95CE4178B5B7A4AE5101E6FC" Source="$(var.SEToolbox.TargetDir)VRage.Common.dll"/>
@@ -83,14 +102,16 @@
       <Component Id="compD71C446C9E204CD7A003FA06132E67BE">
         <File Id="file97E0990BBDDF40A68ED535BF1D64AF8E" Source="$(var.SEToolbox.TargetDir)VRage.Math.dll"/>
       </Component>
-      <Component Id="comp12068FFAF2EB4772A897CB41720E056F">
-        <File Id="file64DEAD08B7A14DCCAD1984564BC6EA1C" Source="$(var.SEToolbox.TargetDir)SEToolboxUpdate.exe"/>
-      </Component>
+
+      <!-- Thrid party depdancies -->
       <Component Id="comp5B10E5BF2D0D4C9EAF44EDE183D113EF">
         <File Id="fileAD5B37B3F8524F6594A80B1BF9660D69" Source="$(var.SEToolbox.TargetDir)HelixToolkit.Wpf.dll"/>
       </Component>
       <Component Id="compEDC13D521AB34560924EFE013C7BCC58">
         <File Id="file4CCC1D5F89354510910F24ECF6734F72" Source="$(var.SEToolbox.TargetDir)ICSharpCode.SharpZipLib.dll"/>
+      </Component>
+      <Component Id="comp5F8887E0899A41C3BD1CEDFFC18A4FD1">
+        <File Id="file1E207785088F43BABB001B75AA97C567" Source="$(var.SEToolbox.TargetDir)log4net.dll"/>
       </Component>
       <Component Id="comp850260AE0B104C008BDDEC785EE8C9AC">
         <File Id="file61DC174231C34C61B30B5F4894074C3F" Source="$(var.SEToolbox.TargetDir)SharpDX.Direct2D1.dll"/>
@@ -109,6 +130,9 @@
       </Component>
       <Component Id="comp59D17BEAA8EF4C7392079C0E59F11556">
         <File Id="file40B3D9CA94E24CE7BB71F3D7E61C5E79" Source="$(var.SEToolbox.TargetDir)SharpDX.Toolkit.Graphics.dll"/>
+      </Component>
+      <Component Id="comp4FF0A2172F244A5FA36AE80475BE0F8E">
+        <File Id="file97FBC095E9A34E86AA664F4C5C9967B7" Source="$(var.SEToolbox.TargetDir)System.Windows.Interactivity.dll"/>
       </Component>
     </ComponentGroup>
 

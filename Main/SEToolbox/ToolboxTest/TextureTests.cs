@@ -67,6 +67,12 @@
             Assert.IsTrue(File.Exists(sunPath), "Filepath should exist on developer machine");
             var sunBmp = TexUtil.CreateBitmap(sunPath);
             ImageTextureUtil.WriteImage(sunBmp, @".\TestAssets\sun.png");
+
+            var goldPath = Path.Combine(contentPath, @"Textures\Voxels\Gold_01_ForAxisXZ_de.dds");
+            Assert.IsTrue(File.Exists(goldPath), "Filepath should exist on developer machine");
+            var goldBmp = TexUtil.CreateBitmap(goldPath);
+            ImageTextureUtil.WriteImage(goldBmp, @".\TestAssets\gold.png");
+
         }
 
         [TestMethod]
