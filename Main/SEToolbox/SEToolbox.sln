@@ -2,11 +2,15 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolbox", "SEToolbox\SEToolbox.csproj", "{476405E8-27C7-4CD8-B75F-00B8DE0B4BD5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0914D968-2B68-4FB4-8554-7238C7A78969} = {0914D968-2B68-4FB4-8554-7238C7A78969}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{06B6FC47-A535-42AC-8ACA-78DB66F28445}"
 	ProjectSection(SolutionItems) = preProject
 		References\HelixToolkit.Wpf.dll = References\HelixToolkit.Wpf.dll
 		References\ICSharpCode.SharpZipLib.dll = References\ICSharpCode.SharpZipLib.dll
+		References\log4net.dll = References\log4net.dll
 		References\Sandbox.Common.dll = References\Sandbox.Common.dll
 		References\Sandbox.Common.XmlSerializers.dll = References\Sandbox.Common.XmlSerializers.dll
 		References\SharpDX.Direct2D1.dll = References\SharpDX.Direct2D1.dll

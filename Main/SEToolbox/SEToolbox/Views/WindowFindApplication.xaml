@@ -34,7 +34,7 @@
                 <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Margin="0,8,0,8">The Space Engineers application could not be located.<LineBreak/>Please specify the location of the Space Engineers Application.</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <TextBox Width="280" Text="{Binding GameApplicationPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Name="uxInitialElement"/>
-                    <Button ToolTip="Browse for Image" Command="{Binding BrowseApplicationCommand}" VerticalAlignment="Center">
+                    <Button ToolTip="Browse for Application" Command="{Binding BrowseApplicationCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>

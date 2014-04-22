@@ -316,10 +316,10 @@
             return mass;
         }
 
-        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderTypeEnum type, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, out TimeSpan timeTaken)
+        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderTypeEnum typeId, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, out TimeSpan timeTaken)
         {
             TimeSpan time = new TimeSpan();
-            var bp = _blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.TypeId == type);
+            var bp = _blueprintDefinitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.TypeId == typeId);
             if (bp != null)
             {
                 foreach (var item in bp.Prerequisites)
@@ -449,11 +449,6 @@
             return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
         }
-
-        //public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(Type typeId, MyCubeSize cubeSize, string subtypeId)
-        //{
-        //    return GetCubeDefinition(_myObjectBuilderTypeList[typeId], cubeSize, subtypeId);
-        //}
 
         #endregion
 

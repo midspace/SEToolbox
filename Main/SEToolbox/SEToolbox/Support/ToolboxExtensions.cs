@@ -315,48 +315,10 @@
 
             var y2 = Math.Round((latitude + (Math.PI / 2)) / Math.PI * (planarHeight - 1), 0);
 
-
-            //if (longitude <= -Math.PI)
-            //{
-            //}
-            //if (longitude >= Math.PI )
-            //{
-            //}
-            //if (latitude <= -Math.PI / 2)
-            //{
-            //}
-            //if (latitude >= Math.PI / 2)
-            //{
-            //}
-            //if (x2 <= 2)
-            //{
-            //}
-            //if (x2 >= planarWidth)
-            //{
-            //}
-            //if (y2 < 0)
-            //{
-            //}
-            //if (y2 >= planarHeight)
-            //{
-            //}
-
-            // TODO: map long/lat to image X/Y
-
-            //if (!double.IsNaN(longitude))
-            //{
-            //    min = Math.Min(longitude, min);
-            //    max = Math.Max(longitude, max);
-            //}
-
-            //Debug.WriteLine(latitude);
             var planarPoint = new Point((int)x2, (int)y2);
 
             return planarPoint;
         }
-
-        //public static double min = double.MaxValue;
-        //public static double max = double.MinValue; 
 
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox
 {
+    using log4net;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Services;
@@ -10,6 +11,7 @@
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Threading;
+    using Res = SEToolbox.Properties.Resources;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -33,6 +35,8 @@
                 GlobalSettings.Default.Reset();
             }
 
+            log4net.Config.XmlConfigurator.Configure(); 
+
             var update = CodeplexReleases.CheckForUpdates();
             if (update != null)
             {
@@ -55,12 +59,16 @@
 
         private void OnExit(object sender, ExitEventArgs e)
         {
-            this._toolboxApplication.Exit();
+            if (this._toolboxApplication != null)
+                this._toolboxApplication.Exit();
         }
+
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            // TODO: Log details to Events.
+            // Log details to Application Event Log.
+            DiagnosticsLogging.LogException(e.Exception);
 
             string message = null;
 
@@ -71,10 +79,13 @@
             else
             {
                 // Unhandled Exception.
-                message = string.Format("An error has been detected in the application that has caused the application to shutdown:\n\n{0}\n\nApologies for any inconvenience.", e.Exception.Message);
+                if (DiagnosticsLogging.LoggingSourceExists())
+                    message = string.Format(Res.UnhandledExceptionEventMessage, e.Exception.Message);
+                else
+                    message = string.Format(Res.UnhandledExceptionMessage, e.Exception.Message);
             }
 
-            MessageBox.Show(message, "SE Toolbox Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(message, Res.UnhandledExceptionTitle, MessageBoxButton.OK, MessageBoxImage.Error);
 
             TempfileUtil.Dispose();
 

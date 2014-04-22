@@ -7,8 +7,10 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Windows.Media.Media3D;
     using VRageMath;
 
@@ -218,39 +220,59 @@
             }
         }
 
+        /// <summary>
+        /// Applying ore into specific suface locations, creating a 'earth' map.
+        /// </summary>
         //[TestMethod]
         public void VoxelPlanetSurfaceMapper()
         {
             // As of update 01.021.024, Helium_01, Helium_02, Ice_01 no longer exist.
+            // Have to restore the Material's manually from an old copy of SE to get them working.
 
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_05"));
+            var stone01Material = materials.FirstOrDefault(m => m.Name.Contains("Stone_01"));
+            var stone05Material = materials.FirstOrDefault(m => m.Name.Contains("Stone_05"));
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
-            var ironMaterial = materials.FirstOrDefault(m => m.Name.Contains("Iron"));
-            var heliumMaterial = materials.FirstOrDefault(m => m.Name.Contains("Helium"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+            var ironMaterial = materials.FirstOrDefault(m => m.Name.Contains("Iron_01"));
+            Assert.IsNotNull(ironMaterial, "Iron_01 material should exist.");
+            var heliumMaterial = materials.FirstOrDefault(m => m.Name.Contains("Helium_01"));
             Assert.IsNotNull(heliumMaterial, "Helium material should exist.");
             var iceMaterial = materials.FirstOrDefault(m => m.Name.Contains("Ice"));
             Assert.IsNotNull(iceMaterial, "Ice material should exist.");
 
             var imageFile = @".\TestAssets\Earth.png";
-            //var fileNew = @".\TestAssets\Earth.vox";
-            //fileNew = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Builder Toolset\Earth0.vox";
-            double radius = 300;
+            var fileNew = @".\TestAssets\Earth2.vox";
+            double radius = 202; // 472 Max
 
             var length = MyVoxelBuilder.ScaleMod((radius * 2) + 2, 64);
             var size = new Vector3I(length, length, length);
             var origin = new Vector3I(size.X / 2, size.Y / 2, size.Z / 2);
 
             var bmp = ToolboxExtensions.OptimizeImagePalette(imageFile);
+            var bmpWidth = bmp.Width;
+            var bmpHeight = bmp.Height;
+            int pixelCount = bmpWidth * bmpHeight;
+            var bmpColorDepth = System.Drawing.Bitmap.GetPixelFormatSize(bmp.PixelFormat);
+            var sourceData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+
+            int step = bmpColorDepth / 8;
+            var Pixels = new byte[pixelCount * step];
+            var Iptr = sourceData.Scan0;
+            Marshal.Copy(Iptr, Pixels, 0, Pixels.Length);
+            bmp.UnlockBits(sourceData);
+
             var palatteNames = ToolboxExtensions.GetPalatteNames();
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
             {
-                double x = e.CoordinatePoint.X - origin.X;
-                double y = e.CoordinatePoint.Y - origin.Y;
-                double z = e.CoordinatePoint.Z - origin.Z;
+                // May have to rotate the coordinates to get a particular size of the mapped planet facing the sun.
+                // The fake sun (light source) for some reason is located in the +Y. Why it's overhead instead of in the X/Z solar plane, I have no idea.
+                double z = e.CoordinatePoint.X - origin.X;
+                double x = e.CoordinatePoint.Y - origin.Y;
+                double y = e.CoordinatePoint.Z - origin.Z;
 
                 var dist = Math.Sqrt(Math.Abs(x * x) + Math.Abs(y * y) + Math.Abs(z * z));
                 if (dist >= radius)
@@ -260,54 +282,93 @@
                 else if (dist > radius - 1)
                 {
                     e.Volume = (byte)((radius - dist) * 255);
-                    var point = ToolboxExtensions.Cartesian3DToSphericalPlanar(x, y, z, dist, bmp.Width, bmp.Height);
+
+                    var point = ToolboxExtensions.Cartesian3DToSphericalPlanar(x, y, z, dist, bmpWidth, bmpHeight);
                     if (point.HasValue)
                     {
-                        var color = bmp.GetPixel(point.Value.X, point.Value.Y);
-                        var materialColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
-                        if (materialColor.Value == "" || materialColor.Value == "White")
+                        var color = GetPixel(Pixels, point.Value.X, point.Value.Y, bmpColorDepth, bmpWidth);
+                        var materialColor = palatteNames[palatteNames.Keys.ToArray()[color.R]]; // Because the bmp is optimised to 8bpp, the returned 'color' is indexed.
+                        if (materialColor == "" || materialColor == "White") // Ice caps
                         {
                             e.Material = iceMaterial.Name;
                         }
-                        if (materialColor.Value == "Blue")
+                        else if (materialColor == "Blue") // Water
                         {
                             e.Material = heliumMaterial.Name;
                         }
-                        //else
-                        //{
-                        //    e.Material = ironMaterial.Name;
-                        //}
+                        else // any other colors should be land mass
+                        {
+                            e.Material = ironMaterial.Name;
+                        }
+                    }
+                }
+                else if ((radius - 5) < dist) // Depth 5 units (m).
+                {
+                    e.Volume = 0xFF;
+
+                    var point = ToolboxExtensions.Cartesian3DToSphericalPlanar(x, y, z, dist, bmpWidth, bmpHeight);
+                    if (point.HasValue)
+                    {
+                        var color = GetPixel(Pixels, point.Value.X, point.Value.Y, bmpColorDepth, bmpWidth);
+                        var materialColor = palatteNames[palatteNames.Keys.ToArray()[color.R]]; // Because the bmp is optimised to 8bpp, the returned 'color' is indexed.
+                        if (materialColor == "" || materialColor == "White")
+                        {
+                            e.Material = iceMaterial.Name;
+                        }
+                        else if (materialColor == "Blue")
+                        {
+                            e.Material = heliumMaterial.Name;
+                        }
+                        else
+                        {
+                            e.Material = ironMaterial.Name;
+                        }
                     }
                 }
                 else
                 {
                     e.Volume = 0xFF;
-                    var point = ToolboxExtensions.Cartesian3DToSphericalPlanar(x, y, z, dist, bmp.Width, bmp.Height);
-                    if (point.HasValue)
-                    {
-                        var color = bmp.GetPixel(point.Value.X, point.Value.Y);
-                        var materialColor = palatteNames.FirstOrDefault(c => c.Key.A == color.A && c.Key.R == color.R && c.Key.G == color.G && c.Key.B == color.B);
-                        if (materialColor.Value == "" || materialColor.Value == "White")
-                        {
-                            e.Material = iceMaterial.Name;
-                        }
-                        if (materialColor.Value == "Blue")
-                        {
-                            e.Material = heliumMaterial.Name;
-                        }
-                        //else
-                        //{
-                        //    e.Material = ironMaterial.Name;
-                        //}
-                    }
                 }
             };
 
-            // TODO: Get the surface calculations working right.
-            //var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, stoneMaterial.Name, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, stone05Material.Name, action);
+        }
 
-            //var m1 = ToolboxExtensions.min;
-            //var m2 = ToolboxExtensions.max;
+        private static System.Drawing.Color GetPixel(byte[] pixels, int x, int y, int colorDepth, int width)
+        {
+            System.Drawing.Color clr = System.Drawing.Color.Empty;
+
+            // Get color components count
+            int cCount = colorDepth / 8;
+
+            // Get start index of the specified pixel
+            int i = ((y * width) + x) * cCount;
+
+            if (i > pixels.Length - cCount)
+                throw new IndexOutOfRangeException();
+
+            if (colorDepth == 32) // For 32 bpp get Red, Green, Blue and Alpha
+            {
+                byte b = pixels[i];
+                byte g = pixels[i + 1];
+                byte r = pixels[i + 2];
+                byte a = pixels[i + 3]; // a
+                clr = System.Drawing.Color.FromArgb(a, r, g, b);
+            }
+            if (colorDepth == 24) // For 24 bpp get Red, Green and Blue
+            {
+                byte b = pixels[i];
+                byte g = pixels[i + 1];
+                byte r = pixels[i + 2];
+                clr = System.Drawing.Color.FromArgb(r, g, b);
+            }
+            if (colorDepth == 8)
+            // For 8 bpp get color value (Red, Green and Blue values are the same)
+            {
+                byte c = pixels[i];
+                clr = System.Drawing.Color.FromArgb(c, c, c);
+            }
+            return clr;
         }
 
         //[TestMethod]
@@ -363,7 +424,8 @@
         public void BuildAsteroidSphereTestLayer()
         {
             const bool multiThread = true;
-            const string filename = "sphere_ore_layer_365radi.vox";
+            var filename = "sphere_ore_layer_365radi.vox";
+            filename = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Dwarf Planet - Ore layer mix\sphere_ore_layer_365radi.vox";
             const double radius = 365;
 
             var materials = SpaceEngineersAPI.GetMaterialList();
@@ -434,7 +496,7 @@
                               Math.Abs(Math.Pow(e.CoordinatePoint.Y - origin.Y, 2)) +
                               Math.Abs(Math.Pow(e.CoordinatePoint.Z - origin.Z, 2)));
 
-                if (dist < 5)
+                if (dist < 11)
                 {
                     e.Volume = 0x00;
                 }
@@ -537,5 +599,159 @@
             }
         }
 
+        //[TestMethod]
+        public void VoxelSphereBase()
+        {
+            const bool multiThread = true;
+            var filename = "sphere_base.vox";
+            const double radius = 350;
+
+            filename = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Space Base 01\sphere_base0.vox";
+
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var materialStone_01 = materials.FirstOrDefault(m => m.Name.Contains("Stone_01"));
+            Assert.IsNotNull(materialStone_01, "Stone_01 material should exist.");
+
+            var materialUraninite_01 = materials.FirstOrDefault(m => m.Name.Contains("Uraninite_01"));
+            Assert.IsNotNull(materialUraninite_01, "Uraninite_01 material should exist.");
+          
+            var length = MyVoxelBuilder.ScaleMod((radius * 2) + 2, 64);
+            var size = new Vector3I(length, length, length);
+            var origin = new Vector3I(size.X / 2, size.Y / 2, size.Z / 2);
+
+            var openingRadius = 75;
+            var shellWidth = 60;
+            var layerDepth = 30;
+
+            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            {
+                if (Math.Abs(e.CoordinatePoint.X - origin.X) < openingRadius
+                    && Math.Abs(e.CoordinatePoint.Y - origin.Y) < openingRadius
+                    && e.CoordinatePoint.Z <= (origin.Z - 70))
+                {
+                    e.Volume = 0x00;
+                    return;
+                }
+
+                var dist =
+                    Math.Sqrt(Math.Abs(Math.Pow(e.CoordinatePoint.X - origin.X, 2)) +
+                              Math.Abs(Math.Pow(e.CoordinatePoint.Y - origin.Y, 2)) +
+                              Math.Abs(Math.Pow(e.CoordinatePoint.Z - origin.Z, 2)));
+
+                if (dist >= radius)
+                {
+                    e.Volume = 0x00;
+                }
+                else if (dist > radius - 1)
+                {
+                    e.Volume = (byte)((radius - dist) * 255);
+                }
+                else if ((radius - shellWidth) < dist)
+                {
+                    e.Volume = 0xFF;
+
+                    if ((radius - layerDepth) > dist)
+                    {
+                        e.Material = materialUraninite_01.Name;
+                    }
+                }
+                else if ((radius - shellWidth - 1) < dist)
+                {
+                    e.Volume = (byte)((1 - ((radius - shellWidth) - dist)) * 255);
+                }
+                else if (dist < 20)
+                {
+                    e.Material = materialUraninite_01.Name;
+                    e.Volume = 0xFF;
+                }
+                else
+                {
+                    e.Volume = 0x00;
+                }
+            };
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, materialStone_01.Name, action);
+        }
+
+        //[TestMethod]
+        public void VoxelGenerateSphereSlice()
+        {
+            const bool multiThread = true;
+            var filename = "sphere_slice.vox";
+            const double radius = 2200;
+            var sliceHeight = -2100;
+
+            filename = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Builder Toolset\sphere_slice0.vox";
+
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var materialStone_01 = materials.FirstOrDefault(m => m.Name.Contains("Stone_01"));
+            Assert.IsNotNull(materialStone_01, "Stone_01 material should exist.");
+
+            var materialUraninite_01 = materials.FirstOrDefault(m => m.Name.Contains("Uraninite_01"));
+            Assert.IsNotNull(materialUraninite_01, "Uraninite_01 material should exist.");
+
+            var length = MyVoxelBuilder.ScaleMod((radius * 2) + 2, 64);
+            var size = new Vector3I(length, length, length);
+            var yOffset = length - 128; // 50 * 64;
+            var zOffset = (length - (64 * 21)) / 2; //10 * 64;
+            var origin = new Vector3I((size.X / 2) - zOffset, (size.Y / 2) - yOffset, (size.Z / 2) - zOffset);
+            var coreSize = new Vector3I(length - (zOffset * 2), length - yOffset, length - (zOffset * 2));
+
+            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            {
+                if (e.CoordinatePoint.Y <= (origin.Y - sliceHeight))
+                {
+                    e.Volume = 0x00;
+                    return;
+                }
+
+                var dist =
+                    Math.Sqrt(Math.Abs(Math.Pow(e.CoordinatePoint.X - origin.X, 2)) +
+                              Math.Abs(Math.Pow(e.CoordinatePoint.Y - origin.Y, 2)) +
+                              Math.Abs(Math.Pow(e.CoordinatePoint.Z - origin.Z, 2)));
+
+                if (dist >= radius)
+                {
+                    e.Volume = 0x00;
+                }
+                else if (dist > radius - 1)
+                {
+                    e.Volume = (byte)((radius - dist) * 255);
+                }
+                else //if (!hollow)
+                {
+                    e.Volume = 0xFF;
+                }
+            };
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(multiThread, filename, coreSize, materialStone_01.Name, action);
+
+        }
+
+
+        //[TestMethod]
+        public void VoxelAreaCalc_CellCounts()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            const string fileOriginal = @".\TestAssets\test_cube2x2x2.vox";
+
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(fileOriginal, materials[0].Name);
+
+            var cellCount = voxelMap.SumVoxelCells();
+            Assert.AreEqual(8 * 255, cellCount, "Cell count should be equal.");
+
+            var fullCells = voxelMap.SumFullCells();
+            var partCells = voxelMap.SumPartCells();
+        }
     }
 }
