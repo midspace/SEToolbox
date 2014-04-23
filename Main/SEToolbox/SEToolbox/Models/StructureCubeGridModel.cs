@@ -28,6 +28,9 @@
         private TimeSpan _timeToProduce;
 
         [XmlIgnore]
+        private string _cockpitOrientation;
+
+        [XmlIgnore]
         private List<CubeAssetModel> _cubeAssets;
 
         [XmlIgnore]
@@ -298,6 +301,23 @@
             }
         }
 
+        public string CockpitOrientation
+        {
+            get
+            {
+                return this._cockpitOrientation;
+            }
+
+            set
+            {
+                if (value != this._cockpitOrientation)
+                {
+                    this._cockpitOrientation = value;
+                    this.RaisePropertyChanged(() => CockpitOrientation);
+                }
+            }
+        }
+
         /// <summary>
         /// This is detail of the breakdown of cubes in the ship.
         /// </summary>
@@ -526,6 +546,24 @@
                 }
             }
 
+            var cockpitOrientation = "Unknown";
+            var cockpits = this.CubeGrid.CubeBlocks.Where(b => b is MyObjectBuilder_Cockpit).ToArray();
+            if (cockpits.Length > 0)
+            {
+                var count = cockpits.Count(b => b.BlockOrientation.Forward == cockpits[0].BlockOrientation.Forward && b.BlockOrientation.Up == cockpits[0].BlockOrientation.Up);
+                if (cockpits.Length == count) 
+                {
+                    // All cockpits share the same orientation.
+                    cockpitOrientation = string.Format("Forward={0} ({1}), Up={2} ({3})", cockpits[0].BlockOrientation.Forward, GetAxisIndicator(cockpits[0].BlockOrientation.Forward), cockpits[0].BlockOrientation.Up, GetAxisIndicator(cockpits[0].BlockOrientation.Up));
+                }
+                else
+                {
+                    // multiple cockpits are present, and do not share a common orientation.
+                    cockpitOrientation = "Mixed";
+                }
+            }
+            this.CockpitOrientation = cockpitOrientation;
+
             foreach (var kvp in ingotRequirements)
             {
                 TimeSpan ingotTime;
@@ -694,9 +732,40 @@
         {
             var pos = this.CubeGrid.PositionAndOrientation.Value;
             pos.Position = pos.Position.RoundOff(2.5f);
-            pos.Forward = pos.Forward.RoundToAxis();
-            pos.Up = pos.Up.RoundToAxis();
+            pos.Forward = new SerializableVector3(-1, 0, 0); // The Station orientation has to be fixed, otherwise it glitches when you copy the object in game.
+            pos.Up = new SerializableVector3(0, 1, 0);
             this.CubeGrid.PositionAndOrientation = pos;
+        }
+
+        public void RotateCubes(VRageMath.Quaternion quaternion)
+        {
+            foreach (var cube in this.CubeGrid.CubeBlocks)
+            {
+                var definition = SpaceEngineersAPI.GetCubeDefinition(cube.TypeId, this.CubeGrid.GridSizeEnum, cube.SubtypeName);
+
+                if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
+                {
+                    // rotate position around origin.
+                    cube.Min = Vector3I.Transform(cube.Min.ToVector3I(), quaternion);
+                }
+                else
+                {
+                    // resolve size of component, and transform to original orientation.
+                    var orientSize = definition.Size.Add(-1).Transform(cube.BlockOrientation).Abs();
+
+                    var min = Vector3I.Transform(cube.Min.ToVector3I(), quaternion);
+                    var blockMax = new Vector3I(cube.Min.X + orientSize.X, cube.Min.Y + orientSize.Y, cube.Min.Z + orientSize.Z);
+                    var max = Vector3I.Transform(blockMax, quaternion);
+
+                    cube.Min = new SerializableVector3I(Math.Min(min.X, max.X), Math.Min(min.Y, max.Y), Math.Min(min.Z, max.Z));
+                }
+                
+                // rotate BlockOrientation.
+                var q = quaternion * cube.BlockOrientation.ToQuaternion();
+                cube.BlockOrientation = new SerializableBlockOrientation(ref q);
+            }
+
+            this.UpdateGeneralFromEntityBase();
         }
 
         public void ConvertToShip()
@@ -1472,6 +1541,30 @@
         }
 
         #endregion
+
+        private static string GetAxisIndicator(Base6Directions.Direction direction)
+        {
+            switch (Base6Directions.GetAxis(direction))
+            {
+                case Base6Directions.Axis.LeftRight: // X
+                    if (Base6Directions.GetVector(direction).X < 0)
+                        return "-X";
+                    else
+                        return "+X";
+                case Base6Directions.Axis.UpDown: // Y
+                    if (Base6Directions.GetVector(direction).X < 0)
+                        return "-Y";
+                    else
+                        return "+Y";
+                case Base6Directions.Axis.ForwardBackward: // Z
+                    if (Base6Directions.GetVector(direction).X < 0)
+                        return "-Z";
+                    else
+                        return "+Z";
+            }
+
+            return null;
+        }
 
         #endregion
     }

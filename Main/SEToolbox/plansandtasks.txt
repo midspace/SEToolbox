@@ -97,6 +97,7 @@ Completed:
 - Drag-Drop copy Meteors.
 - Drag-Drop copy Unknown items.
 - Dialog to Create/Drop Components and Items (pipes, weapons, ingots, ores, ammos).
+- Rotate ship/station cubes to face new orientation.
 
 ========--------~~~~~~~~
 
