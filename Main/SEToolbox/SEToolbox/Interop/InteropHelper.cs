@@ -69,6 +69,12 @@
             return new Vector3((float)point.X, (float)point.Y, (float)point.Z);
         }
 
+        internal static VRageMath.Quaternion ToQuaternion(this SerializableBlockOrientation blockOrientation)
+        {
+            var matrix = Matrix.CreateFromDir(Base6Directions.GetVector(blockOrientation.Forward), Base6Directions.GetVector(blockOrientation.Up));
+            return VRageMath.Quaternion.CreateFromRotationMatrix(matrix);
+        }
+
         public static Vector3 Transform(this Vector3 vector, CubeType axisCubeType)
         {
             var orientation = SpaceEngineersAPI.CubeOrientations[axisCubeType];

@@ -125,6 +125,54 @@
             }
         }
 
+        public ICommand RotateCubesYawPositiveCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(RotateCubesYawPositiveExecuted), new Func<bool>(RotateCubesYawPositiveCanExecute));
+            }
+        }
+
+        public ICommand RotateCubesYawNegativeCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(RotateCubesYawNegativeExecuted), new Func<bool>(RotateCubesYawNegativeCanExecute));
+            }
+        }
+
+        public ICommand RotateCubesPitchPositiveCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(RotateCubesPitchPositiveExecuted), new Func<bool>(RotateCubesPitchPositiveCanExecute));
+            }
+        }
+
+        public ICommand RotateCubesPitchNegativeCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(RotateCubesPitchNegativeExecuted), new Func<bool>(RotateCubesPitchNegativeCanExecute));
+            }
+        }
+
+        public ICommand RotateCubesRollPositiveCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(RotateCubesRollPositiveExecuted), new Func<bool>(RotateCubesRollPositiveCanExecute));
+            }
+        }
+
+        public ICommand RotateCubesRollNegativeCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(RotateCubesRollNegativeExecuted), new Func<bool>(RotateCubesRollNegativeCanExecute));
+            }
+        }
+
         public ICommand ConvertToShipCommand
         {
             get
@@ -346,6 +394,11 @@
             get { return this.DataModel.BlockCount; }
         }
 
+        public string CockpitOrientation
+        {
+            get { return this.DataModel.CockpitOrientation; }
+        }
+
         public List<CubeAssetModel> CubeAssets
         {
             get
@@ -526,12 +579,84 @@
 
         public bool ReorientStationCanExecute()
         {
-            return this.DataModel.IsStatic && this.DataModel.GridSize == MyCubeSize.Large;
+            return this.DataModel.GridSize == MyCubeSize.Large;
         }
 
         public void ReorientStationExecuted()
         {
             this.DataModel.ReorientStation();
+            this.MainViewModel.IsModified = true;
+        }
+
+        public bool RotateCubesYawPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateCubesPitchPositiveExecuted()
+        {
+            // +90 around X
+            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, VRageMath.MathHelper.PiOver2, 0));
+            this.MainViewModel.IsModified = true;
+        }
+
+        public bool RotateCubesPitchNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateCubesPitchNegativeExecuted()
+        {
+            // -90 around X
+            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, -VRageMath.MathHelper.PiOver2, 0));
+            this.MainViewModel.IsModified = true;
+        }
+
+        public bool RotateCubesRollPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateCubesYawPositiveExecuted()
+        {
+            // +90 around Y
+            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(VRageMath.MathHelper.PiOver2, 0, 0));
+            this.MainViewModel.IsModified = true;
+        }
+
+        public bool RotateCubesYawNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateCubesYawNegativeExecuted()
+        {
+            // -90 around Y
+            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(-VRageMath.MathHelper.PiOver2, 0, 0));
+            this.MainViewModel.IsModified = true;
+        }
+
+        public bool RotateCubesPitchPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateCubesRollPositiveExecuted()
+        {
+            // +90 around Z
+            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, VRageMath.MathHelper.PiOver2));
+            this.MainViewModel.IsModified = true;
+        }
+
+        public bool RotateCubesRollNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateCubesRollNegativeExecuted()
+        {
+            // -90 around Z
+            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2));
             this.MainViewModel.IsModified = true;
         }
 
