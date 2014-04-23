@@ -347,7 +347,7 @@ td.right { text-align: right; }");
                     writer.RenderEndTag(); // Td
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.Name);
+                    writer.Write(asset.FriendlyName);
                     writer.RenderEndTag(); // Td
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
@@ -424,7 +424,7 @@ td.right { text-align: right; }");
                     writer.RenderEndTag(); // Td
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.Name);
+                    writer.Write(asset.FriendlyName);
                     writer.RenderEndTag(); // Td
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
@@ -498,7 +498,7 @@ td.right { text-align: right; }");
                     writer.RenderEndTag(); // Td
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.Name);
+                    writer.Write(asset.FriendlyName);
                     writer.RenderEndTag(); // Td
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);

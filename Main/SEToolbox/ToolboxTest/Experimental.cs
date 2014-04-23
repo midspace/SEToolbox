@@ -174,32 +174,33 @@
             Assert.IsNotNull(materialUraninite_01, "Uraninite_01 material should exist.");
 
             // Allowable size appears to be Surface Area related, possibly size of memory mapped texture.
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_500_radi.vox", 500, 500, 500, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_700_radi.vox", 700, 700, 700, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_800_radi.vox", 800, 800, 800, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_830_radi.vox", 830, 830, 830, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_832_radi.vox", 832, 832, 832, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_836_radi.vox", 836, 836, 836, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_838_radi.vox", 838, 838, 838, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839_radi.vox", 839, 839, 839, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839x839x840_radi.vox", 839, 839, 840, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_720x900x900_radi.vox", 720, 900, 900, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_729x900x900_radi.vox", 729, 900, 900, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_730x900x900_radi.vox", 730, 900, 900, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839x840x840_radi.vox", 839, 840, 840, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_840_radi.vox", 840, 840, 840, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_848_radi.vox", 848, 848, 848, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_850_radi.vox", 850, 850, 850, materialStone_01.Name, false, 0); //  CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_856_radi.vox", 856, 856, 870, materialStone_01.Name, false, 0);
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_870_radi.vox", 870, 870, 870, materialStone_01.Name, false, 0);
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_900_radi.vox", 900, 900, 900, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x2048x2048_radi.vox", 100, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1024x1024_radi.vox", 100, 1024, 1024, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_50x2048x2048_radi.vox", 50, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1368x1368_radi.vox", 100, 1368, 1368, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1352x1352_radi.vox", 100, 1352, 1352, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1360x1360_radi.vox", 100, 1360, 1360, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_119x1340x1340_radi.vox", 119, 1340, 1340, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_500.vox", 500, 500, 500, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_700.vox", 700, 700, 700, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_800.vox", 800, 800, 800, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_830.vox", 830, 830, 830, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_832.vox", 832, 832, 832, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_836.vox", 836, 836, 836, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_838.vox", 838, 838, 838, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839.vox", 839, 839, 839, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839x839x840.vox", 839, 839, 840, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_720x900x900.vox", 720, 900, 900, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_729x900x900.vox", 729, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_730x900x900.vox", 730, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839x840x840.vox", 839, 840, 840, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_840.vox", 840, 840, 840, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_848.vox", 848, 848, 848, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_850.vox", 850, 850, 850, materialStone_01.Name, false, 0); //  CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_856.vox", 856, 856, 870, materialStone_01.Name, false, 0);
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_870.vox", 870, 870, 870, materialStone_01.Name, false, 0);
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_900.vox", 900, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x2048x2048.vox", 100, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1024x1024.vox", 100, 1024, 1024, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_50x2048x2048.vox", 50, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1368x1368.vox", 100, 1368, 1368, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1352x1352.vox", 100, 1352, 1352, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_1352x100x1352.vox", 1352, 100, 1352, materialStone_01.Name, false, 0);
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1360x1360.vox", 100, 1360, 1360, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_119x1340x1340.vox", 119, 1340, 1340, materialStone_01.Name, false, 0); // Works
         }
 
         //[TestMethod]

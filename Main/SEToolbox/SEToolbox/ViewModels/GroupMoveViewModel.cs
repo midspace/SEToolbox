@@ -96,7 +96,6 @@
             }
         }
 
-
         public double GlobalOffsetPositionX
         {
             get
@@ -139,6 +138,76 @@
             }
         }
 
+        public bool IsGlobalOffsetPosition
+        {
+            get
+            {
+                return this.dataModel.IsGlobalOffsetPosition;
+            }
+
+            set
+            {
+                this.dataModel.IsGlobalOffsetPosition = value;
+                this.dataModel.CalcOffsetDistances();
+            }
+        }
+
+        public double SinglePositionX
+        {
+            get
+            {
+                return this.dataModel.SinglePositionX;
+            }
+
+            set
+            {
+                this.dataModel.SinglePositionX = value;
+                this.dataModel.CalcOffsetDistances();
+            }
+        }
+
+        public double SinglePositionY
+        {
+            get
+            {
+                return this.dataModel.SinglePositionY;
+            }
+
+            set
+            {
+                this.dataModel.SinglePositionY = value;
+                this.dataModel.CalcOffsetDistances();
+            }
+        }
+
+        public double SinglePositionZ
+        {
+            get
+            {
+                return this.dataModel.SinglePositionZ;
+            }
+
+            set
+            {
+                this.dataModel.SinglePositionZ = value;
+                this.dataModel.CalcOffsetDistances();
+            }
+        }
+
+        public bool IsSinglePosition
+        {
+            get
+            {
+                return this.dataModel.IsSinglePosition;
+            }
+
+            set
+            {
+                this.dataModel.IsSinglePosition = value;
+                this.dataModel.CalcOffsetDistances();
+            }
+        }
+
         public ObservableCollection<GroupMoveItemModel> Selections
         {
             get
@@ -158,7 +227,8 @@
 
         public bool ApplyCanExecute()
         {
-            return this.GlobalOffsetPositionX != 0 || this.GlobalOffsetPositionY != 0 || this.GlobalOffsetPositionZ != 0;
+            return this.IsSinglePosition ||
+                (this.IsGlobalOffsetPosition && (this.GlobalOffsetPositionX != 0 || this.GlobalOffsetPositionY != 0 || this.GlobalOffsetPositionZ != 0));
         }
 
         public void ApplyExecuted()

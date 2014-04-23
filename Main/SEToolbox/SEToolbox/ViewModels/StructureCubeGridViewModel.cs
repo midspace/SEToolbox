@@ -767,7 +767,7 @@
             {
                 foreach (var mat in this.CubeAssets)
                 {
-                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:hh\\:mm\\:ss\\.ff}\r\n", mat.Name, mat.Count, mat.Mass, mat.Time);
+                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, mat.Time);
                 }
             }
 
@@ -776,7 +776,7 @@
             {
                 foreach (var mat in this.ComponentAssets)
                 {
-                    components.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.Name, mat.Count, mat.Mass, mat.Volume, mat.Time);
+                    components.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, mat.Volume, mat.Time);
                 }
             }
 
@@ -785,7 +785,7 @@
             {
                 foreach (var mat in this.IngotAssets)
                 {
-                    ingots.AppendFormat("{0}\t{1:#,##0.00}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.Name, mat.Amount, mat.Mass, mat.Volume, mat.Time);
+                    ingots.AppendFormat("{0}\t{1:#,##0.00}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Amount, mat.Mass, mat.Volume, mat.Time);
                 }
             }
 
@@ -794,11 +794,12 @@
             {
                 foreach (var mat in this.OreAssets)
                 {
-                    ores.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\r\n", mat.Name, mat.Amount, mat.Mass, mat.Volume);
+                    ores.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\r\n", mat.FriendlyName, mat.Amount, mat.Mass, mat.Volume);
                 }
             }
 
             var detail = string.Format(Properties.Resources.CubeDetail,
+                this.ClassType,
                 IsPiloted,
                 DamageCount,
                 LinearVelocity,

@@ -27,14 +27,18 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,4">
-                <Grid HorizontalAlignment="Left" Width="420">
+                <Grid HorizontalAlignment="Left" Width="420" Margin="1,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="Offset Position:"/>
+                    <RadioButton Grid.Column="0" Content="Offset Position:" VerticalAlignment="Center" IsChecked="{Binding IsGlobalOffsetPosition}" Margin="0,0,4,0"/>
                     <TextBox Grid.Column="1" ToolTip="X" x:Name="uxStartBox">
                         <TextBox.Text>
                             <Binding Path="GlobalOffsetPositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
@@ -48,6 +52,22 @@
                     <TextBox Grid.Column="3" ToolTip="Z">
                         <TextBox.Text>
                             <Binding Path="GlobalOffsetPositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                    <RadioButton Grid.Row="1" Grid.Column="0" Content="Single Position:" VerticalAlignment="Center" IsChecked="{Binding IsSinglePosition}" Margin="0,0,4,0"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" ToolTip="X">
+                        <TextBox.Text>
+                            <Binding Path="SinglePositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBox Grid.Row="1" Grid.Column="2" ToolTip="Y">
+                        <TextBox.Text>
+                            <Binding Path="SinglePositionY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBox Grid.Row="1" Grid.Column="3" ToolTip="Z">
+                        <TextBox.Text>
+                            <Binding Path="SinglePositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                         </TextBox.Text>
                     </TextBox>
                 </Grid>
