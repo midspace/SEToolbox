@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
     using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interop;
 
     [Serializable]
     public class ComonentItemModel : BaseModel
@@ -24,7 +25,7 @@
                 if (value != this._name)
                 {
                     this._name = value;
-                    this.SetFriendlyName();
+                    this.FriendlyName = SpaceEngineersAPI.GetResourceName(this.Name);
                     this.RaisePropertyChanged(() => Name);
                 }
             }
@@ -64,26 +65,5 @@
         }
 
         #endregion
-
-        private void SetFriendlyName()
-        {
-            if (this.Name == null)
-                this.FriendlyName = null;
-            else
-            {
-                var field = Regex.Replace(this.Name, @"^Item_", "");
-                this.FriendlyName = SplitPropertText(field);
-            }
-        }
-
-        private static string SplitPropertText(string content)
-        {
-            var replacement = content;
-            replacement = Regex.Replace(replacement, @"[_:]", "", RegexOptions.Multiline);
-            replacement = Regex.Replace(replacement, @"(?<first>[a-z])(?<last>[A-Z])", "${first} ${last}", RegexOptions.Multiline);
-            replacement = Regex.Replace(replacement, @"(?<first>[a-zA-Z])(?<last>\d)", "${first} ${last}", RegexOptions.Multiline);
-            replacement = Regex.Replace(replacement, @"(?<first>\w)\.(?<last>\w)", "${first} ${last}", RegexOptions.Multiline);
-            return replacement;
-        }
     }
 }

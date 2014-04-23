@@ -20,7 +20,7 @@
     
     <TabControl>
         <TabItem Header="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}">
-            <Grid>
+            <Grid Background="White">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -223,7 +223,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Cubes" DisplayMemberBinding="{Binding Name}" Width="175"/>
+                                <GridViewColumn Header="Cubes" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
                                 <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -259,7 +259,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Components" DisplayMemberBinding="{Binding Name}" Width="175"/>
+                                <GridViewColumn Header="Components" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
                                 <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -302,7 +302,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Ingots" DisplayMemberBinding="{Binding Name}" Width="175"/>
+                                <GridViewColumn Header="Ingots" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
                                 <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -345,7 +345,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding Name}" Width="175"/>
+                                <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
                                 <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>

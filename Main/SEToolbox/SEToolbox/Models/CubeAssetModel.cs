@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
+    using SEToolbox.Interop;
     using System;
 
     [Serializable]
@@ -31,10 +32,13 @@
                 if (value != this._name)
                 {
                     this._name = value;
+                    this.FriendlyName = SpaceEngineersAPI.GetResourceName(this.Name);
                     this.RaisePropertyChanged(() => Name);
                 }
             }
         }
+
+        public string FriendlyName { get; set; }
 
         public double Mass
         {

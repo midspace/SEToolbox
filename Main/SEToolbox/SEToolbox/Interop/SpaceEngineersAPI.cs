@@ -20,6 +20,7 @@
         {
             // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
             ReadCubeBlockDefinitions();
+            Sandbox.Common.Localization.MyTextsWrapper.Init();
         }
 
         public static void Init()
@@ -494,6 +495,28 @@
         }
 
         #endregion
+
+        public static string GetResourceName(string value)
+        {
+            if (value == null)
+                return null;
+
+            Sandbox.Common.Localization.MyTextsWrapperEnum myText;
+
+            if (Enum.TryParse<Sandbox.Common.Localization.MyTextsWrapperEnum>(value, out myText))
+            {
+                try
+                {
+                    return Sandbox.Common.Localization.MyTextsWrapper.GetFormatString(myText);
+                }
+                catch
+                {
+                    return value;
+                }
+            }
+
+            return value;
+        }
 
         #region properties
 

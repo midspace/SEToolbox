@@ -14,6 +14,12 @@
         private double _globalOffsetPositionX;
         private double _globalOffsetPositionY;
         private double _globalOffsetPositionZ;
+        private bool _isGlobalOffsetPosition;
+
+        private double _singlePositionX;
+        private double _singlePositionY;
+        private double _singlePositionZ;
+        private bool _isSinglePosition;
 
         private bool _isBusy;
 
@@ -124,6 +130,91 @@
             }
         }
 
+        public bool IsGlobalOffsetPosition
+        {
+            get
+            {
+                return this._isGlobalOffsetPosition;
+            }
+
+            set
+            {
+                if (value != this._isGlobalOffsetPosition)
+                {
+                    this._isGlobalOffsetPosition = value;
+                    this.RaisePropertyChanged(() => IsGlobalOffsetPosition);
+                }
+            }
+        }
+
+        public double SinglePositionX
+        {
+            get
+            {
+                return this._singlePositionX;
+            }
+
+            set
+            {
+                if (value != this._singlePositionX)
+                {
+                    this._singlePositionX = value;
+                    this.RaisePropertyChanged(() => SinglePositionX);
+                }
+            }
+        }
+
+        public double SinglePositionY
+        {
+            get
+            {
+                return this._singlePositionY;
+            }
+
+            set
+            {
+                if (value != this._singlePositionY)
+                {
+                    this._singlePositionY = value;
+                    this.RaisePropertyChanged(() => SinglePositionY);
+                }
+            }
+        }
+
+        public double SinglePositionZ
+        {
+            get
+            {
+                return this._singlePositionZ;
+            }
+
+            set
+            {
+                if (value != this._singlePositionZ)
+                {
+                    this._singlePositionZ = value;
+                    this.RaisePropertyChanged(() => SinglePositionZ);
+                }
+            }
+        }
+
+        public bool IsSinglePosition
+        {
+            get
+            {
+                return this._isSinglePosition;
+            }
+
+            set
+            {
+                if (value != this._isSinglePosition)
+                {
+                    this._isSinglePosition = value;
+                    this.RaisePropertyChanged(() => IsSinglePosition);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -132,8 +223,9 @@
         {
             this.Selections = new ObservableCollection<GroupMoveItemModel>();
             this._playerPosition = playerPosition;
+            this.IsGlobalOffsetPosition = true;
 
-            foreach(var selection in selections)
+            foreach (var selection in selections)
             {
                 this.Selections.Add(new GroupMoveItemModel()
                 {
@@ -154,15 +246,21 @@
         {
             foreach (var selection in this.Selections)
             {
-                // Apply a Global Offset to all objects.
-                selection.PositionX = selection.Item.DataModel.PositionX + this.GlobalOffsetPositionX;
-                selection.PositionY = selection.Item.DataModel.PositionY + this.GlobalOffsetPositionY;
-                selection.PositionZ = selection.Item.DataModel.PositionZ + this.GlobalOffsetPositionZ;
+                if (this.IsGlobalOffsetPosition)
+                {
+                    // Apply a Global Offset to all objects.
+                    selection.PositionX = selection.Item.DataModel.PositionX + this.GlobalOffsetPositionX;
+                    selection.PositionY = selection.Item.DataModel.PositionY + this.GlobalOffsetPositionY;
+                    selection.PositionZ = selection.Item.DataModel.PositionZ + this.GlobalOffsetPositionZ;
+                }
 
-                // TODO: Option to apply a Single Position to all objects.
-                //selection.PositionX = this.SinglePositionX;
-                //selection.PositionY = this.SinglePositionY;
-                //selection.PositionZ = this.SinglePositionZ;
+                if (this.IsSinglePosition)
+                {
+                    // Apply a Single Position to all objects.
+                    selection.PositionX = this.SinglePositionX;
+                    selection.PositionY = this.SinglePositionY;
+                    selection.PositionZ = this.SinglePositionZ;
+                }
 
                 selection.PlayerDistance = (this._playerPosition - new Vector3((float)selection.PositionX, (float)selection.PositionY, (float)selection.PositionZ)).Length();
             }
