@@ -1124,7 +1124,7 @@
 
                     if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
-                        this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
+                        this._dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
                     }
                 }
                 else if (viewModel is StructureVoxelViewModel)
@@ -1145,7 +1145,7 @@
 
                     if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
-                        this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
+                        this._dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
                     }
                 }
                 else if (viewModel is StructureMeteorViewModel)
@@ -1160,13 +1160,12 @@
 
                     if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
-                        this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
+                        this._dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
                     }
                 }
                 else if (viewModel is StructureCubeGridViewModel)
                 {
                     var structure = (StructureCubeGridViewModel)viewModel;
-                    //structure.IsPiloted // TODO: preemptively remove pilots?
 
                     var partname = string.IsNullOrEmpty(structure.DisplayName) ? structure.EntityId.ToString() : structure.DisplayName.Replace("|", "_").Replace("\\", "_").Replace("/", "_");
                     var saveFileDialog = this._saveFileDialogFactory();
@@ -1177,7 +1176,18 @@
 
                     if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
-                        this._dataModel.SaveEntity(viewModel.DataModel, saveFileDialog.FileName);
+                        var cloneEntity = viewModel.DataModel.EntityBase.Clone() as MyObjectBuilder_CubeGrid;
+
+                        // Set to Array to force Linq to update the value.
+                        
+                        // Clear Medical room SteamId.
+                        cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
+
+                        // Remove any pilots.
+                        cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.Cockpit).Select(c => { ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot(); return c; }).ToArray();
+
+                        this._dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
+                        this._dataModel.SaveEntity(cloneEntity, saveFileDialog.FileName + ".2");
                     }
                 }
                 else if (viewModel is StructureUnknownViewModel)

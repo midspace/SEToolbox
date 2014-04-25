@@ -226,6 +226,8 @@
         ConnectorSmall,
         ConveyorTube,
         ConveyorTubeSmall,
+        ConveyorTubeCurved,
+        ConveyorTubeSmallCurved,
         VirtualMassLarge,
         VirtualMassSmall,
         Wheel1x1,

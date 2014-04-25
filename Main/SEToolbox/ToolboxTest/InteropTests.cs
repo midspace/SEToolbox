@@ -13,14 +13,14 @@
         public void ApiInterop()
         {
             var d1 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.GravityGenerator, MyCubeSize.Large, "");
-            Assert.AreEqual("GravityGenerator", d1.DisplayName, "Must match");
+            Assert.AreEqual("DisplayName_Block_GravityGenerator", d1.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
             var d2 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.GravityGenerator, MyCubeSize.Small, "");
             Assert.IsNull(d2, "Must be null");
 
             var d3 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.Gyro, MyCubeSize.Small, "SmallBlockGyro");
-            Assert.AreEqual("Gyroscope", d3.DisplayName, "Must match");
+            Assert.AreEqual("DisplayName_Block_Gyroscope", d3.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Small, d3.CubeSize, "Must match");
 
             var d4 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.Gyro, MyCubeSize.Small, "Fake");
@@ -31,7 +31,7 @@
         public void RotateComponent()
         {
             var d1 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.Thrust, MyCubeSize.Large, "LargeBlockLargeThrust");
-            Assert.AreEqual("LargeThrust", d1.DisplayName, "Must match");
+            Assert.AreEqual("DisplayName_Block_LargeThrust", d1.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
             Assert.AreEqual(3, d1.Size.X, "Must match");

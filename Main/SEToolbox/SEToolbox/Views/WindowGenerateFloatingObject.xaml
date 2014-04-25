@@ -37,7 +37,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Item:" VerticalAlignment="Center"/>
-                <!--<ComboBox Grid.Row="0" Grid.Column="1" Name="uxInitialElement"  VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding StockItemList}" SelectedValue="{Binding StockItem}" IsTextSearchEnabled="True" DisplayMemberPath="FriendlyName"/>-->
                 <ComboBox Grid.Row="0" Grid.Column="1" Name="uxInitialElement"  VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding StockItemList}" SelectedValue="{Binding StockItem}" IsTextSearchEnabled="True">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -49,6 +48,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Units:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="1" VerticalAlignment="Center" Visibility="{Binding IsUnique, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" Visibility="{Binding IsDecimal, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBox.Text>
                         <Binding Path="DecimalUnits" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >

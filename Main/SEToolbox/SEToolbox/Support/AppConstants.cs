@@ -37,10 +37,14 @@
         Thick,
 
         /// <summary>
-        /// Thick Shell calculation + slope additions.
+        /// Thick Shell calculation, with additive slope additions.
         /// </summary>
-        ThickSmoothed,
+        ThickSmoothedUp,
 
+        ///// <summary>
+        ///// Thick Shell calculation, subtractive slope additions.
+        ///// </summary>
+        //ThickSmoothedDown,
 
         //SurfaceCalculated
     };

@@ -441,7 +441,7 @@
 
         #endregion
 
-        #region methods
+        #region command methods
 
         public bool Browse3dModelCanExecute()
         {
@@ -627,68 +627,91 @@
                 fixScale = Math.Max(Math.Max(this.NewModelSize.Height, this.NewModelSize.Width), this.NewModelSize.Depth);
             }
 
-            var smoothObject = true;
+            //var smoothObject = true;
+
+            // Read in voxel and set main cube space.
+            //var ccubic = TestCreateSplayedDiagonalPlane();
+            //var ccubic = TestCreateSlopedDiagonalPlane();
+            //var ccubic = TestCreateStaggeredStar();
+            var ccubic = TestCreateTrayShape();
+            //var ccubic = ReadModelVolmetic(@"..\..\..\..\..\..\building 3D\models\Rhino_corrected.obj", 10, null, ModelTraceVoxel.ThickSmoothedDown);
 
             #region Read in voxel and set main cube space.
-
-            //// Splayed diagonal plane.
-            //var max = 40;
-            //var ccubic = new CubeType[max, max, max];
-
-            //for (var z = 0; z < max; z++)
-            //{
-            //    for (var j = 0; j < max; j++)
-            //    {
-            //        {
-            //            var x = j + z;
-            //            var y = j;
-            //            if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
-            //        }
-            //        {
-            //            var x = j;
-            //            var y = j + z;
-            //            if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
-            //        }
-            //        {
-            //            var x = j + z;
-            //            var y = max - j;
-            //            if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
-            //        }
-            //        {
-            //            var x = j;
-            //            var y = max - (j + z);
-            //            if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
-            //        }
-            //    }
-            //}
 
             #endregion
 
-            #region Read in voxel and set main cube space.
+            //if (smoothObject)
+            //{
+            //    CalculateAddedInverseCorners(ccubic);
+            //    CalculateAddedSlopes(ccubic);
+            //    CalculateAddedCorners(ccubic);
+            //}
 
+            BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
+
+            return entity;
+        }
+
+        private CubeType[, ,] TestCreateSplayedDiagonalPlane()
+        {
+            // Splayed diagonal plane.
+            var max = 40;
+            var ccubic = new CubeType[max, max, max];
+
+            for (var z = 0; z < max; z++)
+            {
+                for (var j = 0; j < max; j++)
+                {
+                    {
+                        var x = j + z;
+                        var y = j;
+                        if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
+                    }
+                    {
+                        var x = j;
+                        var y = j + z;
+                        if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
+                    }
+                    {
+                        var x = j + z;
+                        var y = max - j;
+                        if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
+                    }
+                    {
+                        var x = j;
+                        var y = max - (j + z);
+                        if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
+                    }
+                }
+            }
+            return ccubic;
+        }
+
+        private CubeType[, ,] TestCreateSlopedDiagonalPlane()
+        {
             // Sloped diagonal plane.
-            //var max = 20;
-            //var ccubic = new CubeType[max, max, max];
-            //var dx = 1;
-            //var dy = 6;
-            //var dz = 0;
+            var max = 20;
+            var ccubic = new CubeType[max, max, max];
+            var dx = 1;
+            var dy = 6;
+            var dz = 0;
 
-            //for (var i = 0; i < max; i++)
-            //{
-            //    for (var j = 0; j < max; j++)
-            //    {
-            //        if (dx + j >= 0 && dy + j - i >= 0 && dz + i >= 0 &&
-            //            dx + j < max && dy + j - i < max && dz + i < max)
-            //        {
-            //            ccubic[dx + j, dy + j - i, dz + i] = CubeType.Cube;
-            //        }
-            //    }
-            //}
+            for (var i = 0; i < max; i++)
+            {
+                for (var j = 0; j < max; j++)
+                {
+                    if (dx + j >= 0 && dy + j - i >= 0 && dz + i >= 0 &&
+                        dx + j < max && dy + j - i < max && dz + i < max)
+                    {
+                        ccubic[dx + j, dy + j - i, dz + i] = CubeType.Cube;
+                    }
+                }
+            }
+            return ccubic;
+        }
 
-            #endregion
-
-            #region Read in voxel and set main cube space.
-
+        private CubeType[, ,] TestCreateStaggeredStar()
+        {
             // Staggered star.
 
             var ccubic = new CubeType[9, 9, 9];
@@ -710,54 +733,43 @@
                 ccubic[4, 4, i] = CubeType.Cube;
             }
 
-            #endregion
+            return ccubic;
+        }
 
-            #region Read in voxel and set main cube space.
+        private CubeType[, ,] TestCreateTrayShape()
+        {
+            // Tray shape
 
-            //// Tray shape
+            var max = 20;
+            var offset = 5;
 
-            //var max = 20;
-            //var offset = 5;
+            var ccubic = new CubeType[max, max, max];
 
-            //var ccubic = new CubeType[max, max, max];
-
-            //for (var x = 0; x < max; x++)
-            //{
-            //    for (var y = 0; y < max; y++)
-            //    {
-            //        ccubic[2, x, y] = CubeType.Cube;
-            //    }
-            //}
-
-            //for (var z = 1; z < 4; z += 2)
-            //{
-            //    for (int i = 0; i < max; i++)
-            //    {
-            //        ccubic[z, i, 0] = CubeType.Cube;
-            //        ccubic[z, i, max - 1] = CubeType.Cube;
-            //        ccubic[z, 0, i] = CubeType.Cube;
-            //        ccubic[z, max - 1, i] = CubeType.Cube;
-            //    }
-
-            //    for (int i = 0 + offset; i < max - offset; i++)
-            //    {
-            //        ccubic[z, i, i] = CubeType.Cube;
-            //        ccubic[z, max - i - 1, i] = CubeType.Cube;
-            //    }
-            //}
-
-            #endregion
-
-            if (smoothObject)
+            for (var x = 0; x < max; x++)
             {
-                CalculateInverseCorners(ccubic);
-                CalculateSlopes(ccubic);
-                CalculateCorners(ccubic);
+                for (var y = 0; y < max; y++)
+                {
+                    ccubic[2, x, y] = CubeType.Cube;
+                }
             }
 
-            BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
+            for (var z = 1; z < 4; z += 2)
+            {
+                for (int i = 0; i < max; i++)
+                {
+                    ccubic[z, i, 0] = CubeType.Cube;
+                    ccubic[z, i, max - 1] = CubeType.Cube;
+                    ccubic[z, 0, i] = CubeType.Cube;
+                    ccubic[z, max - 1, i] = CubeType.Cube;
+                }
 
-            return entity;
+                for (int i = 0 + offset; i < max - offset; i++)
+                {
+                    ccubic[z, i, i] = CubeType.Cube;
+                    ccubic[z, max - i - 1, i] = CubeType.Cube;
+                }
+            }
+            return ccubic;
         }
 
         #endregion
@@ -1106,12 +1118,19 @@
 
             CrawlExterior(ccubic);
 
-            if (traceType == ModelTraceVoxel.ThinSmoothed || traceType == ModelTraceVoxel.ThickSmoothed)
+            if (traceType == ModelTraceVoxel.ThinSmoothed || traceType == ModelTraceVoxel.ThickSmoothedUp)
             {
-                CalculateInverseCorners(ccubic);
-                CalculateSlopes(ccubic);
-                CalculateCorners(ccubic);
+                CalculateAddedInverseCorners(ccubic);
+                CalculateAddedSlopes(ccubic);
+                CalculateAddedCorners(ccubic);
             }
+
+            //if (traceType == ModelTraceVoxel.ThickSmoothedDown)
+            //{
+            //    CalculateSubtractedCorners(ccubic);
+            //    CalculateSubtractedSlopes(ccubic);
+            //    CalculateSubtractedInverseCorners(ccubic);
+            //}
 
             return ccubic;
         }
@@ -1339,9 +1358,9 @@
 
         #endregion
 
-        #region CalculateSlopes
+        #region CalculateAddedSlopes
 
-        public static void CalculateSlopes(CubeType[, ,] ccubic)
+        private static void CalculateAddedSlopes(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -1355,51 +1374,51 @@
                     {
                         if (ccubic[x, y, z] == CubeType.None)
                         {
-                            if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, 1, 1))
+                            if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, 1, 1, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeCenterFrontTop;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 1, 0))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 1, 0, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeLeftFrontCenter;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 1, 1, 0))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 1, 1, 0, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeRightFrontCenter;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, 1, -1))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, 1, -1, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeCenterFrontBottom;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 1))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, 1, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeLeftCenterTop;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 1, 0, 1))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 1, 0, 1, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeRightCenterTop;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, -1))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, -1, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeLeftCenterBottom;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 1, 0, -1))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 1, 0, -1, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeRightCenterBottom;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 1))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, 1, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeCenterBackTop;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, -1, 0))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, -1, 0, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeLeftBackCenter;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 1, -1, 0))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 1, -1, 0, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeRightBackCenter;
                             }
-                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, -1))
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, -1, CubeType.Cube))
                             {
                                 ccubic[x, y, z] = CubeType.SlopeCenterBackBottom;
                             }
@@ -1407,14 +1426,13 @@
                     }
                 }
             }
-
         }
 
         #endregion
 
-        #region CalculateCorners
+        #region CalculateAddedCorners
 
-        public static void CalculateCorners(CubeType[, ,] ccubic)
+        private static void CalculateAddedCorners(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -1615,9 +1633,9 @@
 
         #endregion
 
-        #region CalculateInverseCorners
+        #region CalculateAddedInverseCorners
 
-        public static void CalculateInverseCorners(CubeType[, ,] ccubic)
+        private static void CalculateAddedInverseCorners(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -1685,34 +1703,34 @@
             return false;
         }
 
-        private static bool CheckAdjacentCubic(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount, int xDelta, int yDelta, int zDelta)
+        private static bool CheckAdjacentCubic(CubeType[, ,] ccubic, int x, int y, int z, int xCount, int yCount, int zCount, int xDelta, int yDelta, int zDelta, CubeType cubeType)
         {
-            if (ccubic[x, y, z] == CubeType.None && IsValidRange(x, y, z, xCount, yCount, zCount, xDelta, yDelta, zDelta))
+            if (IsValidRange(x, y, z, xCount, yCount, zCount, xDelta, yDelta, zDelta))
             {
-                if (xDelta != 0 && ccubic[x + xDelta, y, z] == CubeType.Cube &&
-                    yDelta != 0 && ccubic[x, y + yDelta, z] == CubeType.Cube &&
+                if (xDelta != 0 && ccubic[x + xDelta, y, z] == cubeType &&
+                    yDelta != 0 && ccubic[x, y + yDelta, z] == cubeType &&
                     zDelta == 0)
                 {
                     return true;
                 }
 
-                if (xDelta != 0 && ccubic[x + xDelta, y, z] == CubeType.Cube &&
+                if (xDelta != 0 && ccubic[x + xDelta, y, z] == cubeType &&
                     yDelta == 0 &&
-                    zDelta != 0 && ccubic[x, y, z + zDelta] == CubeType.Cube)
+                    zDelta != 0 && ccubic[x, y, z + zDelta] == cubeType)
                 {
                     return true;
                 }
 
                 if (xDelta == 0 &&
-                    yDelta != 0 && ccubic[x, y + yDelta, z] == CubeType.Cube &&
-                    zDelta != 0 && ccubic[x, y, z + zDelta] == CubeType.Cube)
+                    yDelta != 0 && ccubic[x, y + yDelta, z] == cubeType &&
+                    zDelta != 0 && ccubic[x, y, z + zDelta] == cubeType)
                 {
                     return true;
                 }
 
-                if (xDelta != 0 && ccubic[x + xDelta, y, z] == CubeType.Cube &&
-                    yDelta != 0 && ccubic[x, y + yDelta, z] == CubeType.Cube &&
-                    zDelta != 0 && ccubic[x, y, z + zDelta] == CubeType.Cube)
+                if (xDelta != 0 && ccubic[x + xDelta, y, z] == cubeType &&
+                    yDelta != 0 && ccubic[x, y + yDelta, z] == cubeType &&
+                    zDelta != 0 && ccubic[x, y, z + zDelta] == cubeType)
                 {
                     return true;
                 }
@@ -1803,6 +1821,138 @@
                             newCube.BlockOrientation = SpaceEngineersAPI.GetCubeOrientation(ccubic[x, y, z]);
                             newCube.Min = new VRageMath.Vector3I(x, y, z);
                         }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region CalculateSubtractedCorners
+
+        private static void CalculateSubtractedCorners(CubeType[, ,] ccubic)
+        {
+            var xCount = ccubic.GetLength(0);
+            var yCount = ccubic.GetLength(1);
+            var zCount = ccubic.GetLength(2);
+
+            for (int x = 0; x < xCount; x++)
+            {
+                for (int y = 0; y < yCount; y++)
+                {
+                    for (int z = 0; z < zCount; z++)
+                    {
+                        // TODO:
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region CalculateSubtractedSlopes
+
+        private static void CalculateSubtractedSlopes(CubeType[, ,] ccubic)
+        {
+            var xCount = ccubic.GetLength(0);
+            var yCount = ccubic.GetLength(1);
+            var zCount = ccubic.GetLength(2);
+
+            for (int x = 0; x < xCount; x++)
+            {
+                for (int y = 0; y < yCount; y++)
+                {
+                    for (int z = 0; z < zCount; z++)
+                    {
+                        // TODO:
+                        if (ccubic[x, y, z] == CubeType.Cube)
+                        {
+                            // TODO:
+
+                            if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, +1, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, -1, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeCenterFrontTop;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, +1, 0, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, +1, -1, 0, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeLeftFrontCenter;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, +1, +1, 0, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, -1, 0, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeRightFrontCenter;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, -1, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, +1, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeCenterFrontBottom;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, +1, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, -1, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeLeftCenterTop;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, +1, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, -1, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeRightCenterTop;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, -1, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, +1, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeLeftCenterBottom;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, -1, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, 0, +1, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeRightCenterBottom;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, +1, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, -1, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeCenterBackTop;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, -1, 0, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, +1, +1, 0, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeLeftBackCenter;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, +1, -1, 0, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, -1, +1, 0, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeRightBackCenter;
+                            }
+                            else if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, -1, -1, CubeType.Cube) &&
+                                CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, +1, +1, CubeType.None))
+                            {
+                                ccubic[x, y, z] = CubeType.SlopeCenterBackBottom;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region CalculateSubtractedInverseCorners
+
+        private static void CalculateSubtractedInverseCorners(CubeType[, ,] ccubic)
+        {
+            var xCount = ccubic.GetLength(0);
+            var yCount = ccubic.GetLength(1);
+            var zCount = ccubic.GetLength(2);
+
+            for (int x = 0; x < xCount; x++)
+            {
+                for (int y = 0; y < yCount; y++)
+                {
+                    for (int z = 0; z < zCount; z++)
+                    {
+                        // TODO:
                     }
                 }
             }
