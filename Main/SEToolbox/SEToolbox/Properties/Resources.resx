@@ -280,8 +280,8 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   <data name="ModelTraceVoxel_Thick" xml:space="preserve">
     <value>Thick Shell</value>
   </data>
-  <data name="ModelTraceVoxel_ThickSmoothed" xml:space="preserve">
-    <value>Thick Shell with Smoothing</value>
+  <data name="ModelTraceVoxel_ThickSmoothedUp" xml:space="preserve">
+    <value>Thick Shell with Added Smoothing</value>
   </data>
   <data name="ModelTraceVoxel_Thin" xml:space="preserve">
     <value>Thin Shell</value>
@@ -417,5 +417,8 @@ Apologies for any inconvenience.</value>
   </data>
   <data name="replace2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\replace2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ModelTraceVoxel_ThickSmoothedDown" xml:space="preserve">
+    <value>Thick Shell with Subtracted Smoothing</value>
   </data>
 </root>

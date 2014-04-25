@@ -436,23 +436,23 @@
             }
         }
 
-        public void SaveEntity(IStructureBase strucutre, string filename)
+        public void SaveEntity(MyObjectBuilder_EntityBase entity, string filename)
         {
-            if (strucutre.EntityBase is MyObjectBuilder_CubeGrid)
+            if (entity is MyObjectBuilder_CubeGrid)
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>((MyObjectBuilder_CubeGrid)strucutre.EntityBase, filename);
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>((MyObjectBuilder_CubeGrid)entity, filename);
             }
-            else if (strucutre.EntityBase is MyObjectBuilder_Character)
+            else if (entity is MyObjectBuilder_Character)
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Character, MyObjectBuilder_CharacterSerializer>((MyObjectBuilder_Character)strucutre.EntityBase, filename);
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Character, MyObjectBuilder_CharacterSerializer>((MyObjectBuilder_Character)entity, filename);
             }
-            else if (strucutre.EntityBase is MyObjectBuilder_FloatingObject)
+            else if (entity is MyObjectBuilder_FloatingObject)
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_FloatingObject, MyObjectBuilder_FloatingObjectSerializer>((MyObjectBuilder_FloatingObject)strucutre.EntityBase, filename);
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_FloatingObject, MyObjectBuilder_FloatingObjectSerializer>((MyObjectBuilder_FloatingObject)entity, filename);
             }
-            else if (strucutre.EntityBase is MyObjectBuilder_Meteor)
+            else if (entity is MyObjectBuilder_Meteor)
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Meteor, MyObjectBuilder_MeteorSerializer>((MyObjectBuilder_Meteor)strucutre.EntityBase, filename);
+                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Meteor, MyObjectBuilder_MeteorSerializer>((MyObjectBuilder_Meteor)entity, filename);
             }
         }
 

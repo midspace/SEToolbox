@@ -1,7 +1,9 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System;
     using System.Windows.Media.Media3D;
 
+    [Obsolete]
     class Import3dModelBackgroundWorker
     {
         #region ctor

@@ -11,6 +11,8 @@
 
     public class GenerateFloatingObjectModel : BaseModel
     {
+        public const int UniqueUnits = 1;
+
         #region Fields
 
         private MyPositionAndOrientation _characterPosition;
@@ -25,6 +27,7 @@
         private decimal? _decimalUnits;
         private bool _isDecimal;
         private bool _isInt;
+        private bool _isUnique;
         private int _multiplier;
         private float _maxFloatingObjects;
 
@@ -213,6 +216,23 @@
             }
         }
 
+        public bool IsUnique
+        {
+            get
+            {
+                return this._isUnique;
+            }
+
+            set
+            {
+                if (value != this._isUnique)
+                {
+                    this._isUnique = value;
+                    this.RaisePropertyChanged(() => IsUnique);
+                }
+            }
+        }
+
         /// <summary>
         /// Generates this many individual items.
         /// </summary>
@@ -335,7 +355,7 @@
                     this.StockItem.TypeId == MyObjectBuilderTypeEnum.Ingot)
                 {
                     this.IsDecimal = true;
-                    this.IsInt = false;
+                    this.IsUnique = this.IsInt = false;
                     if (this.DecimalUnits.HasValue)
                     {
                         this.Mass = (double)this.DecimalUnits * this.StockItem.Mass;
@@ -347,12 +367,11 @@
                         this.Volume = null;
                     }
                 }
-                if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.Component ||
-                    this.StockItem.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject ||
+                else if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.Component ||
                     this.StockItem.TypeId == MyObjectBuilderTypeEnum.AmmoMagazine)
                 {
                     this.IsInt = true;
-                    this.IsDecimal = false;
+                    this.IsUnique = this.IsDecimal = false;
                     if (this.Units.HasValue)
                     {
                         this.Mass = (double)this.Units * this.StockItem.Mass;
@@ -363,6 +382,13 @@
                         this.Mass = null;
                         this.Volume = null;
                     }
+                }
+                else if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
+                {
+                    this.IsUnique = true;
+                    this.IsInt = this.IsDecimal = false;
+                    this.Mass = (double)UniqueUnits * this.StockItem.Mass;
+                    this.Volume = (double)UniqueUnits * this.StockItem.Volume;
                 }
             }
         }

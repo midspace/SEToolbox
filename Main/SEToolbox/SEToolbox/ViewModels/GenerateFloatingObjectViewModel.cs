@@ -219,6 +219,19 @@
             }
         }
 
+        public bool IsUnique
+        {
+            get
+            {
+                return this._dataModel.IsUnique;
+            }
+
+            set
+            {
+                this._dataModel.IsUnique = value;
+            }
+        }
+
         public int Multiplier
         {
             get
@@ -254,7 +267,8 @@
         public bool CreateCanExecute()
         {
             return this.StockItem != null &&
-                ((this.IsInt && this.Units.HasValue && this.Units.Value > 0) ||
+                (this.IsUnique ||
+                (this.IsInt && this.Units.HasValue && this.Units.Value > 0) ||
                 (this.IsDecimal && this.DecimalUnits.HasValue && this.DecimalUnits.Value > 0));
         }
 
@@ -288,8 +302,10 @@
 
             if (this.IsDecimal)
                 entity.Item.AmountDecimal = this.DecimalUnits.Value;
-            if (this.IsInt)
+            else if (this.IsInt)
                 entity.Item.AmountDecimal = this.Units.Value;
+            else if (this.IsUnique)
+                entity.Item.AmountDecimal = GenerateFloatingObjectModel.UniqueUnits;
 
             this.IsValidItemToImport = true;
             entity.Item.PhysicalContent = (MyObjectBuilder_PhysicalObject)MyObjectBuilder_Base.CreateNewObject(this.StockItem.TypeId, this.StockItem.SubtypeId);
@@ -303,15 +319,20 @@
                     break;
 
                 case MyObjectBuilderTypeEnum.PhysicalGunObject:
-                    // TODO: May have to create the GunEntity, to define the ownership of the GunObject.
-                    // At this stage, it doesn't appear to be required.
+                    // The GunEntity appears to make each 'GunObject' unique through the definition of an EntityId.
+                    // This means, you can't stack them.
+                    // Ownership does not appear to be required at this stage.
 
-                    //((MyObjectBuilder_PhysicalGunObject)entity.Item.PhysicalContent).GunEntity =
-                    //    new MyObjectBuilder_AngleGrinder() { EntityId = 0, PersistentFlags = MyPersistentEntityFlags2.None };
-                    //MyObjectBuilder_AngleGrinder MyObjectBuilderTypeEnum.AngleGrinder <SubtypeName>AngleGrinderItem</SubtypeName>
-                    //MyObjectBuilder_AutomaticRifle MyObjectBuilderTypeEnum.AutomaticRifle
-                    //MyObjectBuilder_Welder MyObjectBuilderTypeEnum.Welder
-                    //MyObjectBuilder_HandDrill MyObjectBuilderTypeEnum.HandDrill
+                    // This is a hack approach, to find the Enum from a SubtypeName like "AngleGrinderItem".
+                    var enumName = this.StockItem.SubtypeId.Substring(0, this.StockItem.SubtypeId.Length - 4);
+                    MyObjectBuilderTypeEnum itemEnum;
+                    if (Enum.TryParse<MyObjectBuilderTypeEnum>(enumName, out itemEnum))
+                    {
+                        var gunEntity = MyObjectBuilder_Base.CreateNewObject(itemEnum) as MyObjectBuilder_EntityBase;
+                        gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                        gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
+                        ((MyObjectBuilder_PhysicalGunObject)entity.Item.PhysicalContent).GunEntity = gunEntity;
+                    }
                     break;
 
                 default:

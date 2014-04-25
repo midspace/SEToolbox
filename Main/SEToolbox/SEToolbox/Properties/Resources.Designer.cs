@@ -559,11 +559,20 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thick Shell with Smoothing.
+        ///   Looks up a localized string similar to Thick Shell with Subtracted Smoothing.
         /// </summary>
-        public static string ModelTraceVoxel_ThickSmoothed {
+        public static string ModelTraceVoxel_ThickSmoothedDown {
             get {
-                return ResourceManager.GetString("ModelTraceVoxel_ThickSmoothed", resourceCulture);
+                return ResourceManager.GetString("ModelTraceVoxel_ThickSmoothedDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thick Shell with Added Smoothing.
+        /// </summary>
+        public static string ModelTraceVoxel_ThickSmoothedUp {
+            get {
+                return ResourceManager.GetString("ModelTraceVoxel_ThickSmoothedUp", resourceCulture);
             }
         }
         
