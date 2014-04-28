@@ -1,11 +1,6 @@
 ﻿TODO: list of tasks (in no particular order):
 - All the TODO: items in code!
 - Documentation.... lots of it to be added to CodePlex.
-- Refresh/Save needs to check if save directory no longer exists.
-- tree view of everything.
-- Property Grid, to edit properties and sub items.
-  * https://wpg.codeplex.com/
-  * https://wpftoolkit.codeplex.com/wikipage?title=PropertyGrid
 - Close Dialog on IsModified.
 - Wix installer project,
   * Desktop Icon.
@@ -13,6 +8,16 @@
   * C:\Users\%Username%\AppData\Roaming\SpaceEngineers\WorkshopWorlds\*.sbw  These are .zip files.
   * It's not until the user presses "Copy & Load" that it's actually saved there.
   * The workshopId may or may not be present, depending on if it is the first version, or a subsequent upload by the author.
+
+- Global:
+  * Refresh/Save needs to check if save directory no longer exists.
+  * tree view of everything.
+  * Property Grid, to edit properties and sub items.
+    * https://wpg.codeplex.com/
+    * https://wpftoolkit.codeplex.com/wikipage?title=PropertyGrid
+  * Report of all in world assets.
+    * Breakdown of all ores in untouched (in asteroid), unused (ore and ingot), used (component, tool, cube), npc (ore, ingot, component, tool, cube).
+	* Counts of components, tools, cubes  (npc and non-npc).
 
 - Drag drop files direct into the interface.
   * Detect .vox files for asteroids.
@@ -43,6 +48,7 @@
   * Replace missing tools.
 
 - Asteroid:
+  * Detect multiple objects in 3D import and allow assigning material to individal parts somehow.
   * Replace Asteroid/Voxel.
   * Rotate Asteroid/Voxel (not supported by sandbox currently, but procedural voxel rotation could be accomplished.)
   * Dialog to Generate box/sphere asteroid (size, hollow shell size, material).

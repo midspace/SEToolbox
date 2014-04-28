@@ -35,12 +35,12 @@
                 GlobalSettings.Default.Reset();
             }
 
-            log4net.Config.XmlConfigurator.Configure(); 
+            log4net.Config.XmlConfigurator.Configure();
 
             var update = CodeplexReleases.CheckForUpdates();
             if (update != null)
             {
-                var dialogResult = MessageBox.Show(string.Format("A new version of SEToolbox ({0}) is available.\r\nWould you like to download it now?", update.Version), "New version available", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                var dialogResult = MessageBox.Show(string.Format(Res.DialogNewVersionMessage, update.Version), Res.DialogNewVersionTitle, MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if (dialogResult == MessageBoxResult.Yes)
                 {
                     Process.Start(update.Link);
@@ -80,12 +80,12 @@
             {
                 // Unhandled Exception.
                 if (DiagnosticsLogging.LoggingSourceExists())
-                    message = string.Format(Res.UnhandledExceptionEventMessage, e.Exception.Message);
+                    message = string.Format(Res.DialogUnhandledExceptionEventMessage, e.Exception.Message);
                 else
-                    message = string.Format(Res.UnhandledExceptionMessage, e.Exception.Message);
+                    message = string.Format(Res.DialogUnhandledExceptionMessage, e.Exception.Message);
             }
 
-            MessageBox.Show(message, Res.UnhandledExceptionTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(message, Res.DialogUnhandledExceptionTitle, MessageBoxButton.OK, MessageBoxImage.Error);
 
             TempfileUtil.Dispose();
 

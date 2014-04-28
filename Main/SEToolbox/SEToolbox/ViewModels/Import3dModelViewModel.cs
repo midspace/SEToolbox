@@ -6,7 +6,6 @@
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
-    using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using System;
@@ -19,6 +18,7 @@
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
     using VRageMath;
+    using Res = SEToolbox.Properties.Resources;
 
     public class Import3dModelViewModel : BaseViewModel
     {
@@ -38,7 +38,7 @@
         #region Constructors
 
         public Import3dModelViewModel(BaseViewModel parentViewModel, Import3dModelModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>())
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
         {
         }
 
@@ -453,8 +453,8 @@
             this.IsValidModel = false;
 
             IOpenFileDialog openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = Resources.ImportModelFilter;
-            openFileDialog.Title = Resources.ImportModelTitle;
+            openFileDialog.Filter = Res.DialogImportModelFilter;
+            openFileDialog.Title = Res.DialogImportModelTitle;
 
             // Open the dialog
             DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);

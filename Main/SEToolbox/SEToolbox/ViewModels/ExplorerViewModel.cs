@@ -4,7 +4,6 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;
-    using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using SEToolbox.Views;
@@ -18,10 +17,10 @@
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Windows;
     using System.Windows.Forms;
     using System.Windows.Input;
     using VRageMath;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ExplorerViewModel : BaseViewModel, IDropable, IMainView
     {
@@ -53,7 +52,7 @@
         #region Constructors
 
         public ExplorerViewModel(ExplorerModel dataModel)
-            : this(dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>(), () => ServiceLocator.Resolve<ISaveFileDialog>())
+            : this(dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>, ServiceLocator.Resolve<ISaveFileDialog>)
         {
         }
 
@@ -70,10 +69,7 @@
             this._dataModel = dataModel;
 
             this.Selections = new ObservableCollection<IStructureViewBase>();
-            this.Selections.CollectionChanged  += delegate(object sender, NotifyCollectionChangedEventArgs e)
-            {
-                this.RaisePropertyChanged(() => IsMultipleSelections);
-            };
+            this.Selections.CollectionChanged += (sender, e) => this.RaisePropertyChanged(() => IsMultipleSelections);
 
             this.Structures = new ObservableCollection<IStructureViewBase>();
             foreach (var item in this._dataModel.Structures)
@@ -1090,8 +1086,8 @@
         public void ImportSandboxObjectFromFile()
         {
             var openFileDialog = this._openFileDialogFactory();
-            openFileDialog.Filter = Resources.ImportSandboxObjectFilter;
-            openFileDialog.Title = Resources.ImportSandboxObjectTitle;
+            openFileDialog.Filter = Res.DialogImportSandboxObjectFilter;
+            openFileDialog.Title = Res.DialogImportSandboxObjectTitle;
             openFileDialog.Multiselect = true;
 
             // Open the dialog
@@ -1117,8 +1113,8 @@
                     var structure = (StructureCharacterViewModel)viewModel;
 
                     var saveFileDialog = this._saveFileDialogFactory();
-                    saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
-                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType, structure.Description);
+                    saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
+                    saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.Description);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
 
@@ -1138,8 +1134,8 @@
                     var structure = (StructureFloatingObjectViewModel)viewModel;
 
                     var saveFileDialog = this._saveFileDialogFactory();
-                    saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
-                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
+                    saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
+                    saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
 
@@ -1153,8 +1149,8 @@
                     var structure = (StructureMeteorViewModel)viewModel;
 
                     var saveFileDialog = this._saveFileDialogFactory();
-                    saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
-                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
+                    saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
+                    saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
 
@@ -1169,8 +1165,8 @@
 
                     var partname = string.IsNullOrEmpty(structure.DisplayName) ? structure.EntityId.ToString() : structure.DisplayName.Replace("|", "_").Replace("\\", "_").Replace("/", "_");
                     var saveFileDialog = this._saveFileDialogFactory();
-                    saveFileDialog.Filter = Resources.ExportSandboxObjectFilter;
-                    saveFileDialog.Title = string.Format(Resources.ExportSandboxObjectTitle, structure.ClassType, partname);
+                    saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
+                    saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, partname);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, partname);
                     saveFileDialog.OverwritePrompt = true;
 
