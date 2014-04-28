@@ -33,7 +33,7 @@
         #region Constructors
 
         public GenerateVoxelFieldViewModel(BaseViewModel parentViewModel, GenerateVoxelFieldModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>())
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
         {
         }
 
@@ -61,6 +61,15 @@
                 return new DelegateCommand(new Action(ClearRowsExecuted), new Func<bool>(ClearRowsCanExecute));
             }
         }
+
+        public ICommand AddRandomRowCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(AddRandomRowExecuted), new Func<bool>(AddRandomRowCanExecute));
+            }
+        }
+
 
         public ICommand AddRowCommand
         {
@@ -196,6 +205,22 @@
             }
         }
 
+        public List<GenerateVoxelDetailModel> SmallVoxelFileList
+        {
+            get
+            {
+                return this._dataModel.SmallVoxelFileList;
+            }
+        }
+
+        public List<GenerateVoxelDetailModel> LargeVoxelFileList
+        {
+            get
+            {
+                return this._dataModel.LargeVoxelFileList;
+            }
+        }
+
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
         {
             get
@@ -226,6 +251,114 @@
             this.VoxelCollection.Clear();
             this.MinimumRange = 400;
             this.MaximumRange = 800;
+        }
+
+        public bool AddRandomRowCanExecute()
+        {
+            return true;
+        }
+
+        public void AddRandomRowExecuted()
+        {
+            int idx;
+
+            var randomModel = new GenerateVoxelModel()
+            {
+                Index = this.VoxelCollection.Count + 1,
+                MainMaterial = this.MaterialsCollection[0],
+                SecondMaterial = this.MaterialsCollection[0],
+                ThirdMaterial = this.MaterialsCollection[0],
+                ForthMaterial = this.MaterialsCollection[0],
+                FifthMaterial = this.MaterialsCollection[0],
+            };
+
+            // Random Asteroid.
+            var d = RandomUtil.GetDouble(1, 100);
+            var islarge = false;
+            if (d > 70)
+            {
+                idx = RandomUtil.GetInt(this.LargeVoxelFileList.Count);
+                randomModel.VoxelFile = this.LargeVoxelFileList[idx];
+                islarge = true;
+            }
+            else
+            {
+                idx = RandomUtil.GetInt(this.SmallVoxelFileList.Count);
+                randomModel.VoxelFile = this.SmallVoxelFileList[idx];
+            }
+
+            // Random Main Material non-Rare.
+            var nonRare = this.MaterialsCollection.Where(m => m.IsRare == false).ToArray();
+            idx = RandomUtil.GetInt(nonRare.Length);
+            randomModel.MainMaterial = nonRare[idx];
+
+            int percent;
+            var rare = this.MaterialsCollection.Where(m => m.IsRare == true && m.MinedRatio >= 1).ToList();
+            var superRare = this.MaterialsCollection.Where(m => m.IsRare == true && m.MinedRatio < 1).ToList();
+
+            if (islarge)
+            {
+                // Random 1. Rare.
+                idx = RandomUtil.GetInt(rare.Count);
+                percent = RandomUtil.GetInt(40, 60);
+                randomModel.SecondMaterial = rare[idx];
+                randomModel.SecondPercent = percent;
+                rare.RemoveAt(idx);
+
+                // Random 2. Rare.
+                idx = RandomUtil.GetInt(rare.Count);
+                percent = RandomUtil.GetInt(5, 15);
+                randomModel.ThirdMaterial = rare[idx];
+                randomModel.ThirdPercent = percent;
+                rare.RemoveAt(idx);
+
+                // Random 3. Super Rare.
+                idx = RandomUtil.GetInt(superRare.Count);
+                percent = RandomUtil.GetInt(3, 5);
+                randomModel.ThirdMaterial = superRare[idx];
+                randomModel.ThirdPercent = percent;
+                superRare.RemoveAt(idx);
+
+                // Random 4. Super Rare.
+                idx = RandomUtil.GetInt(superRare.Count);
+                percent = RandomUtil.GetInt(2, 4);
+                randomModel.ForthMaterial = superRare[idx];
+                randomModel.ForthPercent = percent;
+                superRare.RemoveAt(idx);
+
+                // Random 5. Super Rare.
+                idx = RandomUtil.GetInt(superRare.Count);
+                percent = RandomUtil.GetInt(1, 3);
+                randomModel.FifthMaterial = superRare[idx];
+                randomModel.FifthPercent = percent;
+                superRare.RemoveAt(idx);
+            }
+            else // Small Asteroid.
+            {
+                // Random 1. Rare.
+                idx = RandomUtil.GetInt(rare.Count);
+                percent = RandomUtil.GetInt(6, 13);
+                randomModel.SecondMaterial = rare[idx];
+                randomModel.SecondPercent = percent;
+
+                // Random 2. Super Rare.
+                idx = RandomUtil.GetInt(superRare.Count);
+                percent = RandomUtil.GetInt(2, 4);
+                randomModel.ThirdMaterial = superRare[idx];
+                randomModel.ThirdPercent = percent;
+                superRare.RemoveAt(idx);
+            }
+
+            if (this.SelectedRow != null)
+            {
+                this.VoxelCollection.Insert(this.VoxelCollection.IndexOf(this.SelectedRow) + 1, randomModel);
+            }
+            else
+            {
+                this.VoxelCollection.Add(randomModel);
+            }
+
+            this._dataModel.RenumberCollection();
         }
 
         public bool AddRowCanExecute()

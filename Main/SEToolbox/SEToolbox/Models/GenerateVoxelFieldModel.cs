@@ -126,6 +126,10 @@
             }
         }
 
+        public List<GenerateVoxelDetailModel> SmallVoxelFileList { get; set; }
+
+        public List<GenerateVoxelDetailModel> LargeVoxelFileList { get; set; }
+
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
         {
             get
@@ -153,19 +157,28 @@
             this.MaterialsCollection.Clear();
             foreach (var material in SpaceEngineersAPI.GetMaterialList())
             {
-                this.MaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
+                this.MaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name, IsRare = material.IsRare, MinedRatio  = material.MinedOreRatio});
             }
 
             var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
 
             this.StockVoxelFileList.Clear();
+            this.SmallVoxelFileList = new List<GenerateVoxelDetailModel>();
+            this.LargeVoxelFileList = new List<GenerateVoxelDetailModel>();
             foreach (var file in files)
             {
-                this.StockVoxelFileList.Add(new GenerateVoxelDetailModel()
+                var voxel = new GenerateVoxelDetailModel()
                 {
                     Name = Path.GetFileNameWithoutExtension(file),
                     SourceFilename = file,
-                });
+                };
+                this.StockVoxelFileList.Add(voxel);
+                var fileLength = new FileInfo(file).Length;
+
+                if (fileLength > 100000)
+                    this.LargeVoxelFileList.Add(voxel);
+                else if (fileLength > 0)
+                    this.SmallVoxelFileList.Add(voxel);
             }
 
             // Set up a default start.

@@ -2,7 +2,6 @@
 {
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
-    using SEToolbox.Properties;
     using SEToolbox.Services;
     using System;
     using System.Collections.ObjectModel;
@@ -10,6 +9,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using System.Windows.Input;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ComponentListViewModel : BaseViewModel
     {
@@ -25,7 +25,7 @@
         #region Constructors
 
         public ComponentListViewModel(BaseViewModel parentViewModel, ComponentListModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<ISaveFileDialog>())
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<ISaveFileDialog>)
         {
         }
 
@@ -38,11 +38,7 @@
             this._dialogService = dialogService;
             this._saveFileDialogFactory = saveFileDialogFactory;
             this._dataModel = dataModel;
-            this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-            {
-                // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
-            };
+            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -179,8 +175,8 @@
         public void ExportReportExecuted()
         {
             var saveFileDialog = this._saveFileDialogFactory();
-            saveFileDialog.Filter = Resources.ExportReportFilter;
-            saveFileDialog.Title = string.Format(Resources.ExportReportTitle, "Component Item Report");
+            saveFileDialog.Filter = Res.DialogExportReportFilter;
+            saveFileDialog.Title = string.Format(Res.DialogExportReportTitle, "Component Item Report");
             saveFileDialog.FileName = "Space Engineers Component Item Report";
             saveFileDialog.OverwritePrompt = true;
 

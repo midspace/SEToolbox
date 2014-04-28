@@ -18,14 +18,6 @@
 
         #endregion
 
-        #region ctor
-
-        public GenerateVoxelModel()
-        {
-        }
-
-        #endregion
-
         #region Properties
 
         public int Index

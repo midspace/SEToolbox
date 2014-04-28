@@ -2,7 +2,6 @@
 {
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
-    using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using System;
@@ -10,6 +9,7 @@
     using System.IO;
     using System.Windows.Forms;
     using System.Windows.Input;
+    using Res = SEToolbox.Properties.Resources;
 
     public class FindApplicationViewModel : BaseViewModel
     {
@@ -25,7 +25,7 @@
         #region Constructors
 
         public FindApplicationViewModel(FindApplicationModel dataModel)
-            : this(dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>())
+            : this(dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
         {
         }
 
@@ -175,10 +175,10 @@
             openFileDialog.CheckPathExists = true;
             openFileDialog.DefaultExt = "exe";
             openFileDialog.FileName = "SpaceEngineers";
-            openFileDialog.Filter = Resources.LocateApplicationFilter;
+            openFileDialog.Filter = Res.DialogLocateApplicationFilter;
             openFileDialog.InitialDirectory = startPath;
             openFileDialog.Multiselect = false;
-            openFileDialog.Title = Resources.LocateApplicationTitle;
+            openFileDialog.Title = Res.DialogLocateApplicationTitle;
 
             // Open the dialog
             DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);

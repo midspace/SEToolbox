@@ -6,7 +6,6 @@
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
-    using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using System;
@@ -18,6 +17,7 @@
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
     using VRageMath;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ImportVoxelViewModel : BaseViewModel
     {
@@ -35,7 +35,7 @@
         #region Constructors
 
         public ImportVoxelViewModel(BaseViewModel parentViewModel, ImportVoxelModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>())
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
         {
         }
 
@@ -310,8 +310,8 @@
         {
             this.IsValidVoxelFile = false;
             var openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = Resources.ImportVoxelFilter;
-            openFileDialog.Title = Resources.ImportVoxelTitle;
+            openFileDialog.Filter = Res.DialogImportVoxelFilter;
+            openFileDialog.Title = Res.DialogImportVoxelTitle;
 
             // Open the dialog
             var result = _dialogService.ShowOpenFileDialog(this.OwnerViewModel, openFileDialog);

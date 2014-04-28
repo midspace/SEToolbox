@@ -5,7 +5,6 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;
-    using SEToolbox.Properties;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using System;
@@ -17,6 +16,7 @@
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ImportImageViewModel : BaseViewModel
     {
@@ -36,7 +36,7 @@
         #region Constructors
 
         public ImportImageViewModel(BaseViewModel parentViewModel, ImportImageModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), () => ServiceLocator.Resolve<IOpenFileDialog>())
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
         {
         }
 
@@ -49,11 +49,7 @@
             this._dialogService = dialogService;
             this._openFileDialogFactory = openFileDialogFactory;
             this._dataModel = dataModel;
-            this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-            {
-                // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
-            };
+            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -282,12 +278,12 @@
         {
             this.IsValidImage = false;
 
-            IOpenFileDialog openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = Resources.ImportImageFilter;
-            openFileDialog.Title = Resources.ImportImageTitle;
+            var openFileDialog = _openFileDialogFactory();
+            openFileDialog.Filter = Res.DialogImportImageFilter;
+            openFileDialog.Title = Res.DialogImportImageTitle;
 
             // Open the dialog
-            DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
+            var result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
 
             if (result == DialogResult.OK)
             {

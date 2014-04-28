@@ -50,6 +50,7 @@
             </StackPanel>
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="8" HorizontalAlignment="Right">
                 <Button Content="_Clear" Margin="8,0,0,0" Width="50" Command="{Binding ClearRowsCommand}"/>
+                <Button Content="Add _Random" Margin="8,0,0,0" Width="80" Command="{Binding AddRandomRowCommand}"/>
                 <Button Content="_Add" Margin="8,0,0,0" Width="50" Command="{Binding AddRowCommand}"/>
                 <Button Content="_Delete" Margin="8,0,0,0" Width="50" Command="{Binding DeleteRowCommand}"/>
             </StackPanel>

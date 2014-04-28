@@ -130,10 +130,10 @@
   <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ImportImageFilter" xml:space="preserve">
+  <data name="DialogImportImageFilter" xml:space="preserve">
     <value>Image files (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*</value>
   </data>
-  <data name="ImportImageTitle" xml:space="preserve">
+  <data name="DialogImportImageTitle" xml:space="preserve">
     <value>Select Image to Import</value>
   </data>
   <data name="ImportClassType_LargeShip" xml:space="preserve">
@@ -187,10 +187,10 @@
   <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ImportModelFilter" xml:space="preserve">
+  <data name="DialogImportModelFilter" xml:space="preserve">
     <value>All supported files|*.3ds;*.lwo;*.obj;*.objx;*.stl;*.off|3D Studio (*.3ds)|*.3ds|Lightwave (*.lwo)|*.lwo|Wavefront (*.obj)|*.obj;*.objx|StereoLithography (*.stl)|*.stl|OFF (*.off)|*.off</value>
   </data>
-  <data name="ImportModelTitle" xml:space="preserve">
+  <data name="DialogImportModelTitle" xml:space="preserve">
     <value>Select Model to Import</value>
   </data>
   <data name="ClassType_Voxel" xml:space="preserve">
@@ -214,10 +214,10 @@
   <data name="wrench" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wrench.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ImportVoxelFilter" xml:space="preserve">
+  <data name="DialogImportVoxelFilter" xml:space="preserve">
     <value>Image files (*.vox)|*.vox|All files (*.*)|*.*</value>
   </data>
-  <data name="ImportVoxelTitle" xml:space="preserve">
+  <data name="DialogImportVoxelTitle" xml:space="preserve">
     <value>Select Asteroid to Import</value>
   </data>
   <data name="transform" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -247,13 +247,13 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   <data name="workshop16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\workshop16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ExportSandboxObjectFilter" xml:space="preserve">
+  <data name="DialogExportSandboxObjectFilter" xml:space="preserve">
     <value>Sandbox Content files (*.sbc)|*.sbc|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
   </data>
-  <data name="ExportSandboxObjectTitle" xml:space="preserve">
+  <data name="DialogExportSandboxObjectTitle" xml:space="preserve">
     <value>Specify filename to export '{0}_{1}' to</value>
   </data>
-  <data name="ImportSandboxObjectTitle" xml:space="preserve">
+  <data name="DialogImportSandboxObjectTitle" xml:space="preserve">
     <value>Specify Sandbox objects to Import</value>
   </data>
   <data name="SECubes16" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -271,7 +271,7 @@ To use the SEToolbox, you must have SpaceEngineers installed on your computer.</
   <data name="Toolbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Toolbox_logo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ImportSandboxObjectFilter" xml:space="preserve">
+  <data name="DialogImportSandboxObjectFilter" xml:space="preserve">
     <value>Sandbox Content files (*.sbc)|*.sbc|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
   </data>
   <data name="sort_descending" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -376,16 +376,16 @@ Units:		{4:#,##0}</value>
   <data name="Boolean_True" xml:space="preserve">
     <value>Yes</value>
   </data>
-  <data name="ExportReportFilter" xml:space="preserve">
+  <data name="DialogExportReportFilter" xml:space="preserve">
     <value>Sandbox Content files (*.htm)|*.htm</value>
   </data>
-  <data name="ExportReportTitle" xml:space="preserve">
+  <data name="DialogExportReportTitle" xml:space="preserve">
     <value>Specify filename to export '{0}' to</value>
   </data>
-  <data name="LocateApplicationFilter" xml:space="preserve">
+  <data name="DialogLocateApplicationFilter" xml:space="preserve">
     <value>Space Engineers Application|SpaceEngineers.exe</value>
   </data>
-  <data name="LocateApplicationTitle" xml:space="preserve">
+  <data name="DialogLocateApplicationTitle" xml:space="preserve">
     <value>Specify location of Space Engineers Application</value>
   </data>
   <data name="warning32" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -397,7 +397,7 @@ Units:		{4:#,##0}</value>
   <data name="error24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\error24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="UnhandledExceptionEventMessage" xml:space="preserve">
+  <data name="DialogUnhandledExceptionEventMessage" xml:space="preserve">
     <value>An error has been detected in the application that has caused the application to shutdown:
 
 {0}
@@ -405,14 +405,14 @@ Units:		{4:#,##0}</value>
 Please see the Application Event Log for more details.
 Apologies for any inconvenience.</value>
   </data>
-  <data name="UnhandledExceptionMessage" xml:space="preserve">
+  <data name="DialogUnhandledExceptionMessage" xml:space="preserve">
     <value>An error has been detected in the application that has caused the application to shutdown:
 
 {0}
 
 Apologies for any inconvenience.</value>
   </data>
-  <data name="UnhandledExceptionTitle" xml:space="preserve">
+  <data name="DialogUnhandledExceptionTitle" xml:space="preserve">
     <value>"Space Engineers Toolbox Error</value>
   </data>
   <data name="replace2" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -420,5 +420,12 @@ Apologies for any inconvenience.</value>
   </data>
   <data name="ModelTraceVoxel_ThickSmoothedDown" xml:space="preserve">
     <value>Thick Shell with Subtracted Smoothing</value>
+  </data>
+  <data name="DialogNewVersionMessage" xml:space="preserve">
+    <value>A new version of SEToolbox ({0}) is available.
+Would you like to download it now?</value>
+  </data>
+  <data name="DialogNewVersionTitle" xml:space="preserve">
+    <value>New version available</value>
   </data>
 </root>
