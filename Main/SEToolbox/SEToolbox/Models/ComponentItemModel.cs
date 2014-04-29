@@ -7,7 +7,7 @@
     using SEToolbox.Interop;
 
     [Serializable]
-    public class ComonentItemModel : BaseModel
+    public class ComponentItemModel : BaseModel
     {
         #region fields
 

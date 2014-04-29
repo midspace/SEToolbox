@@ -98,7 +98,7 @@
             }
         }
 
-        public ObservableCollection<ComonentItemModel> CubeAssets
+        public ObservableCollection<ComponentItemModel> CubeAssets
         {
             get
             {
@@ -111,7 +111,7 @@
             }
         }
 
-        public ObservableCollection<ComonentItemModel> ComponentAssets
+        public ObservableCollection<ComponentItemModel> ComponentAssets
         {
             get
             {
@@ -124,7 +124,7 @@
             }
         }
 
-        public ObservableCollection<ComonentItemModel> ItemAssets
+        public ObservableCollection<ComponentItemModel> ItemAssets
         {
             get
             {
@@ -137,7 +137,7 @@
             }
         }
 
-        public ObservableCollection<ComonentItemModel> MaterialAssets
+        public ObservableCollection<ComponentItemModel> MaterialAssets
         {
             get
             {
@@ -150,7 +150,7 @@
             }
         }
 
-        public ComonentItemModel SelectedCubeAsset
+        public ComponentItemModel SelectedCubeAsset
         {
             get
             {

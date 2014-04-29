@@ -139,7 +139,8 @@
     <Compile Include="Models\BindableSize3DModel.cs" />
     <Compile Include="Models\BindableSize3DIModel.cs" />
     <Compile Include="Models\ComponentListModel.cs" />
-    <Compile Include="Models\ComonentItemModel.cs" />
+    <Compile Include="Models\ComponentItemModel.cs" />
+    <Compile Include="Models\CubeItemModel.cs" />
     <Compile Include="Models\FindApplicationModel.cs" />
     <Compile Include="Models\GenerateFloatingObjectModel.cs" />
     <Compile Include="Models\GroupMoveItemModel.cs" />
@@ -513,6 +514,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\replace2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\navigate_cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\selection_replace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\colors.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

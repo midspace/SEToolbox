@@ -19,17 +19,17 @@
     {
         #region Fields
 
-        private ObservableCollection<ComonentItemModel> _cubeAssets;
+        private ObservableCollection<ComponentItemModel> _cubeAssets;
 
-        private ObservableCollection<ComonentItemModel> _componentAssets;
+        private ObservableCollection<ComponentItemModel> _componentAssets;
 
-        private ObservableCollection<ComonentItemModel> _itemAssets;
+        private ObservableCollection<ComponentItemModel> _itemAssets;
 
-        private ObservableCollection<ComonentItemModel> _materialAssets;
+        private ObservableCollection<ComponentItemModel> _materialAssets;
 
         private bool _isBusy;
 
-        private ComonentItemModel _selectedCubeAsset;
+        private ComponentItemModel _selectedCubeAsset;
 
         #endregion
 
@@ -46,7 +46,7 @@
         /// <summary>
         /// This is detail of the breakdown of cubes in the ship.
         /// </summary>
-        public ObservableCollection<ComonentItemModel> CubeAssets
+        public ObservableCollection<ComponentItemModel> CubeAssets
         {
             get
             {
@@ -66,7 +66,7 @@
         /// <summary>
         /// This is detail of the breakdown of components in the ship.
         /// </summary>
-        public ObservableCollection<ComonentItemModel> ComponentAssets
+        public ObservableCollection<ComponentItemModel> ComponentAssets
         {
             get
             {
@@ -86,7 +86,7 @@
         /// <summary>
         /// This is detail of the breakdown of items.
         /// </summary>
-        public ObservableCollection<ComonentItemModel> ItemAssets
+        public ObservableCollection<ComponentItemModel> ItemAssets
         {
             get
             {
@@ -106,7 +106,7 @@
         /// <summary>
         /// This is detail of the breakdown of materials used by asteroids.
         /// </summary>
-        public ObservableCollection<ComonentItemModel> MaterialAssets
+        public ObservableCollection<ComponentItemModel> MaterialAssets
         {
             get
             {
@@ -147,7 +147,7 @@
             }
         }
 
-        public ComonentItemModel SelectedCubeAsset
+        public ComponentItemModel SelectedCubeAsset
         {
             get
             {
@@ -172,10 +172,10 @@
 
         public void Load()
         {
-            this.CubeAssets = new ObservableCollection<ComonentItemModel>();
-            this.ComponentAssets = new ObservableCollection<ComonentItemModel>();
-            this.ItemAssets = new ObservableCollection<ComonentItemModel>();
-            this.MaterialAssets = new ObservableCollection<ComonentItemModel>();
+            this.CubeAssets = new ObservableCollection<ComponentItemModel>();
+            this.ComponentAssets = new ObservableCollection<ComponentItemModel>();
+            this.ItemAssets = new ObservableCollection<ComponentItemModel>();
+            this.MaterialAssets = new ObservableCollection<ComponentItemModel>();
 
             var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
 
@@ -193,7 +193,7 @@
                     }
                 }
 
-                this.CubeAssets.Add(new ComonentItemModel()
+                this.CubeAssets.Add(new ComponentItemModel()
                 {
                     Name = cubeDefinition.DisplayName,
                     TypeId = cubeDefinition.Id.TypeId,
@@ -212,7 +212,7 @@
             {
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.TypeId == componentDefinition.Id.TypeId);
 
-                this.ComponentAssets.Add(new ComonentItemModel()
+                this.ComponentAssets.Add(new ComponentItemModel()
                 {
                     Name = componentDefinition.DisplayName,
                     TypeId = componentDefinition.Id.TypeId,
@@ -228,7 +228,7 @@
             foreach (var physicalItemDefinition in SpaceEngineersAPI.PhysicalItemDefinitions)
             {
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
-                this.ItemAssets.Add(new ComonentItemModel()
+                this.ItemAssets.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -244,7 +244,7 @@
             foreach (var physicalItemDefinition in SpaceEngineersAPI.AmmoMagazineDefinitions)
             {
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
-                this.ItemAssets.Add(new ComonentItemModel()
+                this.ItemAssets.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -259,7 +259,7 @@
 
             foreach (var voxelMaterialDefinition in SpaceEngineersAPI.VoxelMaterialDefinitions)
             {
-                this.MaterialAssets.Add(new ComonentItemModel()
+                this.MaterialAssets.Add(new ComponentItemModel()
                 {
                     Name = voxelMaterialDefinition.AssetName,
                     TextureFile = Path.Combine(contentPath, @"Textures\Voxels\" + voxelMaterialDefinition.AssetName + "_ForAxisXZ_de.dds"),
