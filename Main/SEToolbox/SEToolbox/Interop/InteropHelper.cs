@@ -127,5 +127,23 @@
 
             return new SerializableVector3();
         }
+
+        public static System.Drawing.Color ToSandboxDrawingColor(this SerializableVector3 hsv)
+        {
+            var vColor = VRageMath.ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
+            return System.Drawing.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+        }
+
+        public static System.Windows.Media.Color ToSandboxMediaColor(this SerializableVector3 hsv)
+        {
+            var vColor = VRageMath.ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
+            return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+        }
+
+        public static SerializableVector3 ToSandboxHsvColor(this System.Drawing.Color color)
+        {
+            var vColor = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(color.R, color.G, color.B));
+            return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
+        }
     }
 }

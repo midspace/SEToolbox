@@ -491,7 +491,7 @@
                             newCube.EntityId = 0;
                             newCube.BlockOrientation = SpaceEngineersAPI.GetCubeOrientation(CubeType.Cube);
                             newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
-                            newCube.ColorMaskHSV = new SerializableVector3(color.GetHue() / 360f, color.GetSaturation() * 2 - 1, color.GetBrightness() * 2 - 1);
+                            newCube.ColorMaskHSV = color.ToSandboxHsvColor();
                         }
                     }
                 }

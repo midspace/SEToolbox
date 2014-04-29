@@ -107,7 +107,7 @@
             }
         }
 
-        public ObservableCollection<ComonentItemModel> StockItemList
+        public ObservableCollection<ComponentItemModel> StockItemList
         {
             get
             {
@@ -115,7 +115,7 @@
             }
         }
 
-        public ComonentItemModel StockItem
+        public ComponentItemModel StockItem
         {
             get
             {

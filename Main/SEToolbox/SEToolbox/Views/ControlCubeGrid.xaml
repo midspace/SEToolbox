@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:SEToolbox.Converters"
              xmlns:controls="clr-namespace:SEToolbox.Controls"
+             xmlns:commands="clr-namespace:SEToolbox.Services"
              xmlns:views="clr-namespace:SEToolbox.Views"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
@@ -194,7 +196,91 @@
                 <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" Text="{Binding CockpitOrientation}" />
             </Grid>
         </TabItem>
-        <TabItem Header="Components">
+        <TabItem Header="Cubes">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.ColumnSpan="2" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="4 0 4 0" Text="Filter:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,4,0" Text="{Binding ComponentFilter, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding FilterStartCommand}"/>
+                            <KeyBinding Key="Tab" Command="{Binding FilterStartCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <Button Grid.Column="2" ToolTip="Search" Command="{Binding FilterStartCommand}">
+                        <Button.Content>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=find}" />
+                        </Button.Content>
+                    </Button>
+                    <Button Grid.Column="3" ToolTip="Clear Filter" Command="{Binding FilterClearCommand}">
+                        <Button.Content>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_cross}" />
+                        </Button.Content>
+                    </Button>
+                </Grid>
+                <Menu Grid.Row="1" Grid.ColumnSpan="2">
+                    <MenuItem Command="{Binding DeleteCubesCommand}" Header="Delete" Padding="0,2,4,2">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding ReplaceCubesCommand}" Header="Replace" Padding="0,2,4,2">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=selection_replace}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding ColorCubesCommand}" Header="Color" Padding="0,2,4,2">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=colors}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </Menu>
+                <controls:SortableListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding CubeList, Mode=OneWay}"
+                        ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+                    <ListView.View>
+                        <GridView>
+                            <controls:SortableGridViewColumn Width="30" Header="Icon" SortBinding="{Binding FriendlyName}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </controls:SortableGridViewColumn>
+                            <controls:SortableGridViewColumn Width="30" Header="Color" SortBinding="{Binding ColorText}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </controls:SortableGridViewColumn>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
+                            <GridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80"/>
+                        </GridView>
+                    </ListView.View>
+                </controls:SortableListView>
+                <GridSplitter Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />
+                <StackPanel Grid.Row="4">
+                    
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Construction">
             <ScrollViewer>
                 <Grid>
                     <Grid.ColumnDefinitions>

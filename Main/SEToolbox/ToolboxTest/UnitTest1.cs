@@ -10,6 +10,7 @@
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using System.Collections.Generic;
 
     [TestClass]
     public class UnitTest1
@@ -118,17 +119,66 @@
         }
 
         [TestMethod]
-        public void ColorTest()
+        public void SandboxColorTest()
+        {
+            var colors = new Color[]
+            {
+                Color.FromArgb(255, 255, 255),
+                Color.FromArgb(0, 0, 0),
+                Color.FromArgb(0, 1, 1),   // PhotoShop = H:180, S:100%, B:1%
+                Color.FromArgb(255, 0, 0),
+                Color.FromArgb(0, 255, 0),
+                Color.FromArgb(0, 0, 255),
+            };
+
+            var hsvList = new List<SerializableVector3>();
+            foreach (var color in colors)
+            {
+                hsvList.Add(color.ToSandboxHsvColor());
+            }
+
+            var rgbList = new List<Color>();
+            foreach (var hsv in hsvList)
+            {
+                rgbList.Add(hsv.ToSandboxDrawingColor());
+            }
+
+            var rgbArray = rgbList.ToArray();
+
+            for (var i = 0; i < colors.Length; i++)
+            {
+                Assert.AreEqual(rgbArray[i].R, colors[i].R, "Red Should Equal");
+                Assert.AreEqual(rgbArray[i].B, colors[i].B, "Blue Should Equal");
+                Assert.AreEqual(rgbArray[i].G, colors[i].G, "Green Should Equal");
+            }
+        }
+
+        [TestMethod]
+        public void VRageColorTest()
         {
             var c1 = Color.FromArgb(255, 255, 255);
             var c2 = Color.FromArgb(0, 0, 0);
             var c3 = Color.FromArgb(0, 1, 1);   //PS = H:180, S:100%, B:1%
 
-            var h3 = c3.GetHue();
-            var s3 = c3.GetSaturation();
-            var b3 = c3.GetBrightness();
+            var vColor1 = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(c1.R, c1.B, c1.G));
+            var vColor2 = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(c2.R, c2.B, c2.G));
+            var vColor3 = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(c3.R, c3.B, c3.G));
 
-            var v3 = new SerializableVector3(c3.GetHue() / 360f, c3.GetSaturation() * 2 - 1, c3.GetBrightness() * 2 - 1);
+            var rgb1 = VRageMath.ColorExtensions.HSVtoColor(vColor1);
+            var rgb2 = VRageMath.ColorExtensions.HSVtoColor(vColor2);
+            var rgb3 = VRageMath.ColorExtensions.HSVtoColor(vColor3);
+
+            Assert.AreEqual(rgb1.R, c1.R, "Red Should Equal");
+            Assert.AreEqual(rgb1.B, c1.B, "Blue Should Equal");
+            Assert.AreEqual(rgb1.G, c1.G, "Green Should Equal");
+
+            Assert.AreEqual(rgb2.R, c2.R, "Red Should Equal");
+            Assert.AreEqual(rgb2.B, c2.B, "Blue Should Equal");
+            Assert.AreEqual(rgb2.G, c2.G, "Green Should Equal");
+
+            Assert.AreEqual(rgb3.R, c3.R, "Red Should Equal");
+            Assert.AreEqual(rgb3.B, c3.B, "Blue Should Equal");
+            Assert.AreEqual(rgb3.G, c3.G, "Green Should Equal");
         }
 
         [TestMethod]

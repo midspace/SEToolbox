@@ -7,6 +7,7 @@
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
@@ -41,6 +42,12 @@
 
         [XmlIgnore]
         private List<OreAssetModel> _oreAssets;
+
+        [XmlIgnore]
+        private string _componentFilter;
+
+        [XmlIgnore]
+        private ObservableCollection<CubeItemModel> _cubeList;
 
         #endregion
 
@@ -402,6 +409,42 @@
             }
         }
 
+        [XmlIgnore]
+        public string ComponentFilter
+        {
+            get
+            {
+                return this._componentFilter;
+            }
+
+            set
+            {
+                if (value != this._componentFilter)
+                {
+                    this._componentFilter = value;
+                    this.RaisePropertyChanged(() => ComponentFilter);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public ObservableCollection<CubeItemModel> CubeList
+        {
+            get
+            {
+                return this._cubeList;
+            }
+
+            set
+            {
+                if (value != this._cubeList)
+                {
+                    this._cubeList = value;
+                    this.RaisePropertyChanged(() => CubeList);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -451,6 +494,7 @@
 
             var cubeAssetDict = new Dictionary<string, CubeAssetModel>();
             var componentAssetDict = new Dictionary<string, CubeAssetModel>();
+            this.CubeList = new ObservableCollection<CubeItemModel>();
 
             foreach (var block in this.CubeGrid.CubeBlocks)
             {
@@ -459,6 +503,11 @@
                 min.Z = Math.Min(min.Z, block.Min.Z);
 
                 var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
+
+                this.CubeList.Add(new CubeItemModel(block, this.CubeGrid.GridSizeEnum, cubeDefinition)
+                {
+                    TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds")
+                });
 
                 // definition is null when the block no longer exists in the Cube definitions. Ie, Ladder, or a Mod that was removed.
                 if (cubeDefinition == null || (cubeDefinition.Size.X == 1 && cubeDefinition.Size.Y == 1 && cubeDefinition.Size.z == 1))
@@ -551,7 +600,7 @@
             if (cockpits.Length > 0)
             {
                 var count = cockpits.Count(b => b.BlockOrientation.Forward == cockpits[0].BlockOrientation.Forward && b.BlockOrientation.Up == cockpits[0].BlockOrientation.Up);
-                if (cockpits.Length == count) 
+                if (cockpits.Length == count)
                 {
                     // All cockpits share the same orientation.
                     cockpitOrientation = string.Format("Forward={0} ({1}), Up={2} ({3})", cockpits[0].BlockOrientation.Forward, GetAxisIndicator(cockpits[0].BlockOrientation.Forward), cockpits[0].BlockOrientation.Up, GetAxisIndicator(cockpits[0].BlockOrientation.Up));
@@ -759,7 +808,7 @@
 
                     cube.Min = new SerializableVector3I(Math.Min(min.X, max.X), Math.Min(min.Y, max.Y), Math.Min(min.Z, max.Z));
                 }
-                
+
                 // rotate BlockOrientation.
                 var q = quaternion * cube.BlockOrientation.ToQuaternion();
                 cube.BlockOrientation = new SerializableBlockOrientation(ref q);

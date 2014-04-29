@@ -5,6 +5,7 @@
     using SEToolbox.Services;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Text;
     using System.Windows;
@@ -237,6 +238,46 @@
             }
         }
 
+        public ICommand FilterStartCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(FilterStartExecuted), new Func<bool>(FilterStartCanExecute));
+            }
+        }
+
+        public ICommand FilterClearCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(FilterClearExecuted), new Func<bool>(FilterClearCanExecute));
+            }
+        }
+
+        public ICommand DeleteCubesCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(DeleteCubesExecuted), new Func<bool>(DeleteCubesCanExecute));
+            }
+        }
+
+        public ICommand ReplaceCubesCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ReplaceCubesExecuted), new Func<bool>(ReplaceCubesCanExecute));
+            }
+        }
+
+        public ICommand ColorCubesCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ColorCubesExecuted), new Func<bool>(ColorCubesCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -448,6 +489,27 @@
             set
             {
                 this.DataModel.OreAssets = value;
+            }
+        }
+
+        public string ComponentFilter
+        {
+            get
+            {
+                return this.DataModel.ComponentFilter;
+            }
+
+            set
+            {
+                this.DataModel.ComponentFilter = value;
+            }
+        }
+
+        public ObservableCollection<CubeItemModel> CubeList
+        {
+            get
+            {
+                return this.DataModel.CubeList;
             }
         }
 
@@ -816,6 +878,56 @@
                 ores.ToString());
 
             Clipboard.SetText(detail);
+        }
+
+        public bool FilterStartCanExecute()
+        {
+            return false;
+        }
+
+        public void FilterStartExecuted()
+        {
+            // TODO:
+        }
+
+        public bool FilterClearCanExecute()
+        {
+            return !string.IsNullOrEmpty(this.ComponentFilter);
+        }
+
+        public void FilterClearExecuted()
+        {
+            this.ComponentFilter = string.Empty;
+        }
+
+        public bool DeleteCubesCanExecute()
+        {
+            return false;
+        }
+
+        public void DeleteCubesExecuted()
+        {
+            // TODO:
+        }
+
+        public bool ReplaceCubesCanExecute()
+        {
+            return false;
+        }
+
+        public void ReplaceCubesExecuted()
+        {
+            // TODO:
+        }
+
+        public bool ColorCubesCanExecute()
+        {
+            return false;
+        }
+
+        public void ColorCubesExecuted()
+        {
+            // TODO:
         }
 
         #endregion

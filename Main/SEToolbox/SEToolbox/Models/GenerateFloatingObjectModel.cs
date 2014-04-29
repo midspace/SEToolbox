@@ -16,8 +16,8 @@
         #region Fields
 
         private MyPositionAndOrientation _characterPosition;
-        private ObservableCollection<ComonentItemModel> _stockItemList;
-        private ComonentItemModel _stockItem;
+        private ObservableCollection<ComponentItemModel> _stockItemList;
+        private ComponentItemModel _stockItem;
 
         private bool _isValidItemToImport;
 
@@ -37,7 +37,7 @@
 
         public GenerateFloatingObjectModel()
         {
-            this._stockItemList = new ObservableCollection<ComonentItemModel>();
+            this._stockItemList = new ObservableCollection<ComponentItemModel>();
             this.Multiplier = 1;
         }
 
@@ -60,7 +60,7 @@
             }
         }
 
-        public ObservableCollection<ComonentItemModel> StockItemList
+        public ObservableCollection<ComponentItemModel> StockItemList
         {
             get
             {
@@ -77,7 +77,7 @@
             }
         }
 
-        public ComonentItemModel StockItem
+        public ComponentItemModel StockItem
         {
             get
             {
@@ -282,13 +282,13 @@
             this.MaxFloatingObjects = maxFloatingObjects;
             this.CharacterPosition = characterPosition;
             this.StockItemList.Clear();
-            var list = new SortedList<string, ComonentItemModel>();
+            var list = new SortedList<string, ComponentItemModel>();
             var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
 
             foreach (var componentDefinition in SpaceEngineersAPI.ComponentDefinitions)
             {
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.TypeId == componentDefinition.Id.TypeId);
-                list.Add(componentDefinition.DisplayName, new ComonentItemModel()
+                list.Add(componentDefinition.DisplayName, new ComponentItemModel()
                 {
                     Name = componentDefinition.DisplayName,
                     TypeId = componentDefinition.Id.TypeId,
@@ -307,7 +307,7 @@
                     continue;
 
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
-                list.Add(physicalItemDefinition.DisplayName, new ComonentItemModel()
+                list.Add(physicalItemDefinition.DisplayName, new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -323,7 +323,7 @@
             foreach (var physicalItemDefinition in SpaceEngineersAPI.AmmoMagazineDefinitions)
             {
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
-                list.Add(physicalItemDefinition.DisplayName, new ComonentItemModel()
+                list.Add(physicalItemDefinition.DisplayName, new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
