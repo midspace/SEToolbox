@@ -44,10 +44,16 @@
         private List<OreAssetModel> _oreAssets;
 
         [XmlIgnore]
+        private string _activeComponentFilter;
+
+        [XmlIgnore]
         private string _componentFilter;
 
         [XmlIgnore]
         private ObservableCollection<CubeItemModel> _cubeList;
+
+        [XmlIgnore]
+        private CubeItemModel _selectedCubeItem;
 
         #endregion
 
@@ -410,6 +416,24 @@
         }
 
         [XmlIgnore]
+        public string ActiveComponentFilter
+        {
+            get
+            {
+                return this._activeComponentFilter;
+            }
+
+            set
+            {
+                if (value != this._activeComponentFilter)
+                {
+                    this._activeComponentFilter = value;
+                    this.RaisePropertyChanged(() => ActiveComponentFilter);
+                }
+            }
+        }
+
+        [XmlIgnore]
         public string ComponentFilter
         {
             get
@@ -441,6 +465,24 @@
                 {
                     this._cubeList = value;
                     this.RaisePropertyChanged(() => CubeList);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public CubeItemModel SelectedCubeItem
+        {
+            get
+            {
+                return this._selectedCubeItem;
+            }
+
+            set
+            {
+                if (value != this._selectedCubeItem)
+                {
+                    this._selectedCubeItem = value;
+                    this.RaisePropertyChanged(() => SelectedCubeItem);
                 }
             }
         }

@@ -158,6 +158,23 @@
             return dialog.ShowDialog(new WindowWrapper(FindOwnerWindow(ownerViewModel)));
         }
 
+        /// <summary>
+        /// Shows the ColorDialog.
+        /// </summary>
+        /// <param name="ownerViewModel">
+        /// A ViewModel that represents the owner window of the dialog.
+        /// </param>
+        /// <param name="colorDialog">The interface of a color dialog.</param>
+        /// <returns>The DialogResult.OK if successful; otherwise DialogResult.Cancel.</returns>
+        public DialogResult ShowColorDialog(object ownerViewModel, IColorDialog colorDialog)
+        {
+            // Create ColorDialog with specified ViewModel
+            var dialog = new ColorDialog(colorDialog);
+
+            // Show dialog
+            return dialog.ShowDialog(new WindowWrapper(FindOwnerWindow(ownerViewModel)));
+        }
+
         #endregion
 
         #region Attached properties

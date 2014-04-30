@@ -11,8 +11,8 @@
     /// </summary>
     public class SaveFileDialog : IDisposable
     {
-        private readonly ISaveFileDialog saveFileDialog;
-        private WinFormsSaveFileDialog concreteSaveFileDialog;
+        private readonly ISaveFileDialog _saveFileDialog;
+        private WinFormsSaveFileDialog _concreteSaveFileDialog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveFileDialog"/> class.
@@ -22,10 +22,10 @@
         {
             Contract.Requires(saveFileDialog != null);
 
-            this.saveFileDialog = saveFileDialog;
+            this._saveFileDialog = saveFileDialog;
 
             // Create concrete SaveFileDialog
-            concreteSaveFileDialog = new WinFormsSaveFileDialog
+            _concreteSaveFileDialog = new WinFormsSaveFileDialog
             {
                 AddExtension = saveFileDialog.AddExtension,
                 CheckFileExists = saveFileDialog.CheckFileExists,
@@ -54,11 +54,11 @@
         {
             Contract.Requires(owner != null);
 
-            DialogResult result = concreteSaveFileDialog.ShowDialog(owner);
+            DialogResult result = _concreteSaveFileDialog.ShowDialog(owner);
 
             // Update ViewModel
-            saveFileDialog.FileName = concreteSaveFileDialog.FileName;
-            saveFileDialog.FileNames = concreteSaveFileDialog.FileNames;
+            _saveFileDialog.FileName = _concreteSaveFileDialog.FileName;
+            _saveFileDialog.FileNames = _concreteSaveFileDialog.FileNames;
 
             return result;
         }
@@ -85,10 +85,10 @@
         {
             if (disposing)
             {
-                if (concreteSaveFileDialog != null)
+                if (_concreteSaveFileDialog != null)
                 {
-                    concreteSaveFileDialog.Dispose();
-                    concreteSaveFileDialog = null;
+                    _concreteSaveFileDialog.Dispose();
+                    _concreteSaveFileDialog = null;
                 }
             }
         }

@@ -7,7 +7,6 @@
              xmlns:controls="clr-namespace:SEToolbox.Controls"
              xmlns:commands="clr-namespace:SEToolbox.Services"
              xmlns:views="clr-namespace:SEToolbox.Views"
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
@@ -198,18 +197,12 @@
         </TabItem>
         <TabItem Header="Cubes">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.ColumnSpan="2" >
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
@@ -221,6 +214,7 @@
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding FilterStartCommand}"/>
                             <KeyBinding Key="Tab" Command="{Binding FilterStartCommand}"/>
+                            <KeyBinding Key="Escape" Command="{Binding FilterClearCommand}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Button Grid.Column="2" ToolTip="Search" Command="{Binding FilterStartCommand}">
@@ -250,34 +244,55 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=colors}"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Command="{Binding FrameworkCubesCommand}" Header="Framework" Padding="0,2,4,2">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </Menu>
-                <controls:SortableListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding CubeList, Mode=OneWay}"
-                        ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
-                    <ListView.View>
-                        <GridView>
-                            <controls:SortableGridViewColumn Width="30" Header="Icon" SortBinding="{Binding FriendlyName}">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </controls:SortableGridViewColumn>
-                            <controls:SortableGridViewColumn Width="30" Header="Color" SortBinding="{Binding ColorText}">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </controls:SortableGridViewColumn>
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
-                            <GridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80"/>
-                        </GridView>
-                    </ListView.View>
-                </controls:SortableListView>
-                <GridSplitter Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />
-                <StackPanel Grid.Row="4">
-                    
-                </StackPanel>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*" MinHeight="100"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" MinHeight="100"/>
+                    </Grid.RowDefinitions>
+                    <controls:SortableListView Grid.Row="0" ItemsSource="{Binding CubeList, Mode=OneWay}"
+                        ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}" SelectedValue="{Binding SelectedCubeItem}">
+                        <ListView.View>
+                            <GridView>
+                                <controls:SortableGridViewColumn Width="30" Header="Icon" SortBinding="{Binding FriendlyName}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </controls:SortableGridViewColumn>
+                                <controls:SortableGridViewColumn Width="30" Header="Color" SortBinding="{Binding ColorText}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1"  ToolTip="{Binding ColorText}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </controls:SortableGridViewColumn>
+                                <GridViewColumn Header="Build" DisplayMemberBinding="{Binding Build, StringFormat=P}" Width="40"/>
+                                <controls:SortableGridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80">
+                                    <controls:SortableGridViewColumn.SortBinding>
+                                        <MultiBinding>
+                                            <Binding Path="Position.Width" />
+                                            <Binding Path="Position.Height" />
+                                            <Binding Path="Position.Depth" />
+                                        </MultiBinding>
+                                    </controls:SortableGridViewColumn.SortBinding>
+                                </controls:SortableGridViewColumn>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
+                            </GridView>
+                        </ListView.View>
+                    </controls:SortableListView>
+                    <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />
+                    <StackPanel Grid.Row="2">
+
+                    </StackPanel>
+                </Grid>
             </Grid>
         </TabItem>
         <TabItem Header="Construction">

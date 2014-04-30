@@ -157,5 +157,23 @@
 
             return default(DialogResult);
         }
+
+        /// <summary>
+        /// Shows the ColorDialog.
+        /// </summary>
+        /// <param name="ownerViewModel">
+        /// A ViewModel that represents the owner window of the dialog.
+        /// </param>
+        /// <param name="colorDialog">The interface of a folder browser dialog.</param>
+        /// <returns>
+        /// The DialogResult.OK if successful; otherwise DialogResult.Cancel.
+        /// </returns>
+        public DialogResult ShowColorDialog(object ownerViewModel, IColorDialog colorDialog)
+        {
+            Contract.Requires(ownerViewModel != null);
+            Contract.Requires(colorDialog != null);
+
+            return default(DialogResult);
+        }
     }
 }

@@ -1,12 +1,12 @@
 ﻿namespace SEToolbox.Controls
 {
+    using SEToolbox.Support;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
-    using SEToolbox.Support;
-    using SEToolbox.Services;
 
     public class SortableListView : ListView
     {
@@ -72,23 +72,31 @@
                         }
                     }
 
-                    string header;
-                    if (headerClicked.Column.DisplayMemberBinding is Binding)
-                    {
-                        Binding binding = headerClicked.Column.DisplayMemberBinding as Binding;
-                        header = binding.Path.Path;
-                    }
-                    else if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is Binding)
+                    var header = new List<string>();
+                    if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is Binding)
                     {
                         Binding binding = ((SortableGridViewColumn)headerClicked.Column).SortBinding as Binding;
-                        header = binding.Path.Path;
+                        header.Add(binding.Path.Path);
+                    }
+                    else if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is MultiBinding)
+                    {
+                        MultiBinding multiBinding = ((SortableGridViewColumn)headerClicked.Column).SortBinding as MultiBinding;
+                        foreach (Binding binding in multiBinding.Bindings)
+                        {
+                            header.Add(binding.Path.Path);
+                        }
+                    }
+                    else if (headerClicked.Column.DisplayMemberBinding is Binding)
+                    {
+                        Binding binding = headerClicked.Column.DisplayMemberBinding as Binding;
+                        header.Add(binding.Path.Path);
                     }
                     else
                     {
-                        header = headerClicked.Column.Header as string;
+                        header.Add(headerClicked.Column.Header as string);
                     }
 
-                    if (string.IsNullOrEmpty(header))
+                    if (header == null || header.Count == 0)
                         return;
 
                     Sort(listView, header, direction);
@@ -125,7 +133,7 @@
             }
         }
 
-        private static void Sort(ItemsControl lv, string sortBy, ListSortDirection direction)
+        private static void Sort(ItemsControl lv, List<string> sortList, ListSortDirection direction)
         {
             if (lv.ItemsSource != null)
             {
@@ -133,8 +141,11 @@
                 //ICollectionView dataView = lv.Items as ICollectionView;
 
                 dataView.SortDescriptions.Clear();
-                var sd = new SortDescription(sortBy, direction);
-                dataView.SortDescriptions.Add(sd);
+                foreach (var sortBy in sortList)
+                {
+                    var sd = new SortDescription(sortBy, direction);
+                    dataView.SortDescriptions.Add(sd);
+                }
                 dataView.Refresh();
             }
         }

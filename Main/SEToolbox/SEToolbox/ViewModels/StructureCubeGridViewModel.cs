@@ -1,6 +1,10 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Diagnostics.Contracts;
+    using System.Drawing;
+    using System.Windows.Data;
     using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
@@ -11,14 +15,34 @@
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
+    using SEToolbox.Interop;
 
     public class StructureCubeGridViewModel : StructureBaseViewModel<StructureCubeGridModel>
     {
+        #region fields
+
+        private static readonly List<int> CustomColors = new List<int>();
+        private readonly IDialogService _dialogService;
+        private readonly Func<IColorDialog> _colorDialogFactory;
+        
+        #endregion
+
         #region ctor
 
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel)
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IColorDialog>)
+        {
+        }
+
+        public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel, IDialogService dialogService, Func<IColorDialog> colorDialogFactory)
             : base(parentViewModel, dataModel)
         {
+            Contract.Requires(dialogService != null);
+            Contract.Requires(colorDialogFactory != null);
+
+            this._dialogService = dialogService;
+            this._colorDialogFactory = colorDialogFactory;
+
             this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
@@ -278,6 +302,14 @@
             }
         }
 
+        public ICommand FrameworkCubesCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(FrameworkCubesExecuted), new Func<bool>(FrameworkCubesCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -492,6 +524,19 @@
             }
         }
 
+        public string ActiveComponentFilter
+        {
+            get
+            {
+                return this.DataModel.ActiveComponentFilter;
+            }
+
+            set
+            {
+                this.DataModel.ActiveComponentFilter = value;
+            }
+        }
+
         public string ComponentFilter
         {
             get
@@ -513,9 +558,22 @@
             }
         }
 
+        public CubeItemModel SelectedCubeItem
+        {
+            get
+            {
+                return this.DataModel.SelectedCubeItem;
+            }
+
+            set
+            {
+                this.DataModel.SelectedCubeItem = value;
+            }
+        }
+
         #endregion
 
-        #region methods
+        #region command methods
 
         public bool OptimizeObjectCanExecute()
         {
@@ -882,12 +940,13 @@
 
         public bool FilterStartCanExecute()
         {
-            return false;
+            return this.ActiveComponentFilter != this.ComponentFilter;
         }
 
         public void FilterStartExecuted()
         {
-            // TODO:
+            this.ActiveComponentFilter = this.ComponentFilter;
+            ApplyCubeFilter();
         }
 
         public bool FilterClearCanExecute()
@@ -898,6 +957,8 @@
         public void FilterClearExecuted()
         {
             this.ComponentFilter = string.Empty;
+            this.ActiveComponentFilter = this.ComponentFilter;
+            ApplyCubeFilter();
         }
 
         public bool DeleteCubesCanExecute()
@@ -922,12 +983,62 @@
 
         public bool ColorCubesCanExecute()
         {
-            return false;
+            return this.SelectedCubeItem != null;
         }
 
         public void ColorCubesExecuted()
         {
+            var colorDialog = _colorDialogFactory();
+            colorDialog.FullOpen = true;
+            colorDialog.BrushColor = this.SelectedCubeItem.Color as System.Windows.Media.SolidColorBrush;
+            colorDialog.CustomColors = CustomColors.ToArray();
+
+            var result = _dialogService.ShowColorDialog(this.OwnerViewModel, colorDialog);
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                this.SelectedCubeItem.Color = colorDialog.BrushColor;
+                this.SelectedCubeItem.Cube.ColorMaskHSV = colorDialog.DrawingColor.Value.ToSandboxHsvColor();
+                // TODO: apply to all selections.
+            }
+
+            CustomColors.Clear();
+            CustomColors.AddRange(colorDialog.CustomColors);
+        }
+
+        public bool FrameworkCubesCanExecute()
+        {
+            return false;
+        }
+
+        public void FrameworkCubesExecuted()
+        {
             // TODO:
+        }
+
+        #endregion
+
+        #region methods
+
+        private void ApplyCubeFilter()
+        {
+            var view = (CollectionView)CollectionViewSource.GetDefaultView(this.CubeList);
+            view.Filter = UserFilter;
+        }
+
+        private bool UserFilter(object item)
+        {
+            if (string.IsNullOrEmpty(this.ActiveComponentFilter))
+                return true;
+
+            var cube = (CubeItemModel)item;
+            if (cube.FriendlyName.ToLowerInvariant().Contains(this.ActiveComponentFilter.ToLowerInvariant()))
+                return true;
+
+            if (cube.ColorText.ToLowerInvariant().Contains(this.ActiveComponentFilter.ToLowerInvariant()))
+                return true;
+            
+            return false;
         }
 
         #endregion
