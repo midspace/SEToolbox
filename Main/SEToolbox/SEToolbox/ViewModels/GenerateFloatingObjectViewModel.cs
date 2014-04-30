@@ -1,14 +1,12 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System.Collections.Generic;
     using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
 
@@ -16,9 +14,7 @@
     {
         #region Fields
 
-        private readonly IDialogService _dialogService;
         private readonly GenerateFloatingObjectModel _dataModel;
-
         private bool? _closeResult;
         private bool _isBusy;
 
@@ -27,16 +23,9 @@
         #region ctor
 
         public GenerateFloatingObjectViewModel(BaseViewModel parentViewModel, GenerateFloatingObjectModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>())
-        {
-        }
-
-        public GenerateFloatingObjectViewModel(BaseViewModel parentViewModel, GenerateFloatingObjectModel dataModel, IDialogService dialogService)
             : base(parentViewModel)
         {
-            Contract.Requires(dialogService != null);
 
-            this._dialogService = dialogService;
             this._dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
             this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);

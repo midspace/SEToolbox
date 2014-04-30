@@ -87,5 +87,15 @@
         /// <param name="folderBrowserDialog">The interface of a folder browser dialog.</param>
         /// <returns>The DialogResult.OK if successful; otherwise DialogResult.Cancel.</returns>
         DialogResult ShowFolderBrowserDialog(object ownerViewModel, IFolderBrowserDialog folderBrowserDialog);
+
+        /// <summary>
+        /// Shows the ColorDialog.
+        /// </summary>
+        /// <param name="ownerViewModel">
+        /// A ViewModel that represents the owner window of the dialog.
+        /// </param>
+        /// <param name="colorDialog">The interface of a color selector dialog.</param>
+        /// <returns>The DialogResult.OK if successful; otherwise DialogResult.Cancel.</returns>
+        DialogResult ShowColorDialog(object ownerViewModel, IColorDialog colorDialog);
     }
 }

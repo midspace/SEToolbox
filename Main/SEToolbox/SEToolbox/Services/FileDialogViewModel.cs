@@ -10,7 +10,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FileDialogViewModel"/> class.
         /// </summary>
-        public FileDialogViewModel()
+        protected FileDialogViewModel()
         {
             // Set default values
             AddExtension = true;

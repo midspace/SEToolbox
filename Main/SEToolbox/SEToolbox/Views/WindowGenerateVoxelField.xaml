@@ -6,11 +6,8 @@
         ResizeMode="CanResize"  ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow" 
         Title="Generate Asteroid Field" Height="380" Width="600" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
         MinHeight="150" MinWidth="250"
-        commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}">
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
     </Window.Resources>
     <Window.Cursor>

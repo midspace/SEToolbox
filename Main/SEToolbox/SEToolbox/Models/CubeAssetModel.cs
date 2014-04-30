@@ -6,6 +6,8 @@
     [Serializable]
     public class CubeAssetModel : BaseModel
     {
+        #region fields
+
         private string _name;
 
         private double _mass;
@@ -17,6 +19,8 @@
         private TimeSpan _time;
 
         private string _textureFile;
+
+        #endregion
 
         #region Properties
 

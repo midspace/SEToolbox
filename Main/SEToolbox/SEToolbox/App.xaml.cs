@@ -52,6 +52,7 @@
             ServiceLocator.RegisterSingleton<IDialogService, DialogService>();
             ServiceLocator.Register<IOpenFileDialog, OpenFileDialogViewModel>();
             ServiceLocator.Register<ISaveFileDialog, SaveFileDialogViewModel>();
+            ServiceLocator.Register<IColorDialog, ColorDialogViewModel>();
 
             this._toolboxApplication = new CoreToolbox();
             this._toolboxApplication.Startup(e.Args);
@@ -63,7 +64,7 @@
                 this._toolboxApplication.Exit();
         }
 
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {

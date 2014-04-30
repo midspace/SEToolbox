@@ -3,14 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
 
     /// <summary>
     /// A very simple service locator.
     /// </summary>
     internal static class ServiceLocator
     {
-        private static Dictionary<Type, ServiceInfo> services = new Dictionary<Type, ServiceInfo>();
+        private static readonly Dictionary<Type, ServiceInfo> services = new Dictionary<Type, ServiceInfo>();
 
         /// <summary>
         /// Registers a service.
@@ -50,9 +49,9 @@
         /// </summary>
         private class ServiceInfo
         {
-            private Type serviceImplementationType;
-            private object serviceImplementation;
-            private bool isSingleton;
+            private readonly Type _serviceImplementationType;
+            private object _serviceImplementation;
+            private readonly bool _isSingleton;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ServiceInfo"/> class.
@@ -61,8 +60,8 @@
             /// <param name="isSingleton">Whether the service is a Singleton.</param>
             public ServiceInfo(Type serviceImplementationType, bool isSingleton)
             {
-                this.serviceImplementationType = serviceImplementationType;
-                this.isSingleton = isSingleton;
+                this._serviceImplementationType = serviceImplementationType;
+                this._isSingleton = isSingleton;
             }
 
             /// <summary>
@@ -72,18 +71,18 @@
             {
                 get
                 {
-                    if (isSingleton)
+                    if (_isSingleton)
                     {
-                        if (serviceImplementation == null)
+                        if (_serviceImplementation == null)
                         {
-                            serviceImplementation = CreateInstance(serviceImplementationType);
+                            _serviceImplementation = CreateInstance(_serviceImplementationType);
                         }
 
-                        return serviceImplementation;
+                        return _serviceImplementation;
                     }
                     else
                     {
-                        return CreateInstance(serviceImplementationType);
+                        return CreateInstance(_serviceImplementationType);
                     }
                 }
             }
@@ -99,7 +98,7 @@
                     return services[type].ServiceImplementation;
                 }
 
-                ConstructorInfo ctor = type.GetConstructors().First();
+                var ctor = type.GetConstructors().First();
 
                 var parameters =
                     from parameter in ctor.GetParameters()

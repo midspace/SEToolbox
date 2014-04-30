@@ -20,8 +20,6 @@
     {
         #region Fields
 
-        private readonly IDialogService _dialogService;
-        private readonly Func<IOpenFileDialog> _openFileDialogFactory;
         private readonly GenerateVoxelFieldModel _dataModel;
         private GenerateVoxelModel _selectedRow;
 
@@ -33,18 +31,8 @@
         #region Constructors
 
         public GenerateVoxelFieldViewModel(BaseViewModel parentViewModel, GenerateVoxelFieldModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
-        {
-        }
-
-        public GenerateVoxelFieldViewModel(BaseViewModel parentViewModel, GenerateVoxelFieldModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory)
             : base(parentViewModel)
         {
-            Contract.Requires(dialogService != null);
-            Contract.Requires(openFileDialogFactory != null);
-
-            this._dialogService = dialogService;
-            this._openFileDialogFactory = openFileDialogFactory;
             this._dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
             this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
