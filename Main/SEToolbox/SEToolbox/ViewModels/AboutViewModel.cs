@@ -88,7 +88,7 @@
         {
             get
             {
-                return AppConstants.HomepageUrl;
+                return AppConstants.SupportUrl;
             }
         }
 
