@@ -278,11 +278,19 @@
             }
         }
 
-        public ICommand OpenHomepageLinkCommand
+        public ICommand OpenDocumentationLinkCommand
         {
             get
             {
-                return new DelegateCommand(new Action(OpenHomepageLinkExecuted), new Func<bool>(OpenHomepageLinkCanExecute));
+                return new DelegateCommand(new Action(OpenDocumentationLinkExecuted), new Func<bool>(OpenDocumentationLinkCanExecute));
+            }
+        }
+
+        public ICommand OpenSupportLinkCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(OpenSupportLinkExecuted), new Func<bool>(OpenSupportLinkCanExecute));
             }
         }
 
@@ -899,14 +907,24 @@
             Process.Start(AppConstants.UpdatesUrl);
         }
 
-        public bool OpenHomepageLinkCanExecute()
+        public bool OpenDocumentationLinkCanExecute()
         {
             return true;
         }
 
-        public void OpenHomepageLinkExecuted()
+        public void OpenDocumentationLinkExecuted()
         {
-            Process.Start(AppConstants.HomepageUrl);
+            Process.Start(AppConstants.DocumentationUrl);
+        }
+
+        public bool OpenSupportLinkCanExecute()
+        {
+            return true;
+        }
+
+        public void OpenSupportLinkExecuted()
+        {
+            Process.Start(AppConstants.SupportUrl);
         }
 
         public bool AboutCanExecute()

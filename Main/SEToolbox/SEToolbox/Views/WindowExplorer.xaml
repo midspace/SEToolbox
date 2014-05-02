@@ -113,12 +113,12 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="View current Sandbox" Command="{Binding ViewSandboxCommand}">
+                    <MenuItem Header="View current Sandbox raw" Command="{Binding ViewSandboxCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=document_view}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Open Steam Workshop" Command="{Binding OpenWorkshopCommand}">
+                    <MenuItem Header="View Steam Workshop" Command="{Binding OpenWorkshopCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=workshop16}" />
                         </MenuItem.Icon>
@@ -135,7 +135,12 @@
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=help}"/>
                     </MenuItem.Icon>
-                    <MenuItem Command="{Binding OpenHomepageLinkCommand}" Header="_Homepage">
+                    <MenuItem Command="{Binding OpenDocumentationLinkCommand}" Header="_Documentation">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=book_open2}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding OpenSupportLinkCommand}" Header="_Support">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=message_edit}"/>
                         </MenuItem.Icon>

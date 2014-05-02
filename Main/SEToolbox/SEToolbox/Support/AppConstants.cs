@@ -51,7 +51,8 @@
 
     internal class AppConstants
     {
-        public const string HomepageUrl = "http://forums.keenswh.com/post/custom-importereditor-tool-setoolbox-6638984";
+        public const string DocumentationUrl = "https://setoolbox.codeplex.com/documentation";
+        public const string SupportUrl = "http://forums.keenswh.com/post/custom-importereditor-tool-setoolbox-6638984";
         public const string UpdatesUrl = "http://setoolbox.codeplex.com/releases/";
     }
 }

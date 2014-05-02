@@ -236,5 +236,6 @@
         SmallWheel3x3,
         Wheel5x5,
         SmallWheel5x5,
+        LargeShipGrinder,
     };
 }

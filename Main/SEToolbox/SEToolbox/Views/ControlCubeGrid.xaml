@@ -197,102 +197,109 @@
         </TabItem>
         <TabItem Header="Cubes">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Margin="4 0 4 0" Text="Filter:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,4,0" Text="{Binding ComponentFilter, UpdateSourceTrigger=PropertyChanged}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding FilterStartCommand}"/>
-                            <KeyBinding Key="Tab" Command="{Binding FilterStartCommand}"/>
-                            <KeyBinding Key="Escape" Command="{Binding FilterClearCommand}"/>
-                        </TextBox.InputBindings>
-                    </TextBox>
-                    <Button Grid.Column="2" ToolTip="Search" Command="{Binding FilterStartCommand}">
-                        <Button.Content>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=find}" />
-                        </Button.Content>
-                    </Button>
-                    <Button Grid.Column="3" ToolTip="Clear Filter" Command="{Binding FilterClearCommand}">
-                        <Button.Content>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_cross}" />
-                        </Button.Content>
-                    </Button>
-                </Grid>
-                <Menu Grid.Row="1" Grid.ColumnSpan="2">
-                    <MenuItem Command="{Binding DeleteCubesCommand}" Header="Delete" Padding="0,2,4,2">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{Binding ReplaceCubesCommand}" Header="Replace" Padding="0,2,4,2">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=selection_replace}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{Binding ColorCubesCommand}" Header="Color" Padding="0,2,4,2">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=colors}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{Binding FrameworkCubesCommand}" Header="Framework" Padding="0,2,4,2">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </Menu>
-                <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="2*" MinHeight="100"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*" MinHeight="100"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <controls:SortableListView Grid.Row="0" ItemsSource="{Binding CubeList, Mode=OneWay}"
-                        ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}" SelectedValue="{Binding SelectedCubeItem}">
-                        <ListView.View>
-                            <GridView>
-                                <controls:SortableGridViewColumn Width="30" Header="Icon" SortBinding="{Binding FriendlyName}">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </controls:SortableGridViewColumn>
-                                <controls:SortableGridViewColumn Width="30" Header="Color" SortBinding="{Binding ColorText}">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1"  ToolTip="{Binding ColorText}" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </controls:SortableGridViewColumn>
-                                <GridViewColumn Header="Build" DisplayMemberBinding="{Binding Build, StringFormat=P}" Width="40"/>
-                                <controls:SortableGridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80">
-                                    <controls:SortableGridViewColumn.SortBinding>
-                                        <MultiBinding>
-                                            <Binding Path="Position.Width" />
-                                            <Binding Path="Position.Height" />
-                                            <Binding Path="Position.Depth" />
-                                        </MultiBinding>
-                                    </controls:SortableGridViewColumn.SortBinding>
-                                </controls:SortableGridViewColumn>
-                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
-                            </GridView>
-                        </ListView.View>
-                    </controls:SortableListView>
-                    <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />
-                    <StackPanel Grid.Row="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Margin="4 0 4 0" Text="Filter:" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,4,0" Text="{Binding ComponentFilter, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding FilterStartCommand}"/>
+                                <KeyBinding Key="Tab" Command="{Binding FilterStartCommand}"/>
+                                <KeyBinding Key="Escape" Command="{Binding FilterClearCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Button Grid.Column="2" ToolTip="Search" Command="{Binding FilterStartCommand}">
+                            <Button.Content>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=find}" />
+                            </Button.Content>
+                        </Button>
+                        <Button Grid.Column="3" ToolTip="Clear Filter" Command="{Binding FilterClearCommand}">
+                            <Button.Content>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_cross}" />
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Menu Grid.Row="1" Grid.ColumnSpan="2">
+                        <MenuItem Command="{Binding DeleteCubesCommand}" Header="Delete" Padding="0,2,4,2">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding ReplaceCubesCommand}" Header="Replace" Padding="0,2,4,2">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=selection_replace}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding ColorCubesCommand}" Header="Color" Padding="0,2,4,2">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=colors}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding FrameworkCubesCommand}" Header="Framework" Padding="0,2,4,2">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </Menu>
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" MinHeight="100"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*" MinHeight="100"/>
+                        </Grid.RowDefinitions>
+                        <controls:SortableListView Grid.Row="0" ItemsSource="{Binding CubeList, Mode=OneWay}"
+                            ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}" SelectedValue="{Binding SelectedCubeItem}">
+                            <ListView.View>
+                                <GridView>
+                                    <controls:SortableGridViewColumn Width="30" Header="Icon" SortBinding="{Binding FriendlyName}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </controls:SortableGridViewColumn>
+                                    <controls:SortableGridViewColumn Width="30" Header="Color" SortBinding="{Binding ColorText}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1"  ToolTip="{Binding ColorText}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </controls:SortableGridViewColumn>
+                                    <GridViewColumn Header="Build" DisplayMemberBinding="{Binding Build, StringFormat=P}" Width="40"/>
+                                    <controls:SortableGridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80">
+                                        <controls:SortableGridViewColumn.SortBinding>
+                                            <MultiBinding>
+                                                <Binding Path="Position.Width" />
+                                                <Binding Path="Position.Height" />
+                                                <Binding Path="Position.Depth" />
+                                            </MultiBinding>
+                                        </controls:SortableGridViewColumn.SortBinding>
+                                    </controls:SortableGridViewColumn>
+                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
+                                </GridView>
+                            </ListView.View>
+                        </controls:SortableListView>
+                        <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />
+                        <StackPanel Grid.Row="2">
 
-                    </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
+                <TextBlock Text="Work in progress" FontSize="40" Foreground="#80808080" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-140,-100,0" IsHitTestVisible="False">
+                    <TextBlock.RenderTransform>
+                        <RotateTransform Angle="45"/>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
             </Grid>
         </TabItem>
         <TabItem Header="Construction">
