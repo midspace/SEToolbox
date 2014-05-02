@@ -76,6 +76,20 @@
         }
 
         /// <summary>
+        /// Shows a non-modal dialog.
+        /// </summary>
+        /// <param name="ownerViewModel">
+        /// A ViewModel that represents the owner window of the dialog.
+        /// </param>
+        /// <param name="viewModel">The ViewModel of the new dialog.</param>
+        /// <typeparam name="T">The type of the dialog to show.</typeparam>
+        public void Show<T>(object ownerViewModel, object viewModel) where T : Window
+        {
+            Contract.Requires(ownerViewModel != null);
+            Contract.Requires(viewModel != null);
+        }
+
+        /// <summary>
         /// Shows a message box.
         /// </summary>
         /// <param name="ownerViewModel">
