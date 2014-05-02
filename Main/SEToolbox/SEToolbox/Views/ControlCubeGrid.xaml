@@ -295,7 +295,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-                <TextBlock Text="Work in progress" FontSize="40" Foreground="#80808080" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-140,-100,0" IsHitTestVisible="False">
+                <TextBlock Text="Preview" FontSize="60" Foreground="#80808080" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-100,-100,0" IsHitTestVisible="False">
                     <TextBlock.RenderTransform>
                         <RotateTransform Angle="45"/>
                     </TextBlock.RenderTransform>

@@ -83,6 +83,19 @@
         }
 
         /// <summary>
+        /// Shows a non-modal dialog.
+        /// </summary>
+        /// <param name="ownerViewModel">
+        /// A ViewModel that represents the owner window of the dialog.
+        /// </param>
+        /// <param name="viewModel">The ViewModel of the new dialog.</param>
+        /// <typeparam name="T">The type of the dialog to show.</typeparam>
+        public void Show<T>(object ownerViewModel, object viewModel) where T : Window
+        {
+            Show(ownerViewModel, viewModel, typeof(T));
+        }
+
+        /// <summary>
         /// Shows a message box.
         /// </summary>
         /// <param name="ownerViewModel">
@@ -262,6 +275,28 @@
 
             System.Windows.Forms.Application.DoEvents();
             return retValue;
+        }
+
+        /// <summary>
+        /// Shows a non-modal dialog.
+        /// </summary>
+        /// <param name="ownerViewModel">
+        /// A ViewModel that represents the owner window of the dialog.
+        /// </param>
+        /// <param name="viewModel">The ViewModel of the new dialog.</param>
+        /// <param name="dialogType">The type of the dialog.</param>
+        /// <returns>
+        /// A nullable value of type bool that signifies how a window was closed by the user.
+        /// </returns>
+        private void Show(object ownerViewModel, object viewModel, Type dialogType)
+        {
+            // Create dialog and set properties
+            var dialog = (Window)Activator.CreateInstance(dialogType);
+            dialog.Owner = FindOwnerWindow(ownerViewModel);
+            dialog.DataContext = viewModel;
+
+            // Show dialog
+            dialog.Show();
         }
 
         /// <summary>

@@ -318,6 +318,14 @@
             }
         }
 
+        public ICommand MergeShipCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(MergeShipExecuted), new Func<bool>(MergeShipCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -691,7 +699,7 @@
             var model = new ComponentListModel();
             model.Load();
             var loadVm = new ComponentListViewModel(this, model);
-            var result = this._dialogService.ShowDialog<WindowComponentList>(this, loadVm);
+            this._dialogService.Show<WindowComponentList>(this, loadVm);
         }
 
         public bool OpenFolderCanExecute()
@@ -968,6 +976,18 @@
             }
         }
 
+        public bool MergeShipCanExecute()
+        {
+            return this._dataModel.ActiveWorld != null && this.Selections.Count == 2 &&
+                ((this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
+                (this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.SmallShip));
+        }
+
+        public void MergeShipExecuted()
+        {
+            MergeShipModels(this.Selections[0], this.Selections[1]);
+        }
+
         #endregion
 
         #region methods
@@ -1088,6 +1108,21 @@
             {
                 ((StructureCubeGridModel)model.DataModel).MirrorModel(true, false);
             }
+        }
+
+        public void MergeShipModels(IStructureViewBase viewModel1, IStructureViewBase viewModel2)
+        {
+            var ship1 = (StructureCubeGridViewModel)viewModel1;
+            var ship2 = (StructureCubeGridViewModel)viewModel2;
+            
+            // Copy blocks from ship2 into ship1.
+            ((StructureCubeGridModel)ship1.DataModel).CubeGrid.CubeBlocks.AddRange(((StructureCubeGridModel)ship2.DataModel).CubeGrid.CubeBlocks);
+            
+            // Delete ship2.
+            DeleteModel(viewModel2);
+
+            // Deleting ship2 will also ensure the removal of any duplicate UniqueIds.
+            // Any overlapping blocks between the two, will automatically be removed by Space Engineers when the world is loaded.
         }
 
         /// <inheritdoc />

@@ -8,6 +8,7 @@
   * C:\Users\%Username%\AppData\Roaming\SpaceEngineers\WorkshopWorlds\*.sbw  These are .zip files.
   * It's not until the user presses "Copy & Load" that it's actually saved there.
   * The workshopId may or may not be present, depending on if it is the first version, or a subsequent upload by the author.
+- Multi lingual support.
 
 - Global:
   * Refresh/Save needs to check if save directory no longer exists.
@@ -41,7 +42,8 @@
   * Export and Import Asteroids/Floating Objects/Meteors to/from files.
   * Duplicate. Clone any object.
   * Group Move - move all to single point.
-  * Group Move - Disperse over set area. 
+  * Group Move - Disperse over set area.
+  * Duplicate any item.
 
 - Character:
   * Exit Pilot from ship to Astronaut.
@@ -68,6 +70,8 @@
   * Set/Reset Ship Vector. (specify Direction and specify Speed)
   * Replace user specified blocks with other user blocks (ie., by Armor light/heavy/color.)
   * Set Ship direction at specific object (calc correct center of object).
+  * Subsystem editor.
+  * Finish Mirror calculations for final 2 window cubes.
 
 ========--------~~~~~~~~
 
@@ -104,6 +108,7 @@ Completed:
 - Drag-Drop copy Unknown items.
 - Dialog to Create/Drop Components and Items (pipes, weapons, ingots, ores, ammos).
 - Rotate ship/station cubes to face new orientation.
+- Join two ship parts together after accidently breaking them apart.
 
 ========--------~~~~~~~~
 
@@ -112,6 +117,7 @@ Dropped:
 - Text Unicode support. SpaceEngineers doesn't appear to support Unicode.
   * testing text
   * テキストをテスト
+  * 测试文字
 
 ========--------~~~~~~~~
 

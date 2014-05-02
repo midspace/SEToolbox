@@ -168,6 +168,11 @@
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Command="{Binding MergeShipCommand}" Header="Rejoin Ships" Padding="0,2,4,2" ToolTip="Rejoins 2 parts from a broken ship togeather">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=elements2}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </Menu>
             <ToolBarPanel DockPanel.Dock="Top" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ToolBar>
