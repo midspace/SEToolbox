@@ -11,8 +11,15 @@
     {
         #region Fields
 
+        // Fields are marked as NonSerialized, as they aren't required during the drag-drop operation.
+
+        [NonSerialized]
         private double? _volume;
+
+        [NonSerialized]
         private double? _mass;
+
+        [NonSerialized]
         private double? _units;
 
         #endregion
