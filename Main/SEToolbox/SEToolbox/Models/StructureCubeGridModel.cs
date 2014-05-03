@@ -20,39 +20,54 @@
     {
         #region Fields
 
+        // Fields are marked as NonSerialized, as they aren't required during the drag-drop operation.
+
+        [NonSerialized]
         private Point3D _min;
+
+        [NonSerialized]
         private Point3D _max;
+
+        [NonSerialized]
         private Vector3D _scale;
+
+        [NonSerialized]
         private Size3D _size;
+
+        [NonSerialized]
         private int _pilots;
+
+        [NonSerialized]
         private float _mass;
+
+        [NonSerialized]
         private TimeSpan _timeToProduce;
 
-        [XmlIgnore]
+        [NonSerialized]
         private string _cockpitOrientation;
 
-        [XmlIgnore]
+        [NonSerialized]
         private List<CubeAssetModel> _cubeAssets;
 
-        [XmlIgnore]
+        [NonSerialized]
         private List<CubeAssetModel> _componentAssets;
 
-        [XmlIgnore]
+        [NonSerialized]
         private List<OreAssetModel> _ingotAssets;
 
-        [XmlIgnore]
+        [NonSerialized]
         private List<OreAssetModel> _oreAssets;
 
-        [XmlIgnore]
+        [NonSerialized]
         private string _activeComponentFilter;
 
-        [XmlIgnore]
+        [NonSerialized]
         private string _componentFilter;
 
-        [XmlIgnore]
+        [NonSerialized]
         private ObservableCollection<CubeItemModel> _cubeList;
 
-        [XmlIgnore]
+        [NonSerialized]
         private CubeItemModel _selectedCubeItem;
 
         #endregion
@@ -68,7 +83,6 @@
 
         #region Properties
 
-        [XmlIgnore]
         public MyObjectBuilder_CubeGrid CubeGrid
         {
             get
@@ -77,7 +91,6 @@
             }
         }
 
-        [XmlIgnore]
         public Sandbox.Common.ObjectBuilders.MyCubeSize GridSize
         {
             get
@@ -95,7 +108,6 @@
             }
         }
 
-        [XmlIgnore]
         public bool IsStatic
         {
             get
@@ -113,7 +125,6 @@
             }
         }
 
-        [XmlIgnore]
         public bool Dampeners
         {
             get
@@ -131,7 +142,6 @@
             }
         }
 
-        [XmlIgnore]
         public Point3D Min
         {
             get
@@ -149,7 +159,6 @@
             }
         }
 
-        [XmlIgnore]
         public Point3D Max
         {
             get
@@ -167,7 +176,6 @@
             }
         }
 
-        [XmlIgnore]
         public Vector3D Scale
         {
             get
@@ -185,7 +193,6 @@
             }
         }
 
-        [XmlIgnore]
         public Size3D Size
         {
             get
@@ -203,7 +210,6 @@
             }
         }
 
-        [XmlIgnore]
         public int Pilots
         {
             get
@@ -221,7 +227,6 @@
             }
         }
 
-        [XmlIgnore]
         public bool IsPiloted
         {
             get
@@ -230,7 +235,6 @@
             }
         }
 
-        [XmlIgnore]
         public bool IsDamaged
         {
             get
@@ -240,7 +244,6 @@
             }
         }
 
-        [XmlIgnore]
         public int DamageCount
         {
             get
@@ -250,7 +253,6 @@
             }
         }
 
-        [XmlIgnore]
         public double LinearVelocity
         {
             get
@@ -260,7 +262,6 @@
         }
 
         /// This is not to be taken as an accurate representation.
-        [XmlIgnore]
         public double AngularSpeed
         {
             get
@@ -269,7 +270,6 @@
             }
         }
 
-        [XmlIgnore]
         public TimeSpan TimeToProduce
         {
             get
@@ -287,7 +287,6 @@
             }
         }
 
-        [XmlIgnore]
         public float Mass
         {
             get
@@ -305,7 +304,6 @@
             }
         }
 
-        [XmlIgnore]
         public int BlockCount
         {
             get
@@ -334,7 +332,6 @@
         /// <summary>
         /// This is detail of the breakdown of cubes in the ship.
         /// </summary>
-        [XmlIgnore]
         public List<CubeAssetModel> CubeAssets
         {
             get
@@ -355,7 +352,6 @@
         /// <summary>
         /// This is detail of the breakdown of components in the ship.
         /// </summary>
-        [XmlIgnore]
         public List<CubeAssetModel> ComponentAssets
         {
             get
@@ -376,7 +372,6 @@
         /// <summary>
         /// This is detail of the breakdown of ingots in the ship.
         /// </summary>
-        [XmlIgnore]
         public List<OreAssetModel> IngotAssets
         {
             get
@@ -397,7 +392,6 @@
         /// <summary>
         /// This is detail of the breakdown of ore in the ship.
         /// </summary>
-        [XmlIgnore]
         public List<OreAssetModel> OreAssets
         {
             get
@@ -415,7 +409,6 @@
             }
         }
 
-        [XmlIgnore]
         public string ActiveComponentFilter
         {
             get
@@ -433,7 +426,6 @@
             }
         }
 
-        [XmlIgnore]
         public string ComponentFilter
         {
             get
@@ -451,7 +443,6 @@
             }
         }
 
-        [XmlIgnore]
         public ObservableCollection<CubeItemModel> CubeList
         {
             get
@@ -469,7 +460,6 @@
             }
         }
 
-        [XmlIgnore]
         public CubeItemModel SelectedCubeItem
         {
             get

@@ -2,10 +2,8 @@
 {
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Runtime.Serialization;
-    using System.Xml.Serialization;
 
     [Serializable]
     public class StructureUnknownModel : StructureBaseModel
@@ -16,10 +14,6 @@
             : base(entityBase)
         {
         }
-
-        #endregion
-
-        #region Properties
 
         #endregion
 

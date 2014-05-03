@@ -12,6 +12,8 @@
     {
         #region Fields
 
+        // Fields are marked as NonSerialized, as they aren't required during the drag-drop operation.
+
         [NonSerialized]
         private bool _isPlayer;
 

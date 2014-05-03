@@ -14,6 +14,8 @@
     {
         #region fields
 
+        // Fields are marked as NonSerialized, as they aren't required during the drag-drop operation.
+
         [NonSerialized]
         private MyObjectBuilder_EntityBase _entityBase;
 

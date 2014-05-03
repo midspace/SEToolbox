@@ -88,7 +88,7 @@ Completed:
 - Link to open Workshop ID.
 - Add collection for temporary files, to allow cleanup during shutdown.
 - Improve Import 3D Model:
-  * Recode Poly2Vox to VisualC CLR to integrate with app, and enhance.
+  * Recode Poly2Vox to VisualC CLR to integrate with app, and enhance. Replaced Poly2Vox with HelixToolkit.
 - Switch Jetpack on/off.
 - Set/Reset Astronaut Vector. (Direction and Speed)
 - Switch Inertia Dampeners on/off.
