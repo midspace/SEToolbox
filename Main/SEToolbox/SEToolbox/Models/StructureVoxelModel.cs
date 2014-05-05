@@ -1,26 +1,22 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Windows.Documents;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Support;
     using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
     using System.IO;
+    using System.Linq;
     using System.Runtime.Serialization;
-    using System.Text;
     using System.Xml.Serialization;
     using VRageMath;
 
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
     {
-        [XmlIgnore]
+        [NonSerialized]
         private static readonly object Locker = new object();
 
         private string _sourceVoxelFilepath;
@@ -29,7 +25,7 @@
         private Vector3I _contentSize;
         private long _voxCells;
 
-        [XmlIgnore]
+        [NonSerialized]
         private List<VoxelMaterialAssetModel> _materialAssets;
 
         #region ctor

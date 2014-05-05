@@ -7,6 +7,7 @@
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
+    using System.Windows.Threading;
     using System.Xml.Serialization;
 
     [Serializable]
@@ -36,6 +37,9 @@
 
         private string _serializedEntity;
 
+        [NonSerialized]
+        internal Dispatcher _dispatcher;
+
         #endregion
 
         #region ctor
@@ -46,6 +50,7 @@
 
         public StructureBaseModel(MyObjectBuilder_EntityBase entityBase)
         {
+            _dispatcher = Dispatcher.CurrentDispatcher;
             this.EntityBase = entityBase;
         }
 

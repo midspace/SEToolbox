@@ -1,30 +1,31 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System.Diagnostics.Contracts;
-    using System.Drawing;
-    using System.Windows.Data;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Diagnostics.Contracts;
     using System.Text;
     using System.Windows;
+    using System.Windows.Data;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
-    using SEToolbox.Interop;
 
     public class StructureCubeGridViewModel : StructureBaseViewModel<StructureCubeGridModel>
     {
         #region fields
 
-        private static readonly List<int> CustomColors = new List<int>();
+        // TODO: read in current 'world' color Palette.
+        private static readonly List<int> CustomColors = new List<int>() { 8421504, 9342617, 4408198, 4474015, 4677703, 5339473, 8414016, 10056001, 5803425, 5808314, 11447986, 12105932, 3815995, 5329241 };
         private readonly IDialogService _dialogService;
         private readonly Func<IColorDialog> _colorDialogFactory;
-        
+        private ObservableCollection<CubeItemModel> _selections;
+
         #endregion
 
         #region ctor
@@ -32,6 +33,7 @@
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel)
             : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IColorDialog>)
         {
+            this.Selections = new ObservableCollection<CubeItemModel>();
         }
 
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel, IDialogService dialogService, Func<IColorDialog> colorDialogFactory)
@@ -558,6 +560,23 @@
             }
         }
 
+        public ObservableCollection<CubeItemModel> Selections
+        {
+            get
+            {
+                return this._selections;
+            }
+
+            set
+            {
+                if (value != this._selections)
+                {
+                    this._selections = value;
+                    this.RaisePropertyChanged(() => Selections);
+                }
+            }
+        }
+
         public CubeItemModel SelectedCubeItem
         {
             get
@@ -568,6 +587,32 @@
             set
             {
                 this.DataModel.SelectedCubeItem = value;
+            }
+        }
+
+        public bool IsConstructionNotReady
+        {
+            get
+            {
+                return this.DataModel.IsConstructionNotReady;
+            }
+
+            set
+            {
+                this.DataModel.IsConstructionNotReady = value;
+            }
+        }
+
+        public bool IsSubsSystemNotReady
+        {
+            get
+            {
+                return this.DataModel.IsSubsSystemNotReady;
+            }
+
+            set
+            {
+                this.DataModel.IsSubsSystemNotReady = value;
             }
         }
 
@@ -583,6 +628,8 @@
         public void OptimizeObjectExecuted()
         {
             this.MainViewModel.OptimizeModel(this);
+            this.IsSubsSystemNotReady = true;
+            this.DataModel.InitializeAsync();
         }
 
         public bool RepairObjectCanExecute()
@@ -684,6 +731,8 @@
         {
             this.DataModel.ConvertToFramework((float)value);
             this.MainViewModel.IsModified = true;
+            this.IsSubsSystemNotReady = true;
+            this.DataModel.InitializeAsync();
         }
 
         public bool ConvertToStationCanExecute()
@@ -718,6 +767,8 @@
             // +90 around X
             this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, VRageMath.MathHelper.PiOver2, 0));
             this.MainViewModel.IsModified = true;
+            this.IsSubsSystemNotReady = true;
+            this.DataModel.InitializeAsync();
         }
 
         public bool RotateCubesPitchNegativeCanExecute()
@@ -730,6 +781,8 @@
             // -90 around X
             this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, -VRageMath.MathHelper.PiOver2, 0));
             this.MainViewModel.IsModified = true;
+            this.IsSubsSystemNotReady = true;
+            this.DataModel.InitializeAsync();
         }
 
         public bool RotateCubesRollPositiveCanExecute()
@@ -742,6 +795,8 @@
             // +90 around Y
             this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(VRageMath.MathHelper.PiOver2, 0, 0));
             this.MainViewModel.IsModified = true;
+            this.IsSubsSystemNotReady = true;
+            this.DataModel.InitializeAsync();
         }
 
         public bool RotateCubesYawNegativeCanExecute()
@@ -754,6 +809,8 @@
             // -90 around Y
             this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(-VRageMath.MathHelper.PiOver2, 0, 0));
             this.MainViewModel.IsModified = true;
+            this.IsSubsSystemNotReady = true;
+            this.DataModel.InitializeAsync();
         }
 
         public bool RotateCubesPitchPositiveCanExecute()
@@ -766,6 +823,8 @@
             // +90 around Z
             this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, VRageMath.MathHelper.PiOver2));
             this.MainViewModel.IsModified = true;
+            this.IsSubsSystemNotReady = true;
+            this.DataModel.InitializeAsync();
         }
 
         public bool RotateCubesRollNegativeCanExecute()
@@ -778,6 +837,8 @@
             // -90 around Z
             this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2));
             this.MainViewModel.IsModified = true;
+            this.IsSubsSystemNotReady = true;
+            this.DataModel.InitializeAsync();
         }
 
         public bool ConvertToShipCanExecute()
@@ -841,6 +902,9 @@
             if (this.DataModel.MirrorModel(true, false))
             {
                 this.MainViewModel.IsModified = true;
+                this.IsSubsSystemNotReady = true;
+                this.IsConstructionNotReady = true;
+                this.DataModel.InitializeAsync();
             }
             this.MainViewModel.IsBusy = false;
         }
@@ -856,6 +920,9 @@
             if (this.DataModel.MirrorModel(false, true))
             {
                 this.MainViewModel.IsModified = true;
+                this.IsSubsSystemNotReady = true;
+                this.IsConstructionNotReady = true;
+                this.DataModel.InitializeAsync();
             }
             this.MainViewModel.IsBusy = false;
         }
@@ -871,6 +938,9 @@
             if (this.DataModel.MirrorModel(false, false))
             {
                 this.MainViewModel.IsModified = true;
+                this.IsSubsSystemNotReady = true;
+                this.IsConstructionNotReady = true;
+                this.DataModel.InitializeAsync();
             }
             this.MainViewModel.IsBusy = false;
         }
@@ -963,12 +1033,22 @@
 
         public bool DeleteCubesCanExecute()
         {
-            return false;
+            return this.SelectedCubeItem != null;
+            //return false;
         }
 
         public void DeleteCubesExecuted()
         {
-            // TODO:
+            this.IsBusy = true;
+
+            while (this.Selections.Count > 0)
+            {
+                var cube = this.Selections[0];
+                if (this.DataModel.CubeGrid.CubeBlocks.Remove(cube.Cube))
+                    this.DataModel.CubeList.Remove(cube);
+            }
+
+            this.IsBusy = false;
         }
 
         public bool ReplaceCubesCanExecute()
@@ -997,9 +1077,11 @@
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                this.SelectedCubeItem.Color = colorDialog.BrushColor;
-                this.SelectedCubeItem.Cube.ColorMaskHSV = colorDialog.DrawingColor.Value.ToSandboxHsvColor();
-                // TODO: apply to all selections.
+                foreach (var cube in this.Selections)
+                {
+                    cube.Color = colorDialog.BrushColor;
+                    cube.Cube.ColorMaskHSV = colorDialog.DrawingColor.Value.ToSandboxHsvColor();
+                }
             }
 
             CustomColors.Clear();

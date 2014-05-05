@@ -60,7 +60,7 @@
             this.IsMultipleScale = true;
             this.MultipleScale = 1;
             this.MaxLengthScale = 100;
-            this.ClassType = ImportClassType.SmallShip;
+            this.ClassType = ImportModelClassType.SmallShip;
             this.ArmorType = ImportArmorType.Light;
         }
 
@@ -269,7 +269,7 @@
             }
         }
 
-        public ImportClassType ClassType
+        public ImportModelClassType ClassType
         {
             get
             {
@@ -547,10 +547,10 @@
 
                 switch (this.ClassType)
                 {
-                    case ImportClassType.SmallShip: scaleMultiplyer = 0.5; break;
-                    case ImportClassType.LargeShip: scaleMultiplyer = 2.5; break;
-                    case ImportClassType.Station: scaleMultiplyer = 2.5; break;
-                    case ImportClassType.Asteroid: scaleMultiplyer = 1; break;
+                    case ImportModelClassType.SmallShip: scaleMultiplyer = 0.5; break;
+                    case ImportModelClassType.LargeShip: scaleMultiplyer = 2.5; break;
+                    case ImportModelClassType.Station: scaleMultiplyer = 2.5; break;
+                    case ImportModelClassType.Asteroid: scaleMultiplyer = 1; break;
                 }
                 vectorDistance += this.NewModelSize.Depth * scaleMultiplyer;
                 this.NewModelScale = new BindablePoint3DModel(this.NewModelSize.Width * scaleMultiplyer, this.NewModelSize.Height * scaleMultiplyer, this.NewModelSize.Depth * scaleMultiplyer);
@@ -778,7 +778,7 @@
 
         public MyObjectBuilder_EntityBase BuildEntity()
         {
-            if (this.ClassType == ImportClassType.Asteroid)
+            if (this.ClassType == ImportModelClassType.Asteroid)
             {
                 return BuildAsteroidEntity();
             }
@@ -842,19 +842,19 @@
             var blockPrefix = "";
             switch (this.ClassType)
             {
-                case ImportClassType.SmallShip:
+                case ImportModelClassType.SmallShip:
                     entity.GridSizeEnum = MyCubeSize.Small;
                     blockPrefix += "Small";
                     entity.IsStatic = false;
                     break;
 
-                case ImportClassType.LargeShip:
+                case ImportModelClassType.LargeShip:
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = false;
                     break;
 
-                case ImportClassType.Station:
+                case ImportModelClassType.Station:
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = true;

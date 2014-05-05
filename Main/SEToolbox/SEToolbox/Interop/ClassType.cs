@@ -12,12 +12,19 @@
         Voxel,
     };
 
-    public enum ImportClassType
+    public enum ImportModelClassType
     {
         SmallShip,
         LargeShip,
         Station,
         Asteroid
+    };
+
+    public enum ImportImageClassType
+    {
+        SmallShip,
+        LargeShip,
+        Station,
     };
 
     public enum ImportArmorType

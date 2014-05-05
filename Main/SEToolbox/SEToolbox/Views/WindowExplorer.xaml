@@ -41,24 +41,24 @@
                         <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
-                <MenuItem Command="{Binding OpenCommand}" Header="_Open" Padding="0,2,4,2">
+                <MenuItem Command="{Binding OpenCommand}" Header="_Open" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding SaveCommand}" Header="_Save" Padding="0,2,4,2">
+                <MenuItem Command="{Binding SaveCommand}" Header="_Save" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Command="{Binding ReloadCommand}" Header="_Reload" Padding="0,2,4,2" ToolTip="Undo any changes, and reload world again.">
+                <MenuItem Command="{Binding ReloadCommand}" Header="_Reload" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Undo any changes, and reload world again.">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Header="_Import" Command="{Binding ImportCommand}" Padding="0,2,4,2">
+                <MenuItem Header="_Import" Command="{Binding ImportCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=import1}" />
                     </MenuItem.Icon>
@@ -83,12 +83,12 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Export" Command="{Binding ExportSandboxObjectCommand}" Padding="0,2,4,2" ToolTip="Export ships ans stations to a .xml file, to store, and import into other worlds.">
+                <MenuItem Header="Export" Command="{Binding ExportSandboxObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Export ships ans stations to a .xml file, to store, and import into other worlds.">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Create" Command="{Binding ImportCommand}" Padding="0,2,4,2">
+                <MenuItem Header="_Create" Command="{Binding ImportCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=package_add}" />
                     </MenuItem.Icon>
@@ -104,37 +104,55 @@
                     </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Header="World" Padding="0,2,4,2">
+                <MenuItem Header="_World" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SpaceEngineers16}" />
                     </MenuItem.Icon>
-                    <MenuItem Header="Open Folder" Command="{Binding OpenFolderCommand}">
+                    <MenuItem Header="_Report all resources" Command="{Binding WorldReportCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=document_pulse}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Open _Folder" Command="{Binding OpenFolderCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="View current Sandbox raw" Command="{Binding ViewSandboxCommand}">
+                    <MenuItem Header="_View current Sandbox raw" Command="{Binding ViewSandboxCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=document_view}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="View Steam Workshop" Command="{Binding OpenWorkshopCommand}">
+                    <MenuItem Header="View _Steam Workshop" Command="{Binding OpenWorkshopCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=workshop16}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Component List" Command="{Binding OpenComponentListCommand}">
+                    <MenuItem Header="_Component List" Command="{Binding OpenComponentListCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=form_green_view}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem HorizontalAlignment="Right" Header="_Help" Padding="0,2,4,2">
+                <MenuItem HorizontalAlignment="Right" Header="O_ptions" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=help}"/>
                     </MenuItem.Icon>
+                    <MenuItem Command="{Binding LanguageCommand}" Header="_Languages">
+                        <MenuItem Command="{Binding SetLanguageCommand}" CommandParameter="en" Header="English">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=flag_great_britain}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding SetLanguageCommand}" CommandParameter="zh" Header="Chinese">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=flag_china}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                    <Separator/>
                     <MenuItem Command="{Binding OpenDocumentationLinkCommand}" Header="_Documentation">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=book_open2}"/>
@@ -150,6 +168,7 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=server_to_client}"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <Separator/>
                     <MenuItem Command="{Binding AboutCommand}" Header="_About">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}"/>
@@ -158,17 +177,17 @@
                 </MenuItem>
             </Menu>
             <Menu DockPanel.Dock="Top">
-                <MenuItem Command="{Binding DeleteObjectCommand}" Header="Delete" Padding="0,2,4,2">
+                <MenuItem Command="{Binding DeleteObjectCommand}" Header="Delete" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding GroupMoveCommand}" Header="Group Move" Padding="0,2,4,2">
+                <MenuItem Command="{Binding GroupMoveCommand}" Header="Group Move" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding MergeShipCommand}" Header="Rejoin Ships" Padding="0,2,4,2" ToolTip="Rejoins 2 parts from a broken ship togeather">
+                <MenuItem Command="{Binding MergeShipCommand}" Header="Rejoin Ships" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Rejoins 2 parts from a broken ship togeather">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=elements2}"/>
                     </MenuItem.Icon>
@@ -201,6 +220,9 @@
                 <!--<StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0">
                     <views:ControlBusyState />
                 </StatusBarItem>-->
+                <StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0">
+                    <ProgressBar Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" Width="100" Height="14" Visibility="{Binding ShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </StatusBarItem>
             </StatusBar>
             <Grid>
                 <Grid.Style>

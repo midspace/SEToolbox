@@ -174,6 +174,14 @@
             }
         }
 
+        public ICommand WorldReportCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(WorldReportExecuted), new Func<bool>(WorldReportCanExecute));
+            }
+        }
+
         public ICommand OpenFolderCommand
         {
             get
@@ -299,6 +307,22 @@
             get
             {
                 return new DelegateCommand(new Action(AboutExecuted), new Func<bool>(AboutCanExecute));
+            }
+        }
+
+        public ICommand LanguageCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Func<bool>(LanguageCanExecute));
+            }
+        }
+
+        public ICommand SetLanguageCommand
+        {
+            get
+            {
+                return new DelegateCommand<string>(new Action<string>(SetLanguageExecuted), new Func<string, bool>(SetLanguageCanExecute));
             }
         }
 
@@ -702,6 +726,18 @@
             this._dialogService.Show<WindowComponentList>(this, loadVm);
         }
 
+        public bool WorldReportCanExecute()
+        {
+            return false;
+            //return this._dataModel.ActiveWorld != null;
+            // TODO:
+        }
+
+        public void WorldReportExecuted()
+        {
+            // TODO:
+        }
+
         public bool OpenFolderCanExecute()
         {
             return this._dataModel.ActiveWorld != null;
@@ -794,13 +830,18 @@
                 MyObjectBuilder_EntityBase[] newEntities;
                 loadVm.BuildEntities(out sourceVoxelFiles, out newEntities);
                 this._selectNewStructure = true;
+
+                this.ResetProgress(0, newEntities.Length);
+
                 for (var i = 0; i < newEntities.Length; i++)
                 {
                     var structure = this._dataModel.AddEntity(newEntities[i]);
                     ((StructureVoxelModel)structure).SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                    this.Progress++;
                 }
                 this._selectNewStructure = false;
                 this.IsBusy = false;
+                this.ClearProgress();
             }
         }
 
@@ -853,7 +894,7 @@
 
             loadVm.ArmorType = ImportArmorType.Light;
             loadVm.BuildDistance = 10;
-            loadVm.ClassType = ImportClassType.SmallShip;
+            loadVm.ClassType = ImportModelClassType.SmallShip;
             loadVm.Filename = @"D:\Development\SpaceEngineers\building 3D\models\algos.obj";
             loadVm.Forward = new BindableVector3DModel(Vector3.Forward);
             loadVm.IsMaxLengthScale = false;
@@ -933,6 +974,21 @@
         public void OpenSupportLinkExecuted()
         {
             Process.Start(AppConstants.SupportUrl);
+        }
+
+        public bool LanguageCanExecute()
+        {
+            return false;
+        }
+
+        public bool SetLanguageCanExecute(string code)
+        {
+            return true;
+        }
+
+        public void SetLanguageExecuted(string code)
+        {
+            // TODO:
         }
 
         public bool AboutCanExecute()
@@ -1114,10 +1170,10 @@
         {
             var ship1 = (StructureCubeGridViewModel)viewModel1;
             var ship2 = (StructureCubeGridViewModel)viewModel2;
-            
+
             // Copy blocks from ship2 into ship1.
             ((StructureCubeGridModel)ship1.DataModel).CubeGrid.CubeBlocks.AddRange(((StructureCubeGridModel)ship2.DataModel).CubeGrid.CubeBlocks);
-            
+
             // Delete ship2.
             DeleteModel(viewModel2);
 
@@ -1150,7 +1206,7 @@
             {
                 var badfiles = this._dataModel.LoadEntities(openFileDialog.FileNames);
 
-                foreach(var filename in badfiles)
+                foreach (var filename in badfiles)
                 {
                     this._dialogService.ShowMessageBox(this, string.Format("Could not load '{0}', because the file is either corrupt or invalid.", Path.GetFileName(filename)), "Could not import", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
@@ -1228,7 +1284,7 @@
                         var cloneEntity = viewModel.DataModel.EntityBase.Clone() as MyObjectBuilder_CubeGrid;
 
                         // Set to Array to force Linq to update the value.
-                        
+
                         // Clear Medical room SteamId.
                         cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
 
@@ -1318,6 +1374,59 @@
         void IDropable.Drop(object data, int index)
         {
             this._dataModel.MergeData((IList<IStructureBase>)data);
+        }
+
+        #endregion
+
+        #region IMainView Interface
+
+        public bool ShowProgress
+        {
+            get
+            {
+                return this._dataModel.ShowProgress;
+            }
+
+            set
+            {
+                this._dataModel.ShowProgress = value;
+            }
+        }
+
+        public double Progress
+        {
+            get
+            {
+                return this._dataModel.Progress;
+            }
+
+            set
+            {
+                this._dataModel.Progress = value;
+            }
+        }
+
+        public double MaximumProgress
+        {
+            get
+            {
+                return this._dataModel.MaximumProgress;
+            }
+
+            set
+            {
+                this._dataModel.MaximumProgress = value;
+            }
+        }
+
+        public void ResetProgress(double initial, double maximumProgress)
+        {
+            this._dataModel.ResetProgress(initial, maximumProgress);
+        }
+
+        public void ClearProgress()
+        {
+            this._dataModel.ClearProgress();
         }
 
         #endregion

@@ -45,9 +45,15 @@
             <Setter Property="Panel.Background" Value="Transparent" />
         </Style>
         
-        <ObjectDataProvider x:Key="ClassTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider x:Key="ImportModelTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="interop:ImportClassType" />
+                <x:Type TypeName="interop:ImportModelClassType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="ImportImageTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="interop:ImportImageClassType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
@@ -80,42 +86,7 @@
         <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
 
         <Style x:Key="ToolBarTopMenuitem" TargetType="MenuItem">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <!-- Previously x:Key="{x:Static MenuItem.TopLevelHeaderTemplateKey}"-->
-                    <ControlTemplate  TargetType="MenuItem">
-                        <Border Name="Border" BorderThickness="1" BorderBrush="Transparent">
-                            <Grid>
-                                <StackPanel Orientation="Horizontal" Margin="2,2,2,2">
-                                    <ContentPresenter Name="Icon" Margin="0,0,0,0" VerticalAlignment="Center" ContentSource="Icon"/>
-                                    <ContentPresenter Margin="2,0,0,0" ContentSource="Header" RecognizesAccessKey="True" />
-                                </StackPanel>
-                                <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
-                                    <Border Name="SubmenuBorder" SnapsToDevicePixels="True" Background="{StaticResource WindowBackgroundBrush}" BorderBrush="{StaticResource SolidBorderBrush}" BorderThickness="1" >
-                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
-                                    </Border>
-                                </Popup>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSuspendingPopupAnimation" Value="true">
-                                <Setter TargetName="Popup" Property="PopupAnimation" Value="None"/>
-                            </Trigger>
-                            <Trigger Property="IsHighlighted" Value="true">
-                                <Setter TargetName="Border" Property="Background" Value="#FFc2e0ff"/>
-                                <Setter TargetName="Border" Property="BorderBrush" Value="#ff3399ff"/>
-                            </Trigger>
-                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="True">
-                                <Setter TargetName="SubmenuBorder" Property="CornerRadius" Value="0,0,4,4"/>
-                                <Setter TargetName="SubmenuBorder" Property="Padding" Value="0,0,0,3"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Padding" Value="-2,2,6,2"/>
         </Style>
 
         <Style x:Key="textBoxInError" TargetType="{x:Type TextBox}">

@@ -419,8 +419,11 @@
             var entities = new List<MyObjectBuilder_EntityBase>();
             var sourceFiles = new List<string>();
 
+            this.MainViewModel.ResetProgress(0, this.VoxelCollection.Count);
+
             foreach (var voxelDesign in this.VoxelCollection)
             {
+                this.MainViewModel.Progress++;
                 if (string.IsNullOrEmpty(voxelDesign.VoxelFile.SourceFilename) || !MyVoxelMap.IsVoxelMapFile(voxelDesign.VoxelFile.SourceFilename))
                     continue;
 
