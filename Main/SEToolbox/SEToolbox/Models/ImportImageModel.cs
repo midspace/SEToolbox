@@ -11,14 +11,14 @@
         private string _filename;
         private bool _isValidImage;
 
-        private Size originalImageSize;
-        private BindableSizeModel newImageSize;
-        private BindablePoint3DModel position;
-        private BindableVector3DModel forward;
-        private BindableVector3DModel up;
-        private ImportClassType classType;
-        private ImportArmorType armorType;
-        private MyPositionAndOrientation characterPosition;
+        private Size _originalImageSize;
+        private BindableSizeModel _newImageSize;
+        private BindablePoint3DModel _position;
+        private BindableVector3DModel _forward;
+        private BindableVector3DModel _up;
+        private ImportImageClassType _classType;
+        private ImportArmorType _armorType;
+        private MyPositionAndOrientation _characterPosition;
 
         #endregion
 
@@ -70,14 +70,14 @@
         {
             get
             {
-                return this.originalImageSize;
+                return this._originalImageSize;
             }
 
             set
             {
-                if (value != this.originalImageSize)
+                if (value != this._originalImageSize)
                 {
-                    this.originalImageSize = value;
+                    this._originalImageSize = value;
                     this.RaisePropertyChanged(() => OriginalImageSize);
                 }
             }
@@ -87,14 +87,14 @@
         {
             get
             {
-                return this.newImageSize;
+                return this._newImageSize;
             }
 
             set
             {
-                if (value != this.newImageSize)
+                if (value != this._newImageSize)
                 {
-                    this.newImageSize = value;
+                    this._newImageSize = value;
                     this.RaisePropertyChanged(() => NewImageSize);
                 }
             }
@@ -104,14 +104,14 @@
         {
             get
             {
-                return this.position;
+                return this._position;
             }
 
             set
             {
-                if (value != this.position)
+                if (value != this._position)
                 {
-                    this.position = value;
+                    this._position = value;
                     this.RaisePropertyChanged(() => Position);
                 }
             }
@@ -121,14 +121,14 @@
         {
             get
             {
-                return this.forward;
+                return this._forward;
             }
 
             set
             {
-                if (value != this.forward)
+                if (value != this._forward)
                 {
-                    this.forward = value;
+                    this._forward = value;
                     this.RaisePropertyChanged(() => Forward);
                 }
             }
@@ -138,31 +138,31 @@
         {
             get
             {
-                return this.up;
+                return this._up;
             }
 
             set
             {
-                if (value != this.up)
+                if (value != this._up)
                 {
-                    this.up = value;
+                    this._up = value;
                     this.RaisePropertyChanged(() => Up);
                 }
             }
         }
 
-        public ImportClassType ClassType
+        public ImportImageClassType ClassType
         {
             get
             {
-                return this.classType;
+                return this._classType;
             }
 
             set
             {
-                if (value != this.classType)
+                if (value != this._classType)
                 {
-                    this.classType = value;
+                    this._classType = value;
                     this.RaisePropertyChanged(() => ClassType);
                 }
             }
@@ -172,14 +172,14 @@
         {
             get
             {
-                return this.armorType;
+                return this._armorType;
             }
 
             set
             {
-                if (value != this.armorType)
+                if (value != this._armorType)
                 {
-                    this.armorType = value;
+                    this._armorType = value;
                     this.RaisePropertyChanged(() => ArmorType);
                 }
             }
@@ -190,13 +190,13 @@
         {
             get
             {
-                return this.characterPosition;
+                return this._characterPosition;
             }
 
             set
             {
                 //if (value != this.characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
-                this.characterPosition = value;
+                this._characterPosition = value;
                 this.RaisePropertyChanged(() => CharacterPosition);
             }
         }

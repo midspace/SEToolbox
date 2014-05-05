@@ -43,8 +43,8 @@ namespace SEToolbox.Services
                 typeof(SynchronizeSelectedItems),
                 new PropertyMetadata(null, OnSelectionsPropertyChanged));
 
-        private bool updating;
-        private WeakEventHandler<SynchronizeSelectedItems, object, NotifyCollectionChangedEventArgs> currentWeakHandler;
+        private bool _updating;
+        private WeakEventHandler<SynchronizeSelectedItems, object, NotifyCollectionChangedEventArgs> _currentWeakHandler;
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly",
             Justification = "Dependency property")]
@@ -75,10 +75,10 @@ namespace SEToolbox.Services
 
             if (behavior != null)
             {
-                if (behavior.currentWeakHandler != null)
+                if (behavior._currentWeakHandler != null)
                 {
-                    behavior.currentWeakHandler.Detach();
-                    behavior.currentWeakHandler = null;
+                    behavior._currentWeakHandler.Detach();
+                    behavior._currentWeakHandler = null;
                 }
 
                 if (e.NewValue != null)
@@ -86,12 +86,12 @@ namespace SEToolbox.Services
                     var notifyCollectionChanged = e.NewValue as INotifyCollectionChanged;
                     if (notifyCollectionChanged != null)
                     {
-                        behavior.currentWeakHandler =
+                        behavior._currentWeakHandler =
                             new WeakEventHandler<SynchronizeSelectedItems, object, NotifyCollectionChangedEventArgs>(
                                 behavior,
                                 (instance, sender, args) => instance.OnSelectionsCollectionChanged(sender, args),
                                 (listener) => notifyCollectionChanged.CollectionChanged -= listener.OnEvent);
-                        notifyCollectionChanged.CollectionChanged += behavior.currentWeakHandler.OnEvent;
+                        notifyCollectionChanged.CollectionChanged += behavior._currentWeakHandler.OnEvent;
                     }
 
                     behavior.UpdateSelectedItems();
@@ -147,16 +147,16 @@ namespace SEToolbox.Services
 
         private void ExecuteIfNotUpdating(Action execute)
         {
-            if (!this.updating)
+            if (!this._updating)
             {
                 try
                 {
-                    this.updating = true;
+                    this._updating = true;
                     execute();
                 }
                 finally
                 {
-                    this.updating = false;
+                    this._updating = false;
                 }
             }
         }

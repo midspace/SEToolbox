@@ -31,6 +31,8 @@
 
         #region Properties
 
+        public bool IsSelected { get; set; }
+
         public MyObjectBuilder_CubeBlock Cube { get; set; }
 
         public MyObjectBuilderTypeEnum TypeId { get; set; }

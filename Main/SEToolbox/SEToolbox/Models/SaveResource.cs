@@ -203,6 +203,11 @@
             }
         }
 
+        public override string ToString()
+        {
+            return this.SessionName;
+        }
+
         #endregion
 
         /// <summary>

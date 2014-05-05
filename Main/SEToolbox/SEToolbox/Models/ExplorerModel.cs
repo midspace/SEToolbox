@@ -47,6 +47,14 @@
 
         private bool _compressedSectorFormat;
 
+        private bool _showProgress;
+
+        private double _progress;
+
+        private Stopwatch _timer;
+
+        private double _maximumProgress;
+
         #endregion
 
         #region Constructors
@@ -55,6 +63,7 @@
         {
             this.Structures = new ObservableCollection<IStructureBase>();
             this._manageDeleteVoxelList = new List<string>();
+            this._timer = new Stopwatch();
         }
 
         #endregion
@@ -227,6 +236,63 @@
                 {
                     this._sectorData = value;
                     this.RaisePropertyChanged(() => SectorData);
+                }
+            }
+        }
+
+        public bool ShowProgress
+        {
+            get
+            {
+                return this._showProgress;
+            }
+
+            set
+            {
+                if (value != this._showProgress)
+                {
+                    this._showProgress = value;
+                    this.RaisePropertyChanged(() => ShowProgress);
+                }
+            }
+        }
+
+        public double Progress
+        {
+            get
+            {
+                return this._progress;
+            }
+
+            set
+            {
+                if (value != this._progress)
+                {
+                    this._progress = value;
+                    this.RaisePropertyChanged(() => Progress);
+
+                    if (!_timer.IsRunning || _timer.ElapsedMilliseconds > 200 )
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                        _timer.Restart();
+                    }
+                }
+            }
+        }
+
+        public double MaximumProgress
+        {
+            get
+            {
+                return this._maximumProgress;
+            }
+
+            set
+            {
+                if (value != this._maximumProgress)
+                {
+                    this._maximumProgress = value;
+                    this.RaisePropertyChanged(() => MaximumProgress);
                 }
             }
         }
@@ -850,5 +916,21 @@
         }
 
         #endregion
+
+        public void ResetProgress(double initial, double maximumProgress)
+        {
+            this.Progress = initial;
+            this.MaximumProgress = maximumProgress;
+            _timer.Restart();
+            this.ShowProgress = true;
+            System.Windows.Forms.Application.DoEvents();
+        }
+
+        public void ClearProgress()
+        {
+            this.ShowProgress = false;
+            this.Progress = 0;
+            _timer.Stop();
+        }
     }
 }

@@ -18,5 +18,11 @@
         string CreateUniqueVoxelFilename(string originalFile);
 
         StructureCharacterModel ThePlayerCharacter { get; }
+
+        double Progress { get; set; }
+
+        void ResetProgress(double initial, double maximumProgress);
+
+        void ClearProgress();
     }
 }

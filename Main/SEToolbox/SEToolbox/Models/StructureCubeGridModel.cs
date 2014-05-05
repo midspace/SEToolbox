@@ -8,11 +8,12 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Windows.Media.Media3D;
-    using System.Xml.Serialization;
+    using System.Windows.Threading;
     using VRageMath;
 
     [Serializable]
@@ -70,6 +71,15 @@
         [NonSerialized]
         private CubeItemModel _selectedCubeItem;
 
+        [NonSerialized]
+        private static readonly object Locker = new object();
+
+        [NonSerialized]
+        private bool _isSubsSystemNotReady;
+
+        [NonSerialized]
+        private bool _isConstructionNotReady;
+
         #endregion
 
         #region ctor
@@ -77,6 +87,8 @@
         public StructureCubeGridModel(MyObjectBuilder_EntityBase entityBase)
             : base(entityBase)
         {
+            this.IsSubsSystemNotReady = true;
+            this.IsConstructionNotReady = true;
         }
 
         #endregion
@@ -477,6 +489,34 @@
             }
         }
 
+        public bool IsSubsSystemNotReady
+        {
+            get { return this._isSubsSystemNotReady; }
+
+            set
+            {
+                if (value != this._isSubsSystemNotReady)
+                {
+                    this._isSubsSystemNotReady = value;
+                    this.RaisePropertyChanged(() => IsSubsSystemNotReady);
+                }
+            }
+        }
+
+        public bool IsConstructionNotReady
+        {
+            get { return this._isConstructionNotReady; }
+
+            set
+            {
+                if (value != this._isConstructionNotReady)
+                {
+                    this._isConstructionNotReady = value;
+                    this.RaisePropertyChanged(() => IsConstructionNotReady);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -510,23 +550,9 @@
                 scaleMultiplyer = 0.5f;
             }
 
-            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
-
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
             float totalMass = 0;
-            var ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
-            var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
-            var timeTaken = new TimeSpan();
-
-            this.CubeAssets = new List<CubeAssetModel>();
-            this.ComponentAssets = new List<CubeAssetModel>();
-            this.IngotAssets = new List<OreAssetModel>();
-            this.OreAssets = new List<OreAssetModel>();
-
-            var cubeAssetDict = new Dictionary<string, CubeAssetModel>();
-            var componentAssetDict = new Dictionary<string, CubeAssetModel>();
-            this.CubeList = new ObservableCollection<CubeItemModel>();
 
             foreach (var block in this.CubeGrid.CubeBlocks)
             {
@@ -535,11 +561,6 @@
                 min.Z = Math.Min(min.Z, block.Min.Z);
 
                 var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
-
-                this.CubeList.Add(new CubeItemModel(block, this.CubeGrid.GridSizeEnum, cubeDefinition)
-                {
-                    TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds")
-                });
 
                 // definition is null when the block no longer exists in the Cube definitions. Ie, Ladder, or a Mod that was removed.
                 if (cubeDefinition == null || (cubeDefinition.Size.X == 1 && cubeDefinition.Size.Y == 1 && cubeDefinition.Size.z == 1))
@@ -557,12 +578,6 @@
                     max.Z = Math.Max(max.Z, block.Min.Z + orientSize.Z);
                 }
 
-                var blockName = block.SubtypeName;
-                if (string.IsNullOrEmpty(blockName))
-                {
-                    blockName = block.TypeId.ToString();
-                }
-
                 var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
                 float cubeMass = 0;
@@ -570,64 +585,16 @@
                 {
                     foreach (var component in cubeBlockDefinition.Components)
                     {
-                        TimeSpan componentTime;
-                        SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(component.Subtype, component.Type, component.Count, ingotRequirements, out componentTime);
-                        timeTaken += componentTime;
-
                         var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
                         float componentMass = cd.Mass * component.Count;
-                        float componentVolume = cd.Volume.Value * component.Count;
                         cubeMass += componentMass;
-
-                        var componentName = component.Subtype;
-                        if (componentAssetDict.ContainsKey(componentName))
-                        {
-                            componentAssetDict[componentName].Count += component.Count;
-                            componentAssetDict[componentName].Mass += componentMass;
-                            componentAssetDict[componentName].Volume += componentVolume;
-                            componentAssetDict[componentName].Time += componentTime;
-                        }
-                        else
-                        {
-                            var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
-                            var m = new CubeAssetModel() { Name = cd.DisplayName, Mass = componentMass, Volume = componentVolume, Count = component.Count, Time = componentTime, TextureFile = componentTexture };
-                            this.ComponentAssets.Add(m);
-                            componentAssetDict.Add(componentName, m);
-                        }
                     }
                 }
 
                 totalMass += cubeMass;
-
-                TimeSpan blockTime = new TimeSpan();
-                if (cubeDefinition != null)
-                {
-                    blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds));
-                }
-
-                timeTaken += blockTime;
-
-                if (cubeAssetDict.ContainsKey(blockName))
-                {
-                    cubeAssetDict[blockName].Count++;
-                    cubeAssetDict[blockName].Mass += cubeMass;
-                    cubeAssetDict[blockName].Time += blockTime;
-                }
-                else
-                {
-                    string blockTexture = null;
-                    if (cubeDefinition != null)
-                    {
-                        blockTexture = Path.Combine(contentPath, cubeDefinition.Icon + ".dds");
-                    }
-
-                    var m = new CubeAssetModel() { Name = cubeDefinition.DisplayName, Mass = cubeMass, Count = 1, TextureFile = blockTexture, Time = blockTime };
-                    this.CubeAssets.Add(m);
-                    cubeAssetDict.Add(blockName, m);
-                }
             }
 
-            var cockpitOrientation = "Unknown";
+            var cockpitOrientation = "None";
             var cockpits = this.CubeGrid.CubeBlocks.Where(b => b is MyObjectBuilder_Cockpit).ToArray();
             if (cockpits.Length > 0)
             {
@@ -644,16 +611,6 @@
                 }
             }
             this.CockpitOrientation = cockpitOrientation;
-
-            foreach (var kvp in ingotRequirements)
-            {
-                TimeSpan ingotTime;
-                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
-                var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
-                var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
-                IngotAssets.Add(new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture });
-                timeTaken += ingotTime;
-            }
 
             var scale = max - min;
             scale.X++;
@@ -677,15 +634,6 @@
 
             this.Description = string.Format("{0} | {1:#,##0} Kg", this.Scale, this.Mass);
 
-            foreach (var kvp in oreRequirements)
-            {
-                var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
-                var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
-                OreAssets.Add(new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, TextureFile = componentTexture });
-            }
-
-            this.TimeToProduce = timeTaken;
-
             // TODO:
             // Report:
             // Reflectors On
@@ -696,6 +644,162 @@
             // Thrusts:            999
             // Gyros:              999
             // Fuel Time:        0 sec
+        }
+
+        public override void InitializeAsync()
+        {
+            var worker = new BackgroundWorker();
+
+            worker.DoWork += delegate(object s, DoWorkEventArgs workArgs)
+            {
+                lock (Locker)
+                {
+                    // Because I've bound models to the view, this is going to get messy.
+                    var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
+
+                    if (this.IsConstructionNotReady)
+                    {
+                        var ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                        var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                        var timeTaken = new TimeSpan();
+                        var cubeAssetDict = new Dictionary<string, CubeAssetModel>();
+                        var componentAssetDict = new Dictionary<string, CubeAssetModel>();
+                        var cubeAssets = new List<CubeAssetModel>();
+                        var componentAssets = new List<CubeAssetModel>();
+                        var ingotAssets = new List<OreAssetModel>();
+                        var oreAssets = new List<OreAssetModel>();
+
+                        foreach (var block in this.CubeGrid.CubeBlocks)
+                        {
+                            var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
+
+                            var blockName = block.SubtypeName;
+                            if (string.IsNullOrEmpty(blockName))
+                            {
+                                blockName = block.TypeId.ToString();
+                            }
+
+                            var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
+
+                            float cubeMass = 0;
+                            if (cubeBlockDefinition != null)
+                            {
+                                foreach (var component in cubeBlockDefinition.Components)
+                                {
+                                    TimeSpan componentTime;
+                                    SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(component.Subtype, component.Type, component.Count, ingotRequirements, out componentTime);
+                                    timeTaken += componentTime;
+
+                                    var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+                                    float componentMass = cd.Mass * component.Count;
+                                    float componentVolume = cd.Volume.Value * component.Count;
+                                    cubeMass += componentMass;
+
+                                    var componentName = component.Subtype;
+                                    if (componentAssetDict.ContainsKey(componentName))
+                                    {
+                                        componentAssetDict[componentName].Count += component.Count;
+                                        componentAssetDict[componentName].Mass += componentMass;
+                                        componentAssetDict[componentName].Volume += componentVolume;
+                                        componentAssetDict[componentName].Time += componentTime;
+                                    }
+                                    else
+                                    {
+                                        var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
+                                        var m = new CubeAssetModel() { Name = cd.DisplayName, Mass = componentMass, Volume = componentVolume, Count = component.Count, Time = componentTime, TextureFile = componentTexture };
+                                        componentAssets.Add(m);
+                                        componentAssetDict.Add(componentName, m);
+                                    }
+                                }
+                            }
+
+                            TimeSpan blockTime = new TimeSpan();
+                            if (cubeDefinition != null)
+                            {
+                                blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds));
+                            }
+
+                            timeTaken += blockTime;
+
+                            if (cubeAssetDict.ContainsKey(blockName))
+                            {
+                                cubeAssetDict[blockName].Count++;
+                                cubeAssetDict[blockName].Mass += cubeMass;
+                                cubeAssetDict[blockName].Time += blockTime;
+                            }
+                            else
+                            {
+                                string blockTexture = null;
+                                if (cubeDefinition != null)
+                                {
+                                    blockTexture = Path.Combine(contentPath, cubeDefinition.Icon + ".dds");
+                                }
+
+                                var m = new CubeAssetModel() { Name = cubeDefinition.DisplayName, Mass = cubeMass, Count = 1, TextureFile = blockTexture, Time = blockTime };
+                                cubeAssets.Add(m);
+                                cubeAssetDict.Add(blockName, m);
+                            }
+                        }
+
+                        foreach (var kvp in ingotRequirements)
+                        {
+                            TimeSpan ingotTime;
+                            SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
+                            var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
+                            var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
+                            var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture };
+                            ingotAssets.Add(ingotAsset);
+                            timeTaken += ingotTime;
+                        }
+
+                        foreach (var kvp in oreRequirements)
+                        {
+                            var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
+                            var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
+                            var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, TextureFile = componentTexture };
+                            oreAssets.Add(oreAsset);
+                        }
+
+                        this._dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
+                        {
+                            this.CubeAssets = cubeAssets;
+                            this.ComponentAssets = componentAssets;
+                            this.IngotAssets = ingotAssets;
+                            this.OreAssets = oreAssets;
+                            this.TimeToProduce = timeTaken;
+                        });
+
+                        this.IsConstructionNotReady = false;
+                    }
+
+                    if (this.IsSubsSystemNotReady)
+                    {
+                        var cubeList = new List<CubeItemModel>();
+
+                        foreach (var block in this.CubeGrid.CubeBlocks)
+                        {
+                            var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                            this._dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
+                            {
+                                cubeList.Add(new CubeItemModel(block, this.CubeGrid.GridSizeEnum, cubeDefinition)
+                                {
+                                    TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds")
+                                });
+                            });
+                        }
+
+                        this._dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
+                        {
+                            this.CubeList = new ObservableCollection<CubeItemModel>(cubeList);
+
+                        });
+
+                        this.IsSubsSystemNotReady = false;
+                    }
+                }
+            };
+
+            worker.RunWorkerAsync();
         }
 
         /// <summary>

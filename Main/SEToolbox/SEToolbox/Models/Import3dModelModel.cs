@@ -21,7 +21,7 @@
         private BindableVector3DModel forward;
         private BindableVector3DModel up;
         private ModelTraceVoxel traceType;
-        private ImportClassType classType;
+        private ImportModelClassType classType;
         private ImportArmorType armorType;
         private MyPositionAndOrientation characterPosition;
         private double multipleScale;
@@ -234,7 +234,7 @@
             }
         }
 
-        public ImportClassType ClassType
+        public ImportModelClassType ClassType
         {
             get
             {
@@ -257,7 +257,7 @@
         {
             get
             {
-                return this.classType == ImportClassType.Asteroid;
+                return this.classType == ImportModelClassType.Asteroid;
             }
         }
 
@@ -265,7 +265,7 @@
         {
             get
             {
-                return this.classType != ImportClassType.Asteroid;
+                return this.classType != ImportModelClassType.Asteroid;
             }
         }
 

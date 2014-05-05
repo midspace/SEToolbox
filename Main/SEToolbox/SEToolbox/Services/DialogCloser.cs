@@ -1,5 +1,6 @@
-﻿namespace SEToolbox.Services
+﻿ namespace SEToolbox.Services
 {
+    using System;
     using System.Windows;
 
     public static class DialogCloser
@@ -22,6 +23,10 @@
                 try
                 {
                     window.DialogResult = e.NewValue as bool?;
+                }
+                catch (InvalidOperationException)
+                {
+                    window.Close();
                 }
                 catch
                 {

@@ -136,10 +136,10 @@
   <data name="DialogImportImageTitle" xml:space="preserve">
     <value>Select Image to Import</value>
   </data>
-  <data name="ImportClassType_LargeShip" xml:space="preserve">
+  <data name="ImportModelClassType_LargeShip" xml:space="preserve">
     <value>Large Ship</value>
   </data>
-  <data name="ImportClassType_SmallShip" xml:space="preserve">
+  <data name="ImportModelClassType_SmallShip" xml:space="preserve">
     <value>Small Ship</value>
   </data>
   <data name="ClassType_FloatingObject" xml:space="preserve">
@@ -445,5 +445,29 @@ Would you like to download it now?</value>
   </data>
   <data name="elements2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\elements2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportImageClassType_LargeShip" xml:space="preserve">
+    <value>Large Ship</value>
+  </data>
+  <data name="ImportImageClassType_SmallShip" xml:space="preserve">
+    <value>Small Ship</value>
+  </data>
+  <data name="ImportImageClassType_Station" xml:space="preserve">
+    <value>Station</value>
+  </data>
+  <data name="ImportModelClassType_Asteroid" xml:space="preserve">
+    <value>Asteroid</value>
+  </data>
+  <data name="ImportModelClassType_Station" xml:space="preserve">
+    <value>Station</value>
+  </data>
+  <data name="document_pulse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\document_pulse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="flag_china" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\flag_china.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="flag_great_britain" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\flag_great_britain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

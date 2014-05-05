@@ -198,7 +198,7 @@
             }
         }
 
-        public ImportClassType ClassType
+        public ImportImageClassType ClassType
         {
             get
             {
@@ -369,7 +369,7 @@
                 this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Negate();
                 this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
 
-                this.ClassType = ImportClassType.SmallShip;
+                this.ClassType = ImportImageClassType.SmallShip;
                 this.ArmorType = ImportArmorType.Light;
 
                 this.IsValidImage = true;
@@ -424,19 +424,19 @@
             var blockPrefix = "";
             switch (this.ClassType)
             {
-                case ImportClassType.SmallShip:
+                case ImportImageClassType.SmallShip:
                     entity.GridSizeEnum = MyCubeSize.Small;
                     blockPrefix += "Small";
                     entity.IsStatic = false;
                     break;
 
-                case ImportClassType.LargeShip:
+                case ImportImageClassType.LargeShip:
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = false;
                     break;
 
-                case ImportClassType.Station:
+                case ImportImageClassType.Station:
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = true;
