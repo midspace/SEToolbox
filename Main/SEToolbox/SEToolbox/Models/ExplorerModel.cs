@@ -1,9 +1,7 @@
 ﻿namespace SEToolbox.Models
 {
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
-    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Support;
@@ -14,6 +12,7 @@
     using System.IO;
     using System.Linq;
     using System.Windows.Threading;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
 
     public class ExplorerModel : BaseModel
     {
@@ -51,9 +50,11 @@
 
         private double _progress;
 
-        private Stopwatch _timer;
+        private readonly Stopwatch _timer;
 
         private double _maximumProgress;
+
+        private List<int> _customColors;
 
         #endregion
 
@@ -297,6 +298,40 @@
             }
         }
 
+        /// <summary>
+        /// Read in current 'world' color Palette.
+        /// { 8421504, 9342617, 4408198, 4474015, 4677703, 5339473, 8414016, 10056001, 5803425, 5808314, 11447986, 12105932, 3815995, 5329241 }
+        /// </summary>
+        public int[] CreativeModeColors
+        {
+            get
+            {
+                if (_customColors == null)
+                {
+                    _customColors = new List<int>();
+                    foreach (VRageMath.Vector3 hsv in this.ActiveWorld.Content.CharacterToolbar.ColorMaskHSVList)
+                    {
+                        var rgb = ((Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3)hsv).ToSandboxDrawingColor();
+                        _customColors.Add(((rgb.B << 0x10) | (rgb.G << 8) | rgb.R) & 0xffffff);
+                    }
+                }
+                return _customColors.ToArray();
+            }
+
+            set
+            {
+                _customColors = value.ToList();
+                //foreach (int val in value)
+                //{
+                //    var r = (byte)(val & 0xffL);
+                //    var g = (byte)((val >> 8) & 0xffL);
+                //    var b = (byte)((val >> 0x10) & 0xffL);
+                //    var c = Color.FromArgb(r, g, b);
+                //    // Add to ColorMaskHSVList =>  c.ToSandboxHsvColor();
+                //}
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -444,6 +479,7 @@
             this.Structures.Clear();
             this._manageDeleteVoxelList.Clear();
             this.ThePlayerCharacter = null;
+            this._customColors = null;
 
             if (this.SectorData != null)
             {

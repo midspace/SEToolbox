@@ -1429,6 +1429,27 @@
             this._dataModel.ClearProgress();
         }
 
+        public MyObjectBuilder_Checkpoint Checkpoint
+        {
+            get { return this.ActiveWorld.Content; }
+        }
+
+        /// <summary>
+        /// Read in current 'world' color Palette.
+        /// </summary>
+        public int[] CreativeModeColors
+        {
+            get
+            {
+                return this._dataModel.CreativeModeColors;
+            }
+
+            set
+            {
+                this._dataModel.CreativeModeColors = value;
+            }
+        }
+
         #endregion
     }
 }

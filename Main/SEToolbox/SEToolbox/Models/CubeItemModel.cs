@@ -2,6 +2,7 @@
 {
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
 
     public class CubeItemModel : BaseModel
@@ -22,8 +23,7 @@
             this.TypeId = definition.TypeId;
             this.SubtypeId = definition.SubtypeName;
             this.Position = new BindableSize3DIModel(cube.Min);
-            this.Color = new System.Windows.Media.SolidColorBrush(cube.ColorMaskHSV.ToSandboxMediaColor());
-            this.ColorText = this.Color.ToString();
+            this.SetColor(cube.ColorMaskHSV);
             this.Build = cube.BuildPercent;
         }
 
@@ -46,6 +46,10 @@
         public string FriendlyName { get; set; }
 
         public string ColorText { get; set; }
+
+        public float ColorHue { get; set; }
+        
+        public float ColorSaturation { get; set; }
 
         public BindableSize3DIModel Position { get; set; }
 
@@ -74,5 +78,17 @@
         }
 
         #endregion
+
+        public void SetColor(SerializableVector3 vector3)
+        {
+            this.Color = new System.Windows.Media.SolidColorBrush(vector3.ToSandboxMediaColor());
+            this.ColorText = this.Color.ToString();
+            this.ColorHue = vector3.X;
+            this.ColorSaturation = vector3.Y;
+
+            this.RaisePropertyChanged(() => ColorText);
+            this.RaisePropertyChanged(() => ColorHue);
+            this.RaisePropertyChanged(() => ColorSaturation);
+        }
     }
 }

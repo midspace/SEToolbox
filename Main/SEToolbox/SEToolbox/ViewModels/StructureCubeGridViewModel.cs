@@ -20,8 +20,6 @@
     {
         #region fields
 
-        // TODO: read in current 'world' color Palette.
-        private static readonly List<int> CustomColors = new List<int>() { 8421504, 9342617, 4408198, 4474015, 4677703, 5339473, 8414016, 10056001, 5803425, 5808314, 11447986, 12105932, 3815995, 5329241 };
         private readonly IDialogService _dialogService;
         private readonly Func<IColorDialog> _colorDialogFactory;
         private ObservableCollection<CubeItemModel> _selections;
@@ -1071,7 +1069,7 @@
             var colorDialog = _colorDialogFactory();
             colorDialog.FullOpen = true;
             colorDialog.BrushColor = this.SelectedCubeItem.Color as System.Windows.Media.SolidColorBrush;
-            colorDialog.CustomColors = CustomColors.ToArray();
+            colorDialog.CustomColors = this.MainViewModel.CreativeModeColors;
 
             var result = _dialogService.ShowColorDialog(this.OwnerViewModel, colorDialog);
 
@@ -1079,13 +1077,11 @@
             {
                 foreach (var cube in this.Selections)
                 {
-                    cube.Color = colorDialog.BrushColor;
-                    cube.Cube.ColorMaskHSV = colorDialog.DrawingColor.Value.ToSandboxHsvColor();
+                    cube.SetColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
                 }
             }
 
-            CustomColors.Clear();
-            CustomColors.AddRange(colorDialog.CustomColors);
+            this.MainViewModel.CreativeModeColors = colorDialog.CustomColors;
         }
 
         public bool FrameworkCubesCanExecute()

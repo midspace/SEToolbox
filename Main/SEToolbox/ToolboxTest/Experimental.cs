@@ -204,6 +204,23 @@
         }
 
         //[TestMethod]
+        public void VoxelGenerateInterlockingPlatforms()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var materialStone_01 = materials.FirstOrDefault(m => m.Name.Contains("Stone_01"));
+            Assert.IsNotNull(materialStone_01, "Stone_01 material should exist.");
+
+            const bool multiThread = true;
+            const int length = 253;
+            string filename;
+
+            filename = @".\TestOutput\cube_platform_center.vox";
+            MyVoxelBuilder.BuildAsteroidCube(multiThread, filename, new Vector3I(1, 5, 1), new Vector3I(length - 2, 104, length - 2), materialStone_01.Name);
+        }
+
+        //[TestMethod]
         public void VoxelGenerateSphereAssets()
         {
             var materials = SpaceEngineersAPI.GetMaterialList();
