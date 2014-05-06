@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Interfaces
 {
+    using System.Collections.Generic;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
 
@@ -24,5 +25,9 @@
         void ResetProgress(double initial, double maximumProgress);
 
         void ClearProgress();
+
+        MyObjectBuilder_Checkpoint Checkpoint { get; }
+
+        int[] CreativeModeColors { get; set; }
     }
 }

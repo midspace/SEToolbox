@@ -63,6 +63,27 @@
             return MyVoxelBuilder.BuildAsteroid(multiThread, filename, buildSize, material, action);
         }
 
+        public static MyVoxelMap BuildAsteroidCube(bool multiThread, string filename, Vector3I min, Vector3I max, string material)
+        {
+            // correct for allowing sizing.
+            var buildSize = new Vector3I(ScaleMod(max.X, 64), ScaleMod(max.Y, 64), ScaleMod(max.Z, 64));
+
+            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            {
+                if (e.CoordinatePoint.X < min.X || e.CoordinatePoint.Y < min.Y || e.CoordinatePoint.Z < min.Z
+                    || e.CoordinatePoint.X > max.X || e.CoordinatePoint.Y > max.Y || e.CoordinatePoint.Z > max.Z)
+                {
+                    e.Volume = 0x00;
+                }
+                else //if (!hollow)
+                {
+                    e.Volume = 0xFF;
+                }
+            };
+
+            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, buildSize, material, action);
+        }
+
         public static MyVoxelMap BuildAsteroidSphere(bool multiThread, string filename, double radius, string material,
             bool hollow = false, int shellWidth = 0)
         {

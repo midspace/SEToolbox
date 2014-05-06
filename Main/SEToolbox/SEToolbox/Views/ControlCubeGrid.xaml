@@ -216,7 +216,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Margin="4 0 4 0" Text="Filter:" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,4,0" Text="{Binding ComponentFilter, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,4,0" Text="{Binding ComponentFilter, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enter the name of cube to filter by.">
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding FilterStartCommand}"/>
                                     <KeyBinding Key="Tab" Command="{Binding FilterStartCommand}"/>
@@ -273,7 +273,13 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Width="30" Header="Color" SortBinding="{Binding ColorText}">
+                                        <controls:SortableGridViewColumn Width="30" Header="Color">
+                                            <controls:SortableGridViewColumn.SortBinding>
+                                                <MultiBinding>
+                                                    <Binding Path="ColorHue" />
+                                                    <Binding Path="ColorSaturation" />
+                                                </MultiBinding>
+                                            </controls:SortableGridViewColumn.SortBinding>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1"  ToolTip="{Binding ColorText}" />
