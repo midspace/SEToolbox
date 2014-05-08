@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Linq;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -15,6 +16,7 @@
     using System.Windows.Data;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
+    using SEToolbox.Support;
 
     public class StructureCubeGridViewModel : StructureBaseViewModel<StructureCubeGridModel>
     {
@@ -23,6 +25,7 @@
         private readonly IDialogService _dialogService;
         private readonly Func<IColorDialog> _colorDialogFactory;
         private ObservableCollection<CubeItemModel> _selections;
+        private string[] _filerView;
 
         #endregion
 
@@ -31,7 +34,7 @@
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel)
             : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IColorDialog>)
         {
-            this.Selections = new ObservableCollection<CubeItemModel>();
+            this.CubeSelections = new ObservableCollection<CubeItemModel>();
         }
 
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel, IDialogService dialogService, Func<IColorDialog> colorDialogFactory)
@@ -267,6 +270,14 @@
             get
             {
                 return new DelegateCommand(new Action(FilterStartExecuted), new Func<bool>(FilterStartCanExecute));
+            }
+        }
+
+        public ICommand FilterTabStartCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(FilterTabStartExecuted), new Func<bool>(FilterTabStartCanExecute));
             }
         }
 
@@ -558,7 +569,7 @@
             }
         }
 
-        public ObservableCollection<CubeItemModel> Selections
+        public ObservableCollection<CubeItemModel> CubeSelections
         {
             get
             {
@@ -570,7 +581,7 @@
                 if (value != this._selections)
                 {
                     this._selections = value;
-                    this.RaisePropertyChanged(() => Selections);
+                    this.RaisePropertyChanged(() => CubeSelections);
                 }
             }
         }
@@ -1017,6 +1028,18 @@
             ApplyCubeFilter();
         }
 
+        public bool FilterTabStartCanExecute()
+        {
+            return true;
+        }
+
+        public void FilterTabStartExecuted()
+        {
+            this.ActiveComponentFilter = this.ComponentFilter;
+            ApplyCubeFilter();
+            FrameworkExtension.FocusedElementMoveFocus();
+        }
+
         public bool FilterClearCanExecute()
         {
             return !string.IsNullOrEmpty(this.ComponentFilter);
@@ -1032,16 +1055,15 @@
         public bool DeleteCubesCanExecute()
         {
             return this.SelectedCubeItem != null;
-            //return false;
         }
 
         public void DeleteCubesExecuted()
         {
             this.IsBusy = true;
 
-            while (this.Selections.Count > 0)
+            while (this.CubeSelections.Count > 0)
             {
-                var cube = this.Selections[0];
+                var cube = this.CubeSelections[0];
                 if (this.DataModel.CubeGrid.CubeBlocks.Remove(cube.Cube))
                     this.DataModel.CubeList.Remove(cube);
             }
@@ -1075,7 +1097,7 @@
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                foreach (var cube in this.Selections)
+                foreach (var cube in this.CubeSelections)
                 {
                     cube.SetColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
                 }
@@ -1100,23 +1122,23 @@
 
         private void ApplyCubeFilter()
         {
+            // Prepare filter beforehand.
+            if (string.IsNullOrEmpty(this.ActiveComponentFilter))
+                _filerView = new string[0];
+            else
+                _filerView = this.ActiveComponentFilter.ToLowerInvariant().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Distinct().ToArray();
+
             var view = (CollectionView)CollectionViewSource.GetDefaultView(this.CubeList);
             view.Filter = UserFilter;
         }
 
         private bool UserFilter(object item)
         {
-            if (string.IsNullOrEmpty(this.ActiveComponentFilter))
+            if (_filerView.Length == 0)
                 return true;
 
             var cube = (CubeItemModel)item;
-            if (cube.FriendlyName.ToLowerInvariant().Contains(this.ActiveComponentFilter.ToLowerInvariant()))
-                return true;
-
-            if (cube.ColorText.ToLowerInvariant().Contains(this.ActiveComponentFilter.ToLowerInvariant()))
-                return true;
-            
-            return false;
+            return _filerView.All(s => cube.FriendlyName.ToLowerInvariant().Contains(s) || cube.ColorText.ToLowerInvariant().Contains(s));
         }
 
         #endregion

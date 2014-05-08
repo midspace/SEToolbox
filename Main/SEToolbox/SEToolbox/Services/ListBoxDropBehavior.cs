@@ -79,14 +79,14 @@ namespace SEToolbox.Services
                     // dropped above or under the UIElement, then insert at the correct index.
                     var dropContainer = sender as ItemsControl;
                     // get the UIElement that was dropped over.
-                    var droppedOverItem = VisualTreeEnumeration.GetUIElement(dropContainer, e.GetPosition(dropContainer));
+                    var droppedOverItem = dropContainer.GetUIElement(e.GetPosition(dropContainer));
                     var dropIndex = -1; // the location where the item will be dropped.
                     if (droppedOverItem != null)
                     {
                         dropIndex = dropContainer.ItemContainerGenerator.IndexFromContainer(droppedOverItem) + 1;
                         // find if it was dropped above or below the index item so that we can insert 
                         // the item in the correct place.
-                        if (VisualTreeEnumeration.IsPositionAboveElement(droppedOverItem, e.GetPosition(droppedOverItem))) //if above
+                        if (droppedOverItem.IsPositionAboveElement(e.GetPosition(droppedOverItem))) //if above
                         {
                             dropIndex = dropIndex - 1; //we insert at the index above it
                         }
@@ -142,10 +142,10 @@ namespace SEToolbox.Services
                     if (this._insertAdornerManager != null && this.ShowDropIndicator)
                     {
                         var dropContainer = sender as ItemsControl;
-                        var droppedOverItem = VisualTreeEnumeration.GetUIElement(dropContainer, e.GetPosition(dropContainer));
+                        var droppedOverItem = dropContainer.GetUIElement(e.GetPosition(dropContainer));
                         if (droppedOverItem != null)
                         {
-                            var isAboveElement = VisualTreeEnumeration.IsPositionAboveElement(droppedOverItem, e.GetPosition(droppedOverItem));
+                            var isAboveElement = droppedOverItem.IsPositionAboveElement(e.GetPosition(droppedOverItem));
                             this._insertAdornerManager.UpdateDropIndicator(droppedOverItem, isAboveElement);
                         }
                         else

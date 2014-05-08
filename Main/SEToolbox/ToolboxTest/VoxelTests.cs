@@ -19,8 +19,8 @@
         public void VoxelCompression()
         {
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
-            const string fileExtracted = @".\TestAssets\asteroid0moon4.vox.bin";
-            const string fileNew = @".\TestAssets\asteroid0moon4_test.vox";
+            const string fileExtracted = @".\TestOutput\asteroid0moon4.vox.bin";
+            const string fileNew = @".\TestOutput\asteroid0moon4_test.vox";
             MyVoxelMap.Uncompress(fileOriginal, fileExtracted);
             MyVoxelMap.Compress(fileExtracted, fileNew);
 
@@ -48,7 +48,7 @@
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
-            const string fileNew = @".\TestAssets\asteroid0moon4_save.vox";
+            const string fileNew = @".\TestOutput\asteroid0moon4_save.vox";
 
             var voxelMap = new MyVoxelMap();
 
@@ -112,7 +112,7 @@
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
-            const string fileNew = @".\TestAssets\asteroid0moon4_gold.vox";
+            const string fileNew = @".\TestOutput\asteroid0moon4_gold.vox";
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
@@ -224,7 +224,7 @@
             Assert.IsNotNull(uraniumMaterial, "Uranium material should exist.");
 
             const string fileOriginal = @".\TestAssets\Arabian_Border_7.vox";
-            const string fileNewVoxel = @".\TestAssets\Arabian_Border_7_mixed.vox";
+            const string fileNewVoxel = @".\TestOutput\Arabian_Border_7_mixed.vox";
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Name);
@@ -329,7 +329,7 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestAssets\test_cube_solid_8x8x8_gold.vox";
+            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold.vox";
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, fileNew, 8, 8, 8, goldMaterial.Name, false, 0);
 
@@ -360,7 +360,7 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestAssets\test_sphere_solid_7_gold.vox";
+            const string fileNew = @".\TestOutput\test_sphere_solid_7_gold.vox";
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(false, fileNew, 4, goldMaterial.Name, false, 0);
 
@@ -391,7 +391,7 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestAssets\test_sphere_solid_499_gold.vox";
+            const string fileNew = @".\TestOutput\test_sphere_solid_499_gold.vox";
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, fileNew, 250, goldMaterial.Name, false, 0);
 
@@ -419,7 +419,7 @@
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            const string fileNew = @".\TestAssets\test_spike_wall.vox";
+            const string fileNew = @".\TestOutput\test_spike_wall.vox";
 
             var size = new Vector3I(1024, 1024, 64);
 
@@ -467,7 +467,7 @@
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            var fileNew = @".\TestAssets\test_spike_cube256.vox";
+            var fileNew = @".\TestOutput\test_spike_cube256.vox";
 
             var length = 256;
             var min = 4;
@@ -542,7 +542,7 @@
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             const string modelFile = @".\TestAssets\buddha-fixed-bottom.stl";
-            const string voxelFile = @".\TestAssets\buddha-fixed-bottom.vox";
+            const string voxelFile = @".\TestOutput\buddha-fixed-bottom.vox";
 
             var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 180, 0, 0);
 

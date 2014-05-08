@@ -8,9 +8,9 @@
     {
         #region fields
 
-        private int width;
-        private int height;
-        private int depth;
+        private int _width;
+        private int _height;
+        private int _depth;
 
         #endregion
 
@@ -49,14 +49,14 @@
         {
             get
             {
-                return this.width;
+                return this._width;
             }
 
             set
             {
-                if (value != this.width)
+                if (value != this._width)
                 {
-                    this.width = value;
+                    this._width = value;
                     this.RaisePropertyChanged(() => Width);
                 }
             }
@@ -66,14 +66,14 @@
         {
             get
             {
-                return this.height;
+                return this._height;
             }
 
             set
             {
-                if (value != this.height)
+                if (value != this._height)
                 {
-                    this.height = value;
+                    this._height = value;
                     this.RaisePropertyChanged(() => Height);
                 }
             }
@@ -83,14 +83,14 @@
         {
             get
             {
-                return this.depth;
+                return this._depth;
             }
 
             set
             {
-                if (value != this.depth)
+                if (value != this._depth)
                 {
-                    this.depth = value;
+                    this._depth = value;
                     this.RaisePropertyChanged(() => Depth);
                 }
             }

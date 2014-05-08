@@ -143,6 +143,7 @@
     <Compile Include="Models\BindableSize3DIModel.cs" />
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComponentItemModel.cs" />
+    <Compile Include="Models\BindablePoint3DIModel.cs" />
     <Compile Include="Models\CubeItemModel.cs" />
     <Compile Include="Models\FindApplicationModel.cs" />
     <Compile Include="Models\GenerateFloatingObjectModel.cs" />
@@ -238,7 +239,7 @@
     <Compile Include="Support\ToolboxExtensions.cs" />
     <Compile Include="Interop\ClassType.cs" />
     <Compile Include="Support\ToolboxUpdater.cs" />
-    <Compile Include="Support\VisualTreeEnumeration.cs" />
+    <Compile Include="Support\FrameworkExtension.cs" />
     <Compile Include="Support\ZipTools.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />

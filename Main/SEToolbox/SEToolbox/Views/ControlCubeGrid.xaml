@@ -219,16 +219,16 @@
                             <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,4,0" Text="{Binding ComponentFilter, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enter the name of cube to filter by.">
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding FilterStartCommand}"/>
-                                    <KeyBinding Key="Tab" Command="{Binding FilterStartCommand}"/>
+                                    <KeyBinding Key="Tab" Command="{Binding FilterTabStartCommand}"/>
                                     <KeyBinding Key="Escape" Command="{Binding FilterClearCommand}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
-                            <Button Grid.Column="2" ToolTip="Search" Command="{Binding FilterStartCommand}">
+                            <Button Grid.Column="2" ToolTip="Search (Enter)" Command="{Binding FilterStartCommand}" IsTabStop="False">
                                 <Button.Content>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=find}" />
                                 </Button.Content>
                             </Button>
-                            <Button Grid.Column="3" ToolTip="Clear Filter" Command="{Binding FilterClearCommand}">
+                            <Button Grid.Column="3" ToolTip="Clear Filter (Esc)" Command="{Binding FilterClearCommand}" IsTabStop="False">
                                 <Button.Content>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_cross}" />
                                 </Button.Content>
@@ -287,15 +287,18 @@
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
                                         <GridViewColumn Header="Build" DisplayMemberBinding="{Binding Build, StringFormat=P}" Width="40"/>
-                                        <controls:SortableGridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80">
+                                        <GridViewColumn Header="X" DisplayMemberBinding="{Binding Position.X}" Width="40"/>
+                                        <GridViewColumn Header="Y" DisplayMemberBinding="{Binding Position.Y}" Width="40"/>
+                                        <GridViewColumn Header="Z" DisplayMemberBinding="{Binding Position.Z}" Width="40"/>
+                                        <!--<controls:SortableGridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80">
                                             <controls:SortableGridViewColumn.SortBinding>
                                                 <MultiBinding>
-                                                    <Binding Path="Position.Width" />
-                                                    <Binding Path="Position.Height" />
-                                                    <Binding Path="Position.Depth" />
+                                                    <Binding Path="Position.X" />
+                                                    <Binding Path="Position.Y" />
+                                                    <Binding Path="Position.Z" />
                                                 </MultiBinding>
                                             </controls:SortableGridViewColumn.SortBinding>
-                                        </controls:SortableGridViewColumn>
+                                        </controls:SortableGridViewColumn>-->
                                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
                                     </GridView>
                                 </ListView.View>
@@ -304,7 +307,7 @@
                                 </ListView.InputBindings>
                                 <i:Interaction.Behaviors>
                                     <!-- This custom behavior that synchronizes the selected items with the view models collection -->
-                                    <commands:SynchronizeSelectedItems Selections="{Binding Selections}"/>
+                                    <commands:SynchronizeSelectedItems Selections="{Binding CubeSelections}"/>
                                 </i:Interaction.Behaviors>
                             </controls:SortableListView>
                             <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />

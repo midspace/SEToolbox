@@ -12,7 +12,7 @@
         [TestMethod]
         public void GenerateModelComplexVolumentric()
         {
-            var modelFile = @".\TestAssets\algos.obj";
+            const string modelFile = @".\TestAssets\algos.obj";
 
             var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 1, null, ModelTraceVoxel.Thin);
 
@@ -43,7 +43,7 @@
         [TestMethod]
         public void GenerateModelComplexVolumentricHalfScale()
         {
-            var modelFile = @".\TestAssets\algos.obj";
+            const string modelFile = @".\TestAssets\algos.obj";
 
             var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0.5, null, ModelTraceVoxel.Thin);
 
@@ -62,7 +62,7 @@
         [TestMethod]
         public void GenerateModelSimpleThinVolumentric()
         {
-            var modelFile = @".\TestAssets\t25.obj";
+            const string modelFile = @".\TestAssets\t25.obj";
 
             var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
 
@@ -81,7 +81,7 @@
         [TestMethod]
         public void GenerateModelSimpleThinSmoothedVolumentric()
         {
-            var modelFile = @".\TestAssets\t25.obj";
+            const string modelFile = @".\TestAssets\t25.obj";
 
             var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.ThinSmoothed);
 
@@ -100,7 +100,7 @@
         [TestMethod]
         public void GenerateModelSimpleThickVolumentric()
         {
-            var modelFile = @".\TestAssets\t25.obj";
+            const string modelFile = @".\TestAssets\t25.obj";
 
             var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thick);
 
@@ -120,9 +120,9 @@
         public void LoadBrokenModel()
         {
             // TODO: finish testing the model.
-            //var modelFile = @".\TestAssets\LibertyStatue.obj";
+            const string modelFile = @".\TestAssets\LibertyStatue.obj";
 
-            //var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
 
             //Assert.AreEqual(72, cubic.Length, "Array length size must match.");
 
@@ -134,7 +134,7 @@
         [TestMethod]
         public void GenerateModelSimpleVolumentricFill()
         {
-            var modelFile = @".\TestAssets\t25.obj";
+            const string modelFile = @".\TestAssets\t25.obj";
 
             var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 2, null, ModelTraceVoxel.Thin);
 
@@ -153,9 +153,23 @@
         [TestMethod]
         public void GenerateModelSimpleVolumentricAltFill()
         {
-            var modelFile = @".\TestAssets\t25.obj";
+            const string modelFile = @".\TestAssets\t25.obj";
 
             var cubic = Import3dModelViewModel.ReadModelVolmeticAlt(modelFile, 1);
+
+            //Assert.AreEqual(480, cubic.Length, "Array length size must match.");
+
+            //Assert.AreEqual(8, cubic.GetLength(0), "Array size must match.");
+            //Assert.AreEqual(12, cubic.GetLength(1), "Array size must match.");
+            //Assert.AreEqual(5, cubic.GetLength(2), "Array size must match.");
+        }
+
+        [TestMethod]
+        public void GenerateModelWithMaterial()
+        {
+            const string modelFile = @".\TestAssets\test.obj";
+
+            var cubic = Import3dModelViewModel.ReadModelVolmetic(modelFile, 1, null, ModelTraceVoxel.Thin);
 
             //Assert.AreEqual(480, cubic.Length, "Array length size must match.");
 
