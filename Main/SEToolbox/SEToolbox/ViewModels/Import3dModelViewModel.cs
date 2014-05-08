@@ -1,5 +1,7 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Linq;
+    using System.Windows.Media;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
@@ -18,6 +20,7 @@
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
     using VRageMath;
+    using Color = VRageMath.Color;
     using Res = SEToolbox.Properties.Resources;
 
     public class Import3dModelViewModel : BaseViewModel
@@ -1003,6 +1006,18 @@
             {
                 var gm = (GeometryModel3D)model3D;
                 var g = gm.Geometry as MeshGeometry3D;
+                var materials = gm.Material as MaterialGroup;
+                System.Windows.Media.Color color = Colors.Transparent;
+
+                if (materials != null)
+                {
+                    var material = materials.Children.OfType<DiffuseMaterial>().FirstOrDefault();
+
+                    if (material != null)
+                    {
+                        color = ((SolidColorBrush) material.Brush).Color;
+                    }
+                }
 
                 for (var t = 0; t < g.TriangleIndices.Count; t += 3)
                 {

@@ -52,7 +52,7 @@
         public void TestXmlCompacter1()
         {
             var filenameSource = Path.GetFullPath(@".\TestAssets\test.xml");
-            var filenameDestination = Path.GetFullPath(@".\TestAssets\test_out.xml");
+            var filenameDestination = Path.GetFullPath(@".\TestOutput\test_out.xml");
             ToolboxExtensions.CompactXmlFile(filenameSource, filenameDestination);
 
             var oldFileSize = new FileInfo(filenameSource).Length;
@@ -75,7 +75,7 @@
         public void ExtractZipFileToFolder()
         {
             const string filename = @".\TestAssets\Sample World.sbw";
-            const string folder = @".\TestAssets\Sample World";
+            const string folder = @".\TestOutput\Sample World";
 
             ZipTools.MakeClearDirectory(folder);
             ZipTools.ExtractZipFile(filename, null, folder);
@@ -100,7 +100,7 @@
         {
             const string filename = @".\TestAssets\SANDBOX_0_0_0_.sbs";
 
-            const string xmlfilename = @".\TestAssets\SANDBOX_0_0_0_.xml";
+            const string xmlfilename = @".\TestOutput\SANDBOX_0_0_0_.xml";
 
             ZipTools.GZipUncompress(filename, xmlfilename);
         }
@@ -109,12 +109,12 @@
         public void ExtractZipAndRepack()
         {
             const string filename = @".\TestAssets\Sample World.sbw";
-            const string folder = @".\TestAssets\Sample World";
+            const string folder = @".\TestOutput\Sample World";
 
             ZipTools.MakeClearDirectory(folder);
             ZipTools.ExtractZipFile(filename, null, folder);
 
-            const string newFilename = @".\TestAssets\New World.sbw";
+            const string newFilename = @".\TestOutput\New World.sbw";
             ZipTools.ZipFolder(folder, null, newFilename);
         }
 

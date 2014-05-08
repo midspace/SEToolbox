@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Controls
 {
+    using System.Linq;
     using SEToolbox.Support;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -46,16 +47,17 @@
 
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
-            GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
+            var headerClicked = e.OriginalSource as GridViewColumnHeader;
 
             // May be triggered by clicking on vertical scrollbar.
             if (headerClicked != null)
             {
-                var listView = VisualTreeEnumeration.FindVisualParent<ListView>(headerClicked);
-                ListSortDirection direction;
+                var listView = headerClicked.FindVisualParent<ListView>();
 
                 if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
                 {
+                    ListSortDirection direction;
+
                     if (headerClicked != _lastHeaderClicked)
                     {
                         direction = ListSortDirection.Ascending;
@@ -75,20 +77,17 @@
                     var header = new List<string>();
                     if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is Binding)
                     {
-                        Binding binding = ((SortableGridViewColumn)headerClicked.Column).SortBinding as Binding;
+                        var binding = (Binding)((SortableGridViewColumn)headerClicked.Column).SortBinding;
                         header.Add(binding.Path.Path);
                     }
                     else if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is MultiBinding)
                     {
-                        MultiBinding multiBinding = ((SortableGridViewColumn)headerClicked.Column).SortBinding as MultiBinding;
-                        foreach (Binding binding in multiBinding.Bindings)
-                        {
-                            header.Add(binding.Path.Path);
-                        }
+                        var multiBinding = (MultiBinding)((SortableGridViewColumn)headerClicked.Column).SortBinding;
+                        header.AddRange(multiBinding.Bindings.OfType<Binding>().Select(binding => binding.Path.Path));
                     }
                     else if (headerClicked.Column.DisplayMemberBinding is Binding)
                     {
-                        Binding binding = headerClicked.Column.DisplayMemberBinding as Binding;
+                        var binding = headerClicked.Column.DisplayMemberBinding as Binding;
                         header.Add(binding.Path.Path);
                     }
                     else
@@ -96,7 +95,7 @@
                         header.Add(headerClicked.Column.Header as string);
                     }
 
-                    if (header == null || header.Count == 0)
+                    if (header.Count == 0)
                         return;
 
                     Sort(listView, header, direction);
@@ -190,7 +189,7 @@
 
             if ((obj != null) && (obj is FrameworkElement))
             {
-                object control = obj;
+                var control = obj;
                 while (control != null)
                 {
                     if (control.GetType().GetProperty("TemplatedParent").GetValue(control, null) != null)

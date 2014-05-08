@@ -21,8 +21,11 @@
         #region Fields
 
         private CoreToolbox _toolboxApplication;
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         #endregion
+
+        #region events
 
         private void OnStartup(Object sender, StartupEventArgs e)
         {
@@ -45,6 +48,7 @@
                 {
                     Process.Start(update.Link);
                     Application.Current.Shutdown();
+                    return;
                 }
             }
 
@@ -64,7 +68,6 @@
                 this._toolboxApplication.Exit();
         }
 
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
@@ -97,5 +100,7 @@
                 Application.Current.Shutdown();
             }
         }
+
+        #endregion
     }
 }

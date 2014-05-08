@@ -93,33 +93,33 @@
             // 355 Current GFX test dwarf planet.
             // 365 Current dwarf planet ore layers.
 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_350_10_radi.vox", 350, materials[0].Name, true, 10);    // 00:01:32.6580269 | VoxCells 3,801,278,432. | Is culled.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_355_10_radi.vox", 355, materials[0].Name, true, 10);    // 00:01:57.0029873 | VoxCells 3,912,545,848. | Is culled.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_356_10_radi.vox", 356, materials[0].Name, true, 10);    // 00:01:56.1288918 | VoxCells 3,935,432,712. |
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_357_10_radi.vox", 357, materials[0].Name, true, 10);    // 00:01:58.6494562 | VoxCells 3,957,704,936. | no reponse.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_358_10_radi.vox", 358, materials[0].Name, true, 10);    // 00:02:01.1396811 | VoxCells 3,980,026,368. | Crash
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_360_10_radi.vox", 360, materials[0].Name, true, 10);    // 00:02:00.2852452 | VoxCells 4,025,973,228. | >2mins, no response.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_370_10_radi.vox", 370, materials[0].Name, true, 10);    // 00:02:02.8729741 | VoxCells 4,255,404,456. |
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_hollow_382_10_radi.vox", 382, materials[0].Name, true, 10);    // 00:02:01.4779420 | VoxCells 4,540,873,728. | Won't load
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_hollow_350_10_radi.vox", 350, materials[0].Name, true, 10);    // 00:01:32.6580269 | VoxCells 3,801,278,432. | Is culled.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_hollow_355_10_radi.vox", 355, materials[0].Name, true, 10);    // 00:01:57.0029873 | VoxCells 3,912,545,848. | Is culled.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_hollow_356_10_radi.vox", 356, materials[0].Name, true, 10);    // 00:01:56.1288918 | VoxCells 3,935,432,712. |
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_hollow_357_10_radi.vox", 357, materials[0].Name, true, 10);    // 00:01:58.6494562 | VoxCells 3,957,704,936. | no reponse.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_hollow_358_10_radi.vox", 358, materials[0].Name, true, 10);    // 00:02:01.1396811 | VoxCells 3,980,026,368. | Crash
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_hollow_360_10_radi.vox", 360, materials[0].Name, true, 10);    // 00:02:00.2852452 | VoxCells 4,025,973,228. | >2mins, no response.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_hollow_370_10_radi.vox", 370, materials[0].Name, true, 10);    // 00:02:02.8729741 | VoxCells 4,255,404,456. |
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_hollow_382_10_radi.vox", 382, materials[0].Name, true, 10);    // 00:02:01.4779420 | VoxCells 4,540,873,728. | Won't load
 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_380_radi.vox", 380, materials[0].Name, false, 0);  // 00:01:37.7515161 | VoxCells 58,379,415,373. | culling. VoxCells 58,387,542,901
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_390_radi.vox", 390, materials[0].Name, false, 0);  // 00:02:07.8909152 | VoxCells 63,116,794,109. |
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_400_radi.vox", 400, materials[0].Name, false, 0);  // 00:02:05.2804642 | VoxCells 68,104,580,085. | culling. Alt Tab part works, then crash. VoxCells 68,104,580,085
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_450_radi.vox", 450, materials[0].Name, false, 0);  // works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_460_radi.vox", 460, materials[0].Name, false, 0);  // works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_465_radi.vox", 465, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_470_radi.vox", 470, materials[0].Name, false, 0);  // works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_471_radi.vox", 471, materials[0].Name, false, 0); // 00:03:41.2510726  | VoxCells 111,251,164,251 | Works.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_472_radi.vox", 472, materials[0].Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.  Crash under explosives.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\Uraninite_01_sphere_solid_472_radi.vox", 472, materialUraninite_01.Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.  Crash under explosives.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_473_radi.vox", 473, materials[0].Name, false, 0); // 00:03:40.2173012  | VoxCells 112,675,647,555 | Crash.
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_474_radi.vox", 474, materials[0].Name, false, 0); // 00:03:46.7690005  | VoxCells 113,392,787,817 | 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_475_radi.vox", 475, materials[0].Name, false, 0);  // no response?
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_480_radi.vox", 480, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_485_radi.vox", 485, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_490_radi.vox", 490, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_495_radi.vox", 495, materials[0].Name, false, 0);  // 
-            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestAssets\test_sphere_solid_500_radi.vox", 500, materials[0].Name, false, 0); // 00:04:43.9200838  | VoxCells 133,115,971,161. | Crash.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_380_radi.vox", 380, materials[0].Name, false, 0);  // 00:01:37.7515161 | VoxCells 58,379,415,373. | culling. VoxCells 58,387,542,901
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_390_radi.vox", 390, materials[0].Name, false, 0);  // 00:02:07.8909152 | VoxCells 63,116,794,109. |
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_400_radi.vox", 400, materials[0].Name, false, 0);  // 00:02:05.2804642 | VoxCells 68,104,580,085. | culling. Alt Tab part works, then crash. VoxCells 68,104,580,085
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_450_radi.vox", 450, materials[0].Name, false, 0);  // works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_460_radi.vox", 460, materials[0].Name, false, 0);  // works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_465_radi.vox", 465, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_470_radi.vox", 470, materials[0].Name, false, 0);  // works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_471_radi.vox", 471, materials[0].Name, false, 0); // 00:03:41.2510726  | VoxCells 111,251,164,251 | Works.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_472_radi.vox", 472, materials[0].Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.  Crash under explosives.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\Uraninite_01_sphere_solid_472_radi.vox", 472, materialUraninite_01.Name, false, 0); // 00:03:37.6897276  | VoxCells 111,961,704,705 | Works.  Crash under explosives.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_473_radi.vox", 473, materials[0].Name, false, 0); // 00:03:40.2173012  | VoxCells 112,675,647,555 | Crash.
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_474_radi.vox", 474, materials[0].Name, false, 0); // 00:03:46.7690005  | VoxCells 113,392,787,817 | 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_475_radi.vox", 475, materials[0].Name, false, 0);  // no response?
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_480_radi.vox", 480, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_485_radi.vox", 485, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_490_radi.vox", 490, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_495_radi.vox", 495, materials[0].Name, false, 0);  // 
+            //MyVoxelBuilder.BuildAsteroidSphere(true, @".\TestOutput\test_sphere_solid_500_radi.vox", 500, materials[0].Name, false, 0); // 00:04:43.9200838  | VoxCells 133,115,971,161. | Crash.
         }
 
         //[TestMethod]
@@ -174,33 +174,33 @@
             Assert.IsNotNull(materialUraninite_01, "Uraninite_01 material should exist.");
 
             // Allowable size appears to be Surface Area related, possibly size of memory mapped texture.
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_500.vox", 500, 500, 500, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_700.vox", 700, 700, 700, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_800.vox", 800, 800, 800, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_830.vox", 830, 830, 830, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_832.vox", 832, 832, 832, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_836.vox", 836, 836, 836, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_838.vox", 838, 838, 838, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839.vox", 839, 839, 839, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839x839x840.vox", 839, 839, 840, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_720x900x900.vox", 720, 900, 900, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_729x900x900.vox", 729, 900, 900, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_730x900x900.vox", 730, 900, 900, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_839x840x840.vox", 839, 840, 840, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_840.vox", 840, 840, 840, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_848.vox", 848, 848, 848, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_850.vox", 850, 850, 850, materialStone_01.Name, false, 0); //  CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_856.vox", 856, 856, 870, materialStone_01.Name, false, 0);
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_870.vox", 870, 870, 870, materialStone_01.Name, false, 0);
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_900.vox", 900, 900, 900, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x2048x2048.vox", 100, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1024x1024.vox", 100, 1024, 1024, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_50x2048x2048.vox", 50, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1368x1368.vox", 100, 1368, 1368, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1352x1352.vox", 100, 1352, 1352, materialStone_01.Name, false, 0); // Works
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_1352x100x1352.vox", 1352, 100, 1352, materialStone_01.Name, false, 0);
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_100x1360x1360.vox", 100, 1360, 1360, materialStone_01.Name, false, 0); // CRASH
-            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestAssets\test_cube_solid_119x1340x1340.vox", 119, 1340, 1340, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_500.vox", 500, 500, 500, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_700.vox", 700, 700, 700, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_800.vox", 800, 800, 800, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_830.vox", 830, 830, 830, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_832.vox", 832, 832, 832, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_836.vox", 836, 836, 836, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_838.vox", 838, 838, 838, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_839.vox", 839, 839, 839, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_839x839x840.vox", 839, 839, 840, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_720x900x900.vox", 720, 900, 900, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_729x900x900.vox", 729, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_730x900x900.vox", 730, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_839x840x840.vox", 839, 840, 840, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_840.vox", 840, 840, 840, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_848.vox", 848, 848, 848, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_850.vox", 850, 850, 850, materialStone_01.Name, false, 0); //  CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_856.vox", 856, 856, 870, materialStone_01.Name, false, 0);
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_870.vox", 870, 870, 870, materialStone_01.Name, false, 0);
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_900.vox", 900, 900, 900, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_100x2048x2048.vox", 100, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_100x1024x1024.vox", 100, 1024, 1024, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_50x2048x2048.vox", 50, 2048, 2048, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_100x1368x1368.vox", 100, 1368, 1368, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_100x1352x1352.vox", 100, 1352, 1352, materialStone_01.Name, false, 0); // Works
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_1352x100x1352.vox", 1352, 100, 1352, materialStone_01.Name, false, 0);
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_100x1360x1360.vox", 100, 1360, 1360, materialStone_01.Name, false, 0); // CRASH
+            //MyVoxelBuilder.BuildAsteroidCube(true, @".\TestOutput\test_cube_solid_119x1340x1340.vox", 119, 1340, 1340, materialStone_01.Name, false, 0); // Works
         }
 
         //[TestMethod]
@@ -262,7 +262,7 @@
             Assert.IsNotNull(iceMaterial, "Ice material should exist.");
 
             var imageFile = @".\TestAssets\Earth.png";
-            var fileNew = @".\TestAssets\Earth2.vox";
+            var fileNew = @".\TestOutput\Earth2.vox";
             double radius = 202; // 472 Max
 
             var length = MyVoxelBuilder.ScaleMod((radius * 2) + 2, 64);
@@ -401,7 +401,7 @@
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
 
-            var fileNew = string.Format(@".\TestAssets\test_cube_solid_3x3x3_stone_{0}.vox", goldMaterial.Name);
+            var fileNew = string.Format(@".\TestOutput\test_cube_solid_3x3x3_stone_{0}.vox", goldMaterial.Name);
             var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, fileNew, 3, 3, 3, stoneMaterial.Name, false, 0);
 
             IList<byte> materialAssets;
@@ -606,13 +606,13 @@
 
             for (var i = 1; i <= 16; i++)
             {
-                var fileNew = string.Format(@".\TestAssets\cube_solid_{0}x{0}x{0}_gold.vox", i);
+                var fileNew = string.Format(@".\TestOutput\cube_solid_{0}x{0}x{0}_gold.vox", i);
                 var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, fileNew, i, i, i, materialStone_01.Name, false, 0);
             }
 
             for (var i = 20; i <= 100; i += 10)
             {
-                var fileNew = string.Format(@".\TestAssets\cube_solid_{0}x{0}x{0}_gold.vox", i);
+                var fileNew = string.Format(@".\TestOutput\cube_solid_{0}x{0}x{0}_gold.vox", i);
                 var voxelMap = MyVoxelBuilder.BuildAsteroidCube(true, fileNew, i, i, i, materialStone_01.Name, false, 0);
             }
         }
