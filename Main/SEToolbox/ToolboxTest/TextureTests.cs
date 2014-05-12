@@ -110,7 +110,7 @@
             var backgroundPath = Path.Combine(contentPath, @"Textures\BackgroundCube\Final\BackgroundCube.dds");
             Assert.IsTrue(File.Exists(backgroundPath), "Filepath should exist on developer machine");
 
-            var backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 0, -1, -1);
+            var backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 0, -1, -1 );
             ImageTextureUtil.WriteImage(backgroundBmp, @".\TestOutput\BackgroundCube0_Full.png");
 
             backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 1, 1024, 1024);
@@ -132,8 +132,8 @@
         [TestMethod]
         public void CreateBackgroundPreview()
         {
-            const int size = 512;
-            const bool applyAlpha = true;
+            const int size = 128;
+            const bool ignoreAlpha = true;
 
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
@@ -153,19 +153,22 @@
                 graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 
-                graphics.FillRectangle(Brushes.Black, size * 2, size * 1, size, size);
-                graphics.FillRectangle(Brushes.Black, size * 0, size * 1, size, size);
-                graphics.FillRectangle(Brushes.Black, size * 1, size * 0, size, size);
-                graphics.FillRectangle(Brushes.Black, size * 1, size * 2, size, size);
-                graphics.FillRectangle(Brushes.Black, size * 1, size * 1, size, size);
-                graphics.FillRectangle(Brushes.Black, size * 3, size * 1, size, size);
+                if (ignoreAlpha)
+                {
+                    graphics.FillRectangle(Brushes.Black, size * 2, size * 1, size, size);
+                    graphics.FillRectangle(Brushes.Black, size * 0, size * 1, size, size);
+                    graphics.FillRectangle(Brushes.Black, size * 1, size * 0, size, size);
+                    graphics.FillRectangle(Brushes.Black, size * 1, size * 2, size, size);
+                    graphics.FillRectangle(Brushes.Black, size * 1, size * 1, size, size);
+                    graphics.FillRectangle(Brushes.Black, size * 3, size * 1, size, size);
+                }
 
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 0, size, size, applyAlpha), size * 2, size * 1, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 1, size, size, applyAlpha), size * 0, size * 1, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 2, size, size, applyAlpha), size * 1, size * 0, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 3, size, size, applyAlpha), size * 1, size * 2, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 4, size, size, applyAlpha), size * 1, size * 1, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 5, size, size, applyAlpha), size * 3, size * 1, size, size);
+                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 0, size, size, ignoreAlpha), size * 2, size * 1, size, size);
+                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 1, size, size, ignoreAlpha), size * 0, size * 1, size, size);
+                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 2, size, size, ignoreAlpha), size * 1, size * 0, size, size);
+                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 3, size, size, ignoreAlpha), size * 1, size * 2, size, size);
+                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 4, size, size, ignoreAlpha), size * 1, size * 1, size, size);
+                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 5, size, size, ignoreAlpha), size * 3, size * 1, size, size);
 
                 // Approximate position of local Sun and light source.
                 graphics.FillEllipse(Brushes.White, size * 1 + (int)(size * 0.7), size * 2 + (int)(size * 0.93), (int)(size * 0.06), (int)(size * 0.06));

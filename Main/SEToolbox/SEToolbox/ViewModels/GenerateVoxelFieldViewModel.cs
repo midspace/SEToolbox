@@ -253,11 +253,11 @@
             var randomModel = new GenerateVoxelModel()
             {
                 Index = this.VoxelCollection.Count + 1,
-                MainMaterial = this.MaterialsCollection[0],
-                SecondMaterial = this.MaterialsCollection[0],
-                ThirdMaterial = this.MaterialsCollection[0],
-                ForthMaterial = this.MaterialsCollection[0],
-                FifthMaterial = this.MaterialsCollection[0],
+                MainMaterial = this._dataModel.BaseMaterial,
+                SecondMaterial = this._dataModel.BaseMaterial,
+                ThirdMaterial = this._dataModel.BaseMaterial,
+                ForthMaterial = this._dataModel.BaseMaterial,
+                FifthMaterial = this._dataModel.BaseMaterial,
             };
 
             // Random Asteroid.
@@ -428,7 +428,7 @@
                     continue;
 
                 var asteroid = new MyVoxelMap();
-                asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value);
+                asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value, false);
 
                 IList<byte> baseAssets;
                 Dictionary<byte, long> materialVoxelCells;
@@ -477,6 +477,7 @@
 
                 newDistributiuon.Shuffle();
                 asteroid.SetMaterialAssets(newDistributiuon);
+                asteroid.ForceVoxelFaceMaterial(this._dataModel.BaseMaterial.DisplayName);
 
                 var tempfilename = TempfileUtil.NewFilename();
                 asteroid.Save(tempfilename);

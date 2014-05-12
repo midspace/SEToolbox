@@ -198,5 +198,20 @@
         {
             (Keyboard.FocusedElement as FrameworkElement).MoveFocus();
         }
+
+        public static decimal ToDecimal(this float value)
+        {
+            return Convert.ToDecimal(value.ToString("G9", null));
+        }
+
+        public static double ToDouble(this float value)
+        {
+            return Convert.ToDouble(value.ToString("G9", null));
+        }
+
+        public static System.Drawing.Color ToDrawingColor(this System.Windows.Media.Color color)
+        {
+            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
     }
 }

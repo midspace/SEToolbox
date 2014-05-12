@@ -146,6 +146,8 @@
             }
         }
 
+        public MaterialSelectionModel BaseMaterial { get; set; }
+
         #endregion
 
         #region methods
@@ -159,6 +161,10 @@
             {
                 this.MaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name, IsRare = material.IsRare, MinedRatio  = material.MinedOreRatio});
             }
+
+            this.BaseMaterial = this.MaterialsCollection.FirstOrDefault(m => m.IsRare == false);
+            if (this.BaseMaterial == null)
+                this.BaseMaterial = this.MaterialsCollection.FirstOrDefault();
 
             var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
 

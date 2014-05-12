@@ -270,7 +270,7 @@
 
         #endregion
 
-        #region methods
+        #region command methods
 
         public bool BrowseVoxelCanExecute()
         {
@@ -304,7 +304,7 @@
 
         #endregion
 
-        #region heleprs
+        #region helpers
 
         private void BrowseVoxel()
         {
@@ -368,9 +368,10 @@
                 {
                     var asteroid = new MyVoxelMap();
                     asteroid.Load(stockfile, this.StockMaterial.Value);
-                    asteroid.ForceBaseMaterial(this.StockMaterial.Value);
+                    asteroid.ForceBaseMaterial(SpaceEngineersAPI.GetMaterialName(0), this.StockMaterial.Value);
                     this.SourceFile = TempfileUtil.NewFilename();
                     asteroid.Save(this.SourceFile);
+
                     originalFile = this.StockVoxel + ".vox";
                     asteroidCenter = asteroid.ContentCenter;
                     asteroidSize = asteroid.ContentSize;
@@ -384,11 +385,17 @@
                 asteroid.Load(this.SourceFile, SpaceEngineersAPI.GetMaterialName(0), false);
                 asteroidCenter = asteroid.ContentCenter;
                 asteroidSize = asteroid.ContentSize;
+
+                if (this.StockMaterial != null && this.StockMaterial.Value != null)
+                {
+                    asteroid.ForceBaseMaterial(SpaceEngineersAPI.GetMaterialName(0), this.StockMaterial.Value);
+                    this.SourceFile = TempfileUtil.NewFilename();
+                    asteroid.Save(this.SourceFile);
+                }
             }
 
             // automatically number all files, and check for duplicate filenames.
             this.Filename = this.MainViewModel.CreateUniqueVoxelFilename(originalFile);
-
 
             // Figure out where the Character is facing, and plant the new constrcut right in front.
             // Calculate the hypotenuse, as it will be the safest distance to place in front.
@@ -402,7 +409,6 @@
             //this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
             this.Forward = new BindableVector3DModel(Vector3.Forward);  // Asteroids currently don't have any orientation.
             this.Up = new BindableVector3DModel(Vector3.Up);
-
 
             var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3() - asteroidCenter, this.Filename);
             entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
