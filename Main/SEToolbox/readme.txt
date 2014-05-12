@@ -33,6 +33,7 @@ Developer/Build Requirements:
 *	Shaders:
 	*	Windows SDK for Windows 8.1 (Includes DirectX SDK)
 		http://msdn.microsoft.com/en-us/windows/desktop/aa904949
+		C:\Program Files (x86)\Windows Kits\8.0\bin\x86
 
 	*	Shader Effects BuildTask and Templates.zip
 		https://wpf.codeplex.com/downloads/get/40167

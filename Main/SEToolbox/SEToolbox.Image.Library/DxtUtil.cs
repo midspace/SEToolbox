@@ -101,7 +101,7 @@ namespace SEToolbox.ImageLibrary
                     pixelRgba[i + 3] = ignoreAlpha ? (byte)0xff : pixelColors[i + 3];
                 }
 
-                return System.Windows.Media.Imaging.BitmapSource.Create(width, height, 96, 96, System.Windows.Media.PixelFormats.Bgra32, null, pixelRgba, stride);
+                return System.Windows.Media.Imaging.BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgra32, null, pixelRgba, stride);
             }
         }
 
@@ -113,16 +113,16 @@ namespace SEToolbox.ImageLibrary
 
         internal static byte[] DecompressDxt5(Stream imageStream, int width, int height)
         {
-            byte[] imageData = new byte[width * height * 4];
+            var imageData = new byte[width * height * 4];
 
-            using (BinaryReader imageReader = new BinaryReader(imageStream))
+            using (var imageReader = new BinaryReader(imageStream))
             {
-                int blockCountX = (width + 3) / 4;
-                int blockCountY = (height + 3) / 4;
+                var blockCountX = (width + 3) / 4;
+                var blockCountY = (height + 3) / 4;
 
-                for (int y = 0; y < blockCountY; y++)
+                for (var y = 0; y < blockCountY; y++)
                 {
-                    for (int x = 0; x < blockCountX; x++)
+                    for (var x = 0; x < blockCountX; x++)
                     {
                         DecompressDxt5Block(imageReader, x, y, blockCountX, width, height, imageData);
                     }
@@ -134,34 +134,34 @@ namespace SEToolbox.ImageLibrary
 
         private static void DecompressDxt5Block(BinaryReader imageReader, int x, int y, int blockCountX, int width, int height, byte[] imageData)
         {
-            byte alpha0 = imageReader.ReadByte();
-            byte alpha1 = imageReader.ReadByte();
+            var alpha0 = imageReader.ReadByte();
+            var alpha1 = imageReader.ReadByte();
 
-            ulong alphaMask = (ulong)imageReader.ReadByte();
+            var alphaMask = (ulong)imageReader.ReadByte();
             alphaMask += (ulong)imageReader.ReadByte() << 8;
             alphaMask += (ulong)imageReader.ReadByte() << 16;
             alphaMask += (ulong)imageReader.ReadByte() << 24;
             alphaMask += (ulong)imageReader.ReadByte() << 32;
             alphaMask += (ulong)imageReader.ReadByte() << 40;
 
-            ushort c0 = imageReader.ReadUInt16();
-            ushort c1 = imageReader.ReadUInt16();
+            var c0 = imageReader.ReadUInt16();
+            var c1 = imageReader.ReadUInt16();
 
             byte r0, g0, b0;
             byte r1, g1, b1;
             ConvertRgb565ToRgb888(c0, out r0, out g0, out b0);
             ConvertRgb565ToRgb888(c1, out r1, out g1, out b1);
 
-            uint lookupTable = imageReader.ReadUInt32();
+            var lookupTable = imageReader.ReadUInt32();
 
-            for (int blockY = 0; blockY < 4; blockY++)
+            for (var blockY = 0; blockY < 4; blockY++)
             {
-                for (int blockX = 0; blockX < 4; blockX++)
+                for (var blockX = 0; blockX < 4; blockX++)
                 {
                     byte r = 0, g = 0, b = 0, a = 255;
-                    uint index = (lookupTable >> 2 * (4 * blockY + blockX)) & 0x03;
+                    var index = (lookupTable >> 2 * (4 * blockY + blockX)) & 0x03;
 
-                    uint alphaIndex = (uint)((alphaMask >> 3 * (4 * blockY + blockX)) & 0x07);
+                    var alphaIndex = (uint)((alphaMask >> 3 * (4 * blockY + blockX)) & 0x07);
                     if (alphaIndex == 0)
                     {
                         a = alpha0;
@@ -211,11 +211,11 @@ namespace SEToolbox.ImageLibrary
                             break;
                     }
 
-                    int px = (x << 2) + blockX;
-                    int py = (y << 2) + blockY;
+                    var px = (x << 2) + blockX;
+                    var py = (y << 2) + blockY;
                     if ((px < width) && (py < height))
                     {
-                        int offset = ((py * width) + px) << 2;
+                        var offset = ((py * width) + px) << 2;
                         imageData[offset] = r;
                         imageData[offset + 1] = g;
                         imageData[offset + 2] = b;
@@ -227,9 +227,7 @@ namespace SEToolbox.ImageLibrary
 
         private static void ConvertRgb565ToRgb888(ushort color, out byte r, out byte g, out byte b)
         {
-            int temp;
-
-            temp = (color >> 11) * 255 + 16;
+            var temp = (color >> 11) * 255 + 16;
             r = (byte)((temp / 32 + temp) / 32);
             temp = ((color & 0x07E0) >> 5) * 255 + 32;
             g = (byte)((temp / 64 + temp) / 64);

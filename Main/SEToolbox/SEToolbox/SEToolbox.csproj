@@ -144,6 +144,8 @@
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
+    <Compile Include="Models\FrameworkBuildModel.cs" />
+    <Compile Include="Models\SelectCubeModel.cs" />
     <Compile Include="Models\CubeItemModel.cs" />
     <Compile Include="Models\FindApplicationModel.cs" />
     <Compile Include="Models\GenerateFloatingObjectModel.cs" />
@@ -244,6 +246,8 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
+    <Compile Include="ViewModels\SelectCubeViewModel.cs" />
+    <Compile Include="ViewModels\FrameworkBuildViewModel.cs" />
     <Compile Include="ViewModels\FindApplicationViewModel.cs" />
     <Compile Include="ViewModels\GenerateFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\GroupMoveViewModel.cs" />
@@ -292,6 +296,12 @@
     </Compile>
     <Compile Include="Views\ControlMeteor.xaml.cs">
       <DependentUpon>ControlMeteor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowSelectCube.xaml.cs">
+      <DependentUpon>WindowSelectCube.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowFrameworkBuild.xaml.cs">
+      <DependentUpon>WindowFrameworkBuild.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowFindApplication.xaml.cs">
       <DependentUpon>WindowFindApplication.xaml</DependentUpon>
@@ -374,6 +384,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlMeteor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowSelectCube.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowFrameworkBuild.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
