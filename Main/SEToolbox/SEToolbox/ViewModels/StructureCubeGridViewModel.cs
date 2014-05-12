@@ -1,22 +1,24 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System.Linq;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using SEToolbox.Support;
+    using SEToolbox.Views;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
-    using SEToolbox.Support;
 
     public class StructureCubeGridViewModel : StructureBaseViewModel<StructureCubeGridModel>
     {
@@ -1073,12 +1075,43 @@
 
         public bool ReplaceCubesCanExecute()
         {
-            return false;
+            return this.SelectedCubeItem != null;
         }
 
         public void ReplaceCubesExecuted()
         {
-            // TODO:
+            var model = new SelectCubeModel();
+            var loadVm = new SelectCubeViewModel(this, model);
+            model.Load(this.GridSize);
+            var result = this._dialogService.ShowDialog<WindowSelectCube>(this, loadVm);
+            if (result == true)
+            {
+                var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
+
+                var change = false;
+
+                foreach (var cube in this.CubeSelections)
+                {
+                    if (cube.TypeId != model.CubeItem.TypeId && cube.SubtypeId != model.CubeItem.SubtypeId)
+                    {
+                        var idx = this.DataModel.CubeGrid.CubeBlocks.IndexOf(cube.Cube);
+                        this.DataModel.CubeGrid.CubeBlocks.RemoveAt(idx);
+
+                        var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(model.CubeItem.TypeId, this.GridSize, model.CubeItem.SubtypeId);
+                        var newCube = cube.CreateCube(model.CubeItem.TypeId, model.CubeItem.SubtypeId, cubeDefinition);
+                        cube.TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds");
+
+                        this.DataModel.CubeGrid.CubeBlocks.Insert(idx, newCube);
+
+                        change = true;
+                    }
+                }
+
+                if (change)
+                {
+                    this.MainViewModel.IsModified = true;
+                }
+            }
         }
 
         public bool ColorCubesCanExecute()
@@ -1099,8 +1132,10 @@
             {
                 foreach (var cube in this.CubeSelections)
                 {
-                    cube.SetColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
+                    cube.UpdateColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
                 }
+
+                this.MainViewModel.IsModified = true;
             }
 
             this.MainViewModel.CreativeModeColors = colorDialog.CustomColors;
@@ -1108,12 +1143,23 @@
 
         public bool FrameworkCubesCanExecute()
         {
-            return false;
+            return this.SelectedCubeItem != null;
         }
 
         public void FrameworkCubesExecuted()
         {
-            // TODO:
+            var model = new FrameworkBuildModel { BuildPercent = this.SelectedCubeItem.BuildPercent * 100 };
+            var loadVm = new FrameworkBuildViewModel(this, model);
+            var result = this._dialogService.ShowDialog<WindowFrameworkBuild>(this, loadVm);
+            if (result == true)
+            {
+                foreach (var cube in this.CubeSelections)
+                {
+                    cube.UpdateBuildPercent(model.BuildPercent.Value / 100);
+                }
+
+                this.MainViewModel.IsModified = true;
+            }
         }
 
         #endregion

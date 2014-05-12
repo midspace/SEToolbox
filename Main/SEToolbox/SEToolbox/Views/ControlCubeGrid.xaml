@@ -10,7 +10,8 @@
              xmlns:views="clr-namespace:SEToolbox.Views"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="600">
+             d:DesignHeight="400" d:DesignWidth="600"
+             commands:DialogService.IsRegisteredView="True">
     <UserControl.Resources>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
@@ -286,10 +287,34 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <GridViewColumn Header="Build" DisplayMemberBinding="{Binding Build, StringFormat=P}" Width="40"/>
-                                        <GridViewColumn Header="X" DisplayMemberBinding="{Binding Position.X}" Width="40"/>
-                                        <GridViewColumn Header="Y" DisplayMemberBinding="{Binding Position.Y}" Width="40"/>
-                                        <GridViewColumn Header="Z" DisplayMemberBinding="{Binding Position.Z}" Width="40"/>
+                                        <controls:SortableGridViewColumn Header="Build" Width="60" SortBinding="{Binding BuildPercent}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=BuildPercent, StringFormat='P'}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="X" Width="40" SortBinding="{Binding Position.X}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.X}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="Y" Width="40" SortBinding="{Binding Position.Y}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.Y}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="Z" Width="40" SortBinding="{Binding Position.Z}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.Z}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
                                         <!--<controls:SortableGridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80">
                                             <controls:SortableGridViewColumn.SortBinding>
                                                 <MultiBinding>
