@@ -145,5 +145,11 @@
             var vColor = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(color.R, color.G, color.B));
             return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
         }
+
+        public static SerializableVector3 ToSandboxHsvColor(this System.Windows.Media.Color color)
+        {
+            var vColor = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(color.R, color.G, color.B));
+            return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
+        }
     }
 }

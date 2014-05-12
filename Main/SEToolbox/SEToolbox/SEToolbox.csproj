@@ -233,6 +233,7 @@
     <Compile Include="Support\GlobalSettings.cs" />
     <Compile Include="Support\DiagnosticsLogging.cs" />
     <Compile Include="Support\MeshHelper.cs" />
+    <Compile Include="Support\Moddeling.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\RandomUtil.cs" />
     <Compile Include="Support\CodeplexReleases.cs" />

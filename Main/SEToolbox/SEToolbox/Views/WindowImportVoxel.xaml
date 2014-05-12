@@ -23,24 +23,30 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <RadioButton Content="Stock:" Margin="0,0,4,0" VerticalAlignment="Center" Name="uxInitialElement" IsChecked="{Binding IsStockVoxel}" />
                 <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding StockVoxelFileList}" SelectedValue="{Binding StockVoxel}"/>
-                <ComboBox Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="130" ItemsSource="{Binding MaterialsCollection}" SelectedValue="{Binding StockMaterial}" DisplayMemberPath="DisplayName"/>
-                
                 <RadioButton Content="File" Grid.Row="1" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
-                <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" >
-                    <TextBox Width="180" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="Must be valid Space Engineers Asteroid VOX file."/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
+                    <TextBox Width="178" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="Must be valid Space Engineers Asteroid VOX file."/>
                     <Button ToolTip="Browse for Image" Command="{Binding BrowseVoxelCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>
+                <Canvas Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Width="20" Height="60" Margin="0,0" VerticalAlignment="Center">
+                    <Line Fill="Red" Stroke="Black" Width="10" Height="10" StrokeThickness="2" />
+                    <Path StrokeThickness="1" Stroke="black" Data= "M 0,15 L 10,15 L 10,45 L 0,45"/>
+                    <Path StrokeThickness="1" Stroke="black" Data= "M 10,30 L 15,30"/>
+                    <Path StrokeThickness="1" Fill="Black" Data= "M 15,25 L 20,30 L 15,35 L 15,25"/>
+                </Canvas>
+                <ComboBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="130" ItemsSource="{Binding MaterialsCollection}" SelectedValue="{Binding StockMaterial}" DisplayMemberPath="DisplayName"/>
             </Grid>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8">

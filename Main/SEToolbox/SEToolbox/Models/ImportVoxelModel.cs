@@ -3,11 +3,8 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Globalization;
     using System.IO;
 
     public class ImportVoxelModel : BaseModel
@@ -80,6 +77,10 @@
                 {
                     this._sourceFile = value;
                     this.RaisePropertyChanged(() => SourceFile);
+                    if (this.StockMaterial == null)
+                    {
+                        this.StockMaterial = this.MaterialsCollection[0];
+                    }
                 }
             }
         }
@@ -261,7 +262,6 @@
                 {
                     this._stockMaterial = value;
                     this.RaisePropertyChanged(() => StockMaterial);
-                    this.IsStockVoxel = true;
                 }
             }
         }

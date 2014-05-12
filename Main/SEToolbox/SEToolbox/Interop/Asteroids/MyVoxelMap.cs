@@ -12,13 +12,12 @@ using System.Collections;
 
 namespace SEToolbox.Interop.Asteroids
 {
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
-    using System.Linq;
-    using SEToolbox.Support;
     using VRageMath;
 
     public class MyVoxelMap
@@ -560,27 +559,70 @@ namespace SEToolbox.Interop.Asteroids
         }
 
         /// <summary>
-        /// This will now randomize the asteroid content with a little bit of Stone, to match the needs of SE's agorithm for hiding rare ore inside of nonrare ore.
+        /// This will replace all the materials inside the asteroid with specified material.
         /// </summary>
         /// <param name="materialName"></param>
-        public void ForceBaseMaterial(string materialName)
+        public void ForceBaseMaterial(string defaultMaterial, string materialName)
         {
             var materialIndex = SpaceEngineersAPI.GetMaterialIndex(materialName);
 
-            IList<byte> materialAssets;
-            Dictionary<byte, long> materialVoxelCells;
+            for (var x = 0; x < this._voxelMaterialCells.Length; x++)
+            {
+                for (var y = 0; y < this._voxelMaterialCells[x].Length; y++)
+                {
+                    for (var z = 0; z < this._voxelMaterialCells[x][y].Length; z++)
+                    {
+                        this._voxelMaterialCells[x][y][z].ForceReplaceMaterial(materialIndex);
+                    }
+                }
+            }
 
-            CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
+            this.ForceVoxelFaceMaterial(defaultMaterial);
+        }
 
-            for (var i = 0; i < materialAssets.Count; i++)
-                materialAssets[i] = materialIndex;
+        /// <summary>
+        /// Changes all the min and max face materials to a default to overcome the the hiding rare ore inside of nonrare ore.
+        /// </summary>
+        /// <param name="materialName"></param>
+        public void ForceVoxelFaceMaterial(string materialName)
+        {
+            Vector3I coords;
 
-            var minStone = materialAssets.Count / 100;  // Set 1% to Stone material.
-            for (var i = 0; i < minStone; i++)
-                materialAssets[i] = 0;
+            for (var y = 0; y < this.Size.Y; y++)
+            {
+                for (var z = 0; z < this.Size.Z; z++)
+                {
+                    coords = new Vector3I(0, y, z);
+                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
 
-            materialAssets.Shuffle();
-            SetMaterialAssets(materialAssets);
+                    coords = new Vector3I(this.Size.X - 1, y, z);
+                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                }
+            }
+
+            for (var x = 0; x < this.Size.X; x++)
+            {
+                for (var z = 0; z < this.Size.Z; z++)
+                {
+                    coords = new Vector3I(x, 0, z);
+                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+
+                    coords = new Vector3I(x, this.Size.Y - 1, z);
+                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                }
+            }
+
+            for (var x = 0; x < this.Size.X; x++)
+            {
+                for (var y = 0; y < this.Size.Y; y++)
+                {
+                    coords = new Vector3I(x, y, 0);
+                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+
+                    coords = new Vector3I(x, y, this.Size.Z - 1);
+                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                }
+            }
         }
 
         //  Coordinates are relative to voxel map

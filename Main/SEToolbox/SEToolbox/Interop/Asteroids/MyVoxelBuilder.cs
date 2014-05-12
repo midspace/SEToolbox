@@ -1,7 +1,6 @@
 ﻿namespace SEToolbox.Interop.Asteroids
 {
     using SEToolbox.Support;
-    using SEToolbox.ViewModels;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -15,11 +14,11 @@
 
         #region methods
 
-        public static void ConvertAsteroid(string loadFile, string saveFile, string material)
+        public static void ConvertAsteroid(string loadFile, string saveFile, string defaultMaterial, string material)
         {
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(loadFile, material);
-            voxelMap.ForceBaseMaterial(material);
+            voxelMap.ForceBaseMaterial(defaultMaterial, material);
             voxelMap.Save(saveFile);
         }
 
@@ -129,7 +128,7 @@
 
         public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform)
         {
-            var volmeticMap = Import3dModelViewModel.ReadModelVolmetic(sourceVolumetricFile, scale, transform, traceType);
+            var volmeticMap = Moddeling.ReadModelVolmetic(sourceVolumetricFile, scale, transform, traceType);
             var size = new Vector3I(volmeticMap.GetLength(0) + 2, volmeticMap.GetLength(1) + 2, volmeticMap.GetLength(2) + 2);
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)

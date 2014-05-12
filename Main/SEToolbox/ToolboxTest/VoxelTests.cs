@@ -108,19 +108,16 @@
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
+            var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone"));
+            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
             const string fileNew = @".\TestOutput\asteroid0moon4_gold.vox";
 
-            var voxelMap = new MyVoxelMap();
-            voxelMap.Load(fileOriginal, materials[0].Name);
-            voxelMap.ForceBaseMaterial(goldMaterial.Name);
-            voxelMap.Save(fileNew);
-
-            // or call...
-            //MyVoxelBuilder.ConvertAsteroid(fileOriginal, fileNew, goldMaterial.Name);
+            MyVoxelBuilder.ConvertAsteroid(fileOriginal, fileNew, stoneMaterial.Name, goldMaterial.Name);
 
             var lengthOriginal = new FileInfo(fileOriginal).Length;
             var lengthNew = new FileInfo(fileNew).Length;

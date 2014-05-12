@@ -1,10 +1,10 @@
 ﻿namespace SEToolbox.Support
 {
+    using HelixToolkit.Wpf;
     using System;
     using System.IO;
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
-    using HelixToolkit.Wpf;
 
     public static class MeshHelper
     {
@@ -234,16 +234,6 @@
             return true;
         }
 
-        internal static Point3D Min(Point3D point1, Point3D point2, Point3D point3)
-        {
-            return new Point3D(Math.Min(Math.Min(point1.X, point2.X), point3.X), Math.Min(Math.Min(point1.Y, point2.Y), point3.Y), Math.Min(Math.Min(point1.Z, point2.Z), point3.Z));
-        }
-
-        internal static Point3D Max(Point3D point1, Point3D point2, Point3D point3)
-        {
-            return new Point3D(Math.Max(Math.Max(point1.X, point2.X), point3.X), Math.Max(Math.Max(point1.Y, point2.Y), point3.Y), Math.Max(Math.Max(point1.Z, point2.Z), point3.Z));
-        }
-
         internal static Point3D Floor(this Point3D point)
         {
             return new Point3D(Math.Floor(point.X), Math.Floor(point.Y), Math.Floor(point.Z));
@@ -299,14 +289,14 @@
             return transform;
         }
 
-        public static decimal ToDecimal(this float value)
+        internal static Point3D Min(Point3D point1, Point3D point2, Point3D point3)
         {
-            return Convert.ToDecimal(value.ToString("G9", null));
+            return new Point3D(Math.Min(Math.Min(point1.X, point2.X), point3.X), Math.Min(Math.Min(point1.Y, point2.Y), point3.Y), Math.Min(Math.Min(point1.Z, point2.Z), point3.Z));
         }
-        
-        public static double ToDouble(this float value)
+
+        internal static Point3D Max(Point3D point1, Point3D point2, Point3D point3)
         {
-            return Convert.ToDouble(value.ToString("G9", null));
+            return new Point3D(Math.Max(Math.Max(point1.X, point2.X), point3.X), Math.Max(Math.Max(point1.Y, point2.Y), point3.Y), Math.Max(Math.Max(point1.Z, point2.Z), point3.Z));
         }
     }
 }
