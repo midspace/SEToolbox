@@ -113,24 +113,6 @@
       <Component Id="comp5F8887E0899A41C3BD1CEDFFC18A4FD1">
         <File Id="file1E207785088F43BABB001B75AA97C567" Source="$(var.SEToolbox.TargetDir)log4net.dll"/>
       </Component>
-      <Component Id="comp850260AE0B104C008BDDEC785EE8C9AC">
-        <File Id="file61DC174231C34C61B30B5F4894074C3F" Source="$(var.SEToolbox.TargetDir)SharpDX.Direct2D1.dll"/>
-      </Component>
-      <Component Id="compA67742F72D59495A8E315B3F5062FE10">
-        <File Id="file93D6D374C36846B4B66681528E1C8040" Source="$(var.SEToolbox.TargetDir)SharpDX.Direct3D11.dll"/>
-      </Component>
-      <Component Id="comp9DAC066AEF324FBC9C78375C60D5F726">
-        <File Id="file6A4E56F469CA474D8795DDFF37CD6935" Source="$(var.SEToolbox.TargetDir)SharpDX.dll"/>
-      </Component>
-      <Component Id="compDD7343AB3ACD4CC9B3674651E18817F6">
-        <File Id="file4CE3DC12E46641F8BF9F39713AA7295E" Source="$(var.SEToolbox.TargetDir)SharpDX.DXGI.dll"/>
-      </Component>
-      <Component Id="compCE71AA798BF1441BB3C03E8D7F3AAD3F">
-        <File Id="file2D0F73567E004956AB3DCB09DF9D8871" Source="$(var.SEToolbox.TargetDir)SharpDX.Toolkit.dll"/>
-      </Component>
-      <Component Id="comp59D17BEAA8EF4C7392079C0E59F11556">
-        <File Id="file40B3D9CA94E24CE7BB71F3D7E61C5E79" Source="$(var.SEToolbox.TargetDir)SharpDX.Toolkit.Graphics.dll"/>
-      </Component>
       <Component Id="comp4FF0A2172F244A5FA36AE80475BE0F8E">
         <File Id="file97FBC095E9A34E86AA664F4C5C9967B7" Source="$(var.SEToolbox.TargetDir)System.Windows.Interactivity.dll"/>
       </Component>
