@@ -19,6 +19,7 @@
     using System.Text;
     using System.Windows.Forms;
     using System.Windows.Input;
+    using System.Windows.Shell;
     using VRageMath;
     using Res = SEToolbox.Properties.Resources;
 
@@ -730,12 +731,14 @@
         {
             return false;
             //return this._dataModel.ActiveWorld != null;
-            // TODO:
         }
 
         public void WorldReportExecuted()
         {
-            // TODO:
+            var model = new ResourceReportModel();
+            model.Load();
+            var loadVm = new ResourceReportViewModel(this, model);
+            this._dialogService.ShowDialog<WindowResourceReport>(this, loadVm);
         }
 
         public bool OpenFolderCanExecute()
@@ -1406,6 +1409,32 @@
             }
         }
 
+        public TaskbarItemProgressState ProgressState
+        {
+            get
+            {
+                return this._dataModel.ProgressState;
+            }
+
+            set
+            {
+                this._dataModel.ProgressState = value;
+            }
+        }
+
+        public double ProgressValue
+        {
+            get
+            {
+                return this._dataModel.ProgressValue;
+            }
+
+            set
+            {
+                this._dataModel.ProgressValue = value;
+            }
+        }
+
         public double MaximumProgress
         {
             get
@@ -1427,6 +1456,11 @@
         public void ClearProgress()
         {
             this._dataModel.ClearProgress();
+        }
+
+        public void IncrementProgress()
+        {
+            this._dataModel.IncrementProgress();
         }
 
         public MyObjectBuilder_Checkpoint Checkpoint

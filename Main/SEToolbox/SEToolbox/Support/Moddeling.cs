@@ -45,7 +45,12 @@
 
         public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyier, Transform3D transform, ModelTraceVoxel traceType)
         {
-            return ReadModelVolmetic(modelFile, scaleMultiplyier, scaleMultiplyier, scaleMultiplyier, transform, traceType);
+            return ReadModelVolmetic(modelFile, scaleMultiplyier, scaleMultiplyier, scaleMultiplyier, transform, traceType, null, null);
+        }
+
+        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyier, Transform3D transform, ModelTraceVoxel traceType, Action<double, double> resetProgress, Action incrementProgress)
+        {
+            return ReadModelVolmetic(modelFile, scaleMultiplyier, scaleMultiplyier, scaleMultiplyier, transform, traceType, resetProgress, incrementProgress);
         }
 
         /// <summary>
@@ -57,8 +62,10 @@
         /// <param name="scaleMultiplyierZ"></param>
         /// <param name="transform"></param>
         /// <param name="traceType"></param>
+        /// <param name="resetProgress"></param>
+        /// <param name="incrementProgress"></param>
         /// <returns></returns>
-        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyierX, double scaleMultiplyierY, double scaleMultiplyierZ, Transform3D transform, ModelTraceVoxel traceType)
+        public static CubeType[, ,] ReadModelVolmetic(string modelFile, double scaleMultiplyierX, double scaleMultiplyierY, double scaleMultiplyierZ, Transform3D transform, ModelTraceVoxel traceType, Action<double, double> resetProgress, Action incrementProgress)
         {
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);
 
@@ -90,6 +97,17 @@
 
             var ccubic = new CubeType[xCount + 0, yCount + 0, zCount + 0];
 
+            if (resetProgress != null)
+            {
+                double count = (from GeometryModel3D gm in model.Children select gm.Geometry as MeshGeometry3D).Aggregate<MeshGeometry3D, double>(0, (current, g) => current + (g.TriangleIndices.Count / 3));
+                if (traceType == ModelTraceVoxel.ThinSmoothed || traceType == ModelTraceVoxel.ThickSmoothedUp)
+                {
+                    count += (xCount * yCount * zCount * 3);
+                }
+
+                resetProgress.Invoke(0, count);
+            }
+
             #region basic ray trace of every individual triangle.
 
             foreach (var model3D in model.Children)
@@ -111,6 +129,11 @@
 
                 for (var t = 0; t < g.TriangleIndices.Count; t += 3)
                 {
+                    if (incrementProgress != null)
+                    {
+                        incrementProgress.Invoke();
+                    }
+
                     var p1 = g.Positions[g.TriangleIndices[t]];
                     var p2 = g.Positions[g.TriangleIndices[t + 1]];
                     var p3 = g.Positions[g.TriangleIndices[t + 2]];
@@ -225,9 +248,9 @@
 
             if (traceType == ModelTraceVoxel.ThinSmoothed || traceType == ModelTraceVoxel.ThickSmoothedUp)
             {
-                CalculateAddedInverseCorners(ccubic);
-                CalculateAddedSlopes(ccubic);
-                CalculateAddedCorners(ccubic);
+                CalculateAddedInverseCorners(ccubic, incrementProgress);
+                CalculateAddedSlopes(ccubic, incrementProgress);
+                CalculateAddedCorners(ccubic, incrementProgress);
             }
 
             //if (traceType == ModelTraceVoxel.ThickSmoothedDown)
@@ -465,7 +488,7 @@
 
         #region CalculateAddedSlopes
 
-        private static void CalculateAddedSlopes(CubeType[, ,] ccubic)
+        private static void CalculateAddedSlopes(CubeType[, ,] ccubic, Action incrementProgress)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -477,6 +500,11 @@
                 {
                     for (int z = 0; z < zCount; z++)
                     {
+                        if (incrementProgress != null)
+                        {
+                            incrementProgress.Invoke();
+                        }
+
                         if (ccubic[x, y, z] == CubeType.None)
                         {
                             if (CheckAdjacentCubic(ccubic, x, y, z, xCount, yCount, zCount, 0, 1, 1, CubeType.Cube))
@@ -537,7 +565,7 @@
 
         #region CalculateAddedCorners
 
-        private static void CalculateAddedCorners(CubeType[, ,] ccubic)
+        private static void CalculateAddedCorners(CubeType[, ,] ccubic, Action incrementProgress)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -549,6 +577,11 @@
                 {
                     for (var z = 0; z < zCount; z++)
                     {
+                        if (incrementProgress != null)
+                        {
+                            incrementProgress.Invoke();
+                        }
+
                         if (ccubic[x, y, z] == CubeType.None)
                         {
                             if (CheckAdjacentCubic2(ccubic, x, y, z, xCount, yCount, zCount, 0, 0, +1, CubeType.SlopeLeftFrontCenter, -1, 0, 0, CubeType.SlopeCenterFrontTop) ||
@@ -740,7 +773,7 @@
 
         #region CalculateAddedInverseCorners
 
-        private static void CalculateAddedInverseCorners(CubeType[, ,] ccubic)
+        private static void CalculateAddedInverseCorners(CubeType[, ,] ccubic, Action incrementProgress)
         {
             var xCount = ccubic.GetLength(0);
             var yCount = ccubic.GetLength(1);
@@ -752,6 +785,11 @@
                 {
                     for (var z = 0; z < zCount; z++)
                     {
+                        if (incrementProgress != null)
+                        {
+                            incrementProgress.Invoke();
+                        }
+
                         if (ccubic[x, y, z] == CubeType.None)
                         {
                             if (CheckAdjacentCubic3(ccubic, x, y, z, xCount, yCount, zCount, +1, 0, 0, CubeType.Cube, 0, -1, 0, CubeType.Cube, 0, 0, -1, CubeType.Cube))

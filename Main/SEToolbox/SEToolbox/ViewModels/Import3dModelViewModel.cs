@@ -817,7 +817,9 @@
 
             var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
             this.SourceFile = TempfileUtil.NewFilename();
-            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, this.Filename, this.SourceFile, this.OutsideStockMaterial.Value, this.InsideStockMaterial.Value != null, this.InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, this.Filename, this.SourceFile, this.OutsideStockMaterial.Value, this.InsideStockMaterial.Value != null, this.InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
+
+            this.MainViewModel.ClearProgress();
 
             entity.PositionAndOrientation = new MyPositionAndOrientation()
             {
@@ -900,12 +902,14 @@
                 multiplier = this.MaxLengthScale / Math.Max(Math.Max(this.OriginalModelSize.Height, this.OriginalModelSize.Width), this.OriginalModelSize.Depth);
             }
 
-            var ccubic = Moddeling.ReadModelVolmetic(this.Filename, multiplier, null, this.TraceType);
+            var ccubic = Moddeling.ReadModelVolmetic(this.Filename, multiplier, null, this.TraceType, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
 
             // TODO: fillobject UI.
             //var fillObject = false;
 
             Moddeling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
+
+            this.MainViewModel.ClearProgress();
 
             entity.PositionAndOrientation = new MyPositionAndOrientation()
             {

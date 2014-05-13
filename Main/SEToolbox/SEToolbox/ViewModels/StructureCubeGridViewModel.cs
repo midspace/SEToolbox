@@ -1063,13 +1063,17 @@
         {
             this.IsBusy = true;
 
+            this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
+
             while (this.CubeSelections.Count > 0)
             {
+                this.MainViewModel.Progress++;
                 var cube = this.CubeSelections[0];
                 if (this.DataModel.CubeGrid.CubeBlocks.Remove(cube.Cube))
                     this.DataModel.CubeList.Remove(cube);
             }
 
+            this.MainViewModel.ClearProgress();
             this.IsBusy = false;
         }
 
@@ -1082,17 +1086,19 @@
         {
             var model = new SelectCubeModel();
             var loadVm = new SelectCubeViewModel(this, model);
-            model.Load(this.GridSize);
+            model.Load(this.GridSize, this.SelectedCubeItem.Cube.TypeId, this.SelectedCubeItem.SubtypeId);
             var result = this._dialogService.ShowDialog<WindowSelectCube>(this, loadVm);
             if (result == true)
             {
+                this.MainViewModel.IsBusy = true;
                 var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
-
                 var change = false;
+                this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
 
                 foreach (var cube in this.CubeSelections)
                 {
-                    if (cube.TypeId != model.CubeItem.TypeId && cube.SubtypeId != model.CubeItem.SubtypeId)
+                    this.MainViewModel.Progress++;
+                    if (cube.TypeId != model.CubeItem.TypeId || cube.SubtypeId != model.CubeItem.SubtypeId)
                     {
                         var idx = this.DataModel.CubeGrid.CubeBlocks.IndexOf(cube.Cube);
                         this.DataModel.CubeGrid.CubeBlocks.RemoveAt(idx);
@@ -1107,10 +1113,12 @@
                     }
                 }
 
+                this.MainViewModel.ClearProgress();
                 if (change)
                 {
                     this.MainViewModel.IsModified = true;
                 }
+                this.MainViewModel.IsBusy = false;
             }
         }
 
@@ -1130,12 +1138,18 @@
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
+                this.MainViewModel.IsBusy = true;
+                this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
+
                 foreach (var cube in this.CubeSelections)
                 {
+                    this.MainViewModel.Progress++;
                     cube.UpdateColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
                 }
 
+                this.MainViewModel.ClearProgress();
                 this.MainViewModel.IsModified = true;
+                this.MainViewModel.IsBusy = false;
             }
 
             this.MainViewModel.CreativeModeColors = colorDialog.CustomColors;
@@ -1153,12 +1167,18 @@
             var result = this._dialogService.ShowDialog<WindowFrameworkBuild>(this, loadVm);
             if (result == true)
             {
+                this.MainViewModel.IsBusy = true;
+                this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
+
                 foreach (var cube in this.CubeSelections)
                 {
+                    this.MainViewModel.Progress++;
                     cube.UpdateBuildPercent(model.BuildPercent.Value / 100);
                 }
 
+                this.MainViewModel.ClearProgress();
                 this.MainViewModel.IsModified = true;
+                this.MainViewModel.IsBusy = false;
             }
         }
 

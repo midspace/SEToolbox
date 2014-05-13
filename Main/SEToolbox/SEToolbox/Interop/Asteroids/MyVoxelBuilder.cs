@@ -126,9 +126,15 @@
             return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, action);
         }
 
+
         public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform)
         {
-            var volmeticMap = Moddeling.ReadModelVolmetic(sourceVolumetricFile, scale, transform, traceType);
+            return BuildAsteroidFromModel(multiThread, sourceVolumetricFile, filename, material, fillObject, interiorMaterial, traceType, scale, transform, null, null);
+        }
+
+        public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform, Action<double, double> resetProgress, Action incrementProgress)
+        {
+            var volmeticMap = Moddeling.ReadModelVolmetic(sourceVolumetricFile, scale, transform, traceType, resetProgress, incrementProgress);
             var size = new Vector3I(volmeticMap.GetLength(0) + 2, volmeticMap.GetLength(1) + 2, volmeticMap.GetLength(2) + 2);
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
