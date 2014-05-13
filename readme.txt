@@ -51,7 +51,4 @@ Resources:
 *	SharpZipLib
 	http://www.icsharpcode.net/OpenSource/SharpZipLib
 
-*	SharpDx (for reading .dds texture files).
-	http://sharpdx.org/
-
 ========--------~~~~~~~~

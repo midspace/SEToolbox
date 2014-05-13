@@ -8,7 +8,6 @@
     using SEToolbox.ImageLibrary;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    //using TexUtil = SEToolbox.ImageLibrary.SharpDXTextureUtil;
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;
 
     [TestClass]

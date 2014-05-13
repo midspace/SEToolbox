@@ -13,12 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", 
 		References\log4net.dll = References\log4net.dll
 		References\Sandbox.Common.dll = References\Sandbox.Common.dll
 		References\Sandbox.Common.XmlSerializers.dll = References\Sandbox.Common.XmlSerializers.dll
-		References\SharpDX.Direct2D1.dll = References\SharpDX.Direct2D1.dll
-		References\SharpDX.Direct3D11.dll = References\SharpDX.Direct3D11.dll
-		References\SharpDX.dll = References\SharpDX.dll
-		References\SharpDX.DXGI.dll = References\SharpDX.DXGI.dll
-		References\SharpDX.Toolkit.dll = References\SharpDX.Toolkit.dll
-		References\SharpDX.Toolkit.Graphics.dll = References\SharpDX.Toolkit.Graphics.dll
 		References\System.Windows.Interactivity.dll = References\System.Windows.Interactivity.dll
 		References\VRage.Common.dll = References\VRage.Common.dll
 		References\VRage.Library.dll = References\VRage.Library.dll
@@ -38,7 +32,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{F968BC09-554D-4ED1-8619-78EBBC8A30F2}"
 	ProjectSection(SolutionItems) = preProject
 		plansandtasks.txt = plansandtasks.txt
-		readme.txt = readme.txt
+		..\..\readme.txt = ..\..\readme.txt
 	EndProjectSection
 EndProject
 Global
