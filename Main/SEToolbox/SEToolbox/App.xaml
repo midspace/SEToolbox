@@ -20,7 +20,7 @@
 
         <DataTemplate x:Key="HeaderTemplateArrowDown">
             <DockPanel>
-                <TextBlock HorizontalAlignment="Center" Text="{Binding }"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding}"/>
                 <Path x:Name="arrow"
                     StrokeThickness = "1"
                     Fill            = "Black"

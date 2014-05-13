@@ -264,10 +264,10 @@
                                         <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
                                         <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding DisplayName}"/>
                                         <GridViewColumn Header="Description" Width="100" DisplayMemberBinding="{Binding Description}"/>
-                                        <controls:SortableGridViewColumn Header="Distance" Width="70" SortBinding="{Binding PlayerDistance}">
+                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding PlayerDistance}" Header="Distance">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right"/>
+                                                    <TextBlock Text="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right" ToolTip="Distance to Player"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>

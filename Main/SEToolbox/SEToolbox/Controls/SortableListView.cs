@@ -111,15 +111,6 @@
                             headerClicked.Column.HeaderTemplate = this.ColumnHeaderArrowDownTemplate;
                     }
 
-                    //if (direction == ListSortDirection.Ascending)
-                    //{
-                    //    headerClicked.Column.HeaderTemplate = headerClicked.FindResource("HeaderTemplateArrowUp") as DataTemplate;
-                    //}
-                    //else
-                    //{
-                    //    headerClicked.Column.HeaderTemplate = headerClicked.FindResource("HeaderTemplateArrowDown") as DataTemplate;
-                    //}
-
                     // Remove arrow from previously sorted header 
                     if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
                     {
