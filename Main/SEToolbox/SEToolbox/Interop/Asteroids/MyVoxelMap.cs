@@ -625,94 +625,99 @@ namespace SEToolbox.Interop.Asteroids
             }
         }
 
-        //  Coordinates are relative to voxel map
-        private byte GetVoxelContent(ref Vector3I voxelCoord)
+        public void EmptyMaterial(string materialName, string replaceFillMaterial)
         {
-            var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
-            var voxelCell = this.GetCell(ref cellCoord);
+            var materialIndex = SpaceEngineersAPI.GetMaterialIndex(materialName);
+            var replaceMaterialIndex = SpaceEngineersAPI.GetMaterialIndex(replaceFillMaterial);
+            Vector3I cellCoord;
 
-            if (voxelCell == null)
+            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
             {
-                //  Voxel wasn't found in cell dictionary, therefore cell must be full
-                return MyVoxelConstants.VOXEL_CONTENT_FULL;
-            }
-            else
-            {
-                var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
-                var ret = voxelCell.GetVoxelContent(ref voxelCoordInCell);
-                return ret;
-            }
-        }
-
-        //  Return data cell to which belongs specified voxel (data cell)
-        //  IMPORTANT: Input variable 'tempVoxelCoord' is 'ref' only for optimization. Never change its value in the method!!!
-        private Vector3I GetDataCellCoordinate(ref Vector3I voxelCoord)
-        {
-            return new Vector3I(voxelCoord.X >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, voxelCoord.Y >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, voxelCoord.Z >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS);
-        }
-
-        //  Get cell. If not found (cell is full), null is returned.
-        //  IMPORTANT: This method doesn't check if input cell coord0 is inside of the voxel map.
-        //  IMPORTANT: This method has overloaded version that is sometimes needed too.
-        private MyVoxelContentCell GetCell(ref Vector3I cellCoord)
-        {
-            if (!this.CheckVoxelCoord(ref cellCoord)) return null;
-            return this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
-        }
-
-        //  Return voxel's coordinates relative to cell (in voxel space)
-        //  IMPORTANT: Input variable 'tempVoxelCoord' is 'ref' only for optimization. Never change its value in the method!!!
-        private Vector3I GetVoxelCoordinatesInDataCell(ref Vector3I voxelCoord)
-        {
-            return new Vector3I(voxelCoord.X & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK, voxelCoord.Y & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK, voxelCoord.Z & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK);
-        }
-
-        private bool CheckVoxelCoord(ref Vector3I cellCoord)
-        {
-            if (cellCoord.X >= 0 && cellCoord.Y >= 0 && cellCoord.Z >= 0)
-            {
-                if (cellCoord.X < this._voxelContentCells.Length &&
-                    cellCoord.Y < this._voxelContentCells[cellCoord.X].Length &&
-                    cellCoord.Z < this._voxelContentCells[cellCoord.X][cellCoord.Y].Length)
+                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
                 {
-                    return true;
+                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    {
+                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var matCell = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+
+                        if (voxelCell == null)
+                        {
+                            //  Voxel wasn't found in cell dictionary, so cell must be FULL
+                            if (matCell.IsSingleMaterialForWholeCell)
+                            {
+                                if (matCell.SingleMaterial == materialIndex)
+                                {
+                                    var newCell = new MyVoxelContentCell();
+                                    this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                                    newCell.SetToEmpty();
+                                    matCell.Reset(replaceMaterialIndex, 0xff);
+                                }
+                            }
+                            else
+                            {
+                                // A full cell, with mixed materials.
+                                Vector3I voxelCoordInCell;
+                                MyVoxelContentCell newCell = null;
+
+                                for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                                {
+                                    for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                    {
+                                        for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                        {
+                                            var material = matCell.GetMaterial(ref voxelCoordInCell);
+
+                                            if (material == materialIndex)
+                                            {
+                                                if (newCell == null)
+                                                {
+                                                    newCell = new MyVoxelContentCell();
+                                                    this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                                                }
+
+                                                newCell.SetVoxelContent(0x00, ref voxelCoordInCell);
+                                                matCell.SetMaterialAndIndestructibleContent(replaceMaterialIndex, 0xff, ref voxelCoordInCell); 
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (voxelCell.CellType == MyVoxelCellType.MIXED)
+                        {
+                            if (matCell.IsSingleMaterialForWholeCell)
+                            {
+                                if (matCell.SingleMaterial == materialIndex)
+                                {
+                                    voxelCell.SetToEmpty();
+                                    matCell.Reset(replaceMaterialIndex, 0xff);
+                                }
+                            }
+                            else
+                            {
+                                // A mixed cell, with mixed materials.
+                                Vector3I voxelCoordInCell;
+                                for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                                {
+                                    for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                    {
+                                        for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                        {
+                                            var material = matCell.GetMaterial(ref voxelCoordInCell);
+
+                                            if (material == materialIndex)
+                                            {
+                                                voxelCell.SetVoxelContent(0x00, ref voxelCoordInCell);
+                                                matCell.SetMaterialAndIndestructibleContent(replaceMaterialIndex, 0xff, ref voxelCoordInCell);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
-
-            return false;
-        }
-
-        //  Checks if cell didn't change to FULL and if is, we set it to null
-        private void CheckIfCellChangedToFull(MyVoxelContentCell voxelCell, ref Vector3I cellCoord)
-        {
-            if (voxelCell.CellType == MyVoxelCellType.FULL)
-            {
-                this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = null;
-            }
-        }
-
-        //  Return true if this voxel is on voxel map border
-        private bool IsVoxelAtBorder(ref Vector3I voxelCoord)
-        {
-            if (voxelCoord.X <= 0) return true;
-            if (voxelCoord.Y <= 0) return true;
-            if (voxelCoord.Z <= 0) return true;
-            if (voxelCoord.X >= this._sizeMinusOne.X - 1) return true;
-            if (voxelCoord.Y >= this._sizeMinusOne.Y - 1) return true;
-            if (voxelCoord.Z >= this._sizeMinusOne.Z - 1) return true;
-            return false;
-        }
-
-        //  Allocates cell from a buffer, store reference to dictionary and return reference to the cell
-        //  Use it when changing cell type from full to empty or mixed.
-        private MyVoxelContentCell AddCell(ref Vector3I cellCoord)
-        {
-            //  Adding or creating cell can be made only once
-            Debug.Assert(this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] == null);
-
-            var ret = new MyVoxelContentCell();
-            this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = ret;
-            return ret;
         }
 
         public long SumVoxelCells()
@@ -1066,5 +1071,98 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
+        #region helper methods
+
+        //  Coordinates are relative to voxel map
+        private byte GetVoxelContent(ref Vector3I voxelCoord)
+        {
+            var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
+            var voxelCell = this.GetCell(ref cellCoord);
+
+            if (voxelCell == null)
+            {
+                //  Voxel wasn't found in cell dictionary, therefore cell must be full
+                return MyVoxelConstants.VOXEL_CONTENT_FULL;
+            }
+            else
+            {
+                var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
+                var ret = voxelCell.GetVoxelContent(ref voxelCoordInCell);
+                return ret;
+            }
+        }
+
+        //  Return data cell to which belongs specified voxel (data cell)
+        //  IMPORTANT: Input variable 'tempVoxelCoord' is 'ref' only for optimization. Never change its value in the method!!!
+        private Vector3I GetDataCellCoordinate(ref Vector3I voxelCoord)
+        {
+            return new Vector3I(voxelCoord.X >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, voxelCoord.Y >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, voxelCoord.Z >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS);
+        }
+
+        //  Get cell. If not found (cell is full), null is returned.
+        //  IMPORTANT: This method doesn't check if input cell coord0 is inside of the voxel map.
+        //  IMPORTANT: This method has overloaded version that is sometimes needed too.
+        private MyVoxelContentCell GetCell(ref Vector3I cellCoord)
+        {
+            if (!this.CheckVoxelCoord(ref cellCoord)) return null;
+            return this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+        }
+
+        //  Return voxel's coordinates relative to cell (in voxel space)
+        //  IMPORTANT: Input variable 'tempVoxelCoord' is 'ref' only for optimization. Never change its value in the method!!!
+        private Vector3I GetVoxelCoordinatesInDataCell(ref Vector3I voxelCoord)
+        {
+            return new Vector3I(voxelCoord.X & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK, voxelCoord.Y & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK, voxelCoord.Z & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK);
+        }
+
+        private bool CheckVoxelCoord(ref Vector3I cellCoord)
+        {
+            if (cellCoord.X >= 0 && cellCoord.Y >= 0 && cellCoord.Z >= 0)
+            {
+                if (cellCoord.X < this._voxelContentCells.Length &&
+                    cellCoord.Y < this._voxelContentCells[cellCoord.X].Length &&
+                    cellCoord.Z < this._voxelContentCells[cellCoord.X][cellCoord.Y].Length)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        //  Checks if cell didn't change to FULL and if is, we set it to null
+        private void CheckIfCellChangedToFull(MyVoxelContentCell voxelCell, ref Vector3I cellCoord)
+        {
+            if (voxelCell.CellType == MyVoxelCellType.FULL)
+            {
+                this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = null;
+            }
+        }
+
+        //  Return true if this voxel is on voxel map border
+        private bool IsVoxelAtBorder(ref Vector3I voxelCoord)
+        {
+            if (voxelCoord.X <= 0) return true;
+            if (voxelCoord.Y <= 0) return true;
+            if (voxelCoord.Z <= 0) return true;
+            if (voxelCoord.X >= this._sizeMinusOne.X - 1) return true;
+            if (voxelCoord.Y >= this._sizeMinusOne.Y - 1) return true;
+            if (voxelCoord.Z >= this._sizeMinusOne.Z - 1) return true;
+            return false;
+        }
+
+        //  Allocates cell from a buffer, store reference to dictionary and return reference to the cell
+        //  Use it when changing cell type from full to empty or mixed.
+        private MyVoxelContentCell AddCell(ref Vector3I cellCoord)
+        {
+            //  Adding or creating cell can be made only once
+            Debug.Assert(this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] == null);
+
+            var ret = new MyVoxelContentCell();
+            this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = ret;
+            return ret;
+        }
+
+        #endregion
     }
 }

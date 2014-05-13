@@ -22,8 +22,18 @@
             voxelMap.Save(saveFile);
         }
 
+        public static void StripMaterial(string loadFile, string saveFile, string defaultMaterial, string stripMaterial, string replaceFillMaterial)
+        {
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(loadFile, defaultMaterial);
+            voxelMap.EmptyMaterial(stripMaterial, replaceFillMaterial);
+            voxelMap.Save(saveFile);
+        }
+
+        #region BuildAsteroid standard tools
+
         public static MyVoxelMap BuildAsteroidCube(bool multiThread, string filename, int width, int height, int depth,
-            string material, bool hollow = false, int shellWidth = 0, float safeSize = 0f)
+          string material, bool hollow = false, int shellWidth = 0, float safeSize = 0f)
         {
             // offset by 1, to allow for the 3 faces on the origin side.
             var size = new Vector3I(width + 1, height + 1, depth + 1);
@@ -170,6 +180,10 @@
 
             return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, action);
         }
+        
+        #endregion
+
+        #region BuildAsteroid
 
         /// <summary>
         /// Builds and asteroid Voxel and saves it to the specified file. Voxel detail will be completed by function callbacks.
@@ -331,6 +345,8 @@
 
             return voxelMap;
         }
+        
+        #endregion
 
         #endregion
 

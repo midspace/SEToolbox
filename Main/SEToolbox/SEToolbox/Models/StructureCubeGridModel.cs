@@ -628,8 +628,15 @@
             var beacons = this.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString() || b.SubtypeName == SubtypeId.SmallBlockBeacon.ToString()).ToArray();
             if (beacons.Length > 0)
             {
-                var a = beacons.Select(b => ((MyObjectBuilder_Beacon)b).CustomName).ToArray();
-                this.DisplayName = String.Join("|", a);
+                var beaconNames = beacons.Select(b => ((MyObjectBuilder_Beacon)b).CustomName).ToArray();
+
+                for (var i = 0; i < beaconNames.Length; i++)
+                {
+                    if (beaconNames[i] == null)
+                        beaconNames[i] = "Beacon";
+                }
+
+                this.DisplayName = String.Join("|", beaconNames);
             }
 
             this.Description = string.Format("{0} | {1:#,##0} Kg", this.Scale, this.Mass);
@@ -1737,12 +1744,12 @@
                     else
                         return "+X";
                 case Base6Directions.Axis.UpDown: // Y
-                    if (Base6Directions.GetVector(direction).X < 0)
+                    if (Base6Directions.GetVector(direction).Y < 0)
                         return "-Y";
                     else
                         return "+Y";
                 case Base6Directions.Axis.ForwardBackward: // Z
-                    if (Base6Directions.GetVector(direction).X < 0)
+                    if (Base6Directions.GetVector(direction).Z < 0)
                         return "-Z";
                     else
                         return "+Z";
