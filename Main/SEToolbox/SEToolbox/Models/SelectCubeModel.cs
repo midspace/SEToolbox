@@ -11,8 +11,6 @@
 
     public class SelectCubeModel : BaseModel
     {
-        public const int UniqueUnits = 1;
-
         #region Fields
 
         private ObservableCollection<ComponentItemModel> _cubeList;
@@ -69,7 +67,7 @@
 
         #region methods
 
-        public void Load(MyCubeSize cubeSize)
+        public void Load(MyCubeSize cubeSize, MyObjectBuilderTypeEnum typeId, string subTypeId)
         {
             this.CubeList.Clear();
             var list = new SortedList<string, ComponentItemModel>();
@@ -98,6 +96,8 @@
             {
                 this.CubeList.Add(kvp.Value);
             }
+
+            this.CubeItem = this.CubeList.FirstOrDefault(c => c.TypeId == typeId && c.SubtypeId == subTypeId);
         }
 
         #endregion

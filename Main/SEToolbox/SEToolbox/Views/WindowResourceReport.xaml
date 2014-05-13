@@ -1,0 +1,41 @@
+﻿<Window x:Class="SEToolbox.Views.WindowResourceReport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="Resource Report"  Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        commands:DialogService.IsRegisteredView="True"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
+    <Window.Resources>
+        <converters:DDSConverter x:Key="DDSConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid IsEnabled="{Binding IsActive}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Margin="8">
+                <TextBox Text="{Binding ReportText}" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+                <!--<WebBrowser />-->
+            </Grid>
+            <Grid Grid.Row="1" Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"  MinWidth="120" Command="{Binding GenerateCommand}" Content="Generate Report" IsDefault="True" Name="uxInitialElement"/>
+                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding CopyCommand}" Content="Copy" HorizontalAlignment="Left" IsDefault="True"/>
+                <ProgressBar Grid.Column="2"  Margin="8,0,8,0" Value="{Binding Progress}"/>
+                <Button Grid.Column="3" Width="90" Command="{Binding CloseCommand}" Content="Close" HorizontalAlignment="Right" IsCancel="True"/>
+            </Grid>
+        </Grid>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</Window>

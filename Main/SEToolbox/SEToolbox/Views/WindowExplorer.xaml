@@ -33,6 +33,9 @@
             <Binding Path="ActiveWorld.SessionName"/>
         </MultiBinding>
     </Window.Title>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="{Binding ProgressState}" ProgressValue="{Binding ProgressValue}" />
+    </Window.TaskbarItemInfo>
     <Grid IsEnabled="{Binding IsActive}">
         <DockPanel>
             <Menu DockPanel.Dock="Top">

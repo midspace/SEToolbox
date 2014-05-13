@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
@@ -11,8 +12,8 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Windows.Shell;
     using System.Windows.Threading;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
 
     public class ExplorerModel : BaseModel
     {
@@ -49,6 +50,10 @@
         private bool _showProgress;
 
         private double _progress;
+
+        private TaskbarItemProgressState _progressState;
+
+        private double _progressValue;
 
         private readonly Stopwatch _timer;
 
@@ -270,16 +275,53 @@
                 if (value != this._progress)
                 {
                     this._progress = value;
-                    this.RaisePropertyChanged(() => Progress);
+                    this._progressValue = this._progress / this._maximumProgress;
 
                     if (!_timer.IsRunning || _timer.ElapsedMilliseconds > 200 )
                     {
+                        this.RaisePropertyChanged(() => Progress);
+                        this.RaisePropertyChanged(() => ProgressValue);
                         System.Windows.Forms.Application.DoEvents();
                         _timer.Restart();
                     }
                 }
             }
         }
+
+        public TaskbarItemProgressState ProgressState
+        {
+            get
+            {
+                return this._progressState;
+            }
+
+            set
+            {
+                if (value != this._progressState)
+                {
+                    this._progressState = value;
+                    this.RaisePropertyChanged(() => ProgressState);
+                }
+            }
+        }
+
+        public double ProgressValue
+        {
+            get
+            {
+                return this._progressValue;
+            }
+
+            set
+            {
+                if (value != this._progressValue)
+                {
+                    this._progressValue = value;
+                    this.RaisePropertyChanged(() => ProgressValue);
+                }
+            }
+        }
+
 
         public double MaximumProgress
         {
@@ -955,17 +997,25 @@
 
         public void ResetProgress(double initial, double maximumProgress)
         {
-            this.Progress = initial;
             this.MaximumProgress = maximumProgress;
-            _timer.Restart();
+            this.Progress = initial;
             this.ShowProgress = true;
+            this.ProgressState = TaskbarItemProgressState.Normal;
+            _timer.Restart();
             System.Windows.Forms.Application.DoEvents();
+        }
+
+        public void IncrementProgress()
+        {
+            this.Progress++;
         }
 
         public void ClearProgress()
         {
             this.ShowProgress = false;
             this.Progress = 0;
+            this.ProgressState = TaskbarItemProgressState.None;
+            this.ProgressValue = 0;
             _timer.Stop();
         }
     }

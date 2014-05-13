@@ -24,6 +24,8 @@
 
         void ResetProgress(double initial, double maximumProgress);
 
+        void IncrementProgress();
+
         void ClearProgress();
 
         MyObjectBuilder_Checkpoint Checkpoint { get; }
