@@ -8,7 +8,7 @@
     public static class TempfileUtil
     {
         private static readonly List<string> Tempfiles;
-        private static readonly string TempPath;
+        public static readonly string TempPath;
 
         static TempfileUtil()
         {

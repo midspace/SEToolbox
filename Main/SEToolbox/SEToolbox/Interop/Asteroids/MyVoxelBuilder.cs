@@ -33,7 +33,7 @@
         #region BuildAsteroid standard tools
 
         public static MyVoxelMap BuildAsteroidCube(bool multiThread, string filename, int width, int height, int depth,
-          string material, bool hollow = false, int shellWidth = 0, float safeSize = 0f)
+          string material, string faceMaterial, bool hollow = false, int shellWidth = 0, float safeSize = 0f)
         {
             // offset by 1, to allow for the 3 faces on the origin side.
             var size = new Vector3I(width + 1, height + 1, depth + 1);
@@ -69,10 +69,10 @@
                 }
             };
 
-            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, buildSize, material, action);
+            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, buildSize, material, faceMaterial, action);
         }
 
-        public static MyVoxelMap BuildAsteroidCube(bool multiThread, string filename, Vector3I min, Vector3I max, string material)
+        public static MyVoxelMap BuildAsteroidCube(bool multiThread, string filename, Vector3I min, Vector3I max, string material, string faceMaterial)
         {
             // correct for allowing sizing.
             var buildSize = new Vector3I(ScaleMod(max.X, 64), ScaleMod(max.Y, 64), ScaleMod(max.Z, 64));
@@ -90,10 +90,10 @@
                 }
             };
 
-            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, buildSize, material, action);
+            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, buildSize, material, faceMaterial, action);
         }
 
-        public static MyVoxelMap BuildAsteroidSphere(bool multiThread, string filename, double radius, string material,
+        public static MyVoxelMap BuildAsteroidSphere(bool multiThread, string filename, double radius, string material, string faceMaterial,
             bool hollow = false, int shellWidth = 0)
         {
             var length = ScaleMod((radius * 2) + 2, 64);
@@ -133,26 +133,27 @@
                 }
             };
 
-            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, action);
+            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, faceMaterial, action);
         }
 
 
-        public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform)
+        public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, string faceMaterial, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform)
         {
-            return BuildAsteroidFromModel(multiThread, sourceVolumetricFile, filename, material, fillObject, interiorMaterial, traceType, scale, transform, null, null);
+            return BuildAsteroidFromModel(multiThread, sourceVolumetricFile, filename, material, faceMaterial, fillObject, interiorMaterial, traceType, scale, transform, null, null);
         }
 
-        public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform, Action<double, double> resetProgress, Action incrementProgress)
+        public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, string faceMaterial, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform, Action<double, double> resetProgress, Action incrementProgress)
         {
             var volmeticMap = Moddeling.ReadModelVolmetic(sourceVolumetricFile, scale, transform, traceType, resetProgress, incrementProgress);
-            var size = new Vector3I(volmeticMap.GetLength(0) + 2, volmeticMap.GetLength(1) + 2, volmeticMap.GetLength(2) + 2);
+            var size = new Vector3I(volmeticMap.GetLength(0) + 4, volmeticMap.GetLength(1) + 4, volmeticMap.GetLength(2) + 4);
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
             {
-                if (e.CoordinatePoint.X > 0 && e.CoordinatePoint.Y > 0 && e.CoordinatePoint.Z > 0 &&
-                    e.CoordinatePoint.X <= volmeticMap.GetLength(0) && e.CoordinatePoint.Y <= volmeticMap.GetLength(1) && e.CoordinatePoint.Z <= volmeticMap.GetLength(2))
+                if (e.CoordinatePoint.X > 1 && e.CoordinatePoint.Y > 1 && e.CoordinatePoint.Z > 1 &&
+                    //e.CoordinatePoint.X <= volmeticMap.GetLength(0) && e.CoordinatePoint.Y <= volmeticMap.GetLength(1) && e.CoordinatePoint.Z <= volmeticMap.GetLength(2))
+                    (e.CoordinatePoint.X <= volmeticMap.GetLength(0) + 1) && (e.CoordinatePoint.Y <= volmeticMap.GetLength(1) + 1) && (e.CoordinatePoint.Z <= volmeticMap.GetLength(2) + 1))
                 {
-                    var cube = volmeticMap[e.CoordinatePoint.X - 1, e.CoordinatePoint.Y - 1, e.CoordinatePoint.Z - 1];
+                    var cube = volmeticMap[e.CoordinatePoint.X - 2, e.CoordinatePoint.Y - 2, e.CoordinatePoint.Z - 2];
                     if (cube == CubeType.Interior && fillObject)
                     {
                         e.Volume = 0xff;    // 100%
@@ -162,15 +163,15 @@
                         }
                     }
                     else if (cube == CubeType.Cube)
-                        e.Volume = 0xff;    // 100%
+                        e.Volume = 0xff;    // 100% "11111111"
                     else if (cube.ToString().StartsWith("InverseCorner"))
-                        e.Volume = 0xD4;    // 83%
+                        e.Volume = 0xD4;    // 83%  "11010100"
                     else if (cube.ToString().StartsWith("Slope"))
-                        e.Volume = 0x7F;    // 50%
+                        e.Volume = 0x7F;    // 50%  "01111111"
                     else if (cube.ToString().StartsWith("NormalCorner"))
-                        e.Volume = 0x2B;    // 16%
+                        e.Volume = 0x2B;    // 16%  "00101011"
                     else
-                        e.Volume = 0x00;    // 0%
+                        e.Volume = 0x00;    // 0%   "00000000"
                 }
                 else
                 {
@@ -178,7 +179,7 @@
                 }
             };
 
-            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, action);
+            return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, faceMaterial, action);
         }
         
         #endregion
@@ -195,7 +196,7 @@
         /// <param name="material"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static MyVoxelMap BuildAsteroid(bool multiThread, string filename, Vector3I size, string material, Action<MyVoxelBuilderArgs> func)
+        public static MyVoxelMap BuildAsteroid(bool multiThread, string filename, Vector3I size, string material, string faceMaterial, Action<MyVoxelBuilderArgs> func)
         {
             var displayname = Path.GetFileNameWithoutExtension(filename);
             var voxelMap = new MyVoxelMap();
@@ -302,7 +303,6 @@
                             {
                                 lock (Locker)
                                 {
-                                    //System.Windows.Forms.Application.DoEvents();
                                     workerCounter++;
 
                                     counter += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
@@ -314,7 +314,8 @@
                                         progress = prog;
                                         Debug.Write(string.Format("{0:000},", progress));
                                     }
-                                    //System.Windows.Forms.Application.DoEvents();
+
+                                    ((BackgroundWorker)sender).Dispose();
                                 }
                             };
 
@@ -337,7 +338,12 @@
 
             timer.Stop();
 
+            if (faceMaterial != null)
+            {
+                voxelMap.ForceVoxelFaceMaterial(faceMaterial);
+            }
             voxelMap.UpdateContentBounds();
+
             var count = voxelMap.SumVoxelCells();
 
             Debug.WriteLine(string.Format(" Done. | {0}  | VoxCells {1:#,##0}", timer.Elapsed, count));

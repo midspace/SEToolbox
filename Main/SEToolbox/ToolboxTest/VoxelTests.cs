@@ -323,16 +323,19 @@
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
+            var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
+            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold.vox";
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, fileNew, 8, 8, 8, goldMaterial.Name, false, 0);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, fileNew, 8, 8, 8, goldMaterial.Name, stoneMaterial.Name, false, 0);
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(146, lengthNew, "New file size must match.");
+            Assert.AreEqual(7360, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -354,16 +357,19 @@
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
+            var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
+            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             const string fileNew = @".\TestOutput\test_sphere_solid_7_gold.vox";
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(false, fileNew, 4, goldMaterial.Name, false, 0);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(false, fileNew, 4, goldMaterial.Name, stoneMaterial.Name, false, 0);
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(287, lengthNew, "New file size must match.");
+            Assert.AreEqual(7559, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -385,16 +391,19 @@
             var materials = SpaceEngineersAPI.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
+            var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
+            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             const string fileNew = @".\TestOutput\test_sphere_solid_499_gold.vox";
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, fileNew, 250, goldMaterial.Name, false, 0);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, fileNew, 250, goldMaterial.Name, stoneMaterial.Name, false, 0);
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(679997, lengthNew, "New file size must match.");
+            Assert.AreEqual(1213009, lengthNew, "New file size must match.");
 
             Assert.AreEqual(512, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(512, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -438,7 +447,7 @@
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, materials[0].Name, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, materials[0].Name, null, action);
 
             var lengthNew = new FileInfo(fileNew).Length;
 
@@ -507,7 +516,7 @@
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, materials[0].Name, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, fileNew, size, materials[0].Name, null, action);
 
             var lengthNew = new FileInfo(fileNew).Length;
 
@@ -535,6 +544,7 @@
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
@@ -543,7 +553,7 @@
 
             var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 180, 0, 0);
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, modelFile, voxelFile, goldMaterial.Name, true, stoneMaterial.Name, ModelTraceVoxel.ThinSmoothed, 0.766, transform);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, modelFile, voxelFile, goldMaterial.Name, stoneMaterial.Name, true, stoneMaterial.Name, ModelTraceVoxel.ThinSmoothed, 0.766, transform);
 
             Assert.AreEqual(50, voxelMap.ContentSize.X, "Voxel Content size must match.");
             Assert.AreEqual(46, voxelMap.ContentSize.Y, "Voxel Content size must match.");

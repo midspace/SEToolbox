@@ -1,6 +1,6 @@
 ﻿namespace SEToolbox.Interop
 {
-    public enum CubeType
+    public enum CubeType : byte
     {
         None,
         Exterior,
