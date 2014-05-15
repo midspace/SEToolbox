@@ -36,38 +36,42 @@
 #endif
 
             var assemblyVersion = Assembly.GetExecutingAssembly()
-                    .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
-                    .OfType<AssemblyFileVersionAttribute>()
-                    .FirstOrDefault();
+                .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
+                .OfType<AssemblyFileVersionAttribute>()
+                .FirstOrDefault();
             var currentVersion = new Version(assemblyVersion.Version);
 
+            string webContent = string.Empty;
+            string link = null;
+
             // Create the WebClient with Proxy Credentials.
-            var webclient = new MyWebClient();
-            webclient.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials; // For Proxy servers on Corporate networks.
-            webclient.Headers.Add("Referer", string.Format("https://setoolbox.codeplex.com/updatecheck?current={0}", currentVersion));
-
-            string webContent = null;
-            try
+            using (var webclient = new MyWebClient())
             {
-                webContent = webclient.DownloadString(UpdatesUrl);
-            }
-            catch
-            {
-                // Ignore any errors.
-                // If it cannot connect, then there may be an intermittant connection issue, either with the internet, or codeplex (which has happened before).
-            }
+                webclient.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials; // For Proxy servers on Corporate networks.
+                webclient.Headers.Add("Referer", string.Format("https://setoolbox.codeplex.com/updatecheck?current={0}", currentVersion));
 
-            if (webContent == null)
-                return null;
+                try
+                {
+                    webContent = webclient.DownloadString(UpdatesUrl);
+                }
+                catch
+                {
+                    // Ignore any errors.
+                    // If it cannot connect, then there may be an intermittant connection issue, either with the internet, or codeplex (which has happened before).
+                }
+
+                if (webContent == null)
+                    return null;
+
+                // link should be in the form "http://setoolbox.codeplex.com/releases/view/120855"
+                link = webclient.ResponseUri == null ? null : webclient.ResponseUri.AbsoluteUri;
+            }
 
             // search for html in the form:  <h1 class="page_title wordwrap">SEToolbox 01.025.021 Release 2</h1>
             var match = Regex.Match(webContent, @"\<h1 class=\""(?:[^\""]*)\""\>(?<title>(?:[^\<\>\""]*?))\s(?<version>[^\<\>\""]*)\<\/h1\>");
 
             if (!match.Success)
                 return null;
-
-            // link should be in the form "http://setoolbox.codeplex.com/releases/view/120855"
-            var link = webclient.ResponseUri == null ? null : webclient.ResponseUri.AbsoluteUri;
 
             var item = new CodeplexReleases() { Link = link, Version = GetVersion(match.Groups["version"].Value) };
             if (item.Version > currentVersion)
