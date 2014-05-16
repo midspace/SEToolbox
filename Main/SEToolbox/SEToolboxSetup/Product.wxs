@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.029.006.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.030.008.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -125,6 +125,12 @@
                   Name="!(loc.ShortcutName)"
                   Description="!(loc.ShortcutDescription)"
                   Target="[APPLICATIONFOLDER]SEToolbox.exe"
+                  WorkingDirectory="APPLICATIONFOLDER"/>
+        <Shortcut Id="ApplicationStartMenuShortcutAlt"
+                  Name="!(loc.ShortcutName) - test"
+                  Description="!(loc.ShortcutDescription) test version, loads Space Engineers base files directly, with no need to update with UAC."
+                  Target="[APPLICATIONFOLDER]SEToolbox.exe"
+                  Arguments="/ALTDLL"
                   WorkingDirectory="APPLICATIONFOLDER"/>
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
         <RemoveFolder Id="RemoveProgramMenuDir" Directory='COMPANYPROGRAMFOLDER' On='uninstall' />

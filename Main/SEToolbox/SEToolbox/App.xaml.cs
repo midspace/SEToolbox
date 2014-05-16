@@ -59,7 +59,8 @@
             ServiceLocator.Register<IColorDialog, ColorDialogViewModel>();
 
             this._toolboxApplication = new CoreToolbox();
-            this._toolboxApplication.Startup(e.Args);
+            if (this._toolboxApplication.Init(e.Args))
+                this._toolboxApplication.Load();
         }
 
         private void OnExit(object sender, ExitEventArgs e)
@@ -67,7 +68,6 @@
             if (this._toolboxApplication != null)
                 this._toolboxApplication.Exit();
         }
-
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
