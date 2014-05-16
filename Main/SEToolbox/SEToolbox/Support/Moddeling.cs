@@ -121,7 +121,7 @@
                 {
                     var material = materials.Children.OfType<DiffuseMaterial>().FirstOrDefault();
 
-                    if (material != null)
+                    if (material != null && material != null && material.Brush is SolidColorBrush)
                     {
                         color = ((SolidColorBrush)material.Brush).Color;
                     }
