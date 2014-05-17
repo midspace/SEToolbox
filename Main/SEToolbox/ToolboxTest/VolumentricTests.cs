@@ -14,9 +14,9 @@
         {
             const string modelFile = @".\TestAssets\algos.obj";
 
-            var cubic = Moddeling.ReadModelVolmetic(modelFile, 1, null, ModelTraceVoxel.Thin);
+            var cubic = Modelling.ReadModelVolmetic(modelFile, 1, null, ModelTraceVoxel.Thin);
 
-            var cubicCount = Moddeling.CountCubic(cubic);
+            var cubicCount = Modelling.CountCubic(cubic);
 
             Assert.AreEqual(1290600, cubic.Length, "Array length size must match.");
 
@@ -45,9 +45,9 @@
         {
             const string modelFile = @".\TestAssets\algos.obj";
 
-            var cubic = Moddeling.ReadModelVolmetic(modelFile, 0.5, null, ModelTraceVoxel.Thin);
+            var cubic = Modelling.ReadModelVolmetic(modelFile, 0.5, null, ModelTraceVoxel.Thin);
 
-            var cubicCount = Moddeling.CountCubic(cubic);
+            var cubicCount = Modelling.CountCubic(cubic);
 
             Assert.AreEqual(168480, cubic.Length, "Array length size must match.");
 
@@ -64,9 +64,9 @@
         {
             const string modelFile = @".\TestAssets\t25.obj";
 
-            var cubic = Moddeling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
+            var cubic = Modelling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
 
-            var cubicCount = Moddeling.CountCubic(cubic);
+            var cubicCount = Modelling.CountCubic(cubic);
 
             Assert.AreEqual(72, cubic.Length, "Array length size must match.");
 
@@ -83,9 +83,9 @@
         {
             const string modelFile = @".\TestAssets\t25.obj";
 
-            var cubic = Moddeling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.ThinSmoothed);
+            var cubic = Modelling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.ThinSmoothed);
 
-            var cubicCount = Moddeling.CountCubic(cubic);
+            var cubicCount = Modelling.CountCubic(cubic);
 
             Assert.AreEqual(72, cubic.Length, "Array length size must match.");
 
@@ -102,9 +102,9 @@
         {
             const string modelFile = @".\TestAssets\t25.obj";
 
-            var cubic = Moddeling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thick);
+            var cubic = Modelling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thick);
 
-            var cubicCount = Moddeling.CountCubic(cubic);
+            var cubicCount = Modelling.CountCubic(cubic);
 
             Assert.AreEqual(72, cubic.Length, "Array length size must match.");
 
@@ -122,7 +122,7 @@
             // TODO: finish testing the model.
             const string modelFile = @".\TestAssets\LibertyStatue.obj";
 
-            var cubic = Moddeling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
+            var cubic = Modelling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
 
             //Assert.AreEqual(72, cubic.Length, "Array length size must match.");
 
@@ -136,9 +136,9 @@
         {
             const string modelFile = @".\TestAssets\t25.obj";
 
-            var cubic = Moddeling.ReadModelVolmetic(modelFile, 2, null, ModelTraceVoxel.Thin);
+            var cubic = Modelling.ReadModelVolmetic(modelFile, 2, null, ModelTraceVoxel.Thin);
 
-            var cubicCount = Moddeling.CountCubic(cubic);
+            var cubicCount = Modelling.CountCubic(cubic);
 
             Assert.AreEqual(480, cubic.Length, "Array length size must match.");
 
@@ -155,7 +155,7 @@
         {
             const string modelFile = @".\TestAssets\t25.obj";
 
-            var cubic = Moddeling.ReadModelVolmeticAlt(modelFile, 1);
+            var cubic = Modelling.ReadModelVolmeticAlt(modelFile, 1);
 
             //Assert.AreEqual(480, cubic.Length, "Array length size must match.");
 
@@ -169,7 +169,7 @@
         {
             const string modelFile = @".\TestAssets\test.obj";
 
-            var cubic = Moddeling.ReadModelVolmetic(modelFile, 1, null, ModelTraceVoxel.Thin);
+            var cubic = Modelling.ReadModelVolmetic(modelFile, 1, null, ModelTraceVoxel.Thin);
 
             //Assert.AreEqual(480, cubic.Length, "Array length size must match.");
 

@@ -1,8 +1,9 @@
 ﻿namespace SEToolbox.Interop
 {
-    using System;
+    using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Support;
+    using System;
     using VRageMath;
 
     /// <summary>
@@ -75,11 +76,15 @@
             return VRageMath.Quaternion.CreateFromRotationMatrix(matrix);
         }
 
-        public static Vector3 Transform(this Vector3 vector, CubeType axisCubeType)
+        internal static VRageMath.Quaternion ToQuaternion(this MyPositionAndOrientation positionOrientation)
         {
-            var orientation = SpaceEngineersAPI.CubeOrientations[axisCubeType];
-            var matrix = Matrix.CreateFromDir(Base6Directions.GetVector(orientation.Forward), Base6Directions.GetVector(orientation.Up));
-            return Vector3.Transform(vector, matrix);
+            var matrix = positionOrientation.GetMatrix();
+            return VRageMath.Quaternion.CreateFromRotationMatrix(matrix);
+        }
+
+        internal static VRageMath.Matrix ToMatrix(this VRageMath.Quaternion quaternion)
+        {
+            return VRageMath.Matrix.CreateFromQuaternion(quaternion);
         }
 
         public static Vector3 Transform(this Vector3 vector, SerializableBlockOrientation orientation)

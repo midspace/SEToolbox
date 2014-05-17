@@ -40,7 +40,7 @@
 
             //======//
 
-            var orient = SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Forward_Up];
+            var orient = new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up);
 
             var f = Base6Directions.GetVector(orient.Forward);
             var u = Base6Directions.GetVector(orient.Up);
@@ -67,7 +67,7 @@
 
             //======//
 
-            var newOrient = SpaceEngineersAPI.CubeOrientations[CubeType.Axis24_Down_Right];
+            var newOrient = new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right);
 
             var newM = Matrix.CreateFromDir(Base6Directions.GetVector(newOrient.Forward), Base6Directions.GetVector(newOrient.Up));
 
