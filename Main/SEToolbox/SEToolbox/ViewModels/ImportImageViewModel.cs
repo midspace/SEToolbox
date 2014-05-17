@@ -489,7 +489,7 @@
                             entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
                             newCube.SubtypeName = armor.ToString();
                             newCube.EntityId = 0;
-                            newCube.BlockOrientation = SpaceEngineersAPI.GetCubeOrientation(CubeType.Cube);
+                            newCube.BlockOrientation = Modelling.GetCubeOrientation(CubeType.Cube);
                             newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
                             newCube.ColorMaskHSV = color.ToSandboxHsvColor();
                         }

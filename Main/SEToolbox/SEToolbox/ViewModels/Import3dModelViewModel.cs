@@ -511,7 +511,7 @@
                 // validate file is a real model.
                 // read model properties.
                 Model3D model;
-                var size = Moddeling.PreviewModelVolmetic(filename, out model);
+                var size = Modelling.PreviewModelVolmetic(filename, out model);
                 this.Model = model;
 
                 if (size != null && size.Height != 0 && size.Width != 0 && size.Depth != 0)
@@ -650,7 +650,7 @@
             //    CalculateAddedCorners(ccubic);
             //}
 
-            Moddeling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
+            Modelling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
 
             return entity;
         }
@@ -907,12 +907,12 @@
                 multiplier = this.MaxLengthScale / Math.Max(Math.Max(this.OriginalModelSize.Height, this.OriginalModelSize.Width), this.OriginalModelSize.Depth);
             }
 
-            var ccubic = Moddeling.ReadModelVolmetic(this.Filename, multiplier, null, this.TraceType, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
+            var ccubic = Modelling.ReadModelVolmetic(this.Filename, multiplier, null, this.TraceType, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
 
             // TODO: fillobject UI.
             //var fillObject = false;
 
-            Moddeling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
+            Modelling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
 
             this.MainViewModel.ClearProgress();
 

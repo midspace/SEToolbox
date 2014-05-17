@@ -891,7 +891,7 @@
         {
             //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("ArmorCorner")).ToList();
             //var corners = viewModel.CubeGrid.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().ToArray();
-            var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.WindowEdgeRotationBlocks.Contains(b.SubtypeName)).ToList();
+            var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.TubeCurvedRotationBlocks.Contains(b.SubtypeName)).ToList();
 
             foreach (var corner in corners)
             {
