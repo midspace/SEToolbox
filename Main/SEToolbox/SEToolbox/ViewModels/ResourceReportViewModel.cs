@@ -11,7 +11,6 @@
 
         private readonly ResourceReportModel _dataModel;
         private bool? _closeResult;
-        private bool _isBusy;
 
         #endregion
 
@@ -76,33 +75,62 @@
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the View is available.  This is based on the IsInError and IsBusy properties
+        /// </summary>
+        public bool IsActive
+        {
+            get
+            {
+                return this._dataModel.IsActive;
+            }
+
+            set
+            {
+                this._dataModel.IsActive = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the View is currently in the middle of an asynchonise operation.
         /// </summary>
         public bool IsBusy
         {
             get
             {
-                return this._isBusy;
+                return this._dataModel.IsBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
-                {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
-                    {
-                        System.Windows.Forms.Application.DoEvents();
-                    }
-                }
+                this._dataModel.IsBusy = value;
             }
         }
 
-        // TODO:
-        //IsActive
-        //ReportText
-        //Progress
+        public string ReportText
+        {
+            get
+            {
+                return this._dataModel.ReportText;
+            }
+
+            set
+            {
+                this._dataModel.ReportText = value;
+            }
+        }
+
+        public double Progress
+        {
+            get
+            {
+                return this._dataModel.Progress;
+            }
+
+            set
+            {
+                this._dataModel.Progress = value;
+            }
+        }
 
         #endregion
 
@@ -110,12 +138,12 @@
 
         public bool GenerateCanExecute()
         {
-            return false;
+            return true;
         }
 
         public void GenerateExecuted()
         {
-            // TODO:
+            this._dataModel.GenerateReport();
         }
 
         public bool CopyCanExecute()

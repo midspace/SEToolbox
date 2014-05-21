@@ -215,7 +215,7 @@
     <value>..\Resources\wrench.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DialogImportVoxelFilter" xml:space="preserve">
-    <value>Image files (*.vox)|*.vox|All files (*.*)|*.*</value>
+    <value>Asteroid files (*.vox)|*.vox|All files (*.*)|*.*</value>
   </data>
   <data name="DialogImportVoxelTitle" xml:space="preserve">
     <value>Select Asteroid to Import</value>
@@ -469,5 +469,11 @@ Would you like to download it now?</value>
   </data>
   <data name="flag_great_britain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\flag_great_britain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DialogExportVoxelFilter" xml:space="preserve">
+    <value>Asteroid files (*.vox)|*.vox|All files (*.*)|*.*</value>
+  </data>
+  <data name="DialogExportVoxelTitle" xml:space="preserve">
+    <value>Specify file to Export Asteroid to</value>
   </data>
 </root>

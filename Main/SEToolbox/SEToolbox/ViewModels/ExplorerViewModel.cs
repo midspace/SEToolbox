@@ -466,18 +466,6 @@
             set
             {
                 this._dataModel.IsActive = value;
-                //if (this.Dispatcher.CheckAccess())
-                ////{
-                //if (this.isActive != value)
-                //{
-                //    this.isActive = value;
-                //    this.RaisePropertyChanged(() => IsActive);
-                //}
-                //}
-                //else
-                //{
-                //    this.Dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate { this.IsActive = value; });
-                //}
             }
         }
 
@@ -736,7 +724,8 @@
         public void WorldReportExecuted()
         {
             var model = new ResourceReportModel();
-            model.Load();
+            model.Load(this._dataModel.Structures);
+            //model.Load(this._dataModel.SectorData.SectorObjects);
             var loadVm = new ResourceReportViewModel(this, model);
             this._dialogService.ShowDialog<WindowResourceReport>(this, loadVm);
         }
@@ -1237,9 +1226,24 @@
                 }
                 else if (viewModel is StructureVoxelViewModel)
                 {
-                    // TODO: I don't have a way of managing the .vox file with the export as yet.
-                    // Do we save the .vox file alonside the .sbc file, or attempt to embed the .vox file as CDATA?
-                    this._dialogService.ShowMessageBox(this, "Cannot export Asteroids currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    var structure = (StructureVoxelViewModel)viewModel;
+                    var saveFileDialog = this._saveFileDialogFactory();
+                    saveFileDialog.Filter = Res.DialogExportVoxelFilter;
+                    saveFileDialog.Title = Res.DialogExportVoxelTitle;
+                    saveFileDialog.FileName = structure.Filename;
+                    saveFileDialog.OverwritePrompt = true;
+
+                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    {
+                        var asteroid = (StructureVoxelModel)structure.DataModel;
+                        string sourceFile;
+
+                        if (asteroid.SourceVoxelFilepath != null)
+                            sourceFile = asteroid.SourceVoxelFilepath;  // Source Voxel file is temporary. Hasn't been saved yet.
+                        else
+                            sourceFile = asteroid.VoxelFilepath;  // Source Voxel file exists.
+                        File.Copy(sourceFile, saveFileDialog.FileName, true);
+                    }
                 }
                 else if (viewModel is StructureFloatingObjectViewModel)
                 {
