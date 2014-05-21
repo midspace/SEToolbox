@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
+    using Microsoft.VisualBasic.FileIO;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
@@ -14,6 +15,7 @@
     using System.Linq;
     using System.Windows.Shell;
     using System.Windows.Threading;
+    using System.Xml;
 
     public class ExplorerModel : BaseModel
     {
@@ -426,6 +428,63 @@
                     this.IsModified = false;
                     this.IsBusy = false;
                 }));
+        }
+
+        public XmlDocument RepairerLoadSandBoxXml()
+        {
+            var xDoc = new XmlDocument();
+
+            if (this.ActiveWorld == null)
+            {
+                xDoc = null;
+            }
+            else
+            {
+                var filename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+
+                if (ZipTools.IsGzipedFile(filename))
+                {
+                    // New file format is compressed.
+                    // These steps could probably be combined, but would have to use a MemoryStream, which has memory limits before it causes performance issues when chunking memory.
+                    // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
+                    var tempFilename = TempfileUtil.NewFilename();
+                    ZipTools.GZipUncompress(filename, tempFilename);
+                    xDoc.Load(tempFilename);
+                    _compressedSectorFormat = true;
+                }
+                else
+                {
+                    // Old file format is raw XML.
+                    this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+                    xDoc.Load(filename);
+                    _compressedSectorFormat = false;
+                }
+            }
+
+            return xDoc;
+        }
+
+        public void RepairerSaveSandBoxXml(XmlDocument xDoc)
+        {
+            var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+            var sectorBackupFilename = sectorFilename + ".bak";
+
+            if (File.Exists(sectorBackupFilename))
+            {
+                //File.Delete(sectorBackupFilename);
+                FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            }
+
+            File.Move(sectorFilename, sectorBackupFilename);
+
+            if (_compressedSectorFormat)
+            {
+                var tempFilename = TempfileUtil.NewFilename();
+                xDoc.Save(tempFilename);
+                ZipTools.GZipCompress(tempFilename, sectorFilename);
+            }
+            else
+                xDoc.Save(sectorFilename);
         }
 
         public void SaveCheckPointAndSandBox()

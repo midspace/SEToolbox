@@ -3,12 +3,14 @@
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Xml.XPath;
 
     public class SelectWorldModel : BaseModel
     {
@@ -148,12 +150,106 @@
             var str = new StringBuilder();
             var statusNormal = true;
             var missingFiles = false;
+            var saveAfterScan = false;
 
             var model = new ExplorerModel
             {
                 ActiveWorld = this.SelectedWorld
             };
+
             model.ActiveWorld.LoadCheckpoint();
+
+            var xDoc = model.RepairerLoadSandBoxXml();
+            if (xDoc == null)
+            {
+                str.AppendLine("! Checkpoint file is missing or broken.");
+                missingFiles = true;
+            }
+            else
+            {
+                var nsManager = xDoc.BuildXmlNamespaceManager();
+                var nav = xDoc.CreateNavigator();
+
+                var shipNodes = nav.Select("MyObjectBuilder_Sector/SectorObjects/MyObjectBuilder_EntityBase[@xsi:type='MyObjectBuilder_CubeGrid']", nsManager);
+                while (shipNodes.MoveNext())
+                {
+                    var groupBlocksNode = shipNodes.Current.SelectSingleNode("BlockGroups/MyObjectBuilder_BlockGroup/Blocks", nsManager);
+                    if (groupBlocksNode != null)
+                    {
+                        var entityIdNodes = groupBlocksNode.Select("long", nsManager);
+                        var removeNodes = new List<XPathNavigator>();
+                        while (entityIdNodes.MoveNext())
+                        {
+                            var entityId = Convert.ToInt64(entityIdNodes.Current.Value);
+                            var node = shipNodes.Current.SelectSingleNode(string.Format("CubeBlocks/*[./EntityId='{0}']", entityId), nsManager);
+                            if (node != null)
+                            {
+                                var x = node.ToValue<string>("Min/@x");
+                                var y = node.ToValue<string>("Min/@y");
+                                var z = node.ToValue<string>("Min/@z");
+
+                                entityIdNodes.Current.InsertBefore(string.Format("<Vector3I><X>{0}</X><Y>{1}</Y><Z>{2}</Z></Vector3I>", x, y, z));
+                                removeNodes.Add(entityIdNodes.Current.Clone());
+                                str.AppendLine("* Replaced BlockGroup item.");
+                                saveAfterScan = true;
+                                statusNormal = false;
+                            }
+                        }
+
+                        foreach (var node in removeNodes)
+                        {
+                            node.DeleteSelf();
+                        }
+                    }
+                }
+
+                //<BlockGroups>
+                //<MyObjectBuilder_BlockGroup>
+                //    <Name>Open</Name>
+                //    <Blocks>
+                //    <long>-2287829012813351669</long>
+                //    <long>-1828477283611406765</long>
+                //    <long>73405095007807299</long>
+                //    <long>-8785290580748247313</long>
+                //    </Blocks>
+                //</MyObjectBuilder_BlockGroup>
+                //</BlockGroups>
+
+                //<BlockGroups>
+                //<MyObjectBuilder_BlockGroup>
+                //    <Name>Open</Name>
+                //    <Blocks>
+                //    <Vector3I>
+                //        <X>-1</X>
+                //        <Y>2</Y>
+                //        <Z>-4</Z>
+                //    </Vector3I>
+                //    <Vector3I>
+                //        <X>-1</X>
+                //        <Y>7</Y>
+                //        <Z>2</Z>
+                //    </Vector3I>
+                //    <Vector3I>
+                //        <X>-1</X>
+                //        <Y>8</Y>
+                //        <Z>-9</Z>
+                //    </Vector3I>
+                //    <Vector3I>
+                //        <X>-1</X>
+                //        <Y>13</Y>
+                //        <Z>-3</Z>
+                //    </Vector3I>
+                //    </Blocks>
+                //</MyObjectBuilder_BlockGroup>
+                //</BlockGroups>
+
+                if (saveAfterScan)
+                {
+                    model.RepairerSaveSandBoxXml(xDoc);
+                    str.AppendLine("* Saved changes.");
+                }
+            }
+
             model.LoadSandBox();
 
             if (model.ActiveWorld.Content == null)
@@ -247,7 +343,7 @@
                     }
                 }
 
-                bool saveAfterScan = false;
+                saveAfterScan = false;
 
                 // Scan through all items.
                 foreach (var entity in model.SectorData.SectorObjects)
@@ -286,30 +382,6 @@
                         // TODO: search for cubeblocks that don't exist in the definitions.
                         //var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
                     }
-
-                    //if (entity is MyObjectBuilder_CubeGrid)
-                    //{
-                    //    var cubeGrid = (MyObjectBuilder_CubeGrid)entity;
-
-                    //    foreach (var cubeBlock in cubeGrid.CubeBlocks)
-                    //    {
-                    //        if (cubeBlock is MyObjectBuilder_Door)
-                    //        {
-                    //            if (cubeBlock..DamagedComponents != null && cubeBlock.DamagedComponents.Length > 0)
-                    //            {
-                    
-                    // No longer required.
-
-                    //                // Door/DamagedComponent not working. Test this again in later SE Builds.
-                    //                statusNormal = false;
-                    //                str.AppendLine("! 'Door' does not support DamagedComponents currently.");
-                    //                cubeBlock.DamagedComponents = null;
-                    //                str.AppendLine("* Fixed 'Door'.");
-                    //                saveAfterScan = true;
-                    //            }
-                    //        }
-                    //    }
-                    //}
                 }
 
                 if (saveAfterScan)

@@ -244,6 +244,7 @@
     <Compile Include="Interop\ClassType.cs" />
     <Compile Include="Support\ToolboxUpdater.cs" />
     <Compile Include="Support\FrameworkExtension.cs" />
+    <Compile Include="Support\XmlExtension.cs" />
     <Compile Include="Support\ZipTools.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
