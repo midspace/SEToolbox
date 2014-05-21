@@ -221,15 +221,6 @@
             {
                 try
                 {
-                    this.Content = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
-                }
-                catch
-                {
-                    this.Content = null;
-                }
-
-                try
-                {
                     if (ZipTools.IsGzipedFile(filename))
                     {
                         // New file format is compressed.
