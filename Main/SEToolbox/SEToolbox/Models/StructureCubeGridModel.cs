@@ -957,8 +957,28 @@
                 cube.BlockOrientation = new SerializableBlockOrientation(ref q);
             }
 
-            // Rotate the ship in reverse direction, to maintain the appearance that it has not changed.
-            var o = VRageMath.Quaternion.Inverse(quaternion) * this.CubeGrid.PositionAndOrientation.Value.ToQuaternion();
+            // Rotate Groupings.
+            foreach (var group in this.CubeGrid.BlockGroups)
+            {
+                for (var i = 0; i < group.Blocks.Count; i++)
+                {
+                    // The Group location is in the center of the cube.
+                    // It doesn't have to be exact though, as it appears SE is just doing a location test of whatever object is at that location.
+                    group.Blocks[i] = Vector3I.Transform(group.Blocks[i], quaternion);
+                }
+            }
+
+            // TODO: Rotate ConveyorLines
+            foreach (var conveyorLine in this.CubeGrid.ConveyorLines)
+            {
+                //conveyorLine.StartPosition = Vector3I.Transform(conveyorLine.StartPosition, quaternion);
+                //conveyorLine.StartDirection = 
+                //conveyorLine.EndPosition = Vector3I.Transform(conveyorLine.EndPosition, quaternion);
+                //conveyorLine.EndDirection = 
+            }
+
+            // Rotate the ship also to maintain the appearance that it has not changed.
+            var o = this.CubeGrid.PositionAndOrientation.Value.ToQuaternion() * VRageMath.Quaternion.Inverse(quaternion);
             var p = new MyPositionAndOrientation(o.ToMatrix());
 
             this.CubeGrid.PositionAndOrientation = new MyPositionAndOrientation()
@@ -1094,6 +1114,9 @@
                     var cubes = MirrorCubes(this, true, xMirror, xAxis, Mirror.None, 0, Mirror.None, 0).ToArray();
                     this.CubeGrid.CubeBlocks.AddRange(cubes);
                     count += cubes.Length;
+
+                    // TODO: mirror BlockGroups
+                    // TODO: mirror ConveyorLines 
                 }
                 if (this.CubeGrid.YMirroxPlane.HasValue)
                 {
@@ -1102,6 +1125,9 @@
                     var cubes = MirrorCubes(this, true, Mirror.None, 0, yMirror, yAxis, Mirror.None, 0).ToArray();
                     this.CubeGrid.CubeBlocks.AddRange(cubes);
                     count += cubes.Length;
+
+                    // TODO: mirror BlockGroups
+                    // TODO: mirror ConveyorLines 
                 }
                 if (this.CubeGrid.ZMirroxPlane.HasValue)
                 {
@@ -1110,6 +1136,9 @@
                     var cubes = MirrorCubes(this, true, Mirror.None, 0, Mirror.None, 0, zMirror, zAxis).ToArray();
                     this.CubeGrid.CubeBlocks.AddRange(cubes);
                     count += cubes.Length;
+
+                    // TODO: mirror BlockGroups
+                    // TODO: mirror ConveyorLines 
                 }
             }
 

@@ -1071,11 +1071,11 @@
 
         public void ClearProgress()
         {
+            _timer.Stop();
             this.ShowProgress = false;
             this.Progress = 0;
             this.ProgressState = TaskbarItemProgressState.None;
             this.ProgressValue = 0;
-            _timer.Stop();
         }
     }
 }

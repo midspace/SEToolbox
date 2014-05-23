@@ -10,9 +10,12 @@
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
     <Window.Resources>
-        <converters:DDSConverter x:Key="DDSConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
     </Window.Resources>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
     <Grid IsEnabled="{Binding IsActive}">
         <Grid>
             <Grid.RowDefinitions>
@@ -32,7 +35,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"  MinWidth="120" Command="{Binding GenerateCommand}" Content="Generate Report" IsDefault="True" Name="uxInitialElement"/>
                 <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding CopyCommand}" Content="Copy" HorizontalAlignment="Left" IsDefault="True"/>
-                <ProgressBar Grid.Column="2"  Margin="8,0,8,0" Value="{Binding Progress}"/>
+                <ProgressBar Grid.Column="2" Margin="8,0,8,0" Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" />
                 <Button Grid.Column="3" Width="90" Command="{Binding CloseCommand}" Content="Close" HorizontalAlignment="Right" IsCancel="True"/>
             </Grid>
         </Grid>
