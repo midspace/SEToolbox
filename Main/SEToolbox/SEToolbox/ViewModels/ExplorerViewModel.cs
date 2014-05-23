@@ -343,11 +343,11 @@
             }
         }
 
-        public ICommand MergeShipCommand
+        public ICommand RejoinShipCommand
         {
             get
             {
-                return new DelegateCommand(new Action(MergeShipExecuted), new Func<bool>(MergeShipCanExecute));
+                return new DelegateCommand(new Action(RejoinShipExecuted), new Func<bool>(RejoinShipCanExecute));
             }
         }
 
@@ -1024,16 +1024,16 @@
             }
         }
 
-        public bool MergeShipCanExecute()
+        public bool RejoinShipCanExecute()
         {
             return this._dataModel.ActiveWorld != null && this.Selections.Count == 2 &&
                 ((this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
                 (this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.SmallShip));
         }
 
-        public void MergeShipExecuted()
+        public void RejoinShipExecuted()
         {
-            MergeShipModels(this.Selections[0], this.Selections[1]);
+            RejoinShipModels(this.Selections[0], this.Selections[1]);
         }
 
         #endregion
@@ -1158,13 +1158,30 @@
             }
         }
 
-        public void MergeShipModels(IStructureViewBase viewModel1, IStructureViewBase viewModel2)
+        public void RejoinShipModels(IStructureViewBase viewModel1, IStructureViewBase viewModel2)
         {
             var ship1 = (StructureCubeGridViewModel)viewModel1;
             var ship2 = (StructureCubeGridViewModel)viewModel2;
 
             // Copy blocks from ship2 into ship1.
             ((StructureCubeGridModel)ship1.DataModel).CubeGrid.CubeBlocks.AddRange(((StructureCubeGridModel)ship2.DataModel).CubeGrid.CubeBlocks);
+
+            // Merge Groupings
+            foreach (var group in ((StructureCubeGridModel)ship2.DataModel).CubeGrid.BlockGroups)
+            {
+                var existingGroup = ((StructureCubeGridModel)ship1.DataModel).CubeGrid.BlockGroups.Where(bg => bg.Name == group.Name) as MyObjectBuilder_BlockGroup;
+                if (existingGroup == null)
+                {
+                    ((StructureCubeGridModel)ship1.DataModel).CubeGrid.BlockGroups.Add(group);
+                }
+                else
+                {
+                    existingGroup.Blocks.AddRange(group.Blocks);
+                }
+            }
+
+            // Merge ConveyorLines
+            ((StructureCubeGridModel)ship1.DataModel).CubeGrid.ConveyorLines.AddRange(((StructureCubeGridModel)ship2.DataModel).CubeGrid.ConveyorLines);
 
             // Delete ship2.
             DeleteModel(viewModel2);
@@ -1288,7 +1305,7 @@
 
                     if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
-                        var cloneEntity = viewModel.DataModel.EntityBase.Clone() as MyObjectBuilder_CubeGrid;
+                        var cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
 
                         // Set to Array to force Linq to update the value.
 
@@ -1296,7 +1313,12 @@
                         cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
 
                         // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.Cockpit).Select(c => { ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot(); return c; }).ToArray();
+                        cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.Cockpit).Select(c =>
+                        {
+                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
+                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
+                            return c;
+                        }).ToArray();
 
                         this._dataModel.SaveEntity(cloneEntity, saveFileDialog.FileName);
                     }

@@ -119,6 +119,19 @@
             }
         }
 
+        public bool ShowProgress
+        {
+            get
+            {
+                return this._dataModel.ShowProgress;
+            }
+
+            set
+            {
+                this._dataModel.ShowProgress = value;
+            }
+        }
+
         public double Progress
         {
             get
@@ -129,6 +142,19 @@
             set
             {
                 this._dataModel.Progress = value;
+            }
+        }
+
+        public double MaximumProgress
+        {
+            get
+            {
+                return this._dataModel.MaximumProgress;
+            }
+
+            set
+            {
+                this._dataModel.MaximumProgress = value;
             }
         }
 
@@ -143,7 +169,9 @@
 
         public void GenerateExecuted()
         {
+            this.IsBusy = true;
             this._dataModel.GenerateReport();
+            this.IsBusy = false;
         }
 
         public bool CopyCanExecute()
