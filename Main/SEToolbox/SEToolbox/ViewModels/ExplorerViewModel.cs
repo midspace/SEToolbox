@@ -717,15 +717,13 @@
 
         public bool WorldReportCanExecute()
         {
-            return false;
-            //return this._dataModel.ActiveWorld != null;
+            return this._dataModel.ActiveWorld != null;
         }
 
         public void WorldReportExecuted()
         {
             var model = new ResourceReportModel();
-            model.Load(this._dataModel.Structures);
-            //model.Load(this._dataModel.SectorData.SectorObjects);
+            model.Load(this._dataModel.ActiveWorld.Savename, this._dataModel.Structures);
             var loadVm = new ResourceReportViewModel(this, model);
             this._dialogService.ShowDialog<WindowResourceReport>(this, loadVm);
         }

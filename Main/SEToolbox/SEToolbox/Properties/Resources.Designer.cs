@@ -236,6 +236,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Html files (*.htm;*.htm)|*.htm;*.html.
+        /// </summary>
+        public static string DialogExportHtmlFileFilter {
+            get {
+                return ResourceManager.GetString("DialogExportHtmlFileFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify filename to export &apos;{0}&apos; to.
+        /// </summary>
+        public static string DialogExportHtmlFileTitle {
+            get {
+                return ResourceManager.GetString("DialogExportHtmlFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sandbox Content files (*.htm)|*.htm.
         /// </summary>
         public static string DialogExportReportFilter {
@@ -268,6 +286,24 @@ namespace SEToolbox.Properties {
         public static string DialogExportSandboxObjectTitle {
             get {
                 return ResourceManager.GetString("DialogExportSandboxObjectTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text files (*.txt)|*.txt.
+        /// </summary>
+        public static string DialogExportTextFileFilter {
+            get {
+                return ResourceManager.GetString("DialogExportTextFileFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify filename to export &apos;{0}&apos; to.
+        /// </summary>
+        public static string DialogExportTextFileTitle {
+            get {
+                return ResourceManager.GetString("DialogExportTextFileTitle", resourceCulture);
             }
         }
         

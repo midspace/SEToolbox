@@ -1,9 +1,14 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Windows;
     using System.Windows.Input;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ResourceReportViewModel : BaseViewModel
     {
@@ -11,15 +16,26 @@
 
         private readonly ResourceReportModel _dataModel;
         private bool? _closeResult;
+        private readonly IDialogService _dialogService;
+        private readonly Func<ISaveFileDialog> _saveFileDialogFactory;
 
         #endregion
 
         #region ctor
 
         public ResourceReportViewModel(BaseViewModel parentViewModel, ResourceReportModel dataModel)
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<ISaveFileDialog>)
+        {
+        }
+
+        public ResourceReportViewModel(BaseViewModel parentViewModel, ResourceReportModel dataModel, IDialogService dialogService, Func<ISaveFileDialog> saveFileDialogFactory)
             : base(parentViewModel)
         {
+            Contract.Requires(dialogService != null);
+            Contract.Requires(saveFileDialogFactory != null);
 
+            this._dialogService = dialogService;
+            this._saveFileDialogFactory = saveFileDialogFactory;
             this._dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
             this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
@@ -37,11 +53,35 @@
             }
         }
 
+        public ICommand ExportCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Func<bool>(ExportCanExecute));
+            }
+        }
+
         public ICommand CopyCommand
         {
             get
             {
                 return new DelegateCommand(new Action(CopyExecuted), new Func<bool>(CopyCanExecute));
+            }
+        }
+
+        public ICommand ExportTextCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ExportTextExecuted), new Func<bool>(ExportTextCanExecute));
+            }
+        }
+
+        public ICommand ExportHtmlCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ExportHtmlExecuted), new Func<bool>(ExportHtmlCanExecute));
             }
         }
 
@@ -106,16 +146,29 @@
             }
         }
 
-        public string ReportText
+        public bool IsReportReady
         {
             get
             {
-                return this._dataModel.ReportText;
+                return this._dataModel.IsReportReady;
             }
 
             set
             {
-                this._dataModel.ReportText = value;
+                this._dataModel.IsReportReady = value;
+            }
+        }
+
+        public string ReportHtml
+        {
+            get
+            {
+                return this._dataModel.ReportHtml;
+            }
+
+            set
+            {
+                this._dataModel.ReportHtml = value;
             }
         }
 
@@ -171,17 +224,61 @@
         {
             this.IsBusy = true;
             this._dataModel.GenerateReport();
+            this.ReportHtml = this._dataModel.CreateHtmlReport();
             this.IsBusy = false;
+        }
+
+        public bool ExportCanExecute()
+        {
+            return this.IsReportReady;
         }
 
         public bool CopyCanExecute()
         {
-            return false;
+            return this.IsReportReady;
         }
 
         public void CopyExecuted()
         {
-            // TODO:
+            Clipboard.SetText(this._dataModel.CreateTextReport());
+        }
+
+        public bool ExportTextCanExecute()
+        {
+            return this.IsReportReady;
+        }
+
+        public void ExportTextExecuted()
+        {
+            var saveFileDialog = this._saveFileDialogFactory();
+            saveFileDialog.Filter = Res.DialogExportTextFileFilter;
+            saveFileDialog.Title = string.Format(Res.DialogExportTextFileTitle, "Resource Report");
+            saveFileDialog.FileName = string.Format("Resource Report - {0}.txt", this._dataModel.SaveName);
+            saveFileDialog.OverwritePrompt = true;
+
+            if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog.FileName, this._dataModel.CreateTextReport());
+            }
+        }
+
+        public bool ExportHtmlCanExecute()
+        {
+            return this.IsReportReady;
+        }
+
+        public void ExportHtmlExecuted()
+        {
+            var saveFileDialog = this._saveFileDialogFactory();
+            saveFileDialog.Filter = Res.DialogExportHtmlFileFilter;
+            saveFileDialog.Title = string.Format(Res.DialogExportHtmlFileTitle, "Resource Report");
+            saveFileDialog.FileName = string.Format("Resource Report - {0}.html", this._dataModel.SaveName);
+            saveFileDialog.OverwritePrompt = true;
+
+            if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog.FileName, this._dataModel.CreateHtmlReport());
+            }
         }
 
         public bool CloseCanExecute()

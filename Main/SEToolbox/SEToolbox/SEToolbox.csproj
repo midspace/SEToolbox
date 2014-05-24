@@ -182,6 +182,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\BrowserBehavior.cs" />
     <Compile Include="Services\ColorDialog.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -233,6 +234,7 @@
     <Compile Include="Support\ExceptionState.cs" />
     <Compile Include="Support\GlobalSettings.cs" />
     <Compile Include="Support\DiagnosticsLogging.cs" />
+    <Compile Include="Support\HtmlExtensions.cs" />
     <Compile Include="Support\MeshHelper.cs" />
     <Compile Include="Support\Modelling.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />

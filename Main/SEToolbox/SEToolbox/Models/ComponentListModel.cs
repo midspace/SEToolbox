@@ -283,52 +283,22 @@
             {
                 #region header
 
-                writer.AddAttribute("http-equiv", "Content-Type");
-                writer.AddAttribute("content", "text/html;charset=UTF-8");
-                writer.RenderBeginTag(HtmlTextWriterTag.Meta);
-                writer.RenderEndTag();
-
-                writer.RenderBeginTag(HtmlTextWriterTag.Html);
-                writer.RenderBeginTag(HtmlTextWriterTag.Style);
-                writer.Write(@"
+                writer.BeginDocument("Component Item Report",
+                   @"
+body { background-color: #E6E6FA }
 h1 { font-family: Arial, Helvetica, sans-serif; }
 table { background-color: #FFFFFF; }
 table tr td { font-family: Arial, Helvetica, sans-serif; font-size: small; line-height: normal; color: #000000; }
 table thead td { background-color: #BABDD6; font-weight: bold; Color: #000000; }
 td.right { text-align: right; }");
-                writer.RenderEndTag(); // Style
-
-                writer.RenderBeginTag(HtmlTextWriterTag.Head);
-                writer.RenderBeginTag(HtmlTextWriterTag.Title);
-                writer.Write("Component Item Report");
-                writer.RenderBeginTag(HtmlTextWriterTag.Title);
-                writer.RenderEndTag();
-
-                writer.AddAttribute(HtmlTextWriterAttribute.Bgcolor, "#E6E6FA");
-                writer.RenderBeginTag(HtmlTextWriterTag.Body);
 
                 #endregion
 
                 #region Cubes
 
-                writer.RenderBeginTag(HtmlTextWriterTag.H1);
-                writer.Write("Cubes");
-                writer.RenderEndTag(); // H1
-
-                writer.AddAttribute(HtmlTextWriterAttribute.Border, "1");
-                writer.AddAttribute(HtmlTextWriterAttribute.Cellpadding, "3");
-                writer.AddAttribute(HtmlTextWriterAttribute.Cellspacing, "0");
-                writer.RenderBeginTag(HtmlTextWriterTag.Table);
-                writer.RenderBeginTag(HtmlTextWriterTag.Thead);
-                writer.RenderBeginTag(HtmlTextWriterTag.Tr);
-                foreach (var header in new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)" })
-                {
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(header);
-                    writer.RenderEndTag(); // Td
-                }
-                writer.RenderEndTag(); // Tr
-                writer.RenderEndTag(); // Thead
+                writer.RenderElement(HtmlTextWriterTag.H1, "Cubes");
+                writer.BeginTable("1", "3", "0",
+                    new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)" });
 
                 foreach (var asset in this.CubeAssets)
                 {
@@ -337,7 +307,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
                     if (asset.TextureFile != null)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + GetDdsImageToBase64(asset.TextureFile, 32, 32));
+                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(asset.TextureFile));
@@ -346,39 +316,16 @@ td.right { text-align: right; }");
                     }
                     writer.RenderEndTag(); // Td
 
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.FriendlyName);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.TypeId);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.SubtypeId);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.CubeSize);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(new EnumToResouceConverter().Convert(asset.Accessible, typeof(string), null, CultureInfo.CurrentUICulture));
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0}×{1}×{2}", asset.Size.Width, asset.Size.Height, asset.Size.Depth));
-                    writer.RenderEndTag(); // Td
-
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.FriendlyName);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.TypeId);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.SubtypeId);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.CubeSize);
+                    writer.RenderElement(HtmlTextWriterTag.Td, new EnumToResouceConverter().Convert(asset.Accessible, typeof(string), null, CultureInfo.CurrentUICulture));
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0}×{1}×{2}", asset.Size.Width, asset.Size.Height, asset.Size.Depth);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:#,##0.00}", asset.Mass));
-                    writer.RenderEndTag(); // Td
-
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.00}", asset.Mass);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:hh\\:mm\\:ss\\.ff}", asset.Time));
-                    writer.RenderEndTag(); // Td
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:hh\\:mm\\:ss\\.ff}", asset.Time);
 
                     writer.RenderEndTag(); // Tr
                 }
@@ -388,24 +335,9 @@ td.right { text-align: right; }");
 
                 #region Components
 
-                writer.RenderBeginTag(HtmlTextWriterTag.H1);
-                writer.Write("Components");
-                writer.RenderEndTag(); // H1
-
-                writer.AddAttribute(HtmlTextWriterAttribute.Border, "1");
-                writer.AddAttribute(HtmlTextWriterAttribute.Cellpadding, "3");
-                writer.AddAttribute(HtmlTextWriterAttribute.Cellspacing, "0");
-                writer.RenderBeginTag(HtmlTextWriterTag.Table);
-                writer.RenderBeginTag(HtmlTextWriterTag.Thead);
-                writer.RenderBeginTag(HtmlTextWriterTag.Tr);
-                foreach (var header in new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)" })
-                {
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(header);
-                    writer.RenderEndTag(); // Td
-                }
-                writer.RenderEndTag(); // Tr
-                writer.RenderEndTag(); // Thead
+                writer.RenderElement(HtmlTextWriterTag.H1, "Components");
+                writer.BeginTable("1", "3", "0",
+                    new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)" });
 
                 foreach (var asset in this.ComponentAssets)
                 {
@@ -414,7 +346,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
                     if (asset.TextureFile != null)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + GetDdsImageToBase64(asset.TextureFile, 32, 32));
+                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(asset.TextureFile));
@@ -423,36 +355,16 @@ td.right { text-align: right; }");
                     }
                     writer.RenderEndTag(); // Td
 
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.FriendlyName);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.TypeId);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.SubtypeId);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(new EnumToResouceConverter().Convert(asset.Accessible, typeof(string), null, CultureInfo.CurrentUICulture));
-                    writer.RenderEndTag(); // Td
-
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.FriendlyName);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.TypeId);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.SubtypeId);
+                    writer.RenderElement(HtmlTextWriterTag.Td, new EnumToResouceConverter().Convert(asset.Accessible, typeof(string), null, CultureInfo.CurrentUICulture));
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:#,##0.00}", asset.Mass));
-                    writer.RenderEndTag(); // Td
-
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.00}", asset.Mass);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:#,##0.00}", asset.Volume));
-                    writer.RenderEndTag(); // Td
-
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.00}", asset.Volume);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:hh\\:mm\\:ss\\.ff}", asset.Time));
-                    writer.RenderEndTag(); // Td
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:hh\\:mm\\:ss\\.ff}", asset.Time);
 
                     writer.RenderEndTag(); // Tr
                 }
@@ -462,24 +374,9 @@ td.right { text-align: right; }");
 
                 #region Items
 
-                writer.RenderBeginTag(HtmlTextWriterTag.H1);
-                writer.Write("Items");
-                writer.RenderEndTag(); // H1
-
-                writer.AddAttribute(HtmlTextWriterAttribute.Border, "1");
-                writer.AddAttribute(HtmlTextWriterAttribute.Cellpadding, "3");
-                writer.AddAttribute(HtmlTextWriterAttribute.Cellspacing, "0");
-                writer.RenderBeginTag(HtmlTextWriterTag.Table);
-                writer.RenderBeginTag(HtmlTextWriterTag.Thead);
-                writer.RenderBeginTag(HtmlTextWriterTag.Tr);
-                foreach (var header in new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)" })
-                {
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(header);
-                    writer.RenderEndTag(); // Td
-                }
-                writer.RenderEndTag(); // Tr
-                writer.RenderEndTag(); // Thead
+                writer.RenderElement(HtmlTextWriterTag.H1, "Items");
+                writer.BeginTable("1", "3", "0",
+                    new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)" });
 
                 foreach (var asset in this.ItemAssets)
                 {
@@ -488,7 +385,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
                     if (asset.TextureFile != null)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + GetDdsImageToBase64(asset.TextureFile, 32, 32));
+                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(asset.TextureFile));
@@ -497,36 +394,16 @@ td.right { text-align: right; }");
                     }
                     writer.RenderEndTag(); // Td
 
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.FriendlyName);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.TypeId);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.SubtypeId);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(new EnumToResouceConverter().Convert(asset.Accessible, typeof(string), null, CultureInfo.CurrentUICulture));
-                    writer.RenderEndTag(); // Td
-
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.FriendlyName);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.TypeId);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.SubtypeId);
+                    writer.RenderElement(HtmlTextWriterTag.Td, new EnumToResouceConverter().Convert(asset.Accessible, typeof(string), null, CultureInfo.CurrentUICulture));
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:#,##0.00}", asset.Mass));
-                    writer.RenderEndTag(); // Td
-
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.00}", asset.Mass);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:#,##0.00}", asset.Volume));
-                    writer.RenderEndTag(); // Td
-
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.00}", asset.Volume);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:hh\\:mm\\:ss\\.ff}", asset.Time));
-                    writer.RenderEndTag(); // Td
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:hh\\:mm\\:ss\\.ff}", asset.Time);
 
                     writer.RenderEndTag(); // Tr
                 }
@@ -536,24 +413,9 @@ td.right { text-align: right; }");
 
                 #region Materials
 
-                writer.RenderBeginTag(HtmlTextWriterTag.H1);
-                writer.Write("Materials");
-                writer.RenderEndTag(); // H1
-
-                writer.AddAttribute(HtmlTextWriterAttribute.Border, "1");
-                writer.AddAttribute(HtmlTextWriterAttribute.Cellpadding, "3");
-                writer.AddAttribute(HtmlTextWriterAttribute.Cellspacing, "0");
-                writer.RenderBeginTag(HtmlTextWriterTag.Table);
-                writer.RenderBeginTag(HtmlTextWriterTag.Thead);
-                writer.RenderBeginTag(HtmlTextWriterTag.Tr);
-                foreach (var header in new String[] { "Texture", "Name", "Ore Name", "Rare", "Mined Ore Ratio" })
-                {
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(header);
-                    writer.RenderEndTag(); // Td
-                }
-                writer.RenderEndTag(); // Tr
-                writer.RenderEndTag(); // Thead
+                writer.RenderElement(HtmlTextWriterTag.H1, "Materials");
+                writer.BeginTable("1", "3", "0",
+                    new String[] { "Texture", "Name", "Ore Name", "Rare", "Mined Ore Ratio" });
 
                 foreach (var asset in this.MaterialAssets)
                 {
@@ -562,7 +424,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
                     if (asset.TextureFile != null)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + GetDdsImageToBase64(asset.TextureFile, 32, 32));
+                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(asset.TextureFile));
@@ -571,22 +433,11 @@ td.right { text-align: right; }");
                     }
                     writer.RenderEndTag(); // Td
 
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.Name);
-                    writer.RenderEndTag(); // Td
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.Name);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.OreName);
+                    writer.RenderElement(HtmlTextWriterTag.Td, new EnumToResouceConverter().Convert(asset.IsRare, typeof(string), null, CultureInfo.CurrentUICulture));
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.00}", asset.MineOreRatio);
 
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(asset.OreName);
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(new EnumToResouceConverter().Convert(asset.IsRare, typeof(string), null, CultureInfo.CurrentUICulture));
-                    writer.RenderEndTag(); // Td
-
-                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    writer.Write(string.Format("{0:#,##0.00}", asset.MineOreRatio));
-                    writer.RenderEndTag(); // Td
-                 
                     writer.RenderEndTag(); // Tr
                 }
                 writer.RenderEndTag(); // Table 
@@ -595,8 +446,7 @@ td.right { text-align: right; }");
 
                 #region footer
 
-                writer.RenderEndTag(); // Body
-                writer.RenderEndTag(); // Html
+                writer.EndDocument();
 
                 #endregion
             }
@@ -652,17 +502,6 @@ td.right { text-align: right; }");
             {
                 return item.ToString();
             }
-        }
-
-        #endregion
-
-        #region GetDdsImageToBase64
-
-        private static string GetDdsImageToBase64(string filename, int width, int height)
-        {
-            var bmp = ImageTextureUtil.CreateBitmap(filename, 0, width, height);
-            var converter = new ImageConverter();
-            return Convert.ToBase64String((byte[])converter.ConvertTo(bmp, typeof(byte[])));
         }
 
         #endregion

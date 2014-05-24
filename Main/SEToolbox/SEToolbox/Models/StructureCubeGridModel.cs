@@ -678,8 +678,6 @@
 
                         foreach (var block in this.CubeGrid.CubeBlocks)
                         {
-                            var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
-
                             var blockName = block.SubtypeName;
                             if (string.IsNullOrEmpty(blockName))
                             {
@@ -689,6 +687,9 @@
                             var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
 
                             float cubeMass = 0;
+                            TimeSpan blockTime = TimeSpan.Zero;
+                            string blockTexture = null;
+
                             if (cubeBlockDefinition != null)
                             {
                                 foreach (var component in cubeBlockDefinition.Components)
@@ -718,12 +719,9 @@
                                         componentAssetDict.Add(componentName, m);
                                     }
                                 }
-                            }
 
-                            TimeSpan blockTime = new TimeSpan();
-                            if (cubeDefinition != null)
-                            {
-                                blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds));
+                                blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds));
+                                blockTexture = Path.Combine(contentPath, cubeBlockDefinition.Icon + ".dds");
                             }
 
                             timeTaken += blockTime;
@@ -736,13 +734,7 @@
                             }
                             else
                             {
-                                string blockTexture = null;
-                                if (cubeDefinition != null)
-                                {
-                                    blockTexture = Path.Combine(contentPath, cubeDefinition.Icon + ".dds");
-                                }
-
-                                var m = new CubeAssetModel() { Name = cubeDefinition.DisplayName, Mass = cubeMass, Count = 1, TextureFile = blockTexture, Time = blockTime };
+                                var m = new CubeAssetModel() { Name = cubeBlockDefinition.DisplayName, Mass = cubeMass, Count = 1, TextureFile = blockTexture, Time = blockTime };
                                 cubeAssets.Add(m);
                                 cubeAssetDict.Add(blockName, m);
                             }

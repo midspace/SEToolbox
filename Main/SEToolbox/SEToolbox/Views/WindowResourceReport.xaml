@@ -4,6 +4,7 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
         Title="Resource Report"  Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
         commands:DialogService.IsRegisteredView="True"
@@ -23,8 +24,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Margin="8">
-                <TextBox Text="{Binding ReportText}" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
-                <!--<WebBrowser />-->
+                <WebBrowser commands:BrowserBehavior.Html="{Binding ReportHtml}" />
             </Grid>
             <Grid Grid.Row="1" Margin="8">
                 <Grid.ColumnDefinitions>
@@ -34,7 +34,21 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"  MinWidth="120" Command="{Binding GenerateCommand}" Content="Generate Report" IsDefault="True" Name="uxInitialElement"/>
-                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding CopyCommand}" Content="Copy" HorizontalAlignment="Left" IsDefault="True"/>
+                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding ExportCommand}" HorizontalAlignment="Left" ContextMenuService.IsEnabled="False" Click="Button_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Export"/>
+                            <Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="6" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>
+                        </StackPanel>
+                    </Button.Content>
+                    <Button.ContextMenu>
+                        <ContextMenu HorizontalAlignment="Right">
+                            <MenuItem Header="Clipboard" Command="{Binding CopyCommand}"/>
+                            <MenuItem Header=".txt file" Command="{Binding ExportTextCommand}"/>
+                            <MenuItem Header=".html file" Command="{Binding ExportHtmlCommand}"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
                 <ProgressBar Grid.Column="2" Margin="8,0,8,0" Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" />
                 <Button Grid.Column="3" Width="90" Command="{Binding CloseCommand}" Content="Close" HorizontalAlignment="Right" IsCancel="True"/>
             </Grid>

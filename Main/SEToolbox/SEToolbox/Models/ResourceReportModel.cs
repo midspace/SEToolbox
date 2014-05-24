@@ -13,6 +13,11 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Reflection;
+    using System.Web.UI;
+    using SEToolbox.Converters;
+    using System.Globalization;
+    using SEToolbox.ImageLibrary;
 
     public class ResourceReportModel : BaseModel
     {
@@ -20,11 +25,15 @@
 
         private bool _isBusy;
         private bool _isActive;
-        private string _reportText;
+        private bool _isReportReady;
+        private string _reportHtml;
         private readonly Stopwatch _timer;
         private bool _showProgress;
         private double _progress;
         private double _maximumProgress;
+
+        private string _saveName;
+        private DateTime _generatedDate;
         private IList<IStructureBase> _entities;
 
         /// <summary>
@@ -42,6 +51,11 @@
         /// Everything is measured in it's regressed state. Ie., how much ore was used/needed to build this item.
         /// </summary>
         private List<OreAssetModel> _usedOre;
+
+        /// <summary>
+        /// player controlled (inventory), measured in Kg and L.
+        /// </summary>
+        private List<OreAssetModel> _playerOre;
 
         /// <summary>
         /// npc (everything currently in an AI controlled ship with ore, ingot, component, tool, cube), measured in Kg and L.
@@ -123,19 +137,41 @@
             }
         }
 
-        public string ReportText
+        public string SaveName
+        {
+            get { return this._saveName; }
+        }
+
+        public bool IsReportReady
         {
             get
             {
-                return this._reportText;
+                return this._isReportReady;
             }
 
             set
             {
-                if (value != this._reportText)
+                if (value != this._isReportReady)
                 {
-                    this._reportText = value;
-                    this.RaisePropertyChanged(() => ReportText);
+                    this._isReportReady = value;
+                    this.RaisePropertyChanged(() => IsReportReady);
+                }
+            }
+        }
+
+        public string ReportHtml
+        {
+            get
+            {
+                return this._reportHtml;
+            }
+
+            set
+            {
+                if (value != this._reportHtml)
+                {
+                    this._reportHtml = value;
+                    this.RaisePropertyChanged(() => ReportHtml);
                 }
             }
         }
@@ -201,17 +237,12 @@
 
         #region methods
 
-        public void Load(IList<IStructureBase> entities)
+        public void Load(string saveName, IList<IStructureBase> entities)
         {
+            this._saveName = saveName;
             this._entities = entities;
             this.SetActiveStatus();
         }
-
-        //public void Load(List<MyObjectBuilder_EntityBase> entities)
-        //{
-        //    this._entities = entities;
-        //    this.SetActiveStatus();
-        //}
 
         public void SetActiveStatus()
         {
@@ -241,14 +272,17 @@
 
         public void GenerateReport()
         {
+            this.IsReportReady = false;
+            this._generatedDate = DateTime.Now;
             var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
-            var accumulateMaterials = new Dictionary<string, long>();
-            var accumulateUnusedOres = new Dictionary<string, OreAssetModel>();
-            var accumulateUsedOres = new Dictionary<string, OreAssetModel>();
-            var accumulateNpcOres = new Dictionary<string, OreAssetModel>();
-            var accumulateItems = new Dictionary<string, ComponentItemModel>();
-            var accumulateComponents = new Dictionary<string, ComponentItemModel>();
-            var accumulateCubes = new Dictionary<string, ComponentItemModel>();
+            var accumulateMaterials = new SortedDictionary<string, long>();
+            var accumulateUnusedOres = new SortedDictionary<string, OreAssetModel>();
+            var accumulateUsedOres = new SortedDictionary<string, OreAssetModel>();
+            var accumulatePlayerOres = new SortedDictionary<string, OreAssetModel>();
+            var accumulateNpcOres = new SortedDictionary<string, OreAssetModel>();
+            var accumulateItems = new SortedDictionary<string, ComponentItemModel>();
+            var accumulateComponents = new SortedDictionary<string, ComponentItemModel>();
+            var accumulateCubes = new SortedDictionary<string, ComponentItemModel>();
 
             this.ResetProgress(0, _entities.Count);
 
@@ -297,124 +331,138 @@
                 else if (entity is StructureFloatingObjectModel)
                 {
                     var floating = entity as StructureFloatingObjectModel;
-                    var cd = SpaceEngineersAPI.GetDefinition(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
-                    var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
 
-                    if (floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.Ore)
+                    if (floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.Ore || floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.Ingot)
                     {
-                        var mass = Math.Round((double)floating.FloatingObject.Item.Amount * cd.Mass, 7);
-                        var volume = Math.Round((double)floating.FloatingObject.Item.Amount * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-
-                        #region unused floating (ore and ingot)
-
-                        var unusedKey = floating.FloatingObject.Item.Content.SubtypeName;
-                        if (accumulateUnusedOres.ContainsKey(unusedKey))
-                        {
-                            accumulateUnusedOres[unusedKey].Amount += floating.FloatingObject.Item.AmountDecimal;
-                            accumulateUnusedOres[unusedKey].Mass += mass;
-                            accumulateUnusedOres[unusedKey].Volume += volume;
-                        }
-                        else
-                        {
-                            accumulateUnusedOres.Add(unusedKey, new OreAssetModel() { Name = cd.DisplayName, Amount = floating.FloatingObject.Item.AmountDecimal, Mass = mass, Volume = volume, TextureFile = componentTexture });
-                        }
-
-                        #endregion
-
-                        #region tally items
-
-                        var itemsKey = cd.DisplayName;
-                        if (accumulateItems.ContainsKey(itemsKey))
-                        {
-                            accumulateItems[itemsKey].Mass += mass;
-                            accumulateItems[itemsKey].Volume += volume;
-                        }
-                        else
-                        {
-                            accumulateItems.Add(itemsKey, new ComponentItemModel() { Name = cd.DisplayName, Mass = mass, Volume = volume, TypeId = floating.FloatingObject.Item.Content.TypeId, SubtypeId = floating.FloatingObject.Item.Content.SubtypeName, TextureFile = componentTexture, Time = TimeSpan.Zero });
-                        }
-
-                        #endregion
+                        TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, floating.FloatingObject.Item.AmountDecimal, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                     }
-                    else if (floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.Ingot)
+                    else
                     {
-                        var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == floating.FloatingObject.Item.Content.SubtypeName && b.Result.TypeId == floating.FloatingObject.Item.Content.TypeId);
-                        var mass = Math.Round((double)floating.FloatingObject.Item.Amount * cd.Mass, 7);
-                        var volume = Math.Round((double)floating.FloatingObject.Item.Amount * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                        var ingotTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * floating.FloatingObject.Item.AmountDecimal));
-
-                        #region unused floating (ore and ingot)
-
-                        var unusedKey = floating.FloatingObject.Item.Content.SubtypeName;
-                        if (accumulateUnusedOres.ContainsKey(unusedKey))
-                        {
-                            accumulateUnusedOres[unusedKey].Amount += floating.FloatingObject.Item.AmountDecimal;
-                            accumulateUnusedOres[unusedKey].Mass += mass;
-                            accumulateUnusedOres[unusedKey].Volume += volume;
-                            accumulateUnusedOres[unusedKey].Time += ingotTime;
-                        }
-                        else
-                        {
-                            accumulateUnusedOres.Add(unusedKey, new OreAssetModel() { Name = cd.DisplayName, Amount = floating.FloatingObject.Item.AmountDecimal, Mass = mass, Volume = volume, Time = ingotTime, TextureFile = componentTexture });
-                        }
-
-                        #endregion
-
-                        #region tally items
-
-                        var itemsKey = cd.DisplayName;
-                        if (accumulateItems.ContainsKey(itemsKey))
-                        {
-                            accumulateItems[itemsKey].Mass += mass;
-                            accumulateItems[itemsKey].Volume += volume;
-                            accumulateItems[itemsKey].Time += ingotTime;
-                        }
-                        else
-                        {
-                            accumulateItems.Add(itemsKey, new ComponentItemModel() { Name = cd.DisplayName, Mass = mass, Volume = volume, TypeId = floating.FloatingObject.Item.Content.TypeId, SubtypeId = floating.FloatingObject.Item.Content.SubtypeName, TextureFile = componentTexture, Time = ingotTime });
-                        }
-
-                        #endregion
-                    }
-                    else if (floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.Component)
-                    {
-                        // TODO:
-                    }
-                    else if (floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.AmmoMagazine)
-                    {
-                        // TODO:
-                    }
-                    else if (floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
-                    {
-                        // TODO:
-                    }
-                    else if (floating.FloatingObject.Item.Content is MyObjectBuilder_EntityBase)
-                    {
-                        // TODO: missed a new object type?
+                        TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, floating.FloatingObject.Item.AmountDecimal, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
                     }
                 }
                 else if (entity is StructureCharacterModel)
                 {
-                    // Player inventory.
+                    var character = entity as StructureCharacterModel;
+
+                    // Ignore pilots, as we'll check those in the ship.
+                    if (!character.IsPilot)
+                    {
+                        // Character inventory.
+                        foreach (var item in character.Character.Inventory.Items)
+                        {
+                            TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
+                        }
+                    }
                 }
                 else if (entity is StructureCubeGridModel)
                 {
                     var ship = entity as StructureCubeGridModel;
                     var isNpc = ship.CubeGrid.CubeBlocks.Any<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Autopilot != null);
 
-                    #region unused cargo (ore and ingot)
-
-                    #endregion
-
-                    if (isNpc)
+                    foreach (var block in ship.CubeGrid.CubeBlocks)
                     {
-                        #region NPC ships
+                        var blockType = block.GetType();
+                        var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, ship.CubeGrid.GridSizeEnum, block.SubtypeName);
+                        TimeSpan blockTime = TimeSpan.Zero;
+                        string blockTexture = null;
+                        float cubeMass = 0;
+
+                        if (cubeBlockDefinition != null)
+                        {
+                            foreach (var component in cubeBlockDefinition.Components)
+                            {
+                                var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+
+                                #region used ore value
+
+                                if (isNpc)
+                                {
+                                    TallyItems(component.Type, component.Subtype, component.Count, contentPath, accumulateNpcOres, null, null);
+                                }
+                                else
+                                {
+                                    TallyItems(component.Type, component.Subtype, component.Count, contentPath, accumulateUsedOres, null, null);
+                                }
+
+                                #endregion
+
+                                float componentMass = cd.Mass * component.Count;
+                                cubeMass += componentMass;
+                            }
+
+                            blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds));
+                            blockTexture = Path.Combine(contentPath, cubeBlockDefinition.Icon + ".dds");
+                        }
+
+                        if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
+                        {
+                            var fields = blockType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+
+                            #region Inventories
+
+                            var inventoryFields = fields.Where(f => f.FieldType == typeof(MyObjectBuilder_Inventory)).ToArray();
+                            foreach (var field in inventoryFields)
+                            {
+                                var inventory = field.GetValue(block) as MyObjectBuilder_Inventory;
+                                if (inventory != null)
+                                {
+                                    foreach (var item in inventory.Items)
+                                    {
+                                        if (isNpc)
+                                        {
+                                            TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulateNpcOres, accumulateItems, accumulateComponents);
+                                        }
+                                        else
+                                        {
+                                            if (item.Content.TypeId == MyObjectBuilderTypeEnum.Ore || item.Content.TypeId == MyObjectBuilderTypeEnum.Ingot)
+                                            {
+                                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
+                                            }
+                                            else
+                                            {
+                                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            #endregion
+
+                            #region Character inventories
+
+                            var characterFields = fields.Where(f => f.FieldType == typeof(MyObjectBuilder_Character)).ToArray();
+                            foreach (var field in characterFields)
+                            {
+                                var character = field.GetValue(block) as MyObjectBuilder_Character;
+                                if (character != null)
+                                {
+                                    foreach (var item in character.Inventory.Items)
+                                    {
+                                        TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
+                                    }
+                                }
+                            }
+
+                            #endregion
+                        }
+
+                        #region tally cubes
+
+                        var itemsKey = cubeBlockDefinition.DisplayName;
+                        if (accumulateCubes.ContainsKey(itemsKey))
+                        {
+                            accumulateCubes[itemsKey].Count += 1;
+                            accumulateCubes[itemsKey].Mass += cubeMass;
+                            accumulateCubes[itemsKey].Time += blockTime;
+                        }
+                        else
+                        {
+                            accumulateCubes.Add(itemsKey, new ComponentItemModel() { Name = cubeBlockDefinition.DisplayName, Count = 1, Mass = cubeMass, TypeId = cubeBlockDefinition.Id.TypeId, SubtypeId = cubeBlockDefinition.Id.SubtypeName, TextureFile = blockTexture, Time = blockTime });
+                        }
 
                         #endregion
-                    }
-                    else
-                    {
-
                     }
                 }
             }
@@ -431,6 +479,7 @@
 
             _unusedOre = accumulateUnusedOres.Values.ToList();
             _usedOre = accumulateUsedOres.Values.ToList();
+            _playerOre = accumulatePlayerOres.Values.ToList();
             _npcOre = accumulateNpcOres.Values.ToList();
             _allCubes = accumulateCubes.Values.ToList();
             _allComponents = accumulateComponents.Values.ToList();
@@ -440,11 +489,206 @@
 
             #region create report
 
+            this.IsReportReady = true;
+
+            this.ClearProgress();
+
+            #endregion
+        }
+
+        #region TallyItems
+
+        private void TallyItems(MyObjectBuilderTypeEnum tallyTypeId, string tallySubTypeId, Decimal amountDecimal, string contentPath, SortedDictionary<string, OreAssetModel> accumulateOres, SortedDictionary<string, ComponentItemModel> accumulateItems, SortedDictionary<string, ComponentItemModel> accumulateComponents)
+        {
+            var cd = SpaceEngineersAPI.GetDefinition(tallyTypeId, tallySubTypeId) as MyObjectBuilder_PhysicalItemDefinition;
+
+            if (cd == null)
+            {
+                // A component, gun, ore that doesn't exist (Depricated by KeenSH, or Mod that isn't loaded).
+                return;
+            }
+
+            var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
+
+            if (tallyTypeId == MyObjectBuilderTypeEnum.Ore)
+            {
+                var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
+                var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
+
+                #region unused ore value
+
+                var unusedKey = tallySubTypeId;
+                if (accumulateOres.ContainsKey(unusedKey))
+                {
+                    accumulateOres[unusedKey].Amount += amountDecimal;
+                    accumulateOres[unusedKey].Mass += mass;
+                    accumulateOres[unusedKey].Volume += volume;
+                }
+                else
+                {
+                    accumulateOres.Add(unusedKey, new OreAssetModel() { Name = cd.DisplayName, Amount = amountDecimal, Mass = mass, Volume = volume, TextureFile = componentTexture });
+                }
+
+                #endregion
+
+                #region tally items
+
+                if (accumulateItems != null)
+                {
+                    var itemsKey = cd.DisplayName;
+                    if (accumulateItems.ContainsKey(itemsKey))
+                    {
+                        accumulateItems[itemsKey].Count += amountDecimal;
+                        accumulateItems[itemsKey].Mass += mass;
+                        accumulateItems[itemsKey].Volume += volume;
+                    }
+                    else
+                    {
+                        accumulateItems.Add(itemsKey, new ComponentItemModel() { Name = cd.DisplayName, Count = amountDecimal, Mass = mass, Volume = volume, TypeId = tallyTypeId, SubtypeId = tallySubTypeId, TextureFile = componentTexture, Time = TimeSpan.Zero });
+                    }
+                }
+
+                #endregion
+            }
+            else if (tallyTypeId == MyObjectBuilderTypeEnum.Ingot)
+            {
+                var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
+                var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
+                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
+
+                #region unused ore value
+
+                var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                TimeSpan ingotTime;
+                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
+
+                foreach (var item in oreRequirements)
+                {
+                    TallyItems(item.Value.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
+                }
+
+                #endregion
+
+                #region tally items
+
+                if (accumulateItems != null)
+                {
+                    var itemsKey = cd.DisplayName;
+                    if (accumulateItems.ContainsKey(itemsKey))
+                    {
+                        accumulateItems[itemsKey].Count += amountDecimal;
+                        accumulateItems[itemsKey].Mass += mass;
+                        accumulateItems[itemsKey].Volume += volume;
+                        accumulateItems[itemsKey].Time += timeToMake;
+                    }
+                    else
+                    {
+                        accumulateItems.Add(itemsKey, new ComponentItemModel() { Name = cd.DisplayName, Count = amountDecimal, Mass = mass, Volume = volume, TypeId = tallyTypeId, SubtypeId = tallySubTypeId, TextureFile = componentTexture, Time = timeToMake });
+                    }
+                }
+
+                #endregion
+            }
+            else if (tallyTypeId == MyObjectBuilderTypeEnum.AmmoMagazine ||
+                tallyTypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
+            {
+                var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
+                var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
+                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
+
+                #region unused ore value
+
+                var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                TimeSpan ingotTime;
+                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
+
+                foreach (var item in oreRequirements)
+                {
+                    TallyItems(item.Value.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, accumulateComponents);
+                }
+
+                #endregion
+
+                #region tally items
+
+                if (accumulateItems != null)
+                {
+                    var itemsKey = cd.DisplayName;
+                    if (accumulateItems.ContainsKey(itemsKey))
+                    {
+                        accumulateItems[itemsKey].Count += amountDecimal;
+                        accumulateItems[itemsKey].Mass += mass;
+                        accumulateItems[itemsKey].Volume += volume;
+                        accumulateItems[itemsKey].Time += timeToMake;
+                    }
+                    else
+                    {
+                        accumulateItems.Add(itemsKey, new ComponentItemModel() { Name = cd.DisplayName, Count = amountDecimal, Mass = mass, Volume = volume, TypeId = tallyTypeId, SubtypeId = tallySubTypeId, TextureFile = componentTexture, Time = timeToMake });
+                    }
+                }
+
+                #endregion
+            }
+            else if (tallyTypeId == MyObjectBuilderTypeEnum.Component)
+            {
+                var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
+                var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
+                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
+
+                #region unused ore value
+
+                var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                TimeSpan ingotTime;
+                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
+
+                foreach (var item in oreRequirements)
+                {
+                    TallyItems(item.Value.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
+                }
+
+                #endregion
+
+                #region tally items
+
+                if (accumulateComponents != null)
+                {
+                    var itemsKey = cd.DisplayName;
+                    if (accumulateComponents.ContainsKey(itemsKey))
+                    {
+                        accumulateComponents[itemsKey].Count += amountDecimal;
+                        accumulateComponents[itemsKey].Mass += mass;
+                        accumulateComponents[itemsKey].Volume += volume;
+                        accumulateComponents[itemsKey].Time += timeToMake;
+                    }
+                    else
+                    {
+                        accumulateComponents.Add(itemsKey, new ComponentItemModel() { Name = cd.DisplayName, Count = amountDecimal, Mass = mass, Volume = volume, TypeId = tallyTypeId, SubtypeId = tallySubTypeId, TextureFile = componentTexture, Time = timeToMake });
+                    }
+                }
+
+                #endregion
+            }
+            //else if (typeId == MyObjectBuilderTypeEnum.CubeBlock)
+            else // if (tallyItem is MyObjectBuilder_EntityBase)
+            {
+                // TODO: missed a new object type?
+            }
+        }
+
+        #endregion
+
+        #region CreateTextReport
+
+        internal string CreateTextReport()
+        {
             var bld = new StringBuilder();
 
             // Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.
 
-            bld.AppendFormat("Untouched Ore\r\n");
+            bld.AppendFormat("Untouched Ore (Asteroids)\r\n");
             bld.AppendFormat("Name\tVolume m³\r\n");
             foreach (var item in _untouchedOre)
             {
@@ -452,7 +696,7 @@
             }
 
             bld.AppendLine();
-            bld.AppendFormat("Unused Ore\r\n");
+            bld.AppendFormat("Unused Ore (Ore and Ingots)\r\n");
             bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
             foreach (var item in _unusedOre)
             {
@@ -460,7 +704,7 @@
             }
 
             bld.AppendLine();
-            bld.AppendFormat("Used Ore\r\n");
+            bld.AppendFormat("Used Ore (tools, items, components, cubes)\r\n");
             bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
             foreach (var item in _usedOre)
             {
@@ -468,7 +712,15 @@
             }
 
             bld.AppendLine();
-            bld.AppendFormat("NPC Ore\r\n");
+            bld.AppendFormat("Player Ore (Player inventories)\r\n");
+            bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
+            foreach (var item in _playerOre)
+            {
+                bld.AppendFormat("{0}\t{1:#,##0.000}\t{2:#,##0.000}\r\n", item.FriendlyName, item.Mass, item.Volume);
+            }
+
+            bld.AppendLine();
+            bld.AppendFormat("NPC Ore (Controlled by NPC)\r\n");
             bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
             foreach (var item in _npcOre)
             {
@@ -480,33 +732,230 @@
 
             bld.AppendLine();
             bld.AppendFormat("All Cubes\r\n");
+            bld.AppendFormat("Name\tCount\tMass Kg\tTime\r\n");
             foreach (var item in _allCubes)
             {
-
+                bld.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.000}\t{3}\r\n", item.FriendlyName, item.Count, item.Mass, item.Time);
             }
 
             bld.AppendLine();
             bld.AppendFormat("All Components\r\n");
+            bld.AppendFormat("Name\tCount\tMass Kg\tVolume L\tTime\r\n");
             foreach (var item in _allComponents)
             {
-
+                bld.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.000}\t{3:#,##0.000}\t{4}\r\n", item.FriendlyName, item.Count, item.Mass, item.Volume, item.Time);
             }
 
             bld.AppendLine();
             bld.AppendFormat("All Items\r\n");
-            bld.AppendFormat("Name\tMass Kg\tVolume L\tTime\r\n");
+            bld.AppendFormat("Name\tCount\tMass Kg\tVolume L\tTime\r\n");
             foreach (var item in _allItems)
             {
-                bld.AppendFormat("{0}\t{1:#,##0.000}\t{2:#,##0.000}\t{3}\r\n", item.FriendlyName, item.Mass, item.Volume, item.Time);
+                bld.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.000}\t{3:#,##0.000}\t{4}\r\n", item.FriendlyName, item.Count, item.Mass, item.Volume, item.Time);
             }
 
-            this.ReportText = bld.ToString();
-
-            this.ClearProgress();
-
-            #endregion
+            return bld.ToString();
         }
 
+        #endregion
+
+        #region CreateHtmlReport
+
+        internal string CreateHtmlReport()
+        {
+            var stringWriter = new StringWriter();
+
+            // Put HtmlTextWriter in using block because it needs to call Dispose.
+            using (var writer = new HtmlTextWriter(stringWriter))
+            {
+                #region header
+
+                writer.BeginDocument("Resource Report",
+                    @"
+body { background-color: #F6F6FA }
+p { font-family: Arial, Helvetica, sans-serif; }
+h1 { font-family: Arial, Helvetica, sans-serif; }
+h2 { font-family: Arial, Helvetica, sans-serif; }
+table { background-color: #FFFFFF; }
+table tr td { font-family: Arial, Helvetica, sans-serif; font-size: small; line-height: normal; color: #000000; }
+table thead td { background-color: #BABDD6; font-weight: bold; Color: #000000; }
+td.right { text-align: right; }");
+
+                #endregion
+
+                writer.RenderElement(HtmlTextWriterTag.H1, "Resource Report");
+
+                writer.RenderElement(HtmlTextWriterTag.P, "Save World: {0}", _saveName);
+                writer.RenderElement(HtmlTextWriterTag.P, "Date: {0}", _generatedDate);
+
+                writer.RenderElement(HtmlTextWriterTag.P, "Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.");
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "Untouched Ore (Asteroids)");
+                writer.BeginTable("1", "3", "0", new String[] { "Name", "Volume m³" });
+                foreach (var item in this._untouchedOre)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderElement(HtmlTextWriterTag.Td, item.MaterialName);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Volume);
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "Unused Ore (Ore and Ingots)");
+                writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
+                foreach (var item in _unusedOre)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderElement(HtmlTextWriterTag.Td, item.FriendlyName);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Mass);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Volume);
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "Used Ore (tools, items, components, cubes)");
+                writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
+                foreach (var item in _usedOre)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderElement(HtmlTextWriterTag.Td, item.FriendlyName);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Mass);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Volume);
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "Player Ore (Player inventories)");
+                writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
+                foreach (var item in _playerOre)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderElement(HtmlTextWriterTag.Td, item.FriendlyName);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Mass);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Volume);
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "NPC Ore (Controlled by NPC)");
+                writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
+                foreach (var item in _npcOre)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderElement(HtmlTextWriterTag.Td, item.FriendlyName);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Mass);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Volume);
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
+
+                writer.RenderElement(HtmlTextWriterTag.Br);
+                writer.RenderElement(HtmlTextWriterTag.Hr);
+
+                // Counts of all current items in game Assets.
+                // numbers of cubes, components, tools, ingots, etc could be included, as they technically indicate time spent to construct or refine.
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "All Cubes");
+                writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Time" });
+                foreach (var item in _allCubes)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
+                    if (item.TextureFile != null)
+                    {
+                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
+                        writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
+                        writer.RenderBeginTag(HtmlTextWriterTag.Img);
+                        writer.RenderEndTag();
+                    }
+                    writer.RenderEndTag(); // Td
+
+                    writer.RenderElement(HtmlTextWriterTag.Td, item.FriendlyName);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0}", item.Count);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Mass);
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0}", item.Time);
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "All Components");
+                writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
+                foreach (var item in _allComponents)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
+                    if (item.TextureFile != null)
+                    {
+                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
+                        writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
+                        writer.RenderBeginTag(HtmlTextWriterTag.Img);
+                        writer.RenderEndTag();
+                    }
+                    writer.RenderEndTag(); // Td
+
+                    writer.RenderElement(HtmlTextWriterTag.Td, item.FriendlyName);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0}", item.Count);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Mass);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Volume);
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0}", item.Time);
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "All Items");
+                writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
+                foreach (var item in _allItems)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderBeginTag(HtmlTextWriterTag.Td);
+                    if (item.TextureFile != null)
+                    {
+                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
+                        writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
+                        writer.RenderBeginTag(HtmlTextWriterTag.Img);
+                        writer.RenderEndTag();
+                    }
+                    writer.RenderEndTag(); // Td
+
+                    writer.RenderElement(HtmlTextWriterTag.Td, item.FriendlyName);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0}", item.Count);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Mass);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Volume);
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0}", item.Time);
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
+
+                writer.EndDocument();
+            }
+
+            return stringWriter.ToString();
+        }
+
+        #endregion
 
         #endregion
     }
