@@ -476,4 +476,16 @@ Would you like to download it now?</value>
   <data name="DialogExportVoxelTitle" xml:space="preserve">
     <value>Specify file to Export Asteroid to</value>
   </data>
+  <data name="DialogExportHtmlFileFilter" xml:space="preserve">
+    <value>Html files (*.htm;*.htm)|*.htm;*.html</value>
+  </data>
+  <data name="DialogExportHtmlFileTitle" xml:space="preserve">
+    <value>Specify filename to export '{0}' to</value>
+  </data>
+  <data name="DialogExportTextFileFilter" xml:space="preserve">
+    <value>Text files (*.txt)|*.txt</value>
+  </data>
+  <data name="DialogExportTextFileTitle" xml:space="preserve">
+    <value>Specify filename to export '{0}' to</value>
+  </data>
 </root>

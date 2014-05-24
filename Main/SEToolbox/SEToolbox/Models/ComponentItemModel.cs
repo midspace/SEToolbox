@@ -37,6 +37,8 @@
 
         public double Mass { get; set; }
 
+        public Decimal Count { get; set; }
+
         public double Volume { get; set; }
 
         public TimeSpan? Time { get; set; }

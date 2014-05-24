@@ -299,10 +299,17 @@
 
         public static ImageSource CreateImage(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false)
         {
-            var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, ignoreAlpha);
+            uint fourCC;
+            var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC, ignoreAlpha);
             if (pixelChannel == null)
                 return null;
-            return DxtUtil.DecompressDxt5TextureToImageSource(pixelChannel, width, height, ignoreAlpha);
+            try
+            {
+                if (fourCC == (uint)DDS_FOURCC.DXT5)
+                    return DxtUtil.DecompressDxt5TextureToImageSource(pixelChannel, width, height, ignoreAlpha);
+            }
+            catch { }
+            return null;
         }
 
         #endregion
@@ -316,17 +323,33 @@
 
         public static Bitmap CreateBitmap(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false)
         {
-            var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, ignoreAlpha);
+            uint fourCC;
+            var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC, ignoreAlpha);
             if (pixelChannel == null)
                 return null;
-            return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height, ignoreAlpha);
+            try
+            {
+                if (fourCC == (uint)DDS_FOURCC.DXT5)
+                    return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height, ignoreAlpha);
+            }
+            catch { }
+            return null;
+        }
+
+        public static string GetTextureToBase64(string filename, int width, int height)
+        {
+            using (var bmp = CreateBitmap(filename, 0, width, height))
+            {
+                var converter = new ImageConverter();
+                return Convert.ToBase64String((byte[])converter.ConvertTo(bmp, typeof(byte[])));
+            }
         }
 
         #endregion
 
         #region ReadTextureFile
 
-        private static byte[] ReadTextureFile(string filename, int depthSlice, ref int width, ref int height, bool ignoreAlpha = false)
+        private static byte[] ReadTextureFile(string filename, int depthSlice, ref int width, ref int height, out uint fourCC, bool ignoreAlpha = false)
         {
             using (var stream = File.OpenRead(filename))
             {
@@ -337,6 +360,7 @@
                         var magicNumber = reader.ReadUInt32();
                         if (magicNumber != 0x20534444)
                         {
+                            fourCC = 0;
                             return null;
                         }
 
@@ -346,6 +370,8 @@
                         {
                             var dx10Header = MarshalTo<DDS_HEADER_DXT10>(reader.ReadBytes(DDS_HEADER_DXT10.SizeInBytes));
                         }
+
+                        fourCC = header.ddspf.dwFourCC;
 
                         var slices = 1;
                         if (((DDSCAPS2)header.dwCaps2 & DDSCAPS2.DDSCAPS2_CUBEMAP) != 0)
@@ -391,6 +417,7 @@
                     }
                     catch
                     {
+                        fourCC = 0;
                         return null;
                     }
                     finally
