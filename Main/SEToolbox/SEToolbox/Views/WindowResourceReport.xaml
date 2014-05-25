@@ -46,6 +46,7 @@
                             <MenuItem Header="Clipboard" Command="{Binding CopyCommand}"/>
                             <MenuItem Header=".txt file" Command="{Binding ExportTextCommand}"/>
                             <MenuItem Header=".html file" Command="{Binding ExportHtmlCommand}"/>
+                            <MenuItem Header=".xml file" Command="{Binding ExportXmlCommand}"/>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>

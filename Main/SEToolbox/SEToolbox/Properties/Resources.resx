@@ -488,4 +488,10 @@ Would you like to download it now?</value>
   <data name="DialogExportTextFileTitle" xml:space="preserve">
     <value>Specify filename to export '{0}' to</value>
   </data>
+  <data name="DialogExportXmlFileFilter" xml:space="preserve">
+    <value>XML files (*.xml)|*.xml</value>
+  </data>
+  <data name="DialogExportXmlFileTitle" xml:space="preserve">
+    <value>Specify filename to export '{0}' to</value>
+  </data>
 </root>

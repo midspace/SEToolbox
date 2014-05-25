@@ -72,5 +72,28 @@
 
             Tempfiles.Clear();
         }
+
+        public static void DestroyTempFiles()
+        {
+            var basePath = new DirectoryInfo(TempPath);
+
+            foreach (FileInfo file in basePath.GetFiles())
+            {
+                try
+                {
+                    file.Delete();
+                }
+                catch { }
+            }
+
+            foreach (DirectoryInfo dir in basePath.GetDirectories())
+            {
+                try
+                {
+                    dir.Delete(true);
+                }
+                catch { }
+            }
+        }
     }
 }

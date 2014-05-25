@@ -85,6 +85,14 @@
             }
         }
 
+        public ICommand ExportXmlCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ExportXmlExecuted), new Func<bool>(ExportXmlCanExecute));
+            }
+        }
+
         public ICommand CloseCommand
         {
             get
@@ -278,6 +286,25 @@
             if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
             {
                 File.WriteAllText(saveFileDialog.FileName, this._dataModel.CreateHtmlReport());
+            }
+        }
+
+        public bool ExportXmlCanExecute()
+        {
+            return this.IsReportReady;
+        }
+
+        public void ExportXmlExecuted()
+        {
+            var saveFileDialog = this._saveFileDialogFactory();
+            saveFileDialog.Filter = Res.DialogExportXmlFileFilter;
+            saveFileDialog.Title = string.Format(Res.DialogExportXmlFileTitle, "Resource Report");
+            saveFileDialog.FileName = string.Format("Resource Report - {0}.xml", this._dataModel.SaveName);
+            saveFileDialog.OverwritePrompt = true;
+
+            if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog.FileName, this._dataModel.CreateXmlReport());
             }
         }
 
