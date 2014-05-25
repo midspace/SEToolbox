@@ -1,23 +1,21 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Diagnostics;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.Voxels;
+    using SEToolbox.ImageLibrary;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Reflection;
+    using System.Text;
     using System.Web.UI;
-    using SEToolbox.Converters;
-    using System.Globalization;
-    using SEToolbox.ImageLibrary;
+    using System.Xml;
 
     public class ResourceReportModel : BaseModel
     {
@@ -686,6 +684,11 @@
         {
             var bld = new StringBuilder();
 
+            bld.AppendLine("Resource Report");
+            bld.AppendFormat("Save World: {0}\r\n", _saveName);
+            bld.AppendFormat("Date: {0}\r\n", _generatedDate);
+            bld.AppendLine();
+
             // Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.
 
             bld.AppendFormat("Untouched Ore (Asteroids)\r\n");
@@ -956,6 +959,179 @@ td.right { text-align: right; }");
         }
 
         #endregion
+
+        #region CreateXmlReport
+
+        internal string CreateXmlReport()
+        {
+            var settingsDestination = new XmlWriterSettings()
+            {
+                Indent = true, // Set indent to false to compress.
+                Encoding = new UTF8Encoding(false)   // codepage 65001 without signature. Removes the Byte Order Mark from the start of the file.
+            };
+
+            var stringWriter = new StringWriter();
+
+            using (var xmlWriter = XmlWriter.Create(stringWriter, settingsDestination))
+            {
+                xmlWriter.WriteStartElement("report");
+                xmlWriter.WriteAttributeString("title", "Resource Report");
+                xmlWriter.WriteAttributeString("world", _saveName);
+                xmlWriter.WriteAttributeFormat("date", "{0:o}", _generatedDate);
+
+                foreach (var item in this._untouchedOre)
+                {
+                    xmlWriter.WriteStartElement("untouched");
+                    xmlWriter.WriteElementFormat("name", "{0}", item.MaterialName);
+                    xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
+                    xmlWriter.WriteEndElement();
+                }
+
+                foreach (var item in this._unusedOre)
+                {
+                    xmlWriter.WriteStartElement("unused");
+                    xmlWriter.WriteElementFormat("name", "{0}", item.FriendlyName);
+                    xmlWriter.WriteElementFormat("mass", "{0:0.000}", item.Mass);
+                    xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
+                    xmlWriter.WriteEndElement();
+                }
+
+                foreach (var item in _usedOre)
+                {
+                    xmlWriter.WriteStartElement("used");
+                    xmlWriter.WriteElementFormat("name", "{0}", item.FriendlyName);
+                    xmlWriter.WriteElementFormat("mass", "{0:0.000}", item.Mass);
+                    xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
+                    xmlWriter.WriteEndElement();
+                }
+
+                foreach (var item in _playerOre)
+                {
+                    xmlWriter.WriteStartElement("player");
+                    xmlWriter.WriteElementFormat("name", "{0}", item.FriendlyName);
+                    xmlWriter.WriteElementFormat("mass", "{0:0.000}", item.Mass);
+                    xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
+                    xmlWriter.WriteEndElement();
+                }
+
+                foreach (var item in _npcOre)
+                {
+                    xmlWriter.WriteStartElement("npc");
+                    xmlWriter.WriteElementFormat("name", "{0}", item.FriendlyName);
+                    xmlWriter.WriteElementFormat("mass", "{0:0.000}", item.Mass);
+                    xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
+                    xmlWriter.WriteEndElement();
+                }
+
+                foreach (var item in _allCubes)
+                {
+                    xmlWriter.WriteStartElement("cubes");
+                    xmlWriter.WriteElementFormat("friendlyname", "{0}", item.FriendlyName);
+                    xmlWriter.WriteElementFormat("name", "{0}", item.Name);
+                    xmlWriter.WriteElementFormat("typeid", "{0}", item.TypeId);
+                    xmlWriter.WriteElementFormat("subtypeid", "{0}", item.SubtypeId);
+                    xmlWriter.WriteElementFormat("count", "{0:0}", item.Count);
+                    xmlWriter.WriteElementFormat("mass", "{0:0.000}", item.Mass);
+                    xmlWriter.WriteElementFormat("time", "{0}", item.Time);
+                    xmlWriter.WriteEndElement();
+                }
+
+                foreach (var item in _allComponents)
+                {
+                    xmlWriter.WriteStartElement("components");
+                    xmlWriter.WriteElementFormat("friendlyname", "{0}", item.FriendlyName);
+                    xmlWriter.WriteElementFormat("name", "{0}", item.Name);
+                    xmlWriter.WriteElementFormat("typeid", "{0}", item.TypeId);
+                    xmlWriter.WriteElementFormat("subtypeid", "{0}", item.SubtypeId);
+                    xmlWriter.WriteElementFormat("count", "{0:0}", item.Count);
+                    xmlWriter.WriteElementFormat("mass", "{0:0.000}", item.Mass);
+                    xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
+                    xmlWriter.WriteElementFormat("time", "{0}", item.Time);
+                    xmlWriter.WriteEndElement();
+                }
+
+                foreach (var item in _allItems)
+                {
+                    xmlWriter.WriteStartElement("items");
+                    xmlWriter.WriteElementFormat("friendlyname", "{0}", item.FriendlyName);
+                    xmlWriter.WriteElementFormat("name", "{0}", item.Name);
+                    xmlWriter.WriteElementFormat("typeid", "{0}", item.TypeId);
+                    xmlWriter.WriteElementFormat("subtypeid", "{0}", item.SubtypeId);
+                    xmlWriter.WriteElementFormat("count", "{0:0}", item.Count);
+                    xmlWriter.WriteElementFormat("mass", "{0:0.000}", item.Mass);
+                    xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
+                    xmlWriter.WriteElementFormat("time", "{0}", item.Time);
+                    xmlWriter.WriteEndElement();
+                }
+
+                xmlWriter.WriteEndElement();
+            }
+
+            return stringWriter.ToString();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region GenerateOfflineReport
+
+        /// <summary>
+        /// Command line driven method.
+        /// <example>/WR "Builder Toolset" "c:\temp\Easy Start Report.txt"</example>
+        /// </summary>
+        /// <param name="args"></param>
+        public static void GenerateOfflineReport(ExplorerModel baseModel, string[] args)
+        {
+            var argList = args.ToList();
+            var comArgs = args.Where(a => a.ToUpper() == "/WR").Select(a => { return a; }).ToArray();
+            foreach (var a in comArgs) argList.Remove(a);
+
+            if (argList.Count < 2)
+            {
+                Environment.Exit(2);
+                return;
+            }
+
+            var findSessionName = argList[0].ToUpper();
+            var reportFile = argList[1];
+            var reportExtension = Path.GetExtension(reportFile).ToUpper();
+
+            if (reportExtension != ".HTM" &&
+                reportExtension != ".HTML" &&
+                reportExtension != ".TXT" &&
+                reportExtension != ".XML")
+            {
+                Environment.Exit(1);
+                return;
+            }
+
+            var world = SelectWorldModel.FindSaveSession(baseModel.BaseSavePath, findSessionName);
+
+            if (world == null)
+            {
+                Environment.Exit(3);
+                return;
+            }
+
+            baseModel.ActiveWorld = world;
+            baseModel.LoadSandBox();
+
+            var model = new ResourceReportModel();
+            model.Load(baseModel.ActiveWorld.Savename, baseModel.Structures);
+            model.GenerateReport();
+
+            if (reportExtension == ".HTM" || reportExtension == ".HTML")
+                File.WriteAllText(reportFile, model.CreateHtmlReport());
+
+            if (reportExtension == ".TXT")
+                File.WriteAllText(reportFile, model.CreateTextReport());
+
+            if (reportExtension == ".XML")
+                File.WriteAllText(reportFile, model.CreateXmlReport());
+
+            Environment.Exit(0);
+        }
 
         #endregion
     }

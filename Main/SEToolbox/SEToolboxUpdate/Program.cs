@@ -92,7 +92,7 @@
                     if (updateRet)
                     {
                         // B = Binaries were updated.
-                        ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/B", false, false);
+                        ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/B " + String.Join(" ", args), false, false);
                         Environment.Exit(NoError);
                     }
                     else
@@ -102,7 +102,7 @@
                         if (dialogResult == MessageBoxResult.Yes)
                         {
                             // X = Ignore updates.
-                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X", false, false);
+                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X " + String.Join(" ", args), false, false);
                         }
                         Environment.Exit(UpdateBinariesFailed);
                     }
@@ -126,7 +126,7 @@
                         if (ret.Value == 0)
                         {
                             // B = Binaries were updated.
-                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/B", false, false);
+                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/B " + String.Join(" ", args), false, false);
                             Environment.Exit(NoError);
                         }
                         else
@@ -136,7 +136,7 @@
                             if (dialogResult == MessageBoxResult.Yes)
                             {
                                 // X = Ignore updates.
-                                ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X", false, false);
+                                ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X " + String.Join(" ", args), false, false);
                             }
                             Environment.Exit(ret.Value);
                         }
@@ -147,7 +147,7 @@
                         if (dialogResult == MessageBoxResult.Yes)
                         {
                             // X = Ignore updates.
-                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X", false, false);
+                            ToolboxUpdater.RunElevated(Path.Combine(appFilePath, "SEToolbox.exe"), "/X " + String.Join(" ", args), false, false);
                         }
                         Environment.Exit(UacDenied);
                     }

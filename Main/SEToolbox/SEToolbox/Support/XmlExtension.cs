@@ -147,5 +147,23 @@
         }
 
         #endregion
+
+        #region WriteElementFormat
+
+        internal static void WriteElementFormat(this XmlWriter writer, string localName, string format, params object[] arg)
+        {
+            writer.WriteElementString(localName, string.Format(format, arg));
+        }
+
+        #endregion
+
+        #region WriteAttributeFormat
+
+        internal static void WriteAttributeFormat(this XmlWriter writer, string localName, string format, params object[] arg)
+        {
+            writer.WriteAttributeString(localName, string.Format(format, arg));
+        }
+
+        #endregion
     }
 }

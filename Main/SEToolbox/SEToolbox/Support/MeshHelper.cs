@@ -107,7 +107,6 @@
             }
         }
 
-        // WIP.
         public static bool RayIntersetTriangle(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection)
         {
             // http://gamedev.stackexchange.com/questions/5585/line-triangle-intersection-last-bits
@@ -234,12 +233,12 @@
             return true;
         }
 
-        internal static Point3D Floor(this Point3D point)
+        public static Point3D Floor(this Point3D point)
         {
             return new Point3D(Math.Floor(point.X), Math.Floor(point.Y), Math.Floor(point.Z));
         }
 
-        internal static Point3D Ceiling(this Point3D point)
+        public static Point3D Ceiling(this Point3D point)
         {
             return new Point3D(Math.Ceiling(point.X), Math.Ceiling(point.Y), Math.Ceiling(point.Z));
         }
@@ -289,12 +288,12 @@
             return transform;
         }
 
-        internal static Point3D Min(Point3D point1, Point3D point2, Point3D point3)
+        public static Point3D Min(Point3D point1, Point3D point2, Point3D point3)
         {
             return new Point3D(Math.Min(Math.Min(point1.X, point2.X), point3.X), Math.Min(Math.Min(point1.Y, point2.Y), point3.Y), Math.Min(Math.Min(point1.Z, point2.Z), point3.Z));
         }
 
-        internal static Point3D Max(Point3D point1, Point3D point2, Point3D point3)
+        public static Point3D Max(Point3D point1, Point3D point2, Point3D point3)
         {
             return new Point3D(Math.Max(Math.Max(point1.X, point2.X), point3.X), Math.Max(Math.Max(point1.Y, point2.Y), point3.Y), Math.Max(Math.Max(point1.Z, point2.Z), point3.Z));
         }

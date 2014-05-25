@@ -10,6 +10,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
     using System.Windows;
 
     public class CoreToolbox
@@ -45,14 +46,22 @@
             GlobalSettings.Default.Save();
 
             var ignoreUpdates = args.Any(a => a.ToUpper() == "/X");
-            var altDlls = args.Any(a => a.ToUpper() == "/ALTDLL");
+            var oldDlls = args.Any(a => a.ToUpper() == "/OLDDLL");
+            var altDlls = !oldDlls;
 
             // Go looking for any changes in the Dependant Space Engineers assemblies and immediately attempt to update.
             if (!ignoreUpdates && ToolboxUpdater.IsBaseAssembliesChanged() && !altDlls && !Debugger.IsAttached)
             {
-                ToolboxUpdater.RunElevated(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SEToolboxUpdate"), "/B", false, false);
+                ToolboxUpdater.RunElevated(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SEToolboxUpdate"), "/B " + String.Join(" ", args), false, false);
                 Application.Current.Shutdown();
                 return false;
+            }
+
+            var proc = Process.GetCurrentProcess();
+            if (Process.GetProcessesByName(proc.ProcessName).Length == 1)
+            {
+                // Clean up Temp files if this is the only instance running.
+                TempfileUtil.DestroyTempFiles();
             }
 
             // Dot not load any of the Space Engineers assemblies or dependant classes before this point.
@@ -86,15 +95,22 @@
             return true;
         }
 
-        public void Load()
+        public void Load(string[] args)
         {
-            // Load the SpaceEngineers assemblies, or dependant classes after this point.
-            var explorerModel = new ExplorerModel();
-
             // Force pre-loading of any Space Engineers resources.
             SEToolbox.Interop.SpaceEngineersAPI.Init();
 
+            // Load the SpaceEngineers assemblies, or dependant classes after this point.
+            var explorerModel = new ExplorerModel();
             explorerModel.Load();
+
+            if (args.Any(a => a.ToUpper() == "/WR"))
+            {
+                ResourceReportModel.GenerateOfflineReport(explorerModel, args);
+                Application.Current.Shutdown();
+                return;
+            }
+
             var eViewModel = new ExplorerViewModel(explorerModel);
             var eWindow = new WindowExplorer(eViewModel);
             //if (allowClose)

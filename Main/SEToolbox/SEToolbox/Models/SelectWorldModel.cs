@@ -456,6 +456,45 @@
             }
         }
 
+        internal static SaveResource FindSaveSession(string baseSavePath, string findSessionName)
+        {
+            if (Directory.Exists(baseSavePath))
+            {
+                var userPaths = Directory.GetDirectories(baseSavePath);
+
+                foreach (var userPath in userPaths)
+                {
+                    var lastLoadedFile = Path.Combine(userPath, SpaceEngineersConsts.LoadLoadedFilename);
+
+                    // Ignore any other base Save paths without the LastLoaded file.
+                    if (File.Exists(lastLoadedFile))
+                    {
+                        var savePaths = Directory.GetDirectories(userPath);
+
+                        // Still check every potential game world path.
+                        foreach (var savePath in savePaths)
+                        {
+                            var saveResource = new SaveResource()
+                            {
+                                Savename = Path.GetFileName(savePath),
+                                Username = Path.GetFileName(userPath),
+                                Savepath = savePath
+                            };
+
+                            saveResource.LoadCheckpoint();
+
+                            if (saveResource.Savename.ToUpper() == findSessionName || saveResource.SessionName.ToUpper() == findSessionName)
+                            {
+                                return saveResource;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         #endregion
     }
 }

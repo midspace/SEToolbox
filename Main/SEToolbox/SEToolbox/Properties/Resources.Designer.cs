@@ -326,6 +326,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML files (*.xml)|*.xml.
+        /// </summary>
+        public static string DialogExportXmlFileFilter {
+            get {
+                return ResourceManager.GetString("DialogExportXmlFileFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify filename to export &apos;{0}&apos; to.
+        /// </summary>
+        public static string DialogExportXmlFileTitle {
+            get {
+                return ResourceManager.GetString("DialogExportXmlFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Image files (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*.
         /// </summary>
         public static string DialogImportImageFilter {

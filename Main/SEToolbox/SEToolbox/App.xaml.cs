@@ -60,7 +60,7 @@
 
             this._toolboxApplication = new CoreToolbox();
             if (this._toolboxApplication.Init(e.Args))
-                this._toolboxApplication.Load();
+                this._toolboxApplication.Load(e.Args);
         }
 
         private void OnExit(object sender, ExitEventArgs e)
