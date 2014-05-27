@@ -7,7 +7,7 @@ using System.Security.Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SEToolbox.ImageShaders")]
-[assembly: AssemblyDescription("SpaceEngineers Toolbox")]
+[assembly: AssemblyDescription("Space Engineers Toolbox - Image Shaders Library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mid-Space Productions")]
 [assembly: AssemblyProduct("SEToolbox.ImageShadersy")]

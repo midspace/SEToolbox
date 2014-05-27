@@ -62,9 +62,11 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Sandbox.Common">
       <HintPath>..\References\Sandbox.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sandbox.Common.XmlSerializers">
       <HintPath>..\References\Sandbox.Common.XmlSerializers.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -85,18 +87,27 @@
     <Reference Include="VRage.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\VRage.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="VRage.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\VRage.Library.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="VRage.Math, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\VRage.Math.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFLocalizeExtension">
+      <HintPath>..\References\WPFLocalizeExtension.dll</HintPath>
+    </Reference>
+    <Reference Include="XAMLMarkupExtensions">
+      <HintPath>..\References\XAMLMarkupExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -110,6 +121,7 @@
     <Compile Include="Controls\SortableGridViewColumn.cs" />
     <Compile Include="Controls\SortableListView.cs" />
     <Compile Include="Converters\DDSConverter.cs" />
+    <Compile Include="Converters\I18NFormatterConverter.cs" />
     <Compile Include="Converters\RangeRuleI.cs" />
     <Compile Include="Converters\RangeRuleD.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
@@ -461,6 +473,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.zh.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

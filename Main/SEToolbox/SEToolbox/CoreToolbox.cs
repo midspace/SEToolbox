@@ -5,12 +5,11 @@
     using SEToolbox.ViewModels;
     using SEToolbox.Views;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Threading;
+    using System.Text.RegularExpressions;
     using System.Windows;
 
     public class CoreToolbox
@@ -73,12 +72,26 @@
             {
                 _tempBinPath = Path.Combine(TempfileUtil.TempPath, "Bin");
 
-                if (!Directory.Exists(_tempBinPath))
-                    Directory.CreateDirectory(_tempBinPath);
+                DirectoryInfo checkDir = null;
+                var counter = 0;
+
+                while (checkDir == null && counter < 10)
+                {
+                    if (!Directory.Exists(_tempBinPath))
+                        checkDir = Directory.CreateDirectory(_tempBinPath);
+
+                    if (checkDir == null)
+                    {
+                        // wait a while, as the drive may be processing Windows Explorer which had a lock on the Directory after prior cleanup.
+                        System.Threading.Thread.Sleep(100);
+                    }
+                }
+
+                var searchPath = Path.Combine(GlobalSettings.Default.SEInstallLocation, "Bin64");
 
                 foreach (var file in ToolboxUpdater.CoreSpaceEngineersFiles)
                 {
-                    var filename = Path.Combine(Path.Combine(GlobalSettings.Default.SEInstallLocation, "Bin64"), file);
+                    var filename = Path.Combine(searchPath, file);
                     var destFilename = Path.Combine(_tempBinPath, file);
 
                     try
@@ -86,6 +99,21 @@
                         File.Copy(filename, destFilename, true);
                     }
                     catch { }
+                }
+
+                // Copy directories which contain Space Engineers language resources.
+                var dirs = Directory.GetDirectories(searchPath);
+
+                foreach (var sourceDir in dirs)
+                {
+                    var dirName = Path.GetFileName(sourceDir);
+                    var destDir = Path.Combine(_tempBinPath, dirName);
+                    Directory.CreateDirectory(destDir);
+
+                    foreach (string oldFile in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+                    {
+                        File.Copy(oldFile, Path.Combine(destDir, Path.GetFileName(oldFile)), true);
+                    }
                 }
 
                 AppDomain currentDomain = AppDomain.CurrentDomain;
@@ -100,7 +128,7 @@
             // Force pre-loading of any Space Engineers resources.
             SEToolbox.Interop.SpaceEngineersAPI.Init();
 
-            // Load the SpaceEngineers assemblies, or dependant classes after this point.
+            // Load the Space Engineers assemblies, or dependant classes after this point.
             var explorerModel = new ExplorerModel();
             explorerModel.Load();
 
@@ -154,13 +182,30 @@
             // Retrieve the list of referenced assemblies in an array of AssemblyName.
             var filename = args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll";
 
+            var filter = @"^(?<assembly>(?:\w+(?:\.?\w+)+))\s*(?:,\s?Version=(?<version>\d+\.\d+\.\d+\.\d+))?(?:,\s?Culture=(?<culture>[\w-]+))?(?:,\s?PublicKeyToken=(?<token>\w+))?$";
+            var match = Regex.Match(args.Name, filter);
+            if (match.Success)
+            {
+                filename = match.Groups["assembly"].Value + ".dll";
+            }
+
             if (ToolboxUpdater.CoreSpaceEngineersFiles.Any(f => string.Equals(f, filename, StringComparison.InvariantCultureIgnoreCase)))
             {
                 var assemblyPath = Path.Combine(_tempBinPath, filename);
 
-                // Load the assembly from the specified path. 					
+                // Load the assembly from the specified path.
                 // Return the loaded assembly.
                 return Assembly.LoadFrom(assemblyPath);
+            }
+
+            if (ToolboxUpdater.CoreSpaceEngineersResources.Any(f => string.Equals(f, filename, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                var assemblyPath = Path.Combine(Path.Combine(_tempBinPath, match.Groups["culture"].Value), filename);
+
+                // Load the resource assembly from the specified path.
+                // Return the loaded assembly.
+                if (File.Exists(assemblyPath))
+                    return Assembly.LoadFrom(assemblyPath);
             }
 
             return null;

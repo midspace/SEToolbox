@@ -103,7 +103,7 @@
         <File Id="file97E0990BBDDF40A68ED535BF1D64AF8E" Source="$(var.SEToolbox.TargetDir)VRage.Math.dll"/>
       </Component>
 
-      <!-- Thrid party depdancies -->
+      <!-- Third party dependancies -->
       <Component Id="comp5B10E5BF2D0D4C9EAF44EDE183D113EF">
         <File Id="fileAD5B37B3F8524F6594A80B1BF9660D69" Source="$(var.SEToolbox.TargetDir)HelixToolkit.Wpf.dll"/>
       </Component>
@@ -115,6 +115,12 @@
       </Component>
       <Component Id="comp4FF0A2172F244A5FA36AE80475BE0F8E">
         <File Id="file97FBC095E9A34E86AA664F4C5C9967B7" Source="$(var.SEToolbox.TargetDir)System.Windows.Interactivity.dll"/>
+      </Component>
+      <Component Id="compA84A9E7C0EE44549B216E475CC31B6F8">
+        <File Id="file5CE9E6AE20354095A45A284E93837728" Source="$(var.SEToolbox.TargetDir)WPFLocalizeExtension.dll"/>
+      </Component>
+      <Component Id="comp63AE692DD51247CC90A281069BF96AFA">
+        <File Id="fileA9B194FD13214474A2B8004200CF42CD" Source="$(var.SEToolbox.TargetDir)XAMLMarkupExtensions.dll"/>
       </Component>
     </ComponentGroup>
 

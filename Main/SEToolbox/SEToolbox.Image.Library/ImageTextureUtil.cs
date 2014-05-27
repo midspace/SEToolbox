@@ -305,7 +305,7 @@
                 return null;
             try
             {
-                if (fourCC == (uint)DDS_FOURCC.DXT5)
+                if (fourCC == (uint)DDS_FOURCC.DXT3 || fourCC == (uint)DDS_FOURCC.DXT5)
                     return DxtUtil.DecompressDxt5TextureToImageSource(pixelChannel, width, height, ignoreAlpha);
             }
             catch { }
@@ -329,7 +329,7 @@
                 return null;
             try
             {
-                if (fourCC == (uint)DDS_FOURCC.DXT5)
+                if (fourCC == (uint)DDS_FOURCC.DXT3 || fourCC == (uint)DDS_FOURCC.DXT5)
                     return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height, ignoreAlpha);
             }
             catch { }

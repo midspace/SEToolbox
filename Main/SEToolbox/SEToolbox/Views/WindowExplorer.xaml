@@ -8,6 +8,10 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:interfaces="clr-namespace:SEToolbox.Interfaces"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:LocalizeDictionary.DesignCulture="en"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         Height="600" Width="800" MinHeight="320" MinWidth="480" ResizeMode="CanResizeWithGrip" 
         WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
@@ -24,12 +28,13 @@
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:StringFormatMultiValueConverter x:Key="StringFormatConverter"/>
         <converters:DistanceConverter x:Key="DistanceConverter"/>
+        <converters:I18NFormatterConverter x:Key="i18nFormatter"  />
     </Window.Resources>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
     </Window.Cursor>
     <Window.Title>
-        <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}SE Toolbox - {0}">
+        <MultiBinding Converter="{StaticResource i18nFormatter}" ConverterParameter="WindowMainTitle">
             <Binding Path="ActiveWorld.SessionName"/>
         </MultiBinding>
     </Window.Title>

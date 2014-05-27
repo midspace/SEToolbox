@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Globalization;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -21,6 +22,7 @@
     using System.Windows.Input;
     using System.Windows.Shell;
     using VRageMath;
+    using WPFLocalizeExtension.Engine;
     using Res = SEToolbox.Properties.Resources;
 
     public class ExplorerViewModel : BaseViewModel, IDropable, IMainView
@@ -968,7 +970,7 @@
 
         public bool LanguageCanExecute()
         {
-            return false;
+            return false; // TODO: Add more local resources first.
         }
 
         public bool SetLanguageCanExecute(string code)
@@ -978,7 +980,11 @@
 
         public void SetLanguageExecuted(string code)
         {
-            // TODO:
+            GlobalSettings.Default.LanguageCode = code;
+            LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfoByIetfLanguageTag(code);
+            
+            // Causes all bindings to update.
+            this.OnPropertyChanged("");
         }
 
         public bool AboutCanExecute()

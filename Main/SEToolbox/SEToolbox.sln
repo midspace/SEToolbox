@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", 
 		References\VRage.Common.dll = References\VRage.Common.dll
 		References\VRage.Library.dll = References\VRage.Library.dll
 		References\VRage.Math.dll = References\VRage.Math.dll
+		References\WPFLocalizeExtension.dll = References\WPFLocalizeExtension.dll
+		References\XAMLMarkupExtensions.dll = References\XAMLMarkupExtensions.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolbox.ImageLibrary", "SEToolbox.Image.Library\SEToolbox.ImageLibrary.csproj", "{E78476CB-BC3D-4265-806D-96F09229A449}"

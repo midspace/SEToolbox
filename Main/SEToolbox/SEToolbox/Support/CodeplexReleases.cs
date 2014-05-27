@@ -30,7 +30,7 @@
                 return null;
 
 #if DEBUG
-            // Skip the load check, as it make take a few seconds.
+            // Skip the load check, as it may take a few seconds during development.
             if (Debugger.IsAttached)
                 return null;
 #endif
@@ -48,7 +48,8 @@
             using (var webclient = new MyWebClient())
             {
                 webclient.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials; // For Proxy servers on Corporate networks.
-                webclient.Headers.Add("Referer", string.Format("https://setoolbox.codeplex.com/updatecheck?current={0}", currentVersion));
+                webclient.Headers.Add(HttpRequestHeader.UserAgent, string.Format("Mozilla/5.0 ({0}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36", Environment.OSVersion)); // Crude useragent.
+                webclient.Headers.Add(HttpRequestHeader.Referer, string.Format("https://setoolbox.codeplex.com/updatecheck?current={0}", currentVersion));
 
                 try
                 {

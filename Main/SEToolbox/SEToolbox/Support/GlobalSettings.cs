@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.Support
 {
     using System;
+    using System.Globalization;
     using System.Windows;
     using Microsoft.Win32;
 
@@ -32,6 +33,8 @@
 
         public string SEInstallLocation { get; set; }
 
+        public string LanguageCode { get; set; }
+
         public WindowState? WindowState { get; set; }
         public double? WindowTop { get; set; }
         public double? WindowLeft { get; set; }
@@ -52,6 +55,7 @@
             }
 
             UpdateValue(key, "SEInstallLocation", this.SEInstallLocation);
+            UpdateValue(key, "LanguageCode", this.LanguageCode);
             UpdateValue(key, "WindowState", this.WindowState);
             UpdateValue(key, "WindowTop", this.WindowTop);
             UpdateValue(key, "WindowLeft", this.WindowLeft);
@@ -68,6 +72,7 @@
                 return;
 
             this.SEInstallLocation = ReadValue<string>(key, "SEInstallLocation", null);
+            this.LanguageCode = ReadValue<string>(key, "LanguageCode", CultureInfo.CurrentCulture.IetfLanguageTag);
             this.WindowState = ReadValue<WindowState?>(key, "WindowState", null);
             this.WindowTop = ReadValue<double?>(key, "WindowTop", null);
             this.WindowLeft = ReadValue<double?>(key, "WindowLeft", null);
@@ -79,6 +84,7 @@
         public void Reset()
         {
             this.SEInstallLocation = null;
+            this.LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag;
             this.WindowState = null;
             this.WindowTop = null;
             this.WindowLeft = null;
