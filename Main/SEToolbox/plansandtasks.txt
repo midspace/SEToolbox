@@ -76,7 +76,7 @@
 ========--------~~~~~~~~
 
 Completed:
-- Check if SpaceEngineers Game is installed first.
+- Check if Space Engineers Game is installed first.
 - Refresh button, to reload selected Sandbox content.
 - Change Astronaut color.
 - Import Image.
@@ -114,7 +114,7 @@ Completed:
 
 Dropped:
 - Obfuscate/dotfuscator. Don't think it's worth it, considering I've gone open source. :D
-- Text Unicode support. SpaceEngineers doesn't appear to support Unicode.
+- Text Unicode support. Space Engineers doesn't appear to support Unicode.
   * testing text
   * テキストをテスト
   * 测试文字

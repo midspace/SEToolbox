@@ -15,7 +15,12 @@
             "Sandbox.Common.XmlSerializers.dll",
             "VRage.Common.dll",
             "VRage.Library.dll",
-            "VRage.Math.dll",};
+            "VRage.Math.dll",
+        };
+
+        internal static readonly string[] CoreSpaceEngineersResources = {
+            "Sandbox.Common.resources.dll",
+        };
 
         #region GetApplicationFilePath
 

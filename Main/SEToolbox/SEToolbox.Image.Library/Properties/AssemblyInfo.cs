@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SEToolbox.ImageLibrary")]
-[assembly: AssemblyDescription("SpaceEngineers Toolbox")]
+[assembly: AssemblyDescription("Space Engineers Toolbox - Image Library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mid-Space Productions")]
 [assembly: AssemblyProduct("SEToolbox.ImageLibrary")]

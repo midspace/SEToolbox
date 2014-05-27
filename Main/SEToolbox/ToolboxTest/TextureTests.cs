@@ -17,7 +17,7 @@
         public void LoadComponentTextures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
-            Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
+            Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
             var contentPath = Path.Combine(location, "Content");
@@ -72,13 +72,22 @@
             var goldBmp = TexUtil.CreateBitmap(goldPath);
             ImageTextureUtil.WriteImage(goldBmp, @".\TestOutput\gold.png");
 
+            var siliconPath = Path.Combine(contentPath, @"Textures\Voxels\Silicon_01_ForAxisXZ_de.dds");
+            Assert.IsTrue(File.Exists(siliconPath), "Filepath should exist on developer machine");
+            var siliconBmp = TexUtil.CreateBitmap(siliconPath);
+            ImageTextureUtil.WriteImage(siliconBmp, @".\TestOutput\silicon.png");
+
+            var platinumPath = Path.Combine(contentPath, @"Textures\Voxels\Platinum_01_ForAxisXZ_de.dds");
+            Assert.IsTrue(File.Exists(platinumPath), "Filepath should exist on developer machine");
+            var platinumBmp = TexUtil.CreateBitmap(platinumPath);
+            ImageTextureUtil.WriteImage(platinumBmp, @".\TestOutput\platinum.png");
         }
 
         [TestMethod]
         public void CreateMenuTextures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
-            Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
+            Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
             var contentPath = Path.Combine(location, "Content");
@@ -101,7 +110,7 @@
         public void ReadBackgroundTextures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
-            Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
+            Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
             var contentPath = Path.Combine(location, "Content");
@@ -135,7 +144,7 @@
             const bool ignoreAlpha = true;
 
             var location = ToolboxUpdater.GetApplicationFilePath();
-            Assert.IsNotNull(location, "SpaceEngineers should be installed on developer machine");
+            Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
             var contentPath = Path.Combine(location, "Content");

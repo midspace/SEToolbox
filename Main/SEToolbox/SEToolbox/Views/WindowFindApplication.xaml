@@ -3,7 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
-        Height="200" Width="400" ResizeMode="NoResize" Title="Locate Application"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:LocalizeDictionary.DesignCulture="en"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+        Height="200" Width="400" ResizeMode="NoResize" Title="{lex:Loc WnLocateAppTitle}"
         WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         commands:DialogService.IsRegisteredView="True"
@@ -31,25 +35,25 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Margin="0,8,0,8">The Space Engineers application could not be located.<LineBreak/>Please specify the location of the Space Engineers Application.</TextBlock>
+                <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="0,8,0,8" Text="{lex:Loc WnLocateAppPromptUser}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <TextBox Width="280" Text="{Binding GameApplicationPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Name="uxInitialElement"/>
-                    <Button ToolTip="Browse for Application" Command="{Binding BrowseApplicationCommand}" VerticalAlignment="Center">
+                    <Button ToolTip="{lex:Loc BtBrowseAppTip}" Command="{Binding BrowseApplicationCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,8,0,0" Visibility="{Binding IsValidApplication, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=check24}" VerticalAlignment="Center"/>
-                    <TextBlock Text="Valid location detected." VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <TextBlock Text="{lex:Loc WnLocateAppValidText}" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,8,0,0" Visibility="{Binding IsWrongApplication, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=error24}" VerticalAlignment="Center"/>
-                    <TextBlock Text="Invalid location specified." VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <TextBlock Text="{lex:Loc WnLocateAppInvalidText}" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
-                <Button Width="90" Command="{Binding ContinueCommand}" Content="Continue" IsDefault="True"/>
-                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                <Button Width="90" Command="{Binding ContinueCommand}" Content="{lex:Loc BtContinue}" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc BtCancel}" IsCancel="True"/>
             </StackPanel>
         </Grid>
     </Grid>

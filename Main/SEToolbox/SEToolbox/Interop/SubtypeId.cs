@@ -7,7 +7,7 @@
     {
         Empty = 0,
 
-		// Although not enumerated in the SpaceEngineers API, I'm autogenerating enumerations 
+		// Although not enumerated in the Space Engineers API, I'm autogenerating enumerations 
 		// direct from the game source here to make sure we have strongly typed names when generating content,
 		// rather than relying upon hardcoded 'strings' which required maintenance.
 		// When checking content read from 'world' saves however, we will have to rely upon the game data.

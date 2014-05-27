@@ -115,6 +115,7 @@
 
             // Find Triangle Normal
             var normal = Vector3D.CrossProduct(p2 - p1, p3 - p1);
+            normal.Normalize();
 
             // Find distance from LP1 and LP2 to the plane defined by the triangle
             var dist1 = Vector3D.DotProduct(r1 - p1, normal);
@@ -122,39 +123,43 @@
 
             if ((dist1 * dist2) >= 0.0f)
             {
-                //SFLog(@"no cross"); 
+                // line doesn't cross the triangle.
                 return false;
-            } // line doesn't cross the triangle.
+            }
 
             if (dist1 == dist2)
             {
-                //SFLog(@"parallel"); 
+                // line and plane are parallel
                 return false;
-            } // line and plane are parallel
+            }
 
-            // Find point on the line that intersects with the plane
-            // Rouding to correct for anonymous rounding issues! Damn doubles!
+            var zz = r1 + (Vector3D.DotProduct(normal, p1 - r1) / Vector3D.DotProduct(normal, r2 - r1)) * (r2 - r1);
+
+            // Find point on the line that intersects with the plane.
             var intersectPos = r1 + (r2 - r1) * (-dist1 / (dist2 - dist1));
 
             // Find if the interesection point lies inside the triangle by testing it against all edges
             var vTest = Vector3D.CrossProduct(normal, p2 - p1);
-            if (Vector3D.DotProduct(vTest, intersectPos - p1) < 0.0f)
+            var dTest = Vector3D.DotProduct(vTest, intersectPos - p1);
+            if (dTest < 0.0f)
             {
-                //SFLog(@"no intersect P2-P1"); 
+                // no intersect P2-P1
                 return false;
             }
 
             vTest = Vector3D.CrossProduct(normal, p3 - p2);
-            if (Vector3D.DotProduct(vTest, intersectPos - p2) < 0.0f)
+            dTest = Vector3D.DotProduct(vTest, intersectPos - p2);
+            if (dTest < 0.0f)
             {
-                //SFLog(@"no intersect P3-P2"); 
+                // no intersect P3-P2
                 return false;
             }
 
             vTest = Vector3D.CrossProduct(normal, p1 - p3);
-            if (Vector3D.DotProduct(vTest, intersectPos - p1) < 0.0f)
+            dTest = Vector3D.DotProduct(vTest, intersectPos - p3);
+            if (dTest < 0.0f)
             {
-                //SFLog(@"no intersect P1-P3"); 
+                // no intersect P1-P3
                 return false;
             }
 
@@ -185,6 +190,7 @@
 
             // Find Triangle Normal
             var normal = CrossProductRound(Round(p2 - p1, rounding), Round(p3 - p1, rounding));
+            normal.Normalize();
 
             // Find distance from LP1 and LP2 to the plane defined by the triangle
             var dist1 = DotProductRound(Round(r1 - p1, rounding), normal);

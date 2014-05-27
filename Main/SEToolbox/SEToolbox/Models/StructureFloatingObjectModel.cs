@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.Models
 {
     using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using System;
     using System.Runtime.Serialization;
@@ -135,40 +136,39 @@
         public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.FloatingObject;
-            var compMass = SpaceEngineersAPI.GetItemMass(this.FloatingObject.Item.Content.TypeId, this.FloatingObject.Item.Content.SubtypeName);
-            var compVolume = SpaceEngineersAPI.GetItemVolume(this.FloatingObject.Item.Content.TypeId, this.FloatingObject.Item.Content.SubtypeName);
+
+            var cd = SpaceEngineersAPI.GetDefinition(this.FloatingObject.Item.Content.TypeId, this.FloatingObject.Item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
+            var friendlyName = SpaceEngineersAPI.GetResourceName(cd.DisplayName);
 
             if (this.FloatingObject.Item.Content is MyObjectBuilder_Ore)
             {
-                this.DisplayName = string.Format("{0} Ore", this.FloatingObject.Item.Content.SubtypeName);
-                this.Volume = compVolume * this.FloatingObject.Item.Amount;
-                this.Mass = compMass * this.FloatingObject.Item.Amount;
+                this.DisplayName = friendlyName;
+                this.Volume = cd.Volume.Value * this.FloatingObject.Item.Amount;
+                this.Mass = cd.Mass * this.FloatingObject.Item.Amount;
                 this.Description = string.Format("{0:#,##0.00} Kg", this.Mass);
             }
             else if (this.FloatingObject.Item.Content is MyObjectBuilder_Ingot)
             {
-                this.DisplayName = string.Format("{0} Ingot", this.FloatingObject.Item.Content.SubtypeName);
-                this.Volume = compVolume * this.FloatingObject.Item.Amount;
-                this.Mass = compMass * this.FloatingObject.Item.Amount;
+                this.DisplayName = friendlyName;
+                this.Volume = cd.Volume.Value * this.FloatingObject.Item.Amount;
+                this.Mass = cd.Mass * this.FloatingObject.Item.Amount;
                 this.Description = string.Format("{0:#,##0.00} Kg", this.Mass);
             }
             else if (this.FloatingObject.Item.Content is MyObjectBuilder_EntityBase)
             {
-                var name = this.FloatingObject.Item.Content.GetType().Name;
-                name = name.Split('_')[1];
-                this.DisplayName = name;
+                this.DisplayName = friendlyName;
                 this.Description = string.Format("x {0}", this.FloatingObject.Item.Amount);
                 this.Units = this.FloatingObject.Item.Amount;
-                this.Volume = compVolume * this.FloatingObject.Item.Amount;
-                this.Mass = compMass * this.FloatingObject.Item.Amount;
+                this.Volume = cd.Volume.Value * this.FloatingObject.Item.Amount;
+                this.Mass = cd.Mass * this.FloatingObject.Item.Amount;
             }
             else
             {
-                this.DisplayName = this.FloatingObject.Item.Content.SubtypeName;
+                this.DisplayName = friendlyName;
                 this.Description = string.Format("x {0}", this.FloatingObject.Item.Amount);
                 this.Units = this.FloatingObject.Item.Amount;
-                this.Volume = compVolume * this.FloatingObject.Item.Amount;
-                this.Mass = compMass * this.FloatingObject.Item.Amount;
+                this.Volume = cd.Volume.Value * this.FloatingObject.Item.Amount;
+                this.Mass = cd.Mass * this.FloatingObject.Item.Amount;
             }
         }
 

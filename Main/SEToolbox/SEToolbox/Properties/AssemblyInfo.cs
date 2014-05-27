@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SEToolbox")]
-[assembly: AssemblyDescription("SpaceEngineers Toolbox")]
+[assembly: AssemblyDescription("Space Engineers Toolbox")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mid-Space Productions")]
 [assembly: AssemblyProduct("SEToolbox")]
@@ -53,7 +53,7 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 
-// First 3 numbers to match the current SpaceEngineers release.
+// First 3 numbers to match the current Space Engineers release.
 // http://forums.keenswh.com/post/about-change-log-6578819
 // Forth number to indicate my own build of SEToolbox to match. Remember to reset it back to 1 every time there is a new release of SpaceEngineers.
 [assembly: AssemblyFileVersion("01.031.012.1")]

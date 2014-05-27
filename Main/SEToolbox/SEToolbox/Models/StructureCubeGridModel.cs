@@ -639,7 +639,7 @@
                 this.DisplayName = String.Join("|", beaconNames);
             }
 
-            this.Description = string.Format("{0} | {1:#,##0} Kg", this.Scale, this.Mass);
+            this.Description = string.Format("{0}×{1}×{2} | {3:#,##0.00} Kg", this.Scale.X, this.Scale.Y, this.Scale.Z, this.Mass);
 
             // TODO:
             // Report:

@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox
 {
+    using System.Globalization;
     using log4net;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -11,6 +12,7 @@
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Threading;
+    using WPFLocalizeExtension.Engine;
     using Res = SEToolbox.Properties.Resources;
 
     /// <summary>
@@ -29,14 +31,17 @@
 
         private void OnStartup(Object sender, StartupEventArgs e)
         {
-            Splasher.Splash = new WindowSplashScreen();
-            Splasher.ShowSplash();
-
             if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) == KeyStates.Down)
             {
                 // Reset User Settings when Shift is held down during start up.
                 GlobalSettings.Default.Reset();
             }
+
+            LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfoByIetfLanguageTag(GlobalSettings.Default.LanguageCode);
+            
+
+            Splasher.Splash = new WindowSplashScreen();
+            Splasher.ShowSplash();
 
             log4net.Config.XmlConfigurator.Configure();
 
@@ -47,6 +52,7 @@
                 if (dialogResult == MessageBoxResult.Yes)
                 {
                     Process.Start(update.Link);
+                    GlobalSettings.Default.Save();
                     Application.Current.Shutdown();
                     return;
                 }
