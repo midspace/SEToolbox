@@ -6,7 +6,7 @@
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Resource Report"  Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Resource Report"  Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">

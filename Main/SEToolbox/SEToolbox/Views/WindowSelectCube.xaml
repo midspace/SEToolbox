@@ -4,7 +4,7 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Select Cube" Height="140" Width="320" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Select Cube" Height="140" Width="320" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">

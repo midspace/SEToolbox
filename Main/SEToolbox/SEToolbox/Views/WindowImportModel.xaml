@@ -6,7 +6,7 @@
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import 3D Model" Height="400" Width="520" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Import 3D Model" Height="400" Width="520" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -79,7 +79,7 @@
                 <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                 <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
-                    <Border BorderBrush="Black" BorderThickness="1">
+                    <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1">
                         <helix:HelixViewport3D >
                             <helix:DefaultLights/>
                             <helix:CoordinateSystemVisual3D/>

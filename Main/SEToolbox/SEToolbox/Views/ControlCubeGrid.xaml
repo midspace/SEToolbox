@@ -136,7 +136,7 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </Menu>
-                    <Grid Background="White">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>

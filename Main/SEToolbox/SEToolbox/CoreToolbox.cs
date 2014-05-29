@@ -70,7 +70,8 @@
             // Copy them to temporary path, then load with reflection on demand through the AppDomain.
             if (altDlls)
             {
-                _tempBinPath = Path.Combine(TempfileUtil.TempPath, "Bin");
+                _tempBinPath = Path.Combine(TempfileUtil.TempPath, "__bincache");
+                var searchPath = Path.Combine(GlobalSettings.Default.SEInstallLocation, "Bin64");
 
                 DirectoryInfo checkDir = null;
                 var counter = 0;
@@ -86,8 +87,6 @@
                         System.Threading.Thread.Sleep(100);
                     }
                 }
-
-                var searchPath = Path.Combine(GlobalSettings.Default.SEInstallLocation, "Bin64");
 
                 foreach (var file in ToolboxUpdater.CoreSpaceEngineersFiles)
                 {
