@@ -19,6 +19,7 @@
   * Report of all in world assets.
     * Breakdown of all ores in untouched (in asteroid), unused (ore and ingot), used (component, tool, cube), npc (ore, ingot, component, tool, cube).
 	* Counts of components, tools, cubes  (npc and non-npc).
+  * Corrupt save file check.
 
 - Drag drop files direct into the interface.
   * Detect .vox files for asteroids.
@@ -70,8 +71,9 @@
   * Set/Reset Ship Vector. (specify Direction and specify Speed)
   * Replace user specified blocks with other user blocks (ie., by Armor light/heavy/color.)
   * Set Ship direction at specific object (calc correct center of object).
-  * Subsystem editor.
   * Finish Mirror calculations for final 2 window cubes.
+  * Resize ship small<->large.
+  * Subsystem editor.
 
 ========--------~~~~~~~~
 

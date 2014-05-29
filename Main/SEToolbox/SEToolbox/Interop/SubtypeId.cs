@@ -245,5 +245,6 @@
         SmallShipGrinder,
         LargeShipWelder,
         SmallShipWelder,
+        LargeShipMergeBlock,
     };
 }
