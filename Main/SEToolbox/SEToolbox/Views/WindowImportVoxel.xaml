@@ -5,7 +5,7 @@
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Asteroid" Height="190" Width="440" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Import Asteroid" Height="190" Width="440" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">

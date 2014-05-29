@@ -5,7 +5,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Complete Component List" Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Complete Component List" Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}">
     <Window.Resources>
@@ -89,7 +89,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Border Background="Black" CornerRadius="4" Width="130" Height="130" Margin="0,0,4,0">
+                            <Border Background="Black" CornerRadius="4" Width="130" Height="130" Margin="0,0,4,0" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}">
                                 <Image Width="128" Height="128" Source="{Binding Path=SelectedCubeAsset.TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='128,128'}" SnapsToDevicePixels="True" />
                             </Border>
                             <ListView Grid.Column="1" ItemsSource="{Binding SelectedCubeAsset.CustomProperties}">

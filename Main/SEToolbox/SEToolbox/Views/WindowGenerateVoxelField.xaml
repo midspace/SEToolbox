@@ -4,7 +4,7 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         ResizeMode="CanResize"  ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow" 
-        Title="Generate Asteroid Field" Height="380" Width="600" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        Title="Generate Asteroid Field" Height="380" Width="600" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         MinHeight="150" MinWidth="250"
         commands:DialogCloser.DialogResult="{Binding CloseResult}">
     <Window.Resources>

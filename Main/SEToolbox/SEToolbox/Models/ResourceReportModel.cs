@@ -358,7 +358,7 @@
                     var ship = entity as StructureCubeGridModel;
                     var isNpc = ship.CubeGrid.CubeBlocks.Any<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Autopilot != null);
 
-                    foreach (var block in ship.CubeGrid.CubeBlocks)
+                    foreach (MyObjectBuilder_CubeBlock block in ship.CubeGrid.CubeBlocks)
                     {
                         var blockType = block.GetType();
                         var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, ship.CubeGrid.GridSizeEnum, block.SubtypeName);
@@ -366,30 +366,90 @@
                         string blockTexture = null;
                         float cubeMass = 0;
 
-                        if (cubeBlockDefinition != null)
+                        // Unconstructed portion.
+                        if (block.ConstructionStockpile != null && block.ConstructionStockpile.Items.Count > 0)
                         {
-                            foreach (var component in cubeBlockDefinition.Components)
+                            foreach (MyObjectBuilder_StockpileItem item in block.ConstructionStockpile.Items)
                             {
-                                var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
-
-                                #region used ore value
+                                var cd = SpaceEngineersAPI.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName) as MyObjectBuilder_ComponentDefinition;
 
                                 if (isNpc)
                                 {
-                                    TallyItems(component.Type, component.Subtype, component.Count, contentPath, accumulateNpcOres, null, null);
+                                    TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, item.Amount, contentPath, accumulateNpcOres, null, null);
                                 }
                                 else
                                 {
-                                    TallyItems(component.Type, component.Subtype, component.Count, contentPath, accumulateUsedOres, null, null);
+                                    TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, item.Amount, contentPath, accumulateUsedOres, null, null);
                                 }
 
-                                #endregion
-
-                                float componentMass = cd.Mass * component.Count;
+                                float componentMass = cd.Mass * item.Amount;
                                 cubeMass += componentMass;
                             }
+                        }
 
-                            blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds));
+                        if (cubeBlockDefinition != null)
+                        {
+                            if (block.BuildPercent < 1f)
+                            {
+                                // break down the components, to get a accurate counted on the number of components actually in the cube.
+                                var componentList = new List<MyObjectBuilder_ComponentDefinition>();
+
+                                foreach (var component in cubeBlockDefinition.Components)
+                                {
+                                    var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+                                    for (var i = 0; i < component.Count; i++)
+                                        componentList.Add(cd);
+                                }
+
+                                // Round up to nearest whole number.
+                                var completeCount = Math.Min(componentList.Count, Math.Ceiling((double)componentList.Count * (double)block.BuildPercent));
+
+                                // count only the components used to reach the BuildPercent, 1 component at a time.
+                                for (var i = 0; i < completeCount; i++)
+                                {
+                                    #region used ore value
+
+                                    if (isNpc)
+                                    {
+                                        TallyItems(componentList[i].Id.TypeId, componentList[i].Id.SubtypeName, 1, contentPath, accumulateNpcOres, null, null);
+                                    }
+                                    else
+                                    {
+                                        TallyItems(componentList[i].Id.TypeId, componentList[i].Id.SubtypeName, 1, contentPath, accumulateUsedOres, null, null);
+                                    }
+
+                                    #endregion
+
+                                    float componentMass = componentList[i].Mass * 1;
+                                    cubeMass += componentMass;
+                                }
+                            }
+                            else
+                            {
+                                // Fully armed and operational cube.
+                                foreach (var component in cubeBlockDefinition.Components)
+                                {
+                                    var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+
+                                    #region used ore value
+
+                                    if (isNpc)
+                                    {
+                                        TallyItems(component.Type, component.Subtype, component.Count, contentPath, accumulateNpcOres, null, null);
+                                    }
+                                    else
+                                    {
+                                        TallyItems(component.Type, component.Subtype, component.Count, contentPath, accumulateUsedOres, null, null);
+                                    }
+
+                                    #endregion
+
+                                    float componentMass = cd.Mass * component.Count;
+                                    cubeMass += componentMass;
+                                }
+                            }
+
+                            blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds * block.BuildPercent));
                             blockTexture = Path.Combine(contentPath, cubeBlockDefinition.Icon + ".dds");
                         }
 
@@ -689,7 +749,9 @@
             bld.AppendFormat("Date: {0}\r\n", _generatedDate);
             bld.AppendLine();
 
-            // Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.
+            bld.AppendLine("In game resources");
+            bld.AppendLine("Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.");
+            bld.AppendLine();
 
             bld.AppendFormat("Untouched Ore (Asteroids)\r\n");
             bld.AppendFormat("Name\tVolume m³\r\n");
@@ -699,7 +761,7 @@
             }
 
             bld.AppendLine();
-            bld.AppendFormat("Unused Ore (Ore and Ingots)\r\n");
+            bld.AppendFormat("Unused Ore (Ore and Ingots, either floating or in containers)\r\n");
             bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
             foreach (var item in _unusedOre)
             {
@@ -730,8 +792,9 @@
                 bld.AppendFormat("{0}\t{1:#,##0.000}\t{2:#,##0.000}\r\n", item.FriendlyName, item.Mass, item.Volume);
             }
 
-            // Counts of all current items in game Assets.
-            // numbers of cubes, components, tools, ingots, etc could be included, as they technically indicate time spent to construct or refine.
+            bld.AppendLine();
+            bld.AppendLine("In game assets");
+            bld.AppendLine("Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine.");
 
             bld.AppendLine();
             bld.AppendFormat("All Cubes\r\n");
@@ -777,8 +840,7 @@
                     @"
 body { background-color: #F6F6FA }
 p { font-family: Arial, Helvetica, sans-serif; }
-h1 { font-family: Arial, Helvetica, sans-serif; }
-h2 { font-family: Arial, Helvetica, sans-serif; }
+h1,h2,h3 { font-family: Arial, Helvetica, sans-serif; }
 table { background-color: #FFFFFF; }
 table tr td { font-family: Arial, Helvetica, sans-serif; font-size: small; line-height: normal; color: #000000; }
 table thead td { background-color: #BABDD6; font-weight: bold; Color: #000000; }
@@ -791,9 +853,10 @@ td.right { text-align: right; }");
                 writer.RenderElement(HtmlTextWriterTag.P, "Save World: {0}", _saveName);
                 writer.RenderElement(HtmlTextWriterTag.P, "Date: {0}", _generatedDate);
 
+                writer.RenderElement(HtmlTextWriterTag.H2, "In game resources");
                 writer.RenderElement(HtmlTextWriterTag.P, "Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.");
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "Untouched Ore (Asteroids)");
+                writer.RenderElement(HtmlTextWriterTag.H3, "Untouched Ore (Asteroids)");
                 writer.BeginTable("1", "3", "0", new String[] { "Name", "Volume m³" });
                 foreach (var item in this._untouchedOre)
                 {
@@ -805,7 +868,7 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "Unused Ore (Ore and Ingots)");
+                writer.RenderElement(HtmlTextWriterTag.H3, "Unused Ore (Ore and Ingots, either floating or in containers)");
                 writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
                 foreach (var item in _unusedOre)
                 {
@@ -819,7 +882,7 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "Used Ore (tools, items, components, cubes)");
+                writer.RenderElement(HtmlTextWriterTag.H3, "Used Ore (in tools, items, components, cubes)");
                 writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
                 foreach (var item in _usedOre)
                 {
@@ -833,7 +896,7 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "Player Ore (Player inventories)");
+                writer.RenderElement(HtmlTextWriterTag.H3, "Player Ore (Player inventories)");
                 writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
                 foreach (var item in _playerOre)
                 {
@@ -847,7 +910,7 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "NPC Ore (Controlled by NPC)");
+                writer.RenderElement(HtmlTextWriterTag.H3, "NPC Ore (Controlled by NPC)");
                 writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
                 foreach (var item in _npcOre)
                 {
@@ -864,10 +927,10 @@ td.right { text-align: right; }");
                 writer.RenderElement(HtmlTextWriterTag.Br);
                 writer.RenderElement(HtmlTextWriterTag.Hr);
 
-                // Counts of all current items in game Assets.
-                // numbers of cubes, components, tools, ingots, etc could be included, as they technically indicate time spent to construct or refine.
+                writer.RenderElement(HtmlTextWriterTag.H2, "In game assets");
+                writer.RenderElement(HtmlTextWriterTag.P, "Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine.");
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "All Cubes");
+                writer.RenderElement(HtmlTextWriterTag.H3, "All Cubes");
                 writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Time" });
                 foreach (var item in _allCubes)
                 {
@@ -894,7 +957,7 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "All Components");
+                writer.RenderElement(HtmlTextWriterTag.H3, "All Components");
                 writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
                 foreach (var item in _allComponents)
                 {
@@ -923,7 +986,7 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "All Items");
+                writer.RenderElement(HtmlTextWriterTag.H3, "All Items");
                 writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
                 foreach (var item in _allItems)
                 {

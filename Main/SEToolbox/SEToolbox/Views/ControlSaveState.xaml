@@ -24,11 +24,11 @@
             </Border.Background>
             <Grid Margin="4,0,4,0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Unsaved" ToolTip="Your content has been changed, and not yet saved." Foreground="Black" />
+                    <TextBlock Text="Unsaved" ToolTip="Your content has been changed, and not yet saved." Foreground="Red" />
                 </StackPanel>
             </Grid>
         </Border>
-        <Border CornerRadius="2" BorderBrush="Black" BorderThickness="0">
+        <Border CornerRadius="2" BorderBrush="Black" BorderThickness="0" Background="Transparent">
             <Border.Style>
                 <Style TargetType="Border">
                     <Style.Triggers>
@@ -38,15 +38,9 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <Border.Background>
-                <LinearGradientBrush>
-                    <GradientStop Color="#FFE0E0E0" Offset="4"/>
-                    <GradientStop Color="#FFFAFAFA" Offset="0"/>
-                </LinearGradientBrush>
-            </Border.Background>
             <Grid Margin="4,0,4,0">
                 <StackPanel Orientation="Horizontal" Width="46">
-                    <TextBlock Text=" " Foreground="Black" />
+                    <TextBlock Text=" "/>
                 </StackPanel>
             </Grid>
         </Border>

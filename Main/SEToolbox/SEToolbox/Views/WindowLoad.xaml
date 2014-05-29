@@ -5,8 +5,8 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
-        ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Select World" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow" Style="{StaticResource DefaultWindowStyle}"
+        Title="Select World" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" 
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">

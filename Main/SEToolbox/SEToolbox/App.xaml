@@ -84,7 +84,7 @@
         <Style x:Key="ToolBarMenu" TargetType="{x:Type Menu}">
             <Setter Property="Panel.Background" Value="Transparent" />
         </Style>
-        
+
         <ObjectDataProvider x:Key="ImportModelTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="interop:ImportModelClassType" />
@@ -137,10 +137,9 @@
             </Style.Triggers>
         </Style>
 
-        <LinearGradientBrush x:Key="DialogBackgroundBrush">
-            <GradientStop Color="#FF2B2077" Offset="4"/>
-            <GradientStop Color="#FFFFFFFF" Offset="0"/>
-        </LinearGradientBrush>
+        <Style x:Key="DefaultWindowStyle" TargetType="{x:Type Window}">
+            <!--<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />-->
+        </Style>
 
     </Application.Resources>
 </Application>

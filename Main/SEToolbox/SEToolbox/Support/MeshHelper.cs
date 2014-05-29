@@ -117,6 +117,12 @@
             var normal = Vector3D.CrossProduct(p2 - p1, p3 - p1);
             normal.Normalize();
 
+            // not a triangle.
+            if (normal.IsUndefined())
+            {
+                return false;
+            }
+
             // Find distance from LP1 and LP2 to the plane defined by the triangle
             var dist1 = Vector3D.DotProduct(r1 - p1, normal);
             var dist2 = Vector3D.DotProduct(r2 - p1, normal);
@@ -191,6 +197,12 @@
             // Find Triangle Normal
             var normal = CrossProductRound(Round(p2 - p1, rounding), Round(p3 - p1, rounding));
             normal.Normalize();
+
+            // not a triangle.
+            if (normal.IsUndefined())
+            {
+                return false;
+            }
 
             // Find distance from LP1 and LP2 to the plane defined by the triangle
             var dist1 = DotProductRound(Round(r1 - p1, rounding), normal);
