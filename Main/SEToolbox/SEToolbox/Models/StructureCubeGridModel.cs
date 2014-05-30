@@ -1244,6 +1244,7 @@
 
         internal static readonly string[] TubeCurvedRotationBlocks = new string[] {
             "ConveyorTubeCurved",
+            "ConveyorTubeCurvedMedium",
         };
 
         #endregion

@@ -14,9 +14,10 @@
     {
         #region Fields
 
-        private readonly IDialogService dialogService;
-        private SelectWorldModel dataModel;
-        private bool? closeResult;
+        private readonly IDialogService _dialogService;
+        private SelectWorldModel _dataModel;
+        private bool? _closeResult;
+        private bool _zoomThumbnail;
 
         #endregion
 
@@ -31,9 +32,9 @@
             : base(parentViewModel)
         {
             Contract.Requires(dialogService != null);
-            this.dialogService = dialogService;
-            this.dataModel = dataModel;
-            this.dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            this._dialogService = dialogService;
+            this._dataModel = dataModel;
+            this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
                 this.OnPropertyChanged(e.PropertyName);
@@ -42,7 +43,7 @@
 
         #endregion
 
-        #region Properties
+        #region command Properties
 
         public ICommand LoadCommand
         {
@@ -84,6 +85,14 @@
             }
         }
 
+        public ICommand ZoomThumbnailCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ZoomThumbnailExecuted), new Func<bool>(ZoomThumbnailCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -95,13 +104,33 @@
         {
             get
             {
-                return this.closeResult;
+                return this._closeResult;
             }
 
             set
             {
-                this.closeResult = value;
+                if (this._closeResult != value)
+                {
+                this._closeResult = value;
                 this.RaisePropertyChanged(() => CloseResult);
+                }
+            }
+        }
+
+        public bool ZoomThumbnail
+        {
+            get
+            {
+                return this._zoomThumbnail;
+            }
+
+            set
+            {
+                if (this._zoomThumbnail != value)
+                {
+                    this._zoomThumbnail = value;
+                    this.RaisePropertyChanged(() => ZoomThumbnail);
+                }
             }
         }
 
@@ -109,13 +138,13 @@
         {
             get
             {
-                return this.dataModel.SelectedWorld;
+                return this._dataModel.SelectedWorld;
             }
             set
             {
-                if (value != this.dataModel.SelectedWorld)
+                if (value != this._dataModel.SelectedWorld)
                 {
-                    this.dataModel.SelectedWorld = value;
+                    this._dataModel.SelectedWorld = value;
                 }
             }
         }
@@ -124,7 +153,7 @@
         {
             get
             {
-                return this.dataModel.Worlds;
+                return this._dataModel.Worlds;
             }
         }
 
@@ -135,12 +164,12 @@
         {
             get
             {
-                return this.dataModel.IsBusy;
+                return this._dataModel.IsBusy;
             }
 
             set
             {
-                this.dataModel.IsBusy = value;
+                this._dataModel.IsBusy = value;
             }
         }
 
@@ -178,9 +207,9 @@
         public void RepairExecuted()
         {
             this.IsBusy = true;
-            var results = this.dataModel.RepairSandBox();
+            var results = this._dataModel.RepairSandBox();
             this.IsBusy = false;
-            var result = dialogService.ShowMessageBox(this, results, "Repair results", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
+            var result = _dialogService.ShowMessageBox(this, results, "Repair results", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
         }
 
         public bool OpenFolderCanExecute()
@@ -202,6 +231,16 @@
         public void OpenWorkshopExecuted()
         {
             System.Diagnostics.Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", this.SelectedWorld.WorkshopId.Value), null);
+        }
+
+        public bool ZoomThumbnailCanExecute()
+        {
+            return this.SelectedWorld != null && SelectedWorld.ThumbnailImageFilename != null;
+        }
+
+        public void ZoomThumbnailExecuted()
+        {
+            this.ZoomThumbnail = !this.ZoomThumbnail;
         }
 
         #endregion
