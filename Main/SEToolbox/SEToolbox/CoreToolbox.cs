@@ -78,14 +78,18 @@
 
                 while (checkDir == null && counter < 10)
                 {
-                    if (!Directory.Exists(_tempBinPath))
-                        checkDir = Directory.CreateDirectory(_tempBinPath);
+                    if (Directory.Exists(_tempBinPath))
+                        break;
+                        
+                    checkDir = Directory.CreateDirectory(_tempBinPath);
 
                     if (checkDir == null)
                     {
                         // wait a while, as the drive may be processing Windows Explorer which had a lock on the Directory after prior cleanup.
                         System.Threading.Thread.Sleep(100);
                     }
+
+                    counter++;
                 }
 
                 foreach (var file in ToolboxUpdater.CoreSpaceEngineersFiles)
