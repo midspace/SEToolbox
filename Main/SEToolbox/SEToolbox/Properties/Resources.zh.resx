@@ -130,7 +130,7 @@
     <comment>test</comment>
   </data>
   <data name="WindowMainTitle" xml:space="preserve">
-    <value>太空工程师 工具箱 - {0}</value>
+    <value>太空工程师 工具箱 - {0} ({1})</value>
     <comment>test</comment>
   </data>
 </root>

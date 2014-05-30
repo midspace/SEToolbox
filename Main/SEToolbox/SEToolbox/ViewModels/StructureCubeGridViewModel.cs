@@ -678,11 +678,12 @@
 
         public bool MaxVelocityAtPlayerCanExecute()
         {
-            return true;
+            return this.MainViewModel.ThePlayerCharacter != null;
         }
 
         public void MaxVelocityAtPlayerExecuted()
         {
+
             var position = this.MainViewModel.ThePlayerCharacter.PositionAndOrientation.Value.Position;
             this.DataModel.MaxVelocityAtPlayer(position);
             this.MainViewModel.IsModified = true;

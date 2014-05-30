@@ -3,6 +3,7 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using SEToolbox.Support;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -169,7 +170,9 @@
 
         public bool RepairCanExecute()
         {
-            return this.SelectedWorld != null;
+            return this.SelectedWorld != null &&
+                (this.SelectedWorld.SaveType != SaveWorldType.DedicatedServerService ||
+                (this.SelectedWorld.SaveType == SaveWorldType.DedicatedServerService && ToolboxUpdater.CheckIsRuningElevated()));
         }
 
         public void RepairExecuted()

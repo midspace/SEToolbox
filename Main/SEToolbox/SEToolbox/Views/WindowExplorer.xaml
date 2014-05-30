@@ -36,6 +36,7 @@
     <Window.Title>
         <MultiBinding Converter="{StaticResource i18nFormatter}" ConverterParameter="WindowMainTitle">
             <Binding Path="ActiveWorld.SessionName"/>
+            <Binding Path="ActiveWorld.SaveType" Converter="{StaticResource EnumToResouceConverter}"/>
         </MultiBinding>
     </Window.Title>
     <Window.TaskbarItemInfo>

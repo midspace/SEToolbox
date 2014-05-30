@@ -11,10 +11,12 @@
     {
         #region Fields
 
-        private string username;
-        private string savename;
-        private string savepath;
-        private MyObjectBuilder_Checkpoint content;
+        private string _groupDescription;
+        private SaveWorldType _saveType;
+        private string _userName;
+        private string _saveName;
+        private string _savePath;
+        private MyObjectBuilder_Checkpoint _content;
         private bool _compressedCheckpointFormat;
 
         /// <summary>
@@ -26,19 +28,56 @@
 
         #region Properties
 
-        public string Username
+        public string GroupDescription
         {
             get
             {
-                return this.username;
+                return this._groupDescription;
             }
 
             set
             {
-                if (value != this.username)
+                if (value != this._groupDescription)
                 {
-                    this.username = value;
-                    this.RaisePropertyChanged(() => Username);
+                    this._groupDescription = value;
+                    this.RaisePropertyChanged(() => GroupDescription);
+                }
+            }
+        }
+
+        public SaveWorldType SaveType
+        {
+            get
+            {
+                return this._saveType;
+            }
+
+            set
+            {
+                if (value != this._saveType)
+                {
+                    this._saveType = value;
+                    this.RaisePropertyChanged(() => SaveType);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This will be the SteamId of the local user, or the Instance name of the Server.
+        /// </summary>
+        public string UserName
+        {
+            get
+            {
+                return this._userName;
+            }
+
+            set
+            {
+                if (value != this._userName)
+                {
+                    this._userName = value;
+                    this.RaisePropertyChanged(() => UserName);
                 }
             }
         }
@@ -47,14 +86,14 @@
         {
             get
             {
-                return this.savename;
+                return this._saveName;
             }
 
             set
             {
-                if (value != this.savename)
+                if (value != this._saveName)
                 {
-                    this.savename = value;
+                    this._saveName = value;
                     this.RaisePropertyChanged(() => Savename);
                 }
             }
@@ -64,14 +103,14 @@
         {
             get
             {
-                return this.savepath;
+                return this._savePath;
             }
 
             set
             {
-                if (value != this.savepath)
+                if (value != this._savePath)
                 {
-                    this.savepath = value;
+                    this._savePath = value;
                     this.RaisePropertyChanged(() => Savepath);
                 }
             }
@@ -81,14 +120,14 @@
         {
             get
             {
-                return this.content;
+                return this._content;
             }
 
             set
             {
-                if (value != this.content)
+                if (value != this._content)
                 {
-                    this.content = value;
+                    this._content = value;
                     this.RaisePropertyChanged(() => Content, () => SessionName, () => LastSaveTime, () => IsValid);
                 }
             }
@@ -115,17 +154,17 @@
         {
             get
             {
-                if (this.content == null)
+                if (this._content == null)
                     return " # Invalid Save # ";
 
-                return this.content.SessionName;
+                return this._content.SessionName;
             }
 
             set
             {
-                if (value != this.content.SessionName)
+                if (value != this._content.SessionName)
                 {
-                    this.content.SessionName = value;
+                    this._content.SessionName = value;
                     this.RaisePropertyChanged(() => SessionName);
                 }
             }
@@ -135,17 +174,17 @@
         {
             get
             {
-                if (this.content == null)
+                if (this._content == null)
                     return null;
 
-                return this.content.LastSaveTime;
+                return this._content.LastSaveTime;
             }
 
             set
             {
-                if (value != this.content.LastSaveTime)
+                if (value != this._content.LastSaveTime)
                 {
-                    this.content.LastSaveTime = value.Value;
+                    this._content.LastSaveTime = value.Value;
                     this.RaisePropertyChanged(() => LastSaveTime);
                 }
             }
@@ -172,7 +211,7 @@
         {
             get
             {
-                return this.content.WorkshopId.HasValue;
+                return this._content.WorkshopId.HasValue;
             }
         }
 
@@ -180,10 +219,10 @@
         {
             get
             {
-                if (this.content == null)
+                if (this._content == null)
                     return null;
 
-                return this.content.WorkshopId;
+                return this._content.WorkshopId;
             }
         }
 
@@ -199,7 +238,7 @@
         {
             get
             {
-                return Path.Combine(this.savepath, SpaceEngineersConsts.ThumbnailImageFilename);
+                return Path.Combine(this._savePath, SpaceEngineersConsts.ThumbnailImageFilename);
             }
         }
 
@@ -216,7 +255,7 @@
         public void LoadCheckpoint()
         {
             var filename = Path.Combine(this.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
-            
+
             if (File.Exists(filename))
             {
                 try

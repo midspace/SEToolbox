@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System.Globalization;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -15,6 +14,7 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -557,7 +557,7 @@
         public void OpenExecuted()
         {
             var model = new SelectWorldModel();
-            model.Load(this._dataModel.BaseSavePath);
+            model.Load(this._dataModel.BaseLocalSavePath, this._dataModel.BaseDedicatedServerHostSavePath, this._dataModel.BaseDedicatedServerServiceSavePath);
             var loadVm = new SelectWorldViewModel(this, model);
 
             var result = this._dialogService.ShowDialog<WindowLoad>(this, loadVm);
@@ -571,7 +571,9 @@
 
         public bool SaveCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return this._dataModel.ActiveWorld != null &&
+                (this._dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService ||
+                (this._dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService && ToolboxUpdater.CheckIsRuningElevated()));
         }
 
         public void SaveExecuted()
@@ -621,7 +623,8 @@
         public void ImportVoxelExecuted()
         {
             var model = new ImportVoxelModel();
-            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
             var loadVm = new ImportVoxelViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowImportVoxel>(this, loadVm);
@@ -645,7 +648,8 @@
         public void ImportImageExecuted()
         {
             var model = new ImportImageModel();
-            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
             var loadVm = new ImportImageViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowImportImage>(this, loadVm);
@@ -669,7 +673,8 @@
         public void ImportModelExecuted()
         {
             var model = new Import3dModelModel();
-            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
             var loadVm = new Import3dModelViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowImportModel>(this, loadVm);
@@ -782,7 +787,8 @@
         public void CreateFloatingItemExecuted()
         {
             var model = new GenerateFloatingObjectModel();
-            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value, this._dataModel.ActiveWorld.Content.MaxFloatingObjects);
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position, this._dataModel.ActiveWorld.Content.MaxFloatingObjects);
             var loadVm = new GenerateFloatingObjectViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowGenerateFloatingObject>(this, loadVm);
             if (result == true)
@@ -810,7 +816,8 @@
         public void GenerateVoxelFieldExecuted()
         {
             var model = new GenerateVoxelFieldModel();
-            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
             var loadVm = new GenerateVoxelFieldViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowGenerateVoxelField>(this, loadVm);
@@ -845,7 +852,8 @@
         public void Test1Executed()
         {
             var model = new Import3dModelModel();
-            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
             var loadVm = new Import3dModelViewModel(this, model);
 
             this.IsBusy = true;
@@ -881,7 +889,8 @@
         public void Test3Executed()
         {
             var model = new Import3dModelModel();
-            model.Load(this._dataModel.ThePlayerCharacter.PositionAndOrientation.Value);
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
             var loadVm = new Import3dModelViewModel(this, model);
 
             loadVm.ArmorType = ImportArmorType.Light;
@@ -1016,7 +1025,8 @@
         public void GroupMoveExecuted()
         {
             var model = new GroupMoveModel();
-            model.Load(this.Selections, this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3());
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
+            model.Load(this.Selections, position);
             var loadVm = new GroupMoveViewModel(this, model);
 
             var result = this._dialogService.ShowDialog<WindowGroupMove>(this, loadVm);

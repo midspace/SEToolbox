@@ -189,10 +189,17 @@
 
         #region CheckIsRuningElevated
 
+        private static bool? _checkIsRuningElevated = null;
+
         internal static bool CheckIsRuningElevated()
         {
-            var pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-            return pricipal.IsInRole(WindowsBuiltInRole.Administrator);
+            if (_checkIsRuningElevated == null)
+            {
+                var pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+                _checkIsRuningElevated = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+
+            return _checkIsRuningElevated.Value;
         }
 
         #endregion

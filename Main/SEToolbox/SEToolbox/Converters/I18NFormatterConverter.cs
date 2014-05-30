@@ -25,7 +25,9 @@
 
             var keyStr = (string)parameter;
 
+#pragma warning disable 618
             var ext = new LocExtension(keyStr) { Dict = "Resources", Assembly = "SEToolbox" };
+#pragma warning restore 618
 
             string localizedValue;
 

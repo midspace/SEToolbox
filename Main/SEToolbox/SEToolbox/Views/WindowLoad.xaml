@@ -15,6 +15,11 @@
         <converters:NullImageConverter x:Key="NullImageConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <CollectionViewSource Source="{Binding Worlds}" x:Key="GroupedItems">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="GroupDescription" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
     </Window.Resources>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
@@ -26,8 +31,8 @@
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition MinWidth="98" MaxWidth="200"/>
             </Grid.ColumnDefinitions>
-            <controls:SortableListView ItemsSource="{Binding Worlds}" SelectionMode="Single" SelectedValue="{Binding SelectedWorld}" x:Name="uxWorldSelectionBox" VerticalAlignment="Stretch"
-                ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
+            <controls:SortableListView ItemsSource="{Binding Source={StaticResource GroupedItems}}" SelectionMode="Single" SelectedValue="{Binding SelectedWorld}" x:Name="uxWorldSelectionBox" VerticalAlignment="Stretch"
+                                       ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding SessionName}" Header="Name"/>
@@ -36,6 +41,32 @@
                         <GridViewColumn DisplayMemberBinding="{Binding WorkshopId}" Header="Workshop"/>
                     </GridView>
                 </ListView.View>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander IsExpanded="True">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0"/>
+                                                        </StackPanel>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <Expander.Content>
+                                                    <ItemsPresenter/>
+                                                </Expander.Content>
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListView.GroupStyle>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClickItem">
                         <commands:CommandAction Command="{Binding LoadCommand}"/>
