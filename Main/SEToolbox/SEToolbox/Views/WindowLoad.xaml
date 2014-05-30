@@ -90,7 +90,13 @@
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="4"/>
             <Grid Grid.Column="2" Margin="8,0,0,0">
                 <StackPanel VerticalAlignment="Top">
-                    <Image HorizontalAlignment="Stretch" Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" />
+                    <Image HorizontalAlignment="Stretch" Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" Cursor="Hand" ToolTip="Click to Zoom in">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseUp">
+                                <commands:CommandAction Command="{Binding ZoomThumbnailCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Image>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <Button Width="90" Command="{Binding RepairCommand}" Content="Repair"  Margin="0,0,0,32" ToolTip="This will attempt to repair the save content it it finds any issues." />
@@ -99,6 +105,14 @@
                 </StackPanel>
             </Grid>
         </Grid>
+        <Border Visibility="{Binding ZoomThumbnail, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Cursor="Hand" ToolTip="Click to Zoom out">
+            <Image Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" IsHitTestVisible="False"/>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseUp">
+                    <commands:CommandAction Command="{Binding ZoomThumbnailCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Border>
         <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>
