@@ -143,7 +143,7 @@
 
         public bool MaxVelocityAtPlayerCanExecute()
         {
-            return true;
+            return this.MainViewModel.ThePlayerCharacter != null;
         }
 
         public void MaxVelocityAtPlayerExecuted()

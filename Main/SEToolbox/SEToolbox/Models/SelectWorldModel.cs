@@ -2,11 +2,13 @@
 {
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Converters;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -15,13 +17,6 @@
     public class SelectWorldModel : BaseModel
     {
         #region Fields
-
-        /// <summary>
-        /// The base path of the save files, minus the userid.
-        /// </summary>
-        private string _baseSavePath;
-
-        private bool _isValidSaveDirectory;
 
         private SaveResource _selectedWorld;
 
@@ -43,39 +38,14 @@
 
         #region Properties
 
-        public string BaseSavePath
-        {
-            get
-            {
-                return this._baseSavePath;
-            }
+        /// <summary>
+        /// The base path of the save files, minus the userid.
+        /// </summary>
+        public string BaseLocalSavePath { get; set; }
 
-            set
-            {
-                if (value != this._baseSavePath)
-                {
-                    this._baseSavePath = value;
-                    this.RaisePropertyChanged(() => BaseSavePath);
-                }
-            }
-        }
+        public string BaseDedicatedServerHostSavePath { get; set; }
 
-        public bool IsValidSaveDirectory
-        {
-            get
-            {
-                return this._isValidSaveDirectory;
-            }
-
-            set
-            {
-                if (value != this._isValidSaveDirectory)
-                {
-                    this._isValidSaveDirectory = value;
-                    this.RaisePropertyChanged(() => IsValidSaveDirectory);
-                }
-            }
-        }
+        public string BaseDedicatedServerServiceSavePath { get; set; }
 
         public SaveResource SelectedWorld
         {
@@ -139,9 +109,11 @@
 
         #region methods
 
-        public void Load(string baseSavePath)
+        public void Load(string baseLocalSavePath, string baseDedicatedServerHostSavePath, string baseDedicatedServerServiceSavePath)
         {
-            this.BaseSavePath = baseSavePath;
+            this.BaseLocalSavePath = baseLocalSavePath;
+            this.BaseDedicatedServerHostSavePath = baseDedicatedServerHostSavePath;
+            this.BaseDedicatedServerServiceSavePath = baseDedicatedServerServiceSavePath;
             this.LoadSaveList();
         }
 
@@ -258,7 +230,7 @@
                 str.AppendLine("! Checkpoint file is missing or broken.");
                 missingFiles = true;
             }
-            
+
             if (model.SectorData == null)
             {
                 statusNormal = false;
@@ -268,7 +240,7 @@
 
             if (!missingFiles)
             {
-                if (model.ThePlayerCharacter == null)
+                if (this.SelectedWorld.SaveType == SaveWorldType.Local && model.ThePlayerCharacter == null)
                 {
                     statusNormal = false;
                     str.AppendLine("! No active Player in Save content.");
@@ -313,22 +285,43 @@
 
                             // Add default items to Inventory.
                             MyObjectBuilder_InventoryItem item;
+                            MyObjectBuilder_EntityBase gunEntity;
 
                             character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.InventoryItem));
                             item.AmountDecimal = 1;
-                            item.Content = new MyObjectBuilder_Welder() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None };
+                            item.ItemId = 0;
+                            item.Content = new MyObjectBuilder_Welder();
+                            gunEntity = MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.Welder) as MyObjectBuilder_EntityBase;
+                            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
+                            ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
                             character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.InventoryItem));
                             item.AmountDecimal = 1;
-                            item.Content = new MyObjectBuilder_AngleGrinder() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None };
+                            item.ItemId = 1;
+                            item.Content = new MyObjectBuilder_AngleGrinder();
+                            gunEntity = MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.AngleGrinder) as MyObjectBuilder_EntityBase;
+                            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
+                            ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
                             character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.InventoryItem));
                             item.AmountDecimal = 1;
-                            item.Content = new MyObjectBuilder_HandDrill() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None };
+                            item.ItemId = 2;
+                            item.Content = new MyObjectBuilder_HandDrill();
+                            gunEntity = MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.HandDrill) as MyObjectBuilder_EntityBase;
+                            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
+                            ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
                             character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.InventoryItem));
                             item.AmountDecimal = 1;
-                            item.Content = new MyObjectBuilder_AutomaticRifle() { EntityId = SpaceEngineersAPI.GenerateEntityId(), PersistentFlags = MyPersistentEntityFlags2.None, CurrentAmmo = 0 };
+                            item.ItemId = 3;
+                            item.Content = new MyObjectBuilder_AutomaticRifle();
+                            gunEntity = MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.AutomaticRifle) as MyObjectBuilder_EntityBase;
+                            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
+                            ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
                             model.ActiveWorld.Content.ControlledObject = character.EntityId;
                             model.ActiveWorld.Content.CameraController = Sandbox.Common.ObjectBuilders.MyCameraControllerEnum.Entity;
@@ -374,7 +367,7 @@
                         {
                             // MyObjectBuilder_Ladder/MyObjectBuilder_Passage convert.
                             statusNormal = false;
-                            str.AppendLine( "! 'Ladder' no longer supported in game.");
+                            str.AppendLine("! 'Ladder' no longer supported in game.");
                             str.AppendLine(string.Format("! {0} 'Ladder' converted to 'Passage'.", list.Length));
                             saveAfterScan = true;
                         }
@@ -406,54 +399,103 @@
         private void LoadSaveList()
         {
             this.Worlds.Clear();
+            var list = new List<SaveResource>();
 
-            if (Directory.Exists(this.BaseSavePath))
+            #region local saves
+
+            if (Directory.Exists(this.BaseLocalSavePath))
             {
-                var userPaths = Directory.GetDirectories(this.BaseSavePath);
-                var list = new List<SaveResource>();
+                var userPaths = Directory.GetDirectories(this.BaseLocalSavePath);
 
                 foreach (var userPath in userPaths)
                 {
-                    var lastLoadedFile = Path.Combine(userPath, SpaceEngineersConsts.LoadLoadedFilename);
+                    var userName = Path.GetFileName(userPath);
+                    list.AddRange(FindSaveFiles(userPath, userName, SaveWorldType.Local));
+                }
+            }
 
-                    // Ignore any other base Save paths without the LastLoaded file.
-                    if (File.Exists(lastLoadedFile))
+            #endregion
+
+            #region Host Server
+
+            if (Directory.Exists(this.BaseDedicatedServerHostSavePath))
+            {
+                var instancePaths = Directory.GetDirectories(this.BaseDedicatedServerHostSavePath);
+
+                foreach (var instancePath in instancePaths)
+                {
+                    var lastLoadedPath = Path.Combine(instancePath, "Saves");
+
+                    if (Directory.Exists(lastLoadedPath))
                     {
-                        var lastLoaded = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes, MyObjectBuilder_LastLoadedTimesSerializer>(lastLoadedFile);
-                        var savePaths = Directory.GetDirectories(userPath);
-
-                        // Still check every potential game world path.
-                        foreach (var savePath in savePaths)
-                        {
-                            SaveResource saveResource;
-                            list.Add(saveResource = new SaveResource()
-                            {
-                                Savename = Path.GetFileName(savePath),
-                                Username = Path.GetFileName(userPath),
-                                Savepath = savePath
-                            });
-
-                            var last = lastLoaded.LastLoaded.Dictionary.FirstOrDefault(d => d.Key.Equals(savePath, StringComparison.OrdinalIgnoreCase));
-                            if (last.Key != null)
-                            {
-                                saveResource.LastLoadTime = last.Value;
-                            }
-                            
-                            // This should still allow Games to be copied into the Save path manually.
-
-                            saveResource.LoadCheckpoint();
-                        }
+                        var instanceName = Path.GetFileName(instancePath);
+                        list.AddRange(FindSaveFiles(lastLoadedPath, instanceName, SaveWorldType.DedicatedServerHost));
                     }
                 }
-
-                this.Worlds = new ObservableCollection<SaveResource>(list.OrderByDescending(w => w.LastLoadTime));
-
-                this.IsValidSaveDirectory = true;
             }
-            else
+
+            #endregion
+
+            #region Service Server
+
+            if (Directory.Exists(this.BaseDedicatedServerServiceSavePath))
             {
-                this.IsValidSaveDirectory = false;
+                var instancePaths = Directory.GetDirectories(this.BaseDedicatedServerServiceSavePath);
+
+                foreach (var instancePath in instancePaths)
+                {
+                    var lastLoadedPath = Path.Combine(instancePath, "Saves");
+
+                    if (Directory.Exists(lastLoadedPath))
+                    {
+                        var instanceName = Path.GetFileName(instancePath);
+                        list.AddRange(FindSaveFiles(lastLoadedPath, instanceName, SaveWorldType.DedicatedServerService));
+                    }
+                }
             }
+
+            #endregion
+
+            this.Worlds = new ObservableCollection<SaveResource>(list.OrderByDescending(w => w.LastLoadTime));
+        }
+
+        private List<SaveResource> FindSaveFiles(string lastLoadedPath, string userName, SaveWorldType saveType)
+        {
+            var lastLoadedFile = Path.Combine(lastLoadedPath, SpaceEngineersConsts.LoadLoadedFilename);
+            var list = new List<SaveResource>();
+
+            // Ignore any other base Save paths without the LastLoaded file.
+            if (File.Exists(lastLoadedFile))
+            {
+                var lastLoaded = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes, MyObjectBuilder_LastLoadedTimesSerializer>(lastLoadedFile);
+                var savePaths = Directory.GetDirectories(lastLoadedPath);
+
+                // Still check every potential game world path.
+                foreach (var savePath in savePaths)
+                {
+                    SaveResource saveResource;
+                    list.Add(saveResource = new SaveResource()
+                    {
+                        GroupDescription = string.Format("{0}: {1}", new EnumToResouceConverter().Convert(saveType, typeof(string), null, CultureInfo.CurrentUICulture), userName),
+                        SaveType = saveType,
+                        Savename = Path.GetFileName(savePath),
+                        UserName = userName,
+                        Savepath = savePath
+                    });
+
+                    var last = lastLoaded.LastLoaded.Dictionary.FirstOrDefault(d => d.Key.Equals(savePath, StringComparison.OrdinalIgnoreCase));
+                    if (last.Key != null)
+                    {
+                        saveResource.LastLoadTime = last.Value;
+                    }
+
+                    // This should still allow Games to be copied into the Save path manually.
+
+                    saveResource.LoadCheckpoint();
+                }
+            }
+
+            return list;
         }
 
         internal static SaveResource FindSaveSession(string baseSavePath, string findSessionName)
@@ -477,7 +519,7 @@
                             var saveResource = new SaveResource()
                             {
                                 Savename = Path.GetFileName(savePath),
-                                Username = Path.GetFileName(userPath),
+                                UserName = Path.GetFileName(userPath),
                                 Savepath = savePath
                             };
 

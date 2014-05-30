@@ -49,6 +49,22 @@
         //SurfaceCalculated
     };
 
+    public enum SaveWorldType
+    {
+        // The normal method.
+        Local,
+        
+        /// <summary>
+        /// Console Host.
+        /// </summary>
+        DedicatedServerHost,
+        
+        /// <summary>
+        /// Service. Requires Admin access to save.
+        /// </summary>
+        DedicatedServerService
+    };
+
     internal class AppConstants
     {
         public const string DocumentationUrl = "https://setoolbox.codeplex.com/documentation";

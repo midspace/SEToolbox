@@ -1169,7 +1169,7 @@ td.right { text-align: right; }");
                 return;
             }
 
-            var world = SelectWorldModel.FindSaveSession(baseModel.BaseSavePath, findSessionName);
+            var world = SelectWorldModel.FindSaveSession(baseModel.BaseLocalSavePath, findSessionName);
 
             if (world == null)
             {

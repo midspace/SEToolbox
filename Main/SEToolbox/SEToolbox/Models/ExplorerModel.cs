@@ -16,15 +16,11 @@
     using System.Windows.Shell;
     using System.Windows.Threading;
     using System.Xml;
+    using VRageMath;
 
     public class ExplorerModel : BaseModel
     {
         #region Fields
-
-        /// <summary>
-        /// The base path of the save files, minus the userid.
-        /// </summary>
-        private string _baseSavePath;
 
         private SaveResource _activeWorld;
 
@@ -78,22 +74,14 @@
 
         #region Properties
 
-        public string BaseSavePath
-        {
-            get
-            {
-                return this._baseSavePath;
-            }
+        /// <summary>
+        /// The base path of the save files, minus the userid.
+        /// </summary>
+        public string BaseLocalSavePath { get; set; }
 
-            set
-            {
-                if (value != this._baseSavePath)
-                {
-                    this._baseSavePath = value;
-                    this.RaisePropertyChanged(() => BaseSavePath);
-                }
-            }
-        }
+        public string BaseDedicatedServerHostSavePath { get; set; }
+
+        public string BaseDedicatedServerServiceSavePath { get; set; }
 
         public ObservableCollection<IStructureBase> Structures
         {
@@ -387,7 +375,9 @@
 
         public void Load()
         {
-            this.BaseSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves");
+            this.BaseLocalSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves");
+            this.BaseDedicatedServerHostSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineersDedicated"); // Followed by %instancename%\Saves\.
+            this.BaseDedicatedServerServiceSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SpaceEngineersDedicated"); // Followed by %instancename%\Saves\.
             this.SetActiveStatus();
         }
 
@@ -630,11 +620,12 @@
 
         public void CalcDistances()
         {
-            if (this.SectorData != null && this.ThePlayerCharacter != null)
+            if (this.SectorData != null)
             {
+                var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
                 foreach (var structure in this.Structures)
                 {
-                    structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
+                    structure.PlayerDistance = (position - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
                 }
             }
         }
@@ -726,7 +717,8 @@
             {
                 this.SectorData.SectorObjects.Add(entity);
                 var structure = StructureBaseModel.Create(entity, this.ActiveWorld.Savepath);
-                structure.PlayerDistance = (this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
+                var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
+                structure.PlayerDistance = (position - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
                 this.Structures.Add(structure);
                 this.IsModified = true;
                 return structure;

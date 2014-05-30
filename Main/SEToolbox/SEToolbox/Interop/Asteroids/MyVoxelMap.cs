@@ -461,7 +461,7 @@ namespace SEToolbox.Interop.Asteroids
         public static void Uncompress(string sourceFilename, string destinationFilename)
         {
             // Low memory, fast extract.
-            using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open))
+            using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read))
             {
                 var reader = new BinaryReader(compressedByteStream);
                 var msgLength = reader.ReadInt32();

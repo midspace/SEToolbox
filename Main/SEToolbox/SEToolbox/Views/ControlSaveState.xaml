@@ -24,7 +24,7 @@
             </Border.Background>
             <Grid Margin="4,0,4,0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Unsaved" ToolTip="Your content has been changed, and not yet saved." Foreground="Red" />
+                    <TextBlock Text="Unsaved" ToolTip="Your content has been changed, and not yet saved." Foreground="Black" />
                 </StackPanel>
             </Grid>
         </Border>

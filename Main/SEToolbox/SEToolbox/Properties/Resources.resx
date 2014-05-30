@@ -495,7 +495,7 @@ Would you like to download it now?</value>
     <value>Specify filename to export '{0}' to</value>
   </data>
   <data name="WindowMainTitle" xml:space="preserve">
-    <value>SE Toolbox - {0}</value>
+    <value>SE Toolbox - {0} ({1})</value>
   </data>
   <data name="BtBrowseAppTip" xml:space="preserve">
     <value>Browse for Application</value>
@@ -518,5 +518,14 @@ Please specify the location of the Space Engineers Application file.</value>
   </data>
   <data name="WnLocateAppValidText" xml:space="preserve">
     <value>Valid location detected.</value>
+  </data>
+  <data name="SaveWorldType_DedicatedServerHost" xml:space="preserve">
+    <value>Dedicated Server Host</value>
+  </data>
+  <data name="SaveWorldType_DedicatedServerService" xml:space="preserve">
+    <value>Dedicated Server Service</value>
+  </data>
+  <data name="SaveWorldType_Local" xml:space="preserve">
+    <value>Local User</value>
   </data>
 </root>
