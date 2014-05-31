@@ -196,7 +196,12 @@
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding RejoinShipCommand}" Header="Rejoin Ships" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Rejoins 2 parts from a broken ship togeather">
+                <MenuItem Command="{Binding RejoinShipCommand}" Header="Rejoin Ship" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Rejoins 2 parts from a broken ship back togeather">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=elements2}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{Binding JoinShipPartsCommand}" Header="Join into Ship" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Joins 2 foriegn parts to form a new ship">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=elements2}"/>
                     </MenuItem.Icon>

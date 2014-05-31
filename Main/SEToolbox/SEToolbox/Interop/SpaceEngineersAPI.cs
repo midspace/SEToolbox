@@ -395,14 +395,8 @@
 
             // scale box to GridSize
             var size = max - min;
-            if (entity.GridSizeEnum == MyCubeSize.Large)
-            {
-                size = new Vector3(size.X * 2.5f, size.Y * 2.5f, size.Z * 2.5f);
-            }
-            else if (entity.GridSizeEnum == MyCubeSize.Small)
-            {
-                size = new Vector3(size.X * 0.5f, size.Y * 0.5f, size.Z * 0.5f);
-            }
+            var len = entity.GridSizeEnum.ToLength();
+            size = new Vector3(size.X * len, size.Y * len, size.Z * len);
 
             // translate box according to min/max, but reset origin.
             var bb = new BoundingBox(new Vector3(0, 0, 0), size);
