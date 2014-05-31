@@ -419,8 +419,6 @@
                 AngularVelocity = new VRageMath.Vector3(0, 0, 0)
             };
 
-            //double scaleFactor = 2.5;
-
             var blockPrefix = "";
             switch (this.ClassType)
             {

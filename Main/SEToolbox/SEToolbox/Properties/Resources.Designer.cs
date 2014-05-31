@@ -507,7 +507,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Space Engineers Toolbox Error.
+        ///   Looks up a localized string similar to Space Engineers Toolbox Error.
         /// </summary>
         public static string DialogUnhandledExceptionTitle {
             get {

@@ -795,7 +795,7 @@
         {
             var filenamepart = Path.GetFileNameWithoutExtension(this.Filename);
             var filename = this.MainViewModel.CreateUniqueVoxelFilename(filenamepart + ".vox");
-            this.Position = this.Position.RoundOff(2.5);
+            this.Position = this.Position.RoundOff(1.0);
             this.Forward = this.Forward.RoundToAxis();
             this.Up = this.Up.RoundToAxis();
 

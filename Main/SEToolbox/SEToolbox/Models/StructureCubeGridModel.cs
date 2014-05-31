@@ -790,7 +790,6 @@
                         this._dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
                         {
                             this.CubeList = new ObservableCollection<CubeItemModel>(cubeList);
-
                         });
 
                         this.IsSubsSystemNotReady = false;
@@ -915,7 +914,7 @@
         public void ReorientStation()
         {
             var pos = this.CubeGrid.PositionAndOrientation.Value;
-            pos.Position = pos.Position.RoundOff(2.5f);
+            pos.Position = pos.Position.RoundOff(MyCubeSize.Large.ToLength());
             pos.Forward = new SerializableVector3(-1, 0, 0); // The Station orientation has to be fixed, otherwise it glitches when you copy the object in game.
             pos.Up = new SerializableVector3(0, 1, 0);
             this.CubeGrid.PositionAndOrientation = pos;
@@ -946,6 +945,7 @@
 
                 // rotate BlockOrientation.
                 var q = quaternion * cube.BlockOrientation.ToQuaternion();
+                q.Normalize();
                 cube.BlockOrientation = new SerializableBlockOrientation(ref q);
             }
 
@@ -971,6 +971,7 @@
 
             // Rotate the ship also to maintain the appearance that it has not changed.
             var o = this.CubeGrid.PositionAndOrientation.Value.ToQuaternion() * VRageMath.Quaternion.Inverse(quaternion);
+            o.Normalize();
             var p = new MyPositionAndOrientation(o.ToMatrix());
 
             this.CubeGrid.PositionAndOrientation = new MyPositionAndOrientation()

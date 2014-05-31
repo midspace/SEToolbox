@@ -45,6 +45,11 @@
             return new Vector3I(vector.X, vector.Y, vector.Z);
         }
 
+        public static Vector3I RoundToVector3I(this Vector3 vector)
+        {
+            return new Vector3I((int)Math.Round(vector.X, 0, MidpointRounding.ToEven), (int)Math.Round(vector.Y, 0, MidpointRounding.ToEven), (int)Math.Round(vector.Z, 0, MidpointRounding.ToEven));
+        }
+
         public static Vector3 ToVector3(this SerializableVector3I vector)
         {
             return new Vector3(vector.X, vector.Y, vector.Z);
@@ -78,8 +83,7 @@
 
         internal static VRageMath.Quaternion ToQuaternion(this MyPositionAndOrientation positionOrientation)
         {
-            var matrix = positionOrientation.GetMatrix();
-            return VRageMath.Quaternion.CreateFromRotationMatrix(matrix);
+            return VRageMath.Quaternion.CreateFromRotationMatrix(positionOrientation.GetMatrix());
         }
 
         internal static VRageMath.Matrix ToMatrix(this VRageMath.Quaternion quaternion)
@@ -155,6 +159,25 @@
         {
             var vColor = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(color.R, color.G, color.B));
             return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
+        }
+
+        /// <summary>
+        /// Returns block size.
+        /// </summary>
+        /// <remarks>see: http://spaceengineerswiki.com/index.php?title=FAQs
+        /// Why are the blocks 0.5 and 2.5 meter blocks?
+        /// </remarks>
+        /// <param name="cubeSize"></param>
+        /// <returns></returns>
+        public static float ToLength(this MyCubeSize cubeSize)
+        {
+            switch (cubeSize)
+            {
+                case MyCubeSize.Large: return 2.5f;
+                case MyCubeSize.Small: return 0.5f;
+                case MyCubeSize.Medium: return 1.0f; // TODO: Unknown what dimensions it is at this stage.
+            }
+            return 0f;
         }
     }
 }

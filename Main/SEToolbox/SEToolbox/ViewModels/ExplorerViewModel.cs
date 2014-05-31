@@ -353,6 +353,14 @@
             }
         }
 
+        public ICommand JoinShipPartsCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(JoinShipPartsExecuted), new Func<bool>(JoinShipPartsCanExecute));
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -1047,7 +1055,23 @@
 
         public void RejoinShipExecuted()
         {
-            RejoinShipModels(this.Selections[0], this.Selections[1]);
+            this.IsBusy = true;
+            this.RejoinShipModels(this.Selections[0], this.Selections[1]);
+            this.IsBusy = false;
+        }
+
+        public bool JoinShipPartsCanExecute()
+        {
+            return this._dataModel.ActiveWorld != null && this.Selections.Count == 2 &&
+                ((this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
+                (this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.SmallShip));
+        }
+
+        public void JoinShipPartsExecuted()
+        {
+            this.IsBusy = true;
+            this.MergeShipPartModels(this.Selections[0], this.Selections[1]);
+            this.IsBusy = false;
         }
 
         #endregion
@@ -1172,36 +1196,35 @@
             }
         }
 
-        public void RejoinShipModels(IStructureViewBase viewModel1, IStructureViewBase viewModel2)
+        private void RejoinShipModels(IStructureViewBase viewModel1, IStructureViewBase viewModel2)
         {
             var ship1 = (StructureCubeGridViewModel)viewModel1;
             var ship2 = (StructureCubeGridViewModel)viewModel2;
 
-            // Copy blocks from ship2 into ship1.
-            ((StructureCubeGridModel)ship1.DataModel).CubeGrid.CubeBlocks.AddRange(((StructureCubeGridModel)ship2.DataModel).CubeGrid.CubeBlocks);
-
-            // Merge Groupings
-            foreach (var group in ((StructureCubeGridModel)ship2.DataModel).CubeGrid.BlockGroups)
-            {
-                var existingGroup = ((StructureCubeGridModel)ship1.DataModel).CubeGrid.BlockGroups.Where(bg => bg.Name == group.Name) as MyObjectBuilder_BlockGroup;
-                if (existingGroup == null)
-                {
-                    ((StructureCubeGridModel)ship1.DataModel).CubeGrid.BlockGroups.Add(group);
-                }
-                else
-                {
-                    existingGroup.Blocks.AddRange(group.Blocks);
-                }
-            }
-
-            // Merge ConveyorLines
-            ((StructureCubeGridModel)ship1.DataModel).CubeGrid.ConveyorLines.AddRange(((StructureCubeGridModel)ship2.DataModel).CubeGrid.ConveyorLines);
+            this._dataModel.RejoinBrokenShip((StructureCubeGridModel)ship1.DataModel, (StructureCubeGridModel)ship2.DataModel);
 
             // Delete ship2.
             DeleteModel(viewModel2);
 
             // Deleting ship2 will also ensure the removal of any duplicate UniqueIds.
             // Any overlapping blocks between the two, will automatically be removed by Space Engineers when the world is loaded.
+        }
+
+        private void MergeShipPartModels(IStructureViewBase viewModel1, IStructureViewBase viewModel2)
+        {
+            var ship1 = (StructureCubeGridViewModel)viewModel1;
+            var ship2 = (StructureCubeGridViewModel)viewModel2;
+
+            if (this._dataModel.MergeShipParts((StructureCubeGridModel)ship1.DataModel, (StructureCubeGridModel)ship2.DataModel))
+            {
+                // Delete ship2.
+                DeleteModel(viewModel2);
+
+                // Deleting ship2 will also ensure the removal of any duplicate UniqueIds.
+                // Any overlapping blocks between the two, will automatically be removed by Space Engineers when the world is loaded.
+
+                viewModel1.DataModel.UpdateGeneralFromEntityBase();
+            }
         }
 
         /// <inheritdoc />

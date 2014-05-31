@@ -1044,6 +1044,131 @@
             OptimizeModel(viewModel);
         }
 
+        /// <summary>
+        /// Copy blocks from ship2 into ship1.
+        /// </summary>
+        /// <param name="model1"></param>
+        /// <param name="model2"></param>
+        internal void RejoinBrokenShip(StructureCubeGridModel model1, StructureCubeGridModel model2)
+        {
+            // Copy blocks from ship2 into ship1.
+            model1.CubeGrid.CubeBlocks.AddRange(model2.CubeGrid.CubeBlocks);
+
+            // Merge Groupings
+            foreach (var group in model2.CubeGrid.BlockGroups)
+            {
+                var existingGroup = model1.CubeGrid.BlockGroups.FirstOrDefault(bg => bg.Name == group.Name) as MyObjectBuilder_BlockGroup;
+                if (existingGroup == null)
+                {
+                    model1.CubeGrid.BlockGroups.Add(group);
+                }
+                else
+                {
+                    existingGroup.Blocks.AddRange(group.Blocks);
+                }
+            }
+
+            // Merge ConveyorLines
+            model1.CubeGrid.ConveyorLines.AddRange(model2.CubeGrid.ConveyorLines);
+        }
+
+
+        /// <summary>
+        /// Merges and copies blocks from ship2 into ship1.
+        /// </summary>
+        /// <param name="model1"></param>
+        /// <param name="model2"></param>
+        /// <returns></returns>
+        internal bool MergeShipParts(StructureCubeGridModel model1, StructureCubeGridModel model2)
+        {
+            // find closest major axis for both parts.
+            var q1 = Quaternion.CreateFromRotationMatrix(Matrix.CreateFromDir(model1.PositionAndOrientation.Value.Forward.RoundToAxis(), model1.PositionAndOrientation.Value.Up.RoundToAxis()));
+            var q2 = Quaternion.CreateFromRotationMatrix(Matrix.CreateFromDir(model2.PositionAndOrientation.Value.Forward.RoundToAxis(), model2.PositionAndOrientation.Value.Up.RoundToAxis()));
+
+            // Calculate the rotation between the two.
+            var fixRotate = Quaternion.Inverse(q2) * q1;
+            fixRotate.Normalize();
+
+            // Rotate the orientation of model2 to (closely) match model1.
+            // It's Inverse, as the ship is actually rotated inverse in response to rotation of the cubes.
+            model2.RotateCubes(Quaternion.Inverse(fixRotate));
+
+            // At this point ship2 has been reoriented around to closely match ship1.
+            // The cubes in ship2 have be reoriended in reverse, so effectly there is no visual difference in ship2, except now all the cubes are aligned to the same X,Y,Z axis as ship1.
+
+            // find two cubes, one from each ship that are closest to each other to use as the reference.
+            var pos1 = model1.PositionAndOrientation.Value.Position.ToVector3();
+            var pos2 = model2.PositionAndOrientation.Value.Position.ToVector3();
+            var orient1 = model1.PositionAndOrientation.Value.ToQuaternion();
+            var orient2 = model2.PositionAndOrientation.Value.ToQuaternion();
+            var multi1 = model1.GridSize.ToLength();
+            var multi2 = model2.GridSize.ToLength();
+
+            var maxDistance = float.MaxValue;
+            MyObjectBuilder_CubeBlock maxCube1 = null;
+            MyObjectBuilder_CubeBlock maxCube2 = null;
+
+            foreach (var cube1 in model1.CubeGrid.CubeBlocks)
+            {
+                var cPos1 = pos1 + Vector3.Transform(cube1.Min.ToVector3() * multi1, orient1);
+
+                foreach (var cube2 in model2.CubeGrid.CubeBlocks)
+                {
+                    var cPos2 = pos2 + Vector3.Transform(cube2.Min.ToVector3() * multi2, orient2);
+
+                    var d = Vector3.Distance(cPos1, cPos2);
+                    if (maxDistance > d)
+                    {
+                        maxDistance = d;
+                        maxCube1 = cube1;
+                        maxCube2 = cube2;
+                    }
+                }
+            }
+
+            // Ignore ships that are too far away from one another.
+            // A distance of 4 cubes to allow for large cubes, as we are only using the Min as position, not the entire size of a cube.
+            if (maxDistance < (model1.GridSize.ToLength() * 5))
+            {
+                // calculate offset for merging of closest cubes.
+                var cPos1 = pos1 + Vector3.Transform(maxCube1.Min.ToVector3() * multi1, orient1);
+                var cPos2 = pos2 + Vector3.Transform(maxCube2.Min.ToVector3() * multi2, orient2);
+                var adjustedPos = Vector3.Transform(cPos2 - pos1, VRageMath.Quaternion.Inverse(orient1)) / multi1;
+                var offset = adjustedPos.RoundToVector3I() - maxCube2.Min.ToVector3I();
+
+                // Merge cubes in.
+                foreach (var cube2 in model2.CubeGrid.CubeBlocks)
+                {
+                    var newcube = cube2.Clone() as MyObjectBuilder_CubeBlock;
+                    newcube.Min = cube2.Min + offset;
+                    model1.CubeGrid.CubeBlocks.Add(newcube);
+                }
+
+                // Merge Groupings in.
+                foreach (var group in model2.CubeGrid.BlockGroups)
+                {
+                    var existingGroup = model1.CubeGrid.BlockGroups.FirstOrDefault(bg => bg.Name == group.Name) as MyObjectBuilder_BlockGroup;
+                    if (existingGroup == null)
+                    {
+                        existingGroup = new MyObjectBuilder_BlockGroup(){Name = group.Name};
+                        model1.CubeGrid.BlockGroups.Add(existingGroup);
+                    }
+
+                    foreach (var block in group.Blocks)
+                    {
+                        existingGroup.Blocks.Add(block + offset);
+                    }
+                }
+
+                // TODO: Merge ConveyorLines
+                // need to fix the rotation of ConveyorLines first.
+
+                return true;
+            }
+
+            return false;
+        }
+
         #endregion
 
         public void ResetProgress(double initial, double maximumProgress)
