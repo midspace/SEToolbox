@@ -149,17 +149,18 @@
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=help}"/>
                     </MenuItem.Icon>
-                    <MenuItem Command="{Binding LanguageCommand}" Header="_Languages">
-                        <MenuItem Command="{Binding SetLanguageCommand}" CommandParameter="en" Header="English">
-                            <MenuItem.Icon>
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=flag_great_britain}"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Command="{Binding SetLanguageCommand}" CommandParameter="zh" Header="Chinese">
-                            <MenuItem.Icon>
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=flag_china}"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
+                    <MenuItem Command="{Binding LanguageCommand}" Header="_Languages" ItemsSource="{Binding Languages}">
+                        <MenuItem.Resources>
+                            <Image x:Shared="False" x:Key="MenuIcon" Width="16" Height="16" Source="{Binding ImageName, Converter={StaticResource ResouceToImageConverter}}"/>
+                        </MenuItem.Resources>
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{Binding Path=Name}"/>
+                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.SetLanguageCommand}" />
+                                <Setter Property="CommandParameter" Value="{Binding Path=IetfLanguageTag}" />
+                                <Setter Property="Icon" Value="{StaticResource MenuIcon}"/>
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
                     </MenuItem>
                     <Separator/>
                     <MenuItem Command="{Binding OpenDocumentationLinkCommand}" Header="_Documentation">

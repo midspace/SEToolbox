@@ -40,6 +40,7 @@
         private ObservableCollection<IStructureViewBase> _selections;
 
         private ObservableCollection<IStructureViewBase> _structures;
+        private ObservableCollection<LanguageModel> _languages;
 
         // If true, when adding new models to the collection, the new models will be highlighted as selected in the UI.
         private bool _selectNewStructure;
@@ -79,6 +80,8 @@
             {
                 this.AddViewModel(item);
             }
+
+            this.UpdateLanguages();
 
             this._dataModel.Structures.CollectionChanged += Structures_CollectionChanged;
             // Will bubble property change events from the Model to the ViewModel.
@@ -526,6 +529,23 @@
             set
             {
                 this._dataModel.IsBaseSaveChanged = value;
+            }
+        }
+
+        public ObservableCollection<LanguageModel> Languages
+        {
+            get
+            {
+                return this._languages;
+            }
+
+            private set
+            {
+                if (value != this._languages)
+                {
+                    this._languages = value;
+                    this.RaisePropertyChanged(() => Languages);
+                }
             }
         }
 
@@ -987,7 +1007,7 @@
 
         public bool LanguageCanExecute()
         {
-            return false; // TODO: Add more local resources first.
+            return true;
         }
 
         public bool SetLanguageCanExecute(string code)
@@ -999,6 +1019,9 @@
         {
             GlobalSettings.Default.LanguageCode = code;
             LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfoByIetfLanguageTag(code);
+
+            Sandbox.Common.Localization.MyTextsWrapper.Init();
+            this.UpdateLanguages();
             
             // Causes all bindings to update.
             this.OnPropertyChanged("");
@@ -1426,6 +1449,19 @@
         public void CalcDistances()
         {
             this._dataModel.CalcDistances();
+        }
+
+        private void UpdateLanguages()
+        {
+            var list = new List<LanguageModel>();
+
+            foreach (var kvp in AppConstants.SupportedLanguages)
+            {
+                var culture = CultureInfo.GetCultureInfoByIetfLanguageTag(kvp.Key);
+                list.Add(new LanguageModel() {IetfLanguageTag = culture.IetfLanguageTag, LanguageName = culture.DisplayName, NativeName = culture.NativeName, ImageName = kvp.Value});
+            }
+
+            this.Languages = new ObservableCollection<LanguageModel>(list);
         }
 
         #endregion

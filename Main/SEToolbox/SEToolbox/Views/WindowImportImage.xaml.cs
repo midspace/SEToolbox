@@ -9,6 +9,7 @@
     {
         public WindowImportImage()
         {
+            this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag);
             InitializeComponent();
         }
     }
