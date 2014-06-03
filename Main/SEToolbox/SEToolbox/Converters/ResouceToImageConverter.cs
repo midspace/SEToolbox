@@ -10,36 +10,40 @@
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (parameter is string && !string.IsNullOrEmpty(parameter as string))
+            var imageParameter = value as string;
+            if (imageParameter == null)
+                imageParameter = parameter as string;
+
+            if (!string.IsNullOrEmpty(imageParameter as string))
             {
-                string imageParameter = parameter as string;
                 System.Drawing.Bitmap bitmap = null;
-                BitmapImage bitmapImage = new BitmapImage();
+                var bitmapImage = new BitmapImage();
 
                 // Application Resource - File Build Action is marked as None, but stored in Resources.resx
                 // parameter= myresourceimagename
                 try
                 {
-                    bitmap = (System.Drawing.Bitmap)Properties.Resources.ResourceManager.GetObject(imageParameter);
+                    bitmap = Properties.Resources.ResourceManager.GetObject(imageParameter) as System.Drawing.Bitmap;
                 }
-                catch
-                {
-                }
+                catch { }
 
                 if (bitmap != null)
                 {
-                    MemoryStream ms = new MemoryStream();
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    bitmapImage.BeginInit();
-                    bitmapImage.StreamSource = ms;
-                    bitmapImage.EndInit();
+                    using (var ms = new MemoryStream())
+                    {
+                        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        bitmapImage.BeginInit();
+                        bitmapImage.StreamSource = ms;
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.EndInit();
+                    }
                     return bitmapImage;
                 }
 
                 // Embedded Resource - File Build Action is marked as Embedded Resource
                 // parameter= MyWpfApplication.EmbeddedResource.myotherimage.png
-                Assembly asm = Assembly.GetExecutingAssembly();
-                Stream stream = asm.GetManifestResourceStream(imageParameter);
+                var asm = Assembly.GetExecutingAssembly();
+                var stream = asm.GetManifestResourceStream(imageParameter);
                 if (stream != null)
                 {
                     bitmapImage.BeginInit();

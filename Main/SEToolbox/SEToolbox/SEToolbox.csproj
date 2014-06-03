@@ -156,6 +156,7 @@
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
+    <Compile Include="Models\LanguageModel.cs" />
     <Compile Include="Models\ResourceReportModel.cs" />
     <Compile Include="Models\FrameworkBuildModel.cs" />
     <Compile Include="Models\SelectCubeModel.cs" />
@@ -596,6 +597,81 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\document_pulse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_czech_republic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_denmark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_germany.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_spain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_mexico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_estonia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_finland.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_france.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_croatia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_hungary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_iceland.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_italy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_lithuania.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_norway.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_poland.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_brazil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_romania.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_slovakia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_sweden.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_turkey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_ukraine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_russia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_netherlands.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_catalonia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_usa.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
