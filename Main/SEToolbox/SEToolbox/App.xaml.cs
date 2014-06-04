@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox
 {
     using System.Globalization;
+    using System.Threading;
     using log4net;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -37,8 +38,9 @@
                 GlobalSettings.Default.Reset();
             }
 
+            LocalizeDictionary.Instance.SetCurrentThreadCulture = false;
             LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfoByIetfLanguageTag(GlobalSettings.Default.LanguageCode);
-            
+            Thread.CurrentThread.CurrentUICulture = LocalizeDictionary.Instance.Culture;
 
             Splasher.Splash = new WindowSplashScreen();
             Splasher.ShowSplash();
@@ -63,6 +65,7 @@
             ServiceLocator.Register<IOpenFileDialog, OpenFileDialogViewModel>();
             ServiceLocator.Register<ISaveFileDialog, SaveFileDialogViewModel>();
             ServiceLocator.Register<IColorDialog, ColorDialogViewModel>();
+            ServiceLocator.Register<IFolderBrowserDialog, FolderBrowserDialogViewModel>();
 
             this._toolboxApplication = new CoreToolbox();
             if (this._toolboxApplication.Init(e.Args))

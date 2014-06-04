@@ -272,7 +272,7 @@
         {
             this.IsReportReady = false;
             this._generatedDate = DateTime.Now;
-            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
+            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"..\Content");
             var accumulateMaterials = new SortedDictionary<string, long>();
             var accumulateUnusedOres = new SortedDictionary<string, OreAssetModel>();
             var accumulateUsedOres = new SortedDictionary<string, OreAssetModel>();

@@ -8,14 +8,19 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Media;
+    using System.Windows.Forms;
     using System.Windows.Input;
+    using Res = SEToolbox.Properties.Resources;
 
     public class SelectWorldViewModel : BaseViewModel
     {
         #region Fields
 
         private readonly IDialogService _dialogService;
-        private SelectWorldModel _dataModel;
+        private readonly Func<IOpenFileDialog> _openFileDialogFactory;
+        private readonly SelectWorldModel _dataModel;
         private bool? _closeResult;
         private bool _zoomThumbnail;
 
@@ -24,21 +29,20 @@
         #region Constructors
 
         public SelectWorldViewModel(BaseViewModel parentViewModel, SelectWorldModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>())
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
         {
         }
 
-        public SelectWorldViewModel(BaseViewModel parentViewModel, SelectWorldModel dataModel, IDialogService dialogService)
+        public SelectWorldViewModel(BaseViewModel parentViewModel, SelectWorldModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory)
             : base(parentViewModel)
         {
             Contract.Requires(dialogService != null);
+            Contract.Requires(openFileDialogFactory != null);
             this._dialogService = dialogService;
+            this._openFileDialogFactory = openFileDialogFactory;
             this._dataModel = dataModel;
-            this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-            {
-                // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
-            };
+            // Will bubble property change events from the Model to the ViewModel.
+            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -66,6 +70,14 @@
             get
             {
                 return new DelegateCommand(new Action(RepairExecuted), new Func<bool>(RepairCanExecute));
+            }
+        }
+
+        public ICommand BrowseCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(BrowseExecuted), new Func<bool>(BrowseCanExecute));
             }
         }
 
@@ -210,6 +222,54 @@
             var results = this._dataModel.RepairSandBox();
             this.IsBusy = false;
             var result = _dialogService.ShowMessageBox(this, results, "Repair results", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
+        }
+
+        public bool BrowseCanExecute()
+        {
+            return true;
+        }
+
+        public void BrowseExecuted()
+        {
+            var openFileDialog = _openFileDialogFactory();
+            openFileDialog.CheckFileExists = true;
+            openFileDialog.CheckPathExists = true;
+            openFileDialog.DefaultExt = "sbc";
+            openFileDialog.FileName = "Sandbox.sbc";
+            openFileDialog.Filter = Res.DialogLocateSandboxFilter;
+            openFileDialog.Multiselect = false;
+            openFileDialog.Title = Res.DialogLocateSandboxTitle;
+
+            if (_dialogService.ShowOpenFileDialog(this, openFileDialog) == DialogResult.OK)
+            {
+                var savePath = Path.GetDirectoryName(openFileDialog.FileName);
+                var userName = Environment.UserName;
+                var saveType = SaveWorldType.Custom;
+
+                try
+                {
+                    using (FileStream fs = File.OpenWrite(openFileDialog.FileName))
+                    {
+                    }
+                }
+                catch
+                {
+                    saveType = SaveWorldType.CustomAdminRequired;
+                }
+
+                var saveResource = this._dataModel.LoadSaveFromPath(savePath, userName, saveType);
+                saveResource.LoadCheckpoint();
+
+                if (saveResource.IsValid)
+                {
+                    this.SelectedWorld = saveResource;
+                    this.CloseResult = true;
+                }
+                else
+                {
+                    SystemSounds.Beep.Play();
+                }
+            }
         }
 
         public bool OpenFolderCanExecute()

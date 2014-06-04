@@ -26,10 +26,15 @@
 
         public static string GetApplicationFilePath()
         {
-            var gamePath = GlobalSettings.Default.SEInstallLocation;
+            var gamePath = GlobalSettings.Default.SEBinPath;
 
             if (string.IsNullOrEmpty(gamePath))
+            {
+                // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
                 gamePath = GetGameRegistryFilePath();
+                if (!string.IsNullOrEmpty(gamePath))
+                    gamePath = Path.Combine(gamePath, "Bin64");
+            }
 
             return gamePath;
         }
@@ -63,10 +68,6 @@
             return null;
         }
 
-        public static void GetSettings()
-        {
-        }
-
         #endregion
 
         #region GetSteamFilePath
@@ -98,7 +99,7 @@
         #region IsSpaceEngineersInstalled
 
         /// <summary>
-        /// Checks for key directory names in the root game folder.
+        /// Checks for key directory names from the game bin folder.
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -108,9 +109,7 @@
                 return false;
             if (!Directory.Exists(filePath))
                 return false;
-            if (!Directory.Exists(Path.Combine(filePath, "Bin64")))
-                return false;
-            if (!Directory.Exists(Path.Combine(filePath, "Content")))
+            if (!Directory.Exists(Path.Combine(filePath, @"..\Content")))
                 return false;
 
             // Skip checking for the .exe. Not required for the Toolbox currently.
@@ -123,9 +122,7 @@
 
         public static bool IsBaseAssembliesChanged()
         {
-            // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
-            var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
-
+            var baseFilePath = GetApplicationFilePath();
             var appFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             foreach (var filename in CoreSpaceEngineersFiles)
@@ -139,8 +136,7 @@
 
         public static bool UpdateBaseFiles()
         {
-            // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
-            var baseFilePath = Path.Combine(GetApplicationFilePath(), "Bin64");
+            var baseFilePath = GetApplicationFilePath();
             var appFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             foreach (var filename in CoreSpaceEngineersFiles)

@@ -99,8 +99,9 @@
                     </Image>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Button Width="90" Command="{Binding RepairCommand}" Content="Repair"  Margin="0,0,0,32" ToolTip="This will attempt to repair the save content it it finds any issues." />
-                    <Button Width="90" Command="{Binding LoadCommand}" Content="Open" IsDefault="True" Margin="0,0,0,8" />
+                    <Button Width="90" Command="{Binding RepairCommand}" Content="_Repair"  Margin="0,0,0,32" ToolTip="This will attempt to repair the save content it it finds any issues." />
+                    <Button Width="90" Command="{Binding BrowseCommand}" Content="_Browse"  Margin="0,0,0,32" />
+                    <Button Width="90" Command="{Binding LoadCommand}" Content="_Open" IsDefault="True" Margin="0,0,0,8" />
                     <Button Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
                 </StackPanel>
             </Grid>

@@ -9,19 +9,11 @@
 
         private string _gameApplicationPath;
 
-        private string _gameRootPath;
+        private string _gameBinPath;
 
-        private bool isValidApplication;
+        private bool _isValidApplication;
 
         private bool _isWrongApplication;
-
-        #endregion
-
-        #region Constructors
-
-        public FindApplicationModel()
-        {
-        }
 
         #endregion
 
@@ -45,19 +37,19 @@
             }
         }
 
-        public string GameRootPath
+        public string GameBinPath
         {
             get
             {
-                return this._gameRootPath;
+                return this._gameBinPath;
             }
 
             set
             {
-                if (value != this._gameRootPath)
+                if (value != this._gameBinPath)
                 {
-                    this._gameRootPath = value;
-                    this.RaisePropertyChanged(() => GameRootPath);
+                    this._gameBinPath = value;
+                    this.RaisePropertyChanged(() => GameBinPath);
                 }
             }
         }
@@ -66,14 +58,14 @@
         {
             get
             {
-                return this.isValidApplication;
+                return this._isValidApplication;
             }
 
             set
             {
-                if (value != this.isValidApplication)
+                if (value != this._isValidApplication)
                 {
-                    this.isValidApplication = value;
+                    this._isValidApplication = value;
                     this.RaisePropertyChanged(() => IsValidApplication);
                 }
             }
@@ -102,22 +94,22 @@
 
         public void Validate()
         {
-            this.GameRootPath = null;
+            this.GameBinPath = null;
 
             if (!string.IsNullOrEmpty(GameApplicationPath))
             {
                 try
                 {
-                    Path.GetFullPath(GameApplicationPath);
-                    if (File.Exists(GameApplicationPath))
+                    var fullPath = Path.GetFullPath(GameApplicationPath);
+                    if (File.Exists(fullPath))
                     {
-                        this.GameRootPath = Path.GetDirectoryName(Path.GetDirectoryName(GameApplicationPath));
+                        this.GameBinPath = Path.GetDirectoryName(fullPath);
                     }
                 }
                 catch { }
             }
 
-            this.IsValidApplication = ToolboxUpdater.ValidateSpaceEngineersInstall(this.GameRootPath);
+            this.IsValidApplication = ToolboxUpdater.ValidateSpaceEngineersInstall(this.GameBinPath);
             this.IsWrongApplication = !this.IsValidApplication;
         }
 

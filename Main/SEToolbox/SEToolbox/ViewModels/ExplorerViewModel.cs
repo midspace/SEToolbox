@@ -18,6 +18,7 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Shell;
@@ -600,8 +601,9 @@
         public bool SaveCanExecute()
         {
             return this._dataModel.ActiveWorld != null &&
-                (this._dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService ||
-                (this._dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService && ToolboxUpdater.CheckIsRuningElevated()));
+                ((this._dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && this._dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
+                || (this._dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || this._dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired
+                    && ToolboxUpdater.CheckIsRuningElevated()));
         }
 
         public void SaveExecuted()
@@ -1018,7 +1020,9 @@
         public void SetLanguageExecuted(string code)
         {
             GlobalSettings.Default.LanguageCode = code;
+            LocalizeDictionary.Instance.SetCurrentThreadCulture = false;
             LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfoByIetfLanguageTag(code);
+            Thread.CurrentThread.CurrentUICulture = LocalizeDictionary.Instance.Culture;
 
             Sandbox.Common.Localization.MyTextsWrapper.Init();
             this.UpdateLanguages();

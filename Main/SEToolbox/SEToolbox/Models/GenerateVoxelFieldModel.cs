@@ -166,7 +166,7 @@
             if (this.BaseMaterial == null)
                 this.BaseMaterial = this.MaterialsCollection.FirstOrDefault();
 
-            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"Content\VoxelMaps"), "*.vox");
+            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"..\Content\VoxelMaps"), "*.vox");
 
             this.StockVoxelFileList.Clear();
             this.SmallVoxelFileList = new List<GenerateVoxelDetailModel>();

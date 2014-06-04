@@ -351,6 +351,12 @@
 
         private static byte[] ReadTextureFile(string filename, int depthSlice, ref int width, ref int height, out uint fourCC, bool ignoreAlpha = false)
         {
+            if (!File.Exists(filename))
+            {
+                fourCC = 0;
+                return null;
+            }
+
             using (var stream = File.OpenRead(filename))
             {
                 using (var reader = new BinaryReader(stream))
