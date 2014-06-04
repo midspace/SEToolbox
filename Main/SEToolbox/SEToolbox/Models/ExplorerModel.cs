@@ -1072,7 +1072,6 @@
             model1.CubeGrid.ConveyorLines.AddRange(model2.CubeGrid.ConveyorLines);
         }
 
-
         /// <summary>
         /// Merges and copies blocks from ship2 into ship1.
         /// </summary>

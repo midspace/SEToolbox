@@ -383,7 +383,7 @@ Units:		{4:#,##0}</value>
     <value>Specify filename to export '{0}' to</value>
   </data>
   <data name="DialogLocateApplicationFilter" xml:space="preserve">
-    <value>Space Engineers Application|SpaceEngineers.exe</value>
+    <value>Space Engineers Application|SpaceEngineers*.exe</value>
   </data>
   <data name="DialogLocateApplicationTitle" xml:space="preserve">
     <value>Specify location of Space Engineers Application</value>
@@ -602,5 +602,11 @@ Please specify the location of the Space Engineers Application file.</value>
   </data>
   <data name="flag_usa" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\flag_usa.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DialogLocateSandboxFilter" xml:space="preserve">
+    <value>Space Engineers Sandbox|Sandbox.sbc</value>
+  </data>
+  <data name="DialogLocateSandboxTitle" xml:space="preserve">
+    <value>Specify location of Space Engineers save game</value>
   </data>
 </root>

@@ -177,7 +177,7 @@
             this.ItemAssets = new ObservableCollection<ComponentItemModel>();
             this.MaterialAssets = new ObservableCollection<ComponentItemModel>();
 
-            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
+            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"..\Content");
 
             foreach (var cubeDefinition in SpaceEngineersAPI.CubeBlockDefinitions)
             {

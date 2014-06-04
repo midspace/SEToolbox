@@ -459,7 +459,7 @@
             this.Worlds = new ObservableCollection<SaveResource>(list.OrderByDescending(w => w.LastLoadTime));
         }
 
-        private List<SaveResource> FindSaveFiles(string lastLoadedPath, string userName, SaveWorldType saveType)
+        private IEnumerable<SaveResource> FindSaveFiles(string lastLoadedPath, string userName, SaveWorldType saveType)
         {
             var lastLoadedFile = Path.Combine(lastLoadedPath, SpaceEngineersConsts.LoadLoadedFilename);
             var list = new List<SaveResource>();
@@ -473,16 +473,7 @@
                 // Still check every potential game world path.
                 foreach (var savePath in savePaths)
                 {
-                    SaveResource saveResource;
-                    list.Add(saveResource = new SaveResource()
-                    {
-                        GroupDescription = string.Format("{0}: {1}", new EnumToResouceConverter().Convert(saveType, typeof(string), null, CultureInfo.CurrentUICulture), userName),
-                        SaveType = saveType,
-                        Savename = Path.GetFileName(savePath),
-                        UserName = userName,
-                        Savepath = savePath
-                    });
-
+                    var saveResource = LoadSaveFromPath(savePath, userName, saveType);
                     var last = lastLoaded.LastLoaded.Dictionary.FirstOrDefault(d => d.Key.Equals(savePath, StringComparison.OrdinalIgnoreCase));
                     if (last.Key != null)
                     {
@@ -492,10 +483,25 @@
                     // This should still allow Games to be copied into the Save path manually.
 
                     saveResource.LoadCheckpoint();
+                    list.Add(saveResource);
                 }
             }
 
             return list;
+        }
+
+        internal SaveResource LoadSaveFromPath(string savePath, string userName, SaveWorldType saveType)
+        {
+            var saveResource = new SaveResource()
+            {
+                GroupDescription = string.Format("{0}: {1}", new EnumToResouceConverter().Convert(saveType, typeof(string), null, CultureInfo.CurrentUICulture), userName),
+                SaveType = saveType,
+                Savename = Path.GetFileName(savePath),
+                UserName = userName,
+                Savepath = savePath
+            };
+
+            return saveResource;
         }
 
         internal static SaveResource FindSaveSession(string baseSavePath, string findSessionName)

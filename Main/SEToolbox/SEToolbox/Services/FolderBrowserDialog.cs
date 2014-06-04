@@ -11,8 +11,8 @@
     /// </summary>
     public class FolderBrowserDialog : IDisposable
     {
-        private readonly IFolderBrowserDialog folderBrowserDialog;
-        private WinFormsFolderBrowserDialog concreteFolderBrowserDialog;
+        private readonly IFolderBrowserDialog _folderBrowserDialog;
+        private WinFormsFolderBrowserDialog _concreteFolderBrowserDialog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FolderBrowserDialog"/> class.
@@ -22,17 +22,16 @@
         {
             Contract.Requires(folderBrowserDialog != null);
 
-            this.folderBrowserDialog = folderBrowserDialog;
+            this._folderBrowserDialog = folderBrowserDialog;
 
             // Create concrete FolderBrowserDialog
-            concreteFolderBrowserDialog = new WinFormsFolderBrowserDialog
+            _concreteFolderBrowserDialog = new WinFormsFolderBrowserDialog
             {
                 Description = folderBrowserDialog.Description,
                 SelectedPath = folderBrowserDialog.SelectedPath,
                 ShowNewFolderButton = folderBrowserDialog.ShowNewFolderButton
             };
         }
-
 
         /// <summary>
         /// Runs a common dialog box with the specified owner.
@@ -49,14 +48,13 @@
         {
             Contract.Requires(owner != null);
 
-            DialogResult result = concreteFolderBrowserDialog.ShowDialog(owner);
+            var result = _concreteFolderBrowserDialog.ShowDialog(owner);
 
             // Update ViewModel
-            folderBrowserDialog.SelectedPath = concreteFolderBrowserDialog.SelectedPath;
+            _folderBrowserDialog.SelectedPath = _concreteFolderBrowserDialog.SelectedPath;
 
             return result;
         }
-
 
         #region IDisposable Members
 
@@ -79,10 +77,10 @@
         {
             if (disposing)
             {
-                if (concreteFolderBrowserDialog != null)
+                if (_concreteFolderBrowserDialog != null)
                 {
-                    concreteFolderBrowserDialog.Dispose();
-                    concreteFolderBrowserDialog = null;
+                    _concreteFolderBrowserDialog.Dispose();
+                    _concreteFolderBrowserDialog = null;
                 }
             }
         }

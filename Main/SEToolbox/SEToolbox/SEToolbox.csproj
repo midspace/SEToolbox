@@ -204,6 +204,7 @@
     </Compile>
     <Compile Include="Services\CommandAction.cs" />
     <Compile Include="Services\CommandReference.cs" />
+    <Compile Include="Services\FolderBrowserDialogViewModel.cs" />
     <Compile Include="Services\DelegateCommand.cs" />
     <Compile Include="Services\DialogCloser.cs" />
     <Compile Include="CoreToolbox.cs" />

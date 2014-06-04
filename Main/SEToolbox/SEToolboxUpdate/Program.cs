@@ -180,8 +180,7 @@
                 }
             }
 
-            // We use the Bin64 Path, as these assemblies are marked "AllCPU", and will work regardless of processor architecture.
-            var baseFilePath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Bin64");
+            var baseFilePath = ToolboxUpdater.GetApplicationFilePath();
 
             foreach (var filename in ToolboxUpdater.CoreSpaceEngineersFiles)
             {

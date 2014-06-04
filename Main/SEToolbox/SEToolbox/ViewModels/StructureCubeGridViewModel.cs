@@ -1092,7 +1092,7 @@
             if (result == true)
             {
                 this.MainViewModel.IsBusy = true;
-                var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), "Content");
+                var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"..\Content");
                 var change = false;
                 this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
 

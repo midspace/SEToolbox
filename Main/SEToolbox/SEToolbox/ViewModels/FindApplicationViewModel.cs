@@ -105,16 +105,16 @@
             }
         }
 
-        public string GameRootPath
+        public string GameBinPath
         {
             get
             {
-                return this._dataModel.GameRootPath;
+                return this._dataModel.GameBinPath;
             }
 
             set
             {
-                this._dataModel.GameRootPath = value;
+                this._dataModel.GameBinPath = value;
             }
         }
 
@@ -159,7 +159,6 @@
             var startPath = this.GameApplicationPath;
             if (string.IsNullOrEmpty(startPath))
             {
-
                 startPath = ToolboxUpdater.GetSteamFilePath();
                 if (!string.IsNullOrEmpty(startPath))
                 {
@@ -170,7 +169,7 @@
             this.IsValidApplication = false;
             this.IsWrongApplication = false;
 
-            IOpenFileDialog openFileDialog = _openFileDialogFactory();
+            var openFileDialog = _openFileDialogFactory();
             openFileDialog.CheckFileExists = true;
             openFileDialog.CheckPathExists = true;
             openFileDialog.DefaultExt = "exe";
@@ -181,9 +180,7 @@
             openFileDialog.Title = Res.DialogLocateApplicationTitle;
 
             // Open the dialog
-            DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
-
-            if (result == DialogResult.OK)
+            if  (_dialogService.ShowOpenFileDialog(this, openFileDialog) == DialogResult.OK)
             {
                 GameApplicationPath = openFileDialog.FileName;
             }

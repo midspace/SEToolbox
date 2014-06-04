@@ -31,7 +31,7 @@
                 var ret = faWindow.ShowDialog();
                 if (ret == true)
                 {
-                    filePath = faModel.GameRootPath;
+                    filePath = faModel.GameBinPath;
                 }
                 else
                 {
@@ -41,7 +41,7 @@
             }
 
             // Update and save user path.
-            GlobalSettings.Default.SEInstallLocation = filePath;
+            GlobalSettings.Default.SEBinPath = filePath;
             GlobalSettings.Default.Save();
 
             var ignoreUpdates = args.Any(a => a.ToUpper() == "/X");
@@ -71,7 +71,7 @@
             if (altDlls)
             {
                 _tempBinPath = Path.Combine(TempfileUtil.TempPath, "__bincache");
-                var searchPath = Path.Combine(GlobalSettings.Default.SEInstallLocation, "Bin64");
+                var searchPath = GlobalSettings.Default.SEBinPath;
 
                 DirectoryInfo checkDir = null;
                 var counter = 0;

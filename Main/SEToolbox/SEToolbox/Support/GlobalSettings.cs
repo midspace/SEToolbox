@@ -30,17 +30,41 @@
         #endregion
 
         #region properties
-
+        
+        [Obsolete("Replaced by SEBinPath")]
         public string SEInstallLocation { get; set; }
 
+        /// <summary>
+        /// Application binary path.
+        /// </summary>
+        public string SEBinPath { get; set; }
+
+        /// <summary>
+        /// Display language for localized text.
+        /// <remarks>This is not for number or date formats, as this is taken directly from the User profile via CurrentCulture.</remarks>
+        /// </summary>
         public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// Delimited ';' list of UNC paths to search for Save World data, with the 'LastLoaded.sbl' at its root.
+        /// </summary>
+        public string CustomUserSavePaths { get; set; }
 
         public WindowState? WindowState { get; set; }
         public double? WindowTop { get; set; }
         public double? WindowLeft { get; set; }
         public double? WindowWidth { get; set; }
         public double? WindowHeight { get; set; }
+
+        /// <summary>
+        /// Indicates if Toolbox Version check should be ignored.
+        /// </summary>
         public bool? AlwaysCheckForUpdates { get; set; }
+        
+        /// <summary>
+        /// Ignore this specific version during Toolbox version check.
+        /// </summary>
+        //public string IgnoreUpdateVersion { get; set; }
 
         #endregion
 
@@ -55,6 +79,8 @@
             }
 
             UpdateValue(key, "SEInstallLocation", this.SEInstallLocation);
+            UpdateValue(key, "SEBinPath", this.SEBinPath);
+            UpdateValue(key, "CustomUserSavePaths", this.CustomUserSavePaths);
             UpdateValue(key, "LanguageCode", this.LanguageCode);
             UpdateValue(key, "WindowState", this.WindowState);
             UpdateValue(key, "WindowTop", this.WindowTop);
@@ -71,8 +97,9 @@
             if (key == null)
                 return;
 
-            this.SEInstallLocation = ReadValue<string>(key, "SEInstallLocation", null);
-            this.LanguageCode = ReadValue<string>(key, "LanguageCode", CultureInfo.CurrentCulture.IetfLanguageTag);
+            this.SEBinPath = ReadValue<string>(key, "SEBinPath", null);
+            this.LanguageCode = ReadValue<string>(key, "LanguageCode", CultureInfo.CurrentUICulture.IetfLanguageTag);
+            this.CustomUserSavePaths = ReadValue<string>(key, "CustomUserSavePaths", null);
             this.WindowState = ReadValue<WindowState?>(key, "WindowState", null);
             this.WindowTop = ReadValue<double?>(key, "WindowTop", null);
             this.WindowLeft = ReadValue<double?>(key, "WindowLeft", null);
@@ -83,8 +110,9 @@
 
         public void Reset()
         {
-            this.SEInstallLocation = null;
-            this.LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag;
+            this.SEBinPath = null;
+            this.LanguageCode = CultureInfo.CurrentUICulture.IetfLanguageTag;  // Display language (only applied on multi lingual deployment of Windows OS).
+            this.CustomUserSavePaths = null;
             this.WindowState = null;
             this.WindowTop = null;
             this.WindowLeft = null;
@@ -101,7 +129,7 @@
         {
             if (value == null)
             {
-                key.DeleteSubKey(subkey, false);
+                key.DeleteValue(subkey, false);
             }
             else
             {

@@ -236,7 +236,7 @@
                     <views:ControlBusyState />
                 </StatusBarItem>-->
                 <StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0">
-                    <ProgressBar Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" Width="100" Height="14" Visibility="{Binding ShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <ProgressBar Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" Width="100" Height="12" Visibility="{Binding ShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </StatusBarItem>
             </StatusBar>
             <Grid>

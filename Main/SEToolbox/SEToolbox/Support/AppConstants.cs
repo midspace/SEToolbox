@@ -64,7 +64,14 @@
         /// <summary>
         /// Service. Requires Admin access to save.
         /// </summary>
-        DedicatedServerService
+        DedicatedServerService,
+
+        /// <summary>
+        /// User custom specified.
+        /// </summary>
+        Custom,
+
+        CustomAdminRequired
     };
 
     internal class AppConstants
