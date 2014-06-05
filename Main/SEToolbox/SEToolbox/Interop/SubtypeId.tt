@@ -41,7 +41,7 @@ namespace SEToolbox.Interop
 
 			var nav = xDoc.CreateNavigator();
 
-			var definitions = nav.Select("MyObjectBuilder_CubeBlockDefinitions/Definitions/Definition");
+			var definitions = nav.Select("Definitions/CubeBlocks/Definition");
 			while (definitions.MoveNext())
 			{
 				var name = definitions.Current.SelectSingleNode("Id/SubtypeId").Value;

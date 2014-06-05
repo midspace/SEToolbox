@@ -283,7 +283,7 @@
             this.CharacterPosition = characterPosition;
             this.StockItemList.Clear();
             var list = new SortedList<string, ComponentItemModel>();
-            var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"..\Content");
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             foreach (var componentDefinition in SpaceEngineersAPI.ComponentDefinitions)
             {

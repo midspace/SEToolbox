@@ -20,7 +20,7 @@
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
-            var contentPath = Path.Combine(location, @"..\Content");
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             var magnesiumOre = SpaceEngineersAPI.GetDefinition(MyObjectBuilderTypeEnum.Ore, "Magnesium");
             var magnesiumOrePath = Path.Combine(contentPath, magnesiumOre.Icon + ".dds");
@@ -90,7 +90,7 @@
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
-            var contentPath = Path.Combine(location, @"..\Content");
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             var smallBlockLandingGear = SpaceEngineersAPI.GetDefinition(MyObjectBuilderTypeEnum.LandingGear, "SmallBlockLandingGear");
             var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icon + ".dds");
@@ -113,7 +113,7 @@
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
-            var contentPath = Path.Combine(location, @"..\Content");
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             var backgroundPath = Path.Combine(contentPath, @"Textures\BackgroundCube\Final\BackgroundCube.dds");
             Assert.IsTrue(File.Exists(backgroundPath), "Filepath should exist on developer machine");
@@ -147,7 +147,7 @@
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
-            var contentPath = Path.Combine(location, @"..\Content");
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             var backgroundPath = Path.Combine(contentPath, @"Textures\BackgroundCube\Final\BackgroundCube.dds");
             Assert.IsTrue(File.Exists(backgroundPath), "Filepath should exist on developer machine");

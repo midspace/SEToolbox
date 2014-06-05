@@ -246,5 +246,6 @@
         LargeShipWelder,
         SmallShipWelder,
         LargeShipMergeBlock,
+        SmallShipMergeBlock,
     };
 }

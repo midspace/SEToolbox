@@ -662,7 +662,7 @@
                 lock (Locker)
                 {
                     // Because I've bound models to the view, this is going to get messy.
-                    var contentPath = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"..\Content");
+                    var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
                     if (this.IsConstructionNotReady)
                     {
