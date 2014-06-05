@@ -71,6 +71,9 @@
         /// </summary>
         Custom,
 
+        /// <summary>
+        /// User custom but requires Admin access to save.
+        /// </summary>
         CustomAdminRequired
     };
 

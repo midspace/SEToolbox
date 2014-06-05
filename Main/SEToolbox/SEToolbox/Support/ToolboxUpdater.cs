@@ -39,6 +39,11 @@
             return gamePath;
         }
 
+        public static string GetApplicationContentPath()
+        {
+            return Path.GetFullPath(Path.Combine(GetApplicationFilePath(), @"..\Content"));
+        }
+
         /// <summary>
         /// Looks for the Space Engineers install location in the Registry, which should return the form:
         /// "C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers"

@@ -609,4 +609,10 @@ Please specify the location of the Space Engineers Application file.</value>
   <data name="DialogLocateSandboxTitle" xml:space="preserve">
     <value>Specify location of Space Engineers save game</value>
   </data>
+  <data name="SaveWorldType_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="SaveWorldType_CustomAdminRequired" xml:space="preserve">
+    <value>Custom</value>
+  </data>
 </root>

@@ -168,22 +168,22 @@
 
         #region ReadCubeBlockDefinitions
 
-        static MyObjectBuilder_AmmoMagazineDefinitions _ammoMagazineDefinitions;
-        static MyObjectBuilder_CubeBlockDefinitions _cubeBlockDefinitions;
-        static MyObjectBuilder_ComponentDefinitions _componentDefinitions;
-        static MyObjectBuilder_BlueprintDefinitions _blueprintDefinitions;
-        static MyObjectBuilder_PhysicalItemDefinitions _physicalItemDefinitions;
-        static MyObjectBuilder_VoxelMaterialDefinitions _voxelMaterialDefinitions;
+        static MyObjectBuilder_Definitions _ammoMagazineDefinitions;
+        static MyObjectBuilder_Definitions _cubeBlockDefinitions;
+        static MyObjectBuilder_Definitions _componentDefinitions;
+        static MyObjectBuilder_Definitions _blueprintDefinitions;
+        static MyObjectBuilder_Definitions _physicalItemDefinitions;
+        static MyObjectBuilder_Definitions _voxelMaterialDefinitions;
         static Dictionary<string, byte> _materialIndex;
 
         public static void ReadCubeBlockDefinitions()
         {
-            _ammoMagazineDefinitions = LoadContentFile<MyObjectBuilder_AmmoMagazineDefinitions, MyObjectBuilder_AmmoMagazineDefinitionsSerializer>("AmmoMagazines.sbc");
-            _voxelMaterialDefinitions = LoadContentFile<MyObjectBuilder_VoxelMaterialDefinitions, MyObjectBuilder_VoxelMaterialDefinitionsSerializer>("VoxelMaterials.sbc");
-            _physicalItemDefinitions = LoadContentFile<MyObjectBuilder_PhysicalItemDefinitions, MyObjectBuilder_PhysicalItemDefinitionsSerializer>("PhysicalItems.sbc");
-            _componentDefinitions = LoadContentFile<MyObjectBuilder_ComponentDefinitions, MyObjectBuilder_ComponentDefinitionsSerializer>("Components.sbc");
-            _cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_CubeBlockDefinitions, MyObjectBuilder_CubeBlockDefinitionsSerializer>("CubeBlocks.sbc");
-            _blueprintDefinitions = LoadContentFile<MyObjectBuilder_BlueprintDefinitions, MyObjectBuilder_BlueprintDefinitionsSerializer>("Blueprints.sbc");
+            _ammoMagazineDefinitions = LoadContentFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>("AmmoMagazines.sbc");
+            _voxelMaterialDefinitions = LoadContentFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>("VoxelMaterials.sbc");
+            _physicalItemDefinitions = LoadContentFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>("PhysicalItems.sbc");
+            _componentDefinitions = LoadContentFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>("Components.sbc");
+            _cubeBlockDefinitions = LoadContentFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>("CubeBlocks.sbc");
+            _blueprintDefinitions = LoadContentFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>("Blueprints.sbc");
             _materialIndex = new Dictionary<string, byte>();
         }
 
@@ -191,7 +191,7 @@
         {
             object fileContent = null;
 
-            var filePath = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationFilePath(), @"..\Content\Data"), filename);
+            var filePath = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"Data"), filename);
 
             if (!File.Exists(filePath))
             {
@@ -276,13 +276,13 @@
 
         public static MyObjectBuilder_DefinitionBase GetDefinition(MyObjectBuilderTypeEnum typeId, string subTypeId)
         {
-            var cube = _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            var cube = _cubeBlockDefinitions.CubeBlocks.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
             if (cube != null)
             {
                 return cube;
             }
 
-            var item = _physicalItemDefinitions.Definitions.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            var item = _physicalItemDefinitions.PhysicalItems.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
             if (item != null)
             {
                 return item;
@@ -330,7 +330,7 @@
 
         public static IList<MyObjectBuilder_VoxelMaterialDefinition> GetMaterialList()
         {
-            return _voxelMaterialDefinitions.Materials;
+            return _voxelMaterialDefinitions.VoxelMaterials;
         }
 
         public static byte GetMaterialIndex(string materialName)
@@ -339,8 +339,8 @@
                 return _materialIndex[materialName];
             else
             {
-                var material = _voxelMaterialDefinitions.Materials.FirstOrDefault(m => m.Name == materialName);
-                var index = (byte)_voxelMaterialDefinitions.Materials.ToList().IndexOf(material);
+                var material = _voxelMaterialDefinitions.VoxelMaterials.FirstOrDefault(m => m.Name == materialName);
+                var index = (byte)_voxelMaterialDefinitions.VoxelMaterials.ToList().IndexOf(material);
                 _materialIndex.Add(materialName, index);
                 return index;
             }
@@ -348,15 +348,15 @@
 
         public static string GetMaterialName(byte materialIndex, byte defaultMaterialIndex)
         {
-            if (materialIndex <= _voxelMaterialDefinitions.Materials.Length)
-                return _voxelMaterialDefinitions.Materials[materialIndex].Name;
+            if (materialIndex <= _voxelMaterialDefinitions.VoxelMaterials.Length)
+                return _voxelMaterialDefinitions.VoxelMaterials[materialIndex].Name;
             else
-                return _voxelMaterialDefinitions.Materials[defaultMaterialIndex].Name;
+                return _voxelMaterialDefinitions.VoxelMaterials[defaultMaterialIndex].Name;
         }
 
         public static string GetMaterialName(byte materialIndex)
         {
-            return _voxelMaterialDefinitions.Materials[materialIndex].Name;
+            return _voxelMaterialDefinitions.VoxelMaterials[materialIndex].Name;
         }
 
         #endregion
@@ -367,10 +367,10 @@
         {
             if (string.IsNullOrEmpty(subtypeId))
             {
-                return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
+                return _cubeBlockDefinitions.CubeBlocks.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
             }
 
-            return _cubeBlockDefinitions.Definitions.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
+            return _cubeBlockDefinitions.CubeBlocks.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
         }
 
@@ -439,7 +439,7 @@
 
         public static MyObjectBuilder_CubeBlockDefinition[] CubeBlockDefinitions
         {
-            get { return _cubeBlockDefinitions.Definitions; }
+            get { return _cubeBlockDefinitions.CubeBlocks; }
         }
 
         public static MyBlockPosition[] CubeBlockPositions
@@ -454,7 +454,7 @@
 
         public static MyObjectBuilder_PhysicalItemDefinition[] PhysicalItemDefinitions
         {
-            get { return _physicalItemDefinitions.Definitions; }
+            get { return _physicalItemDefinitions.PhysicalItems; }
         }
 
         public static MyObjectBuilder_AmmoMagazineDefinition[] AmmoMagazineDefinitions
@@ -464,7 +464,7 @@
 
         public static MyObjectBuilder_VoxelMaterialDefinition[] VoxelMaterialDefinitions
         {
-            get { return _voxelMaterialDefinitions.Materials; }
+            get { return _voxelMaterialDefinitions.VoxelMaterials; }
         }
 
         public static MyObjectBuilder_BlueprintDefinition[] BlueprintDefinitions
