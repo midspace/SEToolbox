@@ -62,11 +62,9 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Sandbox.Common">
       <HintPath>..\References\Sandbox.Common.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Sandbox.Common.XmlSerializers">
       <HintPath>..\References\Sandbox.Common.XmlSerializers.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -87,17 +85,14 @@
     <Reference Include="VRage.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\VRage.Common.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="VRage.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\VRage.Library.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="VRage.Math, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\VRage.Math.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -156,6 +151,7 @@
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
+    <Compile Include="Models\InventoryModel.cs" />
     <Compile Include="Models\LanguageModel.cs" />
     <Compile Include="Models\ResourceReportModel.cs" />
     <Compile Include="Models\FrameworkBuildModel.cs" />
@@ -265,6 +261,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\ResourceReportViewModel.cs" />
     <Compile Include="ViewModels\SelectCubeViewModel.cs" />
     <Compile Include="ViewModels\FrameworkBuildViewModel.cs" />
@@ -316,6 +313,9 @@
     </Compile>
     <Compile Include="Views\ControlMeteor.xaml.cs">
       <DependentUpon>ControlMeteor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlInventory.xaml.cs">
+      <DependentUpon>ControlInventory.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowResourceReport.xaml.cs">
       <DependentUpon>WindowResourceReport.xaml</DependentUpon>
@@ -407,6 +407,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlMeteor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ControlInventory.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -673,6 +677,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\flag_usa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

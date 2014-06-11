@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Collections.ObjectModel;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Services;
@@ -10,11 +11,15 @@
 
     public class StructureCharacterViewModel : StructureBaseViewModel<StructureCharacterModel>
     {
+        private InventoryViewModel _inventory;
+
         #region ctor
 
         public StructureCharacterViewModel(BaseViewModel parentViewModel, StructureCharacterModel dataModel)
             : base(parentViewModel, dataModel)
         {
+            this.Inventory = new InventoryViewModel(this, dataModel.Inventory);
+
             this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
@@ -23,8 +28,6 @@
         }
 
         #endregion
-
-        #region Properties
 
         #region command Properties
 
@@ -45,6 +48,8 @@
         }
 
         #endregion
+
+        #region Properties
 
         protected new StructureCharacterModel DataModel
         {
@@ -154,6 +159,49 @@
             get
             {
                 return this.DataModel.LinearVelocity;
+            }
+        }
+
+        public float BatteryCapacity
+        {
+            get
+            {
+                return this.DataModel.BatteryCapacity * 100000;
+            }
+
+            set
+            {
+                this.DataModel.BatteryCapacity = value / 100000;
+            }
+        }
+
+        public float? Health
+        {
+            get
+            {
+                return this.DataModel.Health;
+            }
+
+            set
+            {
+                this.DataModel.Health = value;
+            }
+        }
+
+        public InventoryViewModel Inventory
+        {
+            get
+            {
+                return this._inventory;
+            }
+
+            set
+            {
+                if (value != this._inventory)
+                {
+                    this._inventory = value;
+                    this.RaisePropertyChanged(() => Inventory);
+                }
             }
         }
 

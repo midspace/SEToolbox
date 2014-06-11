@@ -70,6 +70,8 @@
             this._toolboxApplication = new CoreToolbox();
             if (this._toolboxApplication.Init(e.Args))
                 this._toolboxApplication.Load(e.Args);
+            else
+                Application.Current.Shutdown();
         }
 
         private void OnExit(object sender, ExitEventArgs e)
@@ -80,6 +82,17 @@
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
+            var comException = e.Exception as System.Runtime.InteropServices.COMException;
+
+            if (comException != null && comException.ErrorCode == -2147221040)
+            {
+                // To fix 'OpenClipboard Failed (Exception from HRESULT: 0x800401D0 (CLIPBRD_E_CANT_OPEN)'
+                // http://stackoverflow.com/questions/12769264/openclipboard-failed-when-copy-pasting-data-from-wpf-datagrid
+
+                e.Handled = true;
+                return;
+            }
+
             // Log details to Application Event Log.
             DiagnosticsLogging.LogException(e.Exception);
 

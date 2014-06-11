@@ -24,8 +24,8 @@
 
         #region ctor
 
-        public StructureMeteorModel(MyObjectBuilder_EntityBase entityBase)
-            : base(entityBase)
+        public StructureMeteorModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
+            : base(entityBase, settings)
         {
         }
 
