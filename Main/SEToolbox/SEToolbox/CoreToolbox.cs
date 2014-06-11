@@ -35,7 +35,6 @@
                 }
                 else
                 {
-                    Application.Current.Shutdown();
                     return false;
                 }
             }
@@ -52,7 +51,6 @@
             if (!ignoreUpdates && ToolboxUpdater.IsBaseAssembliesChanged() && !altDlls && !Debugger.IsAttached)
             {
                 ToolboxUpdater.RunElevated(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SEToolboxUpdate"), "/B " + String.Join(" ", args), false, false);
-                Application.Current.Shutdown();
                 return false;
             }
 
@@ -80,7 +78,7 @@
                 {
                     if (Directory.Exists(_tempBinPath))
                         break;
-                        
+
                     checkDir = Directory.CreateDirectory(_tempBinPath);
 
                     if (checkDir == null)
@@ -123,10 +121,16 @@
                 currentDomain.AssemblyResolve += currentDomain_AssemblyResolve;
             }
 
+#if DEBUG
+            // Force the local debugger to load the Types
+            // This will make it hairy for testing the AppDomain stuff.
+            var settings0 = new Sandbox.Common.ObjectBuilders.MySessionSettings();
+#endif
+
             return true;
         }
 
-        public void Load(string[] args)
+        public bool Load(string[] args)
         {
             // Force pre-loading of any Space Engineers resources.
             SEToolbox.Interop.SpaceEngineersAPI.Init();
@@ -139,7 +143,7 @@
             {
                 ResourceReportModel.GenerateOfflineReport(explorerModel, args);
                 Application.Current.Shutdown();
-                return;
+                return false;
             }
 
             var eViewModel = new ExplorerViewModel(explorerModel);
@@ -162,6 +166,8 @@
                 if (GlobalSettings.Default.WindowState.HasValue) eWindow.WindowState = GlobalSettings.Default.WindowState.Value;
             };
             eWindow.ShowDialog();
+
+            return true;
         }
 
         public void Exit()

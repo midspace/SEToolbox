@@ -1,11 +1,14 @@
 ﻿namespace SEToolbox.Models
 {
+    using System.Linq;
     using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using System.Collections.ObjectModel;
 
     [Serializable]
     public class StructureCharacterModel : StructureBaseModel
@@ -23,12 +26,15 @@
         [NonSerialized]
         private List<string> _characterModels;
 
+        [NonSerialized]
+        private InventoryModel _inventory;
+
         #endregion
 
         #region ctor
 
-        public StructureCharacterModel(MyObjectBuilder_EntityBase entityBase)
-            : base(entityBase)
+        public StructureCharacterModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
+            : base(entityBase, settings)
         {
             this.CharacterModels = new List<string>(Enum.GetNames(typeof(MyCharacterModelEnum)));
         }
@@ -120,6 +126,42 @@
         }
 
         [XmlIgnore]
+        public float BatteryCapacity
+        {
+            get
+            {
+                return this.Character.Battery.CurrentCapacity;
+            }
+
+            set
+            {
+                if (value != this.Character.Battery.CurrentCapacity)
+                {
+                    this.Character.Battery.CurrentCapacity = value;
+                    this.RaisePropertyChanged(() => BatteryCapacity);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public float? Health
+        {
+            get
+            {
+                return this.Character.Health;
+            }
+
+            set
+            {
+                if (value != this.Character.Health)
+                {
+                    this.Character.Health = value;
+                    this.RaisePropertyChanged(() => Health);
+                }
+            }
+        }
+
+        [XmlIgnore]
         public List<string> CharacterModels
         {
             get { return this._characterModels; }
@@ -178,6 +220,24 @@
             }
         }
 
+        [XmlIgnore]
+        public InventoryModel Inventory
+        {
+            get
+            {
+                return this._inventory;
+            }
+
+            set
+            {
+                if (value != this._inventory)
+                {
+                    this._inventory = value;
+                    this.RaisePropertyChanged(() => Inventory);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
@@ -199,6 +259,9 @@
             this.ClassType = ClassType.Character;
             this.Description = string.Format("{0}", this.CharacterModel);
             this.DisplayName = this.Character.Name;
+
+            if (this.Inventory == null)
+                this.Inventory = new InventoryModel(this.Character.Inventory, Settings, 0.4f * 1000 * Settings.InventorySizeMultiplier, this.Character);
         }
 
         public void ResetVelocity()

@@ -467,17 +467,25 @@
             // Ignore any other base Save paths without the LastLoaded file.
             if (File.Exists(lastLoadedFile))
             {
-                var lastLoaded = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes, MyObjectBuilder_LastLoadedTimesSerializer>(lastLoadedFile);
+                MyObjectBuilder_LastLoadedTimes lastLoaded = null;
+                try
+                {
+                    lastLoaded = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes, MyObjectBuilder_LastLoadedTimesSerializer>(lastLoadedFile);
+                }
+                catch { }
                 var savePaths = Directory.GetDirectories(lastLoadedPath);
 
                 // Still check every potential game world path.
                 foreach (var savePath in savePaths)
                 {
                     var saveResource = LoadSaveFromPath(savePath, userName, saveType);
-                    var last = lastLoaded.LastLoaded.Dictionary.FirstOrDefault(d => d.Key.Equals(savePath, StringComparison.OrdinalIgnoreCase));
-                    if (last.Key != null)
+                    if (lastLoaded != null)
                     {
-                        saveResource.LastLoadTime = last.Value;
+                        var last = lastLoaded.LastLoaded.Dictionary.FirstOrDefault(d => d.Key.Equals(savePath, StringComparison.OrdinalIgnoreCase));
+                        if (last.Key != null)
+                        {
+                            saveResource.LastLoadTime = last.Value;
+                        }
                     }
 
                     // This should still allow Games to be copied into the Save path manually.

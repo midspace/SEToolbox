@@ -30,8 +30,8 @@
 
         #region ctor
 
-        public StructureVoxelModel(MyObjectBuilder_EntityBase entityBase, string voxelPath)
-            : base(entityBase)
+        public StructureVoxelModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings, string voxelPath)
+            : base(entityBase, settings)
         {
             if (voxelPath != null)
             {

@@ -1017,7 +1017,12 @@
                 ingots.ToString(),
                 ores.ToString());
 
-            Clipboard.SetText(detail);
+            try
+            {
+                Clipboard.Clear();
+                Clipboard.SetText(detail);
+            }
+            catch { }
         }
 
         public bool FilterStartCanExecute()

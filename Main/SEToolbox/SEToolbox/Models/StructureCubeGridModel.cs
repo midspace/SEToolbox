@@ -84,8 +84,8 @@
 
         #region ctor
 
-        public StructureCubeGridModel(MyObjectBuilder_EntityBase entityBase)
-            : base(entityBase)
+        public StructureCubeGridModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
+            : base(entityBase, settings)
         {
             this.IsSubsSystemNotReady = true;
             this.IsConstructionNotReady = true;

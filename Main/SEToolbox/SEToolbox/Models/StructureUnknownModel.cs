@@ -10,8 +10,8 @@
     {
         #region ctor
 
-        public StructureUnknownModel(MyObjectBuilder_EntityBase entityBase)
-            : base(entityBase)
+        public StructureUnknownModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
+            : base(entityBase, settings)
         {
         }
 

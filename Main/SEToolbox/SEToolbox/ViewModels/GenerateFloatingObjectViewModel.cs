@@ -348,8 +348,12 @@
 
             for (var i = 0; i < this.Multiplier; i++)
             {
-                var newEntity = entity.Clone() as MyObjectBuilder_FloatingObject;
+                var newEntity = (MyObjectBuilder_FloatingObject)entity.Clone();
                 newEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
+                {
+                    ((MyObjectBuilder_PhysicalGunObject)entity.Item.PhysicalContent).GunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                }
                 entities.Add(newEntity);
             }
 

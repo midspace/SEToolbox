@@ -12,116 +12,114 @@
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Label>Character</Label>
-        <ToolBarPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
-            <ToolBar>
-                <Menu Style="{StaticResource ToolBarMenu}">
-                    <MenuItem Header="Speed" Style="{StaticResource ToolBarTopMenuitem}">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
-                        </MenuItem.Icon>
-                        <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}">
+        <TabControl>
+            <TabItem Header="Character">
+                <DockPanel>
+                    <Menu DockPanel.Dock="Top">
+                        <Menu.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <DockPanel HorizontalAlignment="Stretch" Height="22"/>
+                            </ItemsPanelTemplate>
+                        </Menu.ItemsPanel>
+                        <MenuItem Header="Speed" Style="{StaticResource ToolBarTopMenuitem}">
                             <MenuItem.Icon>
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
                             </MenuItem.Icon>
+                            <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}">
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}">
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </MenuItem>
-                        <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}">
-                            <MenuItem.Icon>
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                </Menu>
-            </ToolBar>
-        </ToolBarPanel>
-        <Label Grid.Column="0" Grid.Row="2" Content="Suit:"/>
-        <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding CharacterModels}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}" />
-        <Label Grid.Column="0" Grid.Row="3" Content="Light:"/>
-        <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Light, Mode=TwoWay}" />
-        <Label Grid.Column="0" Grid.Row="4" Content="Jet Pack:"/>
-        <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding JetPack, Mode=TwoWay}" />
-        <Label Grid.Column="0" Grid.Row="5" Content="Dampeners:"/>
-        <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
-        <Label Grid.Column="0" Grid.Row="6" Content="Position:"/>
-        <views:ControlPosition Grid.Column="1" Grid.Row="6" IsEnabled="{Binding IsPilot, Converter={StaticResource InverseBooleanConverter}}" />
-        <!--<Label Grid.Row="7" Content="Position:"/>
-        <ContentControl Grid.Row="7" Grid.Column="1" Content="{Binding Position}">
-            <ContentControl.ContentTemplate>
-                <DataTemplate DataType="{x:Type m:BindablePoint3DModel}">
+                        <Separator HorizontalAlignment="Left" Width="4"/>
+                    </Menu>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" ToolTip="X">
-                            <TextBox.Text>
-                                <Binding Path="X" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                            </TextBox.Text>
-                        </TextBox>
-                        <TextBox Grid.Column="1" ToolTip="Y">
-                            <TextBox.Text>
-                                <Binding Path="Y" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                            </TextBox.Text>
-                        </TextBox>
-                        <TextBox Grid.Column="2" ToolTip="Z">
-                            <TextBox.Text>
-                                <Binding Path="Z" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                            </TextBox.Text>
-                        </TextBox>
-                    </Grid>
-                </DataTemplate>
-            </ContentControl.ContentTemplate>
-        </ContentControl>-->
-        <!--<Grid Grid.Row="7" Grid.Column="1" DataContext="{Binding Position}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" ToolTip="X">
-                <TextBox.Text>
-                    <Binding Path="X" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                </TextBox.Text>
-            </TextBox>
-            <TextBox Grid.Column="1" ToolTip="Y">
-                <TextBox.Text>
-                    <Binding Path="Y" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                </TextBox.Text>
-            </TextBox>
-            <TextBox Grid.Column="2" ToolTip="Z">
-                <TextBox.Text>
-                    <Binding Path="Z" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                </TextBox.Text>
-            </TextBox>
-        </Grid>-->
-        <!--<TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Position, Mode=OneWay}" />-->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="2" Content="Suit:"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding CharacterModels}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}" />
+                        <Label Grid.Column="0" Grid.Row="3" Content="Light:"/>
+                        <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Light, Mode=TwoWay}" />
+                        <Label Grid.Column="0" Grid.Row="4" Content="Jet Pack:"/>
+                        <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding JetPack, Mode=TwoWay}" />
+                        <Label Grid.Column="0" Grid.Row="5" Content="Dampeners:"/>
+                        <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
+                        <Label Grid.Column="0" Grid.Row="6" Content="Position:"/>
+                        <views:ControlPosition Grid.Column="1" Grid.Row="6" IsEnabled="{Binding IsPilot, Converter={StaticResource InverseBooleanConverter}}" />
 
-        <Label Grid.Column="0" Grid.Row="7" Content="Pilot:"/>
-        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPilot}" />
-        <Label Grid.Column="0" Grid.Row="8" Content="Player:"/>
-        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
-        <Label Grid.Column="0" Grid.Row="9" Content="Speed:"/>
-        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
-        <Label Grid.Column="0" Grid.Row="10" Content="Distance:"/>
-        <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+                        <Label Grid.Column="0" Grid.Row="7" Content="Health:"/>
+                        <Grid Grid.Row="7" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="Health" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="100"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Slider Grid.Column="1" Value="{Binding Health}" Minimum="0" Maximum="100" SmallChange="1" LargeChange="10" />
+                        </Grid>
+                        <Label Grid.Column="0" Grid.Row="8" Content="Battery:"/>
+                        <Grid Grid.Row="8" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="BatteryCapacity" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="1"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Slider Grid.Column="1" Value="{Binding BatteryCapacity}" Minimum="0" Maximum="1" SmallChange=".01" LargeChange=".1"/>
+                        </Grid>
+                        <Separator Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"/>
+                        <Label Grid.Column="0" Grid.Row="10" Content="Pilot:"/>
+                        <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPilot}" />
+                        <Label Grid.Column="0" Grid.Row="11" Content="Player:"/>
+                        <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
+                        <Label Grid.Column="0" Grid.Row="12" Content="Speed:"/>
+                        <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
+                        <Label Grid.Column="0" Grid.Row="13" Content="Distance:"/>
+                        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+                    </Grid>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Inventory">
+                <views:ControlInventory Grid.Row="1" DataContext="{Binding Inventory}"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
