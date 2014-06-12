@@ -45,7 +45,7 @@
 
         public string TextureFile { get; set; }
 
-        public MyCubeSize CubeSize { get; set; }
+        public MyCubeSize? CubeSize { get; set; }
 
         public BindableSize3DIModel Size { get; set; }
 

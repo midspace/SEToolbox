@@ -1,14 +1,11 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Linq;
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
-    using System.Collections.ObjectModel;
 
     [Serializable]
     public class StructureCharacterModel : StructureBaseModel

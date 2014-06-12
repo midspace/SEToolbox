@@ -336,6 +336,14 @@
                                 </i:Interaction.Behaviors>
                             </controls:SortableListView>
                             <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />
+                            <TabControl Grid.Row="2">
+                                <TabItem Header="Controls">
+                                    
+                                </TabItem>
+                                <!--<TabItem Header="Inventory">
+
+                                </TabItem>-->
+                            </TabControl>
                             <StackPanel Grid.Row="2">
                                 <TextBlock Text="Preview" FontSize="20" Foreground="#80808080" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,-20,0" IsHitTestVisible="False">
                                     <TextBlock.RenderTransform>

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
         ResizeMode="CanResize"  ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow" 
         Title="Generate Asteroid Field" Height="380" Width="600" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         MinHeight="150" MinWidth="250"
@@ -51,7 +52,7 @@
                 <Button Content="_Add" Margin="8,0,0,0" Width="50" Command="{Binding AddRowCommand}"/>
                 <Button Content="_Delete" Margin="8,0,0,0" Width="50" Command="{Binding DeleteRowCommand}"/>
             </StackPanel>
-            <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
+            <controls:MyDataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Index}" IsReadOnly="True" />
                     <DataGridComboBoxColumn Header="Asteroid" SelectedValueBinding="{Binding VoxelFile}" DisplayMemberPath="Name">
@@ -179,7 +180,7 @@
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
                 </DataGrid.Columns>
-            </DataGrid>
+            </controls:MyDataGrid>
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8">
             <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>

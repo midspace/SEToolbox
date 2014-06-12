@@ -213,5 +213,51 @@
         {
             return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
+
+        #region GetHitControl
+
+        /// <summary>
+        /// Used to determine what T was clicked on during a DoubleClick event, or a Context menu open
+        ///     If a MouseDoubleClick, pass in the MouseButtonEventArgs.
+        ///     If a ContextMenu Opened, pass in Null.
+        /// </summary>
+        /// <param name="parentControl"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        public static T GetHitControl<T>(this UIElement parentControl, MouseEventArgs e)
+        {
+            Point hit;
+
+            if (e == null)
+                hit = Mouse.GetPosition(parentControl);
+            else
+                hit = e.GetPosition(parentControl);
+            object obj = parentControl.InputHitTest(hit);
+
+            if ((obj != null) && (obj is FrameworkElement))
+            {
+                var control = obj;
+                while (control != null)
+                {
+                    if (control.GetType().GetProperty("TemplatedParent").GetValue(control, null) != null)
+                        control = (FrameworkElement)obj.GetType().GetProperty("TemplatedParent").GetValue(control, null);
+                    else if (control == parentControl)
+                        break;
+                    else if (control is FrameworkElement)
+                        control = ((FrameworkElement)control).Parent;
+                    else
+                        break;
+
+                    if (control is T)
+                    {
+                        return (T)control;
+                    }
+                }
+            }
+
+            return default(T);
+        }
+
+        #endregion
     }
 }

@@ -43,6 +43,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" Margin="0,0,2,0" />
                                 <TextBlock Text="{Binding FriendlyName}"/>
+                                <!--<TextBlock Text="{Binding CubeSize, StringFormat='{} ({0})'}"/>-->
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>

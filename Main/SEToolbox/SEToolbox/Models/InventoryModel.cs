@@ -29,14 +29,14 @@
         private float _maxVolume;
 
         [NonSerialized]
-        private MySessionSettings _settings;
+        private readonly MySessionSettings _settings;
 
         [NonSerialized]
         private readonly MyObjectBuilder_Inventory _inventory;
 
         // not required for Cube inventories.
         [NonSerialized]
-        private MyObjectBuilder_Character _character;
+        private readonly MyObjectBuilder_Character _character;
 
         #endregion
 
@@ -162,15 +162,36 @@
         {
             var definition = SpaceEngineersAPI.GetDefinition(item.Content.TypeId, item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
 
+            string name;
+            string textureFile;
+            double mass;
+            double volume;
+
+            if (definition == null)
+            {
+                name = item.Content.SubtypeName + " " + item.Content.TypeId.ToString();
+                mass = (double)item.AmountDecimal;
+                volume = (double)item.AmountDecimal;
+                textureFile = null;
+            }
+            else
+            {
+                name = definition.DisplayName;
+                mass = definition.Mass*(double) item.AmountDecimal;
+                volume = definition.Volume.Value*(double) item.AmountDecimal;
+                textureFile = Path.Combine(contentPath, definition.Icon + ".dds");
+            }
+
             var newItem = new ComponentItemModel()
             {
-                Name = definition.DisplayName,
+                Name = name,
                 Count = item.AmountDecimal,
                 SubtypeId = item.Content.SubtypeName,
                 TypeId = item.Content.TypeId,
-                Mass = definition.Mass * (double)item.AmountDecimal,
-                Volume = definition.Volume.Value * (double)item.AmountDecimal,
-                TextureFile = Path.Combine(contentPath, definition.Icon + ".dds"),
+                Mass = mass,
+                Volume = volume,
+                TextureFile = textureFile,
+                Accessible = definition != null, // item no longer exists in Space Engineers definitions.
             };
 
             this.TotalVolume += newItem.Volume;
@@ -188,12 +209,12 @@
 
         internal void RemoveItem(int index)
         {
-            var InvItem = this._inventory.Items[index];
+            var invItem = this._inventory.Items[index];
 
             // Remove HandWeapon if item is HandWeapon.
-            if (this._character != null && this._character.HandWeapon != null && InvItem.Content.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
+            if (this._character != null && this._character.HandWeapon != null && invItem.Content.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
             {
-                if (((MyObjectBuilder_PhysicalGunObject)InvItem.PhysicalContent).GunEntity.EntityId == this._character.HandWeapon.EntityId)
+                if (((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity.EntityId == this._character.HandWeapon.EntityId)
                 {
                     this._character.HandWeapon = null;
                 }
