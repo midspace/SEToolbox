@@ -177,6 +177,7 @@
         SmallBlockFrontLight,
         LargeMissileLauncher,
         SmallBlockDrill,
+        LargeBlockDrill,
         SmallBlockOreDetector,
         SmallBlockRadioAntenna,
         SmallBlockSmallContainer,
