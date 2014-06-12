@@ -1,24 +1,15 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
     using SEToolbox.Services;
-    using SEToolbox.Support;
+    using SEToolbox.Views;
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Windows.Forms;
     using System.Windows.Input;
-    using System.Windows.Media.Media3D;
     using VRageMath;
-    using Res = SEToolbox.Properties.Resources;
-    using SEToolbox.Views;
 
     public class InventoryViewModel : BaseViewModel
     {
@@ -26,9 +17,7 @@
 
         private readonly IDialogService _dialogService;
         private readonly InventoryModel _dataModel;
-
-        private bool? _closeResult;
-        private bool _isBusy;
+        private ObservableCollection<ComponentItemModel> _selections;
 
         #endregion
 
@@ -46,6 +35,7 @@
 
             this._dialogService = dialogService;
             this._dataModel = dataModel;
+            this.Selections = new ObservableCollection<ComponentItemModel>();
             // Will bubble property change events from the Model to the ViewModel.
             this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
         }
@@ -73,6 +63,23 @@
         #endregion
 
         #region properties
+
+        public ObservableCollection<ComponentItemModel> Selections
+        {
+            get
+            {
+                return this._selections;
+            }
+
+            set
+            {
+                if (value != this._selections)
+                {
+                    this._selections = value;
+                    this.RaisePropertyChanged(() => Selections);
+                }
+            }
+        }
 
         public ObservableCollection<ComponentItemModel> Items
         {

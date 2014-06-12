@@ -282,13 +282,13 @@
             this.MaxFloatingObjects = maxFloatingObjects;
             this.CharacterPosition = characterPosition;
             this.StockItemList.Clear();
-            var list = new SortedList<string, ComponentItemModel>();
+            var list = new List<ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             foreach (var componentDefinition in SpaceEngineersAPI.ComponentDefinitions)
             {
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.TypeId == componentDefinition.Id.TypeId);
-                list.Add(componentDefinition.DisplayName, new ComponentItemModel()
+                list.Add(new ComponentItemModel()
                 {
                     Name = componentDefinition.DisplayName,
                     TypeId = componentDefinition.Id.TypeId,
@@ -307,7 +307,7 @@
                     continue;
 
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
-                list.Add(physicalItemDefinition.DisplayName, new ComponentItemModel()
+                list.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -323,7 +323,7 @@
             foreach (var physicalItemDefinition in SpaceEngineersAPI.AmmoMagazineDefinitions)
             {
                 var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
-                list.Add(physicalItemDefinition.DisplayName, new ComponentItemModel()
+                list.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -336,10 +336,30 @@
                 });
             }
 
-            foreach (var kvp in list)
+            foreach (var item in list.OrderBy(i => i.FriendlyName))
             {
-                this.StockItemList.Add(kvp.Value);
+                this.StockItemList.Add(item);
             }
+
+            //list.Clear();
+
+            //foreach (var cubeDefinition in SpaceEngineersAPI.CubeBlockDefinitions)
+            //{
+            //    list.Add(new ComponentItemModel()
+            //    {
+            //        Name = cubeDefinition.DisplayName,
+            //        TypeId = cubeDefinition.Id.TypeId,
+            //        SubtypeId = cubeDefinition.Id.SubtypeId,
+            //        CubeSize = cubeDefinition.CubeSize,
+            //        TextureFile = cubeDefinition.Icon == null ? null : Path.Combine(contentPath, cubeDefinition.Icon + ".dds"),
+            //        Accessible = !string.IsNullOrEmpty(cubeDefinition.Model),
+            //    });
+            //}
+
+            //foreach (var item in list.OrderBy(i => i.FriendlyName))
+            //{
+            //    this.StockItemList.Add(item);
+            //}
         }
 
         private void SetMassVolume()

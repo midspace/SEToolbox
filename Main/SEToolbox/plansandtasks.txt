@@ -16,10 +16,7 @@
   * Property Grid, to edit properties and sub items.
     * https://wpg.codeplex.com/
     * https://wpftoolkit.codeplex.com/wikipage?title=PropertyGrid
-  * Report of all in world assets.
-    * Breakdown of all ores in untouched (in asteroid), unused (ore and ingot), used (component, tool, cube), npc (ore, ingot, component, tool, cube).
-	* Counts of components, tools, cubes  (npc and non-npc).
-  * Corrupt save file check.
+  * Corrupt and null save file check.
 
 - Drag drop files direct into the interface.
   * Detect .vox files for asteroids.
@@ -42,7 +39,6 @@
     Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
   * Export and Import Asteroids/Floating Objects/Meteors to/from files.
   * Duplicate. Clone any object.
-  * Group Move - move all to single point.
   * Group Move - Disperse over set area.
   * Duplicate any item.
 
@@ -111,6 +107,10 @@ Completed:
 - Dialog to Create/Drop Components and Items (pipes, weapons, ingots, ores, ammos).
 - Rotate ship/station cubes to face new orientation.
 - Join two ship parts together after accidently breaking them apart.
+- Group Move - move all to single point.
+- Report of all in world assets.
+  * Breakdown of all ores in untouched (in asteroid), unused (ore and ingot), used (component, tool, cube), npc (ore, ingot, component, tool, cube).
+  * Counts of components, tools, cubes  (npc and non-npc).
 
 ========--------~~~~~~~~
 
