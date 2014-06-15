@@ -217,7 +217,8 @@
             // Remove HandWeapon if item is HandWeapon.
             if (this._character != null && this._character.HandWeapon != null && invItem.Content.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
             {
-                if (((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity.EntityId == this._character.HandWeapon.EntityId)
+                if (((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity != null &&
+                    ((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity.EntityId == this._character.HandWeapon.EntityId)
                 {
                     this._character.HandWeapon = null;
                 }
@@ -231,7 +232,7 @@
             // Re-index ItemId.
             for (uint i = 0; i < this._inventory.Items.Count; i++)
             {
-                this._inventory.Items[0].ItemId = i;
+                this._inventory.Items[(int)i].ItemId = i;
             }
         }
 
