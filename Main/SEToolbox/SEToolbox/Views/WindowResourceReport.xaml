@@ -34,7 +34,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"  MinWidth="120" Command="{Binding GenerateCommand}" Content="Generate Report" IsDefault="True" Name="uxInitialElement"/>
-                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding ExportCommand}" HorizontalAlignment="Left" ContextMenuService.IsEnabled="False" Click="Button_Click">
+                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding ExportCommand}" HorizontalAlignment="Left">
+                    <i:Interaction.Behaviors>
+                        <commands:ButtonDropDownMenuBehavior />
+                    </i:Interaction.Behaviors>
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Export"/>
