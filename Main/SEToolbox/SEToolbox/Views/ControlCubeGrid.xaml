@@ -163,13 +163,53 @@
                         <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
                         <Label Grid.Row="3" Grid.Column="0" Content="Position:"/>
                         <views:ControlPosition Grid.Row="3" Grid.Column="1"/>
-                        <Separator Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
-                        <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Piloted:"/>
-                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPiloted}" />
-                        <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="Damage:"/>
-                        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
-                        <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="Speed:"/>
-                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
+
+                        <Button Grid.Column="0" Grid.Row="4" Margin="4 0 4 0" HorizontalAlignment="Left" Content="Damage:">
+                            <i:Interaction.Behaviors>
+                                <commands:ButtonDropDownMenuBehavior />
+                            </i:Interaction.Behaviors>
+                            <Button.ContextMenu>
+                                <ContextMenu HorizontalAlignment="Right">
+                                    <MenuItem Header="Repair" Command="{Binding RepairObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+
+                        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
+
+                        <Button Grid.Column="0" Grid.Row="5" Margin="4 0 4 0" HorizontalAlignment="Left" Content="Speed:">
+                            <i:Interaction.Behaviors>
+                                <commands:ButtonDropDownMenuBehavior />
+                            </i:Interaction.Behaviors>
+                            <Button.ContextMenu>
+                                <ContextMenu HorizontalAlignment="Right">
+                                    <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}" ToolTip="Set Linear and Rotation Velocity to zero (0).">
+                                        <MenuItem.Icon>
+                                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}" ToolTip="Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.">
+                                        <MenuItem.Icon>
+                                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="Sets the object velocity directly at the player at maximum speed.">
+                                        <MenuItem.Icon>
+                                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_right2}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
+
+                        <Separator Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"/>
+                        <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="Piloted:"/>
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPiloted}" />
                         <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
                         <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
                         <TextBlock Grid.Row="9" Grid.Column="0" Margin="4 0 4 0" Text="Scale:"/>
