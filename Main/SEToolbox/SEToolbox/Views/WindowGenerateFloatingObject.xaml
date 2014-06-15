@@ -54,7 +54,7 @@
                     <TextBox.Text>
                         <Binding Path="DecimalUnits" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                             <Binding.ValidationRules>
-                                <converters:RangeRuleD Min="0.000001" Max="1000000"/>
+                                <converters:RangeRuleDec Min="0.000001" Max="1000000000"/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>

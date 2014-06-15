@@ -601,7 +601,6 @@
 
             entity.PositionAndOrientation = new MyPositionAndOrientation()
             {
-                // TODO: reposition based scale.
                 Position = this.Position.ToVector3(),
                 Forward = this.Forward.ToVector3(),
                 Up = this.Up.ToVector3()

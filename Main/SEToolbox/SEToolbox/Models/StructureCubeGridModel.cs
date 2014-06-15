@@ -1286,7 +1286,7 @@
                         newBlock.Min = new SerializableVector3I(min.X, min.Y, max.Z);
                 }
 
-                // Don't place a block it one already exists there in the mirror.
+                // Don't place a block if one already exists there in the mirror.
                 if (integrate && viewModel.CubeGrid.CubeBlocks.Any(b => b.Min.X == newBlock.Min.X && b.Min.Y == newBlock.Min.Y && b.Min.Z == newBlock.Min.Z /*|| b.Max == newBlock.Min*/))  // TODO: check cubeblock size.
                     continue;
 

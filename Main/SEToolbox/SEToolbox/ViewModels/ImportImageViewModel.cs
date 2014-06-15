@@ -354,12 +354,6 @@
                     this.ProcessImage();
                 };
 
-
-                //this.Position = new BindablePoint3DModel(VRageMath.Vector3.Zero);
-                //this.Forward = new BindableVector3DModel(VRageMath.Vector3.Forward);
-                //this.Up = new BindableVector3DModel(VRageMath.Vector3.Up);
-
-
                 // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
                 var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
                 vector.Normalize();
@@ -468,7 +462,7 @@
 
             using (var palatteImage = new Bitmap(image))
             {
-                // Optimal order load. from grid 0,0,0 and out.
+                // Optimal order load. from grid coordinate (0,0,0) and up.
                 for (var x = palatteImage.Width - 1; x >= 0; x--)
                 {
                     for (var y = palatteImage.Height - 1; y >= 0; y--)

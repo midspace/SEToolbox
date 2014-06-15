@@ -121,10 +121,6 @@
             </Style.Triggers>
         </Style>
 
-        <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
-        <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
-        <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
-
         <Style x:Key="ToolBarTopMenuitem" TargetType="MenuItem">
             <Setter Property="Padding" Value="-2,2,6,2"/>
         </Style>
@@ -133,6 +129,15 @@
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="true">
                     <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="dataGridCellInError" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                    <Setter Property="Background" Value="Yellow"/>
                 </Trigger>
             </Style.Triggers>
         </Style>

@@ -11,14 +11,14 @@
 
     public class StructureCharacterViewModel : StructureBaseViewModel<StructureCharacterModel>
     {
-        private InventoryViewModel _inventory;
+        private InventoryEditorViewModel _inventory;
 
         #region ctor
 
         public StructureCharacterViewModel(BaseViewModel parentViewModel, StructureCharacterModel dataModel)
             : base(parentViewModel, dataModel)
         {
-            this.Inventory = new InventoryViewModel(this, dataModel.Inventory);
+            this.Inventory = new InventoryEditorViewModel(this, dataModel.Inventory);
 
             this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
@@ -188,7 +188,7 @@
             }
         }
 
-        public InventoryViewModel Inventory
+        public InventoryEditorViewModel Inventory
         {
             get
             {

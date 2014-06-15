@@ -56,7 +56,15 @@
                     <DataGridTextColumn Header="Name" Binding="{Binding FriendlyName}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Mass (Kg)" Binding="{Binding Mass, StringFormat='{}{0:#,###0.000}'}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Volume (L)" Binding="{Binding Volume, StringFormat='{}{0:#,###0.000}'}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Amount" Binding="{Binding Count}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Amount" ElementStyle="{StaticResource dataGridCellInError}">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="Amount" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True" >
+                                <Binding.ValidationRules>
+                                    <converters:RangeRuleDec Min="0.000001" Max="1000000000"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </controls:MyDataGrid>
         </Grid>

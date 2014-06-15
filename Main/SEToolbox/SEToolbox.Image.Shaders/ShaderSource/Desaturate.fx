@@ -35,8 +35,8 @@ float4 main(float2 uv : TEXCOORD) : COLOR
 	}
 	else
 	{
-		/// Desaturate algorithm.  Imitates Photoshop.
-		/// However this may not properly take into account the Alpha Channel.
+		// Desaturate algorithm.  Replicates the Photoshop Desaturate filter.
+		// However this may not properly take into account the Alpha Channel.
 		
 		maxColor = srcColor.r;
 		if (maxColor < srcColor.g)

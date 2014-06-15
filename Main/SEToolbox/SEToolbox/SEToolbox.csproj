@@ -116,6 +116,7 @@
     </Compile>
     <Compile Include="Controls\SortableGridViewColumn.cs" />
     <Compile Include="Controls\SortableListView.cs" />
+    <Compile Include="Converters\RangeRuleDec.cs" />
     <Compile Include="Converters\DDSConverter.cs" />
     <Compile Include="Converters\I18NFormatterConverter.cs" />
     <Compile Include="Converters\RangeRuleI.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
+    <Compile Include="Models\InventoryEditorModel.cs" />
     <Compile Include="Models\InventoryModel.cs" />
     <Compile Include="Models\LanguageModel.cs" />
     <Compile Include="Models\ResourceReportModel.cs" />
@@ -262,7 +264,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
-    <Compile Include="ViewModels\InventoryViewModel.cs" />
+    <Compile Include="ViewModels\InventoryEditorViewModel.cs" />
     <Compile Include="ViewModels\ResourceReportViewModel.cs" />
     <Compile Include="ViewModels\SelectCubeViewModel.cs" />
     <Compile Include="ViewModels\FrameworkBuildViewModel.cs" />

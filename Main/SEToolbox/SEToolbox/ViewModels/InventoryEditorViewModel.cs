@@ -11,31 +11,31 @@
     using System.Windows.Input;
     using VRageMath;
 
-    public class InventoryViewModel : BaseViewModel
+    public class InventoryEditorViewModel : BaseViewModel
     {
         #region Fields
 
         private readonly IDialogService _dialogService;
-        private readonly InventoryModel _dataModel;
-        private ObservableCollection<ComponentItemModel> _selections;
+        private readonly InventoryEditorModel _dataModel;
+        private ObservableCollection<InventoryModel> _selections;
 
         #endregion
 
         #region Constructors
 
-        public InventoryViewModel(BaseViewModel parentViewModel, InventoryModel dataModel)
+        public InventoryEditorViewModel(BaseViewModel parentViewModel, InventoryEditorModel dataModel)
             : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>())
         {
         }
 
-        public InventoryViewModel(BaseViewModel parentViewModel, InventoryModel dataModel, IDialogService dialogService)
+        public InventoryEditorViewModel(BaseViewModel parentViewModel, InventoryEditorModel dataModel, IDialogService dialogService)
             : base(parentViewModel)
         {
             Contract.Requires(dialogService != null);
 
             this._dialogService = dialogService;
             this._dataModel = dataModel;
-            this.Selections = new ObservableCollection<ComponentItemModel>();
+            this.Selections = new ObservableCollection<InventoryModel>();
             // Will bubble property change events from the Model to the ViewModel.
             this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
         }
@@ -64,7 +64,7 @@
 
         #region properties
 
-        public ObservableCollection<ComponentItemModel> Selections
+        public ObservableCollection<InventoryModel> Selections
         {
             get
             {
@@ -81,7 +81,7 @@
             }
         }
 
-        public ObservableCollection<ComponentItemModel> Items
+        public ObservableCollection<InventoryModel> Items
         {
             get
             {
@@ -94,7 +94,7 @@
             }
         }
 
-        public ComponentItemModel SelectedRow
+        public InventoryModel SelectedRow
         {
             get
             {
@@ -160,6 +160,8 @@
                         var item = (MyObjectBuilder_InventoryItem)((MyObjectBuilder_FloatingObject)newEntities[i]).Item;
                         _dataModel.Additem(item);
                     }
+
+                    //  TODO: need to bubble change up to this.MainViewModel.IsModified = true;
                 }
             }
         }
@@ -173,6 +175,8 @@
         {
             var index = this.Items.IndexOf(this.SelectedRow);
             _dataModel.RemoveItem(index);
+
+            //  TODO: need to bubble change up to this.MainViewModel.IsModified = true;
         }
 
         #endregion
