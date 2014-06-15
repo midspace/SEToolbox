@@ -1370,6 +1370,7 @@
 
         #region CalculateSubtractedCorners
 
+        // Experimental code.
         private static void CalculateSubtractedCorners(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);
@@ -1392,6 +1393,7 @@
 
         #region CalculateSubtractedSlopes
 
+        // Experimental code.
         private static void CalculateSubtractedSlopes(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);
@@ -1480,6 +1482,7 @@
 
         #region CalculateSubtractedInverseCorners
 
+        // Experimental code.
         private static void CalculateSubtractedInverseCorners(CubeType[, ,] ccubic)
         {
             var xCount = ccubic.GetLength(0);

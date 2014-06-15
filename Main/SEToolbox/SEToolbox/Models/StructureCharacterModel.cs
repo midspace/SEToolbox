@@ -24,7 +24,7 @@
         private List<string> _characterModels;
 
         [NonSerialized]
-        private InventoryModel _inventory;
+        private InventoryEditorModel _inventory;
 
         #endregion
 
@@ -218,7 +218,7 @@
         }
 
         [XmlIgnore]
-        public InventoryModel Inventory
+        public InventoryEditorModel Inventory
         {
             get
             {
@@ -258,7 +258,7 @@
             this.DisplayName = this.Character.Name;
 
             if (this.Inventory == null)
-                this.Inventory = new InventoryModel(this.Character.Inventory, Settings, 0.4f * 1000 * Settings.InventorySizeMultiplier, this.Character);
+                this.Inventory = new InventoryEditorModel(this.Character.Inventory, Settings, 0.4f * 1000 * Settings.InventorySizeMultiplier, this.Character);
         }
 
         public void ResetVelocity()

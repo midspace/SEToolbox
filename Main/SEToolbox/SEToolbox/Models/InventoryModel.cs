@@ -1,236 +1,176 @@
 ﻿namespace SEToolbox.Models
 {
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
-    using System.Collections.ObjectModel;
-    using System.IO;
-    using System.Xml.Serialization;
+    using System.ComponentModel;
 
     [Serializable]
-    public class InventoryModel : BaseModel
+    public class InventoryModel : BaseModel, IDataErrorInfo
     {
-        #region Fields
+        #region fields
 
-        // Fields are marked as NonSerialized, as they aren't required during the drag-drop operation.
-
-        [NonSerialized]
-        private ObservableCollection<ComponentItemModel> _items;
-
-        [NonSerialized]
-        private ComponentItemModel _selectedRow;
-
-        [NonSerialized]
-        private double _totalVolume;
-
-        [NonSerialized]
-        private float _maxVolume;
-
-        [NonSerialized]
-        private readonly MySessionSettings _settings;
-
-        [NonSerialized]
-        private readonly MyObjectBuilder_Inventory _inventory;
-
-        // not required for Cube inventories.
-        [NonSerialized]
-        private readonly MyObjectBuilder_Character _character;
+        private readonly MyObjectBuilder_InventoryItem _item;
+        private string _name;
+        private decimal _amount;
+        private double _mass;
+        private double _massMultiplyer;
+        private double _volume;
+        private double _volumeMultiplyer;
 
         #endregion
 
-        #region ctor
-
-        public InventoryModel(MyObjectBuilder_Inventory inventory, MySessionSettings settings, float maxVolume, MyObjectBuilder_Character character = null)
+        public InventoryModel(MyObjectBuilder_InventoryItem item)
         {
-            this._inventory = inventory;
-            this._settings = settings;
-            this._maxVolume = maxVolume;
-            this._character = character;
-            UpdateGeneralFromEntityBase();
-
-            // this.CUbe.InventorySize.X * this.CUbe.InventorySize.Y * this.CUbe.InventorySize.Z * 1000 * Sandbox.InventorySizeMultiplier;
-            // or this.Cube.InventoryMaxVolume * 1000 * Sandbox.InventorySizeMultiplier;
-            //this.Character.Inventory = 0.4 * 1000 * Sandbox.InventorySizeMultiplier;
+            _item = item;
         }
-
-        #endregion
 
         #region Properties
 
-        [XmlIgnore]
-        public ObservableCollection<ComponentItemModel> Items
+        public string Name
         {
-            get
-            {
-                return this._items;
-            }
-
+            get { return this._name; }
             set
             {
-                if (value != this._items)
+                if (value != this._name)
                 {
-                    this._items = value;
-                    this.RaisePropertyChanged(() => Items);
+                    this._name = value;
+                    this.FriendlyName = SpaceEngineersAPI.GetResourceName(this.Name);
+                    this.RaisePropertyChanged(() => Name);
                 }
             }
         }
 
-        [XmlIgnore]
-        public ComponentItemModel SelectedRow
-        {
-            get
-            {
-                return this._selectedRow;
-            }
+        public MyObjectBuilderTypeEnum TypeId { get; set; }
 
+        public string SubtypeId { get; set; }
+
+        public Decimal Amount
+        {
+            get { return this._amount; }
             set
             {
-                if (value != this._selectedRow)
+                if (value != this._amount)
                 {
-                    this._selectedRow = value;
-                    this.RaisePropertyChanged(() => SelectedRow);
+                    this._amount = value;
+                    this.RaisePropertyChanged(() => Amount);
+                    this.UpdateMassVolume();
                 }
             }
         }
 
-        [XmlIgnore]
-        public double TotalVolume
+        public double Mass
         {
-            get
-            {
-                return this._totalVolume;
-            }
+            get { return this._mass; }
 
-            set
+            private set
             {
-                if (value != this._totalVolume)
+                if (value != this._mass)
                 {
-                    this._totalVolume = value;
-                    this.RaisePropertyChanged(() => TotalVolume);
+                    this._mass = value;
+                    this.RaisePropertyChanged(() => Mass);
                 }
             }
         }
 
-        [XmlIgnore]
-        public float MaxVolume
+        public double MassMultiplyer
         {
-            get
-            {
-                return this._maxVolume;
-            }
-
+            get { return this._massMultiplyer; }
             set
             {
-                if (value != this._maxVolume)
+                if (value != this._massMultiplyer)
                 {
-                    this._maxVolume = value;
-                    this.RaisePropertyChanged(() => MaxVolume);
+                    this._massMultiplyer = value;
+                    this.RaisePropertyChanged(() => MassMultiplyer);
+                    this.UpdateMassVolume();
                 }
             }
         }
 
-        [XmlIgnore]
-        public MySessionSettings Settings
+        public double Volume
         {
-            get { return this._settings; }
+            get { return this._volume; }
+
+            private set
+            {
+                if (value != this._volume)
+                {
+                    this._volume = value;
+                    this.RaisePropertyChanged(() => Volume);
+                }
+            }
+        }
+
+        public double VolumeMultiplyer
+        {
+            get { return this._volumeMultiplyer; }
+            set
+            {
+                if (value != this._volumeMultiplyer)
+                {
+                    this._volumeMultiplyer = value;
+                    this.RaisePropertyChanged(() => VolumeMultiplyer);
+                    this.UpdateMassVolume();
+                }
+            }
+        }
+
+        public string TextureFile { get; set; }
+
+        public MyCubeSize? CubeSize { get; set; }
+
+        public bool Exists { get; set; }
+
+        public string FriendlyName { get; set; }
+
+        public bool IsUnique { get; set; }
+
+        public bool IsDecimal { get; set; }
+
+        public bool IsInteger { get; set; }
+
+        public override string ToString()
+        {
+            return this.FriendlyName;
         }
 
         #endregion
 
-        #region methods
-
-        private void UpdateGeneralFromEntityBase()
+        private void UpdateMassVolume()
         {
-            var list = new ObservableCollection<ComponentItemModel>();
-            var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            this.TotalVolume = 0;
+            this.Mass = this.MassMultiplyer * (double)this.Amount;
+            this.Volume = this.VolumeMultiplyer * (double)this.Amount;
+            _item.AmountDecimal = this.Amount;
+        }
 
-            if (_inventory != null)
+        #region IDataErrorInfo interfacing
+
+        public string Error
+        {
+            get { return null; }
+        }
+
+        public string this[string columnName]
+        {
+            get
             {
-                foreach (MyObjectBuilder_InventoryItem item in _inventory.Items)
+                switch (columnName)
                 {
-                    list.Add(CreateItem(item, contentPath));
+                    case "Amount":
+                        if (this.IsUnique && Amount != 1)
+                            return "The Amount must be 1 for Unique items";
+
+                        if (this.IsInteger && (Amount % 1 != 0))
+                            return "The Amount must not contain decimal places";
+
+                        break;
                 }
-            }
 
-            this.Items = list;
-        }
-
-        private ComponentItemModel CreateItem(MyObjectBuilder_InventoryItem item, string contentPath)
-        {
-            var definition = SpaceEngineersAPI.GetDefinition(item.Content.TypeId, item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
-
-            string name;
-            string textureFile;
-            double mass;
-            double volume;
-
-            if (definition == null)
-            {
-                name = item.Content.SubtypeName + " " + item.Content.TypeId.ToString();
-                mass = (double)item.AmountDecimal;
-                volume = (double)item.AmountDecimal;
-                textureFile = null;
-            }
-            else
-            {
-                name = definition.DisplayName;
-                mass = definition.Mass*(double) item.AmountDecimal;
-                volume = definition.Volume.Value*(double) item.AmountDecimal;
-                textureFile = Path.Combine(contentPath, definition.Icon + ".dds");
-            }
-
-            var newItem = new ComponentItemModel()
-            {
-                Name = name,
-                Count = item.AmountDecimal,
-                SubtypeId = item.Content.SubtypeName,
-                TypeId = item.Content.TypeId,
-                Mass = mass,
-                Volume = volume,
-                TextureFile = textureFile,
-                Accessible = definition != null, // item no longer exists in Space Engineers definitions.
-            };
-
-            this.TotalVolume += newItem.Volume;
-
-            return newItem;
-        }
-
-        internal void Additem(MyObjectBuilder_InventoryItem item)
-        {
-            var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            item.ItemId = this._inventory.nextItemId++;
-            this._inventory.Items.Add(item);
-            this.Items.Add(CreateItem(item, contentPath));
-        }
-
-        internal void RemoveItem(int index)
-        {
-            var invItem = this._inventory.Items[index];
-
-            // Remove HandWeapon if item is HandWeapon.
-            if (this._character != null && this._character.HandWeapon != null && invItem.Content.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
-            {
-                if (((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity.EntityId == this._character.HandWeapon.EntityId)
-                {
-                    this._character.HandWeapon = null;
-                }
-            }
-
-            this.TotalVolume -= this.Items[index].Volume;
-            this.Items.RemoveAt(index);
-            this._inventory.Items.RemoveAt(index);
-            this._inventory.nextItemId--;
-
-            // Re-index ItemId.
-            for (uint i = 0; i < this._inventory.Items.Count; i++)
-            {
-                this._inventory.Items[0].ItemId = i;
+                return string.Empty;
             }
         }
+
+        //  TODO: need to bubble volume change up to InventoryEditor for updating TotalVolume, and up to this.MainViewModel.IsModified = true;
 
         #endregion
     }

@@ -17,6 +17,7 @@
         // TODO: remove from code behind, into behavior?
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            // Loads context menu from Button as a Drop down Menu.
             var button = sender as Button;
             button.ContextMenu.IsEnabled = true;
             button.ContextMenu.PlacementTarget = button;
