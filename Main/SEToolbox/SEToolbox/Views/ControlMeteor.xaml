@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:views="clr-namespace:SEToolbox.Views"
              xmlns:converters="clr-namespace:SEToolbox.Converters"
+             xmlns:commands="clr-namespace:SEToolbox.Services"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -57,15 +59,40 @@
         </Menu>
         <Label Grid.Row="2" Grid.Column="0" Content="Position:"/>
         <views:ControlPosition Grid.Row="2" Grid.Column="1"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Margin="4 0 4 0" Text="Type:"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DisplayName}" />
-        <TextBlock Grid.Row="4" Grid.Column="0" Margin="4 0 4 0" Text="Speed:"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
-        <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
-        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
-        <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="Volume:"/>
-        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Volume, StringFormat='{}{0:#,###0.000} L'}" />
-        <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="Mass:"/>
-        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0.00} Kg'}" />
+        <Button Grid.Column="0" Grid.Row="3" Content="Speed:" HorizontalAlignment="Left" Margin="4 0 4 0" Style="{StaticResource DropDownMenuButton}">
+            <i:Interaction.Behaviors>
+                <commands:ButtonDropDownMenuBehavior />
+            </i:Interaction.Behaviors>
+            <Button.ContextMenu>
+                <ContextMenu HorizontalAlignment="Right">
+                    <MenuItem Header="Reset Speed" Command="{Binding ResetVelocityCommand}" ToolTip="Set Linear and Rotation Velocity to zero (0).">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}" ToolTip="Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="Sets the object velocity directly at the player at maximum speed.">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_right2}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
+
+        <Separator Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Type:"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DisplayName}" />
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
+        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+        <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="Volume:"/>
+        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Volume, StringFormat='{}{0:#,###0.000} L'}" />
+        <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="Mass:"/>
+        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0.00} Kg'}" />
     </Grid>
 </UserControl>
