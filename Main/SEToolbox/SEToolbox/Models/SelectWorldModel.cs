@@ -337,6 +337,47 @@
                 }
 
                 saveAfterScan = false;
+                
+                var astronaut = model.FindAstronautCharacter();
+                if (!astronaut.Inventory.Items.Any(i =>
+                    i.PhysicalContent != null &&
+                    i.PhysicalContent.SubtypeName == "WelderItem"))
+                {
+                    statusNormal = false;
+                    str.AppendLine("! Replaced astronaut's missing welder.");
+                    saveAfterScan = true;
+                    astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
+                    {
+                        Amount = 1,
+                        Content = new MyObjectBuilder_PhysicalGunObject() {  SubtypeName = "WelderItem" }
+                    });
+                }
+                if (!astronaut.Inventory.Items.Any(i =>
+                    i.PhysicalContent != null &&
+                    i.PhysicalContent.SubtypeName == "AngleGrinderItem"))
+                {
+                    statusNormal = false;
+                    str.AppendLine("! Replaced astronaut's missing grinder.");
+                    saveAfterScan = true;
+                    astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
+                    {
+                        Amount = 1,
+                        Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = "AngleGrinderItem" }
+                    });
+                }
+                if (!astronaut.Inventory.Items.Any(i =>
+                    i.PhysicalContent != null &&
+                    i.PhysicalContent.SubtypeName == "HandDrillItem"))
+                {
+                    statusNormal = false;
+                    str.AppendLine("! Replaced astronaut's missing hand drill.");
+                    saveAfterScan = true;
+                    astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
+                    {
+                        Amount = 1,
+                        Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = "HandDrillItem" }
+                    });
+                }
 
                 // Scan through all items.
                 foreach (var entity in model.SectorData.SectorObjects)
