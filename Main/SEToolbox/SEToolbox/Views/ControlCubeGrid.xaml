@@ -164,7 +164,7 @@
                         <Label Grid.Row="3" Grid.Column="0" Content="Position:"/>
                         <views:ControlPosition Grid.Row="3" Grid.Column="1"/>
 
-                        <Button Grid.Column="0" Grid.Row="4" Margin="4 0 4 0" HorizontalAlignment="Left" Content="Damage:">
+                        <Button Grid.Column="0" Grid.Row="4" Margin="4 0 4 0" HorizontalAlignment="Left" Content="Damage:" Style="{StaticResource DropDownMenuButton}">
                             <i:Interaction.Behaviors>
                                 <commands:ButtonDropDownMenuBehavior />
                             </i:Interaction.Behaviors>
@@ -181,7 +181,7 @@
 
                         <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
 
-                        <Button Grid.Column="0" Grid.Row="5" Margin="4 0 4 0" HorizontalAlignment="Left" Content="Speed:">
+                        <Button Grid.Column="0" Grid.Row="5" Margin="4 0 4 0" HorizontalAlignment="Left" Content="Speed:" Style="{StaticResource DropDownMenuButton}">
                             <i:Interaction.Behaviors>
                                 <commands:ButtonDropDownMenuBehavior />
                             </i:Interaction.Behaviors>

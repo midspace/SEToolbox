@@ -81,6 +81,19 @@
             </Setter>
         </Style>
 
+        <Style x:Key="DropDownMenuButton" TargetType="{x:Type Button}">
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            <Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="6" Fill="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="ToolBarMenu" TargetType="{x:Type Menu}">
             <Setter Property="Panel.Background" Value="Transparent" />
         </Style>

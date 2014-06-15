@@ -110,7 +110,7 @@
                             <Image Grid.Column="1" Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=battery}" />
                             <Slider Grid.Column="2" Value="{Binding BatteryCapacity}" Minimum="0" Maximum="1" SmallChange=".01" LargeChange=".1"/>
                         </Grid>
-                        <Button Grid.Column="0" Grid.Row="9" Content="Speed:" HorizontalAlignment="Left">
+                        <Button Grid.Column="0" Grid.Row="9" Content="Speed:" HorizontalAlignment="Left" Style="{StaticResource DropDownMenuButton}">
                             <i:Interaction.Behaviors>
                                 <commands:ButtonDropDownMenuBehavior />
                             </i:Interaction.Behaviors>

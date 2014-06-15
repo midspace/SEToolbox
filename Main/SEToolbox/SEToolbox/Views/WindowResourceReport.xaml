@@ -34,16 +34,16 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"  MinWidth="120" Command="{Binding GenerateCommand}" Content="Generate Report" IsDefault="True" Name="uxInitialElement"/>
-                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding ExportCommand}" HorizontalAlignment="Left">
+                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding ExportCommand}" HorizontalAlignment="Left" Content="Export" Style="{StaticResource DropDownMenuButton}">
                     <i:Interaction.Behaviors>
                         <commands:ButtonDropDownMenuBehavior />
                     </i:Interaction.Behaviors>
-                    <Button.Content>
+                    <!--<Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Export"/>
                             <Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="6" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>
                         </StackPanel>
-                    </Button.Content>
+                    </Button.Content>-->
                     <Button.ContextMenu>
                         <ContextMenu HorizontalAlignment="Right">
                             <MenuItem Header="Clipboard" Command="{Binding CopyCommand}"/>
