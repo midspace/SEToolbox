@@ -44,7 +44,6 @@
 
 - Character:
   * Exit Pilot from ship to Astronaut.
-  * Replace missing tools.
 
 - Asteroid:
   * Detect multiple objects in 3D import and allow assigning material to individal parts somehow.
