@@ -349,8 +349,10 @@
                     astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
                     {
                         Amount = 1,
-                        Content = new MyObjectBuilder_PhysicalGunObject() {  SubtypeName = "WelderItem" }
+                        Content = new MyObjectBuilder_PhysicalGunObject() {  SubtypeName = "WelderItem" },
+                        ItemId = astronaut.Inventory.nextItemId
                     });
+                    astronaut.Inventory.nextItemId++;
                 }
                 if (!astronaut.Inventory.Items.Any(i =>
                     i.PhysicalContent != null &&
@@ -362,8 +364,10 @@
                     astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
                     {
                         Amount = 1,
-                        Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = "AngleGrinderItem" }
+                        Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = "AngleGrinderItem" },
+                        ItemId = astronaut.Inventory.nextItemId
                     });
+                    astronaut.Inventory.nextItemId++;
                 }
                 if (!astronaut.Inventory.Items.Any(i =>
                     i.PhysicalContent != null &&
@@ -375,8 +379,10 @@
                     astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
                     {
                         Amount = 1,
-                        Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = "HandDrillItem" }
+                        Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = "HandDrillItem" },
+                        ItemId = astronaut.Inventory.nextItemId
                     });
+                    astronaut.Inventory.nextItemId++;
                 }
 
                 // Scan through all items.
