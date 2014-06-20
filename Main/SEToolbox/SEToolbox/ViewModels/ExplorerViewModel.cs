@@ -36,6 +36,7 @@
         private readonly Func<ISaveFileDialog> _saveFileDialogFactory;
         private bool? _closeResult;
 
+        private bool _ignoreUpdateSelection;
         private IStructureViewBase _selectedStructure;
         private IStructureViewBase _preSelectedStructure;
         private ObservableCollection<IStructureViewBase> _selections;
@@ -415,7 +416,7 @@
                 if (value != this._selectedStructure)
                 {
                     this._selectedStructure = value;
-                    if (this._selectedStructure != null)
+                    if (this._selectedStructure != null && !_ignoreUpdateSelection)
                         this._selectedStructure.DataModel.InitializeAsync();
                     this.RaisePropertyChanged(() => SelectedStructure);
                 }
@@ -1172,6 +1173,8 @@
                 index = this.Structures.IndexOf(viewModels[0]);
             }
 
+            this._ignoreUpdateSelection = true;
+            
             foreach (var viewModel in viewModels)
             {
                 bool canDelete = true;
@@ -1194,6 +1197,8 @@
                     this._dataModel.Structures.Remove(viewModel.DataModel);
                 }
             }
+
+            this._ignoreUpdateSelection = false;
 
             // Find and select next object
             while (index >= this.Structures.Count)
