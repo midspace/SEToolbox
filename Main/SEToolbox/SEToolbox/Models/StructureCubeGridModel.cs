@@ -780,7 +780,7 @@
                             var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
                             this._dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
                             {
-                                cubeList.Add(new CubeItemModel(block, this.CubeGrid.GridSizeEnum, cubeDefinition)
+                                cubeList.Add(new CubeItemModel(block, cubeDefinition, Settings)
                                 {
                                     TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds")
                                 });

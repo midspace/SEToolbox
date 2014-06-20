@@ -376,12 +376,18 @@
                                 </i:Interaction.Behaviors>
                             </controls:SortableListView>
                             <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />
-                            <TabControl Grid.Row="2">
-                                <TabItem Header="Controls">
-                                    
-                                </TabItem>
-                                <!--<TabItem Header="Inventory">
 
+                            <!-- TODO: May have to move all this to a dialog, as parsing and setting up the information takes time. -->
+                            <TabControl Grid.Row="2">
+                                <!-- TODO: Create DataTemplate to properly show controls and inventories.  -->
+                                <TabItem Header="Controls">
+                                    <!-- TODO: Property Editor? -->
+                                </TabItem>
+                                <!--<TabItem Header="{Binding Path=SelectedCubeItem.Inventory[0].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[0]}" />
+                                </TabItem>
+                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[1].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[1].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[1]}" />
                                 </TabItem>-->
                             </TabControl>
                             <StackPanel Grid.Row="2">

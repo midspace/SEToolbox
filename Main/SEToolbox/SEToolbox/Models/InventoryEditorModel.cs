@@ -17,6 +17,12 @@
         // Fields are marked as NonSerialized, as they aren't required during the drag-drop operation.
 
         [NonSerialized]
+        private string _name;
+
+        [NonSerialized]
+        private bool _isValid;
+
+        [NonSerialized]
         private ObservableCollection<InventoryModel> _items;
 
         [NonSerialized]
@@ -42,6 +48,11 @@
 
         #region ctor
 
+        public InventoryEditorModel(bool isValid)
+        {
+            this.IsValid = isValid;
+        }
+
         public InventoryEditorModel(MyObjectBuilder_Inventory inventory, MySessionSettings settings, float maxVolume, MyObjectBuilder_Character character = null)
         {
             this._inventory = inventory;
@@ -58,6 +69,42 @@
         #endregion
 
         #region Properties
+
+        [XmlIgnore]
+        public string Name
+        {
+            get
+            {
+                return this._name;
+            }
+
+            set
+            {
+                if (value != this._name)
+                {
+                    this._name = value;
+                    this.RaisePropertyChanged(() => Name);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public bool IsValid
+        {
+            get
+            {
+                return this._isValid;
+            }
+
+            set
+            {
+                if (value != this._isValid)
+                {
+                    this._isValid = value;
+                    this.RaisePropertyChanged(() => IsValid);
+                }
+            }
+        }
 
         [XmlIgnore]
         public ObservableCollection<InventoryModel> Items

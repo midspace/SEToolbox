@@ -4,6 +4,11 @@
     using Sandbox.Common.ObjectBuilders.Definitions;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Reflection;
+    using VRageMath;
 
     public class CubeItemModel : BaseModel
     {
@@ -33,13 +38,17 @@
 
         private System.Windows.Media.Brush _color;
 
+        private ObservableCollection<InventoryEditorModel> _inventory;
+
+        private MySessionSettings _settings;
+
         #endregion
 
         #region ctor
 
-        public CubeItemModel(MyObjectBuilder_CubeBlock cube, MyCubeSize cubeSize, MyObjectBuilder_CubeBlockDefinition definition)
+        public CubeItemModel(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
-            this.SetProperties(cube, cubeSize, definition);
+            this.SetProperties(cube, definition, settings);
         }
 
         #endregion
@@ -257,6 +266,39 @@
             }
         }
 
+        public ObservableCollection<InventoryEditorModel> Inventory
+        {
+            get
+            {
+                return this._inventory;
+            }
+
+            set
+            {
+                if (value != this._inventory)
+                {
+                    this._inventory = value;
+                    this.RaisePropertyChanged(() => Inventory);
+                }
+            }
+        }
+
+        public MySessionSettings Settings
+        {
+            get
+            {
+                return this._settings;
+            }
+            set
+            {
+                if (!EqualityComparer<MySessionSettings>.Default.Equals(value, this._settings))
+                {
+                    this._settings = value;
+                    this.RaisePropertyChanged(() => Settings);
+                }
+            }
+        }
+
         #endregion
 
         public void SetColor(SerializableVector3 vector3)
@@ -284,7 +326,7 @@
             this.BuildPercent = this.Cube.BuildPercent;
         }
 
-        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderTypeEnum typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition)
+        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderTypeEnum typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
             var newCube = (MyObjectBuilder_CubeBlock)MyObjectBuilder_Base.CreateNewObject(typeId, subTypeId);
             newCube.BlockOrientation = this.Cube.BlockOrientation;
@@ -294,21 +336,59 @@
             newCube.IntegrityPercent = this.Cube.IntegrityPercent;
             newCube.Min = this.Cube.Min;
 
-            this.SetProperties(newCube, this.CubeSize, definition);
+            this.SetProperties(newCube, definition, settings);
 
             return newCube;
         }
 
-        private void SetProperties(MyObjectBuilder_CubeBlock cube, MyCubeSize cubeSize, MyObjectBuilder_CubeBlockDefinition definition)
+        private void SetProperties(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
             this.Cube = cube;
-            this.CubeSize = cubeSize;
+            this.Settings = settings;
+            this.CubeSize = definition.CubeSize;
             this.FriendlyName = SpaceEngineersAPI.GetResourceName(definition.DisplayName);
             this.TypeId = definition.Id.TypeId;
             this.SubtypeId = definition.Id.SubtypeId;
             this.Position = new BindablePoint3DIModel(cube.Min);
             this.SetColor(cube.ColorMaskHSV);
             this.BuildPercent = cube.BuildPercent;
+
+            //if (this.Inventory == null)
+            //    this.Inventory = new ObservableCollection<InventoryEditorModel>();
+
+            //var blockType = cube.GetType();
+            //if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
+            //{
+            //    var fields = blockType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+            //    var inventoryFields = fields.Where(f => f.FieldType == typeof(MyObjectBuilder_Inventory) && f.Name != "ConstructionInventory").ToArray();
+            //    foreach (var field in inventoryFields)
+            //    {
+            //        var inventory = field.GetValue(cube) as MyObjectBuilder_Inventory;
+
+            //        var definitionType = definition.GetType();
+            //        var invSizeField = definitionType.GetField("InventorySize");
+            //        var InventoryMaxVolumeField = definitionType.GetField("InventoryMaxVolume");
+            //        float volumeMultiplier = 1f; // Unsure if there should be a default of 1 if there isn't a InventorySize defined.
+            //        if (invSizeField != null)
+            //        {
+            //            var invSize = (Vector3)invSizeField.GetValue(definition);
+            //            volumeMultiplier = invSize.X * invSize.Y * invSize.Z;
+            //        }
+            //        if (InventoryMaxVolumeField != null)
+            //        {
+            //            var maxSize = (float)InventoryMaxVolumeField.GetValue(definition);
+            //            volumeMultiplier = MathHelper.Min(volumeMultiplier, maxSize);
+            //        }
+
+            //        var iem = new InventoryEditorModel(inventory, Settings, volumeMultiplier * 1000 * Settings.InventorySizeMultiplier, null) { Name = field.Name, IsValid = true };
+            //        this.Inventory.Add(iem);
+            //    }
+            //}
+
+            //while (this.Inventory.Count < 2)
+            //{
+            //    this.Inventory.Add(new InventoryEditorModel(false));
+            //}
         }
     }
 }

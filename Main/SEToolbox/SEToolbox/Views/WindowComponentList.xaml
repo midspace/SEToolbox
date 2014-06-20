@@ -32,8 +32,9 @@
                 <TabItem Header="Cubes">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="142"/>
+                            <RowDefinition MinHeight="20"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition MinHeight="132" Height="132"/>
                         </Grid.RowDefinitions>
                         <controls:SortableListView ItemsSource="{Binding CubeAssets}" SelectedValue="{Binding SelectedCubeAsset}"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
@@ -47,7 +48,6 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}"/>
-                                    <!--<GridViewColumn Header="Internal Name" DisplayMemberBinding="{Binding Name}"/>-->
                                     <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeId}"/>
                                     <GridViewColumn Header="Sub Type Id" DisplayMemberBinding="{Binding SubtypeId}"/>
                                     <GridViewColumn Header="Cube Size" DisplayMemberBinding="{Binding CubeSize}" Width="85"/>
@@ -84,12 +84,13 @@
                                 </GridView>
                             </ListView.View>
                         </controls:SortableListView>
-                        <Grid Grid.Row="1" Margin="4">
+                        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="4" />
+                        <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Border Background="Black" CornerRadius="4" Width="130" Height="130" Margin="0,0,4,0" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}">
+                            <Border Background="Black" CornerRadius="4" Width="130" Height="130" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" VerticalAlignment="Top">
                                 <Image Width="128" Height="128" Source="{Binding Path=SelectedCubeAsset.TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='128,128'}" SnapsToDevicePixels="True" />
                             </Border>
                             <ListView Grid.Column="1" ItemsSource="{Binding SelectedCubeAsset.CustomProperties}">
