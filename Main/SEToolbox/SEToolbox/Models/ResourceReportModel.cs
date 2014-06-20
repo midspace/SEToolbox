@@ -455,7 +455,7 @@
 
                         if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
                         {
-                            var fields = blockType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                            var fields = blockType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
 
                             #region Inventories
 

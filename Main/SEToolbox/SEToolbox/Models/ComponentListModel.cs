@@ -182,15 +182,11 @@
             foreach (var cubeDefinition in SpaceEngineersAPI.CubeBlockDefinitions)
             {
                 var props = new Dictionary<string, string>();
+                var fields = cubeDefinition.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
 
-                if (!cubeDefinition.GetType().Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
+                foreach (var field in fields)
                 {
-                    var fields = LoadCubeChildFields(cubeDefinition.GetType());
-
-                    foreach (var field in fields)
-                    {
-                        props.Add(field.Name, GetValue(field, cubeDefinition));
-                    }
+                    props.Add(field.Name, GetValue(field, cubeDefinition));
                 }
 
                 this.CubeAssets.Add(new ComponentItemModel()
@@ -457,34 +453,23 @@ td.right { text-align: right; }");
 
         #endregion
 
-        #region LoadCubeChildFields
-
-        private List<FieldInfo> LoadCubeChildFields(Type cubeType)
-        {
-            var fields = new List<FieldInfo>();
-
-            if (!cubeType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
-            {
-                fields.AddRange(cubeType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-                if (!cubeType.BaseType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
-                {
-                    fields.AddRange(LoadCubeChildFields(cubeType.BaseType));
-                }
-            }
-
-            return fields;
-        }
-
-        #endregion
-
         #region GetRowValue
 
         public static string GetValue(FieldInfo field, object objt)
         {
             var item = field.GetValue(objt);
 
-            if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds))
+            if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3I))
+            {
+                var vector = (Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3I)item;
+                return string.Format("{0}, {1}, {2}", vector.X, vector.Y, vector.Z);
+            }
+            else if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3))
+            {
+                var vector = (Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3)item;
+                return string.Format("{0}, {1}, {2}", vector.X, vector.Y, vector.Z);
+            }
+            else if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds))
             {
                 var bounds = (Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds)item;
                 return string.Format("Default:{0}, Min:{1}, max:{2}", bounds.Default, bounds.Min, bounds.Max);
@@ -497,6 +482,10 @@ td.right { text-align: right; }");
             else if (field.FieldType == typeof(string))
             {
                 return item as string;
+            }
+            else if (item == null)
+            {
+                return string.Empty;
             }
             else
             {

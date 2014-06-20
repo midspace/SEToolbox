@@ -1110,7 +1110,7 @@
                         this.DataModel.CubeGrid.CubeBlocks.RemoveAt(idx);
 
                         var cubeDefinition = SpaceEngineersAPI.GetCubeDefinition(model.CubeItem.TypeId, this.GridSize, model.CubeItem.SubtypeId);
-                        var newCube = cube.CreateCube(model.CubeItem.TypeId, model.CubeItem.SubtypeId, cubeDefinition);
+                        var newCube = cube.CreateCube(model.CubeItem.TypeId, model.CubeItem.SubtypeId, cubeDefinition, DataModel.Settings);
                         cube.TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds");
 
                         this.DataModel.CubeGrid.CubeBlocks.Insert(idx, newCube);
