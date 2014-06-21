@@ -337,52 +337,36 @@
                 }
 
                 saveAfterScan = false;
-                
-                var astronaut = model.FindAstronautCharacter();
-                if (!astronaut.Inventory.Items.Any(i =>
-                    i.PhysicalContent != null &&
-                    i.PhysicalContent.SubtypeName == "WelderItem"))
+
+                // Make sure the character in a locally saved world has all tools.
+                if (this.SelectedWorld.SaveType == SaveWorldType.Local)
                 {
-                    statusNormal = false;
-                    str.AppendLine("! Replaced astronaut's missing welder.");
-                    saveAfterScan = true;
-                    astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
-                    {
-                        Amount = 1,
-                        Content = new MyObjectBuilder_PhysicalGunObject() {  SubtypeName = "WelderItem" },
-                        ItemId = astronaut.Inventory.nextItemId
-                    });
-                    astronaut.Inventory.nextItemId++;
-                }
-                if (!astronaut.Inventory.Items.Any(i =>
-                    i.PhysicalContent != null &&
-                    i.PhysicalContent.SubtypeName == "AngleGrinderItem"))
-                {
-                    statusNormal = false;
-                    str.AppendLine("! Replaced astronaut's missing grinder.");
-                    saveAfterScan = true;
-                    astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
-                    {
-                        Amount = 1,
-                        Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = "AngleGrinderItem" },
-                        ItemId = astronaut.Inventory.nextItemId
-                    });
-                    astronaut.Inventory.nextItemId++;
-                }
-                if (!astronaut.Inventory.Items.Any(i =>
-                    i.PhysicalContent != null &&
-                    i.PhysicalContent.SubtypeName == "HandDrillItem"))
-                {
-                    statusNormal = false;
-                    str.AppendLine("! Replaced astronaut's missing hand drill.");
-                    saveAfterScan = true;
-                    astronaut.Inventory.Items.Add(new MyObjectBuilder_InventoryItem()
-                    {
-                        Amount = 1,
-                        Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = "HandDrillItem" },
-                        ItemId = astronaut.Inventory.nextItemId
-                    });
-                    astronaut.Inventory.nextItemId++;
+                    // SubtypeNames for required tools.
+                    string[] requiredItems = new string[] { 
+                        "WelderItem", "AngleGrinderItem", "HandDrillItem" };
+
+                    var character = model.FindAstronautCharacter() 
+                        ?? model.FindPilotCharacter().Pilot;
+
+                    MyObjectBuilder_Inventory inventory = character.Inventory;
+                    requiredItems.ForEach(
+                        delegate(string subtypeName) {
+                            if (!inventory.Items.Any(i =>
+                                i.PhysicalContent != null &&
+                                i.PhysicalContent.SubtypeName == subtypeName))
+                            {
+                                statusNormal = false;
+                                str.AppendLine("! Replaced astronaut's missing " + subtypeName + ".");
+                                saveAfterScan = true;
+                                inventory.Items.Add(new MyObjectBuilder_InventoryItem()
+                                {
+                                    Amount = 1,
+                                    Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = subtypeName },
+                                    ItemId = inventory.nextItemId
+                                });
+                                inventory.nextItemId++; 
+                            }
+                        });
                 }
 
                 // Scan through all items.
