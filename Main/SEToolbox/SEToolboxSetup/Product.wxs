@@ -31,6 +31,7 @@
 
     <Feature Id="ProductFeature" Title="!(loc.DirApplicationName)" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
+      <!--<ComponentGroupRef Id="SEComponents" />-->
     </Feature>
 
     <Icon Id="APPLICATIONICON" SourceFile="app.ico"/>
@@ -42,6 +43,13 @@
             <Component Id="UninstallAppFolder" Guid="6AF1643F-8251-4FAE-A2AF-F3BB96FC931A">
               <CreateFolder />
               <RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
+
+              <RemoveFile Id="file61275B9FC2AE484BA7A2BDB7459A3647" Name="Sandbox.Common.dll" On="install"/>
+              <RemoveFile Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Name="Sandbox.Common.XmlSerializers.dll" On="install"/>
+              <RemoveFile Id="fileDE67BBEC95CE4178B5B7A4AE5101E6FC" Name="VRage.Common.dll" On="install"/>
+              <RemoveFile Id="file3B25B4B8D8824BFBBC59FF95EB66E88F" Name="VRage.Library.dll" On="install"/>
+              <RemoveFile Id="file97E0990BBDDF40A68ED535BF1D64AF8E" Name="VRage.Math.dll" On="install"/>
+
               <RegistryKey Root="HKLM" Key="Software\MidSpace\SEToolbox">
                 <RegistryValue Id="SEToolboxRegInstallDir" Type="string" Name="InstallDir" Value="[APPLICATIONFOLDER]" />
               </RegistryKey>
@@ -86,23 +94,6 @@
         <File Id="file82AB916AB2C147F5A839E3EC2DDA7993" Source="$(var.SEToolbox.TargetDir)SEToolbox.ImageShaders.dll"/>
       </Component>
 
-      <!-- Space Engineers dependancies -->
-      <Component Id="comp88066F31283E44A79F1D679F4B9D80AE">
-        <File Id="file61275B9FC2AE484BA7A2BDB7459A3647" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.dll"/>
-      </Component>
-      <Component Id="compB0198B4AB39348F5B20741B39BD36F84">
-        <File Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.XmlSerializers.dll"/>
-      </Component>
-      <Component Id="comp8C20AE654FFF46DA894F7056064AA6EF">
-        <File Id="fileDE67BBEC95CE4178B5B7A4AE5101E6FC" Source="$(var.SEToolbox.TargetDir)VRage.Common.dll"/>
-      </Component>
-      <Component Id="comp826C90B9476943B8B8114031A01913F1">
-        <File Id="file3B25B4B8D8824BFBBC59FF95EB66E88F" Source="$(var.SEToolbox.TargetDir)VRage.Library.dll"/>
-      </Component>
-      <Component Id="compD71C446C9E204CD7A003FA06132E67BE">
-        <File Id="file97E0990BBDDF40A68ED535BF1D64AF8E" Source="$(var.SEToolbox.TargetDir)VRage.Math.dll"/>
-      </Component>
-
       <!-- Third party dependancies -->
       <Component Id="comp5B10E5BF2D0D4C9EAF44EDE183D113EF">
         <File Id="fileAD5B37B3F8524F6594A80B1BF9660D69" Source="$(var.SEToolbox.TargetDir)HelixToolkit.Wpf.dll"/>
@@ -123,6 +114,25 @@
         <File Id="fileA9B194FD13214474A2B8004200CF42CD" Source="$(var.SEToolbox.TargetDir)XAMLMarkupExtensions.dll"/>
       </Component>
     </ComponentGroup>
+
+    <!-- Space Engineers dependancies -->
+    <!--<ComponentGroup Id="SEComponents" Directory="APPLICATIONFOLDER">
+      <Component Id="comp88066F31283E44A79F1D679F4B9D80AE">
+        <File Id="file61275B9FC2AE484BA7A2BDB7459A3647" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.dll"/>
+      </Component>
+      <Component Id="compB0198B4AB39348F5B20741B39BD36F84">
+        <File Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Source="$(var.SEToolbox.TargetDir)Sandbox.Common.XmlSerializers.dll"/>
+      </Component>
+      <Component Id="comp8C20AE654FFF46DA894F7056064AA6EF">
+        <File Id="fileDE67BBEC95CE4178B5B7A4AE5101E6FC" Source="$(var.SEToolbox.TargetDir)VRage.Common.dll"/>
+      </Component>
+      <Component Id="comp826C90B9476943B8B8114031A01913F1">
+        <File Id="file3B25B4B8D8824BFBBC59FF95EB66E88F" Source="$(var.SEToolbox.TargetDir)VRage.Library.dll"/>
+      </Component>
+      <Component Id="compD71C446C9E204CD7A003FA06132E67BE">
+        <File Id="file97E0990BBDDF40A68ED535BF1D64AF8E" Source="$(var.SEToolbox.TargetDir)VRage.Math.dll"/>
+      </Component>
+    </ComponentGroup>-->
 
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Id="ApplicationShortcut">

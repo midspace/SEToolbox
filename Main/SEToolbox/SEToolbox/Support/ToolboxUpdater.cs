@@ -168,6 +168,9 @@
 
         public static bool DoFilesDiffer(string file1, string file2)
         {
+            if (!File.Exists(file2))
+                return true;
+
             if (File.Exists(file1) != File.Exists(file2))
                 return false;
 
