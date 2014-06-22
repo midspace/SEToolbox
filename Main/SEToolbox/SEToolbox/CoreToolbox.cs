@@ -48,7 +48,7 @@
             var altDlls = !oldDlls;
 
             // Go looking for any changes in the Dependant Space Engineers assemblies and immediately attempt to update.
-            if (!ignoreUpdates && ToolboxUpdater.IsBaseAssembliesChanged() && !altDlls && !Debugger.IsAttached)
+            if (!ignoreUpdates && !altDlls && ToolboxUpdater.IsBaseAssembliesChanged() && !Debugger.IsAttached)
             {
                 ToolboxUpdater.RunElevated(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SEToolboxUpdate"), "/B " + String.Join(" ", args), false, false);
                 return false;
@@ -124,7 +124,7 @@
 #if DEBUG
             // Force the local debugger to load the Types
             // This will make it hairy for testing the AppDomain stuff.
-            var settings0 = new Sandbox.Common.ObjectBuilders.MySessionSettings();
+            //var settings0 = new Sandbox.Common.ObjectBuilders.MySessionSettings();
 #endif
 
             return true;
