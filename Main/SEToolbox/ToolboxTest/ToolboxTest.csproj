@@ -143,6 +143,9 @@
     <None Include="TestAssets\small2_asteroids.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestAssets\Sphere_Gold.3ds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestAssets\t25.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -156,6 +159,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\test_cube_mixed_2x2x2.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestAssets\TwoSpheres.3ds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

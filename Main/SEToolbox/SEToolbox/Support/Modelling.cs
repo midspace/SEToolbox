@@ -12,6 +12,7 @@
     using System.Windows.Media.Media3D;
     using VRageMath;
     using System.Diagnostics.Contracts;
+    using System.Diagnostics;
 
     public static class Modelling
     {
@@ -180,7 +181,8 @@
                             }
 
                             Point3D intersect;
-                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect))
+                            int normal;
+                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect, out normal))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
@@ -210,7 +212,8 @@
                             }
 
                             Point3D intersect;
-                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect))
+                            int normal;
+                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect, out normal))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
@@ -240,7 +243,8 @@
                             }
 
                             Point3D intersect;
-                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect))
+                            int normal;
+                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect, out normal))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin, (int)Math.Floor(intersect.Y) - yMin, (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
@@ -398,11 +402,11 @@
 
         #region ReadModelAsteroidVolmetic
 
-        private enum VoxPoint { P1, P2, P3, P4, P5 };
-        private enum MeshFace { Undefined, Nearside, Farside };
+        private enum VoxPoint : byte { P1, P2, P3, P4, P5 };
+        private enum MeshFace : byte { Undefined, Nearside, Farside };
 
         // WIP.
-        public static byte[, ,] ReadModelAsteroidVolmetic(string modelFile, double scaleMultiplyierX, double scaleMultiplyierY, double scaleMultiplyierZ, Transform3D rotateTransform, Action<double, double> resetProgress, Action incrementProgress)
+        public static byte[][][] ReadModelAsteroidVolmetic(string modelFile, double scaleMultiplyierX, double scaleMultiplyierY, double scaleMultiplyierZ, Transform3D rotateTransform, Action<long, long> resetProgress, Action incrementProgress)
         {
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);
 
@@ -438,11 +442,24 @@
             var yCount = MyVoxelBuilder.ScaleMod(yMax - yMin, 64);
             var zCount = MyVoxelBuilder.ScaleMod(zMax - zMin, 64);
 
-            var ccubic = new byte[xCount, yCount, zCount];
+            const long maxMemory = 2147483648;
+            Debug.WriteLine("Size: {0}x{1}x{2}", xCount, yCount, zCount);
+            Contract.Assert((long)xCount * yCount * zCount < maxMemory, "Object scale is too large.");
+
+            byte[][][] ccubic = new byte[xCount][][];
+
+            for (var x = 0; x < xCount; x++)
+            {
+                ccubic[x] = new byte[yCount][];
+                for (var y = 0; y < yCount; y++)
+                    ccubic[x][y] = new byte[zCount];
+            }
+
+            //var ccubic = new byte[xCount, yCount, zCount];
 
             if (resetProgress != null)
             {
-                double count = (from GeometryModel3D gm in model.Children select gm.Geometry as MeshGeometry3D).Aggregate<MeshGeometry3D, double>(0, (current, g) => current + (g.TriangleIndices.Count / 3));
+                long count = (from GeometryModel3D gm in model.Children select gm.Geometry as MeshGeometry3D).Aggregate<MeshGeometry3D, long>(0, (current, g) => current + (g.TriangleIndices.Count / 3));
 
                 resetProgress.Invoke(0, count);
             }
@@ -466,16 +483,9 @@
                     }
                 }
 
-                Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<double, MeshFace>>>[] rays;
-
-                rays = new Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<double, MeshFace>>>[3];
-                rays[0] = new Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<double, MeshFace>>>();
-                rays[1] = new Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<double, MeshFace>>>();
-                rays[2] = new Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<double, MeshFace>>>();
-
-                var xRays = new Dictionary<System.Windows.Point, List<double>>();
-                var yRays = new Dictionary<System.Windows.Point, List<double>>();
-                var zRays = new Dictionary<System.Windows.Point, List<double>>();
+                var xRays = new Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<float, MeshFace>>>();
+                var yRays = new Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<float, MeshFace>>>();
+                var zRays = new Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<float, MeshFace>>>();
 
                 #region ray trace
 
@@ -500,147 +510,97 @@
                     var minBound = MeshHelper.Min(p1, p2, p3).Floor();
                     var maxBound = MeshHelper.Max(p1, p2, p3).Ceiling();
 
-                    Point3D[] testRays;
-                    Dictionary<VoxPoint, Point3D[]> tRay;
+                    Dictionary<VoxPoint, Point3D[]> testRays;
 
-                    //for (var y = minBound.Y; y < maxBound.Y; y++)
-                    //{
-                    //    for (var z = minBound.Z; z < maxBound.Z; z++)
-                    //    {
-                    //        testRays = new Point3D[] // 5 point ray trace within each corner and the center of the expected Volumetric cube.
-                    //            {
-                    //                new Point3D(xMin, y + 0.5 + offset, z + 0.5 + offset), new Point3D(xMax, y + 0.5 + offset, z + 0.5 + offset),
-                    //                new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset),
-                    //                new Point3D(xMin, y + 1 - offset, z + offset), new Point3D(xMax, y + 1 - offset, z + offset),
-                    //                new Point3D(xMin, y + offset, z + 1 - offset), new Point3D(xMax, y + offset, z + 1 - offset),
-                    //                new Point3D(xMin, y + 1 - offset, z + 1 - offset), new Point3D(xMax, y + 1 - offset, z + 1 - offset)
-                    //            };
+                    for (var y = minBound.Y; y < maxBound.Y; y++)
+                    {
+                        for (var z = minBound.Z; z < maxBound.Z; z++)
+                        {
+                            testRays = new Dictionary<VoxPoint, Point3D[]>()
+                            {
+                                { VoxPoint.P1, new [] {new Point3D(xMin, y + 0.5 + offset, z + 0.5 + offset), new Point3D(xMax, y + 0.5 + offset, z + 0.5 + offset)}},
+                                { VoxPoint.P2, new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)}},
+                                { VoxPoint.P3, new [] {new Point3D(xMin, y + 1 - offset, z + offset), new Point3D(xMax, y + 1 - offset, z + offset)}},
+                                { VoxPoint.P4, new [] {new Point3D(xMin, y + offset, z + 1 - offset), new Point3D(xMax, y + offset, z + 1 - offset)}},
+                                { VoxPoint.P5, new [] {new Point3D(xMin, y + 1 - offset, z + 1 - offset), new Point3D(xMax, y + 1 - offset, z + 1 - offset)}}
+                            };
 
-                    //        //for (var i = 0; i < testRays.Length; i += 2)
-                    //        //{
-                    //        //    Point3D intersect;
-                    //        //    if (MeshHelper.RayIntersetTriangle(p1, p2, p3, testRays[i], testRays[i + 1], out intersect))
-                    //        //    {
-                    //        //        var p = new System.Windows.Point(intersect.Y, intersect.Z);
+                            foreach (var kvp in testRays)
+                            {
+                                Point3D intersect;
+                                int normal;
+                                if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect, out normal))
+                                //if (MeshHelper.RayIntersetTriangle(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect, out normal))
+                                {
+                                    var p = new System.Drawing.Point((int)y, (int)z);
+                                    var key = (float)intersect.X;
 
-                    //        //        if (xRays.ContainsKey(p))
-                    //        //        {
-                    //        //            xRays[p].Add(intersect.X);
-                    //        //        }
-                    //        //        else
-                    //        //        {
-                    //        //            xRays.Add(p, new List<double>() { intersect.X });
-                    //        //        }
-                    //        //    }
-                    //        //}
+                                    if (xRays.ContainsKey(p))
+                                    {
+                                        if (xRays[p].ContainsKey(kvp.Key))
+                                        {
+                                            if (!xRays[p][kvp.Key].ContainsKey(key))
+                                                xRays[p][kvp.Key].Add(key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside);
+                                        }
+                                        else
+                                        {
+                                            xRays[p].Add(kvp.Key, new Dictionary<float, MeshFace>() { { key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside } });
+                                        }
+                                    }
+                                    else
+                                    {
+                                        xRays.Add(p, new Dictionary<VoxPoint, Dictionary<float, MeshFace>>() { { kvp.Key, new Dictionary<float, MeshFace>() { { key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside } } } });
+                                    }
+                                }
+                            }
 
-                    //        tRay = new Dictionary<VoxPoint, Point3D[]>()
-                    //        {
-                    //            { VoxPoint.P1, new [] {new Point3D(xMin, y + 0.5 + offset, z + 0.5 + offset), new Point3D(xMax, y + 0.5 + offset, z + 0.5 + offset)}},
-                    //            { VoxPoint.P2, new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)}},
-                    //            { VoxPoint.P3, new [] {new Point3D(xMin, y + 1 - offset, z + offset), new Point3D(xMax, y + 1 - offset, z + offset)}},
-                    //            { VoxPoint.P4, new [] {new Point3D(xMin, y + offset, z + 1 - offset), new Point3D(xMax, y + offset, z + 1 - offset)}},
-                    //            { VoxPoint.P5, new [] {new Point3D(xMin, y + 1 - offset, z + 1 - offset), new Point3D(xMax, y + 1 - offset, z + 1 - offset)}}
-                    //        };
+                        }
+                    }
 
-                    //        //foreach (var kvp in tRay)
-                    //        //{
-                    //        //    Point3D intersect;
-                    //        //    if (MeshHelper.RayIntersetTriangle(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect))
-                    //        //    {
-                    //        //        var p = new System.Drawing.Point((int)y, (int)z);
+                    for (var x = minBound.X; x < maxBound.X; x++)
+                    {
+                        for (var z = minBound.Z; z < maxBound.Z; z++)
+                        {
+                            testRays = new Dictionary<VoxPoint, Point3D[]>()
+                            {
+                                { VoxPoint.P1, new [] {new Point3D(x + 0.5 + offset, yMin, z + 0.5 + offset), new Point3D(x + 0.5 + offset, yMax, z + 0.5 + offset)}},
+                                { VoxPoint.P2, new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)}},
+                                { VoxPoint.P3, new [] {new Point3D(x + 1 - offset, yMin, z + offset), new Point3D(x + 1 - offset, yMax, z + offset)}},
+                                { VoxPoint.P4, new [] {new Point3D(x + offset, yMin, z + 1 - offset), new Point3D(x + offset, yMax, z + 1 - offset)}},
+                                { VoxPoint.P5, new [] {new Point3D(x + 1 - offset, yMin, z + 1 - offset), new Point3D(x + 1 - offset, yMax, z + 1 - offset)}}
+                            };
 
-                    //        //        if (rays[0].ContainsKey(p))
-                    //        //        {
-                    //        //            if (rays[0][p].ContainsKey(kvp.Key))
-                    //        //            {
-                    //        //                if (!rays[0][p][kvp.Key].ContainsKey(intersect.X))
-                    //        //                    rays[0][p][kvp.Key].Add(intersect.X, MeshFace.Undefined);
-                    //        //            }
-                    //        //            else
-                    //        //            {
-                    //        //                rays[0][p].Add(kvp.Key, new Dictionary<double, MeshFace>() { { intersect.X, MeshFace.Undefined } });
-                    //        //            }
-                    //        //        }
-                    //        //        else
-                    //        //        {
-                    //        //            rays[0].Add(p, new Dictionary<VoxPoint, Dictionary<double, MeshFace>>() { { kvp.Key, new Dictionary<double, MeshFace>() { { intersect.X, MeshFace.Undefined } } } });
-                    //        //        }
-                    //        //    }
-                    //        //}
+                            foreach (var kvp in testRays)
+                            {
+                                Point3D intersect;
+                                int normal;
+                                if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect, out normal))
+                                //if (MeshHelper.RayIntersetTriangle(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect, out normal))
+                                {
+                                    var p = new System.Drawing.Point((int)x, (int)z);
+                                    var key = (float)intersect.Y;
 
-                    //    }
-                    //}
+                                    if (yRays.ContainsKey(p))
+                                    {
+                                        if (yRays[p].ContainsKey(kvp.Key))
+                                        {
+                                            if (!yRays[p][kvp.Key].ContainsKey(key))
+                                                yRays[p][kvp.Key].Add(key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside);
+                                        }
+                                        else
+                                        {
+                                            yRays[p].Add(kvp.Key, new Dictionary<float, MeshFace>() { { key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside } });
+                                        }
+                                    }
+                                    else
+                                    {
+                                        yRays.Add(p, new Dictionary<VoxPoint, Dictionary<float, MeshFace>>() { { kvp.Key, new Dictionary<float, MeshFace>() { { key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside } } } });
+                                    }
+                                }
+                            }
 
-                    //for (var x = minBound.X; x < maxBound.X; x++)
-                    //{
-                    //    for (var z = minBound.Z; z < maxBound.Z; z++)
-                    //    {
-                    //        testRays = new Point3D[] // 5 point ray trace within each corner and the center of the expected Volumetric cube.
-                    //            {
-                    //                new Point3D(x + 0.5 + offset, yMin, z + 0.5 + offset), new Point3D(x + 0.5 + offset, yMax, z + 0.5 + offset),
-                    //                new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset),
-                    //                new Point3D(x + 1 - offset, yMin, z + offset), new Point3D(x + 1 - offset, yMax, z + offset),
-                    //                new Point3D(x + offset, yMin, z + 1 - offset), new Point3D(x + offset, yMax, z + 1 - offset),
-                    //                new Point3D(x + 1 - offset, yMin, z + 1 - offset), new Point3D(x + 1 - offset, yMax, z + 1 - offset)
-                    //            };
-
-                    //        //for (var i = 0; i < testRays.Length; i += 2)
-                    //        //{
-                    //        //    Point3D intersect;
-                    //        //    if (MeshHelper.RayIntersetTriangle(p1, p2, p3, testRays[i], testRays[i + 1], out intersect))
-                    //        //    {
-                    //        //        var p = new System.Windows.Point(intersect.X, intersect.Z);
-
-                    //        //        if (yRays.ContainsKey(p))
-                    //        //        {
-                    //        //            yRays[p].Add(intersect.Y);
-                    //        //        }
-                    //        //        else
-                    //        //        {
-                    //        //            yRays.Add(p, new List<double>() { intersect.Y });
-                    //        //        }
-                    //        //    }
-                    //        //}
-
-
-                    //        tRay = new Dictionary<VoxPoint, Point3D[]>()
-                    //        {
-                    //            { VoxPoint.P1, new [] {new Point3D(x + 0.5 + offset, yMin, z + 0.5 + offset), new Point3D(x + 0.5 + offset, yMax, z + 0.5 + offset)}},
-                    //            { VoxPoint.P2, new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)}},
-                    //            { VoxPoint.P3, new [] {new Point3D(x + 1 - offset, yMin, z + offset), new Point3D(x + 1 - offset, yMax, z + offset)}},
-                    //            { VoxPoint.P4, new [] {new Point3D(x + offset, yMin, z + 1 - offset), new Point3D(x + offset, yMax, z + 1 - offset)}},
-                    //            { VoxPoint.P5, new [] {new Point3D(x + 1 - offset, yMin, z + 1 - offset), new Point3D(x + 1 - offset, yMax, z + 1 - offset)}}
-                    //        };
-
-                    //        //foreach (var kvp in tRay)
-                    //        //{
-                    //        //    Point3D intersect;
-                    //        //    if (MeshHelper.RayIntersetTriangle(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect))
-                    //        //    {
-                    //        //        var p = new System.Drawing.Point((int)x, (int)z);
-
-                    //        //        if (rays[1].ContainsKey(p))
-                    //        //        {
-                    //        //            if (rays[1][p].ContainsKey(kvp.Key))
-                    //        //            {
-                    //        //                if (!rays[1][p][kvp.Key].ContainsKey(intersect.Y))
-                    //        //                    rays[1][p][kvp.Key].Add(intersect.Y, MeshFace.Undefined);
-                    //        //            }
-                    //        //            else
-                    //        //            {
-                    //        //                rays[1][p].Add(kvp.Key, new Dictionary<double, MeshFace>() { { intersect.Y, MeshFace.Undefined } });
-                    //        //            }
-                    //        //        }
-                    //        //        else
-                    //        //        {
-                    //        //            rays[1].Add(p, new Dictionary<VoxPoint, Dictionary<double, MeshFace>>() { { kvp.Key, new Dictionary<double, MeshFace>() { { intersect.Y, MeshFace.Undefined } } } });
-                    //        //        }
-                    //        //    }
-                    //        //}
-
-                    //    }
-                    //}
+                        }
+                    }
 
                     //var x = -1f;
                     //var y = -1f;
@@ -648,33 +608,7 @@
                     {
                         for (var y = minBound.Y; y < maxBound.Y; y++)
                         {
-                            //testRays = new Point3D[] // 5 point ray trace within each corner and the center of the expected Volumetric cube.
-                            //    {
-                            //        new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMin), new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMax),
-                            //        new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax),
-                            //        new Point3D(x + 1 - offset, y + offset, zMin), new Point3D(x + 1 - offset, y + offset, zMax),
-                            //        new Point3D(x + offset, y + 1 - offset, zMin), new Point3D(x + offset, y + 1 - offset, zMax),
-                            //        new Point3D(x + 1 - offset, y + 1 - offset, zMin), new Point3D(x + 1 - offset, y + 1 - offset, zMax)
-                            //    };
-
-                            //for (var i = 0; i < testRays.Length; i += 2)
-                            //{
-                            //    Point3D intersect;
-                            //    if (MeshHelper.RayIntersetTriangle(p1, p2, p3, testRays[i], testRays[i + 1], out intersect))
-                            //    {
-                            //        var p = new System.Windows.Point(intersect.X, intersect.Y);
-                            //        if (zRays.ContainsKey(p))
-                            //        {
-                            //            zRays[p].Add(intersect.Z);
-                            //        }
-                            //        else
-                            //        {
-                            //            zRays.Add(p, new List<double>() { intersect.Z });
-                            //        }
-                            //    }
-                            //}
-
-                            tRay = new Dictionary<VoxPoint, Point3D[]>()
+                            testRays = new Dictionary<VoxPoint, Point3D[]>()
                             {
                                 { VoxPoint.P1, new [] {new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMin), new Point3D(x + 0.5 + offset, y + 0.5 + offset, zMax)}},
                                 { VoxPoint.P2, new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)}},
@@ -683,35 +617,33 @@
                                 { VoxPoint.P5, new [] {new Point3D(x + 1 - offset, y + 1 - offset, zMin), new Point3D(x + 1 - offset, y + 1 - offset, zMax)}}
                             };
 
-                            foreach (var kvp in tRay)
+                            foreach (var kvp in testRays)
                             {
                                 Point3D intersect;
+                                int normal;
 
-                                //if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect))
-                                if (MeshHelper.RayIntersetTriangle(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect))
+                                if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect, out normal))
+                                //if (MeshHelper.RayIntersetTriangle(p1, p2, p3, kvp.Value[0], kvp.Value[1], out intersect, out normal))
                                 {
                                     var point = new System.Drawing.Point((int)x, (int)y);
-                                    var z = Math.Round(intersect.Z, 14, MidpointRounding.ToEven);
+                                    var key = (float)intersect.Z;
+                                    //var key = Math.Round(intersect.Z, 14, MidpointRounding.ToEven);
 
-                                    if (rays[2].ContainsKey(point))
+                                    if (zRays.ContainsKey(point))
                                     {
-                                        if (rays[2][point].ContainsKey(kvp.Key))
+                                        if (zRays[point].ContainsKey(kvp.Key))
                                         {
-                                            if (!rays[2][point][kvp.Key].ContainsKey(z))
-                                                rays[2][point][kvp.Key].Add(z, MeshFace.Undefined);
-                                            else
-                                            {
-
-                                            }
+                                            if (!zRays[point][kvp.Key].ContainsKey(key))
+                                                zRays[point][kvp.Key].Add(key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside);
                                         }
                                         else
                                         {
-                                            rays[2][point].Add(kvp.Key, new Dictionary<double, MeshFace>() { { z, MeshFace.Undefined } });
+                                            zRays[point].Add(kvp.Key, new Dictionary<float, MeshFace>() { { key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside } });
                                         }
                                     }
                                     else
                                     {
-                                        rays[2].Add(point, new Dictionary<VoxPoint, Dictionary<double, MeshFace>>() { { kvp.Key, new Dictionary<double, MeshFace>() { { z, MeshFace.Undefined } } } });
+                                        zRays.Add(point, new Dictionary<VoxPoint, Dictionary<float, MeshFace>>() { { kvp.Key, new Dictionary<float, MeshFace>() { { key, normal == 1 ? MeshFace.Nearside : MeshFace.Farside } } } });
                                     }
                                 }
                             }
@@ -735,34 +667,38 @@
 
                 //Dictionary<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<double, MeshFace>>>[] rays;
 
-                foreach (var axis in rays)
-                {
-                    foreach (KeyValuePair<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<double, MeshFace>>> point in axis)
-                    {
-                        foreach (KeyValuePair<VoxPoint, Dictionary<double, MeshFace>> ray in point.Value)
-                        {
-                            Contract.Assert(ray.Value.Count == 2);
-                        }
-                    }
-                }
+                //foreach (var axis in rays)
+                //{
+                //    foreach (KeyValuePair<System.Drawing.Point, Dictionary<VoxPoint, Dictionary<double, MeshFace>>> point in axis)
+                //    {
+                //        foreach (KeyValuePair<VoxPoint, Dictionary<double, MeshFace>> ray in point.Value)
+                //        {
+                //            if (ray.Value.Count % 2 != 0)
+                //            {
+                                
+                //            }
+                //            //Contract.Assert(ray.Value.Count % 2 == 0);
+                //        }
+                //    }
+                //}
 
-                foreach (var kvp in xRays)
-                {
-                    var checkRays = kvp.Value.Distinct().OrderBy(f => f).ToArray();
-                    Contract.Assert(rays.Length % 2 == 0);
-                }
+                //foreach (var kvp in xRays)
+                //{
+                //    var checkRays = kvp.Value.Distinct().OrderBy(f => f).ToArray();
+                //    Contract.Assert(rays.Length % 2 == 0);
+                //}
 
-                foreach (var kvp in yRays)
-                {
-                    var checkRays = kvp.Value.Distinct().OrderBy(f => f).ToArray();
-                    Contract.Assert(rays.Length % 2 == 0);
-                }
+                //foreach (var kvp in yRays)
+                //{
+                //    var checkRays = kvp.Value.Distinct().OrderBy(f => f).ToArray();
+                //    Contract.Assert(rays.Length % 2 == 0);
+                //}
 
-                foreach (var kvp in zRays)
-                {
-                    var checkRays = kvp.Value.Distinct().OrderBy(f => f).ToArray();
-                    Contract.Assert(rays.Length % 2 == 0);
-                }
+                //foreach (var kvp in zRays)
+                //{
+                //    var checkRays = kvp.Value.Distinct().OrderBy(f => f).ToArray();
+                //    Contract.Assert(rays.Length % 2 == 0);
+                //}
 
 
             } // end models
