@@ -107,17 +107,18 @@
             }
         }
 
-        public static bool RayIntersetTriangle(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection)
+        public static bool RayIntersetTriangle(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection, out int norm)
         {
             // http://gamedev.stackexchange.com/questions/5585/line-triangle-intersection-last-bits
 
             intersection = default(Point3D);
+            norm = 0;
 
             // Find Triangle Normal
             var normal = Vector3D.CrossProduct(p2 - p1, p3 - p1);
             normal.Normalize();
 
-            // not a triangle.
+            // not a triangle. Two or more points may occupy the same place.
             if (normal.IsUndefined())
             {
                 return false;
@@ -139,10 +140,11 @@
                 return false;
             }
 
-            var zz = r1 + (Vector3D.DotProduct(normal, p1 - r1) / Vector3D.DotProduct(normal, r2 - r1)) * (r2 - r1);
-
             // Find point on the line that intersects with the plane.
             var intersectPos = r1 + (r2 - r1) * (-dist1 / (dist2 - dist1));
+
+            // Alternate calculation, but slower.
+            //var intersectPos = r1 + (Vector3D.DotProduct(normal, p1 - r1) / Vector3D.DotProduct(normal, r2 - r1)) * (r2 - r1);
 
             // Find if the interesection point lies inside the triangle by testing it against all edges
             var vTest = Vector3D.CrossProduct(normal, p2 - p1);
@@ -169,36 +171,39 @@
                 return false;
             }
 
+            // Determine if Normal is facing towards or away from Ray.
+            norm = Math.Sign(Vector3D.DotProduct(r2 - r1, normal));
+
             intersection = intersectPos;
 
             return true;
         }
 
-        public static bool RayIntersetTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D[] rays, out Point3D intersection)
+        public static bool RayIntersetTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D[] rays, out Point3D intersection, out int norm)
         {
             for (var i = 0; i < rays.Length; i += 2)
             {
-                if (RayIntersetTriangleRound(p1, p2, p3, rays[i], rays[i + 1], out intersection)) // Ray
-                    return true;
-                if (RayIntersetTriangleRound(p1, p2, p3, rays[i + 1], rays[i], out intersection)) // Reverse Ray
+                if (RayIntersetTriangleRound(p1, p2, p3, rays[i], rays[i + 1], out intersection, out norm)) // Ray
                     return true;
             }
             intersection = default(Point3D);
+            norm = 0;
             return false;
         }
 
-        public static bool RayIntersetTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection)
+        public static bool RayIntersetTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection, out int norm)
         {
             // http://gamedev.stackexchange.com/questions/5585/line-triangle-intersection-last-bits
 
             intersection = default(Point3D);
+            norm = 0;
             const int rounding = 14;
 
             // Find Triangle Normal
             var normal = CrossProductRound(Round(p2 - p1, rounding), Round(p3 - p1, rounding));
             normal.Normalize();
 
-            // not a triangle.
+            // not a triangle. Two or more points may occupy the same place.
             if (normal.IsUndefined())
             {
                 return false;
@@ -210,15 +215,15 @@
 
             if ((dist1 * dist2) >= 0.0f)
             {
-                //SFLog(@"no cross"); 
+                // line doesn't cross the triangle.
                 return false;
-            } // line doesn't cross the triangle.
+            }
 
             if (dist1 == dist2)
             {
-                //SFLog(@"parallel"); 
+                // ray line and plane are parallel
                 return false;
-            } // line and plane are parallel
+            }
 
             // Find point on the line that intersects with the plane
             // Rouding to correct for anonymous rounding issues! Damn doubles!
@@ -228,23 +233,26 @@
             var vTest = CrossProductRound(normal, Round(p2 - p1, rounding));
             if (DotProductRound(vTest, Round(intersectPos - p1, rounding)) < 0.0f)
             {
-                //SFLog(@"no intersect P2-P1"); 
+                // No intersection on edge P2-P1.
                 return false;
             }
 
             vTest = CrossProductRound(normal, Round(p3 - p2, rounding));
             if (DotProductRound(vTest, Round(intersectPos - p2, rounding)) < 0.0f)
             {
-                //SFLog(@"no intersect P3-P2"); 
+                // No intersection on edge P3-P2.
                 return false;
             }
 
             vTest = CrossProductRound(normal, Round(p1 - p3, rounding));
             if (DotProductRound(vTest, Round(intersectPos - p1, rounding)) < 0.0f)
             {
-                //SFLog(@"no intersect P1-P3"); 
+                // No intersection on edge P1-P3.
                 return false;
             }
+
+            // Determine if Normal is facing towards or away from Ray.
+            norm = Math.Sign(DotProductRound(r2 - r1, normal));
 
             intersection = intersectPos;
 
