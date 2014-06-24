@@ -40,13 +40,13 @@
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Width="44">
+                                    <controls:SortableGridViewColumn Width="44" SortBinding="{Binding TextureFile}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
+                                    </controls:SortableGridViewColumn>
                                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}"/>
                                     <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeId}"/>
                                     <GridViewColumn Header="Sub Type Id" DisplayMemberBinding="{Binding SubtypeId}"/>
@@ -109,13 +109,13 @@
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Width="44">
+                                <controls:SortableGridViewColumn Width="44" SortBinding="{Binding TextureFile}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </controls:SortableGridViewColumn>
                                 <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}"/>
                                 <!--<GridViewColumn Header="Internal Name" DisplayMemberBinding="{Binding Name}"/>-->
                                 <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeId}"/>
@@ -151,13 +151,13 @@
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Width="44">
+                                <controls:SortableGridViewColumn Width="44" SortBinding="{Binding TextureFile}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </controls:SortableGridViewColumn>
                                 <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}"/>
                                 <!--<GridViewColumn Header="Internal Name" DisplayMemberBinding="{Binding Name}"/>-->
                                 <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeId}"/>
@@ -193,13 +193,13 @@
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Width="44">
+                                <controls:SortableGridViewColumn Width="44" SortBinding="{Binding TextureFile}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </controls:SortableGridViewColumn>
                                 <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="125"/>
                                 <GridViewColumn Header="Ore Name" DisplayMemberBinding="{Binding OreName}" Width="125"/>
                                 <GridViewColumn Header="Rare" DisplayMemberBinding="{Binding IsRare, Converter={StaticResource EnumToResouceConverter}}" Width="50"/>
