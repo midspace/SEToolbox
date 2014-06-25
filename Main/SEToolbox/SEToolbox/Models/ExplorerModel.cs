@@ -461,7 +461,6 @@
 
             if (File.Exists(sectorBackupFilename))
             {
-                //File.Delete(sectorBackupFilename);
                 FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
             }
 
@@ -530,6 +529,13 @@
                     var voxel = (StructureVoxelModel)entity;
                     if (voxel.SourceVoxelFilepath != null && File.Exists(voxel.SourceVoxelFilepath))
                     {
+                        // Any asteroid that already exists with same name, must be removed.
+                        // TODO: must improve this later when multiple sectors are implemented and the asteroid filename is used in a different sector.
+                        if (File.Exists(voxel.VoxelFilepath))
+                        {
+                            FileSystem.DeleteFile(voxel.VoxelFilepath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        }
+
                         File.Copy(voxel.SourceVoxelFilepath, voxel.VoxelFilepath);
                         voxel.SourceVoxelFilepath = null;
                     }
@@ -542,7 +548,7 @@
                 var filename = Path.Combine(this.ActiveWorld.Savepath, file);
                 if (File.Exists(filename))
                 {
-                    File.Delete(filename);
+                    FileSystem.DeleteFile(filename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 }
             }
             this._manageDeleteVoxelList.Clear();
