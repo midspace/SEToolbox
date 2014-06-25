@@ -453,15 +453,9 @@
             {
                 var instancePaths = Directory.GetDirectories(this.BaseDedicatedServerHostSavePath);
 
-                foreach (var instancePath in instancePaths)
+                foreach (var lastLoadedPath in instancePaths)
                 {
-                    var lastLoadedPath = Path.Combine(instancePath, "Saves");
-
-                    if (Directory.Exists(lastLoadedPath))
-                    {
-                        var instanceName = Path.GetFileName(instancePath);
-                        list.AddRange(FindSaveFiles(lastLoadedPath, instanceName, SaveWorldType.DedicatedServerHost));
-                    }
+                    list.AddRange(FindSaveFiles(lastLoadedPath, "Local / Console", SaveWorldType.DedicatedServerHost));
                 }
             }
 
