@@ -62,8 +62,10 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Label Grid.Column="0" Grid.Row="2" Content="Suit:"/>
-                        <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding CharacterModels}" SelectedItem="{Binding CharacterModel, Mode=TwoWay}" />
+                        <Label Grid.Column="0" Grid.Row="2" Content="Suit Color:"/>
+                        <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Padding="0" Command="{Binding ChangeColorCommand}">
+                            <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1"/>
+                        </Button>
                         <Label Grid.Column="0" Grid.Row="3" Content="Light:"/>
                         <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Light, Mode=TwoWay}" />
                         <Label Grid.Column="0" Grid.Row="4" Content="Jet Pack:"/>

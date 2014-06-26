@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.Models
 {
     using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;
@@ -50,19 +51,19 @@
         }
 
         [XmlIgnore]
-        public MyCharacterModelEnum CharacterModel
+        public SerializableVector3 Color
         {
             get
             {
-                return this.Character.CharacterModel;
+                return this.Character.ColorMaskHSV;
             }
 
             set
             {
-                if (value != this.Character.CharacterModel)
+                if (!EqualityComparer<SerializableVector3>.Default.Equals(value, this.Character.ColorMaskHSV))
                 {
-                    this.Character.CharacterModel = value;
-                    this.RaisePropertyChanged(() => CharacterModel);
+                    this.Character.ColorMaskHSV = value;
+                    this.RaisePropertyChanged(() => Color);
                     this.UpdateGeneralFromEntityBase();
                 }
             }
@@ -254,7 +255,7 @@
         public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.Character;
-            this.Description = string.Format("{0}", this.CharacterModel);
+            this.Description = "Player";
             this.DisplayName = this.Character.Name;
 
             if (this.Inventory == null)
