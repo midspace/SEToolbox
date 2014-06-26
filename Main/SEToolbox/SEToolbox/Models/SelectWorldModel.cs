@@ -274,7 +274,7 @@
                             character.EntityId = SpaceEngineersAPI.GenerateEntityId();
                             character.PersistentFlags = Sandbox.Common.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.Common.ObjectBuilders.MyPersistentEntityFlags2.InScene;
                             character.PositionAndOrientation = new Sandbox.Common.ObjectBuilders.MyPositionAndOrientation(VRageMath.Vector3.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
-                            character.CharacterModel = Sandbox.Common.ObjectBuilders.MyCharacterModelEnum.Astronaut_White;
+                            character.ColorMaskHSV = new Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3(0, -1, 1); // White
                             character.Battery = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
                             character.LightEnabled = false;
                             character.HeadAngle = new VRageMath.Vector2();

@@ -1,23 +1,37 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System.Collections.ObjectModel;
-    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
     public class StructureCharacterViewModel : StructureBaseViewModel<StructureCharacterModel>
     {
         private InventoryEditorViewModel _inventory;
+        private readonly IDialogService _dialogService;
+        private readonly Func<IColorDialog> _colorDialogFactory;
 
         #region ctor
 
         public StructureCharacterViewModel(BaseViewModel parentViewModel, StructureCharacterModel dataModel)
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IColorDialog>)
+        {
+        }
+
+        public StructureCharacterViewModel(BaseViewModel parentViewModel, StructureCharacterModel dataModel, IDialogService dialogService, Func<IColorDialog> colorDialogFactory)
             : base(parentViewModel, dataModel)
         {
+            Contract.Requires(dialogService != null);
+            Contract.Requires(colorDialogFactory != null);
+
+            this._dialogService = dialogService;
+            this._colorDialogFactory = colorDialogFactory;
+
             this.Inventory = new InventoryEditorViewModel(this, dataModel.Inventory);
 
             this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
@@ -47,6 +61,13 @@
             }
         }
 
+        public ICommand ChangeColorCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ChangeColorExecuted), new Func<bool>(ChangeColorCanExecute));
+            }
+        }
         #endregion
 
         #region Properties
@@ -85,16 +106,16 @@
             }
         }
 
-        public string CharacterModel
+        public System.Windows.Media.Brush Color
         {
             get
             {
-                return this.DataModel.CharacterModel.ToString();
+                return new System.Windows.Media.SolidColorBrush(this.DataModel.Color.ToSandboxMediaColor());
             }
 
             set
             {
-                this.DataModel.CharacterModel = (MyCharacterModelEnum)Enum.Parse(typeof(MyCharacterModelEnum), value);
+                this.DataModel.Color = ((System.Windows.Media.SolidColorBrush)value).Color.ToSandboxHsvColor();
                 this.MainViewModel.IsModified = true;
             }
         }
@@ -229,6 +250,29 @@
         {
             this.DataModel.ReverseVelocity();
             this.MainViewModel.IsModified = true;
+        }
+
+        public bool ChangeColorCanExecute()
+        {
+            return true;
+        }
+
+        public void ChangeColorExecuted()
+        {
+            var colorDialog = _colorDialogFactory();
+            colorDialog.FullOpen = true;
+            colorDialog.BrushColor = this.Color as System.Windows.Media.SolidColorBrush;
+            colorDialog.CustomColors = this.MainViewModel.CreativeModeColors;
+
+            var result = _dialogService.ShowColorDialog(this.OwnerViewModel, colorDialog);
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                this.Color = colorDialog.BrushColor;
+                this.MainViewModel.IsModified = true;
+            }
+
+            this.MainViewModel.CreativeModeColors = colorDialog.CustomColors;
         }
 
         #endregion
