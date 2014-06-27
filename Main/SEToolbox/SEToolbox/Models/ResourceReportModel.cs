@@ -1141,7 +1141,12 @@ td.right { text-align: right; }");
 
         /// <summary>
         /// Command line driven method.
-        /// <example>/WR "Builder Toolset" "c:\temp\Easy Start Report.txt"</example>
+        /// <example>
+        /// /WR "Easy Start Report" "c:\temp\Easy Start Report.txt"
+        /// /WR "C:\Users\%USERNAME%\AppData\Roaming\SpaceEngineersDedicated\Saves\Super Excellent Map\sandbox.sbc" "c:\temp\Super Excellent Map.txt"
+        /// /WR "C:\Users\%USERNAME%\AppData\Roaming\SpaceEngineersDedicated\Saves\Super Excellent Map" "c:\temp\Super Excellent Map.txt"
+        /// /WR "\\SERVER\Dedicated Saves\Super Excellent Map" "\\SERVER\Reports\Super Excellent Map.txt"
+        /// </example>
         /// </summary>
         /// <param name="args"></param>
         public static void GenerateOfflineReport(ExplorerModel baseModel, string[] args)
@@ -1156,7 +1161,7 @@ td.right { text-align: right; }");
                 return;
             }
 
-            var findSessionName = argList[0].ToUpper();
+            var findSession = argList[0].ToUpper();
             var reportFile = argList[1];
             var reportExtension = Path.GetExtension(reportFile).ToUpper();
 
@@ -1169,7 +1174,21 @@ td.right { text-align: right; }");
                 return;
             }
 
-            var world = SelectWorldModel.FindSaveSession(baseModel.BaseLocalSavePath, findSessionName);
+            if (File.Exists(findSession))
+            {
+                findSession = Path.GetDirectoryName(findSession);
+            }
+
+            SaveResource world;
+
+            if (Directory.Exists(findSession))
+            {
+                world = SelectWorldModel.LoadSession(findSession);
+            }
+            else
+            {
+                world = SelectWorldModel.FindSaveSession(baseModel.BaseLocalSavePath, findSession);
+            }
 
             if (world == null)
             {
