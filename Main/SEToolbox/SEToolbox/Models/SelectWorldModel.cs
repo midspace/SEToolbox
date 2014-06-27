@@ -537,7 +537,7 @@
             return saveResource;
         }
 
-        internal static SaveResource FindSaveSession(string baseSavePath, string findSessionName)
+        internal static SaveResource FindSaveSession(string baseSavePath, string findSession)
         {
             if (Directory.Exists(baseSavePath))
             {
@@ -564,13 +564,34 @@
 
                             saveResource.LoadCheckpoint();
 
-                            if (saveResource.Savename.ToUpper() == findSessionName || saveResource.SessionName.ToUpper() == findSessionName)
+                            if (saveResource.Savename.ToUpper() == findSession || saveResource.SessionName.ToUpper() == findSession)
                             {
                                 return saveResource;
                             }
                         }
                     }
                 }
+            }
+
+            return null;
+        }
+
+        internal static SaveResource LoadSession(string savePath)
+        {
+            if (Directory.Exists(savePath))
+            {
+                var userPath = Path.GetDirectoryName(savePath);
+
+                var saveResource = new SaveResource()
+                {
+                    Savename = Path.GetFileName(savePath),
+                    UserName = Path.GetFileName(userPath),
+                    Savepath = savePath
+                };
+
+                saveResource.LoadCheckpoint();
+
+                return saveResource;
             }
 
             return null;
