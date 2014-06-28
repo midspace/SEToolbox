@@ -381,7 +381,7 @@
             this.SetActiveStatus();
         }
 
-        public void LoadSandBox()
+        public void LoadSandBox(bool snapshot = false)
         {
             this.IsBusy = true;
 
@@ -410,7 +410,18 @@
                         else
                         {
                             // Old file format is raw XML.
-                            this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+
+                            // Snapshot used for Report on Dedicated servers.
+                            if (snapshot)
+                            {
+                                var tempFilename = TempfileUtil.NewFilename();
+                                File.Copy(filename, tempFilename);
+                                this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
+                            }
+                            else
+                            {
+                                this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+                            }
                             _compressedSectorFormat = false;
                         }
                     }
