@@ -1197,11 +1197,12 @@ td.right { text-align: right; }");
             }
 
             baseModel.ActiveWorld = world;
-            baseModel.LoadSandBox();
+            baseModel.LoadSandBox(true);
 
             var model = new ResourceReportModel();
             model.Load(baseModel.ActiveWorld.Savename, baseModel.Structures);
             model.GenerateReport();
+            TempfileUtil.Dispose();
 
             if (reportExtension == ".HTM" || reportExtension == ".HTML")
                 File.WriteAllText(reportFile, model.CreateHtmlReport());
