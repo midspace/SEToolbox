@@ -31,9 +31,6 @@
 
         #region properties
         
-        [Obsolete("Replaced by SEBinPath")]
-        public string SEInstallLocation { get; set; }
-
         /// <summary>
         /// Application binary path.
         /// </summary>
@@ -78,7 +75,6 @@
                 key = Registry.CurrentUser.CreateSubKey(BaseKey);
             }
 
-            UpdateValue(key, "SEInstallLocation", this.SEInstallLocation);
             UpdateValue(key, "SEBinPath", this.SEBinPath);
             UpdateValue(key, "CustomUserSavePaths", this.CustomUserSavePaths);
             UpdateValue(key, "LanguageCode", this.LanguageCode);

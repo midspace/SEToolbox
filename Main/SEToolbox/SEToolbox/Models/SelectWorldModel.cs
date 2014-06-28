@@ -403,8 +403,36 @@
                             saveAfterScan = true;
                         }
 
+                        list = cubeGrid.CubeBlocks.OfType<MyObjectBuilder_Cockpit>().ToArray();
+                        for (var i = 0; i < list.Length; i++)
+                        {
+                            if (((MyObjectBuilder_Cockpit)list[i]).Pilot != null)
+                            {
+                                var character = ((MyObjectBuilder_Cockpit)list[i]).Pilot;
+                                if (character.CharacterModel != "Default_Astronaut")
+                                {
+                                    statusNormal = false;
+                                    str.AppendLine("! Fixed astronaut's CharacterModel.");
+                                    saveAfterScan = true;
+                                    character.CharacterModel = "Default_Astronaut";
+                                }
+                            }
+                        }
+
                         // TODO: search for cubeblocks that don't exist in the definitions.
                         //var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                    }
+
+                    if (entity is MyObjectBuilder_Character)
+                    {
+                        var character = (MyObjectBuilder_Character)entity;
+                        if (character.CharacterModel != "Default_Astronaut")
+                        {
+                            statusNormal = false;
+                            str.AppendLine("! Fixed astronaut's CharacterModel.");
+                            saveAfterScan = true;
+                            character.CharacterModel = "Default_Astronaut";
+                        }
                     }
                 }
 
