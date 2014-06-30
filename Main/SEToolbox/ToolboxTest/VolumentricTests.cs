@@ -181,14 +181,6 @@
         }
 
         [TestMethod]
-        public void GenerateModelAsteroid1()
-        {
-            const string modelFile = @".\TestAssets\Sphere_Gold.3ds";
-
-            var cubic = Modelling.ReadModelAsteroidVolmetic(modelFile, 1, 1, 1, null, ResetProgress, IncrementProgress);
-        }
-
-        [TestMethod]
         public void GenerateModelAsteroid2()
         {
             //const string modelFile = @".\TestAssets\test.obj";

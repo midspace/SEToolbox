@@ -143,6 +143,7 @@
     <Compile Include="Interop\Asteroids\MyVoxelContentCellContent.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelMap.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelMaterialCell.cs" />
+    <Compile Include="Interop\Asteroids\MyVoxelRayTracer.cs" />
     <Compile Include="Interop\InteropHelper.cs" />
     <Compile Include="Interop\Native.cs" />
     <Compile Include="Interop\SpaceEngineersAPI.cs" />
