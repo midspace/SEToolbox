@@ -581,5 +581,103 @@
                 Debug.WriteLine("");
             }
         }
+
+        #region VoxelConvertVolume
+        [TestMethod]
+        public void VoxelConvertToVolmetic()
+        {
+            var materials = SpaceEngineersAPI.GetMaterialList();
+
+            var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone"));
+            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+
+            var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var silverMaterial = materials.FirstOrDefault(m => m.Name.Contains("Silver"));
+            Assert.IsNotNull(silverMaterial, "Silver material should exist.");
+
+            double scaleMultiplyierX, scaleMultiplyierY, scaleMultiplyierZ;
+
+            // Basic test...
+            var modelFile = @".\TestAssets\Sphere_Gold.3ds";
+            scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 5;
+
+            // Basic model test...
+            //var modelFile = @".\TestAssets\TwoSpheres.3ds";
+            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 5;
+
+            // Scale test...
+            //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
+            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 20;
+
+            // Max Scale test...
+            //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
+            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 120;
+
+            // Memory test...
+            //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
+            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 200;
+
+            // Complexity test...
+            //var modelFile = @".\TestAssets\buddha-fixed-bottom.stl";
+            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 0.78;
+
+            var multiThread = false;
+            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            var modelMaterials = new string[] { stoneMaterial.Name, goldMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name };
+            var fillerMaterial = silverMaterial.Name;
+            var asteroidFile = @".\TestOutput\test_sphere.vox";
+
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(multiThread, modelFile, asteroidFile, scaleMultiplyierX, scaleMultiplyierY, scaleMultiplyierZ, rotateTransform, modelMaterials, fillerMaterial, ResetProgress, IncrementProgress);
+
+            Assert.IsTrue(File.Exists(modelFile), "Generated file must exist");
+
+            var voxelFileLength = new FileInfo(modelFile).Length;
+
+            Assert.IsTrue(voxelFileLength > 0, "File must not be empty.");
+
+            Assert.IsTrue(voxelMap.Size.X > 0, "Voxel Size must be greater than zero.");
+            Assert.IsTrue(voxelMap.Size.Y > 0, "Voxel Size must be greater than zero.");
+            Assert.IsTrue(voxelMap.Size.Z > 0, "Voxel Size must be greater than zero.");
+        }
+
+
+        #region helpers
+
+        private static long _counter;
+        private static long _maximumProgress;
+        private static int _percent;
+        private static System.Diagnostics.Stopwatch _timer;
+        public static void ResetProgress(long initial, long maximumProgress)
+        {
+            _percent = 0;
+            _counter = initial;
+            _maximumProgress = maximumProgress;
+            _timer = new System.Diagnostics.Stopwatch();
+            _timer.Start();
+
+            Debug.WriteLine("{0}%  {1:#,##0}/{2:#,##0}  {3}/Estimating", _percent, _counter, _maximumProgress, _timer.Elapsed);
+        }
+
+        public static void IncrementProgress()
+        {
+            _counter++;
+
+            var p = (int)((double)_counter / _maximumProgress * 100);
+
+            if (_percent < p)
+            {
+                var elapsed = _timer.Elapsed;
+                var estimate = new TimeSpan(p == 0 ? 0 : (long)((double)elapsed.Ticks / ((double)p / 100f)));
+                _percent = p;
+                Debug.WriteLine("{0}%  {1:#,##0}/{2:#,##0}  {3}/{4}", _percent, _counter, _maximumProgress, elapsed, estimate);
+            }
+        }
+
+        #endregion
+
+        #endregion
+
     }
 }
