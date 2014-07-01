@@ -11,20 +11,29 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" ToolTip="X" AutomationProperties.AutomationId="PositionX">
-            <TextBox.Text>
-                <Binding Path="PositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
-        <TextBox Grid.Column="1" ToolTip="Y" AutomationProperties.AutomationId="PositionY">
-            <TextBox.Text>
-                <Binding Path="PositionY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
-        <TextBox Grid.Column="2" ToolTip="Z" AutomationProperties.AutomationId="PositionZ">
-            <TextBox.Text>
-                <Binding Path="PositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+        <Grid Grid.Column="0">
+            <TextBox ToolTip="Position coordinate X" AutomationProperties.AutomationId="PositionX" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="PositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="X" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+        </Grid>
+        <Grid Grid.Column="1">
+            <TextBox ToolTip="Position coordinate Y" AutomationProperties.AutomationId="PositionY" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="PositionY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="Y" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+        </Grid>
+        <Grid Grid.Column="2">
+            <TextBox ToolTip="Position coordinate Z" AutomationProperties.AutomationId="PositionZ" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="PositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="Z" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+        </Grid>
     </Grid>
 </UserControl>

@@ -42,6 +42,11 @@
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="{Binding ProgressState}" ProgressValue="{Binding ProgressValue}" />
     </Window.TaskbarItemInfo>
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
+        <KeyBinding Key="R" Modifiers="Control" Command="{Binding ReloadCommand}" />
+    </Window.InputBindings>
     <Grid IsEnabled="{Binding IsActive}">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
@@ -50,21 +55,26 @@
                         <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
-                <MenuItem Command="{Binding OpenCommand}" Header="_Open" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem  Header="_File" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}"/>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=document}"/>
                     </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Command="{Binding SaveCommand}" Header="_Save" Style="{StaticResource ToolBarTopMenuitem}">
-                    <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Command="{Binding ReloadCommand}" Header="_Reload" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Undo any changes, and reload world again.">
-                    <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}"/>
-                    </MenuItem.Icon>
+                    <MenuItem Command="{Binding OpenCommand}" Header="_Open (Ctrl+O)">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding SaveCommand}" Header="_Save (Ctrl+S)">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Command="{Binding ReloadCommand}" Header="_Reload (Ctrl+R)" ToolTip="Undo any changes, and reload world again.">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
                 <MenuItem Header="_Import" Command="{Binding ImportCommand}" Style="{StaticResource ToolBarTopMenuitem}">
