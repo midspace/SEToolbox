@@ -11,14 +11,14 @@
         private ObservableCollection<GroupMoveItemModel> _selections;
         private Vector3 _playerPosition;
 
-        private double _globalOffsetPositionX;
-        private double _globalOffsetPositionY;
-        private double _globalOffsetPositionZ;
+        private float _globalOffsetPositionX;
+        private float _globalOffsetPositionY;
+        private float _globalOffsetPositionZ;
         private bool _isGlobalOffsetPosition;
 
-        private double _singlePositionX;
-        private double _singlePositionY;
-        private double _singlePositionZ;
+        private float _singlePositionX;
+        private float _singlePositionY;
+        private float _singlePositionZ;
         private bool _isSinglePosition;
 
         private bool _isBusy;
@@ -79,7 +79,7 @@
             }
         }
 
-        public double GlobalOffsetPositionX
+        public float GlobalOffsetPositionX
         {
             get
             {
@@ -96,7 +96,7 @@
             }
         }
 
-        public double GlobalOffsetPositionY
+        public float GlobalOffsetPositionY
         {
             get
             {
@@ -113,7 +113,7 @@
             }
         }
 
-        public double GlobalOffsetPositionZ
+        public float GlobalOffsetPositionZ
         {
             get
             {
@@ -147,7 +147,7 @@
             }
         }
 
-        public double SinglePositionX
+        public float SinglePositionX
         {
             get
             {
@@ -164,7 +164,7 @@
             }
         }
 
-        public double SinglePositionY
+        public float SinglePositionY
         {
             get
             {
@@ -181,7 +181,7 @@
             }
         }
 
-        public double SinglePositionZ
+        public float SinglePositionZ
         {
             get
             {

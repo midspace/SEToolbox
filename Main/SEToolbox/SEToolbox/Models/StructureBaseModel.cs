@@ -4,11 +4,11 @@
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Windows.Threading;
     using System.Xml.Serialization;
+    using VRageMath;
 
     [Serializable]
     public class StructureBaseModel : BaseModel, IStructureBase
@@ -135,11 +135,11 @@
         }
 
         [XmlIgnore]
-        public double PositionX
+        public float PositionX
         {
             get
             {
-                return this._entityBase.PositionAndOrientation.Value.Position.X.ToDouble();
+                return this._entityBase.PositionAndOrientation.Value.Position.X;
             }
 
             set
@@ -155,11 +155,11 @@
         }
 
         [XmlIgnore]
-        public double PositionY
+        public float PositionY
         {
             get
             {
-                return this._entityBase.PositionAndOrientation.Value.Position.Y.ToDouble();
+                return this._entityBase.PositionAndOrientation.Value.Position.Y;
             }
 
             set
@@ -175,11 +175,11 @@
         }
 
         [XmlIgnore]
-        public double PositionZ
+        public float PositionZ
         {
             get
             {
-                return this._entityBase.PositionAndOrientation.Value.Position.Z.ToDouble();
+                return this._entityBase.PositionAndOrientation.Value.Position.Z;
             }
 
             set
@@ -343,6 +343,11 @@
         public virtual void InitializeAsync()
         {
             // to be overridden.
+        }
+
+        public virtual void RecalcPosition(Vector3 playerPosition)
+        {
+            this.PlayerDistance = (playerPosition - this.PositionAndOrientation.Value.Position.ToVector3()).Length();
         }
 
         #endregion

@@ -2,6 +2,7 @@
 {
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using VRageMath;
 
     public interface IStructureBase
     {
@@ -27,10 +28,12 @@
 
         void InitializeAsync();
 
-        double PositionX { get; set; }
+        float PositionX { get; set; }
 
-        double PositionY { get; set; }
+        float PositionY { get; set; }
 
-        double PositionZ { get; set; }
+        float PositionZ { get; set; }
+
+        void RecalcPosition(Vector3 playerPosition);
     }
 }

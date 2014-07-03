@@ -96,7 +96,7 @@
             }
         }
 
-        public double GlobalOffsetPositionX
+        public float GlobalOffsetPositionX
         {
             get
             {
@@ -110,7 +110,7 @@
             }
         }
 
-        public double GlobalOffsetPositionY
+        public float GlobalOffsetPositionY
         {
             get
             {
@@ -124,7 +124,7 @@
             }
         }
 
-        public double GlobalOffsetPositionZ
+        public float GlobalOffsetPositionZ
         {
             get
             {
@@ -152,7 +152,7 @@
             }
         }
 
-        public double SinglePositionX
+        public float SinglePositionX
         {
             get
             {
@@ -166,7 +166,7 @@
             }
         }
 
-        public double SinglePositionY
+        public float SinglePositionY
         {
             get
             {
@@ -180,7 +180,7 @@
             }
         }
 
-        public double SinglePositionZ
+        public float SinglePositionZ
         {
             get
             {

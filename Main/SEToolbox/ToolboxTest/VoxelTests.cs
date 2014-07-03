@@ -403,6 +403,9 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
+            var voxCells = voxelMap.SumVoxelCells();
+            Assert.AreEqual(16589770849, voxCells, "Voxel cells must match.");
+
             Assert.AreEqual(1213009, lengthNew, "New file size must match.");
 
             Assert.AreEqual(512, voxelMap.Size.X, "Voxel Bounding size must match.");
@@ -558,6 +561,10 @@
             Assert.AreEqual(50, voxelMap.ContentSize.X, "Voxel Content size must match.");
             Assert.AreEqual(46, voxelMap.ContentSize.Y, "Voxel Content size must match.");
             Assert.AreEqual(70, voxelMap.ContentSize.Z, "Voxel Content size must match.");
+
+            var voxCells = voxelMap.SumVoxelCells();
+
+            Assert.AreEqual(18666335, voxCells, "Voxel cells must match.");
         }
 
         [TestMethod]
@@ -615,7 +622,7 @@
             //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 120;
 
-            // Memory test...
+            // Memory test (probably won't load in Space Engineers) ...
             //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 200;
 
@@ -623,13 +630,24 @@
             //var modelFile = @".\TestAssets\buddha-fixed-bottom.stl";
             //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 0.78;
 
-            var multiThread = false;
             var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
             var modelMaterials = new string[] { stoneMaterial.Name, goldMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name };
             var fillerMaterial = silverMaterial.Name;
             var asteroidFile = @".\TestOutput\test_sphere.vox";
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(multiThread, modelFile, asteroidFile, scaleMultiplyierX, scaleMultiplyierY, scaleMultiplyierZ, rotateTransform, modelMaterials, fillerMaterial, ResetProgress, IncrementProgress);
+
+            var model = MeshHelper.Load(modelFile, ignoreErrors: true);
+            var meshes = new List<SEToolbox.Interop.Asteroids.MyVoxelRayTracer.MyMeshModel>();
+            foreach (var model3D in model.Children)
+            {
+                var gm = (GeometryModel3D)model3D;
+                var geometry = gm.Geometry as MeshGeometry3D;
+
+                if (geometry != null)
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel() { Geometery = geometry, Material = "Stone_01", FaceMaterial = "Stone_01" });
+            }
+
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, asteroidFile, scaleMultiplyierX, scaleMultiplyierY, scaleMultiplyierZ, rotateTransform, ResetProgress, IncrementProgress);
 
             Assert.IsTrue(File.Exists(modelFile), "Generated file must exist");
 
@@ -640,6 +658,13 @@
             Assert.IsTrue(voxelMap.Size.X > 0, "Voxel Size must be greater than zero.");
             Assert.IsTrue(voxelMap.Size.Y > 0, "Voxel Size must be greater than zero.");
             Assert.IsTrue(voxelMap.Size.Z > 0, "Voxel Size must be greater than zero.");
+
+            Assert.IsTrue(voxelMap.ContentSize.X > 0, "Voxel ContentSize must be greater than zero.");
+            Assert.IsTrue(voxelMap.ContentSize.Y > 0, "Voxel ContentSize must be greater than zero.");
+            Assert.IsTrue(voxelMap.ContentSize.Z > 0, "Voxel ContentSize must be greater than zero.");
+
+            var voxCells = voxelMap.SumVoxelCells();
+            Assert.IsTrue(voxCells > 0, "voxCells must be greater than zero.");
         }
 
 
@@ -678,6 +703,5 @@
         #endregion
 
         #endregion
-
     }
 }

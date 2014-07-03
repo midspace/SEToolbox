@@ -125,12 +125,13 @@ namespace SEToolbox.Interop.Asteroids
 
         #region Preview
 
-        public static void GetPreview(string filename, out Vector3I size, out Vector3I contentSize, out long voxCells)
+        public static void GetPreview(string filename, out Vector3I size, out Vector3I contentSize, out Vector3 center, out long voxCells)
         {
             var map = new MyVoxelMap();
             map.Load(filename, SpaceEngineersAPI.GetMaterialName(0), false);
             size = map.Size;
             contentSize = map.ContentSize;
+            center = map.ContentCenter;
             voxCells = map.SumVoxelCells();
         }
 
