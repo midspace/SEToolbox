@@ -145,30 +145,6 @@
   <data name="ClassType_FloatingObject" xml:space="preserve">
     <value>Floating Object</value>
   </data>
-  <data name="MyCharacterModelEnum_Astronaut" xml:space="preserve">
-    <value>Astronaut Grey</value>
-  </data>
-  <data name="MyCharacterModelEnum_Astronaut_Black" xml:space="preserve">
-    <value>Astronaut Black</value>
-  </data>
-  <data name="MyCharacterModelEnum_Astronaut_Blue" xml:space="preserve">
-    <value>Astronaut Blue</value>
-  </data>
-  <data name="MyCharacterModelEnum_Astronaut_Green" xml:space="preserve">
-    <value>Astronaut Green</value>
-  </data>
-  <data name="MyCharacterModelEnum_Astronaut_Red" xml:space="preserve">
-    <value>Astronaut Red</value>
-  </data>
-  <data name="MyCharacterModelEnum_Astronaut_White" xml:space="preserve">
-    <value>Astronaut White</value>
-  </data>
-  <data name="MyCharacterModelEnum_Astronaut_Yellow" xml:space="preserve">
-    <value>Astronaut Yellow</value>
-  </data>
-  <data name="MyCharacterModelEnum_Soldier" xml:space="preserve">
-    <value>Soldier</value>
-  </data>
   <data name="about" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\about.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -293,13 +269,14 @@ To use the SEToolbox, you must have the Space Engineers game installed on your c
     <value>Filename:	{0}
 Bounding Size:	{1} × {2} × {3} blocks
 Size:	{4} m × {5} m × {6} m
-Volume:	{7:#,##0.00} m³
-VoxCells:	{8:#,##0}
-Distance:	{9:#,##0.0} m
-Position:	{10}, {11}, {12}
+Center:	{7}, {8}, {9}
+Volume:	{10:#,##0.00} m³
+VoxCells:	{11:#,##0}
+Distance:	{12:#,##0.0} m
+Position:	{13}, {14}, {15}
 
 Material	Mass	Percent
-{13}</value>
+{16}</value>
   </data>
   <data name="CubeDetail" xml:space="preserve">
     <value>Type:	{0}

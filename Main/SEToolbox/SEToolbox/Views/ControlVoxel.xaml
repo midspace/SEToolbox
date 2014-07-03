@@ -33,6 +33,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.ColumnSpan="2">Asteroid</Label>
@@ -50,10 +51,12 @@
             </Menu>
             <Label Grid.Row="2" Grid.Column="0" Content="Position:"/>
             <views:ControlPosition Grid.Row="2" Grid.Column="1"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Margin="4 0 4 0" Text="Filename:"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Filename}"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Margin="4 0 4 0" Text="Bounding Size:"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center">
+            <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="4 0 4 0" Text="Filename:"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Filename}"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Bounding Size:"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0} × {1} × {2} blocks">
                         <Binding Path="Size.Width" />
@@ -62,8 +65,8 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Size:"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="Size:"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0}m × {1}m × {2}m">
                         <Binding Path="ContentSize.Width" />
@@ -72,14 +75,24 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="Volume:"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Volume, StringFormat='{}{0:#,##0.00}m³'}" />
-            <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="VoxCells:"/>
-            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding VoxCells, StringFormat='{}{0:#,##0}'}" />
-            <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
-            <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+            <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="Center:"/>
+            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0:#,##0.0000}, {1:#,##0.0000}, {2:#,##0.0000}">
+                        <Binding Path="Center.X" />
+                        <Binding Path="Center.Y" />
+                        <Binding Path="Center.Z" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="Volume:"/>
+            <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Volume, StringFormat='{}{0:#,##0.00}m³'}" />
+            <TextBlock Grid.Row="9" Grid.Column="0" Margin="4 0 4 0" Text="VoxCells:"/>
+            <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding VoxCells, StringFormat='{}{0:#,##0}'}" />
+            <TextBlock Grid.Row="10" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
+            <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
 
-            <controls:SortableListView Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding MaterialAssets}"
+            <controls:SortableListView Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding MaterialAssets}"
                 ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                 <ListView.View>
                     <GridView>
@@ -101,7 +114,7 @@
                     </GridView>
                 </ListView.View>
             </controls:SortableListView>
-            <controls:BusyIndicator Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <controls:BusyIndicator Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Grid>
 </UserControl>

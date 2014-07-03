@@ -2,9 +2,11 @@
 {
     using SEToolbox.Support;
     using System;
-    using System.ComponentModel;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows.Media.Media3D;
     using VRageMath;
 
@@ -181,7 +183,7 @@
 
             return MyVoxelBuilder.BuildAsteroid(multiThread, filename, size, material, faceMaterial, action);
         }
-        
+
         #endregion
 
         #region BuildAsteroid
@@ -194,6 +196,7 @@
         /// <param name="filename"></param>
         /// <param name="size"></param>
         /// <param name="material"></param>
+        /// <param name="faceMaterial"></param>
         /// <param name="func"></param>
         /// <returns></returns>
         public static MyVoxelMap BuildAsteroid(bool multiThread, string filename, Vector3I size, string material, string faceMaterial, Action<MyVoxelBuilderArgs> func)
@@ -256,8 +259,7 @@
                 // TODO: re-write the multi thread processing to be more stable.
                 // But still try and max out the processors.
 
-                var workerCount = 0;
-                var workerCounter = 0;
+                var taskArray = new List<Task>();
 
                 var baseCoords = new Vector3I(0, 0, 0);
                 for (baseCoords.X = 0; baseCoords.X < actualSize.X; baseCoords.X += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE)
@@ -266,13 +268,11 @@
                     {
                         for (baseCoords.Z = 0; baseCoords.Z < actualSize.Z; baseCoords.Z += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE)
                         {
-                            workerCount++;
-                            var worker = new BackgroundWorker();
+                            Task task;
 
-                            // Threaded work. Do each Data Cell as a single worker process, to prevent them from stepping all over each other at the byte level.
-                            worker.DoWork += delegate(object s, DoWorkEventArgs workArgs)
+                            taskArray.Add(task = new Task((obj) =>
                             {
-                                var bgw = (MyVoxelBackgroundWorker)workArgs.Argument;
+                                var bgw = (MyVoxelBackgroundWorker)obj;
 
                                 var coords = new Vector3I(0, 0, 0);
                                 for (coords.X = bgw.BaseCoords.X; coords.X < bgw.BaseCoords.X + MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE; coords.X++)
@@ -297,35 +297,27 @@
                                     }
                                 }
 
-                            };
-
-                            worker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs args)
-                            {
                                 lock (Locker)
                                 {
-                                    workerCounter++;
-
                                     counter += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
-                                               MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
-                                               MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE;
+                                            MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
+                                            MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE;
                                     var prog = Math.Floor((decimal)counter / (decimal)counterTotal * 100);
                                     if (prog != progress)
                                     {
                                         progress = prog;
                                         Debug.Write(string.Format("{0:000},", progress));
                                     }
-
-                                    ((BackgroundWorker)sender).Dispose();
                                 }
-                            };
 
-                            // Brute force threading. not 100% reliable. Occasionally, some threads will not complete.
-                            worker.RunWorkerAsync(new MyVoxelBackgroundWorker(baseCoords));
+                            }, new MyVoxelBackgroundWorker(baseCoords)));
+
+                            task.Start();
                         }
                     }
                 }
 
-                while (workerCounter < workerCount)
+                while (taskArray.Any(t => !t.IsCompleted))
                 {
                     System.Windows.Forms.Application.DoEvents();
                 }
@@ -342,6 +334,7 @@
             {
                 voxelMap.ForceVoxelFaceMaterial(faceMaterial);
             }
+
             voxelMap.UpdateContentBounds();
 
             var count = voxelMap.SumVoxelCells();
@@ -351,7 +344,7 @@
 
             return voxelMap;
         }
-        
+
         #endregion
 
         #endregion

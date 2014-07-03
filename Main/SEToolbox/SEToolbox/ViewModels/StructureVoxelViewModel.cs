@@ -87,6 +87,19 @@
             }
         }
 
+        public BindableVector3DModel Center
+        {
+            get
+            {
+                return new BindableVector3DModel(this.DataModel.Center);
+            }
+
+            set
+            {
+                this.DataModel.Center = value.ToVector3();
+            }
+        }
+
         public long VoxCells
         {
             get
@@ -146,6 +159,7 @@
                 Filename,
                 Size.Width, Size.Height, Size.Depth,
                 ContentSize.Width, ContentSize.Height, ContentSize.Depth,
+                Center.X, Center.Y, Center.Z,
                 Volume,
                 VoxCells,
                 PlayerDistance,

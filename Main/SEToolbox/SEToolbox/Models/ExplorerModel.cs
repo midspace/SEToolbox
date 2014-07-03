@@ -642,7 +642,7 @@
                 var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
                 foreach (var structure in this.Structures)
                 {
-                    structure.PlayerDistance = (position - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
+                    structure.RecalcPosition(position);
                 }
             }
         }
