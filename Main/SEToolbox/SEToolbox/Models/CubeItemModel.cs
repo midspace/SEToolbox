@@ -32,6 +32,8 @@
 
         private float _colorSaturation;
 
+        private float _colorLuminance;
+
         private BindablePoint3DIModel _position;
 
         private double _buildPercent;
@@ -210,6 +212,23 @@
             }
         }
 
+        public float ColorLuminance
+        {
+            get
+            {
+                return this._colorLuminance;
+            }
+
+            set
+            {
+                if (value != this._colorLuminance)
+                {
+                    this._colorLuminance = value;
+                    this.RaisePropertyChanged(() => ColorLuminance);
+                }
+            }
+        }
+
         public BindablePoint3DIModel Position
         {
             get
@@ -307,10 +326,12 @@
             this.ColorText = this.Color.ToString();
             this.ColorHue = vector3.X;
             this.ColorSaturation = vector3.Y;
+            this.ColorLuminance = vector3.Z;
 
             this.RaisePropertyChanged(() => ColorText);
             this.RaisePropertyChanged(() => ColorHue);
             this.RaisePropertyChanged(() => ColorSaturation);
+            this.RaisePropertyChanged(() => ColorLuminance);
         }
 
         public void UpdateColor(SerializableVector3 vector3)

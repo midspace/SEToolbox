@@ -135,7 +135,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IMainView.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelBackgroundWorker.cs" />
+    <Compile Include="Interop\Asteroids\MyVoxelTaskWorker.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilder.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilderArgs.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelConstants.cs" />
@@ -278,7 +278,6 @@
     <Compile Include="ViewModels\GenerateVoxelFieldViewModel.cs" />
     <Compile Include="ViewModels\DataBaseViewModel.cs" />
     <Compile Include="ViewModels\ImportVoxelViewModel.cs" />
-    <Compile Include="ViewModels\Import3dModelBackgroundWorker.cs" />
     <Compile Include="ViewModels\StructureFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\Import3dModelViewModel.cs" />
     <Compile Include="ViewModels\ImportImageViewModel.cs" />

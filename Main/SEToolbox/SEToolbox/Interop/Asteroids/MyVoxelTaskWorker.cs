@@ -2,11 +2,11 @@
 {
     using VRageMath;
 
-    class MyVoxelBackgroundWorker
+    class MyVoxelTaskWorker
     {
         #region ctor
 
-        public MyVoxelBackgroundWorker(Vector3I baseCoords)
+        public MyVoxelTaskWorker(Vector3I baseCoords)
         {
             this.BaseCoords = baseCoords;
         }
