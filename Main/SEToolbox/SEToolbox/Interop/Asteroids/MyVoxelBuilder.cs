@@ -259,7 +259,7 @@
                 // TODO: re-write the multi thread processing to be more stable.
                 // But still try and max out the processors.
 
-                var taskArray = new List<Task>();
+                var threadCounter = counterTotal / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE;
 
                 var baseCoords = new Vector3I(0, 0, 0);
                 for (baseCoords.X = 0; baseCoords.X < actualSize.X; baseCoords.X += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE)
@@ -268,11 +268,9 @@
                     {
                         for (baseCoords.Z = 0; baseCoords.Z < actualSize.Z; baseCoords.Z += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE)
                         {
-                            Task task;
-
-                            taskArray.Add(task = new Task((obj) =>
+                            var task = new Task((obj) =>
                             {
-                                var bgw = (MyVoxelBackgroundWorker)obj;
+                                var bgw = (MyVoxelTaskWorker)obj;
 
                                 var coords = new Vector3I(0, 0, 0);
                                 for (coords.X = bgw.BaseCoords.X; coords.X < bgw.BaseCoords.X + MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE; coords.X++)
@@ -308,16 +306,17 @@
                                         progress = prog;
                                         Debug.Write(string.Format("{0:000},", progress));
                                     }
+                                    threadCounter--;
                                 }
 
-                            }, new MyVoxelBackgroundWorker(baseCoords)));
+                            }, new MyVoxelTaskWorker(baseCoords));
 
                             task.Start();
                         }
                     }
                 }
 
-                while (taskArray.Any(t => !t.IsCompleted))
+                while (threadCounter > 0)
                 {
                     System.Windows.Forms.Application.DoEvents();
                 }

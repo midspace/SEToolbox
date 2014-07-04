@@ -319,6 +319,7 @@
                                                 <MultiBinding>
                                                     <Binding Path="ColorHue" />
                                                     <Binding Path="ColorSaturation" />
+                                                    <Binding Path="ColorLuminance" />
                                                 </MultiBinding>
                                             </controls:SortableGridViewColumn.SortBinding>
                                             <GridViewColumn.CellTemplate>

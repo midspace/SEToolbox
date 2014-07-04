@@ -137,7 +137,7 @@
 
                         var task = new Task((obj) =>
                         {
-                            var bgw = (RayTracerBackgroundWorker)obj;
+                            var bgw = (RayTracerTaskWorker)obj;
                             var tracers = new List<Trace>();
 
                             for (var t = 0; t < triangles.Length; t += 3)
@@ -226,7 +226,7 @@
                             {
                                 threadCounter--;
                             }
-                        }, new RayTracerBackgroundWorker(modelIdx, 0, y, z));
+                        }, new RayTracerTaskWorker(modelIdx, 0, y, z));
 
                         task.Start();
                     }
@@ -260,7 +260,7 @@
 
                         var task = new Task((obj) =>
                         {
-                            var bgw = (RayTracerBackgroundWorker)obj;
+                            var bgw = (RayTracerTaskWorker)obj;
                             var tracers = new List<Trace>();
 
                             for (var t = 0; t < triangles.Length; t += 3)
@@ -356,7 +356,7 @@
                             {
                                 threadCounter--;
                             }
-                        }, new RayTracerBackgroundWorker(modelIdx, x, 0, z));
+                        }, new RayTracerTaskWorker(modelIdx, x, 0, z));
 
                         task.Start();
                     }
@@ -390,7 +390,7 @@
 
                         var task = new Task((obj) =>
                         {
-                            var bgw = (RayTracerBackgroundWorker)obj;
+                            var bgw = (RayTracerTaskWorker)obj;
                             var tracers = new List<Trace>();
 
                             for (var t = 0; t < triangles.Length; t += 3)
@@ -486,7 +486,7 @@
                             {
                                 threadCounter--;
                             }
-                        }, new RayTracerBackgroundWorker(modelIdx, x, y, 0));
+                        }, new RayTracerTaskWorker(modelIdx, x, y, 0));
 
                         task.Start();
                     }
@@ -570,11 +570,11 @@
             public MeshFace Face { get; private set; }
         }
 
-        private class RayTracerBackgroundWorker
+        private class RayTracerTaskWorker
         {
             #region ctor
 
-            public RayTracerBackgroundWorker(int modelIdx, int x, int y, int z)
+            public RayTracerTaskWorker(int modelIdx, int x, int y, int z)
             {
                 this.ModelIdx = modelIdx;
                 this.X = x;
