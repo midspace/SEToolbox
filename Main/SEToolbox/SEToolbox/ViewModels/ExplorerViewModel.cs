@@ -1381,6 +1381,9 @@
                         // Clear Medical room SteamId.
                         cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
 
+                        // Clear Owners.
+                        cloneEntity.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().Select(c => { ((MyObjectBuilder_CubeBlock)c).Owner = 0; ((MyObjectBuilder_CubeBlock)c).ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
+
                         // Remove any pilots.
                         cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.Cockpit).Select(c =>
                         {
