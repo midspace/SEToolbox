@@ -612,7 +612,7 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
@@ -653,7 +653,7 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
@@ -693,7 +693,7 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value

@@ -30,6 +30,9 @@
         private string _description;
 
         [NonSerialized]
+        private Vector3 _center;
+
+        [NonSerialized]
         private double _playerDistance;
 
         [NonSerialized]
@@ -262,6 +265,27 @@
                 {
                     this._playerDistance = value;
                     this.RaisePropertyChanged(() => PlayerDistance);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Center of the object in space.
+        /// </summary>
+        [XmlIgnore]
+        public Vector3 Center
+        {
+            get
+            {
+                return this._center;
+            }
+
+            set
+            {
+                if (value != this._center)
+                {
+                    this._center = value;
+                    this.RaisePropertyChanged(() => Center);
                 }
             }
         }

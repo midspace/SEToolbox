@@ -10,9 +10,7 @@
         commands:DialogCloser.DialogResult="{Binding CloseResult}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converters:NullImageConverter x:Key="NullImageConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
-        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:DDSConverter x:Key="DDSConverter"/>
         <Style TargetType="ListViewItem">

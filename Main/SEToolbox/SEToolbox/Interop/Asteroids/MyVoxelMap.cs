@@ -51,7 +51,10 @@ namespace SEToolbox.Interop.Asteroids
 
         public Vector3I ContentSize { get { return new Vector3I(this._boundingContent.Size()) + 1; } }
 
-        public Vector3 ContentCenter { get { return this._boundingContent.Center - 0.5f; } }
+        /// <summary>
+        /// The center cell in the asteroid.
+        /// </summary>
+        public Vector3 ContentCenter { get { return this._boundingContent.Center; } }
 
         public byte VoxelMaterial { get; private set; }
 
