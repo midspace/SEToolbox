@@ -179,7 +179,7 @@
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            foreach (var cubeDefinition in SpaceEngineersAPI.CubeBlockDefinitions)
+            foreach (var cubeDefinition in SpaceEngineersAPI.Definitions.CubeBlocks)
             {
                 var props = new Dictionary<string, string>();
                 var fields = cubeDefinition.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
@@ -204,9 +204,9 @@
                 });
             }
 
-            foreach (var componentDefinition in SpaceEngineersAPI.ComponentDefinitions)
+            foreach (var componentDefinition in SpaceEngineersAPI.Definitions.Components)
             {
-                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.TypeId == componentDefinition.Id.TypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.TypeId == componentDefinition.Id.TypeId);
 
                 this.ComponentAssets.Add(new ComponentItemModel()
                 {
@@ -221,9 +221,9 @@
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersAPI.PhysicalItemDefinitions)
+            foreach (var physicalItemDefinition in SpaceEngineersAPI.Definitions.PhysicalItems)
             {
-                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
                 this.ItemAssets.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
@@ -237,9 +237,9 @@
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersAPI.AmmoMagazineDefinitions)
+            foreach (var physicalItemDefinition in SpaceEngineersAPI.Definitions.AmmoMagazines)
             {
-                var bp = SpaceEngineersAPI.BlueprintDefinitions.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
                 this.ItemAssets.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
@@ -253,7 +253,7 @@
                 });
             }
 
-            foreach (var voxelMaterialDefinition in SpaceEngineersAPI.VoxelMaterialDefinitions)
+            foreach (var voxelMaterialDefinition in SpaceEngineersAPI.Definitions.VoxelMaterials)
             {
                 this.MaterialAssets.Add(new ComponentItemModel()
                 {

@@ -20,6 +20,8 @@
 
         double PlayerDistance { get; set; }
 
+        Vector3 Center { get; set; }
+
         string SerializedEntity { get; set; }
 
         void UpdateGeneralFromEntityBase();

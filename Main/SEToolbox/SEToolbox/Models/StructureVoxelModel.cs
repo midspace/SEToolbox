@@ -22,7 +22,6 @@
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
-        private Vector3 _center;
         private Vector3 _voxelCenter;
         private Vector3I _contentSize;
         private long _voxCells;
@@ -151,24 +150,6 @@
         }
 
         [XmlIgnore]
-        public Vector3 Center
-        {
-            get
-            {
-                return this._center;
-            }
-
-            set
-            {
-                if (value != this._center)
-                {
-                    this._center = value;
-                    this.RaisePropertyChanged(() => Center);
-                }
-            }
-        }
-
-        [XmlIgnore]
         public long VoxCells
         {
             get
@@ -288,14 +269,14 @@
                 this.RaisePropertyChanged(() => Size);
                 this.RaisePropertyChanged(() => ContentSize);
                 this.RaisePropertyChanged(() => VoxCells);
-                this.Center = new Vector3(_voxelCenter.X + this.PositionX, _voxelCenter.Y + this.PositionY, _voxelCenter.Z + this.PositionZ);
+                this.Center = new Vector3(_voxelCenter.X + 0.5f + this.PositionX, _voxelCenter.Y + 0.5f + this.PositionY, _voxelCenter.Z + 0.5f + this.PositionZ);
             }
         }
 
         public override void RecalcPosition(Vector3 playerPosition)
         {
             base.RecalcPosition(playerPosition);
-            this.Center = new Vector3(_voxelCenter.X + this.PositionX, _voxelCenter.Y + this.PositionY, _voxelCenter.Z + this.PositionZ);
+            this.Center = new Vector3(_voxelCenter.X + 0.5f + this.PositionX, _voxelCenter.Y + 0.5f + this.PositionY, _voxelCenter.Z + 0.5f + this.PositionZ);
         }
 
         #endregion
