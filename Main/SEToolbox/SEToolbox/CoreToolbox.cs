@@ -68,7 +68,7 @@
             // Copy them to temporary path, then load with reflection on demand through the AppDomain.
             if (altDlls)
             {
-                _tempBinPath = Path.Combine(TempfileUtil.TempPath, "__bincache");
+                _tempBinPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"MidSpace\SEToolbox\__bincache");
                 var searchPath = GlobalSettings.Default.SEBinPath;
 
                 DirectoryInfo checkDir = null;
@@ -95,11 +95,14 @@
                     var filename = Path.Combine(searchPath, file);
                     var destFilename = Path.Combine(_tempBinPath, file);
 
-                    try
+                    if (ToolboxUpdater.DoFilesDiffer(searchPath, _tempBinPath, file))
                     {
-                        File.Copy(filename, destFilename, true);
+                        try
+                        {
+                            File.Copy(filename, destFilename, true);
+                        }
+                        catch { }
                     }
-                    catch { }
                 }
 
                 // Copy directories which contain Space Engineers language resources.
@@ -113,7 +116,11 @@
 
                     foreach (string oldFile in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
                     {
-                        File.Copy(oldFile, Path.Combine(destDir, Path.GetFileName(oldFile)), true);
+                        try
+                        {
+                            File.Copy(oldFile, Path.Combine(destDir, Path.GetFileName(oldFile)), true);
+                        }
+                        catch { }
                     }
                 }
 
