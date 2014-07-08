@@ -77,6 +77,37 @@
         CustomAdminRequired
     };
 
+    /// <summary>
+    /// These represent generic orientations for any cube.
+    /// </summary>
+    public enum OrientType : byte
+    {
+        Axis24_Backward_Down,
+        Axis24_Backward_Left,
+        Axis24_Backward_Right,
+        Axis24_Backward_Up,
+        Axis24_Down_Backward,
+        Axis24_Down_Forward,
+        Axis24_Down_Left,
+        Axis24_Down_Right,
+        Axis24_Forward_Down,
+        Axis24_Forward_Left,
+        Axis24_Forward_Right,
+        Axis24_Forward_Up,
+        Axis24_Left_Backward,
+        Axis24_Left_Down,
+        Axis24_Left_Forward,
+        Axis24_Left_Up,
+        Axis24_Right_Backward,
+        Axis24_Right_Down,
+        Axis24_Right_Forward,
+        Axis24_Right_Up,
+        Axis24_Up_Backward,
+        Axis24_Up_Forward,
+        Axis24_Up_Left,
+        Axis24_Up_Right,
+    };
+
     internal class AppConstants
     {
         public const string DocumentationUrl = "https://setoolbox.codeplex.com/documentation";

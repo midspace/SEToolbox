@@ -20,23 +20,24 @@
 
             var cubicCount = Modelling.CountCubic(cubic);
 
-            Assert.AreEqual(1290600, cubic.Length, "Array length size must match.");
+            var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            Assert.AreEqual(1290600, size, "Array length size must match.");
 
-            Assert.AreEqual(108, cubic.GetLength(0), "Array size must match.");
-            Assert.AreEqual(50, cubic.GetLength(1), "Array size must match.");
-            Assert.AreEqual(239, cubic.GetLength(2), "Array size must match.");
+            Assert.AreEqual(108, cubic.Length, "Array size must match.");
+            Assert.AreEqual(50, cubic[0].Length, "Array size must match.");
+            Assert.AreEqual(239, cubic[0][0].Length, "Array size must match.");
 
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 7]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 17]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 18]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 19]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 20]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 23]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 24]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 25]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 26]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 35]);
-            Assert.AreEqual(CubeType.Cube, cubic[54, 39, 36]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][7]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][17]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][18]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][19]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][20]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][23]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][24]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][25]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][26]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][35]);
+            Assert.AreEqual(CubeType.Cube, cubic[54][39][36]);
 
             Assert.AreEqual(51921, cubicCount[CubeType.Cube], "Cube count must match.");
             Assert.AreEqual(188293, cubicCount[CubeType.Interior], "Interior count must match.");
@@ -51,11 +52,12 @@
 
             var cubicCount = Modelling.CountCubic(cubic);
 
-            Assert.AreEqual(168480, cubic.Length, "Array length size must match.");
+            var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            Assert.AreEqual(168480, size, "Array length size must match.");
 
-            Assert.AreEqual(54, cubic.GetLength(0), "Array size must match.");
-            Assert.AreEqual(26, cubic.GetLength(1), "Array size must match.");
-            Assert.AreEqual(120, cubic.GetLength(2), "Array size must match.");
+            Assert.AreEqual(54, cubic.Length, "Array size must match.");
+            Assert.AreEqual(26, cubic[0].Length, "Array size must match.");
+            Assert.AreEqual(120, cubic[0][0].Length, "Array size must match.");
 
             Assert.AreEqual(12540, cubicCount[CubeType.Cube], "Cube count must match.");
             Assert.AreEqual(20651, cubicCount[CubeType.Interior], "Interior count must match.");
@@ -70,11 +72,12 @@
 
             var cubicCount = Modelling.CountCubic(cubic);
 
-            Assert.AreEqual(72, cubic.Length, "Array length size must match.");
+            var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            Assert.AreEqual(72, size, "Array length size must match.");
 
-            Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
-            Assert.AreEqual(6, cubic.GetLength(1), "Array size must match.");
-            Assert.AreEqual(3, cubic.GetLength(2), "Array size must match.");
+            Assert.AreEqual(4, cubic.Length, "Array size must match.");
+            Assert.AreEqual(6, cubic[0].Length, "Array size must match.");
+            Assert.AreEqual(3, cubic[0][0].Length, "Array size must match.");
 
             Assert.AreEqual(36, cubicCount[CubeType.Cube], "Cube count must match.");
             Assert.AreEqual(4, cubicCount[CubeType.Interior], "Interior count must match.");
@@ -89,11 +92,12 @@
 
             var cubicCount = Modelling.CountCubic(cubic);
 
-            Assert.AreEqual(72, cubic.Length, "Array length size must match.");
+            var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            Assert.AreEqual(72, size, "Array length size must match.");
 
-            Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
-            Assert.AreEqual(6, cubic.GetLength(1), "Array size must match.");
-            Assert.AreEqual(3, cubic.GetLength(2), "Array size must match.");
+            Assert.AreEqual(4, cubic.Length, "Array size must match.");
+            Assert.AreEqual(6, cubic[0].Length, "Array size must match.");
+            Assert.AreEqual(3, cubic[0][0].Length, "Array size must match.");
 
             Assert.AreEqual(36, cubicCount[CubeType.Cube], "Cube count must match.");
             Assert.AreEqual(4, cubicCount[CubeType.Interior], "Interior count must match.");
@@ -108,11 +112,12 @@
 
             var cubicCount = Modelling.CountCubic(cubic);
 
-            Assert.AreEqual(72, cubic.Length, "Array length size must match.");
+            var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            Assert.AreEqual(72, size, "Array length size must match.");
 
-            Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
-            Assert.AreEqual(6, cubic.GetLength(1), "Array size must match.");
-            Assert.AreEqual(3, cubic.GetLength(2), "Array size must match.");
+            Assert.AreEqual(4, cubic.Length, "Array size must match.");
+            Assert.AreEqual(6, cubic[0].Length, "Array size must match.");
+            Assert.AreEqual(3, cubic[0][0].Length, "Array size must match.");
 
             Assert.AreEqual(58, cubicCount[CubeType.Cube], "Cube count must match.");
             Assert.AreEqual(2, cubicCount[CubeType.Interior], "Interior count must match.");
@@ -126,11 +131,12 @@
 
             var cubic = Modelling.ReadModelVolmetic(modelFile, 0, null, ModelTraceVoxel.Thin);
 
-            //Assert.AreEqual(72, cubic.Length, "Array length size must match.");
+            //var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            //Assert.AreEqual(72, size, "Array length size must match.");
 
-            //Assert.AreEqual(4, cubic.GetLength(0), "Array size must match.");
-            //Assert.AreEqual(6, cubic.GetLength(1), "Array size must match.");
-            //Assert.AreEqual(3, cubic.GetLength(2), "Array size must match.");
+            //Assert.AreEqual(4, cubic.Length, "Array size must match.");
+            //Assert.AreEqual(6, cubic[0].Length, "Array size must match.");
+            //Assert.AreEqual(3, cubic[0][0].Length, "Array size must match.");
         }
 
         [TestMethod]
@@ -142,11 +148,12 @@
 
             var cubicCount = Modelling.CountCubic(cubic);
 
-            Assert.AreEqual(480, cubic.Length, "Array length size must match.");
+            var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            Assert.AreEqual(480, size, "Array length size must match.");
 
-            Assert.AreEqual(8, cubic.GetLength(0), "Array size must match.");
-            Assert.AreEqual(12, cubic.GetLength(1), "Array size must match.");
-            Assert.AreEqual(5, cubic.GetLength(2), "Array size must match.");
+            Assert.AreEqual(8, cubic.Length, "Array size must match.");
+            Assert.AreEqual(12, cubic[0].Length, "Array size must match.");
+            Assert.AreEqual(5, cubic[0][0].Length, "Array size must match.");
 
             Assert.AreEqual(168, cubicCount[CubeType.Cube], "Cube count must match.");
             Assert.AreEqual(48, cubicCount[CubeType.Interior], "Interior count must match.");
@@ -159,11 +166,12 @@
 
             var cubic = Modelling.ReadModelVolmeticAlt(modelFile, 1);
 
-            //Assert.AreEqual(480, cubic.Length, "Array length size must match.");
+            //var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            //Assert.AreEqual(480, size, "Array length size must match.");
 
-            //Assert.AreEqual(8, cubic.GetLength(0), "Array size must match.");
-            //Assert.AreEqual(12, cubic.GetLength(1), "Array size must match.");
-            //Assert.AreEqual(5, cubic.GetLength(2), "Array size must match.");
+            //Assert.AreEqual(8, cubic.Length, "Array size must match.");
+            //Assert.AreEqual(12, cubic[0].Length, "Array size must match.");
+            //Assert.AreEqual(5, cubic[0][0].Length, "Array size must match.");
         }
 
         [TestMethod]
@@ -173,11 +181,12 @@
 
             var cubic = Modelling.ReadModelVolmetic(modelFile, 1, null, ModelTraceVoxel.Thin);
 
-            //Assert.AreEqual(480, cubic.Length, "Array length size must match.");
+            //var size = cubic.Length * cubic[0].Length * cubic[0][0].Length;
+            //Assert.AreEqual(480, size, "Array length size must match.");
 
-            //Assert.AreEqual(8, cubic.GetLength(0), "Array size must match.");
-            //Assert.AreEqual(12, cubic.GetLength(1), "Array size must match.");
-            //Assert.AreEqual(5, cubic.GetLength(2), "Array size must match.");
+            //Assert.AreEqual(8, cubic.Length, "Array size must match.");
+            //Assert.AreEqual(12, cubic[0].Length, "Array size must match.");
+            //Assert.AreEqual(5, cubic[0][0].Length, "Array size must match.");
         }
 
         [TestMethod]

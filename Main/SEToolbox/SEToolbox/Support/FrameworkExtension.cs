@@ -98,7 +98,7 @@
         /// <returns>The first parent item that matches the submitted type parameter. 
         /// If not matching item can be found, a null reference is being returned.</returns>
         public static T FindVisualParent<T>(this DependencyObject child)
-          where T : DependencyObject
+            where T : DependencyObject
         {
             // get parent item
             var parentObject = VisualTreeHelper.GetParent(child);
@@ -259,5 +259,47 @@
         }
 
         #endregion
+    }
+
+    public static class ArrayHelper
+    {
+        /// <summary>
+        /// Creates a 2 dimensional jagged array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="length1"></param>
+        /// <param name="length2"></param>
+        /// <returns></returns>
+        public static T[][] Create<T>(int length1, int length2)
+        {
+            var array = new T[length1][];
+
+            for (var x = 0; x < length1; x++)
+                array[x] = new T[length2];
+
+            return array;
+        }
+
+        /// <summary>
+        /// Creates a 3 dimensional jagged array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="length1"></param>
+        /// <param name="length2"></param>
+        /// <param name="length3"></param>
+        /// <returns></returns>
+        public static T[][][] Create<T>(int length1, int length2, int length3)
+        {
+            var array = new T[length1][][];
+
+            for (var x = 0; x < length1; x++)
+            {
+                array[x] = new T[length2][];
+                for (var y = 0; y < length2; y++)
+                    array[x][y] = new T[length3];
+            }
+
+            return array;
+        }
     }
 }
