@@ -6,12 +6,10 @@
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Xml;
-    using VRage.Common.Utils;
     using VRageMath;
 
     public static class SpaceEngineersAPI
@@ -178,11 +176,14 @@
             // Single Player pathing.
             _definitions = LoadDefinitions(ToolboxUpdater.GetApplicationContentPath());
 
-            // TODO: redirect pathing when prior to loading other paths.
-
             _materialIndex = new Dictionary<string, byte>();
         }
 
+        /// <summary>
+        /// Load all the Space Engineers data definitions.
+        /// </summary>
+        /// <param name="contentPath">allows redirection of path when switching between single player or server.</param>
+        /// <returns></returns>
         private static MyObjectBuilder_Definitions LoadDefinitions(string contentPath)
         {
             var files = Directory.GetFiles(Path.Combine(contentPath, "Data"), "*.sbc");
@@ -190,14 +191,32 @@
 
             foreach (var filePath in files)
             {
-                var stockTemp = LoadContentFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>(filePath);
+                MyObjectBuilder_Definitions stockTemp = null;
+                try
+                {
+                    stockTemp = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>(filePath);
+                }
+                catch { /* ignore errors, keep on trucking just like SE. */ }
+
+                if (stockTemp == null) continue;
+
                 var fields = stockTemp.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
                 foreach (var field in fields)
                 {
-                    var stockValues = field.GetValue(stockTemp);
-                    if (stockValues != null)
+                    var readValues = field.GetValue(stockTemp);
+                    if (readValues != null)
                     {
-                        field.SetValue(definitions, stockValues);
+                        var currentValues = field.GetValue(definitions);
+                        if (currentValues == null)
+                        {
+                            field.SetValue(definitions, readValues);
+                        }
+                        else
+                        {
+                            // Merge together multiple values from seperate files.
+                            var newArray = ArrayHelper.MergeGenericArrays(currentValues, readValues);
+                            field.SetValue(definitions, newArray);
+                        }
                     }
                 }
             }
@@ -205,37 +224,16 @@
             // TODO: Read through the mod paths manually.
             // Using the MyObjectBuilder_Base.DeserializeXML() with MyFSLocationEnum.ContentWithMods does not work in the expected manner.
 
+            // Verify that content data was available, just in case the .sbc files didn't exist.
+            if (definitions.AmmoMagazines == null || definitions.AmmoMagazines.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "AmmoMagazines.sbc");
+            if (definitions.Blueprints == null || definitions.Blueprints.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "Blueprints.sbc");
+            if (definitions.Characters == null || definitions.Characters.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "Characters.sbc");
+            if (definitions.Components == null || definitions.Components.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "Components.sbc");
+            if (definitions.CubeBlocks == null || definitions.CubeBlocks.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "CubeBlocks.sbc");
+            if (definitions.PhysicalItems == null || definitions.PhysicalItems.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "PhysicalItems.sbc");
+            if (definitions.VoxelMaterials == null || definitions.VoxelMaterials.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
+
             return definitions;
-        }
-
-        private static T LoadContentFile<T, TS>(string filePath) where TS : XmlSerializer1
-        {
-            object fileContent = null;
-
-            if (!File.Exists(filePath))
-            {
-                throw new ToolboxException(ExceptionState.MissingContentFile, filePath);
-            }
-
-            try
-            {
-                fileContent = SpaceEngineersAPI.ReadSpaceEngineersFile<T, TS>(filePath);
-            }
-            catch
-            {
-                throw new ToolboxException(ExceptionState.CorruptContentFile, filePath);
-            }
-
-            if (fileContent == null)
-            {
-                throw new ToolboxException(ExceptionState.EmptyContentFile, filePath);
-            }
-
-            // TODO: set a file watch to reload the files, incase modding is occuring at the same time this is open.
-            //     Lock the load during this time, in case it happens multiple times.
-            // Report a friendly error if this load fails.
-
-            return (T)fileContent;
         }
 
         #endregion

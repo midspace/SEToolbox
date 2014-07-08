@@ -245,6 +245,7 @@
     <Compile Include="Models\ExplorerModel.cs" />
     <Compile Include="Interop\SpaceEngineersConsts.cs" />
     <Compile Include="Support\AppConstants.cs" />
+    <Compile Include="Support\ArrayHelper.cs" />
     <Compile Include="Support\DiagnosticsLogging4Net.cs" />
     <Compile Include="Support\ExceptionState.cs" />
     <Compile Include="Support\GlobalSettings.cs" />
