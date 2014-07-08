@@ -635,7 +635,7 @@
             //var ccubic = TestCreateSplayedDiagonalPlane();
             //var ccubic = TestCreateSlopedDiagonalPlane();
             //var ccubic = TestCreateStaggeredStar();
-            var ccubic = TestCreateTrayShape();
+            var ccubic = Modelling.TestCreateTrayShape();
             //var ccubic = ReadModelVolmetic(@"..\..\..\..\..\..\building 3D\models\Rhino_corrected.obj", 10, null, ModelTraceVoxel.ThickSmoothedDown);
 
             #region Read in voxel and set main cube space.
@@ -652,126 +652,6 @@
             Modelling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
 
             return entity;
-        }
-
-        private CubeType[, ,] TestCreateSplayedDiagonalPlane()
-        {
-            // Splayed diagonal plane.
-            var max = 40;
-            var ccubic = new CubeType[max, max, max];
-
-            for (var z = 0; z < max; z++)
-            {
-                for (var j = 0; j < max; j++)
-                {
-                    {
-                        var x = j + z;
-                        var y = j;
-                        if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
-                    }
-                    {
-                        var x = j;
-                        var y = j + z;
-                        if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
-                    }
-                    {
-                        var x = j + z;
-                        var y = max - j;
-                        if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
-                    }
-                    {
-                        var x = j;
-                        var y = max - (j + z);
-                        if (x >= 0 && y >= 0 && z >= 0 && x < max && y < max && z < max) ccubic[x, y, z] = CubeType.Cube;
-                    }
-                }
-            }
-            return ccubic;
-        }
-
-        private CubeType[, ,] TestCreateSlopedDiagonalPlane()
-        {
-            // Sloped diagonal plane.
-            var max = 20;
-            var ccubic = new CubeType[max, max, max];
-            var dx = 1;
-            var dy = 6;
-            var dz = 0;
-
-            for (var i = 0; i < max; i++)
-            {
-                for (var j = 0; j < max; j++)
-                {
-                    if (dx + j >= 0 && dy + j - i >= 0 && dz + i >= 0 &&
-                        dx + j < max && dy + j - i < max && dz + i < max)
-                    {
-                        ccubic[dx + j, dy + j - i, dz + i] = CubeType.Cube;
-                    }
-                }
-            }
-            return ccubic;
-        }
-
-        private CubeType[, ,] TestCreateStaggeredStar()
-        {
-            // Staggered star.
-
-            var ccubic = new CubeType[9, 9, 9];
-
-            for (var i = 2; i < 7; i++)
-            {
-                for (var j = 2; j < 7; j++)
-                {
-                    ccubic[i, j, 4] = CubeType.Cube;
-                    ccubic[i, 4, j] = CubeType.Cube;
-                    ccubic[4, i, j] = CubeType.Cube;
-                }
-            }
-
-            for (var i = 0; i < 9; i++)
-            {
-                ccubic[i, 4, 4] = CubeType.Cube;
-                ccubic[4, i, 4] = CubeType.Cube;
-                ccubic[4, 4, i] = CubeType.Cube;
-            }
-
-            return ccubic;
-        }
-
-        private CubeType[, ,] TestCreateTrayShape()
-        {
-            // Tray shape
-
-            var max = 20;
-            var offset = 5;
-
-            var ccubic = new CubeType[max, max, max];
-
-            for (var x = 0; x < max; x++)
-            {
-                for (var y = 0; y < max; y++)
-                {
-                    ccubic[2, x, y] = CubeType.Cube;
-                }
-            }
-
-            for (var z = 1; z < 4; z += 2)
-            {
-                for (int i = 0; i < max; i++)
-                {
-                    ccubic[z, i, 0] = CubeType.Cube;
-                    ccubic[z, i, max - 1] = CubeType.Cube;
-                    ccubic[z, 0, i] = CubeType.Cube;
-                    ccubic[z, max - 1, i] = CubeType.Cube;
-                }
-
-                for (int i = 0 + offset; i < max - offset; i++)
-                {
-                    ccubic[z, i, i] = CubeType.Cube;
-                    ccubic[z, max - i - 1, i] = CubeType.Cube;
-                }
-            }
-            return ccubic;
         }
 
         #endregion

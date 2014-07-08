@@ -62,19 +62,8 @@
 
             Debug.WriteLine("Size: {0}x{1}x{2}", xCount, yCount, zCount);
 
-            var finalCubic = new byte[xCount][][];
-            var finalMater = new byte[xCount][][];
-
-            for (var x = 0; x < xCount; x++)
-            {
-                finalCubic[x] = new byte[yCount][];
-                finalMater[x] = new byte[yCount][];
-                for (var y = 0; y < yCount; y++)
-                {
-                    finalCubic[x][y] = new byte[zCount];
-                    finalMater[x][y] = new byte[zCount];
-                }
-            }
+            var finalCubic = ArrayHelper.Create<byte>(xCount, yCount, zCount);
+            var finalMater = ArrayHelper.Create<byte>(xCount, yCount, zCount);
 
             var modelIdx = 0;
 

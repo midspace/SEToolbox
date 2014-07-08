@@ -2,10 +2,8 @@
 {
     using SEToolbox.Support;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Media.Media3D;
     using VRageMath;
@@ -147,15 +145,14 @@
         public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, string faceMaterial, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform, Action<double, double> resetProgress, Action incrementProgress)
         {
             var volmeticMap = Modelling.ReadModelVolmetic(sourceVolumetricFile, scale, transform, traceType, resetProgress, incrementProgress);
-            var size = new Vector3I(volmeticMap.GetLength(0) + 4, volmeticMap.GetLength(1) + 4, volmeticMap.GetLength(2) + 4);
+            var size = new Vector3I(volmeticMap.Length + 4, volmeticMap[0].Length + 4, volmeticMap[0][0].Length + 4);
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
             {
                 if (e.CoordinatePoint.X > 1 && e.CoordinatePoint.Y > 1 && e.CoordinatePoint.Z > 1 &&
-                    //e.CoordinatePoint.X <= volmeticMap.GetLength(0) && e.CoordinatePoint.Y <= volmeticMap.GetLength(1) && e.CoordinatePoint.Z <= volmeticMap.GetLength(2))
-                    (e.CoordinatePoint.X <= volmeticMap.GetLength(0) + 1) && (e.CoordinatePoint.Y <= volmeticMap.GetLength(1) + 1) && (e.CoordinatePoint.Z <= volmeticMap.GetLength(2) + 1))
+                    (e.CoordinatePoint.X <= volmeticMap.Length + 1) && (e.CoordinatePoint.Y <= volmeticMap[0].Length + 1) && (e.CoordinatePoint.Z <= volmeticMap[0][0].Length + 1))
                 {
-                    var cube = volmeticMap[e.CoordinatePoint.X - 2, e.CoordinatePoint.Y - 2, e.CoordinatePoint.Z - 2];
+                    var cube = volmeticMap[e.CoordinatePoint.X - 2][e.CoordinatePoint.Y - 2][e.CoordinatePoint.Z - 2];
                     if (cube == CubeType.Interior && fillObject)
                     {
                         e.Volume = 0xff;    // 100%
