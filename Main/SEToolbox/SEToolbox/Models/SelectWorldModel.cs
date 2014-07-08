@@ -409,12 +409,13 @@
                             if (((MyObjectBuilder_Cockpit)list[i]).Pilot != null)
                             {
                                 var character = ((MyObjectBuilder_Cockpit)list[i]).Pilot;
-                                if (character.CharacterModel != "Default_Astronaut")
+
+                                if (!SpaceEngineersAPI.Definitions.Characters.Any(c => c.Name == character.CharacterModel))
                                 {
+                                    character.CharacterModel = SpaceEngineersAPI.Definitions.Characters[0].Name;
                                     statusNormal = false;
                                     str.AppendLine("! Fixed astronaut's CharacterModel.");
                                     saveAfterScan = true;
-                                    character.CharacterModel = "Default_Astronaut";
                                 }
                             }
                         }
@@ -426,12 +427,12 @@
                     if (entity is MyObjectBuilder_Character)
                     {
                         var character = (MyObjectBuilder_Character)entity;
-                        if (character.CharacterModel != "Default_Astronaut")
+                        if (!SpaceEngineersAPI.Definitions.Characters.Any(c => c.Name == character.CharacterModel))
                         {
+                            character.CharacterModel = SpaceEngineersAPI.Definitions.Characters[0].Name;
                             statusNormal = false;
                             str.AppendLine("! Fixed astronaut's CharacterModel.");
                             saveAfterScan = true;
-                            character.CharacterModel = "Default_Astronaut";
                         }
                     }
                 }
