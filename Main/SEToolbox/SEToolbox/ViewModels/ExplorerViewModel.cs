@@ -1376,13 +1376,13 @@
                     {
                         var cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
 
-                        // Set to Array to force Linq to update the value.
+                        // Call to ToArray() to force Linq to update the value.
 
                         // Clear Medical room SteamId.
                         cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
 
                         // Clear Owners.
-                        cloneEntity.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().Select(c => { ((MyObjectBuilder_CubeBlock)c).Owner = 0; ((MyObjectBuilder_CubeBlock)c).ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
+                        cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
 
                         // Remove any pilots.
                         cloneEntity.CubeBlocks.Where(c => c.TypeId == MyObjectBuilderTypeEnum.Cockpit).Select(c =>
