@@ -173,9 +173,9 @@
         {
             switch (cubeSize)
             {
-                case MyCubeSize.Large: return 2.5f;
-                case MyCubeSize.Small: return 0.5f;
-                case MyCubeSize.Medium: return 1.0f; // TODO: Unknown what dimensions it is at this stage.
+                case MyCubeSize.Large: return SpaceEngineersAPI.Definitions.Configuration.CubeSizes.Large;
+                case MyCubeSize.Medium: return SpaceEngineersAPI.Definitions.Configuration.CubeSizes.Medium;
+                case MyCubeSize.Small: return SpaceEngineersAPI.Definitions.Configuration.CubeSizes.Small;
             }
             return 0f;
         }

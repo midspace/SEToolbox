@@ -535,7 +535,7 @@
 
         public override void UpdateGeneralFromEntityBase()
         {
-            double scaleMultiplyer = 2.5;
+            double scaleMultiplyer = this.CubeGrid.GridSizeEnum.ToLength();
             if (this.IsStatic && this.CubeGrid.GridSizeEnum == MyCubeSize.Large)
             {
                 this.ClassType = ClassType.Station;
@@ -547,7 +547,6 @@
             else if (!this.IsStatic && this.CubeGrid.GridSizeEnum == MyCubeSize.Small)
             {
                 this.ClassType = ClassType.SmallShip;
-                scaleMultiplyer = 0.5f;
             }
 
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);

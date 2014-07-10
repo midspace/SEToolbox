@@ -546,13 +546,13 @@
                 }
 
                 double vectorDistance = this.BuildDistance;
-                double scaleMultiplyer = 2.5;
+                double scaleMultiplyer = 1;
 
                 switch (this.ClassType)
                 {
-                    case ImportModelClassType.SmallShip: scaleMultiplyer = 0.5; break;
-                    case ImportModelClassType.LargeShip: scaleMultiplyer = 2.5; break;
-                    case ImportModelClassType.Station: scaleMultiplyer = 2.5; break;
+                    case ImportModelClassType.SmallShip: scaleMultiplyer = MyCubeSize.Small.ToLength(); break;
+                    case ImportModelClassType.LargeShip: scaleMultiplyer = MyCubeSize.Large.ToLength(); break;
+                    case ImportModelClassType.Station: scaleMultiplyer = MyCubeSize.Large.ToLength(); break;
                     case ImportModelClassType.Asteroid: scaleMultiplyer = 1; break;
                 }
                 vectorDistance += this.NewModelSize.Depth * scaleMultiplyer;
@@ -747,7 +747,7 @@
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = true;
-                    this.Position = this.Position.RoundOff(2.5);
+                    this.Position = this.Position.RoundOff(MyCubeSize.Large.ToLength());
                     this.Forward = this.Forward.RoundToAxis();
                     this.Up = this.Up.RoundToAxis();
                     break;

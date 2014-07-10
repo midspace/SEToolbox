@@ -9,13 +9,18 @@
 
     public static partial class DiagnosticsLogging
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         #region Log
 
         public static void LogInfo(string message)
         {
-            log.Info(message);
+            Log.Info(message);
+        }
+
+        public static void LogWarning(string message, Exception exception)
+        {
+            Log.Warn(message, exception);
         }
 
         public static void LogException(Exception exception)
@@ -38,7 +43,7 @@
                 diagReport.AppendFormat("{0:O}\t{1:#,###0}\t{2}\t{3}\r\n", fileInfo.LastWriteTime, fileInfo.Length, fileVer.FileVersion, filename);
             }
 
-            log.Fatal(diagReport.ToString(), exception);
+            Log.Fatal(diagReport.ToString(), exception);
         }
 
         #endregion

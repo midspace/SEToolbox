@@ -91,7 +91,10 @@
             this._isLoaded = true;
             var key = Registry.CurrentUser.OpenSubKey(BaseKey, false);
             if (key == null)
+            {
+                Reset();
                 return;
+            }
 
             this.SEBinPath = ReadValue<string>(key, "SEBinPath", null);
             this.LanguageCode = ReadValue<string>(key, "LanguageCode", CultureInfo.CurrentUICulture.IetfLanguageTag);

@@ -11,6 +11,7 @@
     using System.Reflection;
     using System.Xml;
     using VRageMath;
+    using Res = SEToolbox.Properties.Resources;
 
     public static class SpaceEngineersAPI
     {
@@ -77,7 +78,8 @@
             var settings = new XmlReaderSettings()
             {
                 IgnoreComments = true,
-                IgnoreWhitespace = true,
+                // Space Engineers is able to read partially corrupted files,
+                // which means Keen probably aren't using any XML reader settings in general. 
             };
 
             object obj = null;
@@ -88,6 +90,26 @@
                 {
                     var serializer = (TS)Activator.CreateInstance(typeof(TS));
                     obj = serializer.Deserialize(xmlReader);
+                }
+            }
+
+            return (T)obj;
+        }
+
+        public static T ReadSpaceEngineersFile<T>(string filename)
+        {
+            var contract = new XmlSerializerContract();
+            object obj = null;
+
+            if (File.Exists(filename))
+            {
+                // Space Engineers is able to read partially corrupted xml files,
+                // which means Keen probably aren't using any XML reader settings in general. 
+                using (var xmlReader = XmlReader.Create(filename))
+                {
+                    var serializer = contract.GetSerializer(typeof(T));
+                    if (serializer != null)
+                        obj = serializer.Deserialize(xmlReader);
                 }
             }
 
@@ -174,7 +196,7 @@
         public static void ReadCubeBlockDefinitions()
         {
             // Single Player pathing.
-            _definitions = LoadDefinitions(ToolboxUpdater.GetApplicationContentPath());
+            _definitions = LoadDefinitions(ToolboxUpdater.GetApplicationContentPath(), null);
 
             _materialIndex = new Dictionary<string, byte>();
         }
@@ -184,7 +206,90 @@
         /// </summary>
         /// <param name="contentPath">allows redirection of path when switching between single player or server.</param>
         /// <returns></returns>
-        private static MyObjectBuilder_Definitions LoadDefinitions(string contentPath)
+        private static MyObjectBuilder_Definitions LoadDefinitions(string contentPath, string userModspath)
+        {
+            // TODO: Maintain a list of referenced files, prefabs, models, textures, etc., as they must also be found and mapped.
+            // ie.,  "Models\Characters\Custom\Awesome_astronaut_model" might live under "Mods\Awesome_astronaut\Models\Characters\Custom\Awesome_astronaut_model".
+
+            var definitions = LoadAllDefinitions(contentPath);
+
+            // AmmoMagazines/AmmoMagazine/Icon
+            // AmmoMagazines/AmmoMagazine/Model
+            // Characters/Character/Model
+            // Components/Component/Icon
+            // Components/Component/Model
+            // Configuration/BaseBlockPrefabs/SmallDynamic
+            // Configuration/BaseBlockPrefabs/LargeDynamic
+            // Configuration/BaseBlockPrefabs/LargeStatic
+            // CubeBlocks/Definition/Icon
+            // CubeBlocks/Definition/CubeDefinition/Sides/Side/Model
+            // CubeBlocks/Definition/BuildProgressModels/Model/File
+            // Environment/EnvironmentTexture
+            // HandItems/HandItem/FingersAnimation
+            // PhysicalItems/PhysicalItem/Icon
+            // PhysicalItems/PhysicalItem/Model
+            // Scenarios/ScenarioDefinition/Icon
+
+            // "Data\Prefabs\*.sbc"
+            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="SetupBasePrefab"/PrefabFile
+            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="AddShipPrefab"/PrefabFile
+            // Definitions/SpawnGroups/SpawnGroup/Prefabs/Prefab/File
+
+            // "Data\Prefabs\*.sbs"
+            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="AddObjectsPrefab"/PrefabFile
+            
+            // "VoxelMaps\*.vox"
+            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="AddAsteroidPrefab"/PrefabFile
+
+            if (!string.IsNullOrEmpty(userModspath))
+            {
+                // TODO: Read through the mod paths manually.
+                // Using the MyObjectBuilder_Base.DeserializeXML() with MyFSLocationEnum.ContentWithMods does not work in the expected manner.
+
+                var directories = Directory.GetDirectories(userModspath);
+                foreach (var modDirectory in directories)
+                {
+                    var modDefinitions = LoadAllDefinitions(modDirectory);
+                    MergeDefinitions(ref definitions, modDefinitions);
+                }
+            }
+
+            // Verify that content data was available, just in case the .sbc files didn't exist.
+            if (definitions.AmmoMagazines == null) throw new ToolboxException(ExceptionState.MissingContentFile, "AmmoMagazines.sbc");
+            if (definitions.Blueprints == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Blueprints.sbc");
+            if (definitions.Characters == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Characters.sbc");
+            if (definitions.Components == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Components.sbc");
+            if (definitions.ContainerTypes == null) throw new ToolboxException(ExceptionState.MissingContentFile, "ContainerTypes.sbc");
+            if (definitions.CubeBlocks == null) throw new ToolboxException(ExceptionState.MissingContentFile, "CubeBlocks.sbc");
+            if (definitions.GlobalEvents == null) throw new ToolboxException(ExceptionState.MissingContentFile, "GlobalEvents.sbc");
+            if (definitions.HandItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "HandItems.sbc");
+            if (definitions.PhysicalItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "PhysicalItems.sbc");
+            if (definitions.Scenarios == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Scenarios.sbc");
+            if (definitions.SpawnGroups == null) throw new ToolboxException(ExceptionState.MissingContentFile, "SpawnGroups.sbc");
+            if (definitions.TransparentMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "TransparentMaterials.sbc");
+            if (definitions.VoxelMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
+
+            // Deal with duplicate entries. Must use the last one found and overwrite all others.
+            definitions.AmmoMagazines = definitions.AmmoMagazines.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.Blueprints = definitions.Blueprints.GroupBy(c => c.Result.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.Characters = definitions.Characters.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
+            definitions.Components = definitions.Components.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            // definitions.Configuration is not an array.
+            definitions.ContainerTypes = definitions.ContainerTypes.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
+            definitions.CubeBlocks = definitions.CubeBlocks.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            // definitions.Environment is not an array.
+            definitions.GlobalEvents = definitions.GlobalEvents.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.HandItems = definitions.HandItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.PhysicalItems = definitions.PhysicalItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.Scenarios = definitions.Scenarios.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            // definitions.SpawnGroups don't appear to have a unique idetifier.
+            definitions.TransparentMaterials = definitions.TransparentMaterials.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
+            definitions.VoxelMaterials = definitions.VoxelMaterials.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
+
+            return definitions;
+        }
+
+        private static MyObjectBuilder_Definitions LoadAllDefinitions(string contentPath)
         {
             var files = Directory.GetFiles(Path.Combine(contentPath, "Data"), "*.sbc");
             var definitions = new MyObjectBuilder_Definitions();
@@ -194,46 +299,44 @@
                 MyObjectBuilder_Definitions stockTemp = null;
                 try
                 {
-                    stockTemp = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>(filePath);
+                    stockTemp = ReadSpaceEngineersFile<MyObjectBuilder_Definitions>(filePath);
                 }
-                catch { /* ignore errors, keep on trucking just like SE. */ }
+                catch (Exception ex)
+                {
+                    // ignore errors, keep on trucking just like SE.
+                    // write event log warning of any files not loaded.
+                    DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptContentFile, filePath), ex);
+                }
 
                 if (stockTemp == null) continue;
 
-                var fields = stockTemp.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-                foreach (var field in fields)
+                MergeDefinitions(ref definitions, stockTemp);
+            }
+
+            return definitions;
+        }
+
+        private static void MergeDefinitions(ref MyObjectBuilder_Definitions baseDefinitions, MyObjectBuilder_Definitions newDefinitions)
+        {
+            var fields = newDefinitions.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+            foreach (var field in fields)
+            {
+                var readValues = field.GetValue(newDefinitions);
+                if (readValues != null)
                 {
-                    var readValues = field.GetValue(stockTemp);
-                    if (readValues != null)
+                    var currentValues = field.GetValue(baseDefinitions);
+                    if (currentValues == null)
                     {
-                        var currentValues = field.GetValue(definitions);
-                        if (currentValues == null)
-                        {
-                            field.SetValue(definitions, readValues);
-                        }
-                        else
-                        {
-                            // Merge together multiple values from seperate files.
-                            var newArray = ArrayHelper.MergeGenericArrays(currentValues, readValues);
-                            field.SetValue(definitions, newArray);
-                        }
+                        field.SetValue(baseDefinitions, readValues);
+                    }
+                    else
+                    {
+                        // Merge together multiple values from seperate files.
+                        var newArray = ArrayHelper.MergeGenericArrays(currentValues, readValues);
+                        field.SetValue(baseDefinitions, newArray);
                     }
                 }
             }
-
-            // TODO: Read through the mod paths manually.
-            // Using the MyObjectBuilder_Base.DeserializeXML() with MyFSLocationEnum.ContentWithMods does not work in the expected manner.
-
-            // Verify that content data was available, just in case the .sbc files didn't exist.
-            if (definitions.AmmoMagazines == null || definitions.AmmoMagazines.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "AmmoMagazines.sbc");
-            if (definitions.Blueprints == null || definitions.Blueprints.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "Blueprints.sbc");
-            if (definitions.Characters == null || definitions.Characters.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "Characters.sbc");
-            if (definitions.Components == null || definitions.Components.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "Components.sbc");
-            if (definitions.CubeBlocks == null || definitions.CubeBlocks.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "CubeBlocks.sbc");
-            if (definitions.PhysicalItems == null || definitions.PhysicalItems.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "PhysicalItems.sbc");
-            if (definitions.VoxelMaterials == null || definitions.VoxelMaterials.Length == 0) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
-
-            return definitions;
         }
 
         #endregion
