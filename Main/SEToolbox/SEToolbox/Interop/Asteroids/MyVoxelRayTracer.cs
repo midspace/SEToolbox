@@ -17,15 +17,24 @@
 
         #region ReadModelAsteroidVolmetic
 
-        public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IEnumerable<MyMeshModel> mappedMesh, string asteroidFile, double scaleMultiplyierX, double scaleMultiplyierY, double scaleMultiplyierZ, Transform3D rotateTransform,
+        // For a 1024 cubed asteroid, it takes approximately 6.5Gb of system memory.
+
+        public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, string asteroidFile, ScaleTransform3D scale, Transform3D rotateTransform,
             Action<long, long> resetProgress, Action incrementProgress)
         {
             var materials = new List<byte>();
             var faceMaterials = new List<byte>();
             foreach (var mesh in mappedMesh)
             {
-                materials.Add(SpaceEngineersAPI.GetMaterialIndex(mesh.Material));
-                faceMaterials.Add(SpaceEngineersAPI.GetMaterialIndex(mesh.FaceMaterial));
+                if (string.IsNullOrEmpty(mesh.Material))
+                    materials.Add(0xff); // represent empty materials.
+                else
+                    materials.Add(SpaceEngineersAPI.GetMaterialIndex(mesh.Material));
+
+                if (string.IsNullOrEmpty(mesh.FaceMaterial))
+                    faceMaterials.Add(0xff); // represent empty materials.
+                else
+                    faceMaterials.Add(SpaceEngineersAPI.GetMaterialIndex(mesh.FaceMaterial));
             }
 
             // How far to check in from the proposed Volumetric edge.
@@ -33,17 +42,21 @@
             // But still large enough that it isn't the exact corner.
             const double offset = 0.0000045f;
 
-            if (scaleMultiplyierX > 0 && scaleMultiplyierY > 0 && scaleMultiplyierZ > 0 && scaleMultiplyierX != 1.0f && scaleMultiplyierY != 1.0f && scaleMultiplyierZ != 1.0f)
+            if (scale.ScaleX > 0 && scale.ScaleY > 0 && scale.ScaleZ > 0 && scale.ScaleX != 1.0f && scale.ScaleY != 1.0f && scale.ScaleZ != 1.0f)
             {
-                model.TransformScale(scaleMultiplyierX, scaleMultiplyierY, scaleMultiplyierZ);
+                model.TransformScale(scale.ScaleX, scale.ScaleY, scale.ScaleZ);
             }
 
             // Attempt to offset the model, so it's only caulated from zero (0) and up, instead of using zero (0) as origin.
             //model.Transform = new TranslateTransform3D(-model.Bounds.X, -model.Bounds.Y, -model.Bounds.Z);
 
             var tbounds = model.Bounds;
+            Matrix3D? rotate = null;
             if (rotateTransform != null)
+            {
+                rotate = rotateTransform.Value;
                 tbounds = rotateTransform.TransformBounds(tbounds);
+            }
 
             //model.Transform = new TranslateTransform3D(-tbounds.X, -tbounds.Y, -tbounds.Z);
 
@@ -60,12 +73,11 @@
             var yCount = MyVoxelBuilder.ScaleMod(yMax - yMin, 64);
             var zCount = MyVoxelBuilder.ScaleMod(zMax - zMin, 64);
 
-            Debug.WriteLine("Size: {0}x{1}x{2}", xCount, yCount, zCount);
+            Debug.WriteLine("Approximate Size: {0}x{1}x{2}", Math.Ceiling(tbounds.X + tbounds.SizeX) - Math.Floor(tbounds.X), Math.Ceiling(tbounds.Y + tbounds.SizeY) - Math.Floor(tbounds.Y), Math.Ceiling(tbounds.Z + tbounds.SizeZ) - Math.Floor(tbounds.Z));
+            Debug.WriteLine("Bounds Size: {0}x{1}x{2}", xCount, yCount, zCount);
 
             var finalCubic = ArrayHelper.Create<byte>(xCount, yCount, zCount);
             var finalMater = ArrayHelper.Create<byte>(xCount, yCount, zCount);
-
-            var modelIdx = 0;
 
             if (resetProgress != null)
             {
@@ -76,9 +88,8 @@
 
             #region basic ray trace of every individual triangle.
 
-
-            foreach (var mesh in mappedMesh)
-            //foreach (var model3D in model.Children)
+            // Start from the last mesh, which represents the bottom of the UI stack, and overlay each other mesh on top of it.
+            for (var modelIdx = mappedMesh.Count - 1; modelIdx >= 0; modelIdx--)
             {
                 Debug.WriteLine("Model {0}", modelIdx);
 
@@ -96,15 +107,10 @@
                     }
                 }
 
-                //var gm = (GeometryModel3D)model3D;
-                //var geometry = gm.Geometry as MeshGeometry3D;
-
-
+                var mesh = mappedMesh[modelIdx];
                 var triangles = mesh.Geometery.TriangleIndices.ToArray();
                 var positions = mesh.Geometery.Positions.ToArray();
                 var threadCounter = 0;
-
-                // TODO: pass the Transform3D rotateTransform across the Threads.
 
                 #region X ray trace
 
@@ -143,12 +149,12 @@
                                 var p2 = positions[triangles[t + 1]];
                                 var p3 = positions[triangles[t + 2]];
 
-                                //if (rotateTransform != null)
-                                //{
-                                //    p1 = rotateTransform.Transform(p1);
-                                //    p2 = rotateTransform.Transform(p2);
-                                //    p3 = rotateTransform.Transform(p3);
-                                //}
+                                if (rotate.HasValue)
+                                {
+                                    p1 = rotate.Value.Transform(p1);
+                                    p2 = rotate.Value.Transform(p2);
+                                    p3 = rotate.Value.Transform(p3);
+                                }
 
                                 foreach (var ray in testRays)
                                 {
@@ -172,7 +178,7 @@
                                 var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.X).ToArray();
                                 var startCoord = (int)Math.Round(order[0].Point.X, 0);
                                 var endCoord = (int)Math.Round(order[order.Length - 1].Point.X, 0);
-                                int surfaces = 0;
+                                var surfaces = 0;
 
                                 for (var x = startCoord; x <= endCoord; x++)
                                 {
@@ -198,15 +204,18 @@
                                     modelMater[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
                                 }
 
-                                for (var i = 1; i < 10; i++)
+                                if (faceMaterials[bgw.ModelIdx] != 0xff)
                                 {
-                                    if (xMin < startCoord - i && modelCubic[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
+                                    for (var i = 1; i < 6; i++)
                                     {
-                                        modelMater[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
-                                    }
-                                    if (endCoord + i < xMax && modelCubic[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
-                                    {
-                                        modelMater[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
+                                        if (xMin < startCoord - i && modelCubic[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
+                                        {
+                                            modelMater[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                        }
+                                        if (endCoord + i < xMax && modelCubic[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
+                                        {
+                                            modelMater[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                        }
                                     }
                                 }
                             }
@@ -226,6 +235,8 @@
                 {
                     System.Windows.Forms.Application.DoEvents();
                 }
+
+                GC.Collect();
 
                 #endregion
 
@@ -266,12 +277,12 @@
                                 var p2 = positions[triangles[t + 1]];
                                 var p3 = positions[triangles[t + 2]];
 
-                                //if (rotateTransform != null)
-                                //{
-                                //    p1 = rotateTransform.Transform(p1);
-                                //    p2 = rotateTransform.Transform(p2);
-                                //    p3 = rotateTransform.Transform(p3);
-                                //}
+                                if (rotate.HasValue)
+                                {
+                                    p1 = rotate.Value.Transform(p1);
+                                    p2 = rotate.Value.Transform(p2);
+                                    p3 = rotate.Value.Transform(p3);
+                                }
 
                                 foreach (var ray in testRays)
                                 {
@@ -295,7 +306,7 @@
                                 var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Y).ToArray();
                                 var startCoord = (int)Math.Round(order[0].Point.Y, 0);
                                 var endCoord = (int)Math.Round(order[order.Length - 1].Point.Y, 0);
-                                int surfaces = 0;
+                                var surfaces = 0;
 
                                 for (var y = startCoord; y <= endCoord; y++)
                                 {
@@ -328,15 +339,18 @@
                                     modelMater[bgw.X - xMin][y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
                                 }
 
-                                for (var i = 1; i < 10; i++)
+                                if (faceMaterials[bgw.ModelIdx] != 0xff)
                                 {
-                                    if (yMin < startCoord - i && modelCubic[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] == 0)
+                                    for (var i = 1; i < 6; i++)
                                     {
-                                        modelMater[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
-                                    }
-                                    if (endCoord + i < yMax && modelCubic[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] == 0)
-                                    {
-                                        modelMater[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
+                                        if (yMin < startCoord - i && modelCubic[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] == 0)
+                                        {
+                                            modelMater[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                        }
+                                        if (endCoord + i < yMax && modelCubic[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] == 0)
+                                        {
+                                            modelMater[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                        }
                                     }
                                 }
                             }
@@ -356,6 +370,8 @@
                 {
                     System.Windows.Forms.Application.DoEvents();
                 }
+
+                GC.Collect();
 
                 #endregion
 
@@ -396,12 +412,12 @@
                                 var p2 = positions[triangles[t + 1]];
                                 var p3 = positions[triangles[t + 2]];
 
-                                //if (rotateTransform != null)
-                                //{
-                                //    p1 = rotateTransform.Transform(p1);
-                                //    p2 = rotateTransform.Transform(p2);
-                                //    p3 = rotateTransform.Transform(p3);
-                                //}
+                                if (rotate.HasValue)
+                                {
+                                    p1 = rotate.Value.Transform(p1);
+                                    p2 = rotate.Value.Transform(p2);
+                                    p3 = rotate.Value.Transform(p3);
+                                }
 
                                 foreach (var ray in testRays)
                                 {
@@ -425,7 +441,7 @@
                                 var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Z).ToArray();
                                 var startCoord = (int)Math.Round(order[0].Point.Z, 0);
                                 var endCoord = (int)Math.Round(order[order.Length - 1].Point.Z, 0);
-                                int surfaces = 0;
+                                var surfaces = 0;
 
                                 for (var z = startCoord; z <= endCoord; z++)
                                 {
@@ -458,15 +474,18 @@
                                     modelMater[bgw.X - xMin][bgw.Y - yMin][z - zMin] = materials[bgw.ModelIdx];
                                 }
 
-                                for (var i = 1; i < 10; i++)
+                                if (faceMaterials[bgw.ModelIdx] != 0xff)
                                 {
-                                    if (zMin < startCoord - i && modelCubic[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] == 0)
+                                    for (var i = 1; i < 6; i++)
                                     {
-                                        modelMater[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] = materials[bgw.ModelIdx];
-                                    }
-                                    if (endCoord + i < zMax && modelCubic[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] == 0)
-                                    {
-                                        modelMater[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] = materials[bgw.ModelIdx];
+                                        if (zMin < startCoord - i && modelCubic[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] == 0)
+                                        {
+                                            modelMater[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] = faceMaterials[bgw.ModelIdx];
+                                        }
+                                        if (endCoord + i < zMax && modelCubic[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] == 0)
+                                        {
+                                            modelMater[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] = faceMaterials[bgw.ModelIdx];
+                                        }
                                     }
                                 }
                             }
@@ -487,6 +506,8 @@
                     System.Windows.Forms.Application.DoEvents();
                 }
 
+                GC.Collect();
+
                 #endregion
 
                 #region merge individual model results into final
@@ -497,26 +518,24 @@
                     {
                         for (var z = 0; z < zCount; z++)
                         {
-                            if (modelCubic[x][y][z] != 0)
+                            if (modelMater[x][y][z] == 0xff && modelCubic[x][y][z] != 0)
+                            {
+                                finalCubic[x][y][z] = (byte)Math.Max(finalCubic[x][y][z] - modelCubic[x][y][z], 0);
+                            }
+                            else if (modelCubic[x][y][z] != 0)
                             {
                                 finalCubic[x][y][z] = Math.Max(finalCubic[x][y][z], modelCubic[x][y][z]);
                                 finalMater[x][y][z] = modelMater[x][y][z];
                             }
-                            else if (finalCubic[x][y][z] == 0 && finalMater[x][y][z] == 0)
+                            else if (finalCubic[x][y][z] == 0 && finalMater[x][y][z] == 0 && modelMater[x][y][z] != 0xff)
                             {
                                 finalMater[x][y][z] = modelMater[x][y][z];
-                                //finalMater[x][y][z] = 6;
-                            }
-                            else
-                            {
                             }
                         }
                     }
                 }
 
                 #endregion
-
-                modelIdx++;
             } // end models
 
             #endregion
@@ -530,15 +549,21 @@
                 e.Material = SpaceEngineersAPI.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
             };
 
-            return MyVoxelBuilder.BuildAsteroid(true, asteroidFile, size, fillerMaterial, fillerMaterial, action);
+            return MyVoxelBuilder.BuildAsteroid(true, asteroidFile, size, fillerMaterial, fillerMaterial, action, false);
         }
 
         #endregion
 
         public class MyMeshModel
         {
-            public MeshGeometry3D Geometery { get; set; }
+            public MyMeshModel(MeshGeometry3D geometery, string material, string faceMaterial)
+            {
+                this.Geometery = geometery;
+                this.Material = material;
+                this.FaceMaterial = faceMaterial;
+            }
 
+            public MeshGeometry3D Geometery { get; set; }
             public string Material { get; set; }
             public string FaceMaterial { get; set; }
         }
