@@ -590,6 +590,7 @@
         }
 
         #region VoxelConvertVolume
+
         [TestMethod]
         public void VoxelConvertToVolmetic()
         {
@@ -604,33 +605,34 @@
             var silverMaterial = materials.FirstOrDefault(m => m.Name.Contains("Silver"));
             Assert.IsNotNull(silverMaterial, "Silver material should exist.");
 
-            double scaleMultiplyierX, scaleMultiplyierY, scaleMultiplyierZ;
-
             // Basic test...
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
-            scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 5;
+            var scale = new ScaleTransform3D(5, 5, 5);
+            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
 
             // Basic model test...
             //var modelFile = @".\TestAssets\TwoSpheres.3ds";
-            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 5;
+            //var scale = new ScaleTransform3D(5, 5, 5);
 
             // Scale test...
             //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
-            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 20;
+            //var scale = new ScaleTransform3D(20, 20, 20);
+            //Transform3D rotateTransform = null;
 
             // Max Scale test...
             //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
-            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 120;
+            //var scale = new ScaleTransform3D(120, 120, 120);
+            //Transform3D rotateTransform = null;
 
             // Memory test (probably won't load in Space Engineers) ...
             //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
-            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 200;
+            //var scale = new ScaleTransform3D(200, 200, 200);
 
             // Complexity test...
             //var modelFile = @".\TestAssets\buddha-fixed-bottom.stl";
-            //scaleMultiplyierX = scaleMultiplyierY = scaleMultiplyierZ = 0.78;
+            //var scale = new ScaleTransform3D(0.78, 0.78, 0.78);
+            //var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 180, 0, 0);
 
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
             var modelMaterials = new string[] { stoneMaterial.Name, goldMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name };
             var fillerMaterial = silverMaterial.Name;
             var asteroidFile = @".\TestOutput\test_sphere.vox";
@@ -644,14 +646,15 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel() { Geometery = geometry, Material = "Stone_01", FaceMaterial = "Stone_01" });
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometry, "Stone_01", "Stone_01"));
             }
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, asteroidFile, scaleMultiplyierX, scaleMultiplyierY, scaleMultiplyierZ, rotateTransform, ResetProgress, IncrementProgress);
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, asteroidFile, scale, rotateTransform, ResetProgress, IncrementProgress);
+            voxelMap.Save(asteroidFile);
 
-            Assert.IsTrue(File.Exists(modelFile), "Generated file must exist");
+            Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
-            var voxelFileLength = new FileInfo(modelFile).Length;
+            var voxelFileLength = new FileInfo(asteroidFile).Length;
 
             Assert.IsTrue(voxelFileLength > 0, "File must not be empty.");
 
@@ -666,7 +669,6 @@
             var voxCells = voxelMap.SumVoxelCells();
             Assert.IsTrue(voxCells > 0, "voxCells must be greater than zero.");
         }
-
 
         #region helpers
 

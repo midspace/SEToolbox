@@ -196,7 +196,7 @@
         /// <param name="faceMaterial"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static MyVoxelMap BuildAsteroid(bool multiThread, string filename, Vector3I size, string material, string faceMaterial, Action<MyVoxelBuilderArgs> func)
+        public static MyVoxelMap BuildAsteroid(bool multiThread, string filename, Vector3I size, string material, string faceMaterial, Action<MyVoxelBuilderArgs> func, bool saveFile = true)
         {
             var displayname = Path.GetFileNameWithoutExtension(filename);
             var voxelMap = new MyVoxelMap();
@@ -336,7 +336,9 @@
             var count = voxelMap.SumVoxelCells();
 
             Debug.WriteLine(string.Format(" Done. | {0}  | VoxCells {1:#,##0}", timer.Elapsed, count));
-            voxelMap.Save(filename);
+            
+            if (saveFile)
+                voxelMap.Save(filename);
 
             return voxelMap;
         }
