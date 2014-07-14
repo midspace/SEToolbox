@@ -16,7 +16,7 @@
         private const int NoError = 0;
         private const int UpdateBinariesFailed = 1;
         private const int UacDenied = 2;
-        
+
         #endregion
 
         #region Main
@@ -55,6 +55,7 @@
         private static void InstallConfigurationSettings()
         {
             var success = DiagnosticsLogging.CreateLog();
+            CleanBinCache();
         }
 
         #endregion
@@ -64,6 +65,7 @@
         private static void UninstallConfigurationSettings()
         {
             var success = DiagnosticsLogging.RemoveLog();
+            CleanBinCache();
         }
 
         #endregion
@@ -204,6 +206,27 @@
             }
 
             return true;
+        }
+
+        #endregion
+
+        #region CleanBinCache
+
+        /// <summary>
+        /// Clear app bin cache.
+        /// </summary>
+        private static void CleanBinCache()
+        {
+
+            var binCache = ToolboxUpdater.GetBinCachePath();
+            if (Directory.Exists(binCache))
+            {
+                try
+                {
+                    Directory.Delete(binCache, true);
+                }
+                catch { }
+            }
         }
 
         #endregion

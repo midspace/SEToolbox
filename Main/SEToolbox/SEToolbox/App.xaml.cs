@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox
 {
     using System.Globalization;
+    using System.IO;
     using System.Threading;
     using log4net;
     using SEToolbox.Interfaces;
@@ -36,6 +37,17 @@
             {
                 // Reset User Settings when Shift is held down during start up.
                 GlobalSettings.Default.Reset();
+
+                // Clear app bin cache.
+                var binCache = ToolboxUpdater.GetBinCachePath();
+                if (Directory.Exists(binCache))
+                {
+                    try
+                    {
+                        Directory.Delete(binCache, true);
+                    }
+                    catch { }
+                }
             }
 
             LocalizeDictionary.Instance.SetCurrentThreadCulture = false;
@@ -57,6 +69,10 @@
                     GlobalSettings.Default.Save();
                     Application.Current.Shutdown();
                     return;
+                }
+                else if (dialogResult == MessageBoxResult.No)
+                {
+                    GlobalSettings.Default.IgnoreUpdateVersion = update.Version.ToString();
                 }
             }
 
