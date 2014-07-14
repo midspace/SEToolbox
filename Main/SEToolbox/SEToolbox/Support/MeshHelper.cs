@@ -185,6 +185,8 @@
             {
                 if (RayIntersetTriangleRound(p1, p2, p3, rays[i], rays[i + 1], out intersection, out norm)) // Ray
                     return true;
+                if (RayIntersetTriangleRound(p1, p2, p3, rays[i + 1], rays[i], out intersection, out norm)) // Reverse Ray
+                    return true;
             }
             intersection = default(Point3D);
             norm = 0;

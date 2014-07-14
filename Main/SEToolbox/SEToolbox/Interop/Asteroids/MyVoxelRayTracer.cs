@@ -107,10 +107,12 @@
                     }
                 }
 
-                var mesh = mappedMesh[modelIdx];
-                var triangles = mesh.Geometery.TriangleIndices.ToArray();
-                var positions = mesh.Geometery.Positions.ToArray();
+                var meshes = mappedMesh[modelIdx];
                 var threadCounter = 0;
+
+                var geometries = new GeometeryDetail[meshes.Geometery.Length];
+                for (var i = 0; i < meshes.Geometery.Length; i++)
+                    geometries[i] = new GeometeryDetail(meshes.Geometery[i]);
 
                 #region X ray trace
 
@@ -135,40 +137,43 @@
                             var bgw = (RayTracerTaskWorker)obj;
                             var tracers = new List<Trace>();
 
-                            for (var t = 0; t < triangles.Length; t += 3)
+                            foreach (var geometery in geometries)
                             {
-                                if (incrementProgress != null)
+                                for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                 {
-                                    lock (Locker)
+                                    if (incrementProgress != null)
                                     {
-                                        incrementProgress.Invoke();
+                                        lock (Locker)
+                                        {
+                                            incrementProgress.Invoke();
+                                        }
                                     }
-                                }
 
-                                var p1 = positions[triangles[t]];
-                                var p2 = positions[triangles[t + 1]];
-                                var p3 = positions[triangles[t + 2]];
+                                    var p1 = geometery.Positions[geometery.Triangles[t]];
+                                    var p2 = geometery.Positions[geometery.Triangles[t + 1]];
+                                    var p3 = geometery.Positions[geometery.Triangles[t + 2]];
 
-                                if (rotate.HasValue)
-                                {
-                                    p1 = rotate.Value.Transform(p1);
-                                    p2 = rotate.Value.Transform(p2);
-                                    p3 = rotate.Value.Transform(p3);
-                                }
-
-                                foreach (var ray in testRays)
-                                {
-                                    if ((p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
-                                        (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y) ||
-                                        (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
-                                        (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
-                                        continue;
-
-                                    Point3D intersect;
-                                    int normal;
-                                    if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                    if (rotate.HasValue)
                                     {
-                                        tracers.Add(new Trace(intersect, normal));
+                                        p1 = rotate.Value.Transform(p1);
+                                        p2 = rotate.Value.Transform(p2);
+                                        p3 = rotate.Value.Transform(p3);
+                                    }
+
+                                    foreach (var ray in testRays)
+                                    {
+                                        if ((p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
+                                            (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y) ||
+                                            (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
+                                            (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
+                                            continue;
+
+                                        Point3D intersect;
+                                        int normal;
+                                        if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                        {
+                                            tracers.Add(new Trace(intersect, normal));
+                                        }
                                     }
                                 }
                             }
@@ -263,40 +268,43 @@
                             var bgw = (RayTracerTaskWorker)obj;
                             var tracers = new List<Trace>();
 
-                            for (var t = 0; t < triangles.Length; t += 3)
+                            foreach (var geometery in geometries)
                             {
-                                if (incrementProgress != null)
+                                for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                 {
-                                    lock (Locker)
+                                    if (incrementProgress != null)
                                     {
-                                        incrementProgress.Invoke();
+                                        lock (Locker)
+                                        {
+                                            incrementProgress.Invoke();
+                                        }
                                     }
-                                }
 
-                                var p1 = positions[triangles[t]];
-                                var p2 = positions[triangles[t + 1]];
-                                var p3 = positions[triangles[t + 2]];
+                                    var p1 = geometery.Positions[geometery.Triangles[t]];
+                                    var p2 = geometery.Positions[geometery.Triangles[t + 1]];
+                                    var p3 = geometery.Positions[geometery.Triangles[t + 2]];
 
-                                if (rotate.HasValue)
-                                {
-                                    p1 = rotate.Value.Transform(p1);
-                                    p2 = rotate.Value.Transform(p2);
-                                    p3 = rotate.Value.Transform(p3);
-                                }
-
-                                foreach (var ray in testRays)
-                                {
-                                    if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
-                                        (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
-                                        (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
-                                        (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
-                                        continue;
-
-                                    Point3D intersect;
-                                    int normal;
-                                    if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                    if (rotate.HasValue)
                                     {
-                                        tracers.Add(new Trace(intersect, normal));
+                                        p1 = rotate.Value.Transform(p1);
+                                        p2 = rotate.Value.Transform(p2);
+                                        p3 = rotate.Value.Transform(p3);
+                                    }
+
+                                    foreach (var ray in testRays)
+                                    {
+                                        if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
+                                            (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
+                                            (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
+                                            (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
+                                            continue;
+
+                                        Point3D intersect;
+                                        int normal;
+                                        if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                        {
+                                            tracers.Add(new Trace(intersect, normal));
+                                        }
                                     }
                                 }
                             }
@@ -398,40 +406,43 @@
                             var bgw = (RayTracerTaskWorker)obj;
                             var tracers = new List<Trace>();
 
-                            for (var t = 0; t < triangles.Length; t += 3)
+                            foreach (var geometery in geometries)
                             {
-                                if (incrementProgress != null)
+                                for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                 {
-                                    lock (Locker)
+                                    if (incrementProgress != null)
                                     {
-                                        incrementProgress.Invoke();
+                                        lock (Locker)
+                                        {
+                                            incrementProgress.Invoke();
+                                        }
                                     }
-                                }
 
-                                var p1 = positions[triangles[t]];
-                                var p2 = positions[triangles[t + 1]];
-                                var p3 = positions[triangles[t + 2]];
+                                    var p1 = geometery.Positions[geometery.Triangles[t]];
+                                    var p2 = geometery.Positions[geometery.Triangles[t + 1]];
+                                    var p3 = geometery.Positions[geometery.Triangles[t + 2]];
 
-                                if (rotate.HasValue)
-                                {
-                                    p1 = rotate.Value.Transform(p1);
-                                    p2 = rotate.Value.Transform(p2);
-                                    p3 = rotate.Value.Transform(p3);
-                                }
-
-                                foreach (var ray in testRays)
-                                {
-                                    if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
-                                        (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
-                                        (p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
-                                        (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y))
-                                        continue;
-
-                                    Point3D intersect;
-                                    int normal;
-                                    if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                    if (rotate.HasValue)
                                     {
-                                        tracers.Add(new Trace(intersect, normal));
+                                        p1 = rotate.Value.Transform(p1);
+                                        p2 = rotate.Value.Transform(p2);
+                                        p3 = rotate.Value.Transform(p3);
+                                    }
+
+                                    foreach (var ray in testRays)
+                                    {
+                                        if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
+                                            (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
+                                            (p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
+                                            (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y))
+                                            continue;
+
+                                        Point3D intersect;
+                                        int normal;
+                                        if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                        {
+                                            tracers.Add(new Trace(intersect, normal));
+                                        }
                                     }
                                 }
                             }
@@ -556,16 +567,33 @@
 
         public class MyMeshModel
         {
-            public MyMeshModel(MeshGeometry3D geometery, string material, string faceMaterial)
+            public MyMeshModel(MeshGeometry3D[] geometery, string material, string faceMaterial)
             {
                 this.Geometery = geometery;
                 this.Material = material;
                 this.FaceMaterial = faceMaterial;
             }
 
-            public MeshGeometry3D Geometery { get; set; }
+            public MeshGeometry3D[] Geometery { get; set; }
             public string Material { get; set; }
             public string FaceMaterial { get; set; }
+        }
+
+        public class GeometeryDetail
+        {
+            public GeometeryDetail(MeshGeometry3D meshGeometry) :
+                this(meshGeometry.TriangleIndices.ToArray(), meshGeometry.Positions.ToArray())
+            {
+            }
+
+            public GeometeryDetail(Int32[] triangles, Point3D[] positions)
+            {
+                this.Triangles = triangles;
+                this.Positions = positions;
+            }
+
+            public Int32[] Triangles { get; set; }
+            public Point3D[] Positions { get; set; }
         }
 
         private class Trace
