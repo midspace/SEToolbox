@@ -68,7 +68,7 @@
             // Copy them to temporary path, then load with reflection on demand through the AppDomain.
             if (altDlls)
             {
-                _tempBinPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"MidSpace\SEToolbox\__bincache");
+                _tempBinPath = ToolboxUpdater.GetBinCachePath();
                 var searchPath = GlobalSettings.Default.SEBinPath;
 
                 DirectoryInfo checkDir = null;

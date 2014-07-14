@@ -61,7 +61,7 @@
         /// <summary>
         /// Ignore this specific version during Toolbox version check.
         /// </summary>
-        //public string IgnoreUpdateVersion { get; set; }
+        public string IgnoreUpdateVersion { get; set; }
 
         #endregion
 
@@ -84,6 +84,8 @@
             UpdateValue(key, "WindowWidth", this.WindowWidth);
             UpdateValue(key, "WindowHeight", this.WindowHeight);
             UpdateValue(key, "AlwaysCheckForUpdates", this.AlwaysCheckForUpdates);
+            UpdateValue(key, "IgnoreUpdateVersion", this.IgnoreUpdateVersion);
+            
         }
 
         public void Load()
@@ -105,8 +107,12 @@
             this.WindowWidth = ReadValue<double?>(key, "WindowWidth", null);
             this.WindowHeight = ReadValue<double?>(key, "WindowHeight", null);
             this.AlwaysCheckForUpdates = ReadValue<bool?>(key, "AlwaysCheckForUpdates", null);
+            this.IgnoreUpdateVersion = ReadValue<string>(key, "IgnoreUpdateVersion", null);
         }
 
+        /// <summary>
+        /// set all properties to their default value. Used for new application installs.
+        /// </summary>
         public void Reset()
         {
             this.SEBinPath = null;
@@ -118,6 +124,7 @@
             this.WindowHeight = null;
             this.WindowWidth = null;
             this.AlwaysCheckForUpdates = null;
+            this.IgnoreUpdateVersion = null;
         }
 
         #endregion

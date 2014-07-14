@@ -75,7 +75,9 @@
                 return null;
 
             var item = new CodeplexReleases() { Link = link, Version = GetVersion(match.Groups["version"].Value) };
-            if (item.Version > currentVersion)
+            Version ignoreVersion = null;
+            Version.TryParse(GlobalSettings.Default.IgnoreUpdateVersion, out ignoreVersion);
+            if (item.Version > currentVersion && item.Version != ignoreVersion)
                 return item;
 
             return null;

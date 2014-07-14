@@ -244,5 +244,14 @@
         }
 
         #endregion
+
+        #region GetBinCachePath
+
+        public static string GetBinCachePath()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"MidSpace\SEToolbox\__bincache");
+        }
+
+        #endregion
     }
 }
