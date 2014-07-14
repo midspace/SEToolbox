@@ -646,7 +646,7 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometry, "Stone_01", "Stone_01"));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, "Stone_01", "Stone_01"));
             }
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, asteroidFile, scale, rotateTransform, ResetProgress, IncrementProgress);

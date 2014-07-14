@@ -145,14 +145,14 @@
         public static MyVoxelMap BuildAsteroidFromModel(bool multiThread, string sourceVolumetricFile, string filename, string material, string faceMaterial, bool fillObject, string interiorMaterial, ModelTraceVoxel traceType, double scale, Transform3D transform, Action<double, double> resetProgress, Action incrementProgress)
         {
             var volmeticMap = Modelling.ReadModelVolmetic(sourceVolumetricFile, scale, transform, traceType, resetProgress, incrementProgress);
-            var size = new Vector3I(volmeticMap.Length + 4, volmeticMap[0].Length + 4, volmeticMap[0][0].Length + 4);
+            var size = new Vector3I(volmeticMap.Length + 12, volmeticMap[0].Length + 12, volmeticMap[0][0].Length + 12);
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
             {
-                if (e.CoordinatePoint.X > 1 && e.CoordinatePoint.Y > 1 && e.CoordinatePoint.Z > 1 &&
-                    (e.CoordinatePoint.X <= volmeticMap.Length + 1) && (e.CoordinatePoint.Y <= volmeticMap[0].Length + 1) && (e.CoordinatePoint.Z <= volmeticMap[0][0].Length + 1))
+                if (e.CoordinatePoint.X > 5 && e.CoordinatePoint.Y > 5 && e.CoordinatePoint.Z > 5 &&
+                    (e.CoordinatePoint.X <= volmeticMap.Length + 5) && (e.CoordinatePoint.Y <= volmeticMap[0].Length + 5) && (e.CoordinatePoint.Z <= volmeticMap[0][0].Length + 5))
                 {
-                    var cube = volmeticMap[e.CoordinatePoint.X - 2][e.CoordinatePoint.Y - 2][e.CoordinatePoint.Z - 2];
+                    var cube = volmeticMap[e.CoordinatePoint.X - 6][e.CoordinatePoint.Y - 6][e.CoordinatePoint.Z - 6];
                     if (cube == CubeType.Interior && fillObject)
                     {
                         e.Volume = 0xff;    // 100%
