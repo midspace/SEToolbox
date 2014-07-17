@@ -1,0 +1,274 @@
+﻿<Window x:Class="SEToolbox.Views.WindowsImportAsteroidModel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helix="http://helixtoolkit.codeplex.com"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="Import Asteroid 3D Model" Height="480" Width="560" Icon="/SEToolbox;component/app.ico" Background="{StaticResource DialogBackgroundBrush}"
+        commands:DialogService.IsRegisteredView="True"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter"/>
+    </Window.Resources>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
+    <Grid>
+        <StackPanel Margin="8" Orientation="Vertical">
+            <Grid Margin="0,0,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Model:" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBox Width="180" Text="{Binding Filename, Mode=TwoWay}" VerticalAlignment="Center" Name="uxInitialElement"/>
+                    <Button ToolTip="Browse for Model" Command="{Binding Browse3dModelCommand}" VerticalAlignment="Center">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
+                    </Button>
+                </StackPanel>
+                <Label Content="Type:" Grid.Row="1" />
+                <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ImportModelTypeEnum}}" SelectedValue="{Binding ClassType}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!--Import To Ship/Station settings-->
+                <Label Content="Calculation:" Grid.Row="2" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ModelTraceVoxelEnum}}" SelectedValue="{Binding TraceType}" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Label Content="Armor:" Grid.Row="3" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ArmorTypeEnum}}" SelectedValue="{Binding ArmorType}" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!--Import To Asteroid settings-->
+                <Label Content="Ore Shell:" Grid.Row="2" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding OutsideMaterialsCollection}" SelectedValue="{Binding OutsideStockMaterial}" DisplayMemberPath="DisplayName" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Label Content="Ore Inside:" Grid.Row="3" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <Grid Grid.Row="4" Grid.ColumnSpan="2" Height="90">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="1">
+                        <Border Width="20" Height="16" BorderBrush="Black" BorderThickness="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button Grid.Row="0" ToolTip="Move Up" Style="{StaticResource SpinUpButton}" />
+                                <Button Grid.Row="1" ToolTip="Move Down" Style="{StaticResource SpinDownButton}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <ListView ItemsSource="{Binding VolmeticMapList, Mode=OneWay}" SelectedValue="{Binding SelectedVolmeticMapList}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Width="40" Header="Move">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Width="20" Height="16" BorderBrush="Black" BorderThickness="0">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <Button Grid.Row="0" ToolTip="Move Up" Style="{StaticResource SpinUpButton}" Command="{Binding TestCommand}"/>
+                                                    <Button Grid.Row="1" ToolTip="Move Down" Style="{StaticResource SpinDownButton}" Command="{Binding TestCommand}"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Layers" DisplayMemberBinding="{Binding GeometryIndex}" Width="40"/>
+                                <GridViewColumn Width="60" Header="Color">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Width="16" Height="16" Background="{Binding BrushColor}" BorderBrush="Black" BorderThickness="1"/>
+                                                <Button Margin="4,0,0,0" Content="Edit" Command="{Binding TestCommand}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Ore Shell" DisplayMemberBinding="{Binding ShellAsteroidMaterial}" Width="40"/>
+                                <GridViewColumn Header="Ore Inside" DisplayMemberBinding="{Binding FillAsteroidMaterial}" Width="40"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+
+                <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="5">
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <helix:HelixViewport3D >
+                            <helix:DefaultLights/>
+                            <helix:CoordinateSystemVisual3D/>
+                            <ModelVisual3D Content="{Binding Model}"/>
+                        </helix:HelixViewport3D>
+                    </Border>
+                </Grid>
+
+                <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal">
+                    <GroupBox Header="Original Size" MinWidth="120">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="65"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Width:" Margin="0,0,0,0" />
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Width, StringFormat='{}{0:#,##0.00}'}" />
+                            <TextBlock Text="Height:" Margin="0,0,0,0" Grid.Row="1" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Height, StringFormat='{}{0:#,##0.00}'}" />
+                            <TextBlock Text="Depth:" Margin="0,0,0,0" Grid.Row="2" />
+                            <TextBlock Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Depth, StringFormat='{}{0:#,##0.00}'}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Scale" MinWidth="120">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton Content="Multiply:" IsChecked="{Binding IsMultipleScale}" />
+                            <TextBox Width="80" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="MultipleScale" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="10000"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <RadioButton Content="Max Length:" Grid.Row="1" IsChecked="{Binding IsMaxLengthScale}"/>
+                            <TextBox Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}" ToolTip="This specifies the longest dimension of the structure.">
+                                <TextBox.Text>
+                                    <Binding Path="MaxLengthScale" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="5" Max="10240"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Approximate New Size" MinWidth="120" Margin="8,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="1" Text="Blocks" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="2" Text="Meters" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="1" Text="Width:" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Width, StringFormat='{}{0:#,##0}'}" />
+                            <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.X, StringFormat='{}{0:#,##0.0}'}" />
+                            <TextBlock Grid.Row="2" Text="Height:" Margin="0,0,0,0" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Height, StringFormat='{}{0:#,##0}'}" />
+                            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.Y, StringFormat='{}{0:#,##0.0}'}" />
+                            <TextBlock Grid.Row="3" Text="Depth:" Margin="0,0,0,0" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Depth, StringFormat='{}{0:#,##0}'}" />
+                            <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.Z, StringFormat='{}{0:#,##0.0}'}" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+                <StackPanel Grid.Row="6" Grid.ColumnSpan="3" Orientation="Horizontal">
+                    <GroupBox Header="Position" MinWidth="120">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="X:" Margin="0,0,4,0" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Grid.Row="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Label Content="X:" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Orientation" MinWidth="120" Margin="8,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton IsChecked="True" Content="Facing Player" Grid.ColumnSpan="2" />
+                            <Label Content="Distance:" Grid.Row="2" />
+                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" ToolTip="Distance in front of Player in Meters." />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </Grid>
+            <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
+                <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+            </StackPanel>
+        </StackPanel>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</Window>

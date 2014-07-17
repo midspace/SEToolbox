@@ -40,7 +40,6 @@
         private IStructureViewBase _selectedStructure;
         private IStructureViewBase _preSelectedStructure;
         private ObservableCollection<IStructureViewBase> _selections;
-
         private ObservableCollection<IStructureViewBase> _structures;
         private ObservableCollection<LanguageModel> _languages;
 
@@ -1154,7 +1153,7 @@
         /// Find and remove ViewModel, with the specied Model.
         /// Remove the Entity also.
         /// </summary>
-        /// <param name="structureBase"></param>
+        /// <param name="model"></param>
         private void RemoveViewModel(IStructureBase model)
         {
             var viewModel = this.Structures.FirstOrDefault(s => s.DataModel == model);

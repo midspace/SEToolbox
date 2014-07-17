@@ -374,42 +374,42 @@
             this.SetColor(cube.ColorMaskHSV);
             this.BuildPercent = cube.BuildPercent;
 
-            //if (this.Inventory == null)
-            //    this.Inventory = new ObservableCollection<InventoryEditorModel>();
+            if (this.Inventory == null)
+                this.Inventory = new ObservableCollection<InventoryEditorModel>();
 
-            //var blockType = cube.GetType();
-            //if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
-            //{
-            //    var fields = blockType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-            //    var inventoryFields = fields.Where(f => f.FieldType == typeof(MyObjectBuilder_Inventory) && f.Name != "ConstructionInventory").ToArray();
-            //    foreach (var field in inventoryFields)
-            //    {
-            //        var inventory = field.GetValue(cube) as MyObjectBuilder_Inventory;
+            var blockType = cube.GetType();
+            if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
+            {
+                var fields = blockType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+                var inventoryFields = fields.Where(f => f.FieldType == typeof(MyObjectBuilder_Inventory) && f.Name != "ConstructionInventory").ToArray();
+                foreach (var field in inventoryFields)
+                {
+                    var inventory = field.GetValue(cube) as MyObjectBuilder_Inventory;
 
-            //        var definitionType = definition.GetType();
-            //        var invSizeField = definitionType.GetField("InventorySize");
-            //        var InventoryMaxVolumeField = definitionType.GetField("InventoryMaxVolume");
-            //        float volumeMultiplier = 1f; // Unsure if there should be a default of 1 if there isn't a InventorySize defined.
-            //        if (invSizeField != null)
-            //        {
-            //            var invSize = (Vector3)invSizeField.GetValue(definition);
-            //            volumeMultiplier = invSize.X * invSize.Y * invSize.Z;
-            //        }
-            //        if (InventoryMaxVolumeField != null)
-            //        {
-            //            var maxSize = (float)InventoryMaxVolumeField.GetValue(definition);
-            //            volumeMultiplier = MathHelper.Min(volumeMultiplier, maxSize);
-            //        }
+                    var definitionType = definition.GetType();
+                    var invSizeField = definitionType.GetField("InventorySize");
+                    var InventoryMaxVolumeField = definitionType.GetField("InventoryMaxVolume");
+                    float volumeMultiplier = 1f; // Unsure if there should be a default of 1 if there isn't a InventorySize defined.
+                    if (invSizeField != null)
+                    {
+                        var invSize = (Vector3)invSizeField.GetValue(definition);
+                        volumeMultiplier = invSize.X * invSize.Y * invSize.Z;
+                    }
+                    if (InventoryMaxVolumeField != null)
+                    {
+                        var maxSize = (float)InventoryMaxVolumeField.GetValue(definition);
+                        volumeMultiplier = MathHelper.Min(volumeMultiplier, maxSize);
+                    }
 
-            //        var iem = new InventoryEditorModel(inventory, Settings, volumeMultiplier * 1000 * Settings.InventorySizeMultiplier, null) { Name = field.Name, IsValid = true };
-            //        this.Inventory.Add(iem);
-            //    }
-            //}
+                    var iem = new InventoryEditorModel(inventory, Settings, volumeMultiplier * 1000 * Settings.InventorySizeMultiplier, null) { Name = field.Name, IsValid = true };
+                    this.Inventory.Add(iem);
+                }
+            }
 
-            //while (this.Inventory.Count < 2)
-            //{
-            //    this.Inventory.Add(new InventoryEditorModel(false));
-            //}
+            while (this.Inventory.Count < 2)
+            {
+                this.Inventory.Add(new InventoryEditorModel(false));
+            }
         }
     }
 }

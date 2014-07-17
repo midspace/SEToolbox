@@ -83,54 +83,38 @@
 
         public ObservableCollection<InventoryModel> Items
         {
-            get
-            {
-                return this._dataModel.Items;
-            }
-
-            set
-            {
-                this._dataModel.Items = value;
-            }
+            get { return this._dataModel.Items; }
+            set { this._dataModel.Items = value; }
         }
 
         public InventoryModel SelectedRow
         {
-            get
-            {
-                return this._dataModel.SelectedRow;
-            }
-
-            set
-            {
-                this._dataModel.SelectedRow = value;
-            }
+            get { return this._dataModel.SelectedRow; }
+            set { this._dataModel.SelectedRow = value; }
         }
 
         public double TotalVolume
         {
-            get
-            {
-                return this._dataModel.TotalVolume;
-            }
-
-            set
-            {
-                this._dataModel.TotalVolume = value;
-            }
+            get { return this._dataModel.TotalVolume; }
+            set { this._dataModel.TotalVolume = value; }
         }
 
         public float MaxVolume
         {
-            get
-            {
-                return this._dataModel.MaxVolume;
-            }
+            get { return this._dataModel.MaxVolume; }
+            set { this._dataModel.MaxVolume = value; }
+        }
 
-            set
-            {
-                this._dataModel.MaxVolume = value;
-            }
+        public string Name
+        {
+            get { return this._dataModel.Name; }
+            set { this._dataModel.Name = value; }
+        }
+
+        public bool IsValid
+        {
+            get { return this._dataModel.IsValid; }
+            set { this._dataModel.IsValid = value; }
         }
 
         #endregion

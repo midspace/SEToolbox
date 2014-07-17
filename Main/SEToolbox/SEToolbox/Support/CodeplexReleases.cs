@@ -39,9 +39,9 @@
                 .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
                 .OfType<AssemblyFileVersionAttribute>()
                 .FirstOrDefault();
-            var currentVersion = new Version(assemblyVersion.Version);
 
-            string webContent = string.Empty;
+            var currentVersion = assemblyVersion == null ? new Version() : new Version(assemblyVersion.Version);
+            string webContent = null;
             string link = null;
 
             // Create the WebClient with Proxy Credentials.
@@ -59,6 +59,7 @@
                 {
                     // Ignore any errors.
                     // If it cannot connect, then there may be an intermittant connection issue, either with the internet, or codeplex (which has happened before).
+                    return null;
                 }
 
                 if (webContent == null)

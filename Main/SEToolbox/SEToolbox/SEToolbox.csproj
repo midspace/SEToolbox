@@ -233,6 +233,7 @@
     <Compile Include="Services\ListBoxDropBehavior.cs" />
     <Compile Include="Services\ListBoxItemDragBehavior.cs" />
     <Compile Include="Services\MessageListener.cs" />
+    <Compile Include="Services\ObservableViewModelCollection.cs" />
     <Compile Include="Services\OpenFileDialog.cs" />
     <Compile Include="Services\OpenFileDialogViewModel.cs" />
     <Compile Include="Services\SaveFileDialog.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Services\SupplementaryInteraction.cs" />
     <Compile Include="Services\SynchronizeSelectedItems.cs" />
+    <Compile Include="Services\ViewModelCollection.cs" />
     <Compile Include="Services\WeakEventHandler.cs" />
     <Compile Include="Services\WindowWrapper.cs" />
     <Compile Include="Models\ExplorerModel.cs" />
@@ -267,6 +269,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
+    <Compile Include="ViewModels\CubeItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryEditorViewModel.cs" />
     <Compile Include="ViewModels\ResourceReportViewModel.cs" />
     <Compile Include="ViewModels\SelectCubeViewModel.cs" />
@@ -342,6 +345,9 @@
     </Compile>
     <Compile Include="Views\WindowGroupMove.xaml.cs">
       <DependentUpon>WindowGroupMove.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowsImportAsteroidModel.xaml.cs">
+      <DependentUpon>WindowsImportAsteroidModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowSplashScreen.xaml.cs">
       <DependentUpon>WindowSplashScreen.xaml</DependentUpon>
@@ -444,6 +450,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\WindowGroupMove.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WindowsImportAsteroidModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
