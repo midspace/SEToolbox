@@ -375,9 +375,9 @@
 
         public void Load()
         {
-            this.BaseLocalSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves");
-            this.BaseDedicatedServerHostSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineersDedicated"); // Followed by %instancename%\Saves\.
-            this.BaseDedicatedServerServiceSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SpaceEngineersDedicated"); // Followed by %instancename%\Saves\.
+            this.BaseLocalSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves"); // Followed by .\%SteamuserId%\LastLoaded.sbl
+            this.BaseDedicatedServerHostSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineersDedicated"); // Followed by .\Saves\LastLoaded.sbl
+            this.BaseDedicatedServerServiceSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SpaceEngineersDedicated"); // Followed by .\%instancename%\Saves\LastLoaded.sbl
             this.SetActiveStatus();
         }
 

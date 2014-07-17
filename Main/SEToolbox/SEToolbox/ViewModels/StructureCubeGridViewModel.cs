@@ -26,7 +26,9 @@
 
         private readonly IDialogService _dialogService;
         private readonly Func<IColorDialog> _colorDialogFactory;
-        private ObservableCollection<CubeItemModel> _selections;
+        private Lazy<ObservableCollection<CubeItemViewModel>> _cubeList;
+        private ObservableCollection<CubeItemViewModel> _selections;
+        private CubeItemViewModel _selectedCubeItem;
         private string[] _filerView;
 
         #endregion
@@ -36,7 +38,7 @@
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel)
             : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IColorDialog>)
         {
-            this.CubeSelections = new ObservableCollection<CubeItemModel>();
+            this.Selections = new ObservableCollection<CubeItemViewModel>();
         }
 
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel, IDialogService dialogService, Func<IColorDialog> colorDialogFactory)
@@ -48,8 +50,18 @@
             this._dialogService = dialogService;
             this._colorDialogFactory = colorDialogFactory;
 
+            Func<CubeItemModel, CubeItemViewModel> viewModelCreator = model => new CubeItemViewModel(this, model);
+            Func<ObservableCollection<CubeItemViewModel>> collectionCreator =
+                () => new ObservableViewModelCollection<CubeItemViewModel, CubeItemModel>(dataModel.CubeList, viewModelCreator);
+            _cubeList = new Lazy<ObservableCollection<CubeItemViewModel>>(collectionCreator);
+   
             this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
+                if (e.PropertyName == "CubeList")
+                {
+                    collectionCreator.Invoke();
+                    _cubeList = new Lazy<ObservableCollection<CubeItemViewModel>>(collectionCreator);
+                }
                 // Will bubble property change events from the Model to the ViewModel.
                 this.OnPropertyChanged(e.PropertyName);
             };
@@ -327,62 +339,69 @@
 
         #region Properties
 
+        public ObservableCollection<CubeItemViewModel> CubeList
+        {
+            get { return this._cubeList.Value; }
+        }
+
+        public ObservableCollection<CubeItemViewModel> Selections
+        {
+            get { return this._selections; }
+
+            set
+            {
+                if (value != this._selections)
+                {
+                    this._selections = value;
+                    this.RaisePropertyChanged(() => Selections);
+                }
+            }
+        }
+
+        public CubeItemViewModel SelectedCubeItem
+        {
+            get { return this._selectedCubeItem; }
+
+            set
+            {
+                if (value != this._selectedCubeItem)
+                {
+                    this._selectedCubeItem = value;
+                    this.RaisePropertyChanged(() => SelectedCubeItem);
+                }
+            }
+        }
+
         protected new StructureCubeGridModel DataModel
         {
-            get
-            {
-                return base.DataModel as StructureCubeGridModel;
-            }
+            get { return base.DataModel as StructureCubeGridModel; }
         }
 
         public bool IsDamaged
         {
-            get
-            {
-                return this.DataModel.IsDamaged;
-            }
+            get { return this.DataModel.IsDamaged; }
         }
 
         public int DamageCount
         {
-            get
-            {
-                return this.DataModel.DamageCount;
-            }
+            get { return this.DataModel.DamageCount; }
         }
 
         public Sandbox.Common.ObjectBuilders.MyCubeSize GridSize
         {
-            get
-            {
-                return this.DataModel.GridSize;
-            }
-
-            set
-            {
-                this.DataModel.GridSize = value;
-            }
+            get { return this.DataModel.GridSize; }
+            set { this.DataModel.GridSize = value; }
         }
 
         public bool IsStatic
         {
-            get
-            {
-                return this.DataModel.IsStatic;
-            }
-
-            set
-            {
-                this.DataModel.IsStatic = value;
-            }
+            get { return this.DataModel.IsStatic; }
+            set { this.DataModel.IsStatic = value; }
         }
 
         public bool Dampeners
         {
-            get
-            {
-                return this.DataModel.Dampeners;
-            }
+            get { return this.DataModel.Dampeners; }
 
             set
             {
@@ -393,86 +412,46 @@
 
         public Point3D Min
         {
-            get
-            {
-                return this.DataModel.Min;
-            }
-
-            set
-            {
-                this.DataModel.Min = value;
-            }
+            get { return this.DataModel.Min; }
+            set { this.DataModel.Min = value; }
         }
 
         public Point3D Max
         {
-            get
-            {
-                return this.DataModel.Max;
-            }
-
-            set
-            {
-                this.DataModel.Max = value;
-            }
+            get { return this.DataModel.Max; }
+            set { this.DataModel.Max = value; }
         }
 
         public Vector3D Scale
         {
-            get
-            {
-                return this.DataModel.Scale;
-            }
-
-            set
-            {
-                this.DataModel.Scale = value;
-            }
+            get { return this.DataModel.Scale; }
+            set { this.DataModel.Scale = value; }
         }
 
         public BindableSize3DModel Size
         {
-            get
-            {
-                return new BindableSize3DModel(this.DataModel.Size);
-            }
+            get { return new BindableSize3DModel(this.DataModel.Size); }
         }
 
         public bool IsPiloted
         {
-            get
-            {
-                return this.DataModel.IsPiloted;
-            }
+            get { return this.DataModel.IsPiloted; }
         }
 
         public double LinearVelocity
         {
-            get
-            {
-                return this.DataModel.LinearVelocity;
-            }
+            get { return this.DataModel.LinearVelocity; }
         }
 
         public double Mass
         {
-            get
-            {
-                return this.DataModel.Mass;
-            }
+            get { return this.DataModel.Mass; }
         }
 
         public TimeSpan TimeToProduce
         {
-            get
-            {
-                return this.DataModel.TimeToProduce;
-            }
-
-            set
-            {
-                this.DataModel.TimeToProduce = value;
-            }
+            get { return this.DataModel.TimeToProduce; }
+            set { this.DataModel.TimeToProduce = value; }
         }
 
         public int BlockCount
@@ -487,144 +466,50 @@
 
         public List<CubeAssetModel> CubeAssets
         {
-            get
-            {
-                return this.DataModel.CubeAssets;
-            }
-
-            set
-            {
-                this.DataModel.CubeAssets = value;
-            }
+            get { return this.DataModel.CubeAssets; }
+            set { this.DataModel.CubeAssets = value; }
         }
 
         public List<CubeAssetModel> ComponentAssets
         {
-            get
-            {
-                return this.DataModel.ComponentAssets;
-            }
-
-            set
-            {
-                this.DataModel.ComponentAssets = value;
-            }
+            get { return this.DataModel.ComponentAssets; }
+            set { this.DataModel.ComponentAssets = value; }
         }
 
         public List<OreAssetModel> IngotAssets
         {
-            get
-            {
-                return this.DataModel.IngotAssets;
-            }
-
-            set
-            {
-                this.DataModel.IngotAssets = value;
-            }
+            get { return this.DataModel.IngotAssets; }
+            set { this.DataModel.IngotAssets = value; }
         }
 
         public List<OreAssetModel> OreAssets
         {
-            get
-            {
-                return this.DataModel.OreAssets;
-            }
-
-            set
-            {
-                this.DataModel.OreAssets = value;
-            }
+            get { return this.DataModel.OreAssets; }
+            set { this.DataModel.OreAssets = value; }
         }
 
         public string ActiveComponentFilter
         {
-            get
-            {
-                return this.DataModel.ActiveComponentFilter;
-            }
-
-            set
-            {
-                this.DataModel.ActiveComponentFilter = value;
-            }
+            get { return this.DataModel.ActiveComponentFilter; }
+            set { this.DataModel.ActiveComponentFilter = value; }
         }
 
         public string ComponentFilter
         {
-            get
-            {
-                return this.DataModel.ComponentFilter;
-            }
-
-            set
-            {
-                this.DataModel.ComponentFilter = value;
-            }
-        }
-
-        public ObservableCollection<CubeItemModel> CubeList
-        {
-            get
-            {
-                return this.DataModel.CubeList;
-            }
-        }
-
-        public ObservableCollection<CubeItemModel> CubeSelections
-        {
-            get
-            {
-                return this._selections;
-            }
-
-            set
-            {
-                if (value != this._selections)
-                {
-                    this._selections = value;
-                    this.RaisePropertyChanged(() => CubeSelections);
-                }
-            }
-        }
-
-        public CubeItemModel SelectedCubeItem
-        {
-            get
-            {
-                return this.DataModel.SelectedCubeItem;
-            }
-
-            set
-            {
-                this.DataModel.SelectedCubeItem = value;
-            }
+            get { return this.DataModel.ComponentFilter; }
+            set { this.DataModel.ComponentFilter = value; }
         }
 
         public bool IsConstructionNotReady
         {
-            get
-            {
-                return this.DataModel.IsConstructionNotReady;
-            }
-
-            set
-            {
-                this.DataModel.IsConstructionNotReady = value;
-            }
+            get { return this.DataModel.IsConstructionNotReady; }
+            set { this.DataModel.IsConstructionNotReady = value; }
         }
 
         public bool IsSubsSystemNotReady
         {
-            get
-            {
-                return this.DataModel.IsSubsSystemNotReady;
-            }
-
-            set
-            {
-                this.DataModel.IsSubsSystemNotReady = value;
-            }
+            get { return this.DataModel.IsSubsSystemNotReady; }
+            set { this.DataModel.IsSubsSystemNotReady = value; }
         }
 
         #endregion
@@ -1069,14 +954,14 @@
         {
             this.IsBusy = true;
 
-            this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
+            this.MainViewModel.ResetProgress(0, this.Selections.Count);
 
-            while (this.CubeSelections.Count > 0)
+            while (this.Selections.Count > 0)
             {
                 this.MainViewModel.Progress++;
-                var cube = this.CubeSelections[0];
+                var cube = this.Selections[0];
                 if (this.DataModel.CubeGrid.CubeBlocks.Remove(cube.Cube))
-                    this.DataModel.CubeList.Remove(cube);
+                    this.DataModel.CubeList.Remove(cube.DataModel);
             }
 
             this.MainViewModel.ClearProgress();
@@ -1099,9 +984,9 @@
                 this.MainViewModel.IsBusy = true;
                 var contentPath = ToolboxUpdater.GetApplicationContentPath();
                 var change = false;
-                this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
+                this.MainViewModel.ResetProgress(0, this.Selections.Count);
 
-                foreach (var cube in this.CubeSelections)
+                foreach (var cube in this.Selections)
                 {
                     this.MainViewModel.Progress++;
                     if (cube.TypeId != model.CubeItem.TypeId || cube.SubtypeId != model.CubeItem.SubtypeId)
@@ -1145,12 +1030,13 @@
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 this.MainViewModel.IsBusy = true;
-                this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
+                this.MainViewModel.ResetProgress(0, this.Selections.Count);
 
-                foreach (var cube in this.CubeSelections)
+                foreach (var cube in this.Selections)
                 {
                     this.MainViewModel.Progress++;
-                    cube.UpdateColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
+                    if (colorDialog.DrawingColor.HasValue)
+                        cube.UpdateColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
                 }
 
                 this.MainViewModel.ClearProgress();
@@ -1174,9 +1060,9 @@
             if (result == true)
             {
                 this.MainViewModel.IsBusy = true;
-                this.MainViewModel.ResetProgress(0, this.CubeSelections.Count);
+                this.MainViewModel.ResetProgress(0, this.Selections.Count);
 
-                foreach (var cube in this.CubeSelections)
+                foreach (var cube in this.Selections)
                 {
                     this.MainViewModel.Progress++;
                     cube.UpdateBuildPercent(model.BuildPercent.Value / 100);
@@ -1209,7 +1095,7 @@
             if (_filerView.Length == 0)
                 return true;
 
-            var cube = (CubeItemModel)item;
+            var cube = (CubeItemViewModel)item;
             return _filerView.All(s => cube.FriendlyName.ToLowerInvariant().Contains(s) || cube.ColorText.ToLowerInvariant().Contains(s));
         }
 

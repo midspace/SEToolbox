@@ -373,7 +373,7 @@
                                 </ListView.InputBindings>
                                 <i:Interaction.Behaviors>
                                     <!-- This custom behavior that synchronizes the selected items with the view models collection -->
-                                    <commands:SynchronizeSelectedItems Selections="{Binding CubeSelections}"/>
+                                    <commands:SynchronizeSelectedItems Selections="{Binding Selections}"/>
                                 </i:Interaction.Behaviors>
                             </controls:SortableListView>
                             <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4" />
@@ -384,12 +384,12 @@
                                 <TabItem Header="Controls">
                                     <!-- TODO: Property Editor? -->
                                 </TabItem>
-                                <!--<TabItem Header="{Binding Path=SelectedCubeItem.Inventory[0].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[0].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[0]}" />
                                 </TabItem>
                                 <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[1].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[1].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[1]}" />
-                                </TabItem>-->
+                                </TabItem>
                             </TabControl>
                             <StackPanel Grid.Row="2">
                                 <TextBlock Text="Preview" FontSize="20" Foreground="#80808080" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,-20,0" IsHitTestVisible="False">

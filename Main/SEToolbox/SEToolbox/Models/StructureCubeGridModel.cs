@@ -69,9 +69,6 @@
         private ObservableCollection<CubeItemModel> _cubeList;
 
         [NonSerialized]
-        private CubeItemModel _selectedCubeItem;
-
-        [NonSerialized]
         private static readonly object Locker = new object();
 
         [NonSerialized]
@@ -468,23 +465,6 @@
                 {
                     this._cubeList = value;
                     this.RaisePropertyChanged(() => CubeList);
-                }
-            }
-        }
-
-        public CubeItemModel SelectedCubeItem
-        {
-            get
-            {
-                return this._selectedCubeItem;
-            }
-
-            set
-            {
-                if (value != this._selectedCubeItem)
-                {
-                    this._selectedCubeItem = value;
-                    this.RaisePropertyChanged(() => SelectedCubeItem);
                 }
             }
         }

@@ -12,6 +12,8 @@
 		// rather than relying upon hardcoded 'strings' which required maintenance.
 		// When checking content read from 'world' saves however, we will have to rely upon the game data.
 
+        LargeBlockBatteryBlock,
+        SmallBlockBatteryBlock,
         LargeBlockArmorBlock,
         LargeBlockArmorBlockRed,
         LargeBlockArmorBlockYellow,
@@ -151,7 +153,6 @@
         SmallBlockBeacon,
         LargeBlockFrontLight,
         SmallLight,
-        PassengerSeatLarge,
         LargeWindowSquare,
         LargeWindowEdge,
         LargeStairs,
@@ -174,6 +175,7 @@
         LargeBlockCockpitSeat,
         SmallBlockCockpit,
         CockpitOpen,
+        PassengerSeatLarge,
         PassengerSeatSmall,
         SmallBlockLandingGear,
         SmallBlockFrontLight,
@@ -198,7 +200,12 @@
         LargeBlockSmallGenerator,
         LargeBlockLargeGenerator,
         LargeStator,
-        LargeWheel,
+        Suspension3x3,
+        Suspension5x5,
+        Suspension1x1,
+        SmallSuspension3x3,
+        SmallSuspension5x5,
+        SmallSuspension1x1,
         LargeRotor,
         SmallStator,
         SmallRotor,
@@ -239,7 +246,12 @@
         SmallShipConveyorHub,
         VirtualMassLarge,
         VirtualMassSmall,
+        SmallRealWheel1x1,
+        SmallRealWheel,
+        SmallRealWheel5x5,
+        RealWheel1x1,
         RealWheel,
+        RealWheel5x5,
         Wheel1x1,
         SmallWheel1x1,
         Wheel3x3,
@@ -252,5 +264,6 @@
         SmallShipWelder,
         LargeShipMergeBlock,
         SmallShipMergeBlock,
+        LargeWindowCen,
     };
 }

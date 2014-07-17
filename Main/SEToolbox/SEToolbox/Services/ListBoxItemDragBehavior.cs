@@ -92,6 +92,7 @@
                     var parent = ItemsControl.ItemsControlFromItemContainer(this.AssociatedObject) as ListBox;
                     parent.SelectedItems.Clear();
                     item.IsSelected = true;
+                    item.Focus();
                 }
             }
             this._isMouseClicked = false;
