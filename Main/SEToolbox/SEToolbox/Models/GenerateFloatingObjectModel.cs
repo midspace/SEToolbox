@@ -287,7 +287,7 @@
 
             foreach (var componentDefinition in SpaceEngineersAPI.Definitions.Components)
             {
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.TypeId == componentDefinition.Id.TypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.Id.TypeId == componentDefinition.Id.TypeId);
                 list.Add(new ComponentItemModel()
                 {
                     Name = componentDefinition.DisplayName,
@@ -306,7 +306,7 @@
                 if (physicalItemDefinition.Id.SubtypeId == "CubePlacerItem")
                     continue;
 
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
                 list.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
@@ -322,7 +322,7 @@
 
             foreach (var physicalItemDefinition in SpaceEngineersAPI.Definitions.AmmoMagazines)
             {
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
                 list.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
@@ -371,8 +371,8 @@
             }
             else
             {
-                if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.Ore ||
-                    this.StockItem.TypeId == MyObjectBuilderTypeEnum.Ingot)
+                if (this.StockItem.TypeId == SpaceEngineersConsts.Ore ||
+                    this.StockItem.TypeId == SpaceEngineersConsts.Ingot)
                 {
                     this.IsDecimal = true;
                     this.IsUnique = this.IsInt = false;
@@ -387,8 +387,8 @@
                         this.Volume = null;
                     }
                 }
-                else if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.Component ||
-                    this.StockItem.TypeId == MyObjectBuilderTypeEnum.AmmoMagazine)
+                else if (this.StockItem.TypeId == SpaceEngineersConsts.Component ||
+                    this.StockItem.TypeId == SpaceEngineersConsts.AmmoMagazine)
                 {
                     this.IsInt = true;
                     this.IsUnique = this.IsDecimal = false;
@@ -403,7 +403,7 @@
                         this.Volume = null;
                     }
                 }
-                else if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
+                else if (this.StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
                 {
                     this.IsUnique = true;
                     this.IsInt = this.IsDecimal = false;

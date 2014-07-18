@@ -722,8 +722,8 @@
                         foreach (var kvp in ingotRequirements)
                         {
                             TimeSpan ingotTime;
-                            SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
-                            var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
+                            SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.Id.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
+                            var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
                             var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
                             var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture };
                             ingotAssets.Add(ingotAsset);
@@ -732,7 +732,7 @@
 
                         foreach (var kvp in oreRequirements)
                         {
-                            var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
+                            var cd = SpaceEngineersAPI.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
                             var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
                             var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, TextureFile = componentTexture };
                             oreAssets.Add(oreAsset);

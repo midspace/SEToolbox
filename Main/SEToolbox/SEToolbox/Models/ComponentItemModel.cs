@@ -31,7 +31,7 @@
             }
         }
 
-        public MyObjectBuilderTypeEnum TypeId { get; set; }
+        public MyObjectBuilderType TypeId { get; set; }
 
         public string SubtypeId { get; set; }
 

@@ -199,6 +199,8 @@
         SmallBlockLargeGenerator,
         LargeBlockSmallGenerator,
         LargeBlockLargeGenerator,
+        LargePistonBase,
+        LargePistonTop,
         LargeStator,
         Suspension3x3,
         Suspension5x5,
@@ -264,6 +266,6 @@
         SmallShipWelder,
         LargeShipMergeBlock,
         SmallShipMergeBlock,
-        LargeWindowCen,
+        ArmorAlpha,
     };
 }

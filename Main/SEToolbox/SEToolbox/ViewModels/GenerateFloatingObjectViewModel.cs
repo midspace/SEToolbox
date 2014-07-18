@@ -302,36 +302,37 @@
             this.IsValidItemToImport = true;
             entity.Item.PhysicalContent = (MyObjectBuilder_PhysicalObject)MyObjectBuilder_Base.CreateNewObject(this.StockItem.TypeId, this.StockItem.SubtypeId);
 
-            switch (this.StockItem.TypeId)
-            {
-                case MyObjectBuilderTypeEnum.Component:
-                case MyObjectBuilderTypeEnum.Ingot:
-                case MyObjectBuilderTypeEnum.Ore:
-                case MyObjectBuilderTypeEnum.AmmoMagazine:
-                    break;
+            //switch (this.StockItem.TypeId)
+            //{
+            //    case MyObjectBuilderTypeEnum.Component:
+            //    case MyObjectBuilderTypeEnum.Ingot:
+            //    case MyObjectBuilderTypeEnum.Ore:
+            //    case MyObjectBuilderTypeEnum.AmmoMagazine:
+            //        break;
 
-                case MyObjectBuilderTypeEnum.PhysicalGunObject:
-                    // The GunEntity appears to make each 'GunObject' unique through the definition of an EntityId.
-                    // This means, you can't stack them.
-                    // Ownership does not appear to be required at this stage.
+            //    case MyObjectBuilderTypeEnum.PhysicalGunObject:
+            //        // The GunEntity appears to make each 'GunObject' unique through the definition of an EntityId.
+            //        // This means, you can't stack them.
+            //        // Ownership does not appear to be required at this stage.
 
-                    // This is a hack approach, to find the Enum from a SubtypeName like "AngleGrinderItem".
-                    var enumName = this.StockItem.SubtypeId.Substring(0, this.StockItem.SubtypeId.Length - 4);
-                    MyObjectBuilderTypeEnum itemEnum;
-                    if (Enum.TryParse<MyObjectBuilderTypeEnum>(enumName, out itemEnum))
-                    {
-                        var gunEntity = MyObjectBuilder_Base.CreateNewObject(itemEnum) as MyObjectBuilder_EntityBase;
-                        gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
-                        gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
-                        ((MyObjectBuilder_PhysicalGunObject)entity.Item.PhysicalContent).GunEntity = gunEntity;
-                    }
-                    break;
+            //  ###  Only required for pre-generating the Entity id for a gun that has been handled.  ####
+            //        // This is a hack approach, to find the Enum from a SubtypeName like "AngleGrinderItem".
+            //        var enumName = this.StockItem.SubtypeId.Substring(0, this.StockItem.SubtypeId.Length - 4);
+            //        MyObjectBuilderTypeEnum itemEnum;
+            //        if (Enum.TryParse<MyObjectBuilderTypeEnum>(enumName, out itemEnum))
+            //        {
+            //            var gunEntity = MyObjectBuilder_Base.CreateNewObject(itemEnum) as MyObjectBuilder_EntityBase;
+            //            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+            //            gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
+            //            ((MyObjectBuilder_PhysicalGunObject)entity.Item.PhysicalContent).GunEntity = gunEntity;
+            //        }
+            //        break;
 
-                default:
-                    // As yet uncatered for items which may be new.
-                    this.IsValidItemToImport = false;
-                    break;
-            }
+            //    default:
+            //        // As yet uncatered for items which may be new.
+            //        this.IsValidItemToImport = false;
+            //        break;
+            //}
 
             // Figure out where the Character is facing, and plant the new construct 1m out in front, and 1m up from the feet, facing the Character.
             var vectorFwd = this._dataModel.CharacterPosition.Forward.ToVector3D();
@@ -353,10 +354,11 @@
             {
                 var newEntity = (MyObjectBuilder_FloatingObject)entity.Clone();
                 newEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
-                if (this.StockItem.TypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
-                {
-                    ((MyObjectBuilder_PhysicalGunObject)entity.Item.PhysicalContent).GunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
-                }
+                //if (this.StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
+                //{
+                //    Only required for pre-generating the Entity id for a gun that has been handled.
+                //    ((MyObjectBuilder_PhysicalGunObject)entity.Item.PhysicalContent).GunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                //}
                 entities.Add(newEntity);
             }
 

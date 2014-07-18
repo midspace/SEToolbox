@@ -98,7 +98,7 @@
             set { this._dataModel.Cube = value; }
         }
 
-        public MyObjectBuilderTypeEnum TypeId
+        public MyObjectBuilderType TypeId
         {
             get { return this._dataModel.TypeId; }
             set { this._dataModel.TypeId = value; }
@@ -200,7 +200,7 @@
             this._dataModel.UpdateBuildPercent(buildPercent);
         }
 
-        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderTypeEnum typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
+        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
             return this._dataModel.CreateCube(typeId, subTypeId, definition, settings);
         }

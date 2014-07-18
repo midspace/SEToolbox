@@ -1,5 +1,7 @@
 ﻿namespace SEToolbox.Interop
 {
+    using Sandbox.Common.ObjectBuilders;
+
     public class SpaceEngineersConsts
     {
         /// <summary>
@@ -30,5 +32,26 @@
 
         // Estimated max speed m/s for Meteors - as of update 01.024.
         public const float MaxMeteorVelocity = 202.812f;
+
+        public static readonly MyObjectBuilderType AmmoMagazine;
+        public static readonly MyObjectBuilderType PhysicalGunObject;
+        public static readonly MyObjectBuilderType Ore;
+        public static readonly MyObjectBuilderType Ingot;
+        public static readonly MyObjectBuilderType Component;
+        public static readonly MyObjectBuilderType MedicalRoom;
+        public static readonly MyObjectBuilderType Cockpit;
+
+        static SpaceEngineersConsts()
+        {
+            // Some hopefully generic items.
+            AmmoMagazine = new MyObjectBuilderType(typeof(MyObjectBuilder_AmmoMagazine));
+            PhysicalGunObject = new MyObjectBuilderType(typeof(MyObjectBuilder_PhysicalGunObject));
+            Ore = new MyObjectBuilderType(typeof(MyObjectBuilder_Ore));
+            Ingot = new MyObjectBuilderType(typeof(MyObjectBuilder_Ingot));
+            Component = new MyObjectBuilderType(typeof(MyObjectBuilder_Component));
+            MedicalRoom = new MyObjectBuilderType(typeof(MyObjectBuilder_MedicalRoom));
+            Cockpit = new MyObjectBuilderType(typeof(MyObjectBuilder_Cockpit));
+        }
+
     }
 }
