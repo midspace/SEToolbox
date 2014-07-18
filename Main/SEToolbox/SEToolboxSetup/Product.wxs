@@ -81,6 +81,9 @@
       <Component Id="comp2EA1FC447B50410DA2CE55F182C0E00C">
         <File Id="file184705D6F44643D48E157FDD3FBF37D7" Source="$(var.SEToolbox.TargetDir)SEToolbox.exe" Checksum="yes"/>
       </Component>
+      <Component Id="comp774C385B4B294223BF9B6E616D46D59B">
+        <File Id="file9DBBFEB0CF9A43829CE656E02509FEA6" Source="$(var.SEToolbox.TargetDir)SEToolbox.pdb"/>
+      </Component>
       <Component Id="comp6BB6C5C0D9A0473D8FDD4DBE5744C093">
         <File Id="file1B0A6AE8617640669E830BEF810A5047" Source="$(var.SEToolbox.TargetDir)SEToolbox.exe.config" Checksum="yes"/>
       </Component>
