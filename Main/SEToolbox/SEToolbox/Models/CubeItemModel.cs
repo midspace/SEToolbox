@@ -16,7 +16,7 @@
 
         private MyObjectBuilder_CubeBlock _cube;
 
-        private MyObjectBuilderTypeEnum _typeId;
+        private MyObjectBuilderType _typeId;
 
         private string _subtypeId;
 
@@ -76,7 +76,7 @@
             }
         }
 
-        public MyObjectBuilderTypeEnum TypeId
+        public MyObjectBuilderType TypeId
         {
             get
             {
@@ -347,7 +347,7 @@
             this.BuildPercent = this.Cube.BuildPercent;
         }
 
-        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderTypeEnum typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
+        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
             var newCube = (MyObjectBuilder_CubeBlock)MyObjectBuilder_Base.CreateNewObject(typeId, subTypeId);
             newCube.BlockOrientation = this.Cube.BlockOrientation;

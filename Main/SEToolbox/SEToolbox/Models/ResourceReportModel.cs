@@ -330,7 +330,7 @@
                 {
                     var floating = entity as StructureFloatingObjectModel;
 
-                    if (floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.Ore || floating.FloatingObject.Item.Content.TypeId == MyObjectBuilderTypeEnum.Ingot)
+                    if (floating.FloatingObject.Item.Content.TypeId == SpaceEngineersConsts.Ore || floating.FloatingObject.Item.Content.TypeId == SpaceEngineersConsts.Ingot)
                     {
                         TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, floating.FloatingObject.Item.AmountDecimal, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                     }
@@ -473,7 +473,7 @@
                                         }
                                         else
                                         {
-                                            if (item.Content.TypeId == MyObjectBuilderTypeEnum.Ore || item.Content.TypeId == MyObjectBuilderTypeEnum.Ingot)
+                                            if (item.Content.TypeId == SpaceEngineersConsts.Ore || item.Content.TypeId == SpaceEngineersConsts.Ingot)
                                             {
                                                 TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                                             }
@@ -556,7 +556,7 @@
 
         #region TallyItems
 
-        private void TallyItems(MyObjectBuilderTypeEnum tallyTypeId, string tallySubTypeId, Decimal amountDecimal, string contentPath, SortedDictionary<string, OreAssetModel> accumulateOres, SortedDictionary<string, ComponentItemModel> accumulateItems, SortedDictionary<string, ComponentItemModel> accumulateComponents)
+        private void TallyItems(MyObjectBuilderType tallyTypeId, string tallySubTypeId, Decimal amountDecimal, string contentPath, SortedDictionary<string, OreAssetModel> accumulateOres, SortedDictionary<string, ComponentItemModel> accumulateItems, SortedDictionary<string, ComponentItemModel> accumulateComponents)
         {
             var cd = SpaceEngineersAPI.GetDefinition(tallyTypeId, tallySubTypeId) as MyObjectBuilder_PhysicalItemDefinition;
 
@@ -568,7 +568,7 @@
 
             var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
 
-            if (tallyTypeId == MyObjectBuilderTypeEnum.Ore)
+            if (tallyTypeId == SpaceEngineersConsts.Ore)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
@@ -608,11 +608,11 @@
 
                 #endregion
             }
-            else if (tallyTypeId == MyObjectBuilderTypeEnum.Ingot)
+            else if (tallyTypeId == SpaceEngineersConsts.Ingot)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
@@ -623,7 +623,7 @@
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
                 }
 
                 #endregion
@@ -648,12 +648,12 @@
 
                 #endregion
             }
-            else if (tallyTypeId == MyObjectBuilderTypeEnum.AmmoMagazine ||
-                tallyTypeId == MyObjectBuilderTypeEnum.PhysicalGunObject)
+            else if (tallyTypeId == SpaceEngineersConsts.AmmoMagazine ||
+                tallyTypeId == SpaceEngineersConsts.PhysicalGunObject)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
@@ -664,7 +664,7 @@
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, accumulateComponents);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, accumulateComponents);
                 }
 
                 #endregion
@@ -689,11 +689,11 @@
 
                 #endregion
             }
-            else if (tallyTypeId == MyObjectBuilderTypeEnum.Component)
+            else if (tallyTypeId == SpaceEngineersConsts.Component)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.TypeId == tallyTypeId);
+                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
@@ -704,7 +704,7 @@
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
                 }
 
                 #endregion
@@ -729,7 +729,7 @@
 
                 #endregion
             }
-            //else if (typeId == MyObjectBuilderTypeEnum.CubeBlock)
+            //else if (typeId == SpaceEngineersConsts.CubeBlock)
             else // if (tallyItem is MyObjectBuilder_EntityBase)
             {
                 // TODO: missed a new object type?

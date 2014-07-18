@@ -67,7 +67,7 @@
 
         #region methods
 
-        public void Load(MyCubeSize cubeSize, MyObjectBuilderTypeEnum typeId, string subTypeId)
+        public void Load(MyCubeSize cubeSize, MyObjectBuilderType typeId, string subTypeId)
         {
             this.CubeList.Clear();
             var list = new SortedList<string, ComponentItemModel>();

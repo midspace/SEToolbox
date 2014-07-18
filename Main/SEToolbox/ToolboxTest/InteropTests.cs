@@ -12,25 +12,25 @@
         [TestMethod]
         public void ApiInterop()
         {
-            var d1 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.GravityGenerator, MyCubeSize.Large, "");
+            var d1 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Large, "");
             Assert.AreEqual("DisplayName_Block_GravityGenerator", d1.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
-            var d2 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.GravityGenerator, MyCubeSize.Small, "");
+            var d2 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Small, "");
             Assert.IsNull(d2, "Must be null");
 
-            var d3 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.Gyro, MyCubeSize.Small, "SmallBlockGyro");
+            var d3 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "SmallBlockGyro");
             Assert.AreEqual("DisplayName_Block_Gyroscope", d3.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Small, d3.CubeSize, "Must match");
 
-            var d4 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.Gyro, MyCubeSize.Small, "Fake");
+            var d4 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "Fake");
             Assert.IsNull(d4, "Must be null");
         }
 
         [TestMethod]
         public void RotateComponent()
         {
-            var d1 = SpaceEngineersAPI.GetCubeDefinition(MyObjectBuilderTypeEnum.Thrust, MyCubeSize.Large, "LargeBlockLargeThrust");
+            var d1 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust)), MyCubeSize.Large, "LargeBlockLargeThrust");
             Assert.AreEqual("DisplayName_Block_LargeThrust", d1.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
