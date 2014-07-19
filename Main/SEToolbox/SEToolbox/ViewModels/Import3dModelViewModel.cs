@@ -576,7 +576,7 @@
         {
             var entity = new MyObjectBuilder_CubeGrid
             {
-                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                 Skeleton = new System.Collections.Generic.List<BoneInfo>(),
                 LinearVelocity = new VRageMath.Vector3(0, 0, 0),
@@ -680,7 +680,7 @@
 
             var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3(), filename)
             {
-                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
             };
 
@@ -697,9 +697,9 @@
             var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
             this.SourceFile = TempfileUtil.NewFilename();
 
-            var baseMaterial = SpaceEngineersAPI.GetMaterialList().FirstOrDefault(m => m.IsRare == false);
+            var baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false);
             if (baseMaterial == null)
-                baseMaterial = SpaceEngineersAPI.GetMaterialList().FirstOrDefault();
+                baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault();
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, this.Filename, this.SourceFile, this.OutsideStockMaterial.Value, baseMaterial.Name, this.InsideStockMaterial.Value != null, this.InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
 
@@ -721,7 +721,7 @@
         {
             var entity = new MyObjectBuilder_CubeGrid
             {
-                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                 Skeleton = new System.Collections.Generic.List<BoneInfo>(),
                 LinearVelocity = new VRageMath.Vector3(0, 0, 0),

@@ -1,9 +1,12 @@
 ﻿namespace ToolboxTest
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
+    using SEToolbox.Support;
+    using System.IO;
     using VRageMath;
 
     [TestClass]
@@ -12,25 +15,79 @@
         [TestMethod]
         public void ApiInterop()
         {
-            var d1 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Large, "");
+            SpaceEngineersCore.LoadStockDefinitions();
+
+            var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Large, "");
             Assert.AreEqual("DisplayName_Block_GravityGenerator", d1.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
-            var d2 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Small, "");
+            var d2 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Small, "");
             Assert.IsNull(d2, "Must be null");
 
-            var d3 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "SmallBlockGyro");
+            var d3 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "SmallBlockGyro");
             Assert.AreEqual("DisplayName_Block_Gyroscope", d3.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Small, d3.CubeSize, "Must match");
 
-            var d4 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "Fake");
+            var d4 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "Fake");
             Assert.IsNull(d4, "Must be null");
+        }
+
+        [TestMethod]
+        public void LoadSandbox_Oldmethod_Fighter()
+        {
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+
+            var fighterPath = Path.Combine(contentPath, @"Data\Prefabs\Fighter.sbc");
+            Assert.IsTrue(File.Exists(fighterPath), "Sandbox content file should exist");
+
+            MyObjectBuilder_CubeGrid cubeEntity = null;
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>(fighterPath, out cubeEntity);
+
+            Assert.IsNotNull(cubeEntity, "Sandbox content should not be null");
+            Assert.IsTrue(ret, "Sandbox content should have been detected");
+            Assert.IsTrue(cubeEntity.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+        }
+
+        [TestMethod]
+        public void LoadSandbox_Fighter()
+        {
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+
+            var fighterPath = Path.Combine(contentPath, @"Data\Prefabs\Fighter.sbc");
+            Assert.IsTrue(File.Exists(fighterPath), "Sandbox content file should exist");
+
+            MyObjectBuilder_CubeGrid cubeEntity = null;
+            bool isCompressed;
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid>(fighterPath, out cubeEntity, out isCompressed);
+
+            Assert.IsNotNull(cubeEntity, "Sandbox content should not be null");
+            Assert.IsTrue(ret, "Sandbox content should have been detected");
+            Assert.IsFalse(isCompressed, "Sandbox content should not be compressed");
+            Assert.IsTrue(cubeEntity.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+        }
+
+        [TestMethod]
+        public void LoadSandbox_Compressed_BaseEasyStart()
+        {
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+
+            var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\BaseEasyStart1.sbc");
+            Assert.IsTrue(File.Exists(baseEasyStart1Path), "Sandbox content file should exist");
+
+            MyObjectBuilder_CubeGrid cubeEntity = null;
+            bool isCompressed;
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid>(baseEasyStart1Path, out cubeEntity, out isCompressed);
+
+            Assert.IsNotNull(cubeEntity, "Sandbox content should not be null");
+            Assert.IsTrue(ret, "Sandbox content should have been detected");
+            Assert.IsTrue(isCompressed, "Sandbox content should be compressed");
+            Assert.IsTrue(cubeEntity.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
         [TestMethod]
         public void RotateComponent()
         {
-            var d1 = SpaceEngineersAPI.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust)), MyCubeSize.Large, "LargeBlockLargeThrust");
+            var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust)), MyCubeSize.Large, "LargeBlockLargeThrust");
             Assert.AreEqual("DisplayName_Block_LargeThrust", d1.DisplayName, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 

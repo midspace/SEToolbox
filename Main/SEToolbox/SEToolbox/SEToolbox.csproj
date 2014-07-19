@@ -144,9 +144,12 @@
     <Compile Include="Interop\Asteroids\MyVoxelMap.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelMaterialCell.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelRayTracer.cs" />
-    <Compile Include="Interop\InteropHelper.cs" />
+    <Compile Include="Interop\ContentDataPath.cs" />
+    <Compile Include="Interop\SpaceEngineersExtensions.cs" />
     <Compile Include="Interop\Native.cs" />
-    <Compile Include="Interop\SpaceEngineersAPI.cs" />
+    <Compile Include="Interop\SpaceEngineersApi.cs" />
+    <Compile Include="Interop\SpaceEngineersCore.cs" />
+    <Compile Include="Interop\UserDataPath.cs" />
     <Compile Include="Models\BindableVector3DModel.cs" />
     <Compile Include="Models\BindablePoint3DModel.cs" />
     <Compile Include="Models\BindableSize3DModel.cs" />
@@ -704,6 +707,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\first_aid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\components.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

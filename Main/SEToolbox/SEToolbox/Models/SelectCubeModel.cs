@@ -72,7 +72,7 @@
             this.CubeList.Clear();
             var list = new SortedList<string, ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            var cubeDefinitions = SpaceEngineersAPI.Definitions.CubeBlocks.Where(c => c.CubeSize == cubeSize);
+            var cubeDefinitions = SpaceEngineersCore.Definitions.CubeBlocks.Where(c => c.CubeSize == cubeSize);
 
             foreach (var cubeDefinition in cubeDefinitions)
             {
@@ -84,7 +84,7 @@
                     TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds"),
                     Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
                     Accessible = cubeDefinition.Public,
-                    Mass = SpaceEngineersAPI.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeId),
+                    Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeId),
                     CubeSize = cubeDefinition.CubeSize,
                     Size = new BindableSize3DIModel(cubeDefinition.Size),
                 };

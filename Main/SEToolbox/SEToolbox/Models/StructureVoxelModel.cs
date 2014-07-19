@@ -204,13 +204,13 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_VoxelMap>(this.VoxelMap);
+            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_VoxelMap>(this.VoxelMap);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_VoxelMap>(this.SerializedEntity);
+            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_VoxelMap>(this.SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()

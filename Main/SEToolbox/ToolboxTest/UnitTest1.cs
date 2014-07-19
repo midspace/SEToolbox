@@ -89,7 +89,7 @@
             MyObjectBuilder_Checkpoint checkpoint;
             using (var stream = ZipTools.ReadFile(filename, null, SpaceEngineersConsts.SandBoxCheckpointFilename))
             {
-                checkpoint = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(stream);
+                checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(stream);
             }
 
             Assert.AreEqual("Quad Scissor Doors", checkpoint.SessionName, "Checkpoint SessionName must match!");

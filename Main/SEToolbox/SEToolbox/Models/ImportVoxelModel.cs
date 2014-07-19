@@ -37,7 +37,7 @@
                 new MaterialSelectionModel() {Value = null, DisplayName = "No change"}
             };
 
-            foreach (var material in SpaceEngineersAPI.GetMaterialList())
+            foreach (var material in SpaceEngineersApi.GetMaterialList())
             {
                 _materialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
             }

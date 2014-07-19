@@ -179,7 +179,7 @@
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            foreach (var cubeDefinition in SpaceEngineersAPI.Definitions.CubeBlocks)
+            foreach (var cubeDefinition in SpaceEngineersCore.Definitions.CubeBlocks)
             {
                 var props = new Dictionary<string, string>();
                 var fields = cubeDefinition.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
@@ -194,19 +194,19 @@
                     Name = cubeDefinition.DisplayName,
                     TypeId = cubeDefinition.Id.TypeId,
                     SubtypeId = cubeDefinition.Id.SubtypeId,
-                    TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds"),
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon + ".dds")),
                     Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
                     Accessible = cubeDefinition.Public,
-                    Mass = SpaceEngineersAPI.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeId),
+                    Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeId),
                     CubeSize = cubeDefinition.CubeSize,
                     Size = new BindableSize3DIModel(cubeDefinition.Size),
                     CustomProperties = props,
                 });
             }
 
-            foreach (var componentDefinition in SpaceEngineersAPI.Definitions.Components)
+            foreach (var componentDefinition in SpaceEngineersCore.Definitions.Components)
             {
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.Id.TypeId == componentDefinition.Id.TypeId);
+                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.Id.TypeId == componentDefinition.Id.TypeId);
 
                 this.ComponentAssets.Add(new ComponentItemModel()
                 {
@@ -214,16 +214,16 @@
                     TypeId = componentDefinition.Id.TypeId,
                     SubtypeId = componentDefinition.Id.SubtypeId,
                     Mass = componentDefinition.Mass,
-                    TextureFile = componentDefinition.Icon == null ? null : Path.Combine(contentPath, componentDefinition.Icon + ".dds"),
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icon, Path.Combine(contentPath, componentDefinition.Icon + ".dds")),
                     Volume = componentDefinition.Volume.HasValue ? componentDefinition.Volume.Value : 0f,
                     Accessible = componentDefinition.Public,
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersAPI.Definitions.PhysicalItems)
+            foreach (var physicalItemDefinition in SpaceEngineersCore.Definitions.PhysicalItems)
             {
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
                 this.ItemAssets.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
@@ -231,15 +231,15 @@
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
-                    TextureFile = physicalItemDefinition.Icon == null ? null : Path.Combine(contentPath, physicalItemDefinition.Icon + ".dds"),
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icon, Path.Combine(contentPath, physicalItemDefinition.Icon + ".dds")),
                     Accessible = physicalItemDefinition.Public,
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersAPI.Definitions.AmmoMagazines)
+            foreach (var physicalItemDefinition in SpaceEngineersCore.Definitions.AmmoMagazines)
             {
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
                 this.ItemAssets.Add(new ComponentItemModel()
                 {
                     Name = physicalItemDefinition.DisplayName,
@@ -247,13 +247,13 @@
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
-                    TextureFile = physicalItemDefinition.Icon == null ? null : Path.Combine(contentPath, physicalItemDefinition.Icon + ".dds"),
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icon, Path.Combine(contentPath, physicalItemDefinition.Icon + ".dds")),
                     Accessible = !string.IsNullOrEmpty(physicalItemDefinition.Model),
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
                 });
             }
 
-            foreach (var voxelMaterialDefinition in SpaceEngineersAPI.Definitions.VoxelMaterials)
+            foreach (var voxelMaterialDefinition in SpaceEngineersCore.Definitions.VoxelMaterials)
             {
                 this.MaterialAssets.Add(new ComponentItemModel()
                 {
@@ -301,7 +301,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (asset.TextureFile != null)
+                    if (asset.TextureFile != null && File.Exists(asset.TextureFile))
                     {
                         writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
@@ -340,7 +340,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (asset.TextureFile != null)
+                    if (asset.TextureFile != null && File.Exists(asset.TextureFile))
                     {
                         writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
@@ -379,7 +379,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (asset.TextureFile != null)
+                    if (asset.TextureFile != null && File.Exists(asset.TextureFile))
                     {
                         writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
@@ -418,7 +418,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (asset.TextureFile != null)
+                    if (asset.TextureFile != null && File.Exists(asset.TextureFile))
                     {
                         writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");

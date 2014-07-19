@@ -36,7 +36,8 @@
         [TestMethod]
         public void VoxelMaterials()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
 
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
         }
@@ -44,7 +45,8 @@
         [TestMethod]
         public void VoxelLoadSave()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
@@ -65,7 +67,8 @@
         [TestMethod]
         public void VoxelDetails()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             const string fileOriginal = @".\TestAssets\DeformedSphereWithHoles_64x128x64.vox";
@@ -91,21 +94,23 @@
         [TestMethod]
         public void VoxelMaterialIndexes()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             for (byte i = 0; i < materials.Count; i++)
             {
-                Assert.AreEqual(i, SpaceEngineersAPI.GetMaterialIndex(materials[i].Name), "Material index should equal original.");
+                Assert.AreEqual(i, SpaceEngineersApi.GetMaterialIndex(materials[i].Name), "Material index should equal original.");
             }
 
-            Assert.AreEqual(0xFF, SpaceEngineersAPI.GetMaterialIndex("blaggg"), "Material index should not exist.");
+            Assert.AreEqual(0xFF, SpaceEngineersApi.GetMaterialIndex("blaggg"), "Material index should not exist.");
         }
 
         [TestMethod]
         public void VoxelMaterialChanges()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone"));
@@ -129,7 +134,8 @@
         [TestMethod]
         public void VoxelMaterialAssets_MixedGeneratedAsset()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
@@ -157,7 +163,8 @@
         [TestMethod]
         public void VoxelMaterialAssets_FixedSize()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
@@ -186,7 +193,8 @@
         [TestMethod]
         public void VoxelMaterialAssets_FixedSize_MixedContent()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var goldMaterial = materials.FirstOrDefault(m => m.Name.Contains("Gold"));
@@ -210,7 +218,8 @@
         [TestMethod]
         public void VoxelMaterialAssetsRandom()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_05"));
@@ -232,7 +241,7 @@
             Assert.AreEqual(35465, materialAssets.Count, "Asset count should be equal.");
 
             var distribution = new double[] { Double.NaN, .5, .25 };
-            var materialSelection = new byte[] { SpaceEngineersAPI.GetMaterialIndex(stoneMaterial.Name), SpaceEngineersAPI.GetMaterialIndex(goldMaterial.Name), SpaceEngineersAPI.GetMaterialIndex(uraniumMaterial.Name) };
+            var materialSelection = new byte[] { SpaceEngineersApi.GetMaterialIndex(stoneMaterial.Name), SpaceEngineersApi.GetMaterialIndex(goldMaterial.Name), SpaceEngineersApi.GetMaterialIndex(uraniumMaterial.Name) };
 
             var newDistributiuon = new List<byte>();
             int count;
@@ -270,7 +279,8 @@
         [TestMethod]
         public void VoxelMaterialAssetsGenerateFixed()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var files = new string[] { @".\TestAssets\Arabian_Border_7.vox", @".\TestAssets\cube_52x52x52.vox" };
@@ -291,7 +301,7 @@
                     voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
                     var distribution = new double[] { Double.NaN, .99, };
-                    var materialSelection = new byte[] { 0, SpaceEngineersAPI.GetMaterialIndex(material.Name) };
+                    var materialSelection = new byte[] { 0, SpaceEngineersApi.GetMaterialIndex(material.Name) };
 
                     var newDistributiuon = new List<byte>();
                     int count;
@@ -320,7 +330,7 @@
         [TestMethod]
         public void VoxelGenerateBoxSmall()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
@@ -354,7 +364,7 @@
         [TestMethod]
         public void VoxelGenerateSphereSmall()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
@@ -388,7 +398,7 @@
         [TestMethod]
         public void VoxelGenerateSphereLarge()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
@@ -425,7 +435,7 @@
         [TestMethod]
         public void VoxelGenerateSpikeWall()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             const string fileNew = @".\TestOutput\test_spike_wall.vox";
@@ -473,7 +483,7 @@
         [TestMethod]
         public void VoxelGenerateSpikeCube()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var fileNew = @".\TestOutput\test_spike_cube256.vox";
@@ -542,7 +552,8 @@
         [TestMethod]
         public void Voxel3DImportStl()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            SpaceEngineersCore.LoadStockDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone_02"));
@@ -570,12 +581,14 @@
         [TestMethod]
         public void LoadAllVoxelFiles()
         {
+            SpaceEngineersCore.LoadStockDefinitions();
+
             var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps"), "*.vox");
 
             foreach (var filename in files)
             {
                 var voxelMap = new MyVoxelMap();
-                voxelMap.Load(filename, SpaceEngineersAPI.GetMaterialName(0), true);
+                voxelMap.Load(filename, SpaceEngineersApi.GetMaterialName(0), true);
 
                 Assert.IsTrue(voxelMap.Size.X > 0, "Voxel Size must be greater than zero.");
                 Assert.IsTrue(voxelMap.Size.Y > 0, "Voxel Size must be greater than zero.");
@@ -594,7 +607,7 @@
         [TestMethod]
         public void VoxelConvertToVolmetic()
         {
-            var materials = SpaceEngineersAPI.GetMaterialList();
+            var materials = SpaceEngineersApi.GetMaterialList();
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");

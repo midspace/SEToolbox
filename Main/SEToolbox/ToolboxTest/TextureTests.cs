@@ -1,13 +1,13 @@
 ﻿namespace ToolboxTest
 {
-    using System.Drawing;
-    using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.ImageLibrary;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using System.Drawing;
+    using System.IO;
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;
 
     [TestClass]
@@ -16,41 +16,42 @@
         [TestMethod]
         public void LoadComponentTextures()
         {
+            SpaceEngineersCore.LoadStockDefinitions();
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var magnesiumOre = SpaceEngineersAPI.GetDefinition(SpaceEngineersConsts.Ore, "Magnesium");
+            var magnesiumOre = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Ore, "Magnesium");
             var magnesiumOrePath = Path.Combine(contentPath, magnesiumOre.Icon + ".dds");
             Assert.IsTrue(File.Exists(magnesiumOrePath), "Filepath should exist on developer machine");
             Assert.IsTrue(magnesiumOre is MyObjectBuilder_PhysicalItemDefinition, "Type should match");
             var magnesiumOreBmp = TexUtil.CreateBitmap(magnesiumOrePath);
             ImageTextureUtil.WriteImage(magnesiumOreBmp, @".\TestOutput\Magnesium_Ore.png");
 
-            var goldIngot = SpaceEngineersAPI.GetDefinition(SpaceEngineersConsts.Ingot, "Gold");
+            var goldIngot = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Ingot, "Gold");
             var goldIngotPath = Path.Combine(contentPath, goldIngot.Icon + ".dds");
             Assert.IsTrue(File.Exists(goldIngotPath), "Filepath should exist on developer machine");
             Assert.IsTrue(goldIngot is MyObjectBuilder_PhysicalItemDefinition, "Type should match");
             var goldIngotBmp = TexUtil.CreateBitmap(goldIngotPath);
             ImageTextureUtil.WriteImage(goldIngotBmp, @".\TestOutput\Gold_Ingot.png");
 
-            var ammoMagazine = SpaceEngineersAPI.GetDefinition(SpaceEngineersConsts.AmmoMagazine, "NATO_5p56x45mm");
+            var ammoMagazine = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.AmmoMagazine, "NATO_5p56x45mm");
             var ammoMagazinePath = Path.Combine(contentPath, ammoMagazine.Icon + ".dds");
             Assert.IsTrue(File.Exists(ammoMagazinePath), "Filepath should exist on developer machine");
             Assert.IsTrue(ammoMagazine is MyObjectBuilder_AmmoMagazineDefinition, "Type should match");
             var ammoMagazineBmp = TexUtil.CreateBitmap(ammoMagazinePath);
             ImageTextureUtil.WriteImage(ammoMagazineBmp, @".\TestOutput\NATO_5p56x45mm.png");
 
-            var steelPlate = SpaceEngineersAPI.GetDefinition(SpaceEngineersConsts.Component, "SteelPlate");
+            var steelPlate = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Component, "SteelPlate");
             var steelPlatePath = Path.Combine(contentPath, steelPlate.Icon + ".dds");
             Assert.IsTrue(File.Exists(steelPlatePath), "Filepath should exist on developer machine");
             Assert.IsTrue(steelPlate is MyObjectBuilder_ComponentDefinition, "Type should match");
             var steelPlateBmp = TexUtil.CreateBitmap(steelPlatePath);
             ImageTextureUtil.WriteImage(steelPlateBmp, @".\TestOutput\SteelPlate.png");
 
-            var smallBlockLandingGear = SpaceEngineersAPI.GetDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_LandingGear)), "SmallBlockLandingGear");
+            var smallBlockLandingGear = SpaceEngineersApi.GetDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_LandingGear)), "SmallBlockLandingGear");
             var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icon + ".dds");
             Assert.IsTrue(File.Exists(smallBlockLandingGearPath), "Filepath should exist on developer machine");
             Assert.IsTrue(smallBlockLandingGear is MyObjectBuilder_CubeBlockDefinition, "Type should match");
@@ -86,13 +87,15 @@
         [TestMethod]
         public void CreateMenuTextures()
         {
+            SpaceEngineersCore.LoadStockDefinitions();
+
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var smallBlockLandingGear = SpaceEngineersAPI.GetDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_LandingGear)), "SmallBlockLandingGear");
+            var smallBlockLandingGear = SpaceEngineersApi.GetDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_LandingGear)), "SmallBlockLandingGear");
             var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icon + ".dds");
             Assert.IsTrue(File.Exists(smallBlockLandingGearPath), "Filepath should exist on developer machine");
             Assert.IsTrue(smallBlockLandingGear is MyObjectBuilder_CubeBlockDefinition, "Type should match");

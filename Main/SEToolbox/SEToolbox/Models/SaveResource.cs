@@ -116,6 +116,8 @@
             }
         }
 
+        public UserDataPath DataPath { get; set; }
+
         public MyObjectBuilder_Checkpoint Content
         {
             get
@@ -267,12 +269,12 @@
                         // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
                         var tempFilename = TempfileUtil.NewFilename();
                         ZipTools.GZipUncompress(filename, tempFilename);
-                        this.Content = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(tempFilename);
+                        this.Content = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(tempFilename);
                         this.CompressedCheckpointFormat = true;
                     }
                     else
                     {
-                        this.Content = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
+                        this.Content = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
                         this.CompressedCheckpointFormat = false;
                     }
                 }

@@ -36,7 +36,7 @@
                 if (value != this._name)
                 {
                     this._name = value;
-                    this.FriendlyName = SpaceEngineersAPI.GetResourceName(this.Name);
+                    this.FriendlyName = SpaceEngineersApi.GetResourceName(this.Name);
                     this.RaisePropertyChanged(() => Name);
                 }
             }

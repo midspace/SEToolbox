@@ -360,7 +360,7 @@
                     this.SourceFile = stockfile;
                     originalFile = this.SourceFile;
                     var asteroid = new MyVoxelMap();
-                    asteroid.Load(stockfile, SpaceEngineersAPI.GetMaterialName(0), false);
+                    asteroid.Load(stockfile, SpaceEngineersApi.GetMaterialName(0), false);
                     asteroidCenter = asteroid.ContentCenter;
                     asteroidSize = asteroid.ContentSize;
                 }
@@ -368,7 +368,7 @@
                 {
                     var asteroid = new MyVoxelMap();
                     asteroid.Load(stockfile, this.StockMaterial.Value);
-                    asteroid.ForceBaseMaterial(SpaceEngineersAPI.GetMaterialName(0), this.StockMaterial.Value);
+                    asteroid.ForceBaseMaterial(SpaceEngineersApi.GetMaterialName(0), this.StockMaterial.Value);
                     this.SourceFile = TempfileUtil.NewFilename();
                     asteroid.Save(this.SourceFile);
 
@@ -382,13 +382,13 @@
                 originalFile = this.SourceFile;
 
                 var asteroid = new MyVoxelMap();
-                asteroid.Load(this.SourceFile, SpaceEngineersAPI.GetMaterialName(0), false);
+                asteroid.Load(this.SourceFile, SpaceEngineersApi.GetMaterialName(0), false);
                 asteroidCenter = asteroid.ContentCenter;
                 asteroidSize = asteroid.ContentSize;
 
                 if (this.StockMaterial != null && this.StockMaterial.Value != null)
                 {
-                    asteroid.ForceBaseMaterial(SpaceEngineersAPI.GetMaterialName(0), this.StockMaterial.Value);
+                    asteroid.ForceBaseMaterial(SpaceEngineersApi.GetMaterialName(0), this.StockMaterial.Value);
                     this.SourceFile = TempfileUtil.NewFilename();
                     asteroid.Save(this.SourceFile);
                 }
@@ -411,7 +411,7 @@
             this.Up = new BindableVector3DModel(Vector3.Up);
 
             var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3() - asteroidCenter, this.Filename);
-            entity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+            entity.EntityId = SpaceEngineersApi.GenerateEntityId();
             entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
             entity.Filename = this.Filename;
 

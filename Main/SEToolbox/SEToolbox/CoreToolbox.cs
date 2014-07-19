@@ -140,7 +140,7 @@
         public bool Load(string[] args)
         {
             // Force pre-loading of any Space Engineers resources.
-            SEToolbox.Interop.SpaceEngineersAPI.Init();
+            SEToolbox.Interop.SpaceEngineersCore.LoadDefinitions();
 
             // Load the Space Engineers assemblies, or dependant classes after this point.
             var explorerModel = new ExplorerModel();

@@ -122,20 +122,20 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_Meteor>(this.Meteor);
+            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_Meteor>(this.Meteor);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_Meteor>(this.SerializedEntity);
+            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_Meteor>(this.SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.Meteor;
-            var compMass = SpaceEngineersAPI.GetItemMass(this.Meteor.Item.Content.TypeId, this.Meteor.Item.Content.SubtypeName);
-            var compVolume = SpaceEngineersAPI.GetItemVolume(this.Meteor.Item.Content.TypeId, this.Meteor.Item.Content.SubtypeName);
+            var compMass = SpaceEngineersApi.GetItemMass(this.Meteor.Item.Content.TypeId, this.Meteor.Item.Content.SubtypeName);
+            var compVolume = SpaceEngineersApi.GetItemVolume(this.Meteor.Item.Content.TypeId, this.Meteor.Item.Content.SubtypeName);
 
             if (this.Meteor.Item.Content is MyObjectBuilder_Ore)
             {

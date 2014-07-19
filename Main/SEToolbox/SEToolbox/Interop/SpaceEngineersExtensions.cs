@@ -9,7 +9,7 @@
     /// <summary>
     /// Contains Extension methods specifically for Keen classes and structures.
     /// </summary>
-    public static class InteropHelper
+    public static class SpaceEngineersExtensions
     {
         internal static SerializableVector3I Mirror(this SerializableVector3I vector, Mirror xMirror, int xAxis, Mirror yMirror, int yAxis, Mirror zMirror, int zAxis)
         {
@@ -173,9 +173,9 @@
         {
             switch (cubeSize)
             {
-                case MyCubeSize.Large: return SpaceEngineersAPI.Definitions.Configuration.CubeSizes.Large;
-                case MyCubeSize.Medium: return SpaceEngineersAPI.Definitions.Configuration.CubeSizes.Medium;
-                case MyCubeSize.Small: return SpaceEngineersAPI.Definitions.Configuration.CubeSizes.Small;
+                case MyCubeSize.Large: return SpaceEngineersCore.Definitions.Configuration.CubeSizes.Large;
+                case MyCubeSize.Medium: return SpaceEngineersCore.Definitions.Configuration.CubeSizes.Medium;
+                case MyCubeSize.Small: return SpaceEngineersCore.Definitions.Configuration.CubeSizes.Small;
             }
             return 0f;
         }

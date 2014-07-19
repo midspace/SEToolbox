@@ -3,9 +3,12 @@
     using SEToolbox.ImageLibrary;
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Globalization;
+    using System.IO;
     using System.Windows.Data;
     using System.Windows.Media;
+    using System.Windows.Media.Imaging;
 
     public class DDSConverter : IValueConverter
     {
@@ -29,7 +32,9 @@
                     Int32.TryParse(sizeArray[1], out height);
                 }
 
-                var name = (string)value;
+                var filename = (string)value;
+                var extension = Path.GetExtension(filename).ToLower();
+                var name = filename;
 
                 if (width != -1 && height != -1)
                 {
@@ -41,9 +46,33 @@
                     return Cache[name];
                 }
 
-                var image = ImageTextureUtil.CreateImage((string)value, 0, width, height);
-                Cache.Add(name, image);
-                return image;
+                if (extension == ".png")
+                {
+                    try
+                    {
+                        // TODO: rescale the bitmap to specified width/height.
+                        var bitmapImage = new BitmapImage();
+                        System.Drawing.Bitmap bitmap = (Bitmap)Image.FromFile(filename, true);
+                        using (var ms = new MemoryStream())
+                        {
+                            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                            bitmapImage.BeginInit();
+                            bitmapImage.StreamSource = ms;
+                            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmapImage.EndInit();
+                        }
+                        Cache.Add(name, bitmapImage);
+                        return bitmapImage;
+                    }
+                    catch { return null; }
+                }
+                else if (extension == ".dds")
+                {
+                    var image = ImageTextureUtil.CreateImage(filename, 0, width, height);
+                    Cache.Add(name, image);
+                    return image;
+                }
+                return null;
             }
             else
             {
