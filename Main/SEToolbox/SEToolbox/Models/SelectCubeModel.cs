@@ -1,13 +1,13 @@
 ﻿namespace SEToolbox.Models
 {
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
 
     public class SelectCubeModel : BaseModel
     {
@@ -81,7 +81,7 @@
                     Name = cubeDefinition.DisplayName,
                     TypeId = cubeDefinition.Id.TypeId,
                     SubtypeId = cubeDefinition.Id.SubtypeId,
-                    TextureFile = Path.Combine(contentPath, cubeDefinition.Icon + ".dds"),
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon + ".dds")),
                     Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
                     Accessible = cubeDefinition.Public,
                     Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeId),

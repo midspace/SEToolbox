@@ -1,10 +1,10 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using SEToolbox.Models;
+    using SEToolbox.Services;
     using System;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
 
     public class SelectCubeViewModel : BaseViewModel
     {

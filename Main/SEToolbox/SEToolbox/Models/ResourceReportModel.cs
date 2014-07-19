@@ -450,7 +450,7 @@
                             }
 
                             blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds * block.BuildPercent));
-                            blockTexture = Path.Combine(contentPath, cubeBlockDefinition.Icon + ".dds");
+                            blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icon, Path.Combine(contentPath, cubeBlockDefinition.Icon + ".dds"));
                         }
 
                         if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
@@ -566,7 +566,7 @@
                 return;
             }
 
-            var componentTexture = Path.Combine(contentPath, cd.Icon + ".dds");
+            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon + ".dds"));
 
             if (tallyTypeId == SpaceEngineersConsts.Ore)
             {
@@ -936,7 +936,7 @@ td.right { text-align: right; }");
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (item.TextureFile != null)
+                    if (item.TextureFile != null && File.Exists(item.TextureFile))
                     {
                         writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
@@ -963,7 +963,7 @@ td.right { text-align: right; }");
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (item.TextureFile != null)
+                    if (item.TextureFile != null && File.Exists(item.TextureFile))
                     {
                         writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
@@ -992,7 +992,7 @@ td.right { text-align: right; }");
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (item.TextureFile != null)
+                    if (item.TextureFile != null && File.Exists(item.TextureFile))
                     {
                         writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
