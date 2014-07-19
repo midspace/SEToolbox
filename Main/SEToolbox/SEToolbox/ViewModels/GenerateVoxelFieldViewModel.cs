@@ -434,27 +434,27 @@
                 asteroid.CalculateMaterialCellAssets(out baseAssets, out materialVoxelCells);
 
                 var distribution = new List<double> { Double.NaN };
-                var materialSelection = new List<byte> { SpaceEngineersAPI.GetMaterialIndex(voxelDesign.MainMaterial.Value) };
+                var materialSelection = new List<byte> { SpaceEngineersApi.GetMaterialIndex(voxelDesign.MainMaterial.Value) };
 
                 if (voxelDesign.SecondPercent > 0)
                 {
                     distribution.Add((double)voxelDesign.SecondPercent / 100);
-                    materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.SecondMaterial.Value));
+                    materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(voxelDesign.SecondMaterial.Value));
                 }
                 if (voxelDesign.ThirdPercent > 0)
                 {
                     distribution.Add((double)voxelDesign.ThirdPercent / 100);
-                    materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.ThirdMaterial.Value));
+                    materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(voxelDesign.ThirdMaterial.Value));
                 }
                 if (voxelDesign.ForthPercent > 0)
                 {
                     distribution.Add((double)voxelDesign.ForthPercent / 100);
-                    materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.ForthMaterial.Value));
+                    materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(voxelDesign.ForthMaterial.Value));
                 }
                 if (voxelDesign.FifthPercent > 0)
                 {
                     distribution.Add((double)voxelDesign.FifthPercent / 100);
-                    materialSelection.Add(SpaceEngineersAPI.GetMaterialIndex(voxelDesign.FifthMaterial.Value));
+                    materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(voxelDesign.FifthMaterial.Value));
                 }
 
                 var newDistributiuon = new List<byte>();
@@ -499,7 +499,7 @@
                 var position = this._dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)
                 {
-                    EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                    EntityId = SpaceEngineersApi.GenerateEntityId(),
                     PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                     Filename = filename,
                     PositionAndOrientation = new MyPositionAndOrientation()

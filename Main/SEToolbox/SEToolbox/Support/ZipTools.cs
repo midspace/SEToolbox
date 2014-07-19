@@ -183,8 +183,6 @@
             // Low memory, fast extract.
             using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open))
             {
-                var reader = new BinaryReader(compressedByteStream);
-
                 if (File.Exists(destinationFilename))
                     File.Delete(destinationFilename);
 

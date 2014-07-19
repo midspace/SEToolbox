@@ -323,16 +323,26 @@
 
         public static Bitmap CreateBitmap(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false)
         {
-            uint fourCC;
-            var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC, ignoreAlpha);
-            if (pixelChannel == null)
-                return null;
-            try
+            var extension = Path.GetExtension(filename).ToLower();
+
+            if (extension == ".png")
             {
-                if (fourCC == (uint)DDS_FOURCC.DXT3 || fourCC == (uint)DDS_FOURCC.DXT5)
-                    return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height, ignoreAlpha);
+                // TODO: rescale the bitmap to specified width/height.
+                return (Bitmap)Image.FromFile(filename, true);
             }
-            catch { }
+            else if (extension == ".dds")
+            {
+                uint fourCC;
+                var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC, ignoreAlpha);
+                if (pixelChannel == null)
+                    return null;
+                try
+                {
+                    if (fourCC == (uint)DDS_FOURCC.DXT3 || fourCC == (uint)DDS_FOURCC.DXT5)
+                        return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height, ignoreAlpha);
+                }
+                catch { }
+            }
             return null;
         }
 

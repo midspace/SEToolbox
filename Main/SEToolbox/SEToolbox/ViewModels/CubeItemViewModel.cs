@@ -21,7 +21,6 @@
 
         private readonly IDialogService _dialogService;
         private readonly CubeItemModel _dataModel;
-        private bool? _closeResult;
         private Lazy<ObservableCollection<InventoryEditorViewModel>> _inventory;
 
         #endregion

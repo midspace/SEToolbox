@@ -287,7 +287,7 @@
         {
             var entity = new MyObjectBuilder_FloatingObject
             {
-                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.Enabled | MyPersistentEntityFlags2.InScene,
                 Item = new MyObjectBuilder_InventoryItem { ItemId = 0 },
             };
@@ -353,7 +353,7 @@
             for (var i = 0; i < this.Multiplier; i++)
             {
                 var newEntity = (MyObjectBuilder_FloatingObject)entity.Clone();
-                newEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                newEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                 //if (this.StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
                 //{
                 //    Only required for pre-generating the Entity id for a gun that has been handled.

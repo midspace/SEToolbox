@@ -361,7 +361,7 @@
                     foreach (MyObjectBuilder_CubeBlock block in ship.CubeGrid.CubeBlocks)
                     {
                         var blockType = block.GetType();
-                        var cubeBlockDefinition = SpaceEngineersAPI.GetCubeDefinition(block.TypeId, ship.CubeGrid.GridSizeEnum, block.SubtypeName);
+                        var cubeBlockDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, ship.CubeGrid.GridSizeEnum, block.SubtypeName);
                         TimeSpan blockTime = TimeSpan.Zero;
                         string blockTexture = null;
                         float cubeMass = 0;
@@ -371,7 +371,7 @@
                         {
                             foreach (MyObjectBuilder_StockpileItem item in block.ConstructionStockpile.Items)
                             {
-                                var cd = SpaceEngineersAPI.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName) as MyObjectBuilder_ComponentDefinition;
+                                var cd = SpaceEngineersApi.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName) as MyObjectBuilder_ComponentDefinition;
 
                                 if (isNpc)
                                 {
@@ -396,7 +396,7 @@
 
                                 foreach (var component in cubeBlockDefinition.Components)
                                 {
-                                    var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+                                    var cd = SpaceEngineersApi.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
                                     for (var i = 0; i < component.Count; i++)
                                         componentList.Add(cd);
                                 }
@@ -429,7 +429,7 @@
                                 // Fully armed and operational cube.
                                 foreach (var component in cubeBlockDefinition.Components)
                                 {
-                                    var cd = SpaceEngineersAPI.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+                                    var cd = SpaceEngineersApi.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
 
                                     #region used ore value
 
@@ -558,7 +558,7 @@
 
         private void TallyItems(MyObjectBuilderType tallyTypeId, string tallySubTypeId, Decimal amountDecimal, string contentPath, SortedDictionary<string, OreAssetModel> accumulateOres, SortedDictionary<string, ComponentItemModel> accumulateItems, SortedDictionary<string, ComponentItemModel> accumulateComponents)
         {
-            var cd = SpaceEngineersAPI.GetDefinition(tallyTypeId, tallySubTypeId) as MyObjectBuilder_PhysicalItemDefinition;
+            var cd = SpaceEngineersApi.GetDefinition(tallyTypeId, tallySubTypeId) as MyObjectBuilder_PhysicalItemDefinition;
 
             if (cd == null)
             {
@@ -612,14 +612,14 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
+                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
 
                 var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
                 TimeSpan ingotTime;
-                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
+                SpaceEngineersApi.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
 
                 foreach (var item in oreRequirements)
                 {
@@ -653,14 +653,14 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
+                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
 
                 var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
                 TimeSpan ingotTime;
-                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
+                SpaceEngineersApi.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
 
                 foreach (var item in oreRequirements)
                 {
@@ -693,14 +693,14 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersAPI.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
+                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
 
                 var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
                 TimeSpan ingotTime;
-                SpaceEngineersAPI.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
+                SpaceEngineersApi.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
 
                 foreach (var item in oreRequirements)
                 {
@@ -1187,7 +1187,7 @@ td.right { text-align: right; }");
             }
             else
             {
-                world = SelectWorldModel.FindSaveSession(baseModel.BaseLocalSavePath, findSession);
+                world = SelectWorldModel.FindSaveSession(SpaceEngineersConsts.BaseLocalPath.SavesPath, findSession);
             }
 
             if (world == null)

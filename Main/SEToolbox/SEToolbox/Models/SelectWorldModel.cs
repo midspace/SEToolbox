@@ -41,11 +41,11 @@
         /// <summary>
         /// The base path of the save files, minus the userid.
         /// </summary>
-        public string BaseLocalSavePath { get; set; }
+        public UserDataPath BaseLocalPath { get; set; }
 
-        public string BaseDedicatedServerHostSavePath { get; set; }
+        public UserDataPath BaseDedicatedServerHostPath { get; set; }
 
-        public string BaseDedicatedServerServiceSavePath { get; set; }
+        public UserDataPath BaseDedicatedServerServicePath { get; set; }
 
         public SaveResource SelectedWorld
         {
@@ -109,11 +109,11 @@
 
         #region methods
 
-        public void Load(string baseLocalSavePath, string baseDedicatedServerHostSavePath, string baseDedicatedServerServiceSavePath)
+        public void Load(UserDataPath baseLocalPath, UserDataPath baseDedicatedServerHostPath, UserDataPath baseDedicatedServerServicePath)
         {
-            this.BaseLocalSavePath = baseLocalSavePath;
-            this.BaseDedicatedServerHostSavePath = baseDedicatedServerHostSavePath;
-            this.BaseDedicatedServerServiceSavePath = baseDedicatedServerServiceSavePath;
+            this.BaseLocalPath = baseLocalPath;
+            this.BaseDedicatedServerHostPath = baseDedicatedServerHostPath;
+            this.BaseDedicatedServerServicePath = baseDedicatedServerServicePath;
             this.LoadSaveList();
         }
 
@@ -271,9 +271,10 @@
                         {
                             str.AppendLine("! Could not find any Player Characters.");
                             character = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Character();
-                            character.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            character.EntityId = SpaceEngineersApi.GenerateEntityId();
                             character.PersistentFlags = Sandbox.Common.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.Common.ObjectBuilders.MyPersistentEntityFlags2.InScene;
                             character.PositionAndOrientation = new Sandbox.Common.ObjectBuilders.MyPositionAndOrientation(VRageMath.Vector3.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
+                            character.CharacterModel = SpaceEngineersCore.Definitions.Characters[0].Name;
                             character.ColorMaskHSV = new Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3(0, -1, 1); // White
                             character.Battery = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
                             character.LightEnabled = false;
@@ -292,7 +293,7 @@
                             item.ItemId = 0;
                             item.Content = new MyObjectBuilder_Welder();
                             gunEntity = MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_Welder)) as MyObjectBuilder_EntityBase;
-                            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                             gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
@@ -301,7 +302,7 @@
                             item.ItemId = 1;
                             item.Content = new MyObjectBuilder_AngleGrinder();
                             gunEntity = MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AngleGrinder)) as MyObjectBuilder_EntityBase;
-                            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                             gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
@@ -310,7 +311,7 @@
                             item.ItemId = 2;
                             item.Content = new MyObjectBuilder_HandDrill();
                             gunEntity = MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_HandDrill)) as MyObjectBuilder_EntityBase;
-                            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                             gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
@@ -319,7 +320,7 @@
                             item.ItemId = 3;
                             item.Content = new MyObjectBuilder_AutomaticRifle();
                             gunEntity = MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AutomaticRifle)) as MyObjectBuilder_EntityBase;
-                            gunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();
+                            gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                             gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
@@ -410,9 +411,9 @@
                             {
                                 var character = ((MyObjectBuilder_Cockpit)list[i]).Pilot;
 
-                                if (!SpaceEngineersAPI.Definitions.Characters.Any(c => c.Name == character.CharacterModel))
+                                if (!SpaceEngineersCore.Definitions.Characters.Any(c => c.Name == character.CharacterModel))
                                 {
-                                    character.CharacterModel = SpaceEngineersAPI.Definitions.Characters[0].Name;
+                                    character.CharacterModel = SpaceEngineersCore.Definitions.Characters[0].Name;
                                     statusNormal = false;
                                     str.AppendLine("! Fixed astronaut's CharacterModel.");
                                     saveAfterScan = true;
@@ -427,9 +428,9 @@
                     if (entity is MyObjectBuilder_Character)
                     {
                         var character = (MyObjectBuilder_Character)entity;
-                        if (!SpaceEngineersAPI.Definitions.Characters.Any(c => c.Name == character.CharacterModel))
+                        if (!SpaceEngineersCore.Definitions.Characters.Any(c => c.Name == character.CharacterModel))
                         {
-                            character.CharacterModel = SpaceEngineersAPI.Definitions.Characters[0].Name;
+                            character.CharacterModel = SpaceEngineersCore.Definitions.Characters[0].Name;
                             statusNormal = false;
                             str.AppendLine("! Fixed astronaut's CharacterModel.");
                             saveAfterScan = true;
@@ -463,14 +464,14 @@
 
             #region local saves
 
-            if (Directory.Exists(this.BaseLocalSavePath))
+            if (Directory.Exists(this.BaseLocalPath.SavesPath))
             {
-                var userPaths = Directory.GetDirectories(this.BaseLocalSavePath);
+                var userPaths = Directory.GetDirectories(this.BaseLocalPath.SavesPath);
 
                 foreach (var userPath in userPaths)
                 {
                     var userName = Path.GetFileName(userPath);
-                    list.AddRange(FindSaveFiles(userPath, userName, SaveWorldType.Local));
+                    list.AddRange(FindSaveFiles(userPath, userName, SaveWorldType.Local, this.BaseLocalPath));
                 }
             }
 
@@ -478,23 +479,18 @@
 
             #region Host Server
 
-            if (Directory.Exists(this.BaseDedicatedServerHostSavePath))
+            if (Directory.Exists(this.BaseDedicatedServerHostPath.SavesPath))
             {
-                var instancePaths = Directory.GetDirectories(this.BaseDedicatedServerHostSavePath);
-
-                foreach (var lastLoadedPath in instancePaths)
-                {
-                    list.AddRange(FindSaveFiles(lastLoadedPath, "Local / Console", SaveWorldType.DedicatedServerHost));
-                }
+                list.AddRange(FindSaveFiles(this.BaseDedicatedServerHostPath.SavesPath, "Local / Console", SaveWorldType.DedicatedServerHost, this.BaseDedicatedServerHostPath));
             }
 
             #endregion
 
             #region Service Server
 
-            if (Directory.Exists(this.BaseDedicatedServerServiceSavePath))
+            if (Directory.Exists(this.BaseDedicatedServerServicePath.SavesPath))
             {
-                var instancePaths = Directory.GetDirectories(this.BaseDedicatedServerServiceSavePath);
+                var instancePaths = Directory.GetDirectories(this.BaseDedicatedServerServicePath.SavesPath);
 
                 foreach (var instancePath in instancePaths)
                 {
@@ -503,7 +499,8 @@
                     if (Directory.Exists(lastLoadedPath))
                     {
                         var instanceName = Path.GetFileName(instancePath);
-                        list.AddRange(FindSaveFiles(lastLoadedPath, instanceName, SaveWorldType.DedicatedServerService));
+                        var dataPath = new UserDataPath(lastLoadedPath, Path.Combine(instancePath, "Mods"));
+                        list.AddRange(FindSaveFiles(lastLoadedPath, instanceName, SaveWorldType.DedicatedServerService, dataPath));
                     }
                 }
             }
@@ -513,7 +510,7 @@
             this.Worlds = new ObservableCollection<SaveResource>(list.OrderByDescending(w => w.LastLoadTime));
         }
 
-        private IEnumerable<SaveResource> FindSaveFiles(string lastLoadedPath, string userName, SaveWorldType saveType)
+        private IEnumerable<SaveResource> FindSaveFiles(string lastLoadedPath, string userName, SaveWorldType saveType, UserDataPath dataPath)
         {
             var lastLoadedFile = Path.Combine(lastLoadedPath, SpaceEngineersConsts.LoadLoadedFilename);
             var list = new List<SaveResource>();
@@ -524,7 +521,7 @@
                 MyObjectBuilder_LastLoadedTimes lastLoaded = null;
                 try
                 {
-                    lastLoaded = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes, MyObjectBuilder_LastLoadedTimesSerializer>(lastLoadedFile);
+                    lastLoaded = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes>(lastLoadedFile);
                 }
                 catch { }
                 var savePaths = Directory.GetDirectories(lastLoadedPath);
@@ -532,7 +529,7 @@
                 // Still check every potential game world path.
                 foreach (var savePath in savePaths)
                 {
-                    var saveResource = LoadSaveFromPath(savePath, userName, saveType);
+                    var saveResource = LoadSaveFromPath(savePath, userName, saveType, dataPath);
                     if (lastLoaded != null)
                     {
                         var last = lastLoaded.LastLoaded.Dictionary.FirstOrDefault(d => d.Key.Equals(savePath, StringComparison.OrdinalIgnoreCase));
@@ -552,7 +549,7 @@
             return list;
         }
 
-        internal SaveResource LoadSaveFromPath(string savePath, string userName, SaveWorldType saveType)
+        internal SaveResource LoadSaveFromPath(string savePath, string userName, SaveWorldType saveType, UserDataPath dataPath)
         {
             var saveResource = new SaveResource()
             {
@@ -560,7 +557,8 @@
                 SaveType = saveType,
                 Savename = Path.GetFileName(savePath),
                 UserName = userName,
-                Savepath = savePath
+                Savepath = savePath,
+                DataPath = dataPath,
             };
 
             return saveResource;

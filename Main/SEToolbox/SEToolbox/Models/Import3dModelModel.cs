@@ -49,7 +49,7 @@
                 new MaterialSelectionModel() {Value = null, DisplayName = "Empty"}
             };
 
-            foreach (var material in SpaceEngineersAPI.GetMaterialList())
+            foreach (var material in SpaceEngineersApi.GetMaterialList())
             {
                 _outsideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
                 _insideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });

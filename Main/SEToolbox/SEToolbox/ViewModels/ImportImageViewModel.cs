@@ -405,7 +405,7 @@
         {
             var entity = new MyObjectBuilder_CubeGrid
             {
-                EntityId = SpaceEngineersAPI.GenerateEntityId(),
+                EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                 Skeleton = new System.Collections.Generic.List<BoneInfo>(),
                 LinearVelocity = new VRageMath.Vector3(0, 0, 0),

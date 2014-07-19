@@ -77,7 +77,7 @@
                     </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Header="_Import" Command="{Binding ImportCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="_Import" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=import1}" />
                     </MenuItem.Icon>
@@ -107,7 +107,7 @@
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Create" Command="{Binding ImportCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="_Create" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=package_add}" />
                     </MenuItem.Icon>
@@ -119,6 +119,21 @@
                     <MenuItem Header="Generate Asteroid Field" Command="{Binding GenerateVoxelFieldCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Merge" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=elements2}" />
+                    </MenuItem.Icon>
+                    <MenuItem Command="{Binding RejoinShipCommand}" Header="Rejoin Ship" ToolTip="Rejoins 2 parts from a broken ship back togeather">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=first_aid}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding JoinShipPartsCommand}" Header="Join into Ship" ToolTip="Joins 2 foriegn parts to form a new ship">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=components}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -205,16 +220,6 @@
                 <MenuItem Command="{Binding GroupMoveCommand}" Header="Group Move" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Command="{Binding RejoinShipCommand}" Header="Rejoin Ship" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Rejoins 2 parts from a broken ship back togeather">
-                    <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=elements2}"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Command="{Binding JoinShipPartsCommand}" Header="Join into Ship" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Joins 2 foriegn parts to form a new ship">
-                    <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=elements2}"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </Menu>

@@ -207,7 +207,7 @@
 
         private InventoryModel CreateItem(MyObjectBuilder_InventoryItem item, string contentPath)
         {
-            var definition = SpaceEngineersAPI.GetDefinition(item.Content.TypeId, item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
+            var definition = SpaceEngineersApi.GetDefinition(item.Content.TypeId, item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
 
             string name;
             string textureFile;

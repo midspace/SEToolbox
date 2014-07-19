@@ -74,15 +74,6 @@
 
         #region Properties
 
-        /// <summary>
-        /// The base path of the save files, minus the userid.
-        /// </summary>
-        public string BaseLocalSavePath { get; set; }
-
-        public string BaseDedicatedServerHostSavePath { get; set; }
-
-        public string BaseDedicatedServerServiceSavePath { get; set; }
-
         public ObservableCollection<IStructureBase> Structures
         {
             get
@@ -375,9 +366,6 @@
 
         public void Load()
         {
-            this.BaseLocalSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves"); // Followed by .\%SteamuserId%\LastLoaded.sbl
-            this.BaseDedicatedServerHostSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineersDedicated"); // Followed by .\Saves\LastLoaded.sbl
-            this.BaseDedicatedServerServiceSavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SpaceEngineersDedicated"); // Followed by .\%instancename%\Saves\LastLoaded.sbl
             this.SetActiveStatus();
         }
 
@@ -404,7 +392,7 @@
                             // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
                             var tempFilename = TempfileUtil.NewFilename();
                             ZipTools.GZipUncompress(filename, tempFilename);
-                            this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
+                            this.SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
                             _compressedSectorFormat = true;
                         }
                         else
@@ -416,11 +404,11 @@
                             {
                                 var tempFilename = TempfileUtil.NewFilename();
                                 File.Copy(filename, tempFilename);
-                                this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
+                                this.SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
                             }
                             else
                             {
-                                this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+                                this.SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
                             }
                             _compressedSectorFormat = false;
                         }
@@ -456,7 +444,7 @@
                 else
                 {
                     // Old file format is raw XML.
-                    this.SectorData = SpaceEngineersAPI.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+                    this.SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
                     xDoc.Load(filename);
                     _compressedSectorFormat = false;
                 }
@@ -507,12 +495,12 @@
             if (this.ActiveWorld.CompressedCheckpointFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, tempFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, tempFilename);
                 ZipTools.GZipCompress(tempFilename, checkpointFilename);
             }
             else
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
             }
 
             if (File.Exists(sectorBackupFilename))
@@ -526,11 +514,11 @@
             if (_compressedSectorFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);
                 ZipTools.GZipCompress(tempFilename, sectorFilename);
             }
             else
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
 
             // Manages the adding of new voxel files.
             foreach (var entity in this.Structures)
@@ -573,7 +561,7 @@
             this.IsBusy = true;
 
             var tempFilename = TempfileUtil.NewFilename() + ".xml";
-            SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);
+            SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);
 
             this.IsBusy = false;
             return tempFilename;
@@ -651,19 +639,19 @@
         {
             if (entity is MyObjectBuilder_CubeGrid)
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>((MyObjectBuilder_CubeGrid)entity, filename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>((MyObjectBuilder_CubeGrid)entity, filename);
             }
             else if (entity is MyObjectBuilder_Character)
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Character, MyObjectBuilder_CharacterSerializer>((MyObjectBuilder_Character)entity, filename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Character, MyObjectBuilder_CharacterSerializer>((MyObjectBuilder_Character)entity, filename);
             }
             else if (entity is MyObjectBuilder_FloatingObject)
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_FloatingObject, MyObjectBuilder_FloatingObjectSerializer>((MyObjectBuilder_FloatingObject)entity, filename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_FloatingObject, MyObjectBuilder_FloatingObjectSerializer>((MyObjectBuilder_FloatingObject)entity, filename);
             }
             else if (entity is MyObjectBuilder_Meteor)
             {
-                SpaceEngineersAPI.WriteSpaceEngineersFile<MyObjectBuilder_Meteor, MyObjectBuilder_MeteorSerializer>((MyObjectBuilder_Meteor)entity, filename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Meteor, MyObjectBuilder_MeteorSerializer>((MyObjectBuilder_Meteor)entity, filename);
             }
         }
 
@@ -675,26 +663,27 @@
 
             foreach (var filename in filenames)
             {
+                bool isCompressed;
                 MyObjectBuilder_CubeGrid cubeEntity = null;
                 MyObjectBuilder_FloatingObject floatingEntity = null;
                 MyObjectBuilder_Meteor meteorEntity = null;
                 MyObjectBuilder_Character characterEntity = null;
 
-                if (SpaceEngineersAPI.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>(filename, out cubeEntity))
+                if (SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid>(filename, out cubeEntity, out isCompressed))
                 {
-                    this.MergeData((MyObjectBuilder_CubeGrid)cubeEntity, ref idReplacementTable);
+                    this.MergeData(cubeEntity, ref idReplacementTable);
                 }
-                else if (SpaceEngineersAPI.TryReadSpaceEngineersFile<MyObjectBuilder_FloatingObject, MyObjectBuilder_FloatingObjectSerializer>(filename, out floatingEntity))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_FloatingObject>(filename, out floatingEntity, out isCompressed))
                 {
                     var newEntity = this.AddEntity(floatingEntity);
                     newEntity.EntityId = MergeId(floatingEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersAPI.TryReadSpaceEngineersFile<MyObjectBuilder_Meteor, MyObjectBuilder_MeteorSerializer>(filename, out meteorEntity))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Meteor>(filename, out meteorEntity, out isCompressed))
                 {
                     var newEntity = this.AddEntity(meteorEntity);
                     newEntity.EntityId = MergeId(meteorEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersAPI.TryReadSpaceEngineersFile<MyObjectBuilder_Character, MyObjectBuilder_CharacterSerializer>(filename, out characterEntity))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Character>(filename, out characterEntity, out isCompressed))
                 {
                     var newEntity = this.AddEntity(characterEntity);
                     newEntity.EntityId = MergeId(characterEntity.EntityId, ref idReplacementTable);
@@ -939,7 +928,7 @@
                 return idReplacementTable[currentId];
             else
             {
-                idReplacementTable[currentId] = SpaceEngineersAPI.GenerateEntityId();
+                idReplacementTable[currentId] = SpaceEngineersApi.GenerateEntityId();
                 return idReplacementTable[currentId];
             }
         }

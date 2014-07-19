@@ -124,21 +124,21 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_FloatingObject>(this.FloatingObject);
+            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_FloatingObject>(this.FloatingObject);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_FloatingObject>(this.SerializedEntity);
+            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_FloatingObject>(this.SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
             this.ClassType = ClassType.FloatingObject;
 
-            var cd = SpaceEngineersAPI.GetDefinition(this.FloatingObject.Item.Content.TypeId, this.FloatingObject.Item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
-            var friendlyName = SpaceEngineersAPI.GetResourceName(cd.DisplayName);
+            var cd = SpaceEngineersApi.GetDefinition(this.FloatingObject.Item.Content.TypeId, this.FloatingObject.Item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
+            var friendlyName = SpaceEngineersApi.GetResourceName(cd.DisplayName);
 
             if (this.FloatingObject.Item.Content is MyObjectBuilder_Ore)
             {

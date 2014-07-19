@@ -1,12 +1,12 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using System;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Media;
@@ -250,6 +250,7 @@
                 {
                     using (FileStream fs = File.OpenWrite(openFileDialog.FileName))
                     {
+                        // test opening the file.
                     }
                 }
                 catch
@@ -257,7 +258,8 @@
                     saveType = SaveWorldType.CustomAdminRequired;
                 }
 
-                var saveResource = this._dataModel.LoadSaveFromPath(savePath, userName, saveType);
+                // TODO: determine the correct UserDataPath for this custom save game if at all possible, otherwise use BaseLocalPath.
+                var saveResource = this._dataModel.LoadSaveFromPath(savePath, userName, saveType, SpaceEngineersConsts.BaseLocalPath);
                 saveResource.LoadCheckpoint();
 
                 if (saveResource.IsValid)

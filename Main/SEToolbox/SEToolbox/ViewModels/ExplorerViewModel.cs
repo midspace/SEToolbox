@@ -133,11 +133,11 @@
             }
         }
 
-        public ICommand ImportCommand
+        public ICommand IsActiveCommand
         {
             get
             {
-                return new DelegateCommand(new Func<bool>(ImportCanExecute));
+                return new DelegateCommand(new Func<bool>(IsActiveCanExecute));
             }
         }
 
@@ -586,12 +586,13 @@
         public void OpenExecuted()
         {
             var model = new SelectWorldModel();
-            model.Load(this._dataModel.BaseLocalSavePath, this._dataModel.BaseDedicatedServerHostSavePath, this._dataModel.BaseDedicatedServerServiceSavePath);
+            model.Load(SpaceEngineersConsts.BaseLocalPath, SpaceEngineersConsts.BaseDedicatedServerHostPath, SpaceEngineersConsts.BaseDedicatedServerServicePath);
             var loadVm = new SelectWorldViewModel(this, model);
 
             var result = this._dialogService.ShowDialog<WindowLoad>(this, loadVm);
             if (result == true)
             {
+                SpaceEngineersCore.LoadDefinitions(model.SelectedWorld.DataPath.ModsPath);
                 this._dataModel.ActiveWorld = model.SelectedWorld;
                 this.ActiveWorld.LoadCheckpoint();
                 this._dataModel.LoadSandBox();
@@ -640,7 +641,7 @@
             this._dataModel.LoadSandBox();
         }
 
-        public bool ImportCanExecute()
+        public bool IsActiveCanExecute()
         {
             return this._dataModel.ActiveWorld != null;
         }

@@ -366,13 +366,20 @@
         {
             this.Cube = cube;
             this.Settings = settings;
-            this.CubeSize = definition.CubeSize;
-            this.FriendlyName = SpaceEngineersAPI.GetResourceName(definition.DisplayName);
-            this.TypeId = definition.Id.TypeId;
-            this.SubtypeId = definition.Id.SubtypeId;
             this.Position = new BindablePoint3DIModel(cube.Min);
             this.SetColor(cube.ColorMaskHSV);
             this.BuildPercent = cube.BuildPercent;
+
+            if (definition == null)
+            {
+                // Obsolete block or Mod not loaded.
+                return;
+            }
+
+            this.CubeSize = definition.CubeSize;
+            this.FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayName);
+            this.TypeId = definition.Id.TypeId;
+            this.SubtypeId = definition.Id.SubtypeId;
 
             if (this.Inventory == null)
                 this.Inventory = new ObservableCollection<InventoryEditorModel>();

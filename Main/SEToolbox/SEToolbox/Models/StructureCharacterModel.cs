@@ -243,13 +243,13 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersAPI.Serialize<MyObjectBuilder_Character>(this.Character);
+            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_Character>(this.Character);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersAPI.Deserialize<MyObjectBuilder_Character>(this.SerializedEntity);
+            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_Character>(this.SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()

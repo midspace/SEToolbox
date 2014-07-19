@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.Interop
 {
     using Sandbox.Common.ObjectBuilders;
+    using System;
 
     public class SpaceEngineersConsts
     {
@@ -41,6 +42,15 @@
         public static readonly MyObjectBuilderType MedicalRoom;
         public static readonly MyObjectBuilderType Cockpit;
 
+        /// <summary>
+        /// The base path of the save files, minus the userid.
+        /// </summary>
+        public static readonly UserDataPath BaseLocalPath;
+
+        public static readonly UserDataPath BaseDedicatedServerHostPath;
+
+        public static readonly UserDataPath BaseDedicatedServerServicePath;
+
         static SpaceEngineersConsts()
         {
             // Some hopefully generic items.
@@ -51,7 +61,10 @@
             Component = new MyObjectBuilderType(typeof(MyObjectBuilder_Component));
             MedicalRoom = new MyObjectBuilderType(typeof(MyObjectBuilder_MedicalRoom));
             Cockpit = new MyObjectBuilderType(typeof(MyObjectBuilder_Cockpit));
-        }
 
+            BaseLocalPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves", @"SpaceEngineers\Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
+            BaseDedicatedServerHostPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineersDedicated\Saves", @"SpaceEngineersDedicated\Mods"); // Followed by .\LastLoaded.sbl
+            BaseDedicatedServerServicePath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SpaceEngineersDedicated", ""); // Followed by .\%instancename%\Saves\LastLoaded.sbl  (.\%instancename%\Mods)
+        }
     }
 }
