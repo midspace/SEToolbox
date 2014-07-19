@@ -54,7 +54,7 @@
             Func<ObservableCollection<CubeItemViewModel>> collectionCreator =
                 () => new ObservableViewModelCollection<CubeItemViewModel, CubeItemModel>(dataModel.CubeList, viewModelCreator);
             _cubeList = new Lazy<ObservableCollection<CubeItemViewModel>>(collectionCreator);
-   
+
             this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "CubeList")
