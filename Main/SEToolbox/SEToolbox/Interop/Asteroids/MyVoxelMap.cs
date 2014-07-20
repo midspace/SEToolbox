@@ -489,6 +489,8 @@ namespace SEToolbox.Interop.Asteroids
 
         #region methods
 
+        #region SetVoxelContent
+
         //  Voxel at specified coordinate 'x, y, z' sets to value 'content'
         //  Coordinates are relative to voxel map
         internal void SetVoxelContent(byte content, ref Vector3I voxelCoord, bool needLock = true)
@@ -554,6 +556,10 @@ namespace SEToolbox.Interop.Asteroids
             // ignore else condition.
         }
 
+        #endregion
+
+        #region SetVoxelMaterialAndIndestructibleContent
+
         public void SetVoxelMaterialAndIndestructibleContent(string materialName, byte indestructibleContent, ref Vector3I voxelCoord)
         {
             var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
@@ -561,6 +567,10 @@ namespace SEToolbox.Interop.Asteroids
             var oldMaterial = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
             this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].SetMaterialAndIndestructibleContent(SpaceEngineersApi.GetMaterialIndex(materialName), indestructibleContent, ref voxelCoordInCell);
         }
+
+        #endregion
+
+        #region ForceBaseMaterial
 
         /// <summary>
         /// This will replace all the materials inside the asteroid with specified material.
@@ -583,6 +593,10 @@ namespace SEToolbox.Interop.Asteroids
 
             this.ForceVoxelFaceMaterial(defaultMaterial);
         }
+
+        #endregion
+
+        #region ForceVoxelFaceMaterial
 
         /// <summary>
         /// Changes all the min and max face materials to a default to overcome the the hiding rare ore inside of nonrare ore.
@@ -629,7 +643,11 @@ namespace SEToolbox.Interop.Asteroids
             }
         }
 
-        public void EmptyMaterial(string materialName, string replaceFillMaterial)
+        #endregion
+
+        #region RemoveMaterial
+
+        public void RemoveMaterial(string materialName, string replaceFillMaterial)
         {
             var materialIndex = SpaceEngineersApi.GetMaterialIndex(materialName);
             var replaceMaterialIndex = SpaceEngineersApi.GetMaterialIndex(replaceFillMaterial);
@@ -680,7 +698,7 @@ namespace SEToolbox.Interop.Asteroids
                                                 }
 
                                                 newCell.SetVoxelContent(0x00, ref voxelCoordInCell);
-                                                matCell.SetMaterialAndIndestructibleContent(replaceMaterialIndex, 0xff, ref voxelCoordInCell); 
+                                                matCell.SetMaterialAndIndestructibleContent(replaceMaterialIndex, 0xff, ref voxelCoordInCell);
                                             }
                                         }
                                     }
@@ -724,6 +742,74 @@ namespace SEToolbox.Interop.Asteroids
             }
         }
 
+        public void RemoveMaterial(int? xMin, int? xMax, int? yMin, int? yMax, int? zMin, int? zMax)
+        {
+            for (var x = 0; x < Size.X; x++)
+            {
+                for (var y = 0; y < Size.Y; y++)
+                {
+                    for (var z = 0; z < Size.Z; z++)
+                    {
+                        var coords = new Vector3I(x, y, z);
+
+                        if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
+                        {
+                            if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
+                            {
+                                SetVoxelContent(0x00, ref coords);
+                            }
+                        }
+                        else if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue)
+                        {
+                            if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value)
+                            {
+                                SetVoxelContent(0x00, ref coords);
+                            }
+                        }
+                        else if (xMin.HasValue && xMax.HasValue && zMin.HasValue && zMax.HasValue)
+                        {
+                            if (xMin.Value <= x && x <= xMax.Value && zMin.Value <= z && z <= zMax.Value)
+                            {
+                                SetVoxelContent(0x00, ref coords);
+                            }
+                        }
+                        else if (yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
+                        {
+                            if (yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
+                            {
+                                SetVoxelContent(0x00, ref coords);
+                            }
+                        }
+                        else if (xMin.HasValue && xMax.HasValue)
+                        {
+                            if (xMin.Value <= x && x <= xMax.Value)
+                            {
+                                SetVoxelContent(0x00, ref coords);
+                            }
+                        }
+                        else if (yMin.HasValue && yMax.HasValue)
+                        {
+                            if (yMin.Value <= y && y <= yMax.Value)
+                            {
+                                SetVoxelContent(0x00, ref coords);
+                            }
+                        }
+                        else if (zMin.HasValue && zMax.HasValue)
+                        {
+                            if (zMin.Value <= z && z <= zMax.Value)
+                            {
+                                SetVoxelContent(0x00, ref coords);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region SumVoxelCells
+
         public long SumVoxelCells()
         {
             long sum = 0;
@@ -748,6 +834,10 @@ namespace SEToolbox.Interop.Asteroids
 
             return sum;
         }
+
+        #endregion
+
+        #region SumFullCells
 
         public long SumFullCells()
         {
@@ -774,6 +864,10 @@ namespace SEToolbox.Interop.Asteroids
             return sum;
         }
 
+        #endregion
+
+        #region SumPartCells
+
         public long SumPartCells()
         {
             long sum = 0;
@@ -798,6 +892,10 @@ namespace SEToolbox.Interop.Asteroids
 
             return sum;
         }
+
+        #endregion
+
+        #region CalculateMaterialCellAssets
 
         public void CalculateMaterialCellAssets(out IList<byte> materialAssetList, out Dictionary<byte, long> materialVoxelCells)
         {
@@ -910,6 +1008,10 @@ namespace SEToolbox.Interop.Asteroids
             }
         }
 
+        #endregion
+
+        #region SetMaterialAssets
+
         public void SetMaterialAssets(IList<byte> materialsList)
         {
             var materialsIndex = 0;
@@ -952,6 +1054,8 @@ namespace SEToolbox.Interop.Asteroids
                 }
             }
         }
+
+        #endregion
 
         #endregion
 
