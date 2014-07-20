@@ -31,7 +31,15 @@
             var appFile = Path.GetFullPath(Assembly.GetEntryAssembly().Location);
             var appFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-            diagReport.AppendFormat("Application: {0}\r\n", appFile);
+            diagReport.AppendFormat("Application: {0}\r\n", ObsufacatePathNames(appFile));
+            diagReport.AppendFormat("CommandLine: {0}\r\n", ObsufacatePathNames(Environment.CommandLine));
+            diagReport.AppendFormat("CurrentDirectory: {0}\r\n", ObsufacatePathNames(Environment.CurrentDirectory));
+            diagReport.AppendFormat("ProcessorCount: {0}\r\n", Environment.ProcessorCount);
+            diagReport.AppendFormat("OSVersion: {0}\r\n", Environment.OSVersion);
+            diagReport.AppendFormat("Version: {0}\r\n", Environment.Version);
+            diagReport.AppendFormat("Is64BitOperatingSystem: {0}\r\n", Environment.Is64BitOperatingSystem);
+            diagReport.AppendFormat("\r\n");
+
             diagReport.AppendFormat("Files:\r\n");
 
             var files = Directory.GetFiles(appFilePath);
@@ -43,7 +51,28 @@
                 diagReport.AppendFormat("{0:O}\t{1:#,###0}\t{2}\t{3}\r\n", fileInfo.LastWriteTime, fileInfo.Length, fileVer.FileVersion, filename);
             }
 
+            var binCache = ToolboxUpdater.GetBinCachePath();
+            if (Directory.Exists(binCache))
+            {
+                diagReport.AppendFormat("\r\n");
+                diagReport.AppendFormat("BinCachePath: {0}\r\n", ObsufacatePathNames(binCache));
+
+                files = Directory.GetFiles(binCache);
+                foreach (var file in files)
+                {
+                    var filename = Path.GetFileName(file);
+                    var fileInfo = new FileInfo(file);
+                    var fileVer = FileVersionInfo.GetVersionInfo(file);
+                    diagReport.AppendFormat("{0:O}\t{1:#,###0}\t{2}\t{3}\r\n", fileInfo.LastWriteTime, fileInfo.Length, fileVer.FileVersion, filename);
+                }
+            }
+
             Log.Fatal(diagReport.ToString(), exception);
+        }
+
+        private static string ObsufacatePathNames(string path)
+        {
+            return path.Replace(@"\" + Environment.UserName + @"\", @"\%USERNAME%\");
         }
 
         #endregion

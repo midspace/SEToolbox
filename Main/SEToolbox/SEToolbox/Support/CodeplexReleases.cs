@@ -1,12 +1,10 @@
 ﻿namespace SEToolbox.Support
 {
+    using SEToolbox.Controls;
     using System;
     using System.Diagnostics;
-    using System.Linq;
     using System.Net;
-    using System.Reflection;
     using System.Text.RegularExpressions;
-    using SEToolbox.Controls;
 
     /// <summary>
     /// Extracts the CodePlex website information to determine the version of the current release.
@@ -35,12 +33,7 @@
                 return null;
 #endif
 
-            var assemblyVersion = Assembly.GetExecutingAssembly()
-                .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
-                .OfType<AssemblyFileVersionAttribute>()
-                .FirstOrDefault();
-
-            var currentVersion = assemblyVersion == null ? new Version() : new Version(assemblyVersion.Version);
+            var currentVersion = GlobalSettings.GetVersion();
             string webContent = null;
             string link = null;
 

@@ -1,9 +1,11 @@
 ﻿namespace SEToolbox.Support
 {
+    using Microsoft.Win32;
     using System;
     using System.Globalization;
+    using System.Linq;
+    using System.Reflection;
     using System.Windows;
-    using Microsoft.Win32;
 
     public class GlobalSettings
     {
@@ -125,6 +127,16 @@
             this.WindowWidth = null;
             this.AlwaysCheckForUpdates = null;
             this.IgnoreUpdateVersion = null;
+        }
+
+        public static Version GetVersion()
+        {
+            var assemblyVersion = Assembly.GetExecutingAssembly()
+              .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
+              .OfType<AssemblyFileVersionAttribute>()
+              .FirstOrDefault();
+
+            return assemblyVersion == null ? new Version() : new Version(assemblyVersion.Version);
         }
 
         #endregion
