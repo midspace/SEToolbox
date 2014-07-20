@@ -40,7 +40,11 @@
             // Create the WebClient with Proxy Credentials.
             using (var webclient = new MyWebClient())
             {
-                webclient.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials; // For Proxy servers on Corporate networks.
+                if (webclient.Proxy != null)
+                {
+                    // For Proxy servers on Corporate networks.
+                    webclient.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
+                }
                 webclient.Headers.Add(HttpRequestHeader.UserAgent, string.Format("Mozilla/5.0 ({0}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36", Environment.OSVersion)); // Crude useragent.
                 webclient.Headers.Add(HttpRequestHeader.Referer, string.Format("https://setoolbox.codeplex.com/updatecheck?current={0}", currentVersion));
 

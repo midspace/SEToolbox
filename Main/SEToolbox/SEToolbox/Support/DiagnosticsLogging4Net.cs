@@ -34,6 +34,7 @@
             diagReport.AppendFormat("Application: {0}\r\n", ObsufacatePathNames(appFile));
             diagReport.AppendFormat("CommandLine: {0}\r\n", ObsufacatePathNames(Environment.CommandLine));
             diagReport.AppendFormat("CurrentDirectory: {0}\r\n", ObsufacatePathNames(Environment.CurrentDirectory));
+            diagReport.AppendFormat("SEBinPath: {0}\r\n", GlobalSettings.Default.SEBinPath);
             diagReport.AppendFormat("ProcessorCount: {0}\r\n", Environment.ProcessorCount);
             diagReport.AppendFormat("OSVersion: {0}\r\n", Environment.OSVersion);
             diagReport.AppendFormat("Version: {0}\r\n", Environment.Version);
