@@ -1,12 +1,12 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using SEToolbox.Services;
+    using SEToolbox.Support;
     using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
 
     public class AboutViewModel : BaseViewModel
     {
@@ -76,11 +76,7 @@
         {
             get
             {
-                var version = Assembly.GetExecutingAssembly()
-                     .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
-                     .OfType<AssemblyFileVersionAttribute>()
-                     .FirstOrDefault();
-                return new Version(version.Version);
+                return GlobalSettings.GetVersion();
             }
         }
 

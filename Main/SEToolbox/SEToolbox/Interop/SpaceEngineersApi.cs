@@ -3,6 +3,7 @@
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -188,6 +189,8 @@
                     xmlTextWriter.Indentation = 2;
                     var serializer = (TS)Activator.CreateInstance(typeof(TS));
                     serializer.Serialize(xmlTextWriter, sector);
+
+                    xmlTextWriter.WriteComment(string.Format(" Saved '{0:o}' with SEToolbox version '{1}' ", DateTime.Now, GlobalSettings.GetVersion()));
                 }
             }
             catch

@@ -486,8 +486,7 @@
 
             if (File.Exists(checkpointBackupFilename))
             {
-                File.Delete(checkpointBackupFilename);
-                //FileSystem.DeleteFile(checkpointBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                FileSystem.DeleteFile(checkpointBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
             }
 
             File.Move(checkpointFilename, checkpointBackupFilename);
@@ -505,8 +504,7 @@
 
             if (File.Exists(sectorBackupFilename))
             {
-                File.Delete(sectorBackupFilename);
-                //FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
             }
 
             File.Move(sectorFilename, sectorBackupFilename);
