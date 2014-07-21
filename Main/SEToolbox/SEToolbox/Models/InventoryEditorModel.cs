@@ -226,7 +226,7 @@
                 name = definition.DisplayName;
                 massMultiplyer = definition.Mass;
                 volumeMultiplyer = definition.Volume.Value;
-                textureFile = Path.Combine(contentPath, definition.Icon + ".dds");
+                textureFile = SpaceEngineersCore.GetDataPathOrDefault(definition.Icon, Path.Combine(contentPath, definition.Icon + ".dds"));
             }
 
             var newItem = new InventoryModel(item)
