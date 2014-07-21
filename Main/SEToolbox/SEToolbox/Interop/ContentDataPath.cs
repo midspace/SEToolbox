@@ -2,7 +2,7 @@
 {
     public enum ContentPathType
     {
-        Icon,
+        Texture,
         Model,
         SandboxContent,
         SandboxSector,
@@ -25,7 +25,7 @@
         {
             switch (ContentType)
             {
-                case ContentPathType.Icon: return new[] { ReferencePath + ".dds", ReferencePath + ".png" };
+                case ContentPathType.Texture: return new[] { ReferencePath + ".dds", ReferencePath + ".png" };
                 case ContentPathType.Model: return new[] { ReferencePath + ".mwm" };
                 case ContentPathType.SandboxContent: return new[] { ReferencePath + ".sbc" };
                 case ContentPathType.SandboxSector: return new[] { ReferencePath + ".sbs" };

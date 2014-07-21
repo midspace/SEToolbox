@@ -41,7 +41,7 @@
 
         public static void LoadDefinitions()
         {
-            // Stock path for initial startup.
+            // Defined (default) path for initial startup.
             Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), SpaceEngineersConsts.BaseLocalPath.ModsPath);
         }
 
@@ -246,20 +246,36 @@
                 icons.Add(definitions.Environment.EnvironmentTexture);
             }
 
+            if (definitions.VoxelMaterials != null)
+            {
+                icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_de"));
+                icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_ns"));
+            }
+
+            var voxelsPath = Path.Combine(contentPath, @"Textures\Voxels");
+            if (Directory.Exists(voxelsPath))
+            {
+                foreach (var filePath in Directory.GetFiles(voxelsPath, "*.dds"))
+                {
+                    var refPath = Path.Combine(@"Textures\Voxels", Path.GetFileNameWithoutExtension(filePath));
+                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.Texture, refPath, filePath));
+                }
+            }
+
             foreach (var icon in icons.Where(s => !string.IsNullOrEmpty(s)).Select(s => s).Distinct())
             {
                 var contentFile = Path.Combine(contentPath, icon + ".dds");
 
                 if (File.Exists(contentFile) || !contentData.ContainsKey(icon.ToLower()))
                 {
-                    contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Icon, icon, contentFile));
+                    contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile));
                 }
                 else
                 {
                     contentFile = Path.Combine(contentPath, icon + ".png");
                     if (File.Exists(contentFile) || !contentData.ContainsKey(icon.ToLower()))
                     {
-                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Icon, icon, contentFile));
+                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile));
                     }
                 }
             }

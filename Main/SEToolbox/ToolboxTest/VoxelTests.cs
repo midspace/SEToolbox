@@ -685,11 +685,11 @@
 
         #region helpers
 
-        private static long _counter;
-        private static long _maximumProgress;
+        private static double _counter;
+        private static double _maximumProgress;
         private static int _percent;
         private static System.Diagnostics.Stopwatch _timer;
-        public static void ResetProgress(long initial, long maximumProgress)
+        public static void ResetProgress(double initial, double maximumProgress)
         {
             _percent = 0;
             _counter = initial;

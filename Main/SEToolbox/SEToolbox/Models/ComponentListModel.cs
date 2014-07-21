@@ -255,10 +255,11 @@
 
             foreach (var voxelMaterialDefinition in SpaceEngineersCore.Definitions.VoxelMaterials)
             {
+                var texture = @"Textures\Voxels\" + voxelMaterialDefinition.AssetName + "_ForAxisXZ_de";
                 this.MaterialAssets.Add(new ComponentItemModel()
                 {
-                    Name = voxelMaterialDefinition.AssetName,
-                    TextureFile = Path.Combine(contentPath, @"Textures\Voxels\" + voxelMaterialDefinition.AssetName + "_ForAxisXZ_de.dds"),
+                    Name = voxelMaterialDefinition.Name,
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture + ".dds")),
                     IsRare = voxelMaterialDefinition.IsRare,
                     OreName = voxelMaterialDefinition.MinedOre,
                     MineOreRatio = voxelMaterialDefinition.MinedOreRatio,

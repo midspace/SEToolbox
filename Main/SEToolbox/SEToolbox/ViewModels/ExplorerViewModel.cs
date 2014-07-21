@@ -164,6 +164,14 @@
                 return new DelegateCommand(new Action(ImportModelExecuted), new Func<bool>(ImportModelCanExecute));
             }
         }
+        
+        public ICommand ImportAsteroidModelCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ImportAsteroidModelExecuted), new Func<bool>(ImportAsteroidModelCanExecute));
+            }
+        }
 
         public ICommand ImportSandboxObjectCommand
         {
@@ -723,6 +731,35 @@
                         ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
                     }
 
+                    if (this._preSelectedStructure != null)
+                        this.SelectedStructure = this._preSelectedStructure;
+                }
+                this.IsBusy = false;
+            }
+        }
+
+        public bool ImportAsteroidModelCanExecute()
+        {
+            return this._dataModel.ActiveWorld != null;
+        }
+
+        public void ImportAsteroidModelExecuted()
+        {
+            var model = new Import3dAsteroidModel();
+            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
+            var loadVm = new Import3dAsteroidViewModel(this, model);
+
+            var result = _dialogService.ShowDialog<WindowImportAsteroidModel>(this, loadVm);
+            if (result == true)
+            {
+                this.IsBusy = true;
+                var newEntity = loadVm.BuildEntity();
+                if (loadVm.IsValidModel)
+                {
+                    this._dataModel.CollisionCorrectEntity(newEntity);
+                    var structure = this._dataModel.AddEntity(newEntity);
+                    ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
                     if (this._preSelectedStructure != null)
                         this.SelectedStructure = this._preSelectedStructure;
                 }

@@ -20,7 +20,7 @@
         // For a 1024 cubed asteroid, it takes approximately 6.5Gb of system memory.
 
         public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, string asteroidFile, ScaleTransform3D scale, Transform3D rotateTransform,
-            Action<long, long> resetProgress, Action incrementProgress)
+            Action<double, double> resetProgress, Action incrementProgress)
         {
             var materials = new List<byte>();
             var faceMaterials = new List<byte>();
