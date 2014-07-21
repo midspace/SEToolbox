@@ -123,8 +123,8 @@
             {
                 if (this._closeResult != value)
                 {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                    this._closeResult = value;
+                    this.RaisePropertyChanged(() => CloseResult);
                 }
             }
         }
@@ -258,8 +258,15 @@
                     saveType = SaveWorldType.CustomAdminRequired;
                 }
 
-                // TODO: determine the correct UserDataPath for this custom save game if at all possible, otherwise use BaseLocalPath.
-                var saveResource = this._dataModel.LoadSaveFromPath(savePath, userName, saveType, SpaceEngineersConsts.BaseLocalPath);
+                // Determine the correct UserDataPath for this custom save game if at all possible for the mods.
+                var dp = SpaceEngineersConsts.BaseLocalPath;
+                var basePath = GetPathBase(savePath, "Saves");
+                if (basePath != null)
+                {
+                    dp = new UserDataPath(Path.Combine(basePath, "Saves"), Path.Combine(basePath, "Mods"));
+                }
+
+                var saveResource = this._dataModel.LoadSaveFromPath(savePath, userName, saveType, dp);
                 saveResource.LoadCheckpoint();
 
                 if (saveResource.IsValid)
@@ -303,6 +310,28 @@
         public void ZoomThumbnailExecuted()
         {
             this.ZoomThumbnail = !this.ZoomThumbnail;
+        }
+
+        #endregion
+
+        #region helpers
+
+        private string GetPathBase(string path, string baseName)
+        {
+            var parentPath = path;
+            var currentName = Path.GetFileName(parentPath);
+            while (currentName != null && !currentName.Equals(baseName, StringComparison.CurrentCultureIgnoreCase))
+            {
+                parentPath = Path.GetDirectoryName(parentPath);
+                currentName = Path.GetFileName(parentPath);
+            }
+
+            if (currentName != null && currentName.Equals(baseName, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return Path.GetDirectoryName(parentPath);
+            }
+
+            return null;
         }
 
         #endregion

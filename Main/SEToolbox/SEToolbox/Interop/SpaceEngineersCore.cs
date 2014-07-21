@@ -67,6 +67,9 @@
         /// Load all the Space Engineers data definitions.
         /// </summary>
         /// <param name="contentPath">allows redirection of path when switching between single player or server.</param>
+        /// <param name="userModspath"></param>
+        /// <param name="definitions"></param>
+        /// <param name="contentData"></param>
         /// <returns></returns>
         private void FindDefinitions(string contentPath, string userModspath, out MyObjectBuilder_Definitions definitions, out Dictionary<string, ContentDataPath> contentData)
         {
@@ -77,7 +80,7 @@
             definitions = LoadAllDefinitions(contentPath);
             LoadContent(contentPath, definitions, ref contentData);
 
-            if (!string.IsNullOrEmpty(userModspath))
+            if (!string.IsNullOrEmpty(userModspath) && Directory.Exists(userModspath))
             {
                 // Read through the mod paths manually.
                 // Using the MyObjectBuilder_Base.DeserializeXML() with MyFSLocationEnum.ContentWithMods does not work in the expected manner.
@@ -166,7 +169,7 @@
                 if (readValues != null)
                 {
                     var currentValues = field.GetValue(baseDefinitions);
-                    if (currentValues == null)
+                    if (currentValues == null || !field.FieldType.IsArray)
                     {
                         field.SetValue(baseDefinitions, readValues);
                     }

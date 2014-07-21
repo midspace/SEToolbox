@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Security.Principal;
 
@@ -116,6 +117,12 @@
                 return false;
             if (!Directory.Exists(Path.Combine(filePath, @"..\Content")))
                 return false;
+
+            // Validate that all core SE assemblies are present, otherwise it's pointless continuing.
+            if (CoreSpaceEngineersFiles.Any(filename => !File.Exists(Path.Combine(filePath, filename))))
+            {
+                return false;
+            }
 
             // Skip checking for the .exe. Not required for the Toolbox currently.
             return true;

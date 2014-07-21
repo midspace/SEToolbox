@@ -26,6 +26,7 @@
             if (!ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
             {
                 var faModel = new FindApplicationModel();
+                faModel.GameApplicationPath = filePath;
                 var faViewModel = new FindApplicationViewModel(faModel);
                 var faWindow = new WindowFindApplication(faViewModel);
                 var ret = faWindow.ShowDialog();
