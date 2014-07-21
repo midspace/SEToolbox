@@ -558,6 +558,74 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
+        #region SetVoxelContentRegion
+
+        public void SetVoxelContentRegion(byte content, int? xMin, int? xMax, int? yMin, int? yMax, int? zMin, int? zMax)
+        {
+            for (var x = 0; x < Size.X; x++)
+            {
+                for (var y = 0; y < Size.Y; y++)
+                {
+                    for (var z = 0; z < Size.Z; z++)
+                    {
+                        var coords = new Vector3I(x, y, z);
+
+                        if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
+                        {
+                            if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
+                            {
+                                SetVoxelContent(content, ref coords);
+                            }
+                        }
+                        else if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue)
+                        {
+                            if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value)
+                            {
+                                SetVoxelContent(content, ref coords);
+                            }
+                        }
+                        else if (xMin.HasValue && xMax.HasValue && zMin.HasValue && zMax.HasValue)
+                        {
+                            if (xMin.Value <= x && x <= xMax.Value && zMin.Value <= z && z <= zMax.Value)
+                            {
+                                SetVoxelContent(content, ref coords);
+                            }
+                        }
+                        else if (yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
+                        {
+                            if (yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
+                            {
+                                SetVoxelContent(content, ref coords);
+                            }
+                        }
+                        else if (xMin.HasValue && xMax.HasValue)
+                        {
+                            if (xMin.Value <= x && x <= xMax.Value)
+                            {
+                                SetVoxelContent(content, ref coords);
+                            }
+                        }
+                        else if (yMin.HasValue && yMax.HasValue)
+                        {
+                            if (yMin.Value <= y && y <= yMax.Value)
+                            {
+                                SetVoxelContent(content, ref coords);
+                            }
+                        }
+                        else if (zMin.HasValue && zMax.HasValue)
+                        {
+                            if (zMin.Value <= z && z <= zMax.Value)
+                            {
+                                SetVoxelContent(content, ref coords);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region SetVoxelMaterialAndIndestructibleContent
 
         public void SetVoxelMaterialAndIndestructibleContent(string materialName, byte indestructibleContent, ref Vector3I voxelCoord)
@@ -744,66 +812,7 @@ namespace SEToolbox.Interop.Asteroids
 
         public void RemoveMaterial(int? xMin, int? xMax, int? yMin, int? yMax, int? zMin, int? zMax)
         {
-            for (var x = 0; x < Size.X; x++)
-            {
-                for (var y = 0; y < Size.Y; y++)
-                {
-                    for (var z = 0; z < Size.Z; z++)
-                    {
-                        var coords = new Vector3I(x, y, z);
-
-                        if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
-                        {
-                            if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
-                            {
-                                SetVoxelContent(0x00, ref coords);
-                            }
-                        }
-                        else if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue)
-                        {
-                            if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value)
-                            {
-                                SetVoxelContent(0x00, ref coords);
-                            }
-                        }
-                        else if (xMin.HasValue && xMax.HasValue && zMin.HasValue && zMax.HasValue)
-                        {
-                            if (xMin.Value <= x && x <= xMax.Value && zMin.Value <= z && z <= zMax.Value)
-                            {
-                                SetVoxelContent(0x00, ref coords);
-                            }
-                        }
-                        else if (yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
-                        {
-                            if (yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
-                            {
-                                SetVoxelContent(0x00, ref coords);
-                            }
-                        }
-                        else if (xMin.HasValue && xMax.HasValue)
-                        {
-                            if (xMin.Value <= x && x <= xMax.Value)
-                            {
-                                SetVoxelContent(0x00, ref coords);
-                            }
-                        }
-                        else if (yMin.HasValue && yMax.HasValue)
-                        {
-                            if (yMin.Value <= y && y <= yMax.Value)
-                            {
-                                SetVoxelContent(0x00, ref coords);
-                            }
-                        }
-                        else if (zMin.HasValue && zMax.HasValue)
-                        {
-                            if (zMin.Value <= z && z <= zMax.Value)
-                            {
-                                SetVoxelContent(0x00, ref coords);
-                            }
-                        }
-                    }
-                }
-            }
+            SetVoxelContentRegion(0x00, xMin, xMax, yMin, yMax, zMin, zMax);
         }
 
         #endregion

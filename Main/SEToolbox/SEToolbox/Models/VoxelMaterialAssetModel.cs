@@ -13,6 +13,9 @@
 
         #region Properties
 
+        /// <summary>
+        /// 'Name' which represents the name used in the Voxel Material, and .vox file.
+        /// </summary>
         public string MaterialName
         {
             get
@@ -29,6 +32,8 @@
                 }
             }
         }
+
+        // 'AssetName', which represent the texture.
 
         public double Volume
         {

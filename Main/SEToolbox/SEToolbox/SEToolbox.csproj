@@ -157,6 +157,7 @@
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
+    <Compile Include="Models\Import3dAsteroidModel.cs" />
     <Compile Include="Models\InventoryEditorModel.cs" />
     <Compile Include="Models\InventoryModel.cs" />
     <Compile Include="Models\LanguageModel.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
+    <Compile Include="ViewModels\Import3dAsteroidViewModel.cs" />
     <Compile Include="ViewModels\CubeItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryEditorViewModel.cs" />
     <Compile Include="ViewModels\ResourceReportViewModel.cs" />
@@ -349,8 +351,8 @@
     <Compile Include="Views\WindowGroupMove.xaml.cs">
       <DependentUpon>WindowGroupMove.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WindowsImportAsteroidModel.xaml.cs">
-      <DependentUpon>WindowsImportAsteroidModel.xaml</DependentUpon>
+    <Compile Include="Views\WindowImportAsteroidModel.xaml.cs">
+      <DependentUpon>WindowImportAsteroidModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowSplashScreen.xaml.cs">
       <DependentUpon>WindowSplashScreen.xaml</DependentUpon>
@@ -456,7 +458,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\WindowsImportAsteroidModel.xaml">
+    <Page Include="Views\WindowImportAsteroidModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

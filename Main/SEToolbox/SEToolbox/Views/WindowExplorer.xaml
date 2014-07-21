@@ -96,6 +96,11 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=icecube}" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <!--<MenuItem Header="3D Model for Asteroid" Command="{Binding ImportAsteroidModelCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=icecube}" />
+                        </MenuItem.Icon>
+                    </MenuItem>-->
                     <MenuItem Header="Sandbox Content files" Command="{Binding ImportSandboxObjectCommand}" ToolTip="Import previously exported ships and station .xml files.">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SECubes16}" />
