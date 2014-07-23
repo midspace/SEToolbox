@@ -607,6 +607,7 @@
         [TestMethod]
         public void VoxelConvertToVolmetic()
         {
+            SpaceEngineersCore.LoadStockDefinitions();
             var materials = SpaceEngineersApi.GetMaterialList();
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Name.Contains("Stone"));
@@ -632,12 +633,12 @@
             //var scale = new ScaleTransform3D(20, 20, 20);
             //Transform3D rotateTransform = null;
 
-            // Max Scale test...
+            // Max Scale test...  will cause an OutOfMemory exception at this scale because MSTest runs in x86.
             //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             //var scale = new ScaleTransform3D(120, 120, 120);
             //Transform3D rotateTransform = null;
 
-            // Memory test (probably won't load in Space Engineers) ...
+            // Memory test (probably won't load in Space Engineers) ...  will cause an OutOfMemory exception at this scale because MSTest runs in x86.
             //var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             //var scale = new ScaleTransform3D(200, 200, 200);
 
@@ -649,7 +650,6 @@
             var modelMaterials = new string[] { stoneMaterial.Name, goldMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name, stoneMaterial.Name };
             var fillerMaterial = silverMaterial.Name;
             var asteroidFile = @".\TestOutput\test_sphere.vox";
-
 
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);
             var meshes = new List<SEToolbox.Interop.Asteroids.MyVoxelRayTracer.MyMeshModel>();
