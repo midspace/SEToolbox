@@ -189,18 +189,6 @@
             //Assert.AreEqual(5, cubic[0][0].Length, "Array size must match.");
         }
 
-        [TestMethod]
-        public void GenerateModelAsteroid2()
-        {
-            //const string modelFile = @".\TestAssets\test.obj";
-            //const string modelFile = @".\TestAssets\buddha-fixed-bottom.stl";
-            const string modelFile = @".\TestAssets\Sphere_Gold.3ds";
-            //const string modelFile = @".\TestAssets\TwoSpheres.3ds";
-
-            // TODO: is causing OutOfMemory exception at this scale.
-            //var cubic = Modelling.ReadModelAsteroidVolmetic(modelFile, 200, 200, 200, null, ResetProgress, IncrementProgress);
-        }
-
         private static long _counter;
         private static long _maximumProgress;
         private static int _percent;
@@ -239,8 +227,8 @@
             var ret = MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersection, out normal);
 
             Assert.AreEqual(true, ret, "ret must be true.");
-            Assert.AreEqual(intersection, new Point3D(0, 0, 0), "Point must be match.");
-            Assert.AreEqual(normal, 1, "Normal must be 1.");
+            Assert.AreEqual(new Point3D(0, 0, 0), intersection, "Point must be match.");
+            Assert.AreEqual(1, normal, "Normal must be 1.");
         }
 
         [TestMethod]
@@ -261,8 +249,8 @@
             var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersection, out normal);
 
             Assert.AreEqual(true, ret, "ret must be true.");
-            Assert.AreEqual(intersection, new Point3D(1, 1, 0), "Point must be match.");
-            Assert.AreEqual(normal, 1, "Normal must be 1.");
+            Assert.AreEqual(new Point3D(1, 1, 0), intersection, "Point must be match.");
+            Assert.AreEqual(1, normal, "Normal must be 1.");
         }
 
         [TestMethod]
@@ -279,6 +267,7 @@
             var r2 = new Point3D(15, 12, 20);
             var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(new Point3D(15, 12, 11), intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -287,14 +276,15 @@
             Point3D intersection;
             int normal;
 
-            var p3 = new Point3D(10, 10, 10);
-            var p2 = new Point3D(15, 15, 11);
             var p1 = new Point3D(20, 10, 12);
+            var p2 = new Point3D(15, 15, 11);
+            var p3 = new Point3D(10, 10, 10);
 
             var r1 = new Point3D(15, 12, 0);
             var r2 = new Point3D(15, 12, 20);
             var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(new Point3D(15, 12, 11), intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -311,6 +301,7 @@
             var r2 = new Point3D(14, 14, 20);
             var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(new Point3D(14, 14, 10.8), intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -318,15 +309,16 @@
         {
             Point3D intersection;
             int normal;
-       
-            var p3 = new Point3D(10, 10, 10);
-            var p2 = new Point3D(15, 15, 11);
+
             var p1 = new Point3D(20, 10, 12);
+            var p2 = new Point3D(15, 15, 11);
+            var p3 = new Point3D(10, 10, 10);
 
             var r1 = new Point3D(14, 14, 0);
             var r2 = new Point3D(14, 14, 20);
             var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(new Point3D(14, 14, 10.8), intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -338,11 +330,12 @@
             var p1 = new Point3D(10, 10, 10);
             var p2 = new Point3D(15, 15, 11);
             var p3 = new Point3D(20, 10, 12);
-            var r1 = new Point3D(10, 10, 0);
-            var r2 = new Point3D(10, 10, 20);
+            var r1 = new Point3D(p1.X, p1.Y, 0);
+            var r2 = new Point3D(p1.X, p1.Y, 20);
 
             var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(p1, intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -354,11 +347,12 @@
             var p1 = new Point3D(10, 10, 10);
             var p2 = new Point3D(15, 15, 11);
             var p3 = new Point3D(20, 10, 12);
-            var r1 = new Point3D(15, 15, 0);
-            var r2 = new Point3D(15, 15, 20);
+            var r1 = new Point3D(p2.X, p2.Y, 0);
+            var r2 = new Point3D(p2.X, p2.Y, 20);
 
             var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(p2, intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -370,13 +364,12 @@
             var p1 = new Point3D(10, 10, 10);
             var p2 = new Point3D(15, 15, 11);
             var p3 = new Point3D(20, 10, 12);
-            var r1 = new Point3D(20, 20, 0);
-            var r2 = new Point3D(20, 20, 20);
+            var r1 = new Point3D(p3.X, p3.Y, 0);
+            var r2 = new Point3D(p3.X, p3.Y, 20);
 
-            // TODO: test is currently failing.
-
-            //var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
-            //Assert.AreEqual(true, ret, "ret must be true.");
+            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(p3, intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -385,16 +378,15 @@
             Point3D intersection;
             int normal;
 
-            var p3 = new Point3D(10, 10, 10);
-            var p2 = new Point3D(15, 15, 11);
             var p1 = new Point3D(20, 10, 12);
-            var r1 = new Point3D(10, 10, 0);
-            var r2 = new Point3D(10, 10, 20);
+            var p2 = new Point3D(15, 15, 11);
+            var p3 = new Point3D(10, 10, 10);
+            var r1 = new Point3D(p1.X, p1.Y, 0);
+            var r2 = new Point3D(p1.X, p1.Y, 20);
 
-            // TODO: test is currently failing.
-
-            //var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
-            //Assert.AreEqual(true, ret, "ret must be true.");
+            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(p1, intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -403,14 +395,15 @@
             Point3D intersection;
             int normal;
 
-            var p3 = new Point3D(10, 10, 10);
-            var p2 = new Point3D(15, 15, 11);
             var p1 = new Point3D(20, 10, 12);
-            var r1 = new Point3D(15, 15, 0);
-            var r2 = new Point3D(15, 15, 20);
+            var p2 = new Point3D(15, 15, 11);
+            var p3 = new Point3D(10, 10, 10);
+            var r1 = new Point3D(p2.X, p2.Y, 0);
+            var r2 = new Point3D(p2.X, p2.Y, 20);
 
             var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(p2, intersection, "intersection must be match.");
         }
 
         [TestMethod]
@@ -419,16 +412,15 @@
             Point3D intersection;
             int normal;
 
-            var p3 = new Point3D(10, 10, 10);
-            var p2 = new Point3D(15, 15, 11);
             var p1 = new Point3D(20, 10, 12);
-            var r1 = new Point3D(20, 20, 0);
-            var r2 = new Point3D(20, 20, 20);
+            var p2 = new Point3D(15, 15, 11);
+            var p3 = new Point3D(10, 10, 10);
+            var r1 = new Point3D(p3.X, p3.Y, 0);
+            var r2 = new Point3D(p3.X, p3.Y, 20);
 
-            // TODO: test is currently failing.
-
-            //var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
-            //Assert.AreEqual(true, ret, "ret must be true.");
+            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            Assert.AreEqual(true, ret, "ret must be true.");
+            Assert.AreEqual(p3, intersection, "intersection must be match.");
         }
 
         [TestMethod]

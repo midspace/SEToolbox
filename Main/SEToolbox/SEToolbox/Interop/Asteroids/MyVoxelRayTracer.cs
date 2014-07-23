@@ -69,9 +69,9 @@
             var yMax = (int)Math.Ceiling(tbounds.Y + tbounds.SizeY) + 2;
             var zMax = (int)Math.Ceiling(tbounds.Z + tbounds.SizeZ) + 2;
 
-            var xCount = MyVoxelBuilder.ScaleMod(xMax - xMin, 64);
-            var yCount = MyVoxelBuilder.ScaleMod(yMax - yMin, 64);
-            var zCount = MyVoxelBuilder.ScaleMod(zMax - zMin, 64);
+            var xCount = (xMax - xMin).RoundUpToNearest(64);
+            var yCount = (yMax - yMin).RoundUpToNearest(64);
+            var zCount = (zMax - zMin).RoundUpToNearest(64);
 
             Debug.WriteLine("Approximate Size: {0}x{1}x{2}", Math.Ceiling(tbounds.X + tbounds.SizeX) - Math.Floor(tbounds.X), Math.Ceiling(tbounds.Y + tbounds.SizeY) - Math.Floor(tbounds.Y), Math.Ceiling(tbounds.Z + tbounds.SizeZ) - Math.Floor(tbounds.Z));
             Debug.WriteLine("Bounds Size: {0}x{1}x{2}", xCount, yCount, zCount);
@@ -205,6 +205,11 @@
                                         }
                                     }
 
+                                    if (endCoord - startCoord < 6) // 2 voxels or less
+                                        volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
+
+                                    //volume = volume.RoundUpToNearest(8);
+
                                     modelCubic[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = volume;
                                     modelMater[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
                                 }
@@ -254,6 +259,17 @@
                 {
                     for (var z = zMin; z < zMax; z++)
                     {
+                        //if (x - xMin != 20 || z - zMin != 125)
+                        //{
+                        //    threadCounter--;
+                        //    continue;
+                        //}
+                        //if (x - xMin > 20 || z - zMin < 125)
+                        //{
+                        //    threadCounter--;
+                        //    continue;
+                        //}
+
                         var testRays = new List<Point3D[]>()
                         {
                             new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
@@ -342,6 +358,11 @@
                                         // average with the pre-existing X volume.
                                         volume = (byte)Math.Round(((float)prevolumme + (float)volume) / 2f, 0);
                                     }
+
+                                    if (endCoord - startCoord < 6) // 2 voxels or less
+                                        volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
+
+                                    //volume = volume.RoundUpToNearest(8);
 
                                     modelCubic[bgw.X - xMin][y - yMin][bgw.Z - zMin] = volume;
                                     modelMater[bgw.X - xMin][y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
@@ -480,6 +501,11 @@
                                         // average with the pre-existing X and Y volumes.
                                         volume = (byte)Math.Round((((float)prevolumme * 2) + (float)volume) / 3f, 0);
                                     }
+
+                                    if (endCoord - startCoord < 6) // 2 voxels or less
+                                        volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
+
+                                    //volume = volume.RoundUpToNearest(8);
 
                                     modelCubic[bgw.X - xMin][bgw.Y - yMin][z - zMin] = volume;
                                     modelMater[bgw.X - xMin][bgw.Y - yMin][z - zMin] = materials[bgw.ModelIdx];

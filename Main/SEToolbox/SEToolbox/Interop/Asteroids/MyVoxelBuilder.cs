@@ -75,7 +75,7 @@
         public static MyVoxelMap BuildAsteroidCube(bool multiThread, string filename, Vector3I min, Vector3I max, string material, string faceMaterial)
         {
             // correct for allowing sizing.
-            var buildSize = new Vector3I(ScaleMod(max.X, 64), ScaleMod(max.Y, 64), ScaleMod(max.Z, 64));
+            var buildSize = new Vector3I(max.X.RoundUpToNearest(64), max.Y.RoundUpToNearest(64), max.Z.RoundUpToNearest(64));
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
             {
@@ -96,7 +96,7 @@
         public static MyVoxelMap BuildAsteroidSphere(bool multiThread, string filename, double radius, string material, string faceMaterial,
             bool hollow = false, int shellWidth = 0)
         {
-            var length = ScaleMod((radius * 2) + 2, 64);
+            var length = (int)((radius * 2) + 2).RoundUpToNearest(64);
             var size = new Vector3I(length, length, length);
             var origin = new Vector3I(size.X / 2, size.Y / 2, size.Z / 2);
 
@@ -200,7 +200,7 @@
         {
             var displayname = Path.GetFileNameWithoutExtension(filename);
             var voxelMap = new MyVoxelMap();
-            var actualSize = new Vector3I(ScaleMod(size.X, 64), ScaleMod(size.Y, 64), ScaleMod(size.Z, 64));
+            var actualSize = new Vector3I(size.X.RoundUpToNearest(64), size.Y.RoundUpToNearest(64), size.Z.RoundUpToNearest(64));
             voxelMap.Init(displayname, Vector3.Zero, actualSize, material);
 
             var counterTotal = actualSize.X * actualSize.Y * actualSize.Z;
@@ -344,15 +344,6 @@
         }
 
         #endregion
-
-        #endregion
-
-        #region helpers
-
-        public static int ScaleMod(double value, int scale)
-        {
-            return (int)Math.Ceiling(value / scale) * scale;
-        }
 
         #endregion
     }

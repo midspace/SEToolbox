@@ -232,22 +232,29 @@
             var intersectPos = r1 + (r2 - r1) * Math.Round(-dist1 / Math.Round(dist2 - dist1, rounding), rounding);
 
             // Find if the interesection point lies inside the triangle by testing it against all edges
-            var vTest = CrossProductRound(normal, Round(p2 - p1, rounding));
-            if (DotProductRound(vTest, Round(intersectPos - p1, rounding)) < 0.0f)
+
+            var vTest = Vector3D.CrossProduct(normal, p2 - p1);
+            //var vTest = CrossProductRound(normal, Round(p2 - p1, rounding));
+            //if (DotProductRound(vTest, Round(intersectPos - p1, rounding)) < 0.0f)
+            if (Math.Round(Vector3D.DotProduct(vTest, intersectPos - p1), 12) < 0.0f)
             {
                 // No intersection on edge P2-P1.
                 return false;
             }
 
-            vTest = CrossProductRound(normal, Round(p3 - p2, rounding));
-            if (DotProductRound(vTest, Round(intersectPos - p2, rounding)) < 0.0f)
+            vTest = Vector3D.CrossProduct(normal, p3 - p2);
+            //vTest = CrossProductRound(normal, Round(p3 - p2, rounding));
+            //if (DotProductRound(vTest, Round(intersectPos - p2, rounding)) < 0.0f)
+            if (Math.Round(Vector3D.DotProduct(vTest, intersectPos - p2), 12) < 0.0f)
             {
                 // No intersection on edge P3-P2.
                 return false;
             }
 
-            vTest = CrossProductRound(normal, Round(p1 - p3, rounding));
-            if (DotProductRound(vTest, Round(intersectPos - p1, rounding)) < 0.0f)
+            vTest = Vector3D.CrossProduct(normal, p1 - p3);
+            //vTest =  CrossProductRound(normal, Round(p1 - p3, rounding));
+            //if (DotProductRound(vTest, Round(intersectPos - p1, rounding)) < 0.0f)
+            if (Math.Round(Vector3D.DotProduct(vTest, intersectPos - p1), 12) < 0.0f)
             {
                 // No intersection on edge P1-P3.
                 return false;
@@ -303,7 +310,7 @@
 
         internal static double DotProductRound(Vector3D vector1, Vector3D vector2)
         {
-            return Math.Round(Math.Round(Math.Round(vector1.X * vector2.X, 14) + Math.Round(vector1.Y * vector2.Y, 14), 14) + Math.Round(vector1.Z * vector2.Z, 14), 14);
+            return Math.Round(Math.Round(Math.Round(vector1.X * vector2.X, 14) + Math.Round(vector1.Y * vector2.Y, 14), 14) + Math.Round(vector1.Z * vector2.Z, 14), 13);
         }
 
         public static Transform3D TransformVector(Vector3D origin, double xAngle, double yAngle, double zAngle)
