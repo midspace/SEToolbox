@@ -29,6 +29,18 @@
     <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/en-us/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber).msi" SkipUnchangedFiles="false"></Copy>
   </Target>
 
+  <Target Name="WriteToDeploymentBinaries">
+    <ItemGroup>
+      <Line Include="line01"><Text>@echo off</Text></Line>
+      <Line Include="line02"><Text>start setoolbox.exe /OLDDLL</Text></Line>
+      <LineText Include="%(Line.Text)" />
+    </ItemGroup>
+    <WriteLinesToFile
+        File="$(BinariesRoot)\SEToolbox -OLDDLL.bat"
+        Lines="@(LineText)"
+        Overwrite="true"/>
+  </Target>
+
   <Target Name="PackageZipDeployment" DependsOnTargets="CopyBinaryFiles">
     <ItemGroup>
       <PackageFilesToDelete Include="$(ReleaseRoot)\SEToolbox-$(VersionNumber).zip"/>

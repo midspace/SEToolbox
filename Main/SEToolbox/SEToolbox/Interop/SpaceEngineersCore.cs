@@ -115,7 +115,7 @@
             definitions.Characters = definitions.Characters.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
             definitions.Components = definitions.Components.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             // definitions.Configuration is not an array.
-            definitions.ContainerTypes = definitions.ContainerTypes.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
+            definitions.ContainerTypes = definitions.ContainerTypes.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.CubeBlocks = definitions.CubeBlocks.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             // definitions.Environment is not an array.
             definitions.GlobalEvents = definitions.GlobalEvents.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();

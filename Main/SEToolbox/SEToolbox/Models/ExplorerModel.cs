@@ -575,7 +575,7 @@
             this.ThePlayerCharacter = null;
             this._customColors = null;
 
-            if (this.SectorData != null)
+            if (this.SectorData != null && this.ActiveWorld.Content != null)
             {
                 foreach (var entityBase in this.SectorData.SectorObjects)
                 {

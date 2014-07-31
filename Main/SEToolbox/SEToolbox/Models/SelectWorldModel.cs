@@ -135,6 +135,7 @@
             if (xDoc == null)
             {
                 str.AppendLine("! Checkpoint file is missing or broken.");
+                str.AppendLine("! Unable to repair.");
                 missingFiles = true;
             }
             else
@@ -228,6 +229,7 @@
             {
                 statusNormal = false;
                 str.AppendLine("! Checkpoint file is missing or broken.");
+                str.AppendLine("! Unable to repair.");
                 missingFiles = true;
             }
 
@@ -235,6 +237,7 @@
             {
                 statusNormal = false;
                 str.AppendLine("! Sector file is missing or broken.");
+                str.AppendLine("! Unable to repair.");
                 missingFiles = true;
             }
 

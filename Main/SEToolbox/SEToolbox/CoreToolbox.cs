@@ -44,8 +44,8 @@
             GlobalSettings.Default.SEBinPath = filePath;
             GlobalSettings.Default.Save();
 
-            var ignoreUpdates = args.Any(a => a.ToUpper() == "/X");
-            var oldDlls = args.Any(a => a.ToUpper() == "/OLDDLL");
+            var ignoreUpdates = args.Any(a => a.ToUpper() == "/X" || a.ToUpper() == "-X");
+            var oldDlls = args.Any(a => a.ToUpper() == "/OLDDLL" || a.ToUpper() == "-OLDDLL");
             var altDlls = !oldDlls;
 
             // Go looking for any changes in the Dependant Space Engineers assemblies and immediately attempt to update.
@@ -147,7 +147,7 @@
             var explorerModel = new ExplorerModel();
             explorerModel.Load();
 
-            if (args.Any(a => a.ToUpper() == "/WR"))
+            if (args.Any(a => a.ToUpper() == "/WR" || a.ToUpper() == "-WR"))
             {
                 ResourceReportModel.GenerateOfflineReport(explorerModel, args);
                 Application.Current.Shutdown();
