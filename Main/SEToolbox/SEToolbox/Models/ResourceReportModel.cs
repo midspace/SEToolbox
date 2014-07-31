@@ -1152,7 +1152,7 @@ td.right { text-align: right; }");
         public static void GenerateOfflineReport(ExplorerModel baseModel, string[] args)
         {
             var argList = args.ToList();
-            var comArgs = args.Where(a => a.ToUpper() == "/WR").Select(a => { return a; }).ToArray();
+            var comArgs = args.Where(a => a.ToUpper() == "/WR" || a.ToUpper() == "-WR").Select(a => { return a; }).ToArray();
             foreach (var a in comArgs) argList.Remove(a);
 
             if (argList.Count < 2)
