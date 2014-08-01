@@ -198,19 +198,23 @@
 
         #endregion
 
-        #region CheckIsRuningElevated
+        #region IsRuningElevated
 
-        private static bool? _checkIsRuningElevated = null;
+        private static bool? _isRuningElevated = null;
 
-        internal static bool CheckIsRuningElevated()
+        internal static bool IsRuningElevated()
         {
-            if (_checkIsRuningElevated == null)
+            if (_isRuningElevated.HasValue) return _isRuningElevated.Value;
+
+            var identity = WindowsIdentity.GetCurrent();
+            if (identity != null)
             {
-                var pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-                _checkIsRuningElevated = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
+                var pricipal = new WindowsPrincipal(identity);
+                _isRuningElevated = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
+                return _isRuningElevated.Value;
             }
 
-            return _checkIsRuningElevated.Value;
+            return false;
         }
 
         #endregion

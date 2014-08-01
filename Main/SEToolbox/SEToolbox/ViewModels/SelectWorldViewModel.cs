@@ -213,7 +213,7 @@
         {
             return this.SelectedWorld != null &&
                 (this.SelectedWorld.SaveType != SaveWorldType.DedicatedServerService ||
-                (this.SelectedWorld.SaveType == SaveWorldType.DedicatedServerService && ToolboxUpdater.CheckIsRuningElevated()));
+                (this.SelectedWorld.SaveType == SaveWorldType.DedicatedServerService && ToolboxUpdater.IsRuningElevated()));
         }
 
         public void RepairExecuted()
