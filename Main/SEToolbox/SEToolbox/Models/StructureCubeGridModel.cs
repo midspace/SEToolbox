@@ -603,19 +603,16 @@
             this.Mass = totalMass;
 
             this.DisplayName = null;
-            // Substitue Beacon detail for the DisplayName.
-            var beacons = this.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString() || b.SubtypeName == SubtypeId.SmallBlockBeacon.ToString()).ToArray();
-            if (beacons.Length > 0)
+            // Substitue Beacon or Antenna detail for the DisplayName.
+            var bradcasters = this.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString()
+                || b.SubtypeName == SubtypeId.SmallBlockBeacon.ToString()
+                || b.SubtypeName == SubtypeId.LargeBlockRadioAntenna.ToString()
+                || b.SubtypeName == SubtypeId.SmallBlockRadioAntenna.ToString()).ToArray();
+            if (bradcasters.Length > 0)
             {
-                var beaconNames = beacons.Select(b => ((MyObjectBuilder_Beacon)b).CustomName).ToArray();
-
-                for (var i = 0; i < beaconNames.Length; i++)
-                {
-                    if (beaconNames[i] == null)
-                        beaconNames[i] = "Beacon";
-                }
-
-                this.DisplayName = String.Join("|", beaconNames);
+                var beaconNames = bradcasters.Where(b => b is MyObjectBuilder_Beacon).Select(b => ((MyObjectBuilder_Beacon)b).CustomName ?? "Beacon").ToArray();
+                var antennaNames = bradcasters.Where(b => b is MyObjectBuilder_RadioAntenna).Select(b => ((MyObjectBuilder_RadioAntenna)b).CustomName ?? "Antenna").ToArray();
+                this.DisplayName = String.Join("|", beaconNames.Concat(antennaNames).OrderBy(s => s));
             }
 
             this.Description = string.Format("{0}×{1}×{2} | {3:#,##0.00} Kg", this.Scale.X, this.Scale.Y, this.Scale.Z, this.Mass);
