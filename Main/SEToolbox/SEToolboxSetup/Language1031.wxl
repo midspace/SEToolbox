@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="de-de" xmlns="http://schemas.microsoft.com/wix/2006/localization" Language="1031">
+  <String Id="ApplicationTitle">Space Engineers Werkzeugkasten</String>
+  <String Id="ManufacturerName">Mid-Space Produktionen</String>
+  <String Id="ProductName">Space Engineers Werkzeugkasten</String>
+
+  <String Id="DirCompanyName">MidSpace</String>
+  <String Id="DirApplicationName">SEToolbox</String>
+  <String Id="ShortcutName">Space Engineers Werkzeugkasten</String>
+  <String Id="ShortcutDescription">Space Engineers Werkzeugkasten (SEToolbox) - Eine umfassende "Welt" retten Datei-Editor für die Space Engineers Spiel.</String>
+
+  <String Id="OldDllShortcutName">Space Engineers Werkzeugkasten - original</String>
+  <String Id="OldDllShortcutDescription">Space Engineers Werkzeugkasten (SEToolbox) - Originalverknüpfung, requies UAC, wenn die Space Engineers aktualisiert wird. Eine umfassende "Welt" retten Datei-Editor für die Space Engineers Spiel.</String>
+
+  <String Id="ProductServerDlg_Title">ProductServerDlg_Title</String>
+  <String Id="ProductServerDlgDescription">ProductServerDlgDescription</String>
+  <String Id="ProductServerDlgEnterServer">ProductServerDlgEnterServer</String>
+  <String Id="ProductServerDlgTitle">ProductServerDlgTitle</String>
+</WixLocalization>
