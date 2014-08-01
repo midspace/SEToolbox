@@ -145,15 +145,9 @@
                   Description="!(loc.ShortcutDescription)"
                   Target="[APPLICATIONFOLDER]SEToolbox.exe"
                   WorkingDirectory="APPLICATIONFOLDER"/>
-        <!--<Shortcut Id="ApplicationStartMenuShortcutAlt"
-                  Name="!(loc.ShortcutName) - test"
-                  Description="!(loc.ShortcutDescription) test version, loads Space Engineers base files directly, with no need to update with UAC."
-                  Target="[APPLICATIONFOLDER]SEToolbox.exe"
-                  Arguments="/ALTDLL"
-                  WorkingDirectory="APPLICATIONFOLDER"/>-->
         <Shortcut Id="ApplicationStartMenuShortcutOld"
-                  Name="!(loc.ShortcutName) - original"
-                  Description="!(loc.ShortcutDescription) original version, requies UAC when Space Engineers is updated."
+                  Name="!(loc.OldDllShortcutName)"
+                  Description="!(loc.OldDllShortcutDescription)"
                   Target="[APPLICATIONFOLDER]SEToolbox.exe"
                   Arguments="/OLDDLL"
                   WorkingDirectory="APPLICATIONFOLDER"/>

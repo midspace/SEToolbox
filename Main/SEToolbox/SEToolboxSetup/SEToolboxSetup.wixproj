@@ -52,6 +52,7 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Language1031.wxl" />
     <EmbeddedResource Include="Language1033.wxl" />
   </ItemGroup>
   <ItemGroup>

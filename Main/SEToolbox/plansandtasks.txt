@@ -1,6 +1,9 @@
-﻿TODO: list of tasks (in no particular order):
+﻿TODO: list of tasks and features (in no particular order):
 - All the TODO: items in code!
+- https://setoolbox.codeplex.com/workitem/list/basic
 - Documentation.... lots of it to be added to CodePlex.
+
+
 - Close Dialog on IsModified.
 - Wix installer project,
   * Desktop Icon.
