@@ -79,7 +79,7 @@
             var appFile = Assembly.GetExecutingAssembly().Location;
             var appFilePath = Path.GetDirectoryName(appFile);
 
-            if (ToolboxUpdater.CheckIsRuningElevated())
+            if (ToolboxUpdater.IsRuningElevated())
             {
                 if (!attemptedAlready)
                 {

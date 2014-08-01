@@ -612,7 +612,7 @@
             return this._dataModel.ActiveWorld != null &&
                 ((this._dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && this._dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
                 || (this._dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || this._dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired
-                    && ToolboxUpdater.CheckIsRuningElevated()));
+                    && ToolboxUpdater.IsRuningElevated()));
         }
 
         public void SaveExecuted()

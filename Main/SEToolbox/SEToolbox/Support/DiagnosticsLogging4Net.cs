@@ -39,26 +39,32 @@
             diagReport.AppendFormat("OSVersion: {0}\r\n", Environment.OSVersion);
             diagReport.AppendFormat("Version: {0}\r\n", Environment.Version);
             diagReport.AppendFormat("Is64BitOperatingSystem: {0}\r\n", Environment.Is64BitOperatingSystem);
+            diagReport.AppendFormat("IntPtr.Size: {0}\r\n", IntPtr.Size);
+            diagReport.AppendFormat("IsAdmin: {0}\r\n", ToolboxUpdater.IsRuningElevated());
+
             diagReport.AppendFormat("\r\n");
 
             diagReport.AppendFormat("Files:\r\n");
 
-            var files = Directory.GetFiles(appFilePath);
-            foreach (var file in files)
+            if (appFilePath != null)
             {
-                var filename = Path.GetFileName(file);
-                var fileInfo = new FileInfo(file);
-                var fileVer = FileVersionInfo.GetVersionInfo(file);
-                diagReport.AppendFormat("{0:O}\t{1:#,###0}\t{2}\t{3}\r\n", fileInfo.LastWriteTime, fileInfo.Length, fileVer.FileVersion, filename);
+                var files = Directory.GetFiles(appFilePath);
+                foreach (var file in files)
+                {
+                    var filename = Path.GetFileName(file);
+                    var fileInfo = new FileInfo(file);
+                    var fileVer = FileVersionInfo.GetVersionInfo(file);
+                    diagReport.AppendFormat("{0:O}\t{1:#,###0}\t{2}\t{3}\r\n", fileInfo.LastWriteTime, fileInfo.Length, fileVer.FileVersion, filename);
+                }
             }
 
             var binCache = ToolboxUpdater.GetBinCachePath();
-            if (Directory.Exists(binCache))
+            if (binCache != null && Directory.Exists(binCache))
             {
                 diagReport.AppendFormat("\r\n");
                 diagReport.AppendFormat("BinCachePath: {0}\r\n", ObsufacatePathNames(binCache));
 
-                files = Directory.GetFiles(binCache);
+                var files = Directory.GetFiles(binCache);
                 foreach (var file in files)
                 {
                     var filename = Path.GetFileName(file);
