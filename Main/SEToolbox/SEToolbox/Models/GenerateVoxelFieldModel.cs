@@ -203,6 +203,8 @@
                     v1.ThirdMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ThirdMaterial.DisplayName);
                     v1.ForthMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ForthMaterial.DisplayName);
                     v1.FifthMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.FifthMaterial.DisplayName);
+                    v1.SixthMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SixthMaterial.DisplayName);
+                    v1.SeventhMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SeventhMaterial.DisplayName);
                     this.VoxelCollection.Add(v1);
                 }
                 this.RenumberCollection();
@@ -234,6 +236,8 @@
                     ThirdMaterial = this.MaterialsCollection[0],
                     ForthMaterial = this.MaterialsCollection[0],
                     FifthMaterial = this.MaterialsCollection[0],
+                    SixthMaterial = this.MaterialsCollection[0],
+                    SeventhMaterial = this.MaterialsCollection[0],
                 };
         }
 

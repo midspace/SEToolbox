@@ -450,7 +450,7 @@
                             }
 
                             blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds * block.BuildPercent));
-                            blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icon, Path.Combine(contentPath, cubeBlockDefinition.Icon + ".dds"));
+                            blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icon, Path.Combine(contentPath, cubeBlockDefinition.Icon));
                         }
 
                         if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
@@ -566,7 +566,7 @@
                 return;
             }
 
-            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon + ".dds"));
+            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
 
             if (tallyTypeId == SpaceEngineersConsts.Ore)
             {

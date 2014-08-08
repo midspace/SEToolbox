@@ -817,6 +817,105 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
+        #region ReplaceMaterial
+        
+        public void ReplaceMaterial(string materialName, string replaceFillMaterial)
+        {
+            var materialIndex = SpaceEngineersApi.GetMaterialIndex(materialName);
+            var replaceMaterialIndex = SpaceEngineersApi.GetMaterialIndex(replaceFillMaterial);
+            Vector3I cellCoord;
+
+            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            {
+                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                {
+                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    {
+                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var matCell = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+
+                        if (voxelCell == null)
+                        {
+                            //  Voxel wasn't found in cell dictionary, so cell must be FULL
+                            if (matCell.IsSingleMaterialForWholeCell)
+                            {
+                                if (matCell.SingleMaterial == materialIndex)
+                                {
+                                    //matCell.ForceReplaceMaterial(replaceMaterialIndex);
+                                    //var newCell = new MyVoxelContentCell();
+                                    //this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                                    matCell.Reset(replaceMaterialIndex, 0xff);
+                                }
+                            }
+                            else
+                            {
+                                // A full cell, with mixed materials.
+                                Vector3I voxelCoordInCell;
+                                MyVoxelContentCell newCell = null;
+
+                                for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                                {
+                                    for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                    {
+                                        for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                        {
+                                            var material = matCell.GetMaterial(ref voxelCoordInCell);
+
+                                            if (material == materialIndex)
+                                            {
+                                                if (newCell == null)
+                                                {
+                                                    newCell = new MyVoxelContentCell();
+                                                    this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                                                }
+
+                                                //newCell.SetVoxelContent(0x00, ref voxelCoordInCell);
+                                                matCell.SetMaterialAndIndestructibleContent(replaceMaterialIndex, 0xff, ref voxelCoordInCell);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (voxelCell.CellType == MyVoxelCellType.MIXED)
+                        {
+                            if (matCell.IsSingleMaterialForWholeCell)
+                            {
+                                if (matCell.SingleMaterial == materialIndex)
+                                {
+                                    //voxelCell.SetToEmpty();
+                                    matCell.Reset(replaceMaterialIndex, 0xff);
+                                }
+                            }
+                            else
+                            {
+                                // A mixed cell, with mixed materials.
+                                Vector3I voxelCoordInCell;
+                                for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                                {
+                                    for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                    {
+                                        for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                        {
+                                            var material = matCell.GetMaterial(ref voxelCoordInCell);
+
+                                            if (material == materialIndex)
+                                            {
+                                                //voxelCell.SetVoxelContent(0x00, ref voxelCoordInCell);
+                                                matCell.SetMaterialAndIndestructibleContent(replaceMaterialIndex, 0xff, ref voxelCoordInCell);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+
+        #endregion
+
         #region SumVoxelCells
 
         public long SumVoxelCells()

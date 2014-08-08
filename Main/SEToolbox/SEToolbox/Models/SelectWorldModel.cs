@@ -441,6 +441,26 @@
                     }
                 }
 
+                foreach (var item in this.SelectedWorld.Content.Players.Dictionary)
+                {
+                    if (!SpaceEngineersCore.Definitions.Characters.Any(c => c.Name == item.Value.PlayerModel))
+                    {
+                        item.Value.PlayerModel = SpaceEngineersCore.Definitions.Characters[0].Name;
+                        statusNormal = false;
+                        str.AppendLine("! Fixed astronaut's CharacterModel.");
+                        saveAfterScan = true;
+                    }
+
+                    if (item.Value.PlayerId == 0)
+                    {
+                        item.Value.PlayerId = SpaceEngineersApi.GenerateEntityId();
+                        this.SelectedWorld.Content.AllPlayers.Add(new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Checkpoint.PlayerItem(item.Value.PlayerId, "Repair", false, item.Value.SteamID, null));
+                        statusNormal = false;
+                        str.AppendLine("! Fixed corrupt or missing Player defitinion.");
+                        saveAfterScan = true;
+                    }
+                }
+
                 if (saveAfterScan)
                 {
                     model.SaveCheckPointAndSandBox();

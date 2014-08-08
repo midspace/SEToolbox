@@ -34,6 +34,8 @@
         // Estimated max speed m/s for Meteors - as of update 01.024.
         public const float MaxMeteorVelocity = 202.812f;
 
+        public const float PlayerMass = 100f;
+
         public static readonly MyObjectBuilderType AmmoMagazine;
         public static readonly MyObjectBuilderType PhysicalGunObject;
         public static readonly MyObjectBuilderType Ore;
@@ -65,6 +67,18 @@
             BaseLocalPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves", @"SpaceEngineers\Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
             BaseDedicatedServerHostPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineersDedicated\Saves", @"SpaceEngineersDedicated\Mods"); // Followed by .\LastLoaded.sbl
             BaseDedicatedServerServicePath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SpaceEngineersDedicated", ""); // Followed by .\%instancename%\Saves\LastLoaded.sbl  (.\%instancename%\Mods)
+        }
+
+        public static Version GetSEVersion()
+        {
+            try
+            {
+                return new Version(Sandbox.Common.MyFinalBuildConstants.APP_VERSION_STRING.ToString().Replace("_", "."));
+            }
+            catch
+            {
+                return new Version();
+            }
         }
     }
 }

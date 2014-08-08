@@ -491,6 +491,9 @@
 
             File.Move(checkpointFilename, checkpointBackupFilename);
 
+            this.ActiveWorld.Content.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
+            this.SectorData.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
+
             if (this.ActiveWorld.CompressedCheckpointFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
@@ -912,6 +915,12 @@
                 if (cubeGrid is MyObjectBuilder_Cockpit)
                 {
                     ((MyObjectBuilder_Cockpit)cubeGrid).Pilot = null;  // remove any pilots.
+                }
+
+                if (cubeGrid is MyObjectBuilder_MotorStator)
+                {
+                    // reattach motor/rotor to correct entity.
+                    ((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId = MergeId(((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId, ref idReplacementTable);
                 }
             }
 

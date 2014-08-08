@@ -37,6 +37,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		..\..\readme.txt = ..\..\readme.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{C63940A6-05C8-4EE2-ABE7-35F35BA9F240}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\build.bat = ..\..\build.bat
+		Build\Build.proj = Build\Build.proj
+		Build\SEToolbox.targets = Build\SEToolbox.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 7

@@ -96,6 +96,7 @@
 
             // Verify that content data was available, just in case the .sbc files didn't exist.
             if (definitions.AmmoMagazines == null) throw new ToolboxException(ExceptionState.MissingContentFile, "AmmoMagazines.sbc");
+            if (definitions.Animations == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Animations.sbc");
             if (definitions.Blueprints == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Blueprints.sbc");
             if (definitions.Characters == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Characters.sbc");
             if (definitions.Components == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Components.sbc");
@@ -104,13 +105,13 @@
             if (definitions.GlobalEvents == null) throw new ToolboxException(ExceptionState.MissingContentFile, "GlobalEvents.sbc");
             if (definitions.HandItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "HandItems.sbc");
             if (definitions.PhysicalItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "PhysicalItems.sbc");
-            if (definitions.Scenarios == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Scenarios.sbc");
             if (definitions.SpawnGroups == null) throw new ToolboxException(ExceptionState.MissingContentFile, "SpawnGroups.sbc");
             if (definitions.TransparentMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "TransparentMaterials.sbc");
             if (definitions.VoxelMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
 
             // Deal with duplicate entries. Must use the last one found and overwrite all others.
             definitions.AmmoMagazines = definitions.AmmoMagazines.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.Animations = definitions.Animations.GroupBy(a => a.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.Blueprints = definitions.Blueprints.GroupBy(c => c.Result.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.Characters = definitions.Characters.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
             definitions.Components = definitions.Components.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
@@ -121,9 +122,8 @@
             definitions.GlobalEvents = definitions.GlobalEvents.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.HandItems = definitions.HandItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.PhysicalItems = definitions.PhysicalItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Scenarios = definitions.Scenarios.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             // definitions.SpawnGroups don't appear to have a unique idetifier.
-            definitions.TransparentMaterials = definitions.TransparentMaterials.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
+            definitions.TransparentMaterials = definitions.TransparentMaterials.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.VoxelMaterials = definitions.VoxelMaterials.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
         }
 
@@ -188,13 +188,10 @@
             // rechecks pre-existing contentData
             foreach (var kvp in contentData)
             {
-                foreach(var referenceFile in kvp.Value.GetReferenceFiles())
+                var contentFile = Path.Combine(contentPath, kvp.Value.ReferencePath);
+                if (File.Exists(contentFile))
                 {
-                    var contentFile = Path.Combine(contentPath, referenceFile);
-                    if (File.Exists(contentFile))
-                    {
-                        kvp.Value.AbsolutePath = contentFile;
-                    }
+                    kvp.Value.AbsolutePath = contentFile;
                 }
             }
 
@@ -236,11 +233,6 @@
                 models.AddRange(definitions.PhysicalItems.Select(physicalItem => physicalItem.Model));
             }
 
-            if (definitions.Scenarios != null)
-            {
-                icons.AddRange(definitions.Scenarios.Select(scenarioDefinition => scenarioDefinition.Icon));
-            }
-
             if (definitions.Environment != null)
             {
                 icons.Add(definitions.Environment.EnvironmentTexture);
@@ -248,8 +240,8 @@
 
             if (definitions.VoxelMaterials != null)
             {
-                icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_de"));
-                icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_ns"));
+                icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_de.dds"));
+                icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_ns.dds"));
             }
 
             var voxelsPath = Path.Combine(contentPath, @"Textures\Voxels");
@@ -257,31 +249,23 @@
             {
                 foreach (var filePath in Directory.GetFiles(voxelsPath, "*.dds"))
                 {
-                    var refPath = Path.Combine(@"Textures\Voxels", Path.GetFileNameWithoutExtension(filePath));
+                    var refPath = Path.Combine(@"Textures\Voxels", Path.GetFileName(filePath));
                     contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.Texture, refPath, filePath));
                 }
             }
 
             foreach (var icon in icons.Where(s => !string.IsNullOrEmpty(s)).Select(s => s).Distinct())
             {
-                var contentFile = Path.Combine(contentPath, icon + ".dds");
+                var contentFile = Path.Combine(contentPath, icon);
 
                 if (File.Exists(contentFile) || !contentData.ContainsKey(icon.ToLower()))
                 {
                     contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile));
                 }
-                else
-                {
-                    contentFile = Path.Combine(contentPath, icon + ".png");
-                    if (File.Exists(contentFile) || !contentData.ContainsKey(icon.ToLower()))
-                    {
-                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile));
-                    }
-                }
             }
 
             foreach (var model in models.Where(m => !string.IsNullOrEmpty(m)).Select(m => m).Distinct())
-                contentData.Update(model.ToLower(), new ContentDataPath(ContentPathType.Model, model, Path.Combine(contentPath, model + ".mwm")));
+                contentData.Update(model.ToLower(), new ContentDataPath(ContentPathType.Model, model, Path.Combine(contentPath, model)));
 
             var prefabPath = Path.Combine(contentPath, @"Data\Prefabs");
             if (Directory.Exists(prefabPath))

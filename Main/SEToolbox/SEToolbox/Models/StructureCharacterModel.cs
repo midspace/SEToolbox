@@ -257,9 +257,13 @@
             this.ClassType = ClassType.Character;
             this.Description = "Player";
             this.DisplayName = this.Character.DisplayName;
+            this.Mass = SpaceEngineersConsts.PlayerMass;
 
             if (this.Inventory == null)
+            {
                 this.Inventory = new InventoryEditorModel(this.Character.Inventory, Settings, 0.4f * 1000 * Settings.InventorySizeMultiplier, this.Character);
+                this.Mass += this.Inventory.TotalMass;
+            }
         }
 
         public void ResetVelocity()

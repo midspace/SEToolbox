@@ -24,35 +24,35 @@
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             var magnesiumOre = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Ore, "Magnesium");
-            var magnesiumOrePath = Path.Combine(contentPath, magnesiumOre.Icon + ".dds");
+            var magnesiumOrePath = Path.Combine(contentPath, magnesiumOre.Icon);
             Assert.IsTrue(File.Exists(magnesiumOrePath), "Filepath should exist on developer machine");
             Assert.IsTrue(magnesiumOre is MyObjectBuilder_PhysicalItemDefinition, "Type should match");
             var magnesiumOreBmp = TexUtil.CreateBitmap(magnesiumOrePath);
             ImageTextureUtil.WriteImage(magnesiumOreBmp, @".\TestOutput\Magnesium_Ore.png");
 
             var goldIngot = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Ingot, "Gold");
-            var goldIngotPath = Path.Combine(contentPath, goldIngot.Icon + ".dds");
+            var goldIngotPath = Path.Combine(contentPath, goldIngot.Icon);
             Assert.IsTrue(File.Exists(goldIngotPath), "Filepath should exist on developer machine");
             Assert.IsTrue(goldIngot is MyObjectBuilder_PhysicalItemDefinition, "Type should match");
             var goldIngotBmp = TexUtil.CreateBitmap(goldIngotPath);
             ImageTextureUtil.WriteImage(goldIngotBmp, @".\TestOutput\Gold_Ingot.png");
 
             var ammoMagazine = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.AmmoMagazine, "NATO_5p56x45mm");
-            var ammoMagazinePath = Path.Combine(contentPath, ammoMagazine.Icon + ".dds");
+            var ammoMagazinePath = Path.Combine(contentPath, ammoMagazine.Icon);
             Assert.IsTrue(File.Exists(ammoMagazinePath), "Filepath should exist on developer machine");
             Assert.IsTrue(ammoMagazine is MyObjectBuilder_AmmoMagazineDefinition, "Type should match");
             var ammoMagazineBmp = TexUtil.CreateBitmap(ammoMagazinePath);
             ImageTextureUtil.WriteImage(ammoMagazineBmp, @".\TestOutput\NATO_5p56x45mm.png");
 
             var steelPlate = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Component, "SteelPlate");
-            var steelPlatePath = Path.Combine(contentPath, steelPlate.Icon + ".dds");
+            var steelPlatePath = Path.Combine(contentPath, steelPlate.Icon);
             Assert.IsTrue(File.Exists(steelPlatePath), "Filepath should exist on developer machine");
             Assert.IsTrue(steelPlate is MyObjectBuilder_ComponentDefinition, "Type should match");
             var steelPlateBmp = TexUtil.CreateBitmap(steelPlatePath);
             ImageTextureUtil.WriteImage(steelPlateBmp, @".\TestOutput\SteelPlate.png");
 
             var smallBlockLandingGear = SpaceEngineersApi.GetDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_LandingGear)), "SmallBlockLandingGear");
-            var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icon + ".dds");
+            var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icon);
             Assert.IsTrue(File.Exists(smallBlockLandingGearPath), "Filepath should exist on developer machine");
             Assert.IsTrue(smallBlockLandingGear is MyObjectBuilder_CubeBlockDefinition, "Type should match");
             var smallBlockLandingGearBmp = TexUtil.CreateBitmap(smallBlockLandingGearPath);
@@ -96,7 +96,7 @@
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             var smallBlockLandingGear = SpaceEngineersApi.GetDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_LandingGear)), "SmallBlockLandingGear");
-            var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icon + ".dds");
+            var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icon);
             Assert.IsTrue(File.Exists(smallBlockLandingGearPath), "Filepath should exist on developer machine");
             Assert.IsTrue(smallBlockLandingGear is MyObjectBuilder_CubeBlockDefinition, "Type should match");
             var smallBlockLandingGearBmp = TexUtil.CreateBitmap(smallBlockLandingGearPath);

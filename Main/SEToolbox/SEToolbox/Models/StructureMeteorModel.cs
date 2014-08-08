@@ -17,9 +17,6 @@
         [NonSerialized]
         private double? _volume;
 
-        [NonSerialized]
-        private double? _mass;
-
         #endregion
 
         #region ctor
@@ -74,24 +71,6 @@
                 {
                     this._volume = value;
                     this.RaisePropertyChanged(() => Volume);
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public double? Mass
-        {
-            get
-            {
-                return this._mass;
-            }
-
-            set
-            {
-                if (value != this._mass)
-                {
-                    this._mass = value;
-                    this.RaisePropertyChanged(() => Mass);
                 }
             }
         }

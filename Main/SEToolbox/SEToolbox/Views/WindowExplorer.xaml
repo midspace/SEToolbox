@@ -107,10 +107,20 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Export" Command="{Binding ExportSandboxObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Export ships ans stations to a .xml file, to store, and import into other worlds.">
+                <MenuItem Header="Export" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                     </MenuItem.Icon>
+                    <MenuItem Header="Export with owner and MedBay" Command="{Binding ExportSandboxObjectCommand}" ToolTip="Export ships ans stations to a .xml file, to store, and import into other worlds.">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Export without owner and MedBay" Command="{Binding ExportBasicSandboxObjectCommand}" ToolTip="Export ships ans stations to a .xml file, to store, and import into other worlds.">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Header="_Create" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
@@ -293,9 +303,27 @@
                                 <ListView.View>
                                     <GridView>
                                         <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
-                                        <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
-                                        <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding DisplayName}"/>
-                                        <GridViewColumn Header="Description" Width="100" DisplayMemberBinding="{Binding Description}"/>
+                                        <controls:SortableGridViewColumn SortBinding="{Binding ClassType}" Header="Type" Width="70">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                            </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn SortBinding="{Binding DisplayName}" Header="Name" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding DisplayName}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn SortBinding="{Binding Description}" Header="Description" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Description}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
                                         <controls:SortableGridViewColumn Width="70" SortBinding="{Binding PlayerDistance}" Header="Distance">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -303,6 +331,21 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding Mass}" Header="Mass">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00}'}" TextAlignment="Right" ToolTip="Mass (Kg)"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding BlockCount}" Header="Cubes">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=BlockCount, StringFormat='{}{0:#,##0}'}" TextAlignment="Right" ToolTip="Number of cubes"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>

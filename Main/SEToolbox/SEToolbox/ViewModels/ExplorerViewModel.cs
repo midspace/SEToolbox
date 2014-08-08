@@ -229,6 +229,14 @@
             }
         }
 
+        public ICommand ExportBasicSandboxObjectCommand
+        {
+            get
+            {
+                return new DelegateCommand(new Action(ExportBasicSandboxObjectExecuted), new Func<bool>(ExportBasicSandboxObjectCanExecute));
+            }
+        }
+
         public ICommand CreateFloatingItemCommand
         {
             get
@@ -844,7 +852,17 @@
 
         public void ExportSandboxObjectExecuted()
         {
-            this.ExportSandboxObjectToFile(this.Selections.ToArray());
+            this.ExportSandboxObjectToFile(false, this.Selections.ToArray());
+        }
+
+        public bool ExportBasicSandboxObjectCanExecute()
+        {
+            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+        }
+
+        public void ExportBasicSandboxObjectExecuted()
+        {
+            this.ExportSandboxObjectToFile(true, this.Selections.ToArray());
         }
 
         public bool CreateFloatingItemCanExecute()
@@ -1328,7 +1346,7 @@
             }
         }
 
-        public void ExportSandboxObjectToFile(params IStructureViewBase[] viewModels)
+        public void ExportSandboxObjectToFile(bool blankOwnerAndMedBays, params IStructureViewBase[] viewModels)
         {
             foreach (var viewModel in viewModels)
             {
@@ -1413,13 +1431,16 @@
                     {
                         var cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
 
-                        // Call to ToArray() to force Linq to update the value.
+                        if (blankOwnerAndMedBays)
+                        {
+                            // Call to ToArray() to force Linq to update the value.
 
-                        // Clear Medical room SteamId.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
+                            // Clear Medical room SteamId.
+                            cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
 
-                        // Clear Owners.
-                        cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
+                            // Clear Owners.
+                            cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
+                        }
 
                         // Remove any pilots.
                         cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.Cockpit).Select(c =>

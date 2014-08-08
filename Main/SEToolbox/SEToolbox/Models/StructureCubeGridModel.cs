@@ -39,9 +39,6 @@
         private int _pilots;
 
         [NonSerialized]
-        private float _mass;
-
-        [NonSerialized]
         private TimeSpan _timeToProduce;
 
         [NonSerialized]
@@ -296,24 +293,7 @@
             }
         }
 
-        public float Mass
-        {
-            get
-            {
-                return this._mass;
-            }
-
-            set
-            {
-                if (value != this._mass)
-                {
-                    this._mass = value;
-                    this.RaisePropertyChanged(() => Mass);
-                }
-            }
-        }
-
-        public int BlockCount
+        public override int BlockCount
         {
             get
             {
@@ -615,7 +595,7 @@
                 this.DisplayName = String.Join("|", beaconNames.Concat(antennaNames).OrderBy(s => s));
             }
 
-            this.Description = string.Format("{0}×{1}×{2} | {3:#,##0.00} Kg", this.Scale.X, this.Scale.Y, this.Scale.Z, this.Mass);
+            this.Description = string.Format("{0}×{1}×{2}", this.Scale.X, this.Scale.Y, this.Scale.Z);
 
             // TODO:
             // Report:
@@ -689,7 +669,7 @@
                                     }
                                     else
                                     {
-                                        var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon + ".dds"));
+                                        var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
                                         var m = new CubeAssetModel() { Name = cd.DisplayName, Mass = componentMass, Volume = componentVolume, Count = component.Count, Time = componentTime, TextureFile = componentTexture };
                                         componentAssets.Add(m);
                                         componentAssetDict.Add(componentName, m);
@@ -697,7 +677,7 @@
                                 }
 
                                 blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds));
-                                blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icon, Path.Combine(contentPath, cubeBlockDefinition.Icon + ".dds"));
+                                blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icon, Path.Combine(contentPath, cubeBlockDefinition.Icon));
                             }
 
                             timeTaken += blockTime;
@@ -721,7 +701,7 @@
                             TimeSpan ingotTime;
                             SpaceEngineersApi.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.Id.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
                             var cd = SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
-                            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon + ".dds"));
+                            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
                             var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture };
                             ingotAssets.Add(ingotAsset);
                             timeTaken += ingotTime;
@@ -730,7 +710,7 @@
                         foreach (var kvp in oreRequirements)
                         {
                             var cd = SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
-                            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon + ".dds"));
+                            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
                             var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, TextureFile = componentTexture };
                             oreAssets.Add(oreAsset);
                         }
@@ -759,7 +739,7 @@
                             {
                                 cubeList.Add(new CubeItemModel(block, cubeDefinition, Settings)
                                 {
-                                    TextureFile = cubeDefinition == null ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon + ".dds"))
+                                    TextureFile = cubeDefinition == null ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon))
                                 });
                             });
                         }
@@ -1239,6 +1219,12 @@
             {
                 var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
                 newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+
+                if (block is MyObjectBuilder_MotorStator)
+                {
+                    ((MyObjectBuilder_MotorStator)newBlock).RotorEntityId = ((MyObjectBuilder_MotorStator)block).RotorEntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+                }
+
                 newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
                 var definition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, viewModel.GridSize, block.SubtypeName);
 
