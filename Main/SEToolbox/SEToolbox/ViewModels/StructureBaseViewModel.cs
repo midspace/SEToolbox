@@ -145,6 +145,32 @@
             }
         }
 
+        public double Mass
+        {
+            get
+            {
+                return this.DataModel.Mass;
+            }
+
+            set
+            {
+                this.DataModel.Mass = value;
+            }
+        }
+
+        public int BlockCount
+        {
+            get
+            {
+                return this.DataModel.BlockCount;
+            }
+
+            set
+            {
+                this.DataModel.BlockCount = value;
+            }
+        }
+
         public float PositionX
         {
             get

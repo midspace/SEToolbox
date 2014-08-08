@@ -32,6 +32,9 @@
         private double _totalVolume;
 
         [NonSerialized]
+        private double _totalMass;
+
+        [NonSerialized]
         private float _maxVolume;
 
         [NonSerialized]
@@ -161,6 +164,24 @@
         }
 
         [XmlIgnore]
+        public double TotalMass
+        {
+            get
+            {
+                return this._totalMass;
+            }
+
+            set
+            {
+                if (value != this._totalMass)
+                {
+                    this._totalMass = value;
+                    this.RaisePropertyChanged(() => TotalMass);
+                }
+            }
+        }
+
+        [XmlIgnore]
         public float MaxVolume
         {
             get
@@ -193,6 +214,7 @@
             var list = new ObservableCollection<InventoryModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             this.TotalVolume = 0;
+            this.TotalMass = 0;
 
             if (_inventory != null)
             {
@@ -226,7 +248,7 @@
                 name = definition.DisplayName;
                 massMultiplyer = definition.Mass;
                 volumeMultiplyer = definition.Volume.Value;
-                textureFile = SpaceEngineersCore.GetDataPathOrDefault(definition.Icon, Path.Combine(contentPath, definition.Icon + ".dds"));
+                textureFile = SpaceEngineersCore.GetDataPathOrDefault(definition.Icon, Path.Combine(contentPath, definition.Icon));
             }
 
             var newItem = new InventoryModel(item)
@@ -245,6 +267,7 @@
             };
 
             this.TotalVolume += newItem.Volume;
+            this.TotalMass += newItem.Mass;
 
             return newItem;
         }
@@ -272,6 +295,7 @@
             }
 
             this.TotalVolume -= this.Items[index].Volume;
+            this.TotalMass -= this.Items[index].Mass;
             this.Items.RemoveAt(index);
             this._inventory.Items.RemoveAt(index);
             this._inventory.nextItemId--;

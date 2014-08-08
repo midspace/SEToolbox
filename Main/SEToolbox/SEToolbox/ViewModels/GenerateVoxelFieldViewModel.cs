@@ -256,6 +256,8 @@
                 ThirdMaterial = this._dataModel.BaseMaterial,
                 ForthMaterial = this._dataModel.BaseMaterial,
                 FifthMaterial = this._dataModel.BaseMaterial,
+                SixthMaterial = this._dataModel.BaseMaterial,
+                SeventhMaterial = this._dataModel.BaseMaterial,
             };
 
             // Random Asteroid.
@@ -285,39 +287,74 @@
             if (islarge)
             {
                 // Random 1. Rare.
-                idx = RandomUtil.GetInt(rare.Count);
-                percent = RandomUtil.GetInt(40, 60);
-                randomModel.SecondMaterial = rare[idx];
-                randomModel.SecondPercent = percent;
-                rare.RemoveAt(idx);
+                if (rare.Count > 0)
+                {
+                    idx = RandomUtil.GetInt(rare.Count);
+                    percent = RandomUtil.GetInt(40, 60);
+                    randomModel.SecondMaterial = rare[idx];
+                    randomModel.SecondPercent = percent;
+                    rare.RemoveAt(idx);
+                }
 
                 // Random 2. Rare.
-                idx = RandomUtil.GetInt(rare.Count);
-                percent = RandomUtil.GetInt(5, 15);
-                randomModel.ThirdMaterial = rare[idx];
-                randomModel.ThirdPercent = percent;
-                rare.RemoveAt(idx);
+                if (rare.Count > 0)
+                {
+                    idx = RandomUtil.GetInt(rare.Count);
+                    percent = RandomUtil.GetInt(6, 12);
+                    randomModel.ThirdMaterial = rare[idx];
+                    randomModel.ThirdPercent = percent;
+                    rare.RemoveAt(idx);
+                }
 
-                // Random 3. Super Rare.
-                idx = RandomUtil.GetInt(superRare.Count);
-                percent = RandomUtil.GetInt(3, 5);
-                randomModel.ThirdMaterial = superRare[idx];
-                randomModel.ThirdPercent = percent;
-                superRare.RemoveAt(idx);
+                // Random 3. Rare.
+                if (rare.Count > 0)
+                {
+                    idx = RandomUtil.GetInt(rare.Count);
+                    percent = RandomUtil.GetInt(6, 12);
+                    randomModel.ThirdMaterial = rare[idx];
+                    randomModel.ThirdPercent = percent;
+                    rare.RemoveAt(idx);
+                }
 
                 // Random 4. Super Rare.
-                idx = RandomUtil.GetInt(superRare.Count);
-                percent = RandomUtil.GetInt(2, 4);
-                randomModel.ForthMaterial = superRare[idx];
-                randomModel.ForthPercent = percent;
-                superRare.RemoveAt(idx);
+                if (superRare.Count > 0)
+                {
+                    idx = RandomUtil.GetInt(superRare.Count);
+                    percent = RandomUtil.GetInt(2, 4);
+                    randomModel.ForthMaterial = superRare[idx];
+                    randomModel.ForthPercent = percent;
+                    superRare.RemoveAt(idx);
+                }
 
                 // Random 5. Super Rare.
-                idx = RandomUtil.GetInt(superRare.Count);
-                percent = RandomUtil.GetInt(1, 3);
-                randomModel.FifthMaterial = superRare[idx];
-                randomModel.FifthPercent = percent;
-                superRare.RemoveAt(idx);
+                if (superRare.Count > 0)
+                {
+                    idx = RandomUtil.GetInt(superRare.Count);
+                    percent = RandomUtil.GetInt(1, 3);
+                    randomModel.FifthMaterial = superRare[idx];
+                    randomModel.FifthPercent = percent;
+                    superRare.RemoveAt(idx);
+                }
+
+                // Random 6. Super Rare.
+                if (superRare.Count > 0)
+                {
+                    idx = RandomUtil.GetInt(superRare.Count);
+                    percent = RandomUtil.GetInt(1, 3);
+                    randomModel.SixthMaterial = superRare[idx];
+                    randomModel.SixthPercent = percent;
+                    superRare.RemoveAt(idx);
+                }
+
+                // Random 7. Super Rare.
+                if (superRare.Count > 0)
+                {
+                    idx = RandomUtil.GetInt(superRare.Count);
+                    percent = RandomUtil.GetInt(1, 3);
+                    randomModel.SeventhMaterial = superRare[idx];
+                    randomModel.SeventhPercent = percent;
+                    superRare.RemoveAt(idx);
+                }
             }
             else // Small Asteroid.
             {
@@ -390,7 +427,7 @@
         public bool CreateCanExecute()
         {
             var valid = this.VoxelCollection.Count > 0;
-            return this.VoxelCollection.Aggregate(valid, (current, t) => current & (t.SecondPercent + t.ThirdPercent + t.ForthPercent + t.FifthPercent) <= 100);
+            return this.VoxelCollection.Aggregate(valid, (current, t) => current & (t.SecondPercent + t.ThirdPercent + t.ForthPercent + t.FifthPercent + t.SixthPercent + t.SeventhPercent) <= 100);
         }
 
         public void CreateExecuted()
@@ -455,6 +492,16 @@
                 {
                     distribution.Add((double)voxelDesign.FifthPercent / 100);
                     materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(voxelDesign.FifthMaterial.Value));
+                }
+                if (voxelDesign.SixthPercent > 0)
+                {
+                    distribution.Add((double)voxelDesign.SixthPercent / 100);
+                    materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(voxelDesign.SixthMaterial.Value));
+                }
+                if (voxelDesign.SeventhPercent > 0)
+                {
+                    distribution.Add((double)voxelDesign.SeventhPercent / 100);
+                    materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(voxelDesign.SeventhMaterial.Value));
                 }
 
                 var newDistributiuon = new List<byte>();

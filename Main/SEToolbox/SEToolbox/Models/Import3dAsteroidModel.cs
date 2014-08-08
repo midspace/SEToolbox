@@ -10,22 +10,23 @@
     {
         #region Fields
 
-        private string filename;
-        private Model3D model;
-        private bool isValidModel;
+        private string _filename;
+        private Model3D _model;
+        private bool _isValidModel;
 
-        private BindableSize3DModel originalModelSize;
-        private BindableSize3DIModel newModelSize;
-        private BindablePoint3DModel newModelScale;
-        private BindablePoint3DModel position;
-        private BindableVector3DModel forward;
-        private BindableVector3DModel up;
-        private MyPositionAndOrientation characterPosition;
-        private double multipleScale;
-        private double maxLengthScale;
-        private double buildDistance;
-        private bool isMultipleScale;
-        private bool isMaxLengthScale;
+        private BindableSize3DModel _originalModelSize;
+        private BindableSize3DIModel _newModelSize;
+        private BindablePoint3DModel _newModelScale;
+        private BindablePoint3DModel _position;
+        private BindableVector3DModel _forward;
+        private BindableVector3DModel _up;
+        private MyPositionAndOrientation _characterPosition;
+        private SEToolbox.Interop.Asteroids.MyVoxelRayTracer.TraceType _traceType;
+        private double _multipleScale;
+        private double _maxLengthScale;
+        private double _buildDistance;
+        private bool _isMultipleScale;
+        private bool _isMaxLengthScale;
         private readonly ObservableCollection<MaterialSelectionModel> _outsideMaterialsCollection;
         private readonly ObservableCollection<MaterialSelectionModel> _insideMaterialsCollection;
         private MaterialSelectionModel _outsideStockMaterial;
@@ -62,14 +63,14 @@
         {
             get
             {
-                return this.filename;
+                return this._filename;
             }
 
             set
             {
-                if (value != this.filename)
+                if (value != this._filename)
                 {
-                    this.filename = value;
+                    this._filename = value;
                     this.RaisePropertyChanged(() => Filename);
                 }
             }
@@ -79,14 +80,14 @@
         {
             get
             {
-                return this.model;
+                return this._model;
             }
 
             set
             {
-                if (value != this.model)
+                if (value != this._model)
                 {
-                    this.model = value;
+                    this._model = value;
                     this.RaisePropertyChanged(() => Model);
                 }
             }
@@ -97,14 +98,14 @@
         {
             get
             {
-                return this.isValidModel;
+                return this._isValidModel;
             }
 
             set
             {
-                if (value != this.isValidModel)
+                if (value != this._isValidModel)
                 {
-                    this.isValidModel = value;
+                    this._isValidModel = value;
                     this.RaisePropertyChanged(() => IsValidModel);
                 }
             }
@@ -114,14 +115,14 @@
         {
             get
             {
-                return this.originalModelSize;
+                return this._originalModelSize;
             }
 
             set
             {
-                if (value != this.originalModelSize)
+                if (value != this._originalModelSize)
                 {
-                    this.originalModelSize = value;
+                    this._originalModelSize = value;
                     this.RaisePropertyChanged(() => OriginalModelSize);
                 }
             }
@@ -131,14 +132,14 @@
         {
             get
             {
-                return this.newModelSize;
+                return this._newModelSize;
             }
 
             set
             {
-                if (value != this.newModelSize)
+                if (value != this._newModelSize)
                 {
-                    this.newModelSize = value;
+                    this._newModelSize = value;
                     this.RaisePropertyChanged(() => NewModelSize);
                 }
             }
@@ -148,14 +149,14 @@
         {
             get
             {
-                return this.newModelScale;
+                return this._newModelScale;
             }
 
             set
             {
-                if (value != this.newModelScale)
+                if (value != this._newModelScale)
                 {
-                    this.newModelScale = value;
+                    this._newModelScale = value;
                     this.RaisePropertyChanged(() => NewModelScale);
                 }
             }
@@ -165,14 +166,14 @@
         {
             get
             {
-                return this.position;
+                return this._position;
             }
 
             set
             {
-                if (value != this.position)
+                if (value != this._position)
                 {
-                    this.position = value;
+                    this._position = value;
                     this.RaisePropertyChanged(() => Position);
                 }
             }
@@ -182,14 +183,14 @@
         {
             get
             {
-                return this.forward;
+                return this._forward;
             }
 
             set
             {
-                if (value != this.forward)
+                if (value != this._forward)
                 {
-                    this.forward = value;
+                    this._forward = value;
                     this.RaisePropertyChanged(() => Forward);
                 }
             }
@@ -199,14 +200,14 @@
         {
             get
             {
-                return this.up;
+                return this._up;
             }
 
             set
             {
-                if (value != this.up)
+                if (value != this._up)
                 {
-                    this.up = value;
+                    this._up = value;
                     this.RaisePropertyChanged(() => Up);
                 }
             }
@@ -216,14 +217,31 @@
         {
             get
             {
-                return this.characterPosition;
+                return this._characterPosition;
             }
 
             set
             {
                 //if (value != this.characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
-                this.characterPosition = value;
+                this._characterPosition = value;
                 this.RaisePropertyChanged(() => CharacterPosition);
+            }
+        }
+
+        public SEToolbox.Interop.Asteroids.MyVoxelRayTracer.TraceType TraceType
+        {
+            get
+            {
+                return this._traceType;
+            }
+
+            set
+            {
+                if (value != this._traceType)
+                {
+                    this._traceType = value;
+                    this.RaisePropertyChanged(() => TraceType);
+                }
             }
         }
 
@@ -231,14 +249,14 @@
         {
             get
             {
-                return this.multipleScale;
+                return this._multipleScale;
             }
 
             set
             {
-                if (value != this.multipleScale)
+                if (value != this._multipleScale)
                 {
-                    this.multipleScale = value;
+                    this._multipleScale = value;
                     this.RaisePropertyChanged(() => MultipleScale);
                 }
             }
@@ -248,14 +266,14 @@
         {
             get
             {
-                return this.maxLengthScale;
+                return this._maxLengthScale;
             }
 
             set
             {
-                if (value != this.maxLengthScale)
+                if (value != this._maxLengthScale)
                 {
-                    this.maxLengthScale = value;
+                    this._maxLengthScale = value;
                     this.RaisePropertyChanged(() => MaxLengthScale);
                 }
             }
@@ -265,14 +283,14 @@
         {
             get
             {
-                return this.buildDistance;
+                return this._buildDistance;
             }
 
             set
             {
-                if (value != this.buildDistance)
+                if (value != this._buildDistance)
                 {
-                    this.buildDistance = value;
+                    this._buildDistance = value;
                     this.RaisePropertyChanged(() => BuildDistance);
                 }
             }
@@ -282,14 +300,14 @@
         {
             get
             {
-                return this.isMultipleScale;
+                return this._isMultipleScale;
             }
 
             set
             {
-                if (value != this.isMultipleScale)
+                if (value != this._isMultipleScale)
                 {
-                    this.isMultipleScale = value;
+                    this._isMultipleScale = value;
                     this.RaisePropertyChanged(() => IsMultipleScale);
                 }
             }
@@ -299,14 +317,14 @@
         {
             get
             {
-                return this.isMaxLengthScale;
+                return this._isMaxLengthScale;
             }
 
             set
             {
-                if (value != this.isMaxLengthScale)
+                if (value != this._isMaxLengthScale)
                 {
-                    this.isMaxLengthScale = value;
+                    this._isMaxLengthScale = value;
                     this.RaisePropertyChanged(() => IsMaxLengthScale);
                 }
             }

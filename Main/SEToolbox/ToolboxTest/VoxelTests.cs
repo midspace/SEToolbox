@@ -623,6 +623,7 @@
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(5, 5, 5);
             var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            var traceType = SEToolbox.Interop.Asteroids.MyVoxelRayTracer.TraceType.Odd;
 
             // Basic model test...
             //var modelFile = @".\TestAssets\TwoSpheres.3ds";
@@ -662,7 +663,7 @@
                     meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, "Stone_01", "Stone_01"));
             }
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, asteroidFile, scale, rotateTransform, ResetProgress, IncrementProgress);
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, asteroidFile, scale, rotateTransform, traceType, ResetProgress, IncrementProgress);
             voxelMap.Save(asteroidFile);
 
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");

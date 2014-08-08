@@ -443,20 +443,10 @@
             get { return this.DataModel.LinearVelocity; }
         }
 
-        public double Mass
-        {
-            get { return this.DataModel.Mass; }
-        }
-
         public TimeSpan TimeToProduce
         {
             get { return this.DataModel.TimeToProduce; }
             set { this.DataModel.TimeToProduce = value; }
-        }
-
-        public int BlockCount
-        {
-            get { return this.DataModel.BlockCount; }
         }
 
         public string CockpitOrientation
@@ -996,7 +986,7 @@
 
                         var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(model.CubeItem.TypeId, this.GridSize, model.CubeItem.SubtypeId);
                         var newCube = cube.CreateCube(model.CubeItem.TypeId, model.CubeItem.SubtypeId, cubeDefinition, DataModel.Settings);
-                        cube.TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon + ".dds"));
+                        cube.TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon));
                         this.DataModel.CubeGrid.CubeBlocks.Insert(idx, newCube);
 
                         change = true;

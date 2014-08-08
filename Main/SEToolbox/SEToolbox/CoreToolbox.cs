@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox
 {
+    using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Support;
     using SEToolbox.ViewModels;
@@ -140,6 +141,8 @@
 
         public bool Load(string[] args)
         {
+            // TODO: perhaps test the SpaceEngineersConsts.GetSEVersion()
+
             // Force pre-loading of any Space Engineers resources.
             SEToolbox.Interop.SpaceEngineersCore.LoadDefinitions();
 

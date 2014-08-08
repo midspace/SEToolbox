@@ -14,12 +14,36 @@
     {
         private static readonly object Locker = new object();
         private enum MeshFace : byte { Undefined, Nearside, Farside };
+        
+        // Determines offset of trace to the grid.
+        public enum TraceType : byte { 
+            /// <summary>
+            /// Will center the voxel on the origin, creating an odd number of voxels.
+            /// </summary>
+            /// <example>
+            /// -1.5 to -0.5, centered on -1.0
+            /// -0.5 to +0.5, centered on 0.0
+            /// +0.5 to +1.5, centered on +1.0
+            /// </example>
+            Odd,
+
+            /// <summary>
+            /// Will center the voxel to the side of the origin, creating an even number of voxels.
+            /// </summary>
+            /// <example>
+            /// -2.0 to -1.0, centered on -1.5
+            /// -1.0 to 0.0, centered on -0.5
+            /// 0.0 to +1.0, centered on +0.5
+            /// +1.0 to +2.0, centered on +1.5
+            /// </example>
+            Even 
+        };
 
         #region ReadModelAsteroidVolmetic
 
         // For a 1024 cubed asteroid, it takes approximately 6.5Gb of system memory.
 
-        public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, string asteroidFile, ScaleTransform3D scale, Transform3D rotateTransform,
+        public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, string asteroidFile, ScaleTransform3D scale, Transform3D rotateTransform, TraceType traceType,
             Action<double, double> resetProgress, Action incrementProgress)
         {
             var materials = new List<byte>();
@@ -123,6 +147,9 @@
                 {
                     for (var z = zMin; z < zMax; z++)
                     {
+                        //if (traceType == TraceType.Odd)
+                        // TODO: traceType determines position offset of ray.
+
                         var testRays = new List<Point3D[]>()
                         {
                             new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
@@ -187,6 +214,7 @@
 
                                 for (var x = startCoord; x <= endCoord; x++)
                                 {
+                                    // TODO: traceType determines offset
                                     var points = order.Where(p => p.Point.X > x - 0.5 && p.Point.X < x + 0.5).ToArray();
 
                                     var volume = (byte)(0xff / testRays.Count * surfaces);
@@ -205,8 +233,8 @@
                                         }
                                     }
 
-                                    if (endCoord - startCoord < 6) // 2 voxels or less
-                                        volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
+                                    //if (endCoord - startCoord < 6) // 2 voxels or less
+                                    //    volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
 
                                     //volume = volume.RoundUpToNearest(8);
 
@@ -259,17 +287,6 @@
                 {
                     for (var z = zMin; z < zMax; z++)
                     {
-                        //if (x - xMin != 20 || z - zMin != 125)
-                        //{
-                        //    threadCounter--;
-                        //    continue;
-                        //}
-                        //if (x - xMin > 20 || z - zMin < 125)
-                        //{
-                        //    threadCounter--;
-                        //    continue;
-                        //}
-
                         var testRays = new List<Point3D[]>()
                         {
                             new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
@@ -359,8 +376,8 @@
                                         volume = (byte)Math.Round(((float)prevolumme + (float)volume) / 2f, 0);
                                     }
 
-                                    if (endCoord - startCoord < 6) // 2 voxels or less
-                                        volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
+                                    //if (endCoord - startCoord < 6) // 2 voxels or less
+                                    //    volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
 
                                     //volume = volume.RoundUpToNearest(8);
 
@@ -502,8 +519,8 @@
                                         volume = (byte)Math.Round((((float)prevolumme * 2) + (float)volume) / 3f, 0);
                                     }
 
-                                    if (endCoord - startCoord < 6) // 2 voxels or less
-                                        volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
+                                    //if (endCoord - startCoord < 6) // 2 voxels or less
+                                    //    volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
 
                                     //volume = volume.RoundUpToNearest(8);
 
@@ -591,6 +608,8 @@
 
         #endregion
 
+        #region support classes
+
         public class MyMeshModel
         {
             public MyMeshModel(MeshGeometry3D[] geometery, string material, string faceMaterial)
@@ -661,5 +680,7 @@
 
             #endregion
         }
+
+        #endregion
     }
 }

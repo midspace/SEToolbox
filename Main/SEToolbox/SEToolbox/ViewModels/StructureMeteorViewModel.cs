@@ -94,19 +94,6 @@
             }
         }
 
-        public double? Mass
-        {
-            get
-            {
-                return this.DataModel.Mass;
-            }
-
-            set
-            {
-                this.DataModel.Mass = value;
-            }
-        }
-
         public double LinearVelocity
         {
             get

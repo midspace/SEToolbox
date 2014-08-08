@@ -36,6 +36,12 @@
         private double _playerDistance;
 
         [NonSerialized]
+        private double _mass;
+
+        [NonSerialized]
+        private int _blockCount;
+
+        [NonSerialized]
         private bool _isBusy;
 
         private string _serializedEntity;
@@ -265,6 +271,42 @@
                 {
                     this._playerDistance = value;
                     this.RaisePropertyChanged(() => PlayerDistance);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public double Mass
+        {
+            get
+            {
+                return this._mass;
+            }
+
+            set
+            {
+                if (value != this._mass)
+                {
+                    this._mass = value;
+                    this.RaisePropertyChanged(() => Mass);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public virtual int BlockCount
+        {
+            get
+            {
+                return this._blockCount;
+            }
+
+            set
+            {
+                if (value != this._blockCount)
+                {
+                    this._blockCount = value;
+                    this.RaisePropertyChanged(() => BlockCount);
                 }
             }
         }

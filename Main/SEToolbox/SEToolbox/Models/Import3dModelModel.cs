@@ -10,9 +10,9 @@
     {
         #region Fields
 
-        private string filename;
-        private Model3D model;
-        private bool isValidModel;
+        private string _filename;
+        private Model3D _model;
+        private bool _isValidModel;
 
         private BindableSize3DModel originalModelSize;
         private BindableSize3DIModel newModelSize;
@@ -67,14 +67,14 @@
         {
             get
             {
-                return this.filename;
+                return this._filename;
             }
 
             set
             {
-                if (value != this.filename)
+                if (value != this._filename)
                 {
-                    this.filename = value;
+                    this._filename = value;
                     this.RaisePropertyChanged(() => Filename);
                 }
             }
@@ -84,14 +84,14 @@
         {
             get
             {
-                return this.model;
+                return this._model;
             }
 
             set
             {
-                if (value != this.model)
+                if (value != this._model)
                 {
-                    this.model = value;
+                    this._model = value;
                     this.RaisePropertyChanged(() => Model);
                 }
             }
@@ -102,14 +102,14 @@
         {
             get
             {
-                return this.isValidModel;
+                return this._isValidModel;
             }
 
             set
             {
-                if (value != this.isValidModel)
+                if (value != this._isValidModel)
                 {
-                    this.isValidModel = value;
+                    this._isValidModel = value;
                     this.RaisePropertyChanged(() => IsValidModel);
                 }
             }

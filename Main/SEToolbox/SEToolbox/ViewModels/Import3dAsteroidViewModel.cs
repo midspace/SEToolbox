@@ -196,6 +196,12 @@
             set { this._dataModel.Up = value; }
         }
 
+        public SEToolbox.Interop.Asteroids.MyVoxelRayTracer.TraceType TraceType
+        {
+            get { return this._dataModel.TraceType; }
+            set { this._dataModel.TraceType = value; }
+        }
+
         public double MultipleScale
         {
             get { return this._dataModel.MultipleScale; }
@@ -527,7 +533,7 @@
             }
             meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), this.OutsideStockMaterial.Value, this.OutsideStockMaterial.Value));
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, this.SourceFile, scale, rotateTransform, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, this.SourceFile, scale, rotateTransform, this.TraceType, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
             voxelMap.Save(this.SourceFile);
 
             this.MainViewModel.ClearProgress();

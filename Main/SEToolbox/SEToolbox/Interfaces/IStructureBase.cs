@@ -20,6 +20,10 @@
 
         double PlayerDistance { get; set; }
 
+        double Mass { get; set; }
+
+        int BlockCount { get; set; }
+
         Vector3 Center { get; set; }
 
         string SerializedEntity { get; set; }
