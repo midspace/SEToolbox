@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.ImageLibrary;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;
@@ -382,13 +383,13 @@
         {
             if (this._sourceImage != null)
             {
-                var image = ToolboxExtensions.ResizeImage(this._sourceImage, this.NewImageSize.Size);
+                var image = ImageHelper.ResizeImage(this._sourceImage, this.NewImageSize.Size);
 
                 if (image != null)
                 {
-                    this.NewImage = ToolboxExtensions.ConvertBitmapToBitmapImage(image);
+                    this.NewImage = ImageHelper.ConvertBitmapToBitmapImage(image);
 
-                    //ToolboxExtensions.SavePng(@"C:\temp\test.png", image);
+                    //ImageHelper.SavePng(@"C:\temp\test.png", image);
                 }
                 else
                 {
@@ -458,7 +459,7 @@
             // Small|HeavyBlockArmor|Corner,
 
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
-            var image = ToolboxExtensions.ResizeImage(this._sourceImage, this.NewImageSize.Size);
+            var image = ImageHelper.ResizeImage(this._sourceImage, this.NewImageSize.Size);
 
             using (var palatteImage = new Bitmap(image))
             {

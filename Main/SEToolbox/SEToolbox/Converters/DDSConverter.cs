@@ -52,7 +52,7 @@
                     {
                         // TODO: rescale the bitmap to specified width/height.
                         var bitmapImage = new BitmapImage();
-                        System.Drawing.Bitmap bitmap = (Bitmap)Image.FromFile(filename, true);
+                        var bitmap = (Bitmap)Image.FromFile(filename, true);
                         using (var ms = new MemoryStream())
                         {
                             bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);

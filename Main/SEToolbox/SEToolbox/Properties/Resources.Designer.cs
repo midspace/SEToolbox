@@ -528,6 +528,25 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An old version &apos;{0}&apos; of Space Engineers was detected in the folder &apos;{1}&apos;.
+        ///Please update it before running SEToolbox {2} again..
+        /// </summary>
+        public static string DialogOldSEVersionMessage {
+            get {
+                return ResourceManager.GetString("DialogOldSEVersionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot run with old version of Space Engineers.
+        /// </summary>
+        public static string DialogOldSEVersionTitle {
+            get {
+                return ResourceManager.GetString("DialogOldSEVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error has been detected in the application that has caused the application to shut down:
         ///
         ///{0}

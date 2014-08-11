@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ImageLibrary
 {
+    using SEToolbox.ImageLibrary.Effects;
     using System;
     using System.Drawing;
     using System.Drawing.Imaging;
@@ -272,11 +273,6 @@
 
         #endregion
 
-        public static void Init()
-        {
-            // Placeholder to make sure ctor is called.
-        }
-
         #region MarshalTo
 
         private static T MarshalTo<T>(byte[] buffer)
@@ -292,23 +288,38 @@
 
         #region CreateImage
 
-        public static ImageSource CreateImage(string filename)
+        public static ImageSource CreateImage(string filename, bool ignoreAlpha = false, IPixelEffect effect = null)
         {
-            return CreateImage(filename, 0, -1, -1);
+            return CreateImage(filename, 0, -1, -1, ignoreAlpha, effect);
         }
 
-        public static ImageSource CreateImage(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false)
+        public static ImageSource CreateImage(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false, IPixelEffect effect = null)
         {
-            uint fourCC;
-            var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC, ignoreAlpha);
-            if (pixelChannel == null)
-                return null;
-            try
+            var extension = Path.GetExtension(filename).ToLower();
+
+            if (extension == ".png")
             {
-                if (fourCC == (uint)DDS_FOURCC.DXT3 || fourCC == (uint)DDS_FOURCC.DXT5)
-                    return DxtUtil.DecompressDxt5TextureToImageSource(pixelChannel, width, height, ignoreAlpha);
+                // TODO: rescale the bitmap to specified width/height.
+                try
+                {
+                    return ImageHelper.ConvertBitmapToBitmapImage((Bitmap)Image.FromFile(filename, true));
+                }
+                catch { return null; }
             }
-            catch { }
+            else if (extension == ".dds")
+            {
+                uint fourCC;
+                var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC);
+                if (pixelChannel == null)
+                    return null;
+                try
+                {
+                    if (fourCC == (uint)DDS_FOURCC.DXT3 || fourCC == (uint)DDS_FOURCC.DXT5)
+                        return DxtUtil.DecompressDxt5TextureToImageSource(pixelChannel, width, height, ignoreAlpha, effect);
+                }
+                catch { return null; }
+            }
+            
             return null;
         }
 
@@ -316,9 +327,9 @@
 
         #region CreateBitmap
 
-        public static Bitmap CreateBitmap(string filename)
+        public static Bitmap CreateBitmap(string filename, bool ignoreAlpha = false)
         {
-            return CreateBitmap(filename, 0, -1, -1);
+            return CreateBitmap(filename, 0, -1, -1, ignoreAlpha);
         }
 
         public static Bitmap CreateBitmap(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false)
@@ -333,7 +344,7 @@
             else if (extension == ".dds")
             {
                 uint fourCC;
-                var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC, ignoreAlpha);
+                var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC);
                 if (pixelChannel == null)
                     return null;
                 try
@@ -341,7 +352,7 @@
                     if (fourCC == (uint)DDS_FOURCC.DXT3 || fourCC == (uint)DDS_FOURCC.DXT5)
                         return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height, ignoreAlpha);
                 }
-                catch { }
+                catch { return null; }
             }
             return null;
         }
@@ -359,7 +370,7 @@
 
         #region ReadTextureFile
 
-        private static byte[] ReadTextureFile(string filename, int depthSlice, ref int width, ref int height, out uint fourCC, bool ignoreAlpha = false)
+        private static byte[] ReadTextureFile(string filename, int depthSlice, ref int width, ref int height, out uint fourCC)
         {
             if (!File.Exists(filename))
             {

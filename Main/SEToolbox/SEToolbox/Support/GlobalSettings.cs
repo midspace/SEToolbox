@@ -129,14 +129,19 @@
             this.IgnoreUpdateVersion = null;
         }
 
-        public static Version GetVersion()
+        public static Version GetVersion(bool ignoreRevision = false)
         {
             var assemblyVersion = Assembly.GetExecutingAssembly()
               .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
               .OfType<AssemblyFileVersionAttribute>()
               .FirstOrDefault();
 
-            return assemblyVersion == null ? new Version() : new Version(assemblyVersion.Version);
+            var version = assemblyVersion == null ? new Version() : new Version(assemblyVersion.Version);
+
+            if (ignoreRevision)
+                return new Version(version.Major, version.Minor, version.Build);
+            else
+                return version;
         }
 
         #endregion

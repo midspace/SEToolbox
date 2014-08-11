@@ -65,9 +65,19 @@
             return new System.Windows.Media.Media3D.Vector3D(vector.X, vector.Y, vector.Z);
         }
 
+        public static System.Windows.Media.Media3D.Vector3D ToVector3D(this Vector3 vector)
+        {
+            return new System.Windows.Media.Media3D.Vector3D(vector.X, vector.Y, vector.Z);
+        }
+
         internal static System.Windows.Media.Media3D.Point3D ToPoint3D(this SerializableVector3 point)
         {
             return new System.Windows.Media.Media3D.Point3D(point.X, point.Y, point.Z);
+        }
+
+        public static System.Windows.Point ToPoint(this Vector2 vector)
+        {
+            return new System.Windows.Point(vector.X, vector.Y);
         }
 
         internal static Vector3 ToVector3(this System.Windows.Media.Media3D.Point3D point)
@@ -137,6 +147,8 @@
             return new SerializableVector3();
         }
 
+        // SerializableVector3 stores Color HSV in the range of H=X=0.0 to +1.0, S=Y=-1.0 to +1.0, V=Z=-1.0 to +1.0
+
         public static System.Drawing.Color ToSandboxDrawingColor(this SerializableVector3 hsv)
         {
             var vColor = VRageMath.ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
@@ -146,6 +158,12 @@
         public static System.Windows.Media.Color ToSandboxMediaColor(this SerializableVector3 hsv)
         {
             var vColor = VRageMath.ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
+            return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+        }
+
+        public static System.Windows.Media.Color ToSandboxMediaColor(this Vector3 rgb)
+        {
+            var vColor = new VRageMath.Color(rgb);
             return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
         }
 

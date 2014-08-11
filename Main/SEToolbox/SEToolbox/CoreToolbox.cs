@@ -12,6 +12,7 @@
     using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Windows;
+    using Res = SEToolbox.Properties.Resources;
 
     public class CoreToolbox
     {
@@ -141,7 +142,14 @@
 
         public bool Load(string[] args)
         {
-            // TODO: perhaps test the SpaceEngineersConsts.GetSEVersion()
+            // Test the Space Engineers version to make sure users are using an version that is new enough for SEToolbox to run with!
+            // This is usually because a user has not updated a manual install of a Dedicated Server, or their Steam did not update properly.
+            if (SpaceEngineersConsts.GetSEVersion() < GlobalSettings.GetVersion(true))
+            {
+                MessageBox.Show(string.Format(Res.DialogOldSEVersionMessage, SpaceEngineersConsts.GetSEVersion(), GlobalSettings.Default.SEBinPath, GlobalSettings.GetVersion()), Res.DialogOldSEVersionTitle, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                Application.Current.Shutdown();
+                return false;
+            }
 
             // Force pre-loading of any Space Engineers resources.
             SEToolbox.Interop.SpaceEngineersCore.LoadDefinitions();
