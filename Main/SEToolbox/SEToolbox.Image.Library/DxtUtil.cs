@@ -42,6 +42,8 @@
 // 
 namespace SEToolbox.ImageLibrary
 {
+    using SEToolbox.ImageLibrary.Effects;
+    using System;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
@@ -83,7 +85,7 @@ namespace SEToolbox.ImageLibrary
             }
         }
 
-        internal static ImageSource DecompressDxt5TextureToImageSource(byte[] imageData, int width, int height, bool ignoreAlpha)
+        internal static ImageSource DecompressDxt5TextureToImageSource(byte[] imageData, int width, int height, bool ignoreAlpha, IPixelEffect effect)
         {
             using (var imageStream = new MemoryStream(imageData))
             {
@@ -101,7 +103,24 @@ namespace SEToolbox.ImageLibrary
                     pixelRgba[i + 3] = ignoreAlpha ? (byte)0xff : pixelColors[i + 3];
                 }
 
-                return System.Windows.Media.Imaging.BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgra32, null, pixelRgba, stride);
+                if (effect == null)
+                    return System.Windows.Media.Imaging.BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgra32, null, pixelRgba, stride);
+                else
+                {
+                    var bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                    var bmpData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, bmp.PixelFormat);
+
+                    //Copy the data from the byte array into BitmapData.Scan0
+                    Marshal.Copy(pixelRgba, 0, bmpData.Scan0, pixelRgba.Length);
+
+                    // Unlock the pixels
+                    bmp.UnlockBits(bmpData);
+
+                    bmp = effect.Quantize(bmp);
+
+                    return ImageHelper.ConvertBitmapToBitmapImage(bmp);
+                }
             }
         }
 

@@ -1,5 +1,7 @@
 ﻿namespace ToolboxTest
 {
+    using System.Windows.Media;
+    using System.Windows.Media.Media3D;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
@@ -8,7 +10,9 @@
     using SEToolbox.Support;
     using System.Drawing;
     using System.IO;
+    using Brushes = System.Drawing.Brushes;
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;
+    using SEToolbox.ImageLibrary.Effects;
 
     [TestClass]
     public class TextureTests
@@ -82,6 +86,104 @@
             Assert.IsTrue(File.Exists(platinumPath), "Filepath should exist on developer machine");
             var platinumBmp = TexUtil.CreateBitmap(platinumPath);
             ImageTextureUtil.WriteImage(platinumBmp, @".\TestOutput\platinum.png");
+
+            var medicalDiffuseEmissivePath = Path.Combine(contentPath, @"Textures\Models\Cubes\large_medical_room_de.dds");
+            Assert.IsTrue(File.Exists(medicalDiffuseEmissivePath), "Filepath should exist on developer machine");
+            var medicalDiffuseEmissiveBmp = TexUtil.CreateBitmap(medicalDiffuseEmissivePath);
+            ImageTextureUtil.WriteImage(medicalDiffuseEmissiveBmp, @".\TestOutput\large_medical_room_de.png");
+
+            medicalDiffuseEmissiveBmp = TexUtil.CreateBitmap(medicalDiffuseEmissivePath, true);
+            ImageTextureUtil.WriteImage(medicalDiffuseEmissiveBmp, @".\TestOutput\large_medical_room.png");
+
+            var astronautMaskEmissivePath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_custom_me.dds");
+            Assert.IsTrue(File.Exists(astronautMaskEmissivePath), "Filepath should exist on developer machine");
+            var astronautMaskEmissiveBmp = TexUtil.CreateBitmap(astronautMaskEmissivePath);
+            ImageTextureUtil.WriteImage(astronautMaskEmissiveBmp, @".\TestOutput\Astronaut_custom_me.png");
+
+            astronautMaskEmissiveBmp = TexUtil.CreateBitmap(astronautMaskEmissivePath, true);
+            ImageTextureUtil.WriteImage(astronautMaskEmissiveBmp, @".\TestOutput\Astronaut_custom_me2.png");
+
+            var astronautNormalSpecularPath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_custom_ns.dds");
+            Assert.IsTrue(File.Exists(astronautNormalSpecularPath), "Filepath should exist on developer machine");
+            var astronautNormalSpecularBmp = TexUtil.CreateBitmap(astronautNormalSpecularPath);
+            ImageTextureUtil.WriteImage(astronautNormalSpecularBmp, @".\TestOutput\Astronaut_custom_ns.png");
+
+            astronautNormalSpecularBmp = TexUtil.CreateBitmap(astronautNormalSpecularPath, true);
+            ImageTextureUtil.WriteImage(astronautNormalSpecularBmp, @".\TestOutput\Astronaut_custom_ns2.png");
+        }
+
+        [TestMethod]
+        public void PixelEffectTextures()
+        {
+            SpaceEngineersCore.LoadStockDefinitions();
+            var location = ToolboxUpdater.GetApplicationFilePath();
+            Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
+            Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
+
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+
+            // ----
+
+            var medicalDiffuseEmissivePath = Path.Combine(contentPath, @"Textures\Models\Cubes\large_medical_room_de.dds");
+            Assert.IsTrue(File.Exists(medicalDiffuseEmissivePath), "Filepath should exist on developer machine");
+            var medicalDiffuseEmissiveBmp = TexUtil.CreateBitmap(medicalDiffuseEmissivePath);
+            ImageTextureUtil.WriteImage(medicalDiffuseEmissiveBmp, @".\TestOutput\large_medical_room_de.png");
+
+            var medicalDiffuseEmissiveBmp2 = TexUtil.CreateBitmap(medicalDiffuseEmissivePath, true);
+            ImageTextureUtil.WriteImage(medicalDiffuseEmissiveBmp2, @".\TestOutput\large_medical_room_de_full.png");
+            
+            IPixelEffect effect = new AlphaPixelEffect();
+            var medicalDiffuseEmissiveAlphaBmp = effect.Quantize(medicalDiffuseEmissiveBmp);
+            ImageTextureUtil.WriteImage(medicalDiffuseEmissiveAlphaBmp, @".\TestOutput\large_medical_room_de_alpha.png");
+
+            effect = new EmissivePixelEffect(0);
+            var medicalNormalSpecularEmissiveBmp = effect.Quantize(medicalDiffuseEmissiveBmp);
+            ImageTextureUtil.WriteImage(medicalNormalSpecularEmissiveBmp, @".\TestOutput\large_medical_room_emissive.png");
+
+            var defaultImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(medicalDiffuseEmissivePath, false, new EmissivePixelEffect(0));
+
+            // ----
+
+            var largeThrustDiffuseEmissivePath = Path.Combine(contentPath, @"Textures\Models\Cubes\large_thrust_large_me.dds");
+            Assert.IsTrue(File.Exists(largeThrustDiffuseEmissivePath), "Filepath should exist on developer machine");
+            var largeThrustDiffuseEmissiveBmp = TexUtil.CreateBitmap(largeThrustDiffuseEmissivePath);
+            ImageTextureUtil.WriteImage(largeThrustDiffuseEmissiveBmp, @".\TestOutput\large_thrust_large_me.png");
+
+            var largeThrustDiffuseEmissiveBmp2 = TexUtil.CreateBitmap(largeThrustDiffuseEmissivePath, true);
+            ImageTextureUtil.WriteImage(largeThrustDiffuseEmissiveBmp2, @".\TestOutput\large_thrust_large_me_full.png");
+
+            effect = new AlphaPixelEffect();
+            var largeThrustDiffuseEmissiveAlphaBmp = effect.Quantize(largeThrustDiffuseEmissiveBmp);
+            ImageTextureUtil.WriteImage(largeThrustDiffuseEmissiveAlphaBmp, @".\TestOutput\large_thrust_large_me_alpha.png");
+
+            effect = new EmissivePixelEffect(0);
+            var largeThrustNormalSpecularEmissiveBmp = effect.Quantize(largeThrustDiffuseEmissiveBmp);
+            ImageTextureUtil.WriteImage(largeThrustNormalSpecularEmissiveBmp, @".\TestOutput\large_thrust_large_me_emissive.png");
+
+            // ----
+
+            var astronautMaskEmissivePath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_custom_me.dds");
+            Assert.IsTrue(File.Exists(astronautMaskEmissivePath), "Filepath should exist on developer machine");
+            var astronautMaskEmissiveBmp = TexUtil.CreateBitmap(astronautMaskEmissivePath);
+            ImageTextureUtil.WriteImage(astronautMaskEmissiveBmp, @".\TestOutput\Astronaut_custom_me.png");
+
+            effect = new AlphaPixelEffect();
+            var astronautMaskEmissiveAlphaBmp = effect.Quantize(astronautMaskEmissiveBmp);
+            ImageTextureUtil.WriteImage(astronautMaskEmissiveAlphaBmp, @".\TestOutput\Astronaut_custom_me_alpha.png");
+
+            var astronautMaskEmissiveBmp2 = TexUtil.CreateBitmap(astronautMaskEmissivePath, true);
+            ImageTextureUtil.WriteImage(astronautMaskEmissiveBmp2, @".\TestOutput\Astronaut_custom_me_full.png");
+
+            effect = new EmissivePixelEffect(255);
+            var astronautNormalSpecularEmissiveBmp = effect.Quantize(astronautMaskEmissiveBmp);
+            ImageTextureUtil.WriteImage(astronautNormalSpecularEmissiveBmp, @".\TestOutput\Astronaut_custom_me_emissive.png");
+
+            // ----
+
+            var astronautNormalSpecularPath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_custom_ns.dds");
+            Assert.IsTrue(File.Exists(astronautNormalSpecularPath), "Filepath should exist on developer machine");
+            var astronautNormalSpecularBmp = TexUtil.CreateBitmap(astronautNormalSpecularPath);
+            ImageTextureUtil.WriteImage(astronautNormalSpecularBmp, @".\TestOutput\Astronaut_custom_ns.png");
         }
 
         [TestMethod]
@@ -187,5 +289,20 @@
 
             ImageTextureUtil.WriteImage(result, string.Format(@".\TestOutput\BackgroundCube_{0}.png", size));
         }
+
+        //[TestMethod]
+        //public void LoadAllCubeTextures()
+        //{
+        //    SpaceEngineersCore.LoadStockDefinitions();
+
+        //    var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"Textures\Models\Cubes"), "*.dds");
+
+        //    foreach (var filename in files)
+        //    {
+        //        var outputFilename = Path.Combine(@".\TestOutput", Path.GetFileNameWithoutExtension( filename) + ".png");
+        //        var imageBitmap = TexUtil.CreateBitmap(filename);
+        //        ImageTextureUtil.WriteImage(imageBitmap, outputFilename);
+        //    }
+        //}
     }
 }

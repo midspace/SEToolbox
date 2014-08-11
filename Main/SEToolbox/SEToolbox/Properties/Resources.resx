@@ -610,4 +610,11 @@ Please specify the location of the Space Engineers Application file.</value>
   <data name="first_aid" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\first_aid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DialogOldSEVersionMessage" xml:space="preserve">
+    <value>An old version '{0}' of Space Engineers was detected in the folder '{1}'.
+Please update it before running SEToolbox {2} again.</value>
+  </data>
+  <data name="DialogOldSEVersionTitle" xml:space="preserve">
+    <value>Cannot run with old version of Space Engineers</value>
+  </data>
 </root>
