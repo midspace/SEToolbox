@@ -152,7 +152,7 @@
             }
 
             // Force pre-loading of any Space Engineers resources.
-            SEToolbox.Interop.SpaceEngineersCore.LoadDefinitions();
+            SEToolbox.Interop.SpaceEngineersCore.LoadStockDefinitions();
 
             // Load the Space Engineers assemblies, or dependant classes after this point.
             var explorerModel = new ExplorerModel();

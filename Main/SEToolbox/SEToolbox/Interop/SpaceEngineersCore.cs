@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Interop
 {
+    using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
     using System;
@@ -20,7 +21,6 @@
         private MyObjectBuilder_Definitions _definitions;
         private Dictionary<string, ContentDataPath> _contentDataPaths;
         private Dictionary<string, byte> _materialIndex;
-        private string _lastUserModsPath;
 
         #endregion
 
@@ -36,31 +36,27 @@
         public static void LoadStockDefinitions()
         {
             // Load Stock paths for tests.
-            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), null);
+            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), null, null);
         }
 
-        public static void LoadDefinitions()
-        {
-            // Defined (default) path for initial startup.
-            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), SpaceEngineersConsts.BaseLocalPath.ModsPath);
-        }
+        //public static void LoadDefinitions()
+        //{
+        //    // Defined (default) path for initial startup.
+        //    Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), SpaceEngineersConsts.BaseLocalPath.ModsPath);
+        //}
 
-        public static void LoadDefinitions(string userModPath)
+        public static void LoadDefinitions(string userModPath, MyObjectBuilder_Checkpoint.ModItem[] mods)
         {
-            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), userModPath);
+            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), userModPath, mods);
         }
 
         #region ReadCubeBlockDefinitions
 
-        private void ReadCubeBlockDefinitions(string contentPath, string userModspath)
+        private void ReadCubeBlockDefinitions(string contentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
         {
             // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
-            if (this._definitions == null || _lastUserModsPath != userModspath)
-            {
-                FindDefinitions(ToolboxUpdater.GetApplicationContentPath(), userModspath, out _definitions, out _contentDataPaths);
-                this._materialIndex = new Dictionary<string, byte>();
-                this._lastUserModsPath = userModspath;
-            }
+            FindDefinitions(ToolboxUpdater.GetApplicationContentPath(), userModspath, mods, out _definitions, out _contentDataPaths);
+            this._materialIndex = new Dictionary<string, byte>();
         }
 
         /// <summary>
@@ -71,26 +67,33 @@
         /// <param name="definitions"></param>
         /// <param name="contentData"></param>
         /// <returns></returns>
-        private void FindDefinitions(string contentPath, string userModspath, out MyObjectBuilder_Definitions definitions, out Dictionary<string, ContentDataPath> contentData)
+        private void FindDefinitions(string contentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods, out MyObjectBuilder_Definitions definitions, out Dictionary<string, ContentDataPath> contentData)
         {
             // Maintain a list of referenced files, prefabs, models, textures, etc., as they must also be found and mapped.
             // ie.,  "Models\Characters\Custom\Awesome_astronaut_model" might live under "Mods\Awesome_astronaut\Models\Characters\Custom\Awesome_astronaut_model".
             contentData = new Dictionary<string, ContentDataPath>();
 
-            definitions = LoadAllDefinitions(contentPath);
-            LoadContent(contentPath, definitions, ref contentData);
+            definitions = LoadAllDefinitions(contentPath, contentPath, ref contentData);
 
-            if (!string.IsNullOrEmpty(userModspath) && Directory.Exists(userModspath))
+            if (mods != null && !string.IsNullOrEmpty(userModspath) && Directory.Exists(userModspath))
             {
                 // Read through the mod paths manually.
                 // Using the MyObjectBuilder_Base.DeserializeXML() with MyFSLocationEnum.ContentWithMods does not work in the expected manner.
 
-                var directories = Directory.GetDirectories(userModspath);
-                foreach (var modDirectory in directories)
+                foreach (MyObjectBuilder_Checkpoint.ModItem mod in mods)
                 {
-                    var modDefinitions = LoadAllDefinitions(modDirectory);
-                    LoadContent(modDirectory, modDefinitions, ref contentData);
-                    MergeDefinitions(ref definitions, modDefinitions);
+                    if (mod.PublishedFileId != 0)
+                    {
+                        var modFile = Path.Combine(userModspath, string.Format("{0}.sbm", mod.PublishedFileId));
+                        var modDefinitions = LoadAllDefinitionsZip(contentPath, modFile, ref contentData);
+                        MergeDefinitions(ref definitions, modDefinitions);
+                    }
+                    else if (mod.PublishedFileId == 0 && !string.IsNullOrEmpty(mod.Name))
+                    {
+                        var modContentPath = Path.Combine(userModspath, mod.Name);
+                        var modDefinitions = LoadAllDefinitions(contentPath, modContentPath, ref contentData);
+                        MergeDefinitions(ref definitions, modDefinitions);
+                    }
                 }
             }
 
@@ -127,9 +130,9 @@
             definitions.VoxelMaterials = definitions.VoxelMaterials.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
         }
 
-        private MyObjectBuilder_Definitions LoadAllDefinitions(string contentPath)
+        private MyObjectBuilder_Definitions LoadAllDefinitions(string stockContentPath, string modContentPath, ref Dictionary<string, ContentDataPath> contentData)
         {
-            var searchPath = Path.Combine(contentPath, "Data");
+            var searchPath = Path.Combine(modContentPath, "Data");
             var definitions = new MyObjectBuilder_Definitions();
 
             if (!Directory.Exists(searchPath))
@@ -140,9 +143,9 @@
             foreach (var filePath in files)
             {
                 MyObjectBuilder_Definitions stockTemp = null;
-                bool isCompressed;
                 try
                 {
+                    bool isCompressed;
                     stockTemp = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Definitions>(filePath, out isCompressed);
                 }
                 catch (Exception ex)
@@ -152,10 +155,50 @@
                     DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptContentFile, filePath), ex);
                 }
 
-                if (stockTemp == null) continue;
-
-                MergeDefinitions(ref definitions, stockTemp);
+                if (stockTemp != null)
+                    MergeDefinitions(ref definitions, stockTemp);
             }
+
+            LoadContent(stockContentPath, modContentPath, null, null, definitions, ref contentData);
+
+            return definitions;
+        }
+
+        private MyObjectBuilder_Definitions LoadAllDefinitionsZip(string stockContentPath, string zipModFile, ref Dictionary<string, ContentDataPath> contentData)
+        {
+            var zipFiles = ZipTools.ExtractZipContentList(zipModFile, null);
+            var definitions = new MyObjectBuilder_Definitions();
+
+            if (!zipFiles.Any(f => Path.GetDirectoryName(f).Equals("Data", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return definitions;
+            }
+
+            var files = zipFiles.Where(f => Path.GetDirectoryName(f).Equals("Data", StringComparison.InvariantCultureIgnoreCase) && Path.GetExtension(f).Equals(".sbc", StringComparison.InvariantCultureIgnoreCase)).ToArray();
+
+            foreach (var filePath in files)
+            {
+                MyObjectBuilder_Definitions stockTemp = null;
+                try
+                {
+                    using (var stream = ZipTools.ExtractZipFileToSteam(zipModFile, null, filePath))
+                    {
+                        bool isCompressed;
+                        stockTemp = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Definitions>(stream, out isCompressed);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // ignore errors, keep on trucking just like SE.
+                    // write event log warning of any files not loaded.
+                    DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptContentFile, filePath), ex);
+                }
+
+                if (stockTemp != null)
+                    MergeDefinitions(ref definitions, stockTemp);
+            }
+
+            LoadContent(stockContentPath, null, zipModFile, zipFiles, definitions, ref contentData);
 
             return definitions;
         }
@@ -183,15 +226,28 @@
             }
         }
 
-        private void LoadContent(string contentPath, MyObjectBuilder_Definitions definitions, ref Dictionary<string, ContentDataPath> contentData)
+        private void LoadContent(string stockContentPath, string modContentPath, string zipModFile, string[] zipFiles, MyObjectBuilder_Definitions definitions, ref Dictionary<string, ContentDataPath> contentData)
         {
             // rechecks pre-existing contentData
             foreach (var kvp in contentData)
             {
-                var contentFile = Path.Combine(contentPath, kvp.Value.ReferencePath);
-                if (File.Exists(contentFile))
+                if (modContentPath != null)
                 {
-                    kvp.Value.AbsolutePath = contentFile;
+                    var contentFile = Path.Combine(modContentPath, kvp.Value.ReferencePath);
+                    if (File.Exists(contentFile))
+                    {
+                        kvp.Value.AbsolutePath = contentFile;
+                        kvp.Value.ZipFilePath = null;
+                    }
+                }
+                else if (zipModFile != null)
+                {
+                    var contentFile = zipFiles.FirstOrDefault(f => f.Equals(kvp.Value.ReferencePath, StringComparison.InvariantCultureIgnoreCase));
+                    if (contentFile != null)
+                    {
+                        kvp.Value.ZipFilePath = zipModFile;
+                        kvp.Value.AbsolutePath = null;
+                    }
                 }
             }
 
@@ -244,42 +300,110 @@
                 icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_ns.dds"));
             }
 
-            var voxelsPath = Path.Combine(contentPath, @"Textures\Voxels");
-            if (Directory.Exists(voxelsPath))
+            if (modContentPath != null)
             {
-                foreach (var filePath in Directory.GetFiles(voxelsPath, "*.dds"))
+                var voxelsPath = Path.Combine(modContentPath, @"Textures\Voxels");
+                if (Directory.Exists(voxelsPath))
                 {
-                    var refPath = Path.Combine(@"Textures\Voxels", Path.GetFileName(filePath));
-                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.Texture, refPath, filePath));
+                    foreach (var filePath in Directory.GetFiles(voxelsPath, "*.dds"))
+                    {
+                        // TODO: check if it exists in the mod or not.
+                        var refPath = Path.Combine(@"Textures\Voxels", Path.GetFileName(filePath));
+                        contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.Texture, refPath, filePath, zipModFile));
+                    }
+                }
+            }
+            else if (zipModFile != null)
+            {
+                var files = zipFiles.Where(f => Path.GetDirectoryName(f).Equals(@"Textures\Voxels", StringComparison.InvariantCultureIgnoreCase) && Path.GetExtension(f).Equals(".dds", StringComparison.InvariantCultureIgnoreCase)).ToArray();
+
+                foreach (var refPath in files)
+                {
+                    // TODO: check if it exists in the mod or not.
+                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.Texture, refPath, null, zipModFile));
                 }
             }
 
             foreach (var icon in icons.Where(s => !string.IsNullOrEmpty(s)).Select(s => s).Distinct())
             {
-                var contentFile = Path.Combine(contentPath, icon);
-
-                if (File.Exists(contentFile) || !contentData.ContainsKey(icon.ToLower()))
+                if (modContentPath != null)
                 {
-                    contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile));
+                    var contentFile = Path.Combine(modContentPath, icon);
+
+                    // if the content exists, add/update it.
+                    if (File.Exists(contentFile))
+                    {
+                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile, null));
+                    }
+                    else if (!contentData.ContainsKey(icon.ToLower()))
+                    {
+                        // doesn't exist in this mod, assume it's stock icon and add/update it anyhow.
+                        contentFile = Path.Combine(stockContentPath, icon);
+                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile, null));
+                    }
+                }
+                else if (zipModFile != null)
+                {
+                    var contentFile = zipFiles.FirstOrDefault(f => f.Equals(icon, StringComparison.InvariantCultureIgnoreCase));
+
+                    // if the content exists, add/update it.
+                    if (contentFile != null)
+                    {
+                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, null, zipModFile));
+                    }
+                    else if (!contentData.ContainsKey(icon.ToLower()))
+                    {
+                        // doesn't exist in this mod, assume it's stock icon and add/update it anyhow.
+                        contentFile = Path.Combine(stockContentPath, icon);
+                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile, null));
+                    }
                 }
             }
 
             foreach (var model in models.Where(m => !string.IsNullOrEmpty(m)).Select(m => m).Distinct())
-                contentData.Update(model.ToLower(), new ContentDataPath(ContentPathType.Model, model, Path.Combine(contentPath, model)));
-
-            var prefabPath = Path.Combine(contentPath, @"Data\Prefabs");
-            if (Directory.Exists(prefabPath))
             {
-                foreach (var filePath in Directory.GetFiles(prefabPath, "*.sbc"))
+                if (modContentPath != null)
                 {
-                    var refPath = Path.Combine(@"Data\Prefabs", Path.GetFileName(filePath));
-                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxContent, refPath, filePath));
+                    // TODO: check if it exists in the mod or not.
+                    contentData.Update(model.ToLower(), new ContentDataPath(ContentPathType.Model, model, Path.Combine(modContentPath, model), zipModFile));
+                }
+                else if (zipModFile != null)
+                {
+                    // TODO: check if it exists in the mod or not.
+                    contentData.Update(model.ToLower(), new ContentDataPath(ContentPathType.Model, model, null, zipModFile));
+                }
+            }
+
+            if (modContentPath != null)
+            {
+                var prefabPath = Path.Combine(modContentPath, @"Data\Prefabs");
+                if (Directory.Exists(prefabPath))
+                {
+                    foreach (var filePath in Directory.GetFiles(prefabPath, "*.sbc"))
+                    {
+                        var refPath = Path.Combine(@"Data\Prefabs", Path.GetFileName(filePath));
+                        contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxContent, refPath, filePath, zipModFile));
+                    }
+
+                    foreach (var filePath in Directory.GetFiles(prefabPath, "*.sbs"))
+                    {
+                        var refPath = Path.Combine(@"Data\Prefabs", Path.GetFileName(filePath));
+                        contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxSector, refPath, filePath, zipModFile));
+                    }
+                }
+            }
+            else if (zipModFile != null)
+            {
+                var files = zipFiles.Where(f => Path.GetDirectoryName(f).Equals(@"Data\Prefabs", StringComparison.InvariantCultureIgnoreCase) && Path.GetExtension(f).Equals(".sbc", StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                foreach (var refPath in files)
+                {
+                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxContent, refPath, null, zipModFile));
                 }
 
-                foreach (var filePath in Directory.GetFiles(prefabPath, "*.sbs"))
+                files = zipFiles.Where(f => Path.GetDirectoryName(f).Equals(@"Data\Prefabs", StringComparison.InvariantCultureIgnoreCase) && Path.GetExtension(f).Equals(".sbs", StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                foreach (var refPath in files)
                 {
-                    var refPath = Path.Combine(@"Data\Prefabs", Path.GetFileName(filePath));
-                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxSector, refPath, filePath));
+                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxContent, refPath, null, zipModFile));
                 }
             }
 
@@ -336,7 +460,18 @@
         public static string GetDataPathOrDefault(string key, string defaultValue)
         {
             if (key != null && Default._contentDataPaths.ContainsKey(key.ToLower()))
-                return Default._contentDataPaths[key.ToLower()].AbsolutePath;
+            {
+                if (Default._contentDataPaths[key.ToLower()].AbsolutePath != null)
+                    return Default._contentDataPaths[key.ToLower()].AbsolutePath;
+                else if (Default._contentDataPaths[key.ToLower()].ZipFilePath != null)
+                {
+                    var tempContentFile = TempfileUtil.NewFilename(Path.GetExtension(defaultValue));
+                    ZipTools.ExtractZipFileToFile(Default._contentDataPaths[key.ToLower()].ZipFilePath, null, Default._contentDataPaths[key.ToLower()].ReferencePath, tempContentFile);
+                    return tempContentFile;
+                }
+                else
+                    return defaultValue;
+            }
             else
                 return defaultValue;
         }

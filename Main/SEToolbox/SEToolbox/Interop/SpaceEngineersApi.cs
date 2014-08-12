@@ -130,12 +130,12 @@
                                 Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", fileStream.Length, outStream.Length);
                             }
                             outStream.Position = 0;
-                            return ReadSpaceEngineersFile<T>(outStream);
+                            return ReadSpaceEngineersFileRaw<T>(outStream);
                         }
                     }
                     else
                     {
-                        return ReadSpaceEngineersFile<T>(fileStream);
+                        return ReadSpaceEngineersFileRaw<T>(fileStream);
                     }
                 }
             }
@@ -143,7 +143,41 @@
             return default(T);
         }
 
-        public static T ReadSpaceEngineersFile<T>(Stream stream)
+        public static T ReadSpaceEngineersFile<T>(Stream fileStream, out bool isCompressed)
+        {
+            var contract = new XmlSerializerContract();
+            isCompressed = false;
+
+            if (fileStream != null)
+            {
+                var b1 = fileStream.ReadByte();
+                var b2 = fileStream.ReadByte();
+                isCompressed = (b1 == 0x1f && b2 == 0x8b);
+                fileStream.Position = 0;
+
+                if (isCompressed)
+                {
+                    using (var outStream = new MemoryStream())
+                    {
+                        using (var zip = new GZipStream(fileStream, CompressionMode.Decompress))
+                        {
+                            zip.CopyTo(outStream);
+                            Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", fileStream.Length, outStream.Length);
+                        }
+                        outStream.Position = 0;
+                        return ReadSpaceEngineersFileRaw<T>(outStream);
+                    }
+                }
+                else
+                {
+                    return ReadSpaceEngineersFileRaw<T>(fileStream);
+                }
+            }
+
+            return default(T);
+        }
+
+        public static T ReadSpaceEngineersFileRaw<T>(Stream stream)
         {
             var contract = new XmlSerializerContract();
             object obj = default(T);
@@ -451,6 +485,5 @@
         }
         
         #endregion
-
     }
 }

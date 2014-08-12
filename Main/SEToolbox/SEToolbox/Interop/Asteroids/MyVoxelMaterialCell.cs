@@ -33,7 +33,7 @@ namespace SEToolbox.Interop.Asteroids
         private byte[] _materials;
         private byte[] _indestructibleContent;
         private byte _averageCellMaterial;
-        private static readonly Dictionary<byte, long> CellMaterialCounts = new Dictionary<byte, long>();
+        private readonly Dictionary<byte, long> CellMaterialCounts = new Dictionary<byte, long>();
 
         #endregion
 
