@@ -1,9 +1,13 @@
 ﻿namespace SEToolbox.Support
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.IO.Compression;
+    using System.Linq;
+    using System.Windows.Documents;
     using ICSharpCode.SharpZipLib.Core;
     using ICSharpCode.SharpZipLib.Zip;
 
@@ -19,7 +23,7 @@
             Directory.CreateDirectory(folder);
         }
 
-        public static void ExtractZipFile(string archiveFilenameIn, string password, string outFolder)
+        public static void ExtractZipFileToDirectory(string archiveFilenameIn, string password, string outFolder)
         {
             ZipFile zf = null;
             try
@@ -70,29 +74,82 @@
             }
         }
 
-        public static Stream ReadFile(string zipFile, string password, string file)
+        public static void ExtractZipFileToFile(string zipArchiveFilenameIn, string password, string archivedFile, string outFile)
         {
             ZipFile zf = null;
             try
             {
-                var fs = File.OpenRead(zipFile);
+                var fs = File.OpenRead(zipArchiveFilenameIn);
                 zf = new ZipFile(fs);
                 if (!String.IsNullOrEmpty(password))
                 {
-                    zf.Password = password; // AES encrypted entries are handled automatically
+                    zf.Password = password;     // AES encrypted entries are handled automatically
                 }
 
                 foreach (ZipEntry zipEntry in zf)
                 {
                     if (!zipEntry.IsFile)
                     {
-                        continue; // Ignore directories
+                        continue;           // Ignore directories
                     }
 
-                    if (zipEntry.Name == file)
+                    var seperator = Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentUICulture);
+
+                    if (zipEntry.Name.Replace("/", seperator).Equals(archivedFile, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        var zipStream = zf.GetInputStream(zipEntry);
                         var buffer = new byte[4096]; // 4K is optimum
+                        var zipStream = zf.GetInputStream(zipEntry);
+
+                        // Unzip file in buffered chunks. This is just as fast as unpacking to a buffer the full size
+                        // of the file, but does not waste memory.
+                        // The "using" will close the stream even if an exception occurs.
+                        using (var streamWriter = File.Create(outFile))
+                        {
+                            StreamUtils.Copy(zipStream, streamWriter, buffer);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (zf != null)
+                {
+                    zf.IsStreamOwner = true; // Makes close also shut the underlying stream
+                    zf.Close(); // Ensure we release resources
+                }
+            }
+        }
+
+        public static Stream ExtractZipFileToSteam(string zipArchiveFilenameIn, string password, string archivedFile)
+        {
+            ZipFile zf = null;
+            try
+            {
+                var fs = File.OpenRead(zipArchiveFilenameIn);
+                zf = new ZipFile(fs);
+                if (!String.IsNullOrEmpty(password))
+                {
+                    zf.Password = password;     // AES encrypted entries are handled automatically
+                }
+
+                foreach (ZipEntry zipEntry in zf)
+                {
+                    if (!zipEntry.IsFile)
+                    {
+                        continue;           // Ignore directories
+                    }
+
+                    var seperator = Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentUICulture);
+
+                    if (zipEntry.Name.Replace("/", seperator).Equals(archivedFile, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        var buffer = new byte[4096]; // 4K is optimum
+                        var zipStream = zf.GetInputStream(zipEntry);
+
+                        // Unzip file in buffered chunks. This is just as fast as unpacking to a buffer the full size
+                        // of the file, but does not waste memory.
+                        // The "using" will close the stream even if an exception occurs.
+
                         var stream = new MemoryStream();
                         StreamUtils.Copy(zipStream, stream, buffer);
                         stream.Position = 0;
@@ -108,8 +165,36 @@
                     zf.Close(); // Ensure we release resources
                 }
             }
-
             return null;
+        }
+
+        public static string[] ExtractZipContentList(string archiveFilenameIn, string password)
+        {
+            var fileList = new List<string>();
+
+            ZipFile zf = null;
+            try
+            {
+                var fs = File.OpenRead(archiveFilenameIn);
+                zf = new ZipFile(fs);
+                if (!String.IsNullOrEmpty(password))
+                {
+                    zf.Password = password;     // AES encrypted entries are handled automatically
+                }
+
+                var seperator = Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentUICulture);
+                fileList.AddRange(from ZipEntry zipEntry in zf where zipEntry.IsFile select zipEntry.Name.Replace("/", seperator));
+                //fileList.AddRange(from ZipEntry zipEntry in zf where zipEntry.IsFile select zipEntry.Name);
+            }
+            finally
+            {
+                if (zf != null)
+                {
+                    zf.IsStreamOwner = true; // Makes close also shut the underlying stream
+                    zf.Close(); // Ensure we release resources
+                }
+            }
+            return fileList.ToArray();
         }
 
         public static void ZipFolder(string sourceFolderName, string password, string outPathname)

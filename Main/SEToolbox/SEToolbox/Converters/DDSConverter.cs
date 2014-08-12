@@ -84,5 +84,10 @@
         {
             throw new NotSupportedException(string.Format("{0} does not support converting back.", this.GetType().FullName));
         }
+
+        public static void ClearCache()
+        {
+            Cache.Clear();
+        }
     }
 }

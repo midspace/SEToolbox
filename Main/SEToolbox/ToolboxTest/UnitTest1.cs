@@ -78,7 +78,7 @@
             const string folder = @".\TestOutput\Sample World";
 
             ZipTools.MakeClearDirectory(folder);
-            ZipTools.ExtractZipFile(filename, null, folder);
+            ZipTools.ExtractZipFileToDirectory(filename, null, folder);
         }
 
         [TestMethod]
@@ -87,7 +87,7 @@
             const string filename = @".\TestAssets\Sample World.sbw";
 
             MyObjectBuilder_Checkpoint checkpoint;
-            using (var stream = ZipTools.ReadFile(filename, null, SpaceEngineersConsts.SandBoxCheckpointFilename))
+            using (var stream = ZipTools.ExtractZipFileToSteam(filename, null, SpaceEngineersConsts.SandBoxCheckpointFilename))
             {
                 checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(stream);
             }
@@ -112,7 +112,7 @@
             const string folder = @".\TestOutput\Sample World";
 
             ZipTools.MakeClearDirectory(folder);
-            ZipTools.ExtractZipFile(filename, null, folder);
+            ZipTools.ExtractZipFileToDirectory(filename, null, folder);
 
             const string newFilename = @".\TestOutput\New World.sbw";
             ZipTools.ZipFolder(folder, null, newFilename);
