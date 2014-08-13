@@ -172,6 +172,9 @@
         {
             var fileList = new List<string>();
 
+            if (!File.Exists(archiveFilenameIn))
+                return fileList.ToArray();
+
             ZipFile zf = null;
             try
             {
@@ -179,7 +182,7 @@
                 zf = new ZipFile(fs);
                 if (!String.IsNullOrEmpty(password))
                 {
-                    zf.Password = password;     // AES encrypted entries are handled automatically
+                    zf.Password = password; // AES encrypted entries are handled automatically
                 }
 
                 var seperator = Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentUICulture);
