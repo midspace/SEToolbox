@@ -1241,9 +1241,9 @@ namespace SEToolbox.Interop.Asteroids
                 string name;
 
                 if (kvp.Key >= materialDefinitions.Count)
-                    name = materialDefinitions[this.VoxelMaterial].Name;
+                    name = materialDefinitions[this.VoxelMaterial].Id.SubtypeId;
                 else
-                    name = materialDefinitions[kvp.Key].Name;
+                    name = materialDefinitions[kvp.Key].Id.SubtypeId;
 
                 if (assetNameCount.ContainsKey(name))
                 {
@@ -1268,9 +1268,9 @@ namespace SEToolbox.Interop.Asteroids
                 string name;
 
                 if (kvp.Key >= materialDefinitions.Count)
-                    name = materialDefinitions[this.VoxelMaterial].Name;
+                    name = materialDefinitions[this.VoxelMaterial].Id.SubtypeId;
                 else
-                    name = materialDefinitions[kvp.Key].Name;
+                    name = materialDefinitions[kvp.Key].Id.SubtypeId;
 
                 if (assetNameCount.ContainsKey(name))
                 {

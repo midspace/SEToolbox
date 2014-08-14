@@ -39,7 +39,7 @@
 
             foreach (var material in SpaceEngineersApi.GetMaterialList())
             {
-                _materialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
+                _materialsCollection.Add(new MaterialSelectionModel() { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
             }
         }
 

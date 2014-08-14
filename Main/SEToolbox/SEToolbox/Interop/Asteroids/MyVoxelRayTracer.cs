@@ -595,7 +595,7 @@
             #endregion
 
             var size = new Vector3I(xCount, yCount, zCount);
-            var fillerMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false).Name;  // Default to first non-rare material.
+            var fillerMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false).Id.SubtypeId;  // Default to first non-rare material.
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
             {

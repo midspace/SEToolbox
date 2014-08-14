@@ -386,7 +386,7 @@
                 return SpaceEngineersCore.MaterialIndex[materialName];
             else
             {
-                var material = SpaceEngineersCore.Definitions.VoxelMaterials.FirstOrDefault(m => m.Name == materialName);
+                var material = SpaceEngineersCore.Definitions.VoxelMaterials.FirstOrDefault(m => m.Id.SubtypeId == materialName);
                 var index = (byte)SpaceEngineersCore.Definitions.VoxelMaterials.ToList().IndexOf(material);
                 SpaceEngineersCore.MaterialIndex.Add(materialName, index);
                 return index;
@@ -396,14 +396,14 @@
         public static string GetMaterialName(byte materialIndex, byte defaultMaterialIndex)
         {
             if (materialIndex <= SpaceEngineersCore.Definitions.VoxelMaterials.Length)
-                return SpaceEngineersCore.Definitions.VoxelMaterials[materialIndex].Name;
+                return SpaceEngineersCore.Definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
             else
-                return SpaceEngineersCore.Definitions.VoxelMaterials[defaultMaterialIndex].Name;
+                return SpaceEngineersCore.Definitions.VoxelMaterials[defaultMaterialIndex].Id.SubtypeId;
         }
 
         public static string GetMaterialName(byte materialIndex)
         {
-            return SpaceEngineersCore.Definitions.VoxelMaterials[materialIndex].Name;
+            return SpaceEngineersCore.Definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
         }
 
         #endregion
