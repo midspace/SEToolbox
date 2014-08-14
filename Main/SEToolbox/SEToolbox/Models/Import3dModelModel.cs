@@ -51,8 +51,8 @@
 
             foreach (var material in SpaceEngineersApi.GetMaterialList())
             {
-                _outsideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
-                _insideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name });
+                _outsideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
+                _insideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
             }
 
             this.InsideStockMaterial = this.InsideMaterialsCollection[0];

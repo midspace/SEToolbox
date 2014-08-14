@@ -255,10 +255,10 @@
 
             foreach (var voxelMaterialDefinition in SpaceEngineersCore.Definitions.VoxelMaterials)
             {
-                var texture = @"Textures\Voxels\" + voxelMaterialDefinition.AssetName + "_ForAxisXZ_de.dds";
+                var texture = voxelMaterialDefinition.DiffuseXZ;
                 this.MaterialAssets.Add(new ComponentItemModel()
                 {
-                    Name = voxelMaterialDefinition.Name,
+                    Name = voxelMaterialDefinition.Id.SubtypeId,
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture)),
                     IsRare = voxelMaterialDefinition.IsRare,
                     OreName = voxelMaterialDefinition.MinedOre,

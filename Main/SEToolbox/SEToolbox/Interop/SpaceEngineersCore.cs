@@ -127,7 +127,7 @@
             definitions.PhysicalItems = definitions.PhysicalItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             // definitions.SpawnGroups don't appear to have a unique idetifier.
             definitions.TransparentMaterials = definitions.TransparentMaterials.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.VoxelMaterials = definitions.VoxelMaterials.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
+            definitions.VoxelMaterials = definitions.VoxelMaterials.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
         }
 
         private MyObjectBuilder_Definitions LoadAllDefinitions(string stockContentPath, string modContentPath, ref Dictionary<string, ContentDataPath> contentData)
@@ -296,8 +296,10 @@
 
             if (definitions.VoxelMaterials != null)
             {
-                icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_de.dds"));
-                icons.AddRange(definitions.VoxelMaterials.Select(voxelMaterial => @"Textures\Voxels\" + voxelMaterial.AssetName + "_ForAxisXZ_ns.dds"));
+                icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.DiffuseXZ)).Select(vm => vm.DiffuseXZ));
+                icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.DiffuseY)).Select(vm => vm.DiffuseY));
+                icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.NormalXZ)).Select(vm => vm.NormalXZ));
+                icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.NormalY)).Select(vm => vm.NormalY));
             }
 
             if (modContentPath != null)

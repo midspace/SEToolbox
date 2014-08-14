@@ -159,7 +159,7 @@
             this.MaterialsCollection.Clear();
             foreach (var material in SpaceEngineersApi.GetMaterialList())
             {
-                this.MaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Name, DisplayName = material.Name, IsRare = material.IsRare, MinedRatio  = material.MinedOreRatio});
+                this.MaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId, IsRare = material.IsRare, MinedRatio = material.MinedOreRatio });
             }
 
             this.BaseMaterial = this.MaterialsCollection.FirstOrDefault(m => m.IsRare == false);
