@@ -583,24 +583,22 @@
             this.Mass = totalMass;
 
             this.DisplayName = this.CubeGrid.DisplayName;
-            
-            // TODO: this may have just become redundant.
-            if (string.IsNullOrEmpty(this.DisplayName))
+
+            // Add Beacon or Antenna detail for the Description.
+            var broadcasters = this.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString()
+                || b.SubtypeName == SubtypeId.SmallBlockBeacon.ToString()
+                || b.SubtypeName == SubtypeId.LargeBlockRadioAntenna.ToString()
+                || b.SubtypeName == SubtypeId.SmallBlockRadioAntenna.ToString()).ToArray();
+            var broadcastNames = string.Empty;
+            if (broadcasters.Length > 0)
             {
-                // Substitue Beacon or Antenna detail for the DisplayName.
-                var bradcasters = this.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString()
-                    || b.SubtypeName == SubtypeId.SmallBlockBeacon.ToString()
-                    || b.SubtypeName == SubtypeId.LargeBlockRadioAntenna.ToString()
-                    || b.SubtypeName == SubtypeId.SmallBlockRadioAntenna.ToString()).ToArray();
-                if (bradcasters.Length > 0)
-                {
-                    var beaconNames = bradcasters.Where(b => b is MyObjectBuilder_Beacon).Select(b => ((MyObjectBuilder_Beacon)b).CustomName ?? "Beacon").ToArray();
-                    var antennaNames = bradcasters.Where(b => b is MyObjectBuilder_RadioAntenna).Select(b => ((MyObjectBuilder_RadioAntenna)b).CustomName ?? "Antenna").ToArray();
-                    this.DisplayName = String.Join("|", beaconNames.Concat(antennaNames).OrderBy(s => s));
-                }
+                var beaconNames = broadcasters.Where(b => b is MyObjectBuilder_Beacon).Select(b => ((MyObjectBuilder_Beacon)b).CustomName ?? "Beacon").ToArray();
+                var antennaNames = broadcasters.Where(b => b is MyObjectBuilder_RadioAntenna).Select(b => ((MyObjectBuilder_RadioAntenna)b).CustomName ?? "Antenna").ToArray();
+                broadcastNames = String.Join("|", beaconNames.Concat(antennaNames).OrderBy(s => s));
             }
 
-            this.Description = string.Format("{0}×{1}×{2}", this.Scale.X, this.Scale.Y, this.Scale.Z);
+            this.Description = string.Format("{0}×{1}×{2} {3}", this.Scale.X, this.Scale.Y, this.Scale.Z, broadcastNames);
+
 
             // TODO:
             // Report:

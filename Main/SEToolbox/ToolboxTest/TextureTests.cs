@@ -1,18 +1,17 @@
 ﻿namespace ToolboxTest
 {
-    using System.Windows.Media;
-    using System.Windows.Media.Media3D;
+    using System.Drawing;
+    using System.IO;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.ImageLibrary;
+    using SEToolbox.ImageLibrary.Effects;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    using System.Drawing;
-    using System.IO;
     using Brushes = System.Drawing.Brushes;
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;
-    using SEToolbox.ImageLibrary.Effects;
 
     [TestClass]
     public class TextureTests
@@ -20,7 +19,7 @@
         [TestMethod]
         public void LoadComponentTextures()
         {
-            SpaceEngineersCore.LoadStockDefinitions();
+            SpaceEngineersCore.LoadDefinitions();
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
@@ -115,7 +114,7 @@
         [TestMethod]
         public void PixelEffectTextures()
         {
-            SpaceEngineersCore.LoadStockDefinitions();
+            SpaceEngineersCore.LoadDefinitions();
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
@@ -189,7 +188,7 @@
         [TestMethod]
         public void CreateMenuTextures()
         {
-            SpaceEngineersCore.LoadStockDefinitions();
+            SpaceEngineersCore.LoadDefinitions();
 
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
@@ -293,7 +292,7 @@
         //[TestMethod]
         //public void LoadAllCubeTextures()
         //{
-        //    SpaceEngineersCore.LoadStockDefinitions();
+        //    SpaceEngineersCore.LoadDefinitions();
 
         //    var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"Textures\Models\Cubes"), "*.dds");
 

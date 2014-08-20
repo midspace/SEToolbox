@@ -12,6 +12,7 @@ using System.Collections;
 
 namespace SEToolbox.Interop.Asteroids
 {
+    using System.Windows;
     using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
@@ -58,24 +59,21 @@ namespace SEToolbox.Interop.Asteroids
 
         public byte VoxelMaterial { get; private set; }
 
-        public string DisplayName { get; private set; }
-
         #endregion
 
         #region Init
 
         // Creates full voxel map, does not initialize base !!! Use only for importing voxel maps from models !!!
-        public void Init(string displayName, Vector3 position, Vector3I size, string material)
+        public void Init(Vector3 position, Vector3I size, string material)
         {
-            InitVoxelMap(displayName, position, size, material);
+            InitVoxelMap(position, size, material);
         }
 
-        private void InitVoxelMap(string displayName, Vector3 position, Vector3I size, string materialName)
+        private void InitVoxelMap(Vector3 position, Vector3I size, string materialName)
         {
             this.Size = size;
             this._sizeMinusOne = new Vector3I(Size.X - 1, Size.Y - 1, Size.Z - 1);
             this.VoxelMaterial = SpaceEngineersApi.GetMaterialIndex(materialName);
-            this.DisplayName = displayName;
             this._positionLeftBottomCorner = position;
             this._boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
 
@@ -190,7 +188,7 @@ namespace SEToolbox.Interop.Asteroids
 
         public void Load(string filename, string defaultMaterial)
         {
-            if (defaultMaterial == null)
+            if (string.IsNullOrEmpty(defaultMaterial))
                 defaultMaterial = SpaceEngineersApi.GetMaterialName(0);
             this.Load(filename, defaultMaterial, true);
         }
@@ -204,17 +202,15 @@ namespace SEToolbox.Interop.Asteroids
             {
                 using (var reader = new BinaryReader(ms))
                 {
-                    this.LoadUncompressed(Vector3.Zero, Path.GetFileNameWithoutExtension(filename), reader, defaultMaterial, loadMaterial);
+                    this.LoadUncompressed(Vector3.Zero, reader, defaultMaterial, loadMaterial);
                 }
             }
 
             File.Delete(tempfilename);
         }
 
-        public void LoadUncompressed(Vector3 position, string displayName, BinaryReader reader, string defaultMaterial, bool loadMaterial)
+        public void LoadUncompressed(Vector3 position, BinaryReader reader, string defaultMaterial, bool loadMaterial)
         {
-            Debug.WriteLine(string.Format("Load: '{0}'", displayName));
-
             this.FileVersion = reader.ReadInt32();
 
             var sizeX = reader.ReadInt32();
@@ -227,7 +223,7 @@ namespace SEToolbox.Interop.Asteroids
 
             this._cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
 
-            this.InitVoxelMap(displayName, position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
+            this.InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
             var cellsCount = this.Size / this._cellSize;
 
             for (var x = 0; x < cellsCount.X; x++)
@@ -634,6 +630,20 @@ namespace SEToolbox.Interop.Asteroids
             var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
             var oldMaterial = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
             this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].SetMaterialAndIndestructibleContent(SpaceEngineersApi.GetMaterialIndex(materialName), indestructibleContent, ref voxelCoordInCell);
+        }
+
+        #endregion
+
+        #region GetVoxelMaterialContent
+
+        public void GetVoxelMaterialContent(ref Vector3I voxelCoord, out string materialName, out byte content)
+        {
+            var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
+            var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
+
+            var oldMaterial = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
+            materialName = SpaceEngineersApi.GetMaterialName(oldMaterial);
+            content = GetVoxelContent(ref voxelCoordInCell);
         }
 
         #endregion

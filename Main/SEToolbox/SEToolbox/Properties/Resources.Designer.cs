@@ -251,30 +251,31 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type:	{0}
-        ///Piloted:	{1}
-        ///Damage:	{2}
-        ///Speed:	{3:#,##0.000} m/s
-        ///Distance:	{4:#,##0.0} m
-        ///Scale:	{5} × {6} × {7} blocks
-        ///Size:	{8} m × {9} m × {10} m
-        ///Mass:	{11:#,##0.00} Kg
-        ///Blocks:	{12:#,##0}
-        ///Position:	{13}, {14}, {15}
-        ///Total time to produce:	{16:dd} days, {16:hh} hours, {16:mm\:ss\.ff}
+        ///   Looks up a localized string similar to Name:	{0}
+        ///Type:	{1}
+        ///Piloted:	{2}
+        ///Damage:	{3}
+        ///Speed:	{4:#,##0.000} m/s
+        ///Distance:	{5:#,##0.0} m
+        ///Scale:	{6} × {7} × {8} blocks
+        ///Size:	{9} m × {10} m × {11} m
+        ///Mass:	{12:#,##0.00} Kg
+        ///Blocks:	{13:#,##0}
+        ///Position:	{14}, {15}, {16}
+        ///Total time to produce:	{17:dd} days, {17:hh} hours, {17:mm\:ss\.ff}
         ///
         ///Construction Requirements:
         ///Cubes	Count	Mass	Time to Produce
-        ///{17}
-        ///
-        ///Components	Count	Mass	Volume	Time to Produce
         ///{18}
         ///
-        ///Ingots	Amount	Mass	Volume	Time to Produce
+        ///Components	Count	Mass	Volume	Time to Produce
         ///{19}
         ///
+        ///Ingots	Amount	Mass	Volume	Time to Produce
+        ///{20}
+        ///
         ///Ore	Amount	Mass	Volume
-        ///{20}.
+        ///{21}.
         /// </summary>
         public static string CubeDetail {
             get {

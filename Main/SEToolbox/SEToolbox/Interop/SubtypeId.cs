@@ -218,6 +218,8 @@
         LargeRotor,
         SmallStator,
         SmallRotor,
+        ButtonPanelLarge,
+        ButtonPanelSmall,
         LargeRailStraight,
         LargeBlockSolarPanel,
         SmallBlockSolarPanel,

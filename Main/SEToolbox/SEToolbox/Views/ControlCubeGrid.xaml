@@ -159,6 +159,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
+                        <Label Grid.Row="1" Grid.Column="0" Content="Name:"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DisplayName, Mode=TwoWay}" />
                         <Label Grid.Row="2" Grid.Column="0" Content="Dampeners:"/>
                         <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
                         <Label Grid.Row="3" Grid.Column="0" Content="Position:"/>
