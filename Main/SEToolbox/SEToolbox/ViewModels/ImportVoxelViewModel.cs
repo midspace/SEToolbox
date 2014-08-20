@@ -1,13 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Voxels;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -16,6 +8,15 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Voxels;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
     using VRageMath;
     using Res = SEToolbox.Properties.Resources;
 
@@ -353,7 +354,7 @@
             string originalFile = null;
             if (this.IsStockVoxel)
             {
-                var stockfile = Path.Combine(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps"), this.StockVoxel + ".vox");
+                var stockfile = Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps", this.StockVoxel + ".vox");
 
                 if (this.StockMaterial == null || this.StockMaterial.Value == null)
                 {
@@ -410,16 +411,17 @@
             this.Forward = new BindableVector3DModel(Vector3.Forward);  // Asteroids currently don't have any orientation.
             this.Up = new BindableVector3DModel(Vector3.Up);
 
-            var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3() - asteroidCenter, this.Filename);
-            entity.EntityId = SpaceEngineersApi.GenerateEntityId();
-            entity.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
-            entity.Filename = this.Filename;
-
-            entity.PositionAndOrientation = new MyPositionAndOrientation()
+            var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3() - asteroidCenter, this.Filename)
             {
-                Position = this.Position.ToVector3() - asteroidCenter,
-                Forward = this.Forward.ToVector3(),
-                Up = this.Up.ToVector3()
+                EntityId = SpaceEngineersApi.GenerateEntityId(),
+                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Filename = this.Filename,
+                PositionAndOrientation = new MyPositionAndOrientation
+                {
+                    Position = this.Position.ToVector3() - asteroidCenter,
+                    Forward = this.Forward.ToVector3(),
+                    Up = this.Up.ToVector3()
+                }
             };
 
             return entity;

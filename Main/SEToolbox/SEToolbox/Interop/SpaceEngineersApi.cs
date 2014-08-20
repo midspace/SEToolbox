@@ -1,9 +1,5 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -11,6 +7,11 @@
     using System.IO.Compression;
     using System.Linq;
     using System.Xml;
+
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using SEToolbox.Support;
     using VRageMath;
 
     /// <summary>
@@ -289,7 +290,7 @@
 
         public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderType typeId, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, out TimeSpan timeTaken)
         {
-            TimeSpan time = new TimeSpan();
+            var time = new TimeSpan();
             var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.Id.TypeId == typeId);
             if (bp != null)
             {

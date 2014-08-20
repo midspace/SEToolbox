@@ -876,6 +876,7 @@
             }
 
             var detail = string.Format(Properties.Resources.CubeDetail,
+                this.DisplayName,
                 this.ClassType,
                 IsPiloted,
                 DamageCount,

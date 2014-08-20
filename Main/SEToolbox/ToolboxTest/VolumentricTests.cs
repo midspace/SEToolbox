@@ -1,12 +1,11 @@
 ﻿namespace ToolboxTest
 {
-    using System;
     using System.Diagnostics;
     using System.Windows.Media.Media3D;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    using SEToolbox.ViewModels;
 
     [TestClass]
     public class VolumentricTests

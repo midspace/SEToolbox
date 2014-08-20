@@ -1,12 +1,13 @@
 ﻿namespace ToolboxTest
 {
+    using System.IO;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    using System.IO;
     using VRageMath;
 
     [TestClass]
@@ -15,7 +16,7 @@
         [TestMethod]
         public void ApiInterop()
         {
-            SpaceEngineersCore.LoadStockDefinitions();
+            SpaceEngineersCore.LoadDefinitions();
 
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Large, "");
             Assert.AreEqual("DisplayName_Block_GravityGenerator", d1.DisplayName, "Must match");

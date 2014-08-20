@@ -603,7 +603,7 @@
                 e.Material = SpaceEngineersApi.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
             };
 
-            return MyVoxelBuilder.BuildAsteroid(true, asteroidFile, size, fillerMaterial, fillerMaterial, action, false);
+            return MyVoxelBuilder.BuildAsteroid(true, size, fillerMaterial, fillerMaterial, action);
         }
 
         #endregion

@@ -1,10 +1,5 @@
 ﻿namespace SEToolbox
 {
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
-    using SEToolbox.Support;
-    using SEToolbox.ViewModels;
-    using SEToolbox.Views;
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -12,6 +7,12 @@
     using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Windows;
+
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
+    using SEToolbox.Support;
+    using SEToolbox.ViewModels;
+    using SEToolbox.Views;
     using Res = SEToolbox.Properties.Resources;
 
     public class CoreToolbox
@@ -152,7 +153,7 @@
             }
 
             // Force pre-loading of any Space Engineers resources.
-            SEToolbox.Interop.SpaceEngineersCore.LoadStockDefinitions();
+            SEToolbox.Interop.SpaceEngineersCore.LoadDefinitions();
 
             // Load the Space Engineers assemblies, or dependant classes after this point.
             var explorerModel = new ExplorerModel();
@@ -228,7 +229,7 @@
 
             if (ToolboxUpdater.CoreSpaceEngineersResources.Any(f => string.Equals(f, filename, StringComparison.InvariantCultureIgnoreCase)))
             {
-                var assemblyPath = Path.Combine(Path.Combine(_tempBinPath, match.Groups["culture"].Value), filename);
+                var assemblyPath = Path.Combine(_tempBinPath, match.Groups["culture"].Value, filename);
 
                 // Load the resource assembly from the specified path.
                 // Return the loaded assembly.

@@ -1,13 +1,14 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
 
     /// <summary>
@@ -33,47 +34,36 @@
 
         #endregion
 
-        public static void LoadStockDefinitions()
+        /// <summary>
+        /// Loads Stock definitions from default path, useful for tests.
+        /// </summary>
+        public static void LoadDefinitions()
         {
-            // Load Stock paths for tests.
-            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), null, null);
-        }
-
-        //public static void LoadDefinitions()
-        //{
-        //    // Defined (default) path for initial startup.
-        //    Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), SpaceEngineersConsts.BaseLocalPath.ModsPath);
-        //}
-
-        public static void LoadDefinitions(string userModPath, MyObjectBuilder_Checkpoint.ModItem[] mods)
-        {
-            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), userModPath, mods);
-        }
-
-        #region ReadCubeBlockDefinitions
-
-        private void ReadCubeBlockDefinitions(string contentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
-        {
-            // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
-            FindDefinitions(ToolboxUpdater.GetApplicationContentPath(), userModspath, mods, out _definitions, out _contentDataPaths);
-            this._materialIndex = new Dictionary<string, byte>();
+            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), null);
         }
 
         /// <summary>
-        /// Load all the Space Engineers data definitions.
+        /// Loads Stock definitions from specified path, useful for tests.
         /// </summary>
-        /// <param name="contentPath">allows redirection of path when switching between single player or server.</param>
-        /// <param name="userModspath"></param>
-        /// <param name="definitions"></param>
-        /// <param name="contentData"></param>
-        /// <returns></returns>
-        private void FindDefinitions(string contentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods, out MyObjectBuilder_Definitions definitions, out Dictionary<string, ContentDataPath> contentData)
+        /// <param name="contentPath"></param>
+        public static void LoadDefinitions(string contentPath)
         {
-            // Maintain a list of referenced files, prefabs, models, textures, etc., as they must also be found and mapped.
-            // ie.,  "Models\Characters\Custom\Awesome_astronaut_model" might live under "Mods\Awesome_astronaut\Models\Characters\Custom\Awesome_astronaut_model".
-            contentData = new Dictionary<string, ContentDataPath>();
+            Default.ReadCubeBlockDefinitions(contentPath, null);
+        }
 
-            definitions = LoadAllDefinitions(contentPath, contentPath, ref contentData);
+        public static void LoadDefinitionsAndMods(params string[] modPaths)
+        {
+            Default.ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), modPaths);
+        }
+
+        public static void LoadDefinitionsAndMods(string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
+        {
+            LoadDefinitionsAndMods(ToolboxUpdater.GetApplicationContentPath(), userModspath, mods);
+        }
+
+        public static void LoadDefinitionsAndMods(string applicationContentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
+        {
+            var modPaths = new List<string>();
 
             if (mods != null && !string.IsNullOrEmpty(userModspath) && Directory.Exists(userModspath))
             {
@@ -84,14 +74,57 @@
                 {
                     if (mod.PublishedFileId != 0)
                     {
-                        var modFile = Path.Combine(userModspath, string.Format("{0}.sbm", mod.PublishedFileId));
-                        var modDefinitions = LoadAllDefinitionsZip(contentPath, modFile, ref contentData);
-                        MergeDefinitions(ref definitions, modDefinitions);
+                        modPaths.Add(Path.Combine(userModspath, string.Format("{0}.sbm", mod.PublishedFileId)));
                     }
                     else if (mod.PublishedFileId == 0 && !string.IsNullOrEmpty(mod.Name))
                     {
-                        var modContentPath = Path.Combine(userModspath, mod.Name);
-                        var modDefinitions = LoadAllDefinitions(contentPath, modContentPath, ref contentData);
+                        modPaths.Add(Path.Combine(userModspath, mod.Name));
+                    }
+                }
+            }
+
+            Default.ReadCubeBlockDefinitions(applicationContentPath, modPaths.ToArray());
+        }
+
+        #region ReadCubeBlockDefinitions
+
+        private void ReadCubeBlockDefinitions(string contentPath, string[] modPaths)
+        {
+            // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
+            FindDefinitions(contentPath, modPaths, out _definitions, out _contentDataPaths);
+            this._materialIndex = new Dictionary<string, byte>();
+        }
+
+        /// <summary>
+        /// Load all the Space Engineers data definitions.
+        /// </summary>
+        /// <param name="contentPath">allows redirection of path when switching between single player or server.</param>
+        /// <param name="modPaths"></param>
+        /// <param name="definitions"></param>
+        /// <param name="contentData"></param>
+        /// <returns></returns>
+        private void FindDefinitions(string contentPath, IEnumerable<string> modPaths, out MyObjectBuilder_Definitions definitions, out Dictionary<string, ContentDataPath> contentData)
+        {
+            // Maintain a list of referenced files, prefabs, models, textures, etc., as they must also be found and mapped.
+            // ie.,  "Models\Characters\Custom\Awesome_astronaut_model" might live under "Mods\Awesome_astronaut\Models\Characters\Custom\Awesome_astronaut_model".
+            contentData = new Dictionary<string, ContentDataPath>();
+
+            definitions = LoadAllDefinitions(contentPath, contentPath, ref contentData);
+
+            if (modPaths != null)
+            {
+                foreach (var modPath in modPaths)
+                {
+                    var filePath = Environment.ExpandEnvironmentVariables(modPath);
+
+                    if (File.Exists(filePath))
+                    {
+                        var modDefinitions = LoadAllDefinitionsZip(contentPath, filePath, ref contentData);
+                        MergeDefinitions(ref definitions, modDefinitions);
+                    }
+                    else if (Directory.Exists(filePath))
+                    {
+                        var modDefinitions = LoadAllDefinitions(contentPath, filePath, ref contentData);
                         MergeDefinitions(ref definitions, modDefinitions);
                     }
                 }
@@ -113,21 +146,21 @@
             if (definitions.VoxelMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
 
             // Deal with duplicate entries. Must use the last one found and overwrite all others.
-            definitions.AmmoMagazines = definitions.AmmoMagazines.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Animations = definitions.Animations.GroupBy(a => a.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Blueprints = definitions.Blueprints.GroupBy(c => c.Result.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.AmmoMagazines = definitions.AmmoMagazines.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.Animations = definitions.Animations.Where(c => !c.Id.TypeId.IsNull).GroupBy(a => a.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.Blueprints = definitions.Blueprints.Where(c => !c.Result.Id.TypeId.IsNull).GroupBy(c => c.Result.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.Characters = definitions.Characters.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
-            definitions.Components = definitions.Components.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.Components = definitions.Components.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             // definitions.Configuration is not an array.
-            definitions.ContainerTypes = definitions.ContainerTypes.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.CubeBlocks = definitions.CubeBlocks.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.ContainerTypes = definitions.ContainerTypes.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.CubeBlocks = definitions.CubeBlocks.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             // definitions.Environment is not an array.
-            definitions.GlobalEvents = definitions.GlobalEvents.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.HandItems = definitions.HandItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.PhysicalItems = definitions.PhysicalItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            // definitions.SpawnGroups don't appear to have a unique idetifier.
-            definitions.TransparentMaterials = definitions.TransparentMaterials.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.VoxelMaterials = definitions.VoxelMaterials.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.GlobalEvents = definitions.GlobalEvents.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.HandItems = definitions.HandItems.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.PhysicalItems = definitions.PhysicalItems.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.SpawnGroups = definitions.SpawnGroups.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.TransparentMaterials = definitions.TransparentMaterials.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.VoxelMaterials = definitions.VoxelMaterials.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
         }
 
         private MyObjectBuilder_Definitions LoadAllDefinitions(string stockContentPath, string modContentPath, ref Dictionary<string, ContentDataPath> contentData)

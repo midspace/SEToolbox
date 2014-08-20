@@ -610,7 +610,7 @@
             {
                 this._dataModel.ActiveWorld = model.SelectedWorld;
                 this.ActiveWorld.LoadCheckpoint();
-                SpaceEngineersCore.LoadDefinitions(model.SelectedWorld.DataPath.ModsPath, this.ActiveWorld.Content.Mods.ToArray());
+                SpaceEngineersCore.LoadDefinitionsAndMods(model.SelectedWorld.DataPath.ModsPath, this.ActiveWorld.Content.Mods.ToArray());
                 this._dataModel.LoadSandBox();
             }
         }
@@ -654,7 +654,7 @@
             this.ActiveWorld.LoadCheckpoint();
 
             // Reload Definitions, Mods, and clear out Materials, Textures.
-            SpaceEngineersCore.LoadDefinitions(this.ActiveWorld.DataPath.ModsPath, this.ActiveWorld.Content.Mods.ToArray());
+            SpaceEngineersCore.LoadDefinitionsAndMods(this.ActiveWorld.DataPath.ModsPath, this.ActiveWorld.Content.Mods.ToArray());
             SEToolbox.Converters.DDSConverter.ClearCache();
 
             // Load Sector file.
