@@ -1,12 +1,13 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
+
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
 
     public class GenerateVoxelFieldModel : BaseModel
     {
@@ -28,10 +29,10 @@
 
         public GenerateVoxelFieldModel()
         {
-            this._stockVoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>();
-            this._materialsCollection = new ObservableCollection<MaterialSelectionModel>();
-            this._voxelCollection = new ObservableCollection<GenerateVoxelModel>();
-            this._percentList = new List<int>();
+            _stockVoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>();
+            _materialsCollection = new ObservableCollection<MaterialSelectionModel>();
+            _voxelCollection = new ObservableCollection<GenerateVoxelModel>();
+            _percentList = new List<int>();
         }
 
         static GenerateVoxelFieldModel()
@@ -47,15 +48,15 @@
         {
             get
             {
-                return this._voxelCollection;
+                return _voxelCollection;
             }
 
             set
             {
-                if (value != this._voxelCollection)
+                if (value != _voxelCollection)
                 {
-                    this._voxelCollection = value;
-                    this.RaisePropertyChanged(() => VoxelCollection);
+                    _voxelCollection = value;
+                    RaisePropertyChanged(() => VoxelCollection);
                 }
             }
         }
@@ -72,7 +73,7 @@
                 if (value != _minimumRange)
                 {
                     _minimumRange = value;
-                    this.RaisePropertyChanged(() => MinimumRange);
+                    RaisePropertyChanged(() => MinimumRange);
                 }
             }
         }
@@ -89,7 +90,7 @@
                 if (value != _maximumRange)
                 {
                     _maximumRange = value;
-                    this.RaisePropertyChanged(() => MaximumRange);
+                    RaisePropertyChanged(() => MaximumRange);
                 }
             }
         }
@@ -98,14 +99,14 @@
         {
             get
             {
-                return this._characterPosition;
+                return _characterPosition;
             }
 
             set
             {
-                //if (value != this.characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
-                this._characterPosition = value;
-                this.RaisePropertyChanged(() => CharacterPosition);
+                //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
+                _characterPosition = value;
+                RaisePropertyChanged(() => CharacterPosition);
             }
         }
 
@@ -113,15 +114,15 @@
         {
             get
             {
-                return this._stockVoxelFileList;
+                return _stockVoxelFileList;
             }
 
             set
             {
-                if (value != this._stockVoxelFileList)
+                if (value != _stockVoxelFileList)
                 {
-                    this._stockVoxelFileList = value;
-                    this.RaisePropertyChanged(() => StockVoxelFileList);
+                    _stockVoxelFileList = value;
+                    RaisePropertyChanged(() => StockVoxelFileList);
                 }
             }
         }
@@ -134,7 +135,7 @@
         {
             get
             {
-                return this._materialsCollection;
+                return _materialsCollection;
             }
         }
 
@@ -142,7 +143,7 @@
         {
             get
             {
-                return this._percentList;
+                return _percentList;
             }
         }
 
@@ -154,98 +155,96 @@
 
         public void Load(MyPositionAndOrientation characterPosition)
         {
-            this.CharacterPosition = characterPosition;
+            CharacterPosition = characterPosition;
 
-            this.MaterialsCollection.Clear();
+            MaterialsCollection.Clear();
             foreach (var material in SpaceEngineersApi.GetMaterialList())
             {
-                this.MaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId, IsRare = material.IsRare, MinedRatio = material.MinedOreRatio });
+                MaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId, IsRare = material.IsRare, MinedRatio = material.MinedOreRatio });
             }
 
-            this.BaseMaterial = this.MaterialsCollection.FirstOrDefault(m => m.IsRare == false);
-            if (this.BaseMaterial == null)
-                this.BaseMaterial = this.MaterialsCollection.FirstOrDefault();
+            BaseMaterial = MaterialsCollection.FirstOrDefault(m => m.IsRare == false) ?? MaterialsCollection.FirstOrDefault();
 
             var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*.vox");
 
-            this.StockVoxelFileList.Clear();
-            this.SmallVoxelFileList = new List<GenerateVoxelDetailModel>();
-            this.LargeVoxelFileList = new List<GenerateVoxelDetailModel>();
+            StockVoxelFileList.Clear();
+            SmallVoxelFileList = new List<GenerateVoxelDetailModel>();
+            LargeVoxelFileList = new List<GenerateVoxelDetailModel>();
             foreach (var file in files)
             {
-                var voxel = new GenerateVoxelDetailModel()
+                var voxel = new GenerateVoxelDetailModel
                 {
                     Name = Path.GetFileNameWithoutExtension(file),
                     SourceFilename = file,
                 };
-                this.StockVoxelFileList.Add(voxel);
+                StockVoxelFileList.Add(voxel);
                 var fileLength = new FileInfo(file).Length;
 
                 if (fileLength > 100000)
-                    this.LargeVoxelFileList.Add(voxel);
+                    LargeVoxelFileList.Add(voxel);
                 else if (fileLength > 0)
-                    this.SmallVoxelFileList.Add(voxel);
+                    SmallVoxelFileList.Add(voxel);
             }
 
             // Set up a default start.
             if (VoxelStore.Count == 0)
             {
-                this.VoxelCollection.Add(this.NewDefaultVoxel(1));
+                VoxelCollection.Add(NewDefaultVoxel(1));
             }
             else
             {
                 foreach (var item in VoxelStore)
                 {
                     var v1 = item.Clone();
-                    v1.VoxelFile = this.StockVoxelFileList.FirstOrDefault(v => v.Name == v1.VoxelFile.Name);
-                    v1.MainMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.MainMaterial.DisplayName);
-                    v1.SecondMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SecondMaterial.DisplayName);
-                    v1.ThirdMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ThirdMaterial.DisplayName);
-                    v1.ForthMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ForthMaterial.DisplayName);
-                    v1.FifthMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.FifthMaterial.DisplayName);
-                    v1.SixthMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SixthMaterial.DisplayName);
-                    v1.SeventhMaterial = this.MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SeventhMaterial.DisplayName);
-                    this.VoxelCollection.Add(v1);
+                    v1.VoxelFile = StockVoxelFileList.FirstOrDefault(v => v.Name == v1.VoxelFile.Name);
+                    v1.MainMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.MainMaterial.DisplayName);
+                    v1.SecondMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SecondMaterial.DisplayName);
+                    v1.ThirdMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ThirdMaterial.DisplayName);
+                    v1.ForthMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ForthMaterial.DisplayName);
+                    v1.FifthMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.FifthMaterial.DisplayName);
+                    v1.SixthMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SixthMaterial.DisplayName);
+                    v1.SeventhMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SeventhMaterial.DisplayName);
+                    VoxelCollection.Add(v1);
                 }
-                this.RenumberCollection();
+                RenumberCollection();
             }
 
             for (var i = 0; i < 100; i++)
             {
-                this.PercentList.Add(i);
+                PercentList.Add(i);
             }
 
-            this.MinimumRange = 400;
-            this.MaximumRange = 800;
+            MinimumRange = 400;
+            MaximumRange = 800;
         }
 
         public void Unload()
         {
             VoxelStore.Clear();
-            VoxelStore.AddRange(this._voxelCollection);
+            VoxelStore.AddRange(_voxelCollection);
         }
 
         public GenerateVoxelModel NewDefaultVoxel(int index)
         {
-            return new GenerateVoxelModel()
+            return new GenerateVoxelModel
                 {
                     Index = index,
-                    VoxelFile = this.StockVoxelFileList[0],
-                    MainMaterial = this.MaterialsCollection[0],
-                    SecondMaterial = this.MaterialsCollection[0],
-                    ThirdMaterial = this.MaterialsCollection[0],
-                    ForthMaterial = this.MaterialsCollection[0],
-                    FifthMaterial = this.MaterialsCollection[0],
-                    SixthMaterial = this.MaterialsCollection[0],
-                    SeventhMaterial = this.MaterialsCollection[0],
+                    VoxelFile = StockVoxelFileList[0],
+                    MainMaterial = MaterialsCollection[0],
+                    SecondMaterial = MaterialsCollection[0],
+                    ThirdMaterial = MaterialsCollection[0],
+                    ForthMaterial = MaterialsCollection[0],
+                    FifthMaterial = MaterialsCollection[0],
+                    SixthMaterial = MaterialsCollection[0],
+                    SeventhMaterial = MaterialsCollection[0],
                 };
         }
 
         public void RenumberCollection()
         {
-            for (var i = 0; i < this.VoxelCollection.Count; i++)
+            for (var i = 0; i < VoxelCollection.Count; i++)
             {
-                this.VoxelCollection[i].Index = i + 1;
+                VoxelCollection[i].Index = i + 1;
             }
         }
 

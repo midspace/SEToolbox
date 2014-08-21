@@ -6,14 +6,14 @@
     {
         public UserDataPath(string basePath, string savesPathPart, string modsPathPart)
         {
-            this.SavesPath = Path.Combine(basePath, savesPathPart);
-            this.ModsPath = Path.Combine(basePath, modsPathPart);
+            SavesPath = Path.Combine(basePath, savesPathPart);
+            ModsPath = Path.Combine(basePath, modsPathPart);
         }
 
         public UserDataPath(string savesPath, string modsPath)
         {
-            this.SavesPath = savesPath;
-            this.ModsPath = modsPath;
+            SavesPath = savesPath;
+            ModsPath = modsPath;
         }
 
         public string SavesPath { get; set; }

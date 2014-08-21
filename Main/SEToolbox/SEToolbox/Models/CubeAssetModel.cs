@@ -1,7 +1,8 @@
 ﻿namespace SEToolbox.Models
 {
-    using SEToolbox.Interop;
     using System;
+
+    using SEToolbox.Interop;
 
     [Serializable]
     public class CubeAssetModel : BaseModel
@@ -26,18 +27,15 @@
 
         public string Name
         {
-            get
-            {
-                return this._name;
-            }
+            get { return _name; }
 
             set
             {
-                if (value != this._name)
+                if (value != _name)
                 {
-                    this._name = value;
-                    this.FriendlyName = SpaceEngineersApi.GetResourceName(this.Name);
-                    this.RaisePropertyChanged(() => Name);
+                    _name = value;
+                    FriendlyName = SpaceEngineersApi.GetResourceName(Name);
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -46,85 +44,70 @@
 
         public double Mass
         {
-            get
-            {
-                return this._mass;
-            }
+            get { return _mass; }
 
             set
             {
-                if (value != this._mass)
+                if (value != _mass)
                 {
-                    this._mass = value;
-                    this.RaisePropertyChanged(() => Mass);
+                    _mass = value;
+                    RaisePropertyChanged(() => Mass);
                 }
             }
         }
 
         public double Volume
         {
-            get
-            {
-                return this._volume;
-            }
+            get { return _volume; }
 
             set
             {
-                if (value != this._volume)
+                if (value != _volume)
                 {
-                    this._volume = value;
-                    this.RaisePropertyChanged(() => Volume);
+                    _volume = value;
+                    RaisePropertyChanged(() => Volume);
                 }
             }
         }
 
         public long Count
         {
-            get
-            {
-                return this._count;
-            }
+            get { return _count; }
 
             set
             {
-                if (value != this._count)
+                if (value != _count)
                 {
-                    this._count = value;
-                    this.RaisePropertyChanged(() => Count);
+                    _count = value;
+                    RaisePropertyChanged(() => Count);
                 }
             }
         }
 
         public TimeSpan Time
         {
-            get
-            {
-                return this._time;
-            }
+            get { return _time; }
 
             set
             {
-                if (value != this._time)
+                if (value != _time)
                 {
-                    this._time = value;
-                    this.RaisePropertyChanged(() => Time);
+                    _time = value;
+                    RaisePropertyChanged(() => Time);
                 }
             }
         }
 
         public string TextureFile
         {
-            get
-            {
-                return this._textureFile;
-            }
+            get { return _textureFile; }
 
             set
             {
-                if (value != this._textureFile)
+                if (value != _textureFile)
                 {
-                    this._textureFile = value;
-                    this.RaisePropertyChanged(() => TextureFile);
+                    _textureFile = value;
+                    RaisePropertyChanged(() => TextureFile);
                 }
             }
         }

@@ -28,15 +28,15 @@
         {
             get
             {
-                return this._index;
+                return _index;
             }
 
             set
             {
-                if (value != this._index)
+                if (value != _index)
                 {
-                    this._index = value;
-                    this.RaisePropertyChanged(() => Index);
+                    _index = value;
+                    RaisePropertyChanged(() => Index);
                 }
             }
         }
@@ -45,15 +45,15 @@
         {
             get
             {
-                return this._voxelFile;
+                return _voxelFile;
             }
 
             set
             {
-                if (value != this._voxelFile)
+                if (value != _voxelFile)
                 {
-                    this._voxelFile = value;
-                    this.RaisePropertyChanged(() => VoxelFile);
+                    _voxelFile = value;
+                    RaisePropertyChanged(() => VoxelFile);
                 }
             }
         }
@@ -62,15 +62,15 @@
         {
             get
             {
-                return this._mainMaterial;
+                return _mainMaterial;
             }
 
             set
             {
-                if (value != this._mainMaterial)
+                if (value != _mainMaterial)
                 {
-                    this._mainMaterial = value;
-                    this.RaisePropertyChanged(() => MainMaterial);
+                    _mainMaterial = value;
+                    RaisePropertyChanged(() => MainMaterial);
                 }
             }
         }
@@ -79,15 +79,15 @@
         {
             get
             {
-                return this._secondMaterial;
+                return _secondMaterial;
             }
 
             set
             {
-                if (value != this._secondMaterial)
+                if (value != _secondMaterial)
                 {
-                    this._secondMaterial = value;
-                    this.RaisePropertyChanged(() => SecondMaterial);
+                    _secondMaterial = value;
+                    RaisePropertyChanged(() => SecondMaterial);
                 }
             }
         }
@@ -96,15 +96,15 @@
         {
             get
             {
-                return this._secondPercent;
+                return _secondPercent;
             }
 
             set
             {
-                if (value != this._secondPercent)
+                if (value != _secondPercent)
                 {
-                    this._secondPercent = value;
-                    this.RaisePropertyChanged(() => SecondPercent);
+                    _secondPercent = value;
+                    RaisePropertyChanged(() => SecondPercent);
                 }
             }
         }
@@ -113,15 +113,15 @@
         {
             get
             {
-                return this._thirdMaterial;
+                return _thirdMaterial;
             }
 
             set
             {
-                if (value != this._thirdMaterial)
+                if (value != _thirdMaterial)
                 {
-                    this._thirdMaterial = value;
-                    this.RaisePropertyChanged(() => ThirdMaterial);
+                    _thirdMaterial = value;
+                    RaisePropertyChanged(() => ThirdMaterial);
                 }
             }
         }
@@ -130,15 +130,15 @@
         {
             get
             {
-                return this._thirdPercent;
+                return _thirdPercent;
             }
 
             set
             {
-                if (value != this._thirdPercent)
+                if (value != _thirdPercent)
                 {
-                    this._thirdPercent = value;
-                    this.RaisePropertyChanged(() => ThirdPercent);
+                    _thirdPercent = value;
+                    RaisePropertyChanged(() => ThirdPercent);
                 }
             }
         }
@@ -147,15 +147,15 @@
         {
             get
             {
-                return this._forthMaterial;
+                return _forthMaterial;
             }
 
             set
             {
-                if (value != this._forthMaterial)
+                if (value != _forthMaterial)
                 {
-                    this._forthMaterial = value;
-                    this.RaisePropertyChanged(() => ForthMaterial);
+                    _forthMaterial = value;
+                    RaisePropertyChanged(() => ForthMaterial);
                 }
             }
         }
@@ -164,15 +164,15 @@
         {
             get
             {
-                return this._forthPercent;
+                return _forthPercent;
             }
 
             set
             {
-                if (value != this._forthPercent)
+                if (value != _forthPercent)
                 {
-                    this._forthPercent = value;
-                    this.RaisePropertyChanged(() => ForthPercent);
+                    _forthPercent = value;
+                    RaisePropertyChanged(() => ForthPercent);
                 }
             }
         }
@@ -181,15 +181,15 @@
         {
             get
             {
-                return this._fifthMaterial;
+                return _fifthMaterial;
             }
 
             set
             {
-                if (value != this._fifthMaterial)
+                if (value != _fifthMaterial)
                 {
-                    this._fifthMaterial = value;
-                    this.RaisePropertyChanged(() => FifthMaterial);
+                    _fifthMaterial = value;
+                    RaisePropertyChanged(() => FifthMaterial);
                 }
             }
         }
@@ -198,15 +198,15 @@
         {
             get
             {
-                return this._fifthPercent;
+                return _fifthPercent;
             }
 
             set
             {
-                if (value != this._fifthPercent)
+                if (value != _fifthPercent)
                 {
-                    this._fifthPercent = value;
-                    this.RaisePropertyChanged(() => FifthPercent);
+                    _fifthPercent = value;
+                    RaisePropertyChanged(() => FifthPercent);
                 }
             }
         }
@@ -215,15 +215,15 @@
         {
             get
             {
-                return this._sixthMaterial;
+                return _sixthMaterial;
             }
 
             set
             {
-                if (value != this._sixthMaterial)
+                if (value != _sixthMaterial)
                 {
-                    this._sixthMaterial = value;
-                    this.RaisePropertyChanged(() => SixthMaterial);
+                    _sixthMaterial = value;
+                    RaisePropertyChanged(() => SixthMaterial);
                 }
             }
         }
@@ -232,15 +232,15 @@
         {
             get
             {
-                return this._sixthPercent;
+                return _sixthPercent;
             }
 
             set
             {
-                if (value != this._sixthPercent)
+                if (value != _sixthPercent)
                 {
-                    this._sixthPercent = value;
-                    this.RaisePropertyChanged(() => SixthPercent);
+                    _sixthPercent = value;
+                    RaisePropertyChanged(() => SixthPercent);
                 }
             }
         }
@@ -249,15 +249,15 @@
         {
             get
             {
-                return this._seventhMaterial;
+                return _seventhMaterial;
             }
 
             set
             {
-                if (value != this._seventhMaterial)
+                if (value != _seventhMaterial)
                 {
-                    this._seventhMaterial = value;
-                    this.RaisePropertyChanged(() => SeventhMaterial);
+                    _seventhMaterial = value;
+                    RaisePropertyChanged(() => SeventhMaterial);
                 }
             }
         }
@@ -266,15 +266,15 @@
         {
             get
             {
-                return this._seventhPercent;
+                return _seventhPercent;
             }
 
             set
             {
-                if (value != this._seventhPercent)
+                if (value != _seventhPercent)
                 {
-                    this._seventhPercent = value;
-                    this.RaisePropertyChanged(() => SeventhPercent);
+                    _seventhPercent = value;
+                    RaisePropertyChanged(() => SeventhPercent);
                 }
             }
         }
@@ -283,23 +283,23 @@
 
         public GenerateVoxelModel Clone()
         {
-            return new GenerateVoxelModel()
+            return new GenerateVoxelModel
             {
-                Index = this.Index,
-                VoxelFile = this.VoxelFile,
-                MainMaterial = this.MainMaterial,
-                SecondMaterial = this.SecondMaterial,
-                SecondPercent = this.SecondPercent,
-                ThirdMaterial = this.ThirdMaterial,
-                ThirdPercent = this.ThirdPercent,
-                ForthMaterial = this.ForthMaterial,
-                ForthPercent = this.ForthPercent,
-                FifthMaterial = this.FifthMaterial,
-                FifthPercent = this.FifthPercent,
-                SixthMaterial = this.SixthMaterial,
-                SixthPercent = this.SixthPercent,
-                SeventhMaterial = this.SeventhMaterial,
-                SeventhPercent = this.SeventhPercent,
+                Index = Index,
+                VoxelFile = VoxelFile,
+                MainMaterial = MainMaterial,
+                SecondMaterial = SecondMaterial,
+                SecondPercent = SecondPercent,
+                ThirdMaterial = ThirdMaterial,
+                ThirdPercent = ThirdPercent,
+                ForthMaterial = ForthMaterial,
+                ForthPercent = ForthPercent,
+                FifthMaterial = FifthMaterial,
+                FifthPercent = FifthPercent,
+                SixthMaterial = SixthMaterial,
+                SixthPercent = SixthPercent,
+                SeventhMaterial = SeventhMaterial,
+                SeventhPercent = SeventhPercent,
             };
         }
     }

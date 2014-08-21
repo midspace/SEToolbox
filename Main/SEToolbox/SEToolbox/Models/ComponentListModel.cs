@@ -1,19 +1,18 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using SEToolbox.Converters;
-    using SEToolbox.ImageLibrary;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Drawing;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Web.UI;
+
+    using SEToolbox.Converters;
+    using SEToolbox.ImageLibrary;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
 
     public class ComponentListModel : BaseModel
     {
@@ -33,14 +32,6 @@
 
         #endregion
 
-        #region ctor
-
-        public ComponentListModel()
-        {
-        }
-
-        #endregion
-
         #region Properties
 
         /// <summary>
@@ -50,15 +41,15 @@
         {
             get
             {
-                return this._cubeAssets;
+                return _cubeAssets;
             }
 
             set
             {
-                if (value != this._cubeAssets)
+                if (value != _cubeAssets)
                 {
-                    this._cubeAssets = value;
-                    this.RaisePropertyChanged(() => CubeAssets);
+                    _cubeAssets = value;
+                    RaisePropertyChanged(() => CubeAssets);
                 }
             }
         }
@@ -70,15 +61,15 @@
         {
             get
             {
-                return this._componentAssets;
+                return _componentAssets;
             }
 
             set
             {
-                if (value != this._componentAssets)
+                if (value != _componentAssets)
                 {
-                    this._componentAssets = value;
-                    this.RaisePropertyChanged(() => ComponentAssets);
+                    _componentAssets = value;
+                    RaisePropertyChanged(() => ComponentAssets);
                 }
             }
         }
@@ -90,15 +81,15 @@
         {
             get
             {
-                return this._itemAssets;
+                return _itemAssets;
             }
 
             set
             {
-                if (value != this._itemAssets)
+                if (value != _itemAssets)
                 {
-                    this._itemAssets = value;
-                    this.RaisePropertyChanged(() => ItemAssets);
+                    _itemAssets = value;
+                    RaisePropertyChanged(() => ItemAssets);
                 }
             }
         }
@@ -110,15 +101,15 @@
         {
             get
             {
-                return this._materialAssets;
+                return _materialAssets;
             }
 
             set
             {
-                if (value != this._materialAssets)
+                if (value != _materialAssets)
                 {
-                    this._materialAssets = value;
-                    this.RaisePropertyChanged(() => MaterialAssets);
+                    _materialAssets = value;
+                    RaisePropertyChanged(() => MaterialAssets);
                 }
             }
         }
@@ -130,16 +121,16 @@
         {
             get
             {
-                return this._isBusy;
+                return _isBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -151,15 +142,15 @@
         {
             get
             {
-                return this._selectedCubeAsset;
+                return _selectedCubeAsset;
             }
 
             set
             {
-                if (value != this._selectedCubeAsset)
+                if (value != _selectedCubeAsset)
                 {
-                    this._selectedCubeAsset = value;
-                    this.RaisePropertyChanged(() => SelectedCubeAsset);
+                    _selectedCubeAsset = value;
+                    RaisePropertyChanged(() => SelectedCubeAsset);
                 }
             }
         }
@@ -172,10 +163,10 @@
 
         public void Load()
         {
-            this.CubeAssets = new ObservableCollection<ComponentItemModel>();
-            this.ComponentAssets = new ObservableCollection<ComponentItemModel>();
-            this.ItemAssets = new ObservableCollection<ComponentItemModel>();
-            this.MaterialAssets = new ObservableCollection<ComponentItemModel>();
+            CubeAssets = new ObservableCollection<ComponentItemModel>();
+            ComponentAssets = new ObservableCollection<ComponentItemModel>();
+            ItemAssets = new ObservableCollection<ComponentItemModel>();
+            MaterialAssets = new ObservableCollection<ComponentItemModel>();
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
@@ -189,7 +180,7 @@
                     props.Add(field.Name, GetValue(field, cubeDefinition));
                 }
 
-                this.CubeAssets.Add(new ComponentItemModel()
+                CubeAssets.Add(new ComponentItemModel
                 {
                     Name = cubeDefinition.DisplayName,
                     TypeId = cubeDefinition.Id.TypeId,
@@ -208,7 +199,7 @@
             {
                 var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.Id.TypeId == componentDefinition.Id.TypeId);
 
-                this.ComponentAssets.Add(new ComponentItemModel()
+                ComponentAssets.Add(new ComponentItemModel
                 {
                     Name = componentDefinition.DisplayName,
                     TypeId = componentDefinition.Id.TypeId,
@@ -224,7 +215,7 @@
             foreach (var physicalItemDefinition in SpaceEngineersCore.Definitions.PhysicalItems)
             {
                 var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
-                this.ItemAssets.Add(new ComponentItemModel()
+                ItemAssets.Add(new ComponentItemModel
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -240,7 +231,7 @@
             foreach (var physicalItemDefinition in SpaceEngineersCore.Definitions.AmmoMagazines)
             {
                 var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
-                this.ItemAssets.Add(new ComponentItemModel()
+                ItemAssets.Add(new ComponentItemModel
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -256,7 +247,7 @@
             foreach (var voxelMaterialDefinition in SpaceEngineersCore.Definitions.VoxelMaterials)
             {
                 var texture = voxelMaterialDefinition.DiffuseXZ;
-                this.MaterialAssets.Add(new ComponentItemModel()
+                MaterialAssets.Add(new ComponentItemModel
                 {
                     Name = voxelMaterialDefinition.Id.SubtypeId,
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture)),
@@ -295,9 +286,9 @@ td.right { text-align: right; }");
 
                 writer.RenderElement(HtmlTextWriterTag.H1, "Cubes");
                 writer.BeginTable("1", "3", "0",
-                    new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)" });
+                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)" });
 
-                foreach (var asset in this.CubeAssets)
+                foreach (var asset in CubeAssets)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
@@ -334,9 +325,9 @@ td.right { text-align: right; }");
 
                 writer.RenderElement(HtmlTextWriterTag.H1, "Components");
                 writer.BeginTable("1", "3", "0",
-                    new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)" });
+                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)" });
 
-                foreach (var asset in this.ComponentAssets)
+                foreach (var asset in ComponentAssets)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
@@ -373,9 +364,9 @@ td.right { text-align: right; }");
 
                 writer.RenderElement(HtmlTextWriterTag.H1, "Items");
                 writer.BeginTable("1", "3", "0",
-                    new String[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)" });
+                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)" });
 
-                foreach (var asset in this.ItemAssets)
+                foreach (var asset in ItemAssets)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
@@ -412,9 +403,9 @@ td.right { text-align: right; }");
 
                 writer.RenderElement(HtmlTextWriterTag.H1, "Materials");
                 writer.BeginTable("1", "3", "0",
-                    new String[] { "Texture", "Name", "Ore Name", "Rare", "Mined Ore Ratio" });
+                    new[] { "Texture", "Name", "Ore Name", "Rare", "Mined Ore Ratio" });
 
-                foreach (var asset in this.MaterialAssets)
+                foreach (var asset in MaterialAssets)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
@@ -465,33 +456,36 @@ td.right { text-align: right; }");
                 var vector = (Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3I)item;
                 return string.Format("{0}, {1}, {2}", vector.X, vector.Y, vector.Z);
             }
-            else if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3))
+
+            if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3))
             {
                 var vector = (Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3)item;
                 return string.Format("{0}, {1}, {2}", vector.X, vector.Y, vector.Z);
             }
-            else if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds))
+
+            if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds))
             {
                 var bounds = (Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds)item;
                 return string.Format("Default:{0}, Min:{1}, max:{2}", bounds.Default, bounds.Min, bounds.Max);
             }
-            else if (field.FieldType == typeof(VRageMath.Vector3))
+
+            if (field.FieldType == typeof(VRageMath.Vector3))
             {
                 var vector3 = (VRageMath.Vector3)item;
                 return string.Format("X:{0}, Y:{1}, Z:{2}", vector3.X, vector3.Y, vector3.Z);
             }
-            else if (field.FieldType == typeof(string))
+
+            if (field.FieldType == typeof(string))
             {
                 return item as string;
             }
-            else if (item == null)
+
+            if (item == null)
             {
                 return string.Empty;
             }
-            else
-            {
-                return item.ToString();
-            }
+
+            return item.ToString();
         }
 
         #endregion

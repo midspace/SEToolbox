@@ -12,10 +12,10 @@
     {
         public ContentDataPath(ContentPathType contentType, string referencePath, string absolutePath, string zipFilePath)
         {
-            this.ContentType = contentType;
-            this.ReferencePath = referencePath;
-            this.AbsolutePath = absolutePath;
-            this.ZipFilePath = zipFilePath;
+            ContentType = contentType;
+            ReferencePath = referencePath;
+            AbsolutePath = absolutePath;
+            ZipFilePath = zipFilePath;
         }
 
         public ContentPathType ContentType { get; set; }

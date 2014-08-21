@@ -1,12 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
-    using SEToolbox.Views;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -22,6 +15,14 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Shell;
+
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
+    using SEToolbox.Views;
     using VRageMath;
     using WPFLocalizeExtension.Engine;
     using Res = SEToolbox.Properties.Resources;
@@ -68,25 +69,25 @@
             Contract.Requires(openFileDialogFactory != null);
             Contract.Requires(saveFileDialogFactory != null);
 
-            this._dialogService = dialogService;
-            this._openFileDialogFactory = openFileDialogFactory;
-            this._saveFileDialogFactory = saveFileDialogFactory;
-            this._dataModel = dataModel;
+            _dialogService = dialogService;
+            _openFileDialogFactory = openFileDialogFactory;
+            _saveFileDialogFactory = saveFileDialogFactory;
+            _dataModel = dataModel;
 
-            this.Selections = new ObservableCollection<IStructureViewBase>();
-            this.Selections.CollectionChanged += (sender, e) => this.RaisePropertyChanged(() => IsMultipleSelections);
+            Selections = new ObservableCollection<IStructureViewBase>();
+            Selections.CollectionChanged += (sender, e) => RaisePropertyChanged(() => IsMultipleSelections);
 
-            this.Structures = new ObservableCollection<IStructureViewBase>();
-            foreach (var item in this._dataModel.Structures)
+            Structures = new ObservableCollection<IStructureViewBase>();
+            foreach (var item in _dataModel.Structures)
             {
-                this.AddViewModel(item);
+                AddViewModel(item);
             }
 
-            this.UpdateLanguages();
+            UpdateLanguages();
 
-            this._dataModel.Structures.CollectionChanged += Structures_CollectionChanged;
+            _dataModel.Structures.CollectionChanged += Structures_CollectionChanged;
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -95,290 +96,182 @@
 
         public ICommand ClosingCommand
         {
-            get
-            {
-                return new DelegateCommand<CancelEventArgs>(new Action<CancelEventArgs>(ClosingExecuted), new Func<CancelEventArgs, bool>(ClosingCanExecute));
-            }
+            get { return new DelegateCommand<CancelEventArgs>(ClosingExecuted, ClosingCanExecute); }
         }
 
         public ICommand OpenCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenExecuted), new Func<bool>(OpenCanExecute));
-            }
+            get { return new DelegateCommand(OpenExecuted, OpenCanExecute); }
         }
 
         public ICommand SaveCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(SaveExecuted), new Func<bool>(SaveCanExecute));
-            }
+            get { return new DelegateCommand(SaveExecuted, SaveCanExecute); }
         }
 
         public ICommand ClearCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ClearExecuted), new Func<bool>(ClearCanExecute));
-            }
+            get { return new DelegateCommand(ClearExecuted, ClearCanExecute); }
         }
 
         public ICommand ReloadCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ReloadExecuted), new Func<bool>(ReloadCanExecute));
-            }
+            get { return new DelegateCommand(ReloadExecuted, ReloadCanExecute); }
         }
 
         public ICommand IsActiveCommand
         {
-            get
-            {
-                return new DelegateCommand(new Func<bool>(IsActiveCanExecute));
-            }
+            get { return new DelegateCommand(new Func<bool>(IsActiveCanExecute)); }
         }
 
         public ICommand ImportVoxelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ImportVoxelExecuted), new Func<bool>(ImportVoxelCanExecute));
-            }
+            get { return new DelegateCommand(ImportVoxelExecuted, ImportVoxelCanExecute); }
         }
 
         public ICommand ImportImageCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ImportImageExecuted), new Func<bool>(ImportImageCanExecute));
-            }
+            get { return new DelegateCommand(ImportImageExecuted, ImportImageCanExecute); }
         }
 
         public ICommand ImportModelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ImportModelExecuted), new Func<bool>(ImportModelCanExecute));
-            }
+            get { return new DelegateCommand(ImportModelExecuted, ImportModelCanExecute); }
         }
-        
+
         public ICommand ImportAsteroidModelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ImportAsteroidModelExecuted), new Func<bool>(ImportAsteroidModelCanExecute));
-            }
+            get { return new DelegateCommand(ImportAsteroidModelExecuted, ImportAsteroidModelCanExecute); }
         }
 
         public ICommand ImportSandboxObjectCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ImportSandboxObjectExecuted), new Func<bool>(ImportSandboxObjectCanExecute));
-            }
+            get { return new DelegateCommand(ImportSandboxObjectExecuted, ImportSandboxObjectCanExecute); }
         }
 
         public ICommand OpenComponentListCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenComponentListExecuted), new Func<bool>(OpenComponentListCanExecute));
-            }
+            get { return new DelegateCommand(OpenComponentListExecuted, OpenComponentListCanExecute); }
         }
 
         public ICommand WorldReportCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(WorldReportExecuted), new Func<bool>(WorldReportCanExecute));
-            }
+            get { return new DelegateCommand(WorldReportExecuted, WorldReportCanExecute); }
         }
 
         public ICommand OpenFolderCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenFolderExecuted), new Func<bool>(OpenFolderCanExecute));
-            }
+            get { return new DelegateCommand(OpenFolderExecuted, OpenFolderCanExecute); }
         }
 
         public ICommand ViewSandboxCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ViewSandboxExecuted), new Func<bool>(ViewSandboxCanExecute));
-            }
+            get { return new DelegateCommand(ViewSandboxExecuted, ViewSandboxCanExecute); }
         }
 
         public ICommand OpenWorkshopCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenWorkshopExecuted), new Func<bool>(OpenWorkshopCanExecute));
-            }
+            get { return new DelegateCommand(OpenWorkshopExecuted, OpenWorkshopCanExecute); }
         }
 
         public ICommand ExportSandboxObjectCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ExportSandboxObjectExecuted), new Func<bool>(ExportSandboxObjectCanExecute));
-            }
+            get { return new DelegateCommand(ExportSandboxObjectExecuted, ExportSandboxObjectCanExecute); }
         }
 
         public ICommand ExportBasicSandboxObjectCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ExportBasicSandboxObjectExecuted), new Func<bool>(ExportBasicSandboxObjectCanExecute));
-            }
+            get { return new DelegateCommand(ExportBasicSandboxObjectExecuted, ExportBasicSandboxObjectCanExecute); }
         }
 
         public ICommand CreateFloatingItemCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CreateFloatingItemExecuted), new Func<bool>(CreateFloatingItemCanExecute));
-            }
+            get { return new DelegateCommand(CreateFloatingItemExecuted, CreateFloatingItemCanExecute); }
         }
 
         public ICommand GenerateVoxelFieldCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(GenerateVoxelFieldExecuted), new Func<bool>(GenerateVoxelFieldCanExecute));
-            }
+            get { return new DelegateCommand(GenerateVoxelFieldExecuted, GenerateVoxelFieldCanExecute); }
         }
 
         public ICommand Test1Command
         {
-            get
-            {
-                return new DelegateCommand(new Action(Test1Executed), new Func<bool>(Test1CanExecute));
-            }
+            get { return new DelegateCommand(Test1Executed, Test1CanExecute); }
         }
 
         public ICommand Test2Command
         {
-            get
-            {
-                return new DelegateCommand(new Action(Test2Executed), new Func<bool>(Test2CanExecute));
-            }
+            get { return new DelegateCommand(Test2Executed, Test2CanExecute); }
         }
 
         public ICommand Test3Command
         {
-            get
-            {
-                return new DelegateCommand(new Action(Test3Executed), new Func<bool>(Test3CanExecute));
-            }
+            get { return new DelegateCommand(Test3Executed, Test3CanExecute); }
         }
 
         public ICommand Test4Command
         {
-            get
-            {
-                return new DelegateCommand(new Action(Test4Executed), new Func<bool>(Test4CanExecute));
-            }
+            get { return new DelegateCommand(Test4Executed, Test4CanExecute); }
         }
 
         public ICommand Test5Command
         {
-            get
-            {
-                return new DelegateCommand(new Action(Test5Executed), new Func<bool>(Test5CanExecute));
-            }
+            get { return new DelegateCommand(Test5Executed, Test5CanExecute); }
         }
 
         public ICommand Test6Command
         {
-            get
-            {
-                return new DelegateCommand(new Action(Test6Executed), new Func<bool>(Test6CanExecute));
-            }
+            get { return new DelegateCommand(Test6Executed, Test6CanExecute); }
         }
 
         public ICommand OpenUpdatesLinkCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenUpdatesLinkExecuted), new Func<bool>(OpenUpdatesLinkCanExecute));
-            }
+            get { return new DelegateCommand(OpenUpdatesLinkExecuted, OpenUpdatesLinkCanExecute); }
         }
 
         public ICommand OpenDocumentationLinkCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenDocumentationLinkExecuted), new Func<bool>(OpenDocumentationLinkCanExecute));
-            }
+            get { return new DelegateCommand(OpenDocumentationLinkExecuted, OpenDocumentationLinkCanExecute); }
         }
 
         public ICommand OpenSupportLinkCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenSupportLinkExecuted), new Func<bool>(OpenSupportLinkCanExecute));
-            }
+            get { return new DelegateCommand(OpenSupportLinkExecuted, OpenSupportLinkCanExecute); }
         }
 
         public ICommand AboutCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(AboutExecuted), new Func<bool>(AboutCanExecute));
-            }
+            get { return new DelegateCommand(AboutExecuted, AboutCanExecute); }
         }
 
         public ICommand LanguageCommand
         {
-            get
-            {
-                return new DelegateCommand(new Func<bool>(LanguageCanExecute));
-            }
+            get { return new DelegateCommand(new Func<bool>(LanguageCanExecute)); }
         }
 
         public ICommand SetLanguageCommand
         {
-            get
-            {
-                return new DelegateCommand<string>(new Action<string>(SetLanguageExecuted), new Func<string, bool>(SetLanguageCanExecute));
-            }
+            get { return new DelegateCommand<string>(SetLanguageExecuted, SetLanguageCanExecute); }
         }
 
         public ICommand DeleteObjectCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(DeleteObjectExecuted), new Func<bool>(DeleteObjectCanExecute));
-            }
+            get { return new DelegateCommand(DeleteObjectExecuted, DeleteObjectCanExecute); }
         }
 
         public ICommand GroupMoveCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(GroupMoveExecuted), new Func<bool>(GroupMoveCanExecute));
-            }
+            get { return new DelegateCommand(GroupMoveExecuted, GroupMoveCanExecute); }
         }
 
         public ICommand RejoinShipCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RejoinShipExecuted), new Func<bool>(RejoinShipCanExecute));
-            }
+            get { return new DelegateCommand(RejoinShipExecuted, RejoinShipCanExecute); }
         }
 
         public ICommand JoinShipPartsCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(JoinShipPartsExecuted), new Func<bool>(JoinShipPartsCanExecute));
-            }
+            get { return new DelegateCommand(JoinShipPartsExecuted, JoinShipPartsCanExecute); }
         }
 
         #endregion
@@ -392,13 +285,13 @@
         {
             get
             {
-                return this._closeResult;
+                return _closeResult;
             }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
@@ -406,15 +299,15 @@
         {
             get
             {
-                return this._structures;
+                return _structures;
             }
 
             private set
             {
-                if (value != this._structures)
+                if (value != _structures)
                 {
-                    this._structures = value;
-                    this.RaisePropertyChanged(() => Structures);
+                    _structures = value;
+                    RaisePropertyChanged(() => Structures);
                 }
             }
         }
@@ -423,17 +316,17 @@
         {
             get
             {
-                return this._selectedStructure;
+                return _selectedStructure;
             }
 
             set
             {
-                if (value != this._selectedStructure)
+                if (value != _selectedStructure)
                 {
-                    this._selectedStructure = value;
-                    if (this._selectedStructure != null && !_ignoreUpdateSelection)
-                        this._selectedStructure.DataModel.InitializeAsync();
-                    this.RaisePropertyChanged(() => SelectedStructure);
+                    _selectedStructure = value;
+                    if (_selectedStructure != null && !_ignoreUpdateSelection)
+                        _selectedStructure.DataModel.InitializeAsync();
+                    RaisePropertyChanged(() => SelectedStructure);
                 }
             }
         }
@@ -442,15 +335,15 @@
         {
             get
             {
-                return this._selections;
+                return _selections;
             }
 
             set
             {
-                if (value != this._selections)
+                if (value != _selections)
                 {
-                    this._selections = value;
-                    this.RaisePropertyChanged(() => Selections);
+                    _selections = value;
+                    RaisePropertyChanged(() => Selections);
                 }
             }
         }
@@ -459,7 +352,7 @@
         {
             get
             {
-                return this._selections.Count > 1;
+                return _selections.Count > 1;
             }
         }
 
@@ -467,11 +360,11 @@
         {
             get
             {
-                return this._dataModel.ActiveWorld;
+                return _dataModel.ActiveWorld;
             }
             set
             {
-                this._dataModel.ActiveWorld = value;
+                _dataModel.ActiveWorld = value;
             }
         }
 
@@ -479,7 +372,7 @@
         {
             get
             {
-                return this._dataModel.ThePlayerCharacter;
+                return _dataModel.ThePlayerCharacter;
             }
         }
 
@@ -490,12 +383,12 @@
         {
             get
             {
-                return this._dataModel.IsActive;
+                return _dataModel.IsActive;
             }
 
             set
             {
-                this._dataModel.IsActive = value;
+                _dataModel.IsActive = value;
             }
         }
 
@@ -506,12 +399,12 @@
         {
             get
             {
-                return this._dataModel.IsBusy;
+                return _dataModel.IsBusy;
             }
 
             set
             {
-                this._dataModel.IsBusy = value;
+                _dataModel.IsBusy = value;
             }
         }
 
@@ -527,12 +420,12 @@
         {
             get
             {
-                return this._dataModel.IsModified;
+                return _dataModel.IsModified;
             }
 
             set
             {
-                this._dataModel.IsModified = value;
+                _dataModel.IsModified = value;
             }
         }
 
@@ -540,12 +433,12 @@
         {
             get
             {
-                return this._dataModel.IsBaseSaveChanged;
+                return _dataModel.IsBaseSaveChanged;
             }
 
             set
             {
-                this._dataModel.IsBaseSaveChanged = value;
+                _dataModel.IsBaseSaveChanged = value;
             }
         }
 
@@ -553,15 +446,15 @@
         {
             get
             {
-                return this._languages;
+                return _languages;
             }
 
             private set
             {
-                if (value != this._languages)
+                if (value != _languages)
                 {
-                    this._languages = value;
-                    this.RaisePropertyChanged(() => Languages);
+                    _languages = value;
+                    RaisePropertyChanged(() => Languages);
                 }
             }
         }
@@ -580,16 +473,16 @@
             // TODO: dialog on outstanding changes.
 
 
-            //if (this.CheckCloseWindow() == false)
+            //if (CheckCloseWindow() == false)
             //{
             //e.Cancel = true;
-            //this.CloseResult = null;
+            //CloseResult = null;
             //}
             //else
             {
-                if (this.CloseRequested != null)
+                if (CloseRequested != null)
                 {
-                    this.CloseRequested(this, EventArgs.Empty);
+                    CloseRequested(this, EventArgs.Empty);
                 }
             }
         }
@@ -605,35 +498,35 @@
             model.Load(SpaceEngineersConsts.BaseLocalPath, SpaceEngineersConsts.BaseDedicatedServerHostPath, SpaceEngineersConsts.BaseDedicatedServerServicePath);
             var loadVm = new SelectWorldViewModel(this, model);
 
-            var result = this._dialogService.ShowDialog<WindowLoad>(this, loadVm);
+            var result = _dialogService.ShowDialog<WindowLoad>(this, loadVm);
             if (result == true)
             {
-                this._dataModel.ActiveWorld = model.SelectedWorld;
-                this.ActiveWorld.LoadCheckpoint();
-                SpaceEngineersCore.LoadDefinitionsAndMods(model.SelectedWorld.DataPath.ModsPath, this.ActiveWorld.Content.Mods.ToArray());
-                this._dataModel.LoadSandBox();
+                _dataModel.ActiveWorld = model.SelectedWorld;
+                ActiveWorld.LoadCheckpoint();
+                SpaceEngineersCore.LoadDefinitionsAndMods(model.SelectedWorld.DataPath.ModsPath, ActiveWorld.Content.Mods.ToArray());
+                _dataModel.LoadSandBox();
             }
         }
 
         public bool SaveCanExecute()
         {
-            return this._dataModel.ActiveWorld != null &&
-                ((this._dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && this._dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
-                || (this._dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || this._dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired
+            return _dataModel.ActiveWorld != null &&
+                ((_dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && _dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
+                || (_dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || _dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired
                     && ToolboxUpdater.IsRuningElevated()));
         }
 
         public void SaveExecuted()
         {
-            if (this._dataModel != null)
+            if (_dataModel != null)
             {
-                this._dataModel.SaveCheckPointAndSandBox();
+                _dataModel.SaveCheckPointAndSandBox();
             }
         }
 
         public bool ClearCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void ClearExecuted()
@@ -643,7 +536,7 @@
 
         public bool ReloadCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void ReloadExecuted()
@@ -651,142 +544,142 @@
             // TODO: check is save directory is still valid.
 
             // Reload Checkpoint file.
-            this.ActiveWorld.LoadCheckpoint();
+            ActiveWorld.LoadCheckpoint();
 
             // Reload Definitions, Mods, and clear out Materials, Textures.
-            SpaceEngineersCore.LoadDefinitionsAndMods(this.ActiveWorld.DataPath.ModsPath, this.ActiveWorld.Content.Mods.ToArray());
-            SEToolbox.Converters.DDSConverter.ClearCache();
+            SpaceEngineersCore.LoadDefinitionsAndMods(ActiveWorld.DataPath.ModsPath, ActiveWorld.Content.Mods.ToArray());
+            Converters.DDSConverter.ClearCache();
 
             // Load Sector file.
-            this._dataModel.LoadSandBox();
+            _dataModel.LoadSandBox();
         }
 
         public bool IsActiveCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public bool ImportVoxelCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void ImportVoxelExecuted()
         {
             var model = new ImportVoxelModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new ImportVoxelViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowImportVoxel>(this, loadVm);
             if (result == true)
             {
-                this.IsBusy = true;
+                IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
-                var structure = this._dataModel.AddEntity(newEntity);
+                var structure = _dataModel.AddEntity(newEntity);
                 ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
-                if (this._preSelectedStructure != null)
-                    this.SelectedStructure = this._preSelectedStructure;
-                this.IsBusy = false;
+                if (_preSelectedStructure != null)
+                    SelectedStructure = _preSelectedStructure;
+                IsBusy = false;
             }
         }
 
         public bool ImportImageCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void ImportImageExecuted()
         {
             var model = new ImportImageModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new ImportImageViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowImportImage>(this, loadVm);
             if (result == true)
             {
-                this.IsBusy = true;
+                IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
-                this._selectNewStructure = true;
-                this._dataModel.CollisionCorrectEntity(newEntity);
-                var structure = this._dataModel.AddEntity(newEntity);
-                this._selectNewStructure = false;
-                this.IsBusy = false;
+                _selectNewStructure = true;
+                _dataModel.CollisionCorrectEntity(newEntity);
+                _dataModel.AddEntity(newEntity);
+                _selectNewStructure = false;
+                IsBusy = false;
             }
         }
 
         public bool ImportModelCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void ImportModelExecuted()
         {
-            var model = new Import3dModelModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var model = new Import3DModelModel();
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
-            var loadVm = new Import3dModelViewModel(this, model);
+            var loadVm = new Import3DModelViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowImportModel>(this, loadVm);
             if (result == true)
             {
-                this.IsBusy = true;
+                IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
                 if (loadVm.IsValidModel)
                 {
-                    this._dataModel.CollisionCorrectEntity(newEntity);
-                    var structure = this._dataModel.AddEntity(newEntity);
+                    _dataModel.CollisionCorrectEntity(newEntity);
+                    var structure = _dataModel.AddEntity(newEntity);
 
                     if (structure is StructureVoxelModel)
                     {
                         ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
                     }
 
-                    if (this._preSelectedStructure != null)
-                        this.SelectedStructure = this._preSelectedStructure;
+                    if (_preSelectedStructure != null)
+                        SelectedStructure = _preSelectedStructure;
                 }
-                this.IsBusy = false;
+                IsBusy = false;
             }
         }
 
         public bool ImportAsteroidModelCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void ImportAsteroidModelExecuted()
         {
-            var model = new Import3dAsteroidModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var model = new Import3DAsteroidModel();
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
-            var loadVm = new Import3dAsteroidViewModel(this, model);
+            var loadVm = new Import3DAsteroidViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowImportAsteroidModel>(this, loadVm);
             if (result == true)
             {
-                this.IsBusy = true;
+                IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
                 if (loadVm.IsValidModel)
                 {
-                    this._dataModel.CollisionCorrectEntity(newEntity);
-                    var structure = this._dataModel.AddEntity(newEntity);
+                    _dataModel.CollisionCorrectEntity(newEntity);
+                    var structure = _dataModel.AddEntity(newEntity);
                     ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
-                    if (this._preSelectedStructure != null)
-                        this.SelectedStructure = this._preSelectedStructure;
+                    if (_preSelectedStructure != null)
+                        SelectedStructure = _preSelectedStructure;
                 }
-                this.IsBusy = false;
+                IsBusy = false;
             }
         }
 
         public bool ImportSandboxObjectCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void ImportSandboxObjectExecuted()
         {
-            this.ImportSandboxObjectFromFile();
+            ImportSandboxObjectFromFile();
         }
 
         public bool OpenComponentListCanExecute()
@@ -799,114 +692,114 @@
             var model = new ComponentListModel();
             model.Load();
             var loadVm = new ComponentListViewModel(this, model);
-            this._dialogService.Show<WindowComponentList>(this, loadVm);
+            _dialogService.Show<WindowComponentList>(this, loadVm);
         }
 
         public bool WorldReportCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void WorldReportExecuted()
         {
             var model = new ResourceReportModel();
-            model.Load(this._dataModel.ActiveWorld.Savename, this._dataModel.Structures);
+            model.Load(_dataModel.ActiveWorld.Savename, _dataModel.Structures);
             var loadVm = new ResourceReportViewModel(this, model);
-            this._dialogService.ShowDialog<WindowResourceReport>(this, loadVm);
+            _dialogService.ShowDialog<WindowResourceReport>(this, loadVm);
         }
 
         public bool OpenFolderCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void OpenFolderExecuted()
         {
-            System.Diagnostics.Process.Start("Explorer", string.Format("\"{0}\"", this._dataModel.ActiveWorld.Savepath));
+            Process.Start("Explorer", string.Format("\"{0}\"", _dataModel.ActiveWorld.Savepath));
         }
 
         public bool ViewSandboxCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void ViewSandboxExecuted()
         {
-            if (this._dataModel != null)
+            if (_dataModel != null)
             {
-                var filename = this._dataModel.SaveTemporarySandbox();
-                System.Diagnostics.Process.Start(string.Format("\"{0}\"", filename));
+                var filename = _dataModel.SaveTemporarySandbox();
+                Process.Start(string.Format("\"{0}\"", filename));
             }
         }
         public bool OpenWorkshopCanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this._dataModel.ActiveWorld.WorkshopId.HasValue &&
-                   this._dataModel.ActiveWorld.WorkshopId.Value != 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.WorkshopId.HasValue &&
+                   _dataModel.ActiveWorld.WorkshopId.Value != 0;
         }
 
         public void OpenWorkshopExecuted()
         {
-            System.Diagnostics.Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", this._dataModel.ActiveWorld.WorkshopId.Value), null);
+            Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", _dataModel.ActiveWorld.WorkshopId.Value), null);
         }
 
         public bool ExportSandboxObjectCanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
         }
 
         public void ExportSandboxObjectExecuted()
         {
-            this.ExportSandboxObjectToFile(false, this.Selections.ToArray());
+            ExportSandboxObjectToFile(false, Selections.ToArray());
         }
 
         public bool ExportBasicSandboxObjectCanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
         }
 
         public void ExportBasicSandboxObjectExecuted()
         {
-            this.ExportSandboxObjectToFile(true, this.Selections.ToArray());
+            ExportSandboxObjectToFile(true, Selections.ToArray());
         }
 
         public bool CreateFloatingItemCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void CreateFloatingItemExecuted()
         {
             var model = new GenerateFloatingObjectModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
-            model.Load(position, this._dataModel.ActiveWorld.Content.MaxFloatingObjects);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position, _dataModel.ActiveWorld.Content.MaxFloatingObjects);
             var loadVm = new GenerateFloatingObjectViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowGenerateFloatingObject>(this, loadVm);
             if (result == true)
             {
-                this.IsBusy = true;
+                IsBusy = true;
                 var newEntities = loadVm.BuildEntities();
                 if (loadVm.IsValidItemToImport)
                 {
-                    this._selectNewStructure = true;
+                    _selectNewStructure = true;
                     for (var i = 0; i < newEntities.Length; i++)
                     {
-                        this._dataModel.AddEntity(newEntities[i]);
+                        _dataModel.AddEntity(newEntities[i]);
                     }
-                    this._selectNewStructure = false;
+                    _selectNewStructure = false;
                 }
-                this.IsBusy = false;
+                IsBusy = false;
             }
         }
 
         public bool GenerateVoxelFieldCanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void GenerateVoxelFieldExecuted()
         {
             var model = new GenerateVoxelFieldModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new GenerateVoxelFieldViewModel(this, model);
 
@@ -914,74 +807,74 @@
             model.Unload();
             if (result == true)
             {
-                this.IsBusy = true;
+                IsBusy = true;
                 string[] sourceVoxelFiles;
                 MyObjectBuilder_EntityBase[] newEntities;
                 loadVm.BuildEntities(out sourceVoxelFiles, out newEntities);
-                this._selectNewStructure = true;
+                _selectNewStructure = true;
 
-                this.ResetProgress(0, newEntities.Length);
+                ResetProgress(0, newEntities.Length);
 
                 for (var i = 0; i < newEntities.Length; i++)
                 {
-                    var structure = this._dataModel.AddEntity(newEntities[i]);
+                    var structure = _dataModel.AddEntity(newEntities[i]);
                     ((StructureVoxelModel)structure).SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
-                    this.Progress++;
+                    Progress++;
                 }
-                this._selectNewStructure = false;
-                this.IsBusy = false;
-                this.ClearProgress();
+                _selectNewStructure = false;
+                IsBusy = false;
+                ClearProgress();
             }
         }
 
         public bool Test1CanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void Test1Executed()
         {
-            var model = new Import3dModelModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var model = new Import3DModelModel();
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
-            var loadVm = new Import3dModelViewModel(this, model);
+            var loadVm = new Import3DModelViewModel(this, model);
 
-            this.IsBusy = true;
+            IsBusy = true;
             var newEntity = loadVm.BuildTestEntity();
 
             // Split object where X=28|29.
             //newEntity.CubeBlocks.RemoveAll(c => c.Min.X <= 3);
             //newEntity.CubeBlocks.RemoveAll(c => c.Min.X > 4);
 
-            this._selectNewStructure = true;
-            this._dataModel.CollisionCorrectEntity(newEntity);
-            var structure = this._dataModel.AddEntity(newEntity);
-            this._selectNewStructure = false;
-            this.IsBusy = false;
+            _selectNewStructure = true;
+            _dataModel.CollisionCorrectEntity(newEntity);
+            _dataModel.AddEntity(newEntity);
+            _selectNewStructure = false;
+            IsBusy = false;
         }
 
         public bool Test2CanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
         }
 
         public void Test2Executed()
         {
-            this.TestCalcCubesModel(this.Selections.ToArray());
-            //this.OptimizeModel(this.Selections.ToArray());
+            TestCalcCubesModel(Selections.ToArray());
+            //OptimizeModel(Selections.ToArray());
         }
 
         public bool Test3CanExecute()
         {
-            return this._dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null;
         }
 
         public void Test3Executed()
         {
-            var model = new Import3dModelModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var model = new Import3DModelModel();
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
-            var loadVm = new Import3dModelViewModel(this, model);
+            var loadVm = new Import3DModelViewModel(this, model);
 
             loadVm.ArmorType = ImportArmorType.Light;
             loadVm.BuildDistance = 10;
@@ -994,47 +887,47 @@
             loadVm.MultipleScale = 1;
             loadVm.Up = new BindableVector3DModel(Vector3.Up);
 
-            this.IsBusy = true;
+            IsBusy = true;
             var newEntity = loadVm.BuildEntity();
 
             // Split object where X=28|29.
             ((MyObjectBuilder_CubeGrid)newEntity).CubeBlocks.RemoveAll(c => c.Min.X <= 28);
 
-            this._selectNewStructure = true;
-            this._dataModel.CollisionCorrectEntity(newEntity);
-            var structure = this._dataModel.AddEntity(newEntity);
-            this._selectNewStructure = false;
-            this.IsBusy = false;
+            _selectNewStructure = true;
+            _dataModel.CollisionCorrectEntity(newEntity);
+            _dataModel.AddEntity(newEntity);
+            _selectNewStructure = false;
+            IsBusy = false;
         }
 
         public bool Test4CanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
         }
 
         public void Test4Executed()
         {
-            this.MirrorModel(false, this.Selections.ToArray());
+            MirrorModel(false, Selections.ToArray());
         }
 
         public bool Test5CanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
         }
 
         public void Test5Executed()
         {
-            this._dataModel.TestDisplayRotation(this.Selections[0].DataModel as StructureCubeGridModel);
+            _dataModel.TestDisplayRotation(Selections[0].DataModel as StructureCubeGridModel);
         }
 
         public bool Test6CanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
         }
 
         public void Test6Executed()
         {
-            this._dataModel.TestConvert(this.Selections[0].DataModel as StructureCubeGridModel);
+            _dataModel.TestConvert(Selections[0].DataModel as StructureCubeGridModel);
         }
 
         public bool OpenUpdatesLinkCanExecute()
@@ -1085,10 +978,10 @@
             Thread.CurrentThread.CurrentUICulture = LocalizeDictionary.Instance.Culture;
 
             Sandbox.Common.Localization.MyTextsWrapper.Init();
-            this.UpdateLanguages();
-            
+            UpdateLanguages();
+
             // Causes all bindings to update.
-            this.OnPropertyChanged("");
+            OnPropertyChanged("");
         }
 
         public bool AboutCanExecute()
@@ -1099,66 +992,66 @@
         public void AboutExecuted()
         {
             var loadVm = new AboutViewModel(this);
-            var result = _dialogService.ShowDialog<WindowAbout>(this, loadVm);
+            _dialogService.ShowDialog<WindowAbout>(this, loadVm);
         }
 
         public bool DeleteObjectCanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
         }
 
         public void DeleteObjectExecuted()
         {
-            this.DeleteModel(this.Selections.ToArray());
+            DeleteModel(Selections.ToArray());
         }
 
         public bool GroupMoveCanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count > 1;
+            return _dataModel.ActiveWorld != null && Selections.Count > 1;
         }
 
         public void GroupMoveExecuted()
         {
             var model = new GroupMoveModel();
-            var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
-            model.Load(this.Selections, position);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
+            model.Load(Selections, position);
             var loadVm = new GroupMoveViewModel(this, model);
 
-            var result = this._dialogService.ShowDialog<WindowGroupMove>(this, loadVm);
+            var result = _dialogService.ShowDialog<WindowGroupMove>(this, loadVm);
             if (result == true)
             {
                 model.ApplyNewPositions();
-                this._dataModel.CalcDistances();
-                this.IsModified = true;
+                _dataModel.CalcDistances();
+                IsModified = true;
             }
         }
 
         public bool RejoinShipCanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count == 2 &&
-                ((this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
-                (this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.SmallShip));
+            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+                ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
+                (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.SmallShip));
         }
 
         public void RejoinShipExecuted()
         {
-            this.IsBusy = true;
-            this.RejoinShipModels(this.Selections[0], this.Selections[1]);
-            this.IsBusy = false;
+            IsBusy = true;
+            RejoinShipModels(Selections[0], Selections[1]);
+            IsBusy = false;
         }
 
         public bool JoinShipPartsCanExecute()
         {
-            return this._dataModel.ActiveWorld != null && this.Selections.Count == 2 &&
-                ((this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
-                (this.Selections[0].DataModel.ClassType == this.Selections[1].DataModel.ClassType && this.Selections[0].DataModel.ClassType == ClassType.SmallShip));
+            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+                ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
+                (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.SmallShip));
         }
 
         public void JoinShipPartsExecuted()
         {
-            this.IsBusy = true;
-            this.MergeShipPartModels(this.Selections[0], this.Selections[1]);
-            this.IsBusy = false;
+            IsBusy = true;
+            MergeShipPartModels(Selections[0], Selections[1]);
+            IsBusy = false;
         }
 
         #endregion
@@ -1169,9 +1062,9 @@
         {
             switch (e.Action)
             {
-                case NotifyCollectionChangedAction.Add: this.AddViewModel(e.NewItems[0] as IStructureBase); break;
-                case NotifyCollectionChangedAction.Remove: this.RemoveViewModel(e.OldItems[0] as IStructureBase); break;
-                case NotifyCollectionChangedAction.Reset: this._structures.Clear(); break;
+                case NotifyCollectionChangedAction.Add: AddViewModel(e.NewItems[0] as IStructureBase); break;
+                case NotifyCollectionChangedAction.Remove: RemoveViewModel(e.OldItems[0] as IStructureBase); break;
+                case NotifyCollectionChangedAction.Reset: _structures.Clear(); break;
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Move: throw new NotImplementedException();
             }
@@ -1179,7 +1072,8 @@
 
         private void AddViewModel(IStructureBase structureBase)
         {
-            IStructureViewBase item = null;
+            IStructureViewBase item;
+
             if (structureBase is StructureCharacterModel)
                 item = new StructureCharacterViewModel(this, structureBase as StructureCharacterModel);
             else if (structureBase is StructureCubeGridModel)
@@ -1197,15 +1091,12 @@
                 throw new NotImplementedException("As yet undefined ViewModel has been called.");
             }
 
-            if (item != null)
-            {
-                this._structures.Add(item);
-                this._preSelectedStructure = item;
+            _structures.Add(item);
+            _preSelectedStructure = item;
 
-                if (this._selectNewStructure)
-                {
-                    this.SelectedStructure = item;
-                }
+            if (_selectNewStructure)
+            {
+                SelectedStructure = item;
             }
         }
 
@@ -1216,10 +1107,10 @@
         /// <param name="model"></param>
         private void RemoveViewModel(IStructureBase model)
         {
-            var viewModel = this.Structures.FirstOrDefault(s => s.DataModel == model);
-            if (viewModel != null && this._dataModel.RemoveEntity(model.EntityBase))
+            var viewModel = Structures.FirstOrDefault(s => s.DataModel == model);
+            if (viewModel != null && _dataModel.RemoveEntity(model.EntityBase))
             {
-                this.Structures.Remove(viewModel);
+                Structures.Remove(viewModel);
             }
         }
 
@@ -1229,11 +1120,11 @@
             int index = -1;
             if (viewModels.Length > 0)
             {
-                index = this.Structures.IndexOf(viewModels[0]);
+                index = Structures.IndexOf(viewModels[0]);
             }
 
-            this._ignoreUpdateSelection = true;
-            
+            _ignoreUpdateSelection = true;
+
             foreach (var viewModel in viewModels)
             {
                 bool canDelete = true;
@@ -1253,21 +1144,21 @@
 
                 if (canDelete)
                 {
-                    this._dataModel.Structures.Remove(viewModel.DataModel);
+                    _dataModel.Structures.Remove(viewModel.DataModel);
                 }
             }
 
-            this._ignoreUpdateSelection = false;
+            _ignoreUpdateSelection = false;
 
             // Find and select next object
-            while (index >= this.Structures.Count)
+            while (index >= Structures.Count)
             {
                 index--;
             }
 
             if (index > -1)
             {
-                this.SelectedStructure = this.Structures[index];
+                SelectedStructure = Structures[index];
             }
         }
 
@@ -1275,7 +1166,7 @@
         {
             foreach (var viewModel in viewModels.OfType<StructureCubeGridViewModel>())
             {
-                this._dataModel.OptimizeModel(viewModel.DataModel as StructureCubeGridModel);
+                _dataModel.OptimizeModel(viewModel.DataModel as StructureCubeGridModel);
             }
         }
 
@@ -1292,7 +1183,7 @@
             var ship1 = (StructureCubeGridViewModel)viewModel1;
             var ship2 = (StructureCubeGridViewModel)viewModel2;
 
-            this._dataModel.RejoinBrokenShip((StructureCubeGridModel)ship1.DataModel, (StructureCubeGridModel)ship2.DataModel);
+            _dataModel.RejoinBrokenShip((StructureCubeGridModel)ship1.DataModel, (StructureCubeGridModel)ship2.DataModel);
 
             // Delete ship2.
             DeleteModel(viewModel2);
@@ -1306,7 +1197,7 @@
             var ship1 = (StructureCubeGridViewModel)viewModel1;
             var ship2 = (StructureCubeGridViewModel)viewModel2;
 
-            if (this._dataModel.MergeShipParts((StructureCubeGridModel)ship1.DataModel, (StructureCubeGridModel)ship2.DataModel))
+            if (_dataModel.MergeShipParts((StructureCubeGridModel)ship1.DataModel, (StructureCubeGridModel)ship2.DataModel))
             {
                 // Delete ship2.
                 DeleteModel(viewModel2);
@@ -1321,31 +1212,31 @@
         /// <inheritdoc />
         public string CreateUniqueVoxelFilename(string originalFile)
         {
-            return this._dataModel.CreateUniqueVoxelFilename(originalFile, null);
+            return _dataModel.CreateUniqueVoxelFilename(originalFile, null);
         }
 
         public string CreateUniqueVoxelFilename(string originalFile, MyObjectBuilder_EntityBase[] additionalList)
         {
-            return this._dataModel.CreateUniqueVoxelFilename(originalFile, additionalList);
+            return _dataModel.CreateUniqueVoxelFilename(originalFile, additionalList);
         }
 
         public void ImportSandboxObjectFromFile()
         {
-            var openFileDialog = this._openFileDialogFactory();
+            var openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Res.DialogImportSandboxObjectFilter;
             openFileDialog.Title = Res.DialogImportSandboxObjectTitle;
             openFileDialog.Multiselect = true;
 
             // Open the dialog
-            var result = this._dialogService.ShowOpenFileDialog(this, openFileDialog);
+            var result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
 
             if (result == DialogResult.OK)
             {
-                var badfiles = this._dataModel.LoadEntities(openFileDialog.FileNames);
+                var badfiles = _dataModel.LoadEntities(openFileDialog.FileNames);
 
                 foreach (var filename in badfiles)
                 {
-                    this._dialogService.ShowMessageBox(this, string.Format("Could not load '{0}', because the file is either corrupt or invalid.", Path.GetFileName(filename)), "Could not import", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    _dialogService.ShowMessageBox(this, string.Format("Could not load '{0}', because the file is either corrupt or invalid.", Path.GetFileName(filename)), "Could not import", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
             }
         }
@@ -1358,27 +1249,27 @@
                 {
                     var structure = (StructureCharacterViewModel)viewModel;
 
-                    var saveFileDialog = this._saveFileDialogFactory();
+                    var saveFileDialog = _saveFileDialogFactory();
                     saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.Description);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
 
-                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
-                        this._dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
+                        _dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
                     }
                 }
                 else if (viewModel is StructureVoxelViewModel)
                 {
                     var structure = (StructureVoxelViewModel)viewModel;
-                    var saveFileDialog = this._saveFileDialogFactory();
+                    var saveFileDialog = _saveFileDialogFactory();
                     saveFileDialog.Filter = Res.DialogExportVoxelFilter;
                     saveFileDialog.Title = Res.DialogExportVoxelTitle;
                     saveFileDialog.FileName = structure.Filename;
                     saveFileDialog.OverwritePrompt = true;
 
-                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
                         var asteroid = (StructureVoxelModel)structure.DataModel;
                         string sourceFile;
@@ -1394,30 +1285,30 @@
                 {
                     var structure = (StructureFloatingObjectViewModel)viewModel;
 
-                    var saveFileDialog = this._saveFileDialogFactory();
+                    var saveFileDialog = _saveFileDialogFactory();
                     saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
 
-                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
-                        this._dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
+                        _dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
                     }
                 }
                 else if (viewModel is StructureMeteorViewModel)
                 {
                     var structure = (StructureMeteorViewModel)viewModel;
 
-                    var saveFileDialog = this._saveFileDialogFactory();
+                    var saveFileDialog = _saveFileDialogFactory();
                     saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
 
-                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
-                        this._dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
+                        _dataModel.SaveEntity(viewModel.DataModel.EntityBase, saveFileDialog.FileName);
                     }
                 }
                 else if (viewModel is StructureCubeGridViewModel)
@@ -1425,13 +1316,13 @@
                     var structure = (StructureCubeGridViewModel)viewModel;
 
                     var partname = string.IsNullOrEmpty(structure.DisplayName) ? structure.EntityId.ToString() : structure.DisplayName.Replace("|", "_").Replace("\\", "_").Replace("/", "_");
-                    var saveFileDialog = this._saveFileDialogFactory();
+                    var saveFileDialog = _saveFileDialogFactory();
                     saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, partname);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, partname);
                     saveFileDialog.OverwritePrompt = true;
 
-                    if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+                    if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
                     {
                         var cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
 
@@ -1454,13 +1345,13 @@
                             return c;
                         }).ToArray();
 
-                        this._dataModel.SaveEntity(cloneEntity, saveFileDialog.FileName);
+                        _dataModel.SaveEntity(cloneEntity, saveFileDialog.FileName);
                     }
                 }
                 else if (viewModel is StructureUnknownViewModel)
                 {
                     // Need to use the specific serializer when exporting to generate the correct XML, so Unknown should never be export.
-                    this._dialogService.ShowMessageBox(this, "Cannot export Unknown currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    _dialogService.ShowMessageBox(this, "Cannot export Unknown currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
             }
         }
@@ -1522,7 +1413,7 @@
 
         public void CalcDistances()
         {
-            this._dataModel.CalcDistances();
+            _dataModel.CalcDistances();
         }
 
         private void UpdateLanguages()
@@ -1532,10 +1423,10 @@
             foreach (var kvp in AppConstants.SupportedLanguages)
             {
                 var culture = CultureInfo.GetCultureInfoByIetfLanguageTag(kvp.Key);
-                list.Add(new LanguageModel() {IetfLanguageTag = culture.IetfLanguageTag, LanguageName = culture.DisplayName, NativeName = culture.NativeName, ImageName = kvp.Value});
+                list.Add(new LanguageModel { IetfLanguageTag = culture.IetfLanguageTag, LanguageName = culture.DisplayName, NativeName = culture.NativeName, ImageName = kvp.Value });
             }
 
-            this.Languages = new ObservableCollection<LanguageModel>(list);
+            Languages = new ObservableCollection<LanguageModel>(list);
         }
 
         #endregion
@@ -1549,7 +1440,7 @@
 
         void IDropable.Drop(object data, int index)
         {
-            this._dataModel.MergeData((IList<IStructureBase>)data);
+            _dataModel.MergeData((IList<IStructureBase>)data);
         }
 
         #endregion
@@ -1560,12 +1451,12 @@
         {
             get
             {
-                return this._dataModel.ShowProgress;
+                return _dataModel.ShowProgress;
             }
 
             set
             {
-                this._dataModel.ShowProgress = value;
+                _dataModel.ShowProgress = value;
             }
         }
 
@@ -1573,12 +1464,12 @@
         {
             get
             {
-                return this._dataModel.Progress;
+                return _dataModel.Progress;
             }
 
             set
             {
-                this._dataModel.Progress = value;
+                _dataModel.Progress = value;
             }
         }
 
@@ -1586,12 +1477,12 @@
         {
             get
             {
-                return this._dataModel.ProgressState;
+                return _dataModel.ProgressState;
             }
 
             set
             {
-                this._dataModel.ProgressState = value;
+                _dataModel.ProgressState = value;
             }
         }
 
@@ -1599,12 +1490,12 @@
         {
             get
             {
-                return this._dataModel.ProgressValue;
+                return _dataModel.ProgressValue;
             }
 
             set
             {
-                this._dataModel.ProgressValue = value;
+                _dataModel.ProgressValue = value;
             }
         }
 
@@ -1612,33 +1503,33 @@
         {
             get
             {
-                return this._dataModel.MaximumProgress;
+                return _dataModel.MaximumProgress;
             }
 
             set
             {
-                this._dataModel.MaximumProgress = value;
+                _dataModel.MaximumProgress = value;
             }
         }
 
         public void ResetProgress(double initial, double maximumProgress)
         {
-            this._dataModel.ResetProgress(initial, maximumProgress);
+            _dataModel.ResetProgress(initial, maximumProgress);
         }
 
         public void ClearProgress()
         {
-            this._dataModel.ClearProgress();
+            _dataModel.ClearProgress();
         }
 
         public void IncrementProgress()
         {
-            this._dataModel.IncrementProgress();
+            _dataModel.IncrementProgress();
         }
 
         public MyObjectBuilder_Checkpoint Checkpoint
         {
-            get { return this.ActiveWorld.Content; }
+            get { return ActiveWorld.Content; }
         }
 
         /// <summary>
@@ -1648,12 +1539,12 @@
         {
             get
             {
-                return this._dataModel.CreativeModeColors;
+                return _dataModel.CreativeModeColors;
             }
 
             set
             {
-                this._dataModel.CreativeModeColors = value;
+                _dataModel.CreativeModeColors = value;
             }
         }
 

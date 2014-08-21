@@ -8,7 +8,7 @@
 
         public MyVoxelTaskWorker(Vector3I baseCoords)
         {
-            this.BaseCoords = baseCoords;
+            BaseCoords = baseCoords;
         }
 
         #endregion

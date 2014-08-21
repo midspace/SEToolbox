@@ -1,14 +1,14 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Interfaces;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
     using System;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using System.Windows.Input;
+
+    using SEToolbox.Interfaces;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
     using Res = SEToolbox.Properties.Resources;
 
     public class ComponentListViewModel : BaseViewModel
@@ -35,10 +35,10 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(saveFileDialogFactory != null);
 
-            this._dialogService = dialogService;
-            this._saveFileDialogFactory = saveFileDialogFactory;
-            this._dataModel = dataModel;
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dialogService = dialogService;
+            _saveFileDialogFactory = saveFileDialogFactory;
+            _dataModel = dataModel;
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -47,18 +47,12 @@
 
         public ICommand ExportReportCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ExportReportExecuted), new Func<bool>(ExportReportCanExecute));
-            }
+            get { return new DelegateCommand(ExportReportExecuted, ExportReportCanExecute); }
         }
 
         public ICommand CloseCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CloseExecuted), new Func<bool>(CloseCanExecute));
-            }
+            get { return new DelegateCommand(CloseExecuted, CloseCanExecute); }
         }
 
         #endregion
@@ -72,13 +66,13 @@
         {
             get
             {
-                return this._closeResult;
+                return _closeResult;
             }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
@@ -89,12 +83,12 @@
         {
             get
             {
-                return this._dataModel.IsBusy;
+                return _dataModel.IsBusy;
             }
 
             set
             {
-                this._dataModel.IsBusy = value;
+                _dataModel.IsBusy = value;
             }
         }
 
@@ -102,12 +96,12 @@
         {
             get
             {
-                return this._dataModel.CubeAssets;
+                return _dataModel.CubeAssets;
             }
 
             set
             {
-                this._dataModel.CubeAssets = value;
+                _dataModel.CubeAssets = value;
             }
         }
 
@@ -115,12 +109,12 @@
         {
             get
             {
-                return this._dataModel.ComponentAssets;
+                return _dataModel.ComponentAssets;
             }
 
             set
             {
-                this._dataModel.ComponentAssets = value;
+                _dataModel.ComponentAssets = value;
             }
         }
 
@@ -128,12 +122,12 @@
         {
             get
             {
-                return this._dataModel.ItemAssets;
+                return _dataModel.ItemAssets;
             }
 
             set
             {
-                this._dataModel.ItemAssets = value;
+                _dataModel.ItemAssets = value;
             }
         }
 
@@ -141,12 +135,12 @@
         {
             get
             {
-                return this._dataModel.MaterialAssets;
+                return _dataModel.MaterialAssets;
             }
 
             set
             {
-                this._dataModel.MaterialAssets = value;
+                _dataModel.MaterialAssets = value;
             }
         }
 
@@ -154,12 +148,12 @@
         {
             get
             {
-                return this._dataModel.SelectedCubeAsset;
+                return _dataModel.SelectedCubeAsset;
             }
 
             set
             {
-                this._dataModel.SelectedCubeAsset = value;
+                _dataModel.SelectedCubeAsset = value;
             }
         }
 
@@ -174,18 +168,18 @@
 
         public void ExportReportExecuted()
         {
-            var saveFileDialog = this._saveFileDialogFactory();
+            var saveFileDialog = _saveFileDialogFactory();
             saveFileDialog.Filter = Res.DialogExportReportFilter;
             saveFileDialog.Title = string.Format(Res.DialogExportReportTitle, "Component Item Report");
             saveFileDialog.FileName = "Space Engineers Component Item Report";
             saveFileDialog.OverwritePrompt = true;
 
             // Open the dialog
-            var result = this._dialogService.ShowSaveFileDialog(this, saveFileDialog);
+            var result = _dialogService.ShowSaveFileDialog(this, saveFileDialog);
 
             if (result == DialogResult.OK)
             {
-                this._dataModel.GenerateHtmlReport(saveFileDialog.FileName);
+                _dataModel.GenerateHtmlReport(saveFileDialog.FileName);
             }
         }
 
@@ -196,7 +190,7 @@
 
         public void CloseExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion

@@ -1,18 +1,19 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Services;
-    using SEToolbox.Support;
     using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
 
+    using SEToolbox.Services;
+    using SEToolbox.Support;
+
     public class AboutViewModel : BaseViewModel
     {
         #region Fields
 
-        private bool? closeResult;
+        private bool? _closeResult;
 
         #endregion
 
@@ -32,32 +33,23 @@
         /// </summary>
         public bool? CloseResult
         {
-            get
-            {
-                return this.closeResult;
-            }
+            get { return _closeResult; }
 
             set
             {
-                this.closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
         public ICommand OpenLinkCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenLinkExecuted), new Func<bool>(OpenLinkCanExecute));
-            }
+            get { return new DelegateCommand(OpenLinkExecuted, OpenLinkCanExecute); }
         }
 
         public ICommand CloseCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CloseExecuted), new Func<bool>(CloseCanExecute));
-            }
+            get { return new DelegateCommand(CloseExecuted, CloseCanExecute); }
         }
 
         public string Company
@@ -74,18 +66,12 @@
 
         public Version Version
         {
-            get
-            {
-                return GlobalSettings.GetVersion();
-            }
+            get { return GlobalSettings.GetVersion(); }
         }
 
         public string HomepageUrl
         {
-            get
-            {
-                return AppConstants.SupportUrl;
-            }
+            get { return AppConstants.SupportUrl; }
         }
 
         #endregion
@@ -99,7 +85,7 @@
 
         public void CloseExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         public bool OpenLinkCanExecute()
@@ -109,7 +95,7 @@
 
         public void OpenLinkExecuted()
         {
-            Process.Start(this.HomepageUrl);
+            Process.Start(HomepageUrl);
         }
 
         #endregion

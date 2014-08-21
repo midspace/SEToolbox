@@ -20,6 +20,7 @@ namespace SEToolbox.ImageLibrary.Effects
         /// Override this to process the pixel in the second pass of the algorithm
         /// </summary>
         /// <param name="pixel">The pixel to quantize</param>
+        /// <param name="destinationPixel"></param>
         /// <returns>The quantized value</returns>
         protected override void QuantizePixel(Color32* pixel, Color32* destinationPixel)
         {

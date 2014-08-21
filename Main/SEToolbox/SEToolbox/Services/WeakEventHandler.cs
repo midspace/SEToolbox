@@ -31,9 +31,9 @@ namespace SEToolbox.Services
     public class WeakEventHandler<TInstance, TSender, TEventArgs>
         where TInstance : class
     {
-        private readonly WeakReference instanceReference;
-        private Action<TInstance, TSender, TEventArgs> handlerAction;
-        private Action<WeakEventHandler<TInstance, TSender, TEventArgs>> detachAction;
+        private readonly WeakReference _instanceReference;
+        private readonly Action<TInstance, TSender, TEventArgs> _handlerAction;
+        private Action<WeakEventHandler<TInstance, TSender, TEventArgs>> _detachAction;
 
         /// <summary>
         /// Initializes a new instance of the WeakEventHandler{TInstance, TSender, TEventArgs} class.
@@ -46,9 +46,9 @@ namespace SEToolbox.Services
             Action<TInstance, TSender, TEventArgs> handlerAction,
             Action<WeakEventHandler<TInstance, TSender, TEventArgs>> detachAction)
         {
-            this.instanceReference = new WeakReference(instance);
-            this.handlerAction = handlerAction;
-            this.detachAction = detachAction;
+            _instanceReference = new WeakReference(instance);
+            _handlerAction = handlerAction;
+            _detachAction = detachAction;
         }
 
         /// <summary>
@@ -56,10 +56,10 @@ namespace SEToolbox.Services
         /// </summary>
         public void Detach()
         {
-            if (this.detachAction != null)
+            if (_detachAction != null)
             {
-                this.detachAction(this);
-                this.detachAction = null;
+                _detachAction(this);
+                _detachAction = null;
             }
         }
 
@@ -73,17 +73,17 @@ namespace SEToolbox.Services
         /// <param name="e">The event arguments.</param>
         public void OnEvent(TSender sender, TEventArgs e)
         {
-            var instance = this.instanceReference.Target as TInstance;
+            var instance = _instanceReference.Target as TInstance;
             if (instance != null)
             {
-                if (this.handlerAction != null)
+                if (_handlerAction != null)
                 {
-                    this.handlerAction((TInstance)this.instanceReference.Target, sender, e);
+                    _handlerAction((TInstance)_instanceReference.Target, sender, e);
                 }
             }
             else
             {
-                this.Detach();
+                Detach();
             }
         }
     }

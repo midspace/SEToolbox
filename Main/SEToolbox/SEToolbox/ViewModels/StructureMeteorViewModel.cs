@@ -1,11 +1,11 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.ComponentModel;
+    using System.Windows.Input;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Services;
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Input;
 
     public class StructureMeteorViewModel : StructureBaseViewModel<StructureMeteorModel>
     {
@@ -14,10 +14,10 @@
         public StructureMeteorViewModel(BaseViewModel parentViewModel, StructureMeteorModel dataModel)
             : base(parentViewModel, dataModel)
         {
-            this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
+                OnPropertyChanged(e.PropertyName);
             };
         }
 
@@ -27,27 +27,19 @@
 
         public ICommand ResetVelocityCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ResetVelocityExecuted), new Func<bool>(ResetVelocityCanExecute));
-            }
+            get { return new DelegateCommand(ResetVelocityExecuted, ResetVelocityCanExecute); }
         }
 
         public ICommand ReverseVelocityCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ReverseVelocityExecuted), new Func<bool>(ReverseVelocityCanExecute));
-            }
+            get { return new DelegateCommand(ReverseVelocityExecuted, ReverseVelocityCanExecute); }
         }
 
         public ICommand MaxVelocityAtPlayerCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(MaxVelocityAtPlayerExecuted), new Func<bool>(MaxVelocityAtPlayerCanExecute));
-            }
+            get { return new DelegateCommand(MaxVelocityAtPlayerExecuted, MaxVelocityAtPlayerCanExecute); }
         }
+
         #endregion
 
         #region Properties
@@ -64,12 +56,12 @@
         {
             get
             {
-                return this.DataModel.Item;
+                return DataModel.Item;
             }
 
             set
             {
-                this.DataModel.Item = value;
+                DataModel.Item = value;
             }
         }
 
@@ -77,7 +69,7 @@
         {
             get
             {
-                return this.DataModel.Item.Content.SubtypeName;
+                return DataModel.Item.Content.SubtypeName;
             }
         }
 
@@ -85,12 +77,12 @@
         {
             get
             {
-                return this.DataModel.Volume;
+                return DataModel.Volume;
             }
 
             set
             {
-                this.DataModel.Volume = value;
+                DataModel.Volume = value;
             }
         }
 
@@ -98,7 +90,7 @@
         {
             get
             {
-                return this.DataModel.LinearVelocity;
+                return DataModel.LinearVelocity;
             }
         }
 
@@ -108,36 +100,36 @@
 
         public bool ResetVelocityCanExecute()
         {
-            return this.DataModel.LinearVelocity != 0f || this.DataModel.AngularSpeed != 0f;
+            return DataModel.LinearVelocity != 0f || DataModel.AngularSpeed != 0f;
         }
 
         public void ResetVelocityExecuted()
         {
-            this.DataModel.ResetVelocity();
-            this.MainViewModel.IsModified = true;
+            DataModel.ResetVelocity();
+            MainViewModel.IsModified = true;
         }
 
         public bool ReverseVelocityCanExecute()
         {
-            return this.DataModel.LinearVelocity != 0f || this.DataModel.AngularSpeed != 0f;
+            return DataModel.LinearVelocity != 0f || DataModel.AngularSpeed != 0f;
         }
 
         public void ReverseVelocityExecuted()
         {
-            this.DataModel.ReverseVelocity();
-            this.MainViewModel.IsModified = true;
+            DataModel.ReverseVelocity();
+            MainViewModel.IsModified = true;
         }
 
         public bool MaxVelocityAtPlayerCanExecute()
         {
-            return this.MainViewModel.ThePlayerCharacter != null;
+            return MainViewModel.ThePlayerCharacter != null;
         }
 
         public void MaxVelocityAtPlayerExecuted()
         {
-            var position = this.MainViewModel.ThePlayerCharacter.PositionAndOrientation.Value.Position;
-            this.DataModel.MaxVelocityAtPlayer(position);
-            this.MainViewModel.IsModified = true;
+            var position = MainViewModel.ThePlayerCharacter.PositionAndOrientation.Value.Position;
+            DataModel.MaxVelocityAtPlayer(position);
+            MainViewModel.IsModified = true;
         }
 
         #endregion

@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.Support
 {
-    using System;
     using System.Windows;
 
     /// <summary>
@@ -11,7 +10,8 @@
         /// <summary>
         /// 
         /// </summary>
-        private static Window mSplash;
+        private static Window _splash;
+
         /// <summary>
         /// Get or set the splash screen window
         /// </summary>
@@ -19,11 +19,11 @@
         {
             get
             {
-                return mSplash;
+                return _splash;
             }
             set
             {
-                mSplash = value;
+                _splash = value;
             }
         }
         /// <summary>
@@ -31,9 +31,9 @@
         /// </summary>
         public static void ShowSplash()
         {
-            if (mSplash != null)
+            if (_splash != null)
             {
-                mSplash.Show();
+                _splash.Show();
                 System.Windows.Forms.Application.DoEvents();
             }
         }
@@ -42,11 +42,9 @@
         /// </summary>
         public static void CloseSplash()
         {
-            if (mSplash != null)
+            if (_splash != null)
             {
-                mSplash.Close();
-                if (mSplash is IDisposable)
-                    (mSplash as IDisposable).Dispose();
+                _splash.Close();
             }
         }
     }

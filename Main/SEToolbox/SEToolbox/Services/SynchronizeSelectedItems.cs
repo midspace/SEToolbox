@@ -46,25 +46,24 @@ namespace SEToolbox.Services
         private bool _updating;
         private WeakEventHandler<SynchronizeSelectedItems, object, NotifyCollectionChangedEventArgs> _currentWeakHandler;
 
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly",
-            Justification = "Dependency property")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Dependency property")]
         public IList Selections
         {
-            get { return (IList)this.GetValue(SelectionsProperty); }
-            set { this.SetValue(SelectionsProperty, value); }
+            get { return (IList)GetValue(SelectionsProperty); }
+            set { SetValue(SelectionsProperty, value); }
         }
 
         protected override void OnAttached()
         {
             base.OnAttached();
 
-            this.AssociatedObject.SelectionChanged += this.OnSelectedItemsChanged;
-            this.UpdateSelectedItems();
+            AssociatedObject.SelectionChanged += OnSelectedItemsChanged;
+            UpdateSelectedItems();
         }
 
         protected override void OnDetaching()
         {
-            this.AssociatedObject.SelectionChanged += this.OnSelectedItemsChanged;
+            AssociatedObject.SelectionChanged += OnSelectedItemsChanged;
 
             base.OnDetaching();
         }
@@ -101,24 +100,24 @@ namespace SEToolbox.Services
 
         private void OnSelectedItemsChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.UpdateSelections(e);
+            UpdateSelections(e);
         }
 
         private void UpdateSelections(SelectionChangedEventArgs e)
         {
-            this.ExecuteIfNotUpdating(
+            ExecuteIfNotUpdating(
                 () =>
                 {
-                    if (this.Selections != null)
+                    if (Selections != null)
                     {
                         foreach (var item in e.AddedItems)
                         {
-                            this.Selections.Add(item);
+                            Selections.Add(item);
                         }
 
                         foreach (var item in e.RemovedItems)
                         {
-                            this.Selections.Remove(item);
+                            Selections.Remove(item);
                         }
                     }
                 });
@@ -126,20 +125,20 @@ namespace SEToolbox.Services
 
         private void OnSelectionsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.UpdateSelectedItems();
+            UpdateSelectedItems();
         }
 
         private void UpdateSelectedItems()
         {
-            this.ExecuteIfNotUpdating(
+            ExecuteIfNotUpdating(
                 () =>
                 {
-                    if (this.AssociatedObject != null)
+                    if (AssociatedObject != null)
                     {
-                        this.AssociatedObject.SelectedItems.Clear();
-                        foreach (var item in this.Selections ?? new object[0])
+                        AssociatedObject.SelectedItems.Clear();
+                        foreach (var item in Selections ?? new object[0])
                         {
-                            this.AssociatedObject.SelectedItems.Add(item);
+                            AssociatedObject.SelectedItems.Add(item);
                         }
                     }
                 });
@@ -147,16 +146,16 @@ namespace SEToolbox.Services
 
         private void ExecuteIfNotUpdating(Action execute)
         {
-            if (!this._updating)
+            if (!_updating)
             {
                 try
                 {
-                    this._updating = true;
+                    _updating = true;
                     execute();
                 }
                 finally
                 {
-                    this._updating = false;
+                    _updating = false;
                 }
             }
         }

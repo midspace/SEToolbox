@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
 
@@ -19,14 +19,14 @@
 
         public string Name
         {
-            get { return this._name; }
+            get { return _name; }
             set
             {
-                if (value != this._name)
+                if (value != _name)
                 {
-                    this._name = value;
-                    this.FriendlyName = SpaceEngineersApi.GetResourceName(this.Name);
-                    this.RaisePropertyChanged(() => Name);
+                    _name = value;
+                    FriendlyName = SpaceEngineersApi.GetResourceName(Name);
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -63,7 +63,7 @@
 
         public override string ToString()
         {
-            return this.FriendlyName;
+            return FriendlyName;
         }
 
         #endregion

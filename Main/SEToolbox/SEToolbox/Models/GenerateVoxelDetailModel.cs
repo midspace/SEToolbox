@@ -19,15 +19,15 @@
         {
             get
             {
-                return this._name;
+                return _name;
             }
 
             set
             {
-                if (value != this._name)
+                if (value != _name)
                 {
-                    this._name = value;
-                    this.RaisePropertyChanged(() => Name);
+                    _name = value;
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -36,15 +36,15 @@
         {
             get
             {
-                return this._sourceFilename;
+                return _sourceFilename;
             }
 
             set
             {
-                if (value != this._sourceFilename)
+                if (value != _sourceFilename)
                 {
-                    this._sourceFilename = value;
-                    this.RaisePropertyChanged(() => SourceFilename);
+                    _sourceFilename = value;
+                    RaisePropertyChanged(() => SourceFilename);
                 }
             }
         }
@@ -53,15 +53,15 @@
         {
             get
             {
-                return this._voxelFilename;
+                return _voxelFilename;
             }
 
             set
             {
-                if (value != this._voxelFilename)
+                if (value != _voxelFilename)
                 {
-                    this._voxelFilename = value;
-                    this.RaisePropertyChanged(() => VoxelFilename);
+                    _voxelFilename = value;
+                    RaisePropertyChanged(() => VoxelFilename);
                 }
             }
         }
@@ -70,15 +70,15 @@
         {
             get
             {
-                return this._size;
+                return _size;
             }
 
             set
             {
-                if (value != this._size)
+                if (value != _size)
                 {
-                    this._size = value;
-                    this.RaisePropertyChanged(() => Size);
+                    _size = value;
+                    RaisePropertyChanged(() => Size);
                 }
             }
         }

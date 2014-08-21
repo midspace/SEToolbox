@@ -1,12 +1,13 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.VRageData;
-    using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.VRageData;
+    using SEToolbox.Interop;
 
     [Serializable]
     public class StructureCharacterModel : StructureBaseModel
@@ -34,7 +35,7 @@
         public StructureCharacterModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
             : base(entityBase, settings)
         {
-            this.CharacterModels = new List<string>(Enum.GetNames(typeof(MyCharacterModelEnum)));
+            CharacterModels = new List<string>(Enum.GetNames(typeof(MyCharacterModelEnum)));
         }
 
         #endregion
@@ -46,7 +47,7 @@
         {
             get
             {
-                return this.EntityBase as MyObjectBuilder_Character;
+                return EntityBase as MyObjectBuilder_Character;
             }
         }
 
@@ -55,16 +56,16 @@
         {
             get
             {
-                return this.Character.ColorMaskHSV;
+                return Character.ColorMaskHSV;
             }
 
             set
             {
-                if (!EqualityComparer<SerializableVector3>.Default.Equals(value, this.Character.ColorMaskHSV))
+                if (!EqualityComparer<SerializableVector3>.Default.Equals(value, Character.ColorMaskHSV))
                 {
-                    this.Character.ColorMaskHSV = value;
-                    this.RaisePropertyChanged(() => Color);
-                    this.UpdateGeneralFromEntityBase();
+                    Character.ColorMaskHSV = value;
+                    RaisePropertyChanged(() => Color);
+                    UpdateGeneralFromEntityBase();
                 }
             }
         }
@@ -74,15 +75,15 @@
         {
             get
             {
-                return this.Character.LightEnabled;
+                return Character.LightEnabled;
             }
 
             set
             {
-                if (value != this.Character.LightEnabled)
+                if (value != Character.LightEnabled)
                 {
-                    this.Character.LightEnabled = value;
-                    this.RaisePropertyChanged(() => Light);
+                    Character.LightEnabled = value;
+                    RaisePropertyChanged(() => Light);
                 }
             }
         }
@@ -92,15 +93,15 @@
         {
             get
             {
-                return this.Character.JetpackEnabled;
+                return Character.JetpackEnabled;
             }
 
             set
             {
-                if (value != this.Character.JetpackEnabled)
+                if (value != Character.JetpackEnabled)
                 {
-                    this.Character.JetpackEnabled = value;
-                    this.RaisePropertyChanged(() => JetPack);
+                    Character.JetpackEnabled = value;
+                    RaisePropertyChanged(() => JetPack);
                 }
             }
         }
@@ -110,15 +111,15 @@
         {
             get
             {
-                return this.Character.DampenersEnabled;
+                return Character.DampenersEnabled;
             }
 
             set
             {
-                if (value != this.Character.DampenersEnabled)
+                if (value != Character.DampenersEnabled)
                 {
-                    this.Character.DampenersEnabled = value;
-                    this.RaisePropertyChanged(() => Dampeners);
+                    Character.DampenersEnabled = value;
+                    RaisePropertyChanged(() => Dampeners);
                 }
             }
         }
@@ -128,15 +129,15 @@
         {
             get
             {
-                return this.Character.Battery.CurrentCapacity;
+                return Character.Battery.CurrentCapacity;
             }
 
             set
             {
-                if (value != this.Character.Battery.CurrentCapacity)
+                if (value != Character.Battery.CurrentCapacity)
                 {
-                    this.Character.Battery.CurrentCapacity = value;
-                    this.RaisePropertyChanged(() => BatteryCapacity);
+                    Character.Battery.CurrentCapacity = value;
+                    RaisePropertyChanged(() => BatteryCapacity);
                 }
             }
         }
@@ -146,15 +147,15 @@
         {
             get
             {
-                return this.Character.Health;
+                return Character.Health;
             }
 
             set
             {
-                if (value != this.Character.Health)
+                if (value != Character.Health)
                 {
-                    this.Character.Health = value;
-                    this.RaisePropertyChanged(() => Health);
+                    Character.Health = value;
+                    RaisePropertyChanged(() => Health);
                 }
             }
         }
@@ -162,13 +163,13 @@
         [XmlIgnore]
         public List<string> CharacterModels
         {
-            get { return this._characterModels; }
+            get { return _characterModels; }
             set
             {
-                if (value != this._characterModels)
+                if (value != _characterModels)
                 {
-                    this._characterModels = value;
-                    this.RaisePropertyChanged(() => CharacterModels);
+                    _characterModels = value;
+                    RaisePropertyChanged(() => CharacterModels);
                 }
             }
         }
@@ -178,15 +179,15 @@
         {
             get
             {
-                return this._isPlayer;
+                return _isPlayer;
             }
 
             set
             {
-                if (value != this._isPlayer)
+                if (value != _isPlayer)
                 {
-                    this._isPlayer = value;
-                    this.RaisePropertyChanged(() => IsPlayer);
+                    _isPlayer = value;
+                    RaisePropertyChanged(() => IsPlayer);
                 }
             }
         }
@@ -196,7 +197,7 @@
         {
             get
             {
-                return this.Character.LinearVelocity.ToVector3().LinearVector();
+                return Character.LinearVelocity.ToVector3().LinearVector();
             }
         }
 
@@ -205,15 +206,15 @@
         {
             get
             {
-                return this._isPilot;
+                return _isPilot;
             }
 
             set
             {
-                if (value != this._isPilot)
+                if (value != _isPilot)
                 {
-                    this._isPilot = value;
-                    this.RaisePropertyChanged(() => IsPilot);
+                    _isPilot = value;
+                    RaisePropertyChanged(() => IsPilot);
                 }
             }
         }
@@ -223,15 +224,15 @@
         {
             get
             {
-                return this._inventory;
+                return _inventory;
             }
 
             set
             {
-                if (value != this._inventory)
+                if (value != _inventory)
                 {
-                    this._inventory = value;
-                    this.RaisePropertyChanged(() => Inventory);
+                    _inventory = value;
+                    RaisePropertyChanged(() => Inventory);
                 }
             }
         }
@@ -243,39 +244,39 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_Character>(this.Character);
+            SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_Character>(Character);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_Character>(this.SerializedEntity);
+            EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_Character>(SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
-            this.ClassType = ClassType.Character;
-            this.Description = "Player";
-            this.DisplayName = this.Character.DisplayName;
-            this.Mass = SpaceEngineersConsts.PlayerMass;
+            ClassType = ClassType.Character;
+            Description = "Player";
+            DisplayName = Character.DisplayName;
+            Mass = SpaceEngineersConsts.PlayerMass;
 
-            if (this.Inventory == null)
+            if (Inventory == null)
             {
-                this.Inventory = new InventoryEditorModel(this.Character.Inventory, Settings, 0.4f * 1000 * Settings.InventorySizeMultiplier, this.Character);
-                this.Mass += this.Inventory.TotalMass;
+                Inventory = new InventoryEditorModel(Character.Inventory, Settings, 0.4f * 1000 * Settings.InventorySizeMultiplier, Character);
+                Mass += Inventory.TotalMass;
             }
         }
 
         public void ResetVelocity()
         {
-            this.Character.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.RaisePropertyChanged(() => LinearVelocity);
+            Character.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
+            RaisePropertyChanged(() => LinearVelocity);
         }
 
         public void ReverseVelocity()
         {
-            this.Character.LinearVelocity = new VRageMath.Vector3(this.Character.LinearVelocity.X * -1, this.Character.LinearVelocity.Y * -1, this.Character.LinearVelocity.Z * -1);
-            this.RaisePropertyChanged(() => LinearVelocity);
+            Character.LinearVelocity = new VRageMath.Vector3(Character.LinearVelocity.X * -1, Character.LinearVelocity.Y * -1, Character.LinearVelocity.Z * -1);
+            RaisePropertyChanged(() => LinearVelocity);
         }
 
         #endregion

@@ -1,9 +1,10 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
     using System;
     using System.ComponentModel;
+
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interop;
 
     [Serializable]
     public class InventoryModel : BaseModel, IDataErrorInfo
@@ -29,14 +30,14 @@
 
         public string Name
         {
-            get { return this._name; }
+            get { return _name; }
             set
             {
-                if (value != this._name)
+                if (value != _name)
                 {
-                    this._name = value;
-                    this.FriendlyName = SpaceEngineersApi.GetResourceName(this.Name);
-                    this.RaisePropertyChanged(() => Name);
+                    _name = value;
+                    FriendlyName = SpaceEngineersApi.GetResourceName(Name);
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -47,70 +48,70 @@
 
         public Decimal Amount
         {
-            get { return this._amount; }
+            get { return _amount; }
             set
             {
-                if (value != this._amount)
+                if (value != _amount)
                 {
-                    this._amount = value;
-                    this.RaisePropertyChanged(() => Amount);
-                    this.UpdateMassVolume();
+                    _amount = value;
+                    RaisePropertyChanged(() => Amount);
+                    UpdateMassVolume();
                 }
             }
         }
 
         public double Mass
         {
-            get { return this._mass; }
+            get { return _mass; }
 
             private set
             {
-                if (value != this._mass)
+                if (value != _mass)
                 {
-                    this._mass = value;
-                    this.RaisePropertyChanged(() => Mass);
+                    _mass = value;
+                    RaisePropertyChanged(() => Mass);
                 }
             }
         }
 
         public double MassMultiplyer
         {
-            get { return this._massMultiplyer; }
+            get { return _massMultiplyer; }
             set
             {
-                if (value != this._massMultiplyer)
+                if (value != _massMultiplyer)
                 {
-                    this._massMultiplyer = value;
-                    this.RaisePropertyChanged(() => MassMultiplyer);
-                    this.UpdateMassVolume();
+                    _massMultiplyer = value;
+                    RaisePropertyChanged(() => MassMultiplyer);
+                    UpdateMassVolume();
                 }
             }
         }
 
         public double Volume
         {
-            get { return this._volume; }
+            get { return _volume; }
 
             private set
             {
-                if (value != this._volume)
+                if (value != _volume)
                 {
-                    this._volume = value;
-                    this.RaisePropertyChanged(() => Volume);
+                    _volume = value;
+                    RaisePropertyChanged(() => Volume);
                 }
             }
         }
 
         public double VolumeMultiplyer
         {
-            get { return this._volumeMultiplyer; }
+            get { return _volumeMultiplyer; }
             set
             {
-                if (value != this._volumeMultiplyer)
+                if (value != _volumeMultiplyer)
                 {
-                    this._volumeMultiplyer = value;
-                    this.RaisePropertyChanged(() => VolumeMultiplyer);
-                    this.UpdateMassVolume();
+                    _volumeMultiplyer = value;
+                    RaisePropertyChanged(() => VolumeMultiplyer);
+                    UpdateMassVolume();
                 }
             }
         }
@@ -131,16 +132,16 @@
 
         public override string ToString()
         {
-            return this.FriendlyName;
+            return FriendlyName;
         }
 
         #endregion
 
         private void UpdateMassVolume()
         {
-            this.Mass = this.MassMultiplyer * (double)this.Amount;
-            this.Volume = this.VolumeMultiplyer * (double)this.Amount;
-            _item.AmountDecimal = this.Amount;
+            Mass = MassMultiplyer * (double)Amount;
+            Volume = VolumeMultiplyer * (double)Amount;
+            _item.AmountDecimal = Amount;
         }
 
         #region IDataErrorInfo interfacing
@@ -157,10 +158,10 @@
                 switch (columnName)
                 {
                     case "Amount":
-                        if (this.IsUnique && Amount != 1)
+                        if (IsUnique && Amount != 1)
                             return "The Amount must be 1 for Unique items";
 
-                        if (this.IsInteger && (Amount % 1 != 0))
+                        if (IsInteger && (Amount % 1 != 0))
                             return "The Amount must not contain decimal places";
 
                         break;
@@ -170,7 +171,7 @@
             }
         }
 
-        //  TODO: need to bubble volume change up to InventoryEditor for updating TotalVolume, and up to this.MainViewModel.IsModified = true;
+        //  TODO: need to bubble volume change up to InventoryEditor for updating TotalVolume, and up to MainViewModel.IsModified = true;
 
         #endregion
     }

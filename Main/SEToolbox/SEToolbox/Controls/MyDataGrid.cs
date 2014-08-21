@@ -2,6 +2,7 @@
 {
     using System.Windows.Controls;
     using System.Windows.Input;
+
     using SEToolbox.Support;
 
     /// <summary>
@@ -11,12 +12,12 @@
     {
         public MyDataGrid()
         {
-            this.PreviewMouseLeftButtonDown += MyDataGrid_PreviewMouseLeftButtonDown;
+            PreviewMouseLeftButtonDown += MyDataGrid_PreviewMouseLeftButtonDown;
         }
 
         void MyDataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var cell = ((DataGrid)sender).GetHitControl<DataGridCell>((MouseEventArgs)e);
+            var cell = ((DataGrid)sender).GetHitControl<DataGridCell>(e);
 
             if (cell != null && !cell.IsEditing && !cell.IsReadOnly)
             {

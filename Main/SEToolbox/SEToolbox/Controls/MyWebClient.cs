@@ -7,23 +7,21 @@
 
     class MyWebClient : WebClient
     {
-        Uri _responseUri;
-
-        public Uri ResponseUri
-        {
-            get { return _responseUri; }
-        }
+        public Uri ResponseUri { get; private set; }
 
         protected override WebResponse GetWebResponse(WebRequest request)
         {
-            WebResponse response = null;
+            WebResponse response;
             try
             {
                 response = base.GetWebResponse(request);
             }
-            catch { }
+            catch
+            {
+                response = null;
+            }
 
-            _responseUri = (response != null) ? response.ResponseUri : null;
+            ResponseUri = (response != null) ? response.ResponseUri : null;
 
             return response;
         }

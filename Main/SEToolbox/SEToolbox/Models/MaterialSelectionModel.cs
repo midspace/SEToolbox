@@ -16,15 +16,15 @@
         {
             get
             {
-                return this._displayName;
+                return _displayName;
             }
 
             set
             {
-                if (value != this._displayName)
+                if (value != _displayName)
                 {
-                    this._displayName = value;
-                    this.RaisePropertyChanged(() => DisplayName);
+                    _displayName = value;
+                    RaisePropertyChanged(() => DisplayName);
                 }
             }
         }
@@ -33,15 +33,15 @@
         {
             get
             {
-                return this._value;
+                return _value;
             }
 
             set
             {
-                if (value != this._value)
+                if (value != _value)
                 {
-                    this._value = value;
-                    this.RaisePropertyChanged(() => Value);
+                    _value = value;
+                    RaisePropertyChanged(() => Value);
                 }
             }
         }
@@ -50,15 +50,15 @@
         {
             get
             {
-                return this._isRare;
+                return _isRare;
             }
 
             set
             {
-                if (value != this._isRare)
+                if (value != _isRare)
                 {
-                    this._isRare = value;
-                    this.RaisePropertyChanged(() => IsRare);
+                    _isRare = value;
+                    RaisePropertyChanged(() => IsRare);
                 }
             }
         }
@@ -67,15 +67,15 @@
         {
             get
             {
-                return this._minedRatio;
+                return _minedRatio;
             }
 
             set
             {
-                if (value != this._minedRatio)
+                if (value != _minedRatio)
                 {
-                    this._minedRatio = value;
-                    this.RaisePropertyChanged(() => MinedRatio);
+                    _minedRatio = value;
+                    RaisePropertyChanged(() => MinedRatio);
                 }
             }
         }

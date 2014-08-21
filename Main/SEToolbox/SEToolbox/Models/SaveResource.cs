@@ -1,11 +1,12 @@
 ﻿namespace SEToolbox.Models
 {
+    using System;
+    using System.IO;
+
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    using System;
-    using System.IO;
 
     public class SaveResource : BaseModel
     {
@@ -32,15 +33,15 @@
         {
             get
             {
-                return this._groupDescription;
+                return _groupDescription;
             }
 
             set
             {
-                if (value != this._groupDescription)
+                if (value != _groupDescription)
                 {
-                    this._groupDescription = value;
-                    this.RaisePropertyChanged(() => GroupDescription);
+                    _groupDescription = value;
+                    RaisePropertyChanged(() => GroupDescription);
                 }
             }
         }
@@ -49,15 +50,15 @@
         {
             get
             {
-                return this._saveType;
+                return _saveType;
             }
 
             set
             {
-                if (value != this._saveType)
+                if (value != _saveType)
                 {
-                    this._saveType = value;
-                    this.RaisePropertyChanged(() => SaveType);
+                    _saveType = value;
+                    RaisePropertyChanged(() => SaveType);
                 }
             }
         }
@@ -69,15 +70,15 @@
         {
             get
             {
-                return this._userName;
+                return _userName;
             }
 
             set
             {
-                if (value != this._userName)
+                if (value != _userName)
                 {
-                    this._userName = value;
-                    this.RaisePropertyChanged(() => UserName);
+                    _userName = value;
+                    RaisePropertyChanged(() => UserName);
                 }
             }
         }
@@ -86,15 +87,15 @@
         {
             get
             {
-                return this._saveName;
+                return _saveName;
             }
 
             set
             {
-                if (value != this._saveName)
+                if (value != _saveName)
                 {
-                    this._saveName = value;
-                    this.RaisePropertyChanged(() => Savename);
+                    _saveName = value;
+                    RaisePropertyChanged(() => Savename);
                 }
             }
         }
@@ -103,15 +104,15 @@
         {
             get
             {
-                return this._savePath;
+                return _savePath;
             }
 
             set
             {
-                if (value != this._savePath)
+                if (value != _savePath)
                 {
-                    this._savePath = value;
-                    this.RaisePropertyChanged(() => Savepath);
+                    _savePath = value;
+                    RaisePropertyChanged(() => Savepath);
                 }
             }
         }
@@ -122,15 +123,15 @@
         {
             get
             {
-                return this._content;
+                return _content;
             }
 
             set
             {
-                if (value != this._content)
+                if (value != _content)
                 {
-                    this._content = value;
-                    this.RaisePropertyChanged(() => Content, () => SessionName, () => LastSaveTime, () => IsValid);
+                    _content = value;
+                    RaisePropertyChanged(() => Content, () => SessionName, () => LastSaveTime, () => IsValid);
                 }
             }
         }
@@ -139,15 +140,15 @@
         {
             get
             {
-                return this._compressedCheckpointFormat;
+                return _compressedCheckpointFormat;
             }
 
             set
             {
-                if (value != this._compressedCheckpointFormat)
+                if (value != _compressedCheckpointFormat)
                 {
-                    this._compressedCheckpointFormat = value;
-                    this.RaisePropertyChanged(() => CompressedCheckpointFormat);
+                    _compressedCheckpointFormat = value;
+                    RaisePropertyChanged(() => CompressedCheckpointFormat);
                 }
             }
         }
@@ -156,18 +157,18 @@
         {
             get
             {
-                if (this._content == null)
+                if (_content == null)
                     return " # Invalid Save # ";
 
-                return this._content.SessionName;
+                return _content.SessionName;
             }
 
             set
             {
-                if (value != this._content.SessionName)
+                if (value != _content.SessionName)
                 {
-                    this._content.SessionName = value;
-                    this.RaisePropertyChanged(() => SessionName);
+                    _content.SessionName = value;
+                    RaisePropertyChanged(() => SessionName);
                 }
             }
         }
@@ -176,18 +177,18 @@
         {
             get
             {
-                if (this._content == null)
+                if (_content == null)
                     return null;
 
-                return this._content.LastSaveTime;
+                return _content.LastSaveTime;
             }
 
             set
             {
-                if (value != this._content.LastSaveTime)
+                if (value != _content.LastSaveTime)
                 {
-                    this._content.LastSaveTime = value.Value;
-                    this.RaisePropertyChanged(() => LastSaveTime);
+                    _content.LastSaveTime = value.Value;
+                    RaisePropertyChanged(() => LastSaveTime);
                 }
             }
         }
@@ -196,15 +197,15 @@
         {
             get
             {
-                return this._lastLoadTime;
+                return _lastLoadTime;
             }
 
             set
             {
-                if (value != this._lastLoadTime)
+                if (value != _lastLoadTime)
                 {
-                    this._lastLoadTime = value;
-                    this.RaisePropertyChanged(() => LastLoadTime);
+                    _lastLoadTime = value;
+                    RaisePropertyChanged(() => LastLoadTime);
                 }
             }
         }
@@ -213,7 +214,7 @@
         {
             get
             {
-                return this._content.WorkshopId.HasValue;
+                return _content.WorkshopId.HasValue;
             }
         }
 
@@ -221,10 +222,10 @@
         {
             get
             {
-                if (this._content == null)
+                if (_content == null)
                     return null;
 
-                return this._content.WorkshopId;
+                return _content.WorkshopId;
             }
         }
 
@@ -232,7 +233,7 @@
         {
             get
             {
-                return this.Content != null;
+                return Content != null;
             }
         }
 
@@ -240,13 +241,13 @@
         {
             get
             {
-                return Path.Combine(this._savePath, SpaceEngineersConsts.ThumbnailImageFilename);
+                return Path.Combine(_savePath, SpaceEngineersConsts.ThumbnailImageFilename);
             }
         }
 
         public override string ToString()
         {
-            return this.SessionName;
+            return SessionName;
         }
 
         #endregion
@@ -256,7 +257,7 @@
         /// </summary>
         public void LoadCheckpoint()
         {
-            var filename = Path.Combine(this.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
+            var filename = Path.Combine(Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
 
             if (File.Exists(filename))
             {
@@ -269,23 +270,23 @@
                         // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
                         var tempFilename = TempfileUtil.NewFilename();
                         ZipTools.GZipUncompress(filename, tempFilename);
-                        this.Content = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(tempFilename);
-                        this.CompressedCheckpointFormat = true;
+                        Content = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(tempFilename);
+                        CompressedCheckpointFormat = true;
                     }
                     else
                     {
-                        this.Content = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
-                        this.CompressedCheckpointFormat = false;
+                        Content = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(filename);
+                        CompressedCheckpointFormat = false;
                     }
                 }
                 catch
                 {
-                    this.Content = null;
+                    Content = null;
                 }
             }
             else
             {
-                this.Content = null;
+                Content = null;
             }
         }
     }

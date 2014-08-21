@@ -17,9 +17,9 @@
         [Obsolete("Use RaisePropertyChanged(() => PropertyName) instead.")]
         protected void OnPropertyChanged(string propertyName)
         {
-            if (this._propertyChanged != null)
+            if (_propertyChanged != null)
             {
-                this._propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
@@ -41,7 +41,7 @@
         public event PropertyChangedEventHandler PropertyChanged
         {
             add { _propertyChanged += value; }
-            remove { _propertyChanged -= value; }
+            remove { if (_propertyChanged != null) _propertyChanged -= value; }
         }
 
         #endregion

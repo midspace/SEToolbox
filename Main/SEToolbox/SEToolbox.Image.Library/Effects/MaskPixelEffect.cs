@@ -1,7 +1,5 @@
 namespace SEToolbox.ImageLibrary.Effects
 {
-    using System;
-
     /// <summary>
     /// Summary description for MaskEffect.
     /// </summary>

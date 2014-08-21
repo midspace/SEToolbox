@@ -18,29 +18,21 @@
 
         #endregion
 
-        #region ctor
-
-        public GroupMoveItemModel()
-        {
-        }
-
-        #endregion
-
         #region Properties
 
         public IStructureViewBase Item
         {
             get
             {
-                return this._item;
+                return _item;
             }
 
             set
             {
-                if (value != this._item)
+                if (value != _item)
                 {
-                    this._item = value;
-                    this.RaisePropertyChanged(() => Item);
+                    _item = value;
+                    RaisePropertyChanged(() => Item);
                 }
             }
         }
@@ -49,15 +41,15 @@
         {
             get
             {
-                return this._newPositionX;
+                return _newPositionX;
             }
 
             set
             {
-                if (value != this._newPositionX)
+                if (value != _newPositionX)
                 {
-                    this._newPositionX = value;
-                    this.RaisePropertyChanged(() => PositionX);
+                    _newPositionX = value;
+                    RaisePropertyChanged(() => PositionX);
                 }
             }
         }
@@ -66,15 +58,15 @@
         {
             get
             {
-                return this._newtPositionY;
+                return _newtPositionY;
             }
 
             set
             {
-                if (value != this._newtPositionY)
+                if (value != _newtPositionY)
                 {
-                    this._newtPositionY = value;
-                    this.RaisePropertyChanged(() => PositionY);
+                    _newtPositionY = value;
+                    RaisePropertyChanged(() => PositionY);
                 }
             }
         }
@@ -83,15 +75,15 @@
         {
             get
             {
-                return this._newPositionZ;
+                return _newPositionZ;
             }
 
             set
             {
-                if (value != this._newPositionZ)
+                if (value != _newPositionZ)
                 {
-                    this._newPositionZ = value;
-                    this.RaisePropertyChanged(() => PositionZ);
+                    _newPositionZ = value;
+                    RaisePropertyChanged(() => PositionZ);
                 }
             }
         }
@@ -100,15 +92,15 @@
         {
             get
             {
-                return this._playerDistance;
+                return _playerDistance;
             }
 
             set
             {
-                if (value != this._playerDistance)
+                if (value != _playerDistance)
                 {
-                    this._playerDistance = value;
-                    this.RaisePropertyChanged(() => PlayerDistance);
+                    _playerDistance = value;
+                    RaisePropertyChanged(() => PlayerDistance);
                 }
             }
         }

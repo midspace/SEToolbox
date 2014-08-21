@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.Support
 {
-    using Microsoft.Win32;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -9,6 +8,8 @@
     using System.Reflection;
     using System.Security.Principal;
 
+    using Microsoft.Win32;
+
     public static class ToolboxUpdater
     {
         internal static readonly string[] CoreSpaceEngineersFiles = {
@@ -16,11 +17,11 @@
             "Sandbox.Common.XmlSerializers.dll",
             "VRage.Common.dll",
             "VRage.Library.dll",
-            "VRage.Math.dll",
+            "VRage.Math.dll"
         };
 
         internal static readonly string[] CoreSpaceEngineersResources = {
-            "Sandbox.Common.resources.dll",
+            "Sandbox.Common.resources.dll"
         };
 
         #region GetApplicationFilePath
@@ -238,10 +239,9 @@
             {
                 var process = Process.Start(processInfo);
 
-                if (waitForExit)
+                if (waitForExit && process != null)
                 {
                     process.WaitForExit();
-
                     return process.ExitCode;
                 }
 

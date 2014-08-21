@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
@@ -37,8 +38,8 @@
 
         public GenerateFloatingObjectModel()
         {
-            this._stockItemList = new ObservableCollection<ComponentItemModel>();
-            this.Multiplier = 1;
+            _stockItemList = new ObservableCollection<ComponentItemModel>();
+            Multiplier = 1;
         }
 
         #endregion
@@ -49,14 +50,14 @@
         {
             get
             {
-                return this._characterPosition;
+                return _characterPosition;
             }
 
             set
             {
-                //if (value != this.characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
-                this._characterPosition = value;
-                this.RaisePropertyChanged(() => CharacterPosition);
+                //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
+                _characterPosition = value;
+                RaisePropertyChanged(() => CharacterPosition);
             }
         }
 
@@ -64,15 +65,15 @@
         {
             get
             {
-                return this._stockItemList;
+                return _stockItemList;
             }
 
             set
             {
-                if (value != this._stockItemList)
+                if (value != _stockItemList)
                 {
-                    this._stockItemList = value;
-                    this.RaisePropertyChanged(() => StockItemList);
+                    _stockItemList = value;
+                    RaisePropertyChanged(() => StockItemList);
                 }
             }
         }
@@ -81,15 +82,15 @@
         {
             get
             {
-                return this._stockItem;
+                return _stockItem;
             }
 
             set
             {
-                if (value != this._stockItem)
+                if (value != _stockItem)
                 {
-                    this._stockItem = value;
-                    this.RaisePropertyChanged(() => StockItem);
+                    _stockItem = value;
+                    RaisePropertyChanged(() => StockItem);
                     SetMassVolume();
                 }
             }
@@ -99,15 +100,15 @@
         {
             get
             {
-                return this._isValidItemToImport;
+                return _isValidItemToImport;
             }
 
             set
             {
-                if (value != this._isValidItemToImport)
+                if (value != _isValidItemToImport)
                 {
-                    this._isValidItemToImport = value;
-                    this.RaisePropertyChanged(() => IsValidItemToImport);
+                    _isValidItemToImport = value;
+                    RaisePropertyChanged(() => IsValidItemToImport);
                 }
             }
         }
@@ -116,15 +117,15 @@
         {
             get
             {
-                return this._volume;
+                return _volume;
             }
 
             set
             {
-                if (value != this._volume)
+                if (value != _volume)
                 {
-                    this._volume = value;
-                    this.RaisePropertyChanged(() => Volume);
+                    _volume = value;
+                    RaisePropertyChanged(() => Volume);
                 }
             }
         }
@@ -133,15 +134,15 @@
         {
             get
             {
-                return this._mass;
+                return _mass;
             }
 
             set
             {
-                if (value != this._mass)
+                if (value != _mass)
                 {
-                    this._mass = value;
-                    this.RaisePropertyChanged(() => Mass);
+                    _mass = value;
+                    RaisePropertyChanged(() => Mass);
                 }
             }
         }
@@ -150,15 +151,15 @@
         {
             get
             {
-                return this._units;
+                return _units;
             }
 
             set
             {
-                if (value != this._units)
+                if (value != _units)
                 {
-                    this._units = value;
-                    this.RaisePropertyChanged(() => Units);
+                    _units = value;
+                    RaisePropertyChanged(() => Units);
                     SetMassVolume();
                 }
             }
@@ -168,15 +169,15 @@
         {
             get
             {
-                return this._decimalUnits;
+                return _decimalUnits;
             }
 
             set
             {
-                if (value != this._decimalUnits)
+                if (value != _decimalUnits)
                 {
-                    this._decimalUnits = value;
-                    this.RaisePropertyChanged(() => DecimalUnits);
+                    _decimalUnits = value;
+                    RaisePropertyChanged(() => DecimalUnits);
                     SetMassVolume();
                 }
             }
@@ -186,15 +187,15 @@
         {
             get
             {
-                return this._isDecimal;
+                return _isDecimal;
             }
 
             set
             {
-                if (value != this._isDecimal)
+                if (value != _isDecimal)
                 {
-                    this._isDecimal = value;
-                    this.RaisePropertyChanged(() => IsDecimal);
+                    _isDecimal = value;
+                    RaisePropertyChanged(() => IsDecimal);
                 }
             }
         }
@@ -203,15 +204,15 @@
         {
             get
             {
-                return this._isInt;
+                return _isInt;
             }
 
             set
             {
-                if (value != this._isInt)
+                if (value != _isInt)
                 {
-                    this._isInt = value;
-                    this.RaisePropertyChanged(() => IsInt);
+                    _isInt = value;
+                    RaisePropertyChanged(() => IsInt);
                 }
             }
         }
@@ -220,15 +221,15 @@
         {
             get
             {
-                return this._isUnique;
+                return _isUnique;
             }
 
             set
             {
-                if (value != this._isUnique)
+                if (value != _isUnique)
                 {
-                    this._isUnique = value;
-                    this.RaisePropertyChanged(() => IsUnique);
+                    _isUnique = value;
+                    RaisePropertyChanged(() => IsUnique);
                 }
             }
         }
@@ -240,15 +241,15 @@
         {
             get
             {
-                return this._multiplier;
+                return _multiplier;
             }
 
             set
             {
-                if (value != this._multiplier)
+                if (value != _multiplier)
                 {
-                    this._multiplier = value;
-                    this.RaisePropertyChanged(() => Multiplier);
+                    _multiplier = value;
+                    RaisePropertyChanged(() => Multiplier);
                 }
             }
         }
@@ -260,15 +261,15 @@
         {
             get
             {
-                return this._maxFloatingObjects;
+                return _maxFloatingObjects;
             }
 
             set
             {
-                if (value != this._maxFloatingObjects)
+                if (value != _maxFloatingObjects)
                 {
-                    this._maxFloatingObjects = value;
-                    this.RaisePropertyChanged(() => MaxFloatingObjects);
+                    _maxFloatingObjects = value;
+                    RaisePropertyChanged(() => MaxFloatingObjects);
                 }
             }
         }
@@ -279,16 +280,16 @@
 
         public void Load(MyPositionAndOrientation characterPosition, float maxFloatingObjects)
         {
-            this.MaxFloatingObjects = maxFloatingObjects;
-            this.CharacterPosition = characterPosition;
-            this.StockItemList.Clear();
+            MaxFloatingObjects = maxFloatingObjects;
+            CharacterPosition = characterPosition;
+            StockItemList.Clear();
             var list = new List<ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             foreach (var componentDefinition in SpaceEngineersCore.Definitions.Components)
             {
                 var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.Id.TypeId == componentDefinition.Id.TypeId);
-                list.Add(new ComponentItemModel()
+                list.Add(new ComponentItemModel
                 {
                     Name = componentDefinition.DisplayName,
                     TypeId = componentDefinition.Id.TypeId,
@@ -307,7 +308,7 @@
                     continue;
 
                 var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
-                list.Add(new ComponentItemModel()
+                list.Add(new ComponentItemModel
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -323,7 +324,7 @@
             foreach (var physicalItemDefinition in SpaceEngineersCore.Definitions.AmmoMagazines)
             {
                 var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
-                list.Add(new ComponentItemModel()
+                list.Add(new ComponentItemModel
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
@@ -338,14 +339,14 @@
 
             foreach (var item in list.OrderBy(i => i.FriendlyName))
             {
-                this.StockItemList.Add(item);
+                StockItemList.Add(item);
             }
 
             //list.Clear();
 
             //foreach (var cubeDefinition in SpaceEngineersAPI.CubeBlockDefinitions)
             //{
-            //    list.Add(new ComponentItemModel()
+            //    list.Add(new ComponentItemModel
             //    {
             //        Name = cubeDefinition.DisplayName,
             //        TypeId = cubeDefinition.Id.TypeId,
@@ -358,57 +359,57 @@
 
             //foreach (var item in list.OrderBy(i => i.FriendlyName))
             //{
-            //    this.StockItemList.Add(item);
+            //    StockItemList.Add(item);
             //}
         }
 
         private void SetMassVolume()
         {
-            if (this.StockItem == null)
+            if (StockItem == null)
             {
-                this.Mass = null;
-                this.Volume = null;
+                Mass = null;
+                Volume = null;
             }
             else
             {
-                if (this.StockItem.TypeId == SpaceEngineersConsts.Ore ||
-                    this.StockItem.TypeId == SpaceEngineersConsts.Ingot)
+                if (StockItem.TypeId == SpaceEngineersConsts.Ore ||
+                    StockItem.TypeId == SpaceEngineersConsts.Ingot)
                 {
-                    this.IsDecimal = true;
-                    this.IsUnique = this.IsInt = false;
-                    if (this.DecimalUnits.HasValue)
+                    IsDecimal = true;
+                    IsUnique = IsInt = false;
+                    if (DecimalUnits.HasValue)
                     {
-                        this.Mass = (double)this.DecimalUnits * this.StockItem.Mass;
-                        this.Volume = (double)this.DecimalUnits * this.StockItem.Volume;
+                        Mass = (double)DecimalUnits * StockItem.Mass;
+                        Volume = (double)DecimalUnits * StockItem.Volume;
                     }
                     else
                     {
-                        this.Mass = null;
-                        this.Volume = null;
+                        Mass = null;
+                        Volume = null;
                     }
                 }
-                else if (this.StockItem.TypeId == SpaceEngineersConsts.Component ||
-                    this.StockItem.TypeId == SpaceEngineersConsts.AmmoMagazine)
+                else if (StockItem.TypeId == SpaceEngineersConsts.Component ||
+                    StockItem.TypeId == SpaceEngineersConsts.AmmoMagazine)
                 {
-                    this.IsInt = true;
-                    this.IsUnique = this.IsDecimal = false;
-                    if (this.Units.HasValue)
+                    IsInt = true;
+                    IsUnique = IsDecimal = false;
+                    if (Units.HasValue)
                     {
-                        this.Mass = (double)this.Units * this.StockItem.Mass;
-                        this.Volume = (double)this.Units * this.StockItem.Volume;
+                        Mass = Units.Value * StockItem.Mass;
+                        Volume = Units.Value * StockItem.Volume;
                     }
                     else
                     {
-                        this.Mass = null;
-                        this.Volume = null;
+                        Mass = null;
+                        Volume = null;
                     }
                 }
-                else if (this.StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
+                else if (StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
                 {
-                    this.IsUnique = true;
-                    this.IsInt = this.IsDecimal = false;
-                    this.Mass = (double)UniqueUnits * this.StockItem.Mass;
-                    this.Volume = (double)UniqueUnits * this.StockItem.Volume;
+                    IsUnique = true;
+                    IsInt = IsDecimal = false;
+                    Mass = UniqueUnits * StockItem.Mass;
+                    Volume = UniqueUnits * StockItem.Volume;
                 }
             }
         }

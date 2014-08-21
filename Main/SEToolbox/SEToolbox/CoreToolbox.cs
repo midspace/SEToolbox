@@ -54,7 +54,7 @@
             // Go looking for any changes in the Dependant Space Engineers assemblies and immediately attempt to update.
             if (!ignoreUpdates && !altDlls && ToolboxUpdater.IsBaseAssembliesChanged() && !Debugger.IsAttached)
             {
-                ToolboxUpdater.RunElevated(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SEToolboxUpdate"), "/B " + String.Join(" ", args), false, false);
+                ToolboxUpdater.RunElevated(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "SEToolboxUpdate"), "/B " + String.Join(" ", args), false, false);
                 return false;
             }
 
@@ -153,7 +153,7 @@
             }
 
             // Force pre-loading of any Space Engineers resources.
-            SEToolbox.Interop.SpaceEngineersCore.LoadDefinitions();
+            SpaceEngineersCore.LoadDefinitions();
 
             // Load the Space Engineers assemblies, or dependant classes after this point.
             var explorerModel = new ExplorerModel();
@@ -170,13 +170,13 @@
             var eWindow = new WindowExplorer(eViewModel);
             //if (allowClose)
             //{
-            eViewModel.CloseRequested += (object sender, EventArgs e) =>
+            eViewModel.CloseRequested += (sender, e) =>
             {
                 SaveSettings(eWindow);
                 Application.Current.Shutdown();
             };
             //}
-            eWindow.Loaded += (object sender, RoutedEventArgs e) =>
+            eWindow.Loaded += (sender, e) =>
             {
                 Splasher.CloseSplash();
                 if (GlobalSettings.Default.WindowLeft.HasValue) eWindow.Left = GlobalSettings.Default.WindowLeft.Value;
@@ -209,7 +209,7 @@
         Assembly currentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             // Retrieve the list of referenced assemblies in an array of AssemblyName.
-            var filename = args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll";
+            var filename = args.Name.Substring(0, args.Name.IndexOf(",", StringComparison.InvariantCulture)) + ".dll";
 
             var filter = @"^(?<assembly>(?:\w+(?:\.?\w+)+))\s*(?:,\s?Version=(?<version>\d+\.\d+\.\d+\.\d+))?(?:,\s?Culture=(?<culture>[\w-]+))?(?:,\s?PublicKeyToken=(?<token>\w+))?$";
             var match = Regex.Match(args.Name, filter);

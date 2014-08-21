@@ -1,13 +1,11 @@
 namespace SEToolbox.ImageLibrary.Effects
 {
-    using System;
-
     /// <summary>
     /// Summary description for EmissiveEffect.
     /// </summary>
     public unsafe class EmissivePixelEffect : PixelEffect
     {
-        private byte _alphaEmmissiveValue;
+        private readonly byte _alphaEmmissiveValue;
 
         /// <summary>
         /// Construct the Emissive pixel effect

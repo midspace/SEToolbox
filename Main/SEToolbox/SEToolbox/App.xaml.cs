@@ -1,19 +1,19 @@
 ﻿namespace SEToolbox
 {
+    using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Threading;
-    using log4net;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Threading;
+
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Services;
     using SEToolbox.Support;
     using SEToolbox.Views;
-    using System;
-    using System.Diagnostics;
-    using System.Windows;
-    using System.Windows.Input;
-    using System.Windows.Threading;
     using WPFLocalizeExtension.Engine;
     using Res = SEToolbox.Properties.Resources;
 
@@ -25,7 +25,6 @@
         #region Fields
 
         private CoreToolbox _toolboxApplication;
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         #endregion
 
@@ -46,7 +45,10 @@
                     {
                         Directory.Delete(binCache, true);
                     }
-                    catch { }
+                    catch
+                    {
+                        // File is locked and cannot be deleted at this time.
+                    }
                 }
             }
 
@@ -70,7 +72,8 @@
                     Application.Current.Shutdown();
                     return;
                 }
-                else if (dialogResult == MessageBoxResult.No)
+
+                if (dialogResult == MessageBoxResult.No)
                 {
                     GlobalSettings.Default.IgnoreUpdateVersion = update.Version.ToString();
                 }
@@ -83,17 +86,17 @@
             ServiceLocator.Register<IColorDialog, ColorDialogViewModel>();
             ServiceLocator.Register<IFolderBrowserDialog, FolderBrowserDialogViewModel>();
 
-            this._toolboxApplication = new CoreToolbox();
-            if (this._toolboxApplication.Init(e.Args))
-                this._toolboxApplication.Load(e.Args);
+            _toolboxApplication = new CoreToolbox();
+            if (_toolboxApplication.Init(e.Args))
+                _toolboxApplication.Load(e.Args);
             else
                 Application.Current.Shutdown();
         }
 
         private void OnExit(object sender, ExitEventArgs e)
         {
-            if (this._toolboxApplication != null)
-                this._toolboxApplication.Exit();
+            if (_toolboxApplication != null)
+                _toolboxApplication.Exit();
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -112,7 +115,7 @@
             // Log details to Application Event Log.
             DiagnosticsLogging.LogException(e.Exception);
 
-            string message = null;
+            string message;
 
             if (e.Exception is ToolboxException)
             {

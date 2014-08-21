@@ -1,13 +1,14 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Interfaces;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
     using System;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Windows;
     using System.Windows.Input;
+
+    using SEToolbox.Interfaces;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
     using Res = SEToolbox.Properties.Resources;
 
     public class ResourceReportViewModel : BaseViewModel
@@ -34,11 +35,11 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(saveFileDialogFactory != null);
 
-            this._dialogService = dialogService;
-            this._saveFileDialogFactory = saveFileDialogFactory;
-            this._dataModel = dataModel;
+            _dialogService = dialogService;
+            _saveFileDialogFactory = saveFileDialogFactory;
+            _dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -47,58 +48,37 @@
 
         public ICommand GenerateCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(GenerateExecuted), new Func<bool>(GenerateCanExecute));
-            }
+            get { return new DelegateCommand(GenerateExecuted, GenerateCanExecute); }
         }
 
         public ICommand ExportCommand
         {
-            get
-            {
-                return new DelegateCommand(new Func<bool>(ExportCanExecute));
-            }
+            get { return new DelegateCommand(new Func<bool>(ExportCanExecute)); }
         }
 
         public ICommand CopyCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CopyExecuted), new Func<bool>(CopyCanExecute));
-            }
+            get { return new DelegateCommand(CopyExecuted, CopyCanExecute); }
         }
 
         public ICommand ExportTextCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ExportTextExecuted), new Func<bool>(ExportTextCanExecute));
-            }
+            get { return new DelegateCommand(ExportTextExecuted, ExportTextCanExecute); }
         }
 
         public ICommand ExportHtmlCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ExportHtmlExecuted), new Func<bool>(ExportHtmlCanExecute));
-            }
+            get { return new DelegateCommand(ExportHtmlExecuted, ExportHtmlCanExecute); }
         }
 
         public ICommand ExportXmlCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ExportXmlExecuted), new Func<bool>(ExportXmlCanExecute));
-            }
+            get { return new DelegateCommand(ExportXmlExecuted, ExportXmlCanExecute); }
         }
 
         public ICommand CloseCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CloseExecuted), new Func<bool>(CloseCanExecute));
-            }
+            get { return new DelegateCommand(CloseExecuted, CloseCanExecute); }
         }
 
         #endregion
@@ -112,13 +92,13 @@
         {
             get
             {
-                return this._closeResult;
+                return _closeResult;
             }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
@@ -129,12 +109,12 @@
         {
             get
             {
-                return this._dataModel.IsActive;
+                return _dataModel.IsActive;
             }
 
             set
             {
-                this._dataModel.IsActive = value;
+                _dataModel.IsActive = value;
             }
         }
 
@@ -145,12 +125,12 @@
         {
             get
             {
-                return this._dataModel.IsBusy;
+                return _dataModel.IsBusy;
             }
 
             set
             {
-                this._dataModel.IsBusy = value;
+                _dataModel.IsBusy = value;
             }
         }
 
@@ -158,12 +138,12 @@
         {
             get
             {
-                return this._dataModel.IsReportReady;
+                return _dataModel.IsReportReady;
             }
 
             set
             {
-                this._dataModel.IsReportReady = value;
+                _dataModel.IsReportReady = value;
             }
         }
 
@@ -171,12 +151,12 @@
         {
             get
             {
-                return this._dataModel.ReportHtml;
+                return _dataModel.ReportHtml;
             }
 
             set
             {
-                this._dataModel.ReportHtml = value;
+                _dataModel.ReportHtml = value;
             }
         }
 
@@ -184,12 +164,12 @@
         {
             get
             {
-                return this._dataModel.ShowProgress;
+                return _dataModel.ShowProgress;
             }
 
             set
             {
-                this._dataModel.ShowProgress = value;
+                _dataModel.ShowProgress = value;
             }
         }
 
@@ -197,12 +177,12 @@
         {
             get
             {
-                return this._dataModel.Progress;
+                return _dataModel.Progress;
             }
 
             set
             {
-                this._dataModel.Progress = value;
+                _dataModel.Progress = value;
             }
         }
 
@@ -210,12 +190,12 @@
         {
             get
             {
-                return this._dataModel.MaximumProgress;
+                return _dataModel.MaximumProgress;
             }
 
             set
             {
-                this._dataModel.MaximumProgress = value;
+                _dataModel.MaximumProgress = value;
             }
         }
 
@@ -230,81 +210,81 @@
 
         public void GenerateExecuted()
         {
-            this.IsBusy = true;
-            this._dataModel.GenerateReport();
-            this.ReportHtml = this._dataModel.CreateHtmlReport();
-            this.IsBusy = false;
+            IsBusy = true;
+            _dataModel.GenerateReport();
+            ReportHtml = _dataModel.CreateHtmlReport();
+            IsBusy = false;
         }
 
         public bool ExportCanExecute()
         {
-            return this.IsReportReady;
+            return IsReportReady;
         }
 
         public bool CopyCanExecute()
         {
-            return this.IsReportReady;
+            return IsReportReady;
         }
 
         public void CopyExecuted()
         {
-            Clipboard.SetText(this._dataModel.CreateTextReport());
+            Clipboard.SetText(_dataModel.CreateTextReport());
         }
 
         public bool ExportTextCanExecute()
         {
-            return this.IsReportReady;
+            return IsReportReady;
         }
 
         public void ExportTextExecuted()
         {
-            var saveFileDialog = this._saveFileDialogFactory();
+            var saveFileDialog = _saveFileDialogFactory();
             saveFileDialog.Filter = Res.DialogExportTextFileFilter;
             saveFileDialog.Title = string.Format(Res.DialogExportTextFileTitle, "Resource Report");
-            saveFileDialog.FileName = string.Format("Resource Report - {0}.txt", this._dataModel.SaveName);
+            saveFileDialog.FileName = string.Format("Resource Report - {0}.txt", _dataModel.SaveName);
             saveFileDialog.OverwritePrompt = true;
 
-            if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
+            if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
             {
-                File.WriteAllText(saveFileDialog.FileName, this._dataModel.CreateTextReport());
+                File.WriteAllText(saveFileDialog.FileName, _dataModel.CreateTextReport());
             }
         }
 
         public bool ExportHtmlCanExecute()
         {
-            return this.IsReportReady;
+            return IsReportReady;
         }
 
         public void ExportHtmlExecuted()
         {
-            var saveFileDialog = this._saveFileDialogFactory();
+            var saveFileDialog = _saveFileDialogFactory();
             saveFileDialog.Filter = Res.DialogExportHtmlFileFilter;
             saveFileDialog.Title = string.Format(Res.DialogExportHtmlFileTitle, "Resource Report");
-            saveFileDialog.FileName = string.Format("Resource Report - {0}.html", this._dataModel.SaveName);
+            saveFileDialog.FileName = string.Format("Resource Report - {0}.html", _dataModel.SaveName);
             saveFileDialog.OverwritePrompt = true;
 
-            if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
+            if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
             {
-                File.WriteAllText(saveFileDialog.FileName, this._dataModel.CreateHtmlReport());
+                File.WriteAllText(saveFileDialog.FileName, _dataModel.CreateHtmlReport());
             }
         }
 
         public bool ExportXmlCanExecute()
         {
-            return this.IsReportReady;
+            return IsReportReady;
         }
 
         public void ExportXmlExecuted()
         {
-            var saveFileDialog = this._saveFileDialogFactory();
+            var saveFileDialog = _saveFileDialogFactory();
             saveFileDialog.Filter = Res.DialogExportXmlFileFilter;
             saveFileDialog.Title = string.Format(Res.DialogExportXmlFileTitle, "Resource Report");
-            saveFileDialog.FileName = string.Format("Resource Report - {0}.xml", this._dataModel.SaveName);
+            saveFileDialog.FileName = string.Format("Resource Report - {0}.xml", _dataModel.SaveName);
             saveFileDialog.OverwritePrompt = true;
 
-            if (this._dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
+            if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == System.Windows.Forms.DialogResult.OK)
             {
-                File.WriteAllText(saveFileDialog.FileName, this._dataModel.CreateXmlReport());
+                File.WriteAllText(saveFileDialog.FileName, _dataModel.CreateXmlReport());
             }
         }
 
@@ -315,7 +295,7 @@
 
         public void CloseExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion

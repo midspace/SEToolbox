@@ -239,8 +239,8 @@
 
             Assert.AreEqual(35465, materialAssets.Count, "Asset count should be equal.");
 
-            var distribution = new double[] { Double.NaN, .5, .25 };
-            var materialSelection = new byte[] { SpaceEngineersApi.GetMaterialIndex(stoneMaterial.Id.SubtypeId), SpaceEngineersApi.GetMaterialIndex(goldMaterial.Id.SubtypeId), SpaceEngineersApi.GetMaterialIndex(uraniumMaterial.Id.SubtypeId) };
+            var distribution = new [] { Double.NaN, .5, .25 };
+            var materialSelection = new [] { SpaceEngineersApi.GetMaterialIndex(stoneMaterial.Id.SubtypeId), SpaceEngineersApi.GetMaterialIndex(goldMaterial.Id.SubtypeId), SpaceEngineersApi.GetMaterialIndex(uraniumMaterial.Id.SubtypeId) };
 
             var newDistributiuon = new List<byte>();
             int count;
@@ -282,7 +282,7 @@
             var materials = SpaceEngineersApi.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            var files = new string[] { @".\TestAssets\Arabian_Border_7.vox", @".\TestAssets\cube_52x52x52.vox" };
+            var files = new [] { @".\TestAssets\Arabian_Border_7.vox", @".\TestAssets\cube_52x52x52.vox" };
 
             foreach (var fileOriginal in files)
             {
@@ -299,8 +299,8 @@
                     Dictionary<byte, long> materialVoxelCells;
                     voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
 
-                    var distribution = new double[] { Double.NaN, .99, };
-                    var materialSelection = new byte[] { 0, SpaceEngineersApi.GetMaterialIndex(material.Id.SubtypeId) };
+                    var distribution = new [] { Double.NaN, .99, };
+                    var materialSelection = new byte [] { 0, SpaceEngineersApi.GetMaterialIndex(material.Id.SubtypeId) };
 
                     var newDistributiuon = new List<byte>();
                     int count;

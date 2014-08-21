@@ -25,7 +25,7 @@
         {
             if (!_isLoaded)
             {
-                this.Load();
+                Load();
             }
         }
 
@@ -71,28 +71,24 @@
 
         public void Save()
         {
-            var key = Registry.CurrentUser.OpenSubKey(BaseKey, true);
-            if (key == null)
-            {
-                key = Registry.CurrentUser.CreateSubKey(BaseKey);
-            }
+            var key = Registry.CurrentUser.OpenSubKey(BaseKey, true) ?? Registry.CurrentUser.CreateSubKey(BaseKey);
 
-            UpdateValue(key, "SEBinPath", this.SEBinPath);
-            UpdateValue(key, "CustomUserSavePaths", this.CustomUserSavePaths);
-            UpdateValue(key, "LanguageCode", this.LanguageCode);
-            UpdateValue(key, "WindowState", this.WindowState);
-            UpdateValue(key, "WindowTop", this.WindowTop);
-            UpdateValue(key, "WindowLeft", this.WindowLeft);
-            UpdateValue(key, "WindowWidth", this.WindowWidth);
-            UpdateValue(key, "WindowHeight", this.WindowHeight);
-            UpdateValue(key, "AlwaysCheckForUpdates", this.AlwaysCheckForUpdates);
-            UpdateValue(key, "IgnoreUpdateVersion", this.IgnoreUpdateVersion);
+            UpdateValue(key, "SEBinPath", SEBinPath);
+            UpdateValue(key, "CustomUserSavePaths", CustomUserSavePaths);
+            UpdateValue(key, "LanguageCode", LanguageCode);
+            UpdateValue(key, "WindowState", WindowState);
+            UpdateValue(key, "WindowTop", WindowTop);
+            UpdateValue(key, "WindowLeft", WindowLeft);
+            UpdateValue(key, "WindowWidth", WindowWidth);
+            UpdateValue(key, "WindowHeight", WindowHeight);
+            UpdateValue(key, "AlwaysCheckForUpdates", AlwaysCheckForUpdates);
+            UpdateValue(key, "IgnoreUpdateVersion", IgnoreUpdateVersion);
             
         }
 
         public void Load()
         {
-            this._isLoaded = true;
+            _isLoaded = true;
             var key = Registry.CurrentUser.OpenSubKey(BaseKey, false);
             if (key == null)
             {
@@ -100,16 +96,16 @@
                 return;
             }
 
-            this.SEBinPath = ReadValue<string>(key, "SEBinPath", null);
-            this.LanguageCode = ReadValue<string>(key, "LanguageCode", CultureInfo.CurrentUICulture.IetfLanguageTag);
-            this.CustomUserSavePaths = ReadValue<string>(key, "CustomUserSavePaths", null);
-            this.WindowState = ReadValue<WindowState?>(key, "WindowState", null);
-            this.WindowTop = ReadValue<double?>(key, "WindowTop", null);
-            this.WindowLeft = ReadValue<double?>(key, "WindowLeft", null);
-            this.WindowWidth = ReadValue<double?>(key, "WindowWidth", null);
-            this.WindowHeight = ReadValue<double?>(key, "WindowHeight", null);
-            this.AlwaysCheckForUpdates = ReadValue<bool?>(key, "AlwaysCheckForUpdates", null);
-            this.IgnoreUpdateVersion = ReadValue<string>(key, "IgnoreUpdateVersion", null);
+            SEBinPath = ReadValue<string>(key, "SEBinPath", null);
+            LanguageCode = ReadValue<string>(key, "LanguageCode", CultureInfo.CurrentUICulture.IetfLanguageTag);
+            CustomUserSavePaths = ReadValue<string>(key, "CustomUserSavePaths", null);
+            WindowState = ReadValue<WindowState?>(key, "WindowState", null);
+            WindowTop = ReadValue<double?>(key, "WindowTop", null);
+            WindowLeft = ReadValue<double?>(key, "WindowLeft", null);
+            WindowWidth = ReadValue<double?>(key, "WindowWidth", null);
+            WindowHeight = ReadValue<double?>(key, "WindowHeight", null);
+            AlwaysCheckForUpdates = ReadValue<bool?>(key, "AlwaysCheckForUpdates", null);
+            IgnoreUpdateVersion = ReadValue<string>(key, "IgnoreUpdateVersion", null);
         }
 
         /// <summary>
@@ -117,16 +113,16 @@
         /// </summary>
         public void Reset()
         {
-            this.SEBinPath = null;
-            this.LanguageCode = CultureInfo.CurrentUICulture.IetfLanguageTag;  // Display language (only applied on multi lingual deployment of Windows OS).
-            this.CustomUserSavePaths = null;
-            this.WindowState = null;
-            this.WindowTop = null;
-            this.WindowLeft = null;
-            this.WindowHeight = null;
-            this.WindowWidth = null;
-            this.AlwaysCheckForUpdates = null;
-            this.IgnoreUpdateVersion = null;
+            SEBinPath = null;
+            LanguageCode = CultureInfo.CurrentUICulture.IetfLanguageTag;  // Display language (only applied on multi lingual deployment of Windows OS).
+            CustomUserSavePaths = null;
+            WindowState = null;
+            WindowTop = null;
+            WindowLeft = null;
+            WindowHeight = null;
+            WindowWidth = null;
+            AlwaysCheckForUpdates = null;
+            IgnoreUpdateVersion = null;
         }
 
         public static Version GetVersion(bool ignoreRevision = false)
@@ -177,7 +173,8 @@
                 {
                     return default(T);
                 }
-                else if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(Nullable<>))
+                
+                if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
                     var baseType = typeof(T).GetGenericArguments()[0];
 

@@ -1,7 +1,8 @@
 ﻿namespace SEToolbox.Models
 {
-    using SEToolbox.Support;
     using System.IO;
+
+    using SEToolbox.Support;
 
     public class FindApplicationModel : BaseModel
     {
@@ -23,16 +24,16 @@
         {
             get
             {
-                return this._gameApplicationPath;
+                return _gameApplicationPath;
             }
 
             set
             {
-                if (value != this._gameApplicationPath)
+                if (value != _gameApplicationPath)
                 {
-                    this._gameApplicationPath = value;
-                    this.RaisePropertyChanged(() => GameApplicationPath);
-                    this.Validate();
+                    _gameApplicationPath = value;
+                    RaisePropertyChanged(() => GameApplicationPath);
+                    Validate();
                 }
             }
         }
@@ -41,15 +42,15 @@
         {
             get
             {
-                return this._gameBinPath;
+                return _gameBinPath;
             }
 
             set
             {
-                if (value != this._gameBinPath)
+                if (value != _gameBinPath)
                 {
-                    this._gameBinPath = value;
-                    this.RaisePropertyChanged(() => GameBinPath);
+                    _gameBinPath = value;
+                    RaisePropertyChanged(() => GameBinPath);
                 }
             }
         }
@@ -58,15 +59,15 @@
         {
             get
             {
-                return this._isValidApplication;
+                return _isValidApplication;
             }
 
             set
             {
-                if (value != this._isValidApplication)
+                if (value != _isValidApplication)
                 {
-                    this._isValidApplication = value;
-                    this.RaisePropertyChanged(() => IsValidApplication);
+                    _isValidApplication = value;
+                    RaisePropertyChanged(() => IsValidApplication);
                 }
             }
         }
@@ -75,15 +76,15 @@
         {
             get
             {
-                return this._isWrongApplication;
+                return _isWrongApplication;
             }
 
             set
             {
-                if (value != this._isWrongApplication)
+                if (value != _isWrongApplication)
                 {
-                    this._isWrongApplication = value;
-                    this.RaisePropertyChanged(() => IsWrongApplication);
+                    _isWrongApplication = value;
+                    RaisePropertyChanged(() => IsWrongApplication);
                 }
             }
         }
@@ -94,7 +95,7 @@
 
         public void Validate()
         {
-            this.GameBinPath = null;
+            GameBinPath = null;
 
             if (!string.IsNullOrEmpty(GameApplicationPath))
             {
@@ -103,14 +104,14 @@
                     var fullPath = Path.GetFullPath(GameApplicationPath);
                     if (File.Exists(fullPath))
                     {
-                        this.GameBinPath = Path.GetDirectoryName(fullPath);
+                        GameBinPath = Path.GetDirectoryName(fullPath);
                     }
                 }
                 catch { }
             }
 
-            this.IsValidApplication = ToolboxUpdater.ValidateSpaceEngineersInstall(this.GameBinPath);
-            this.IsWrongApplication = !this.IsValidApplication;
+            IsValidApplication = ToolboxUpdater.ValidateSpaceEngineersInstall(GameBinPath);
+            IsWrongApplication = !IsValidApplication;
         }
 
         #endregion

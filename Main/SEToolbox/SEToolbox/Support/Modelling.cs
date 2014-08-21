@@ -1,14 +1,15 @@
 ﻿namespace SEToolbox.Support
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.VRageData;
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Media;
     using System.Windows.Media.Media3D;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.VRageData;
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
     using VRageMath;
 
     public static class Modelling
@@ -17,8 +18,6 @@
 
         public static BindableSize3DModel PreviewModelVolmetic(string modelFile, out Model3D model)
         {
-            var size = new BindableSize3DModel();
-
             if (modelFile != null)
             {
                 try
@@ -181,7 +180,7 @@
                             int normal;
                             if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect, out normal))
                             {
-                                ccubic[(int)Math.Floor(intersect.X) - xMin][(int)Math.Floor(intersect.Y) - yMin][ (int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
+                                ccubic[(int)Math.Floor(intersect.X) - xMin][(int)Math.Floor(intersect.Y) - yMin][(int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
                         }
                     }
@@ -994,7 +993,7 @@
 
                             newCube.EntityId = 0;
                             newCube.BlockOrientation = GetCubeOrientation(cubic[x][y][z]);
-                            newCube.Min = new VRageMath.Vector3I(x, y, z);
+                            newCube.Min = new Vector3I(x, y, z);
                         }
                     }
                 }

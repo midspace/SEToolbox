@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.Converters
 {
-    using SEToolbox.ImageLibrary;
     using System;
     using System.Collections.Generic;
     using System.Drawing;
@@ -9,6 +8,8 @@
     using System.Windows.Data;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+
+    using SEToolbox.ImageLibrary;
 
     public class DDSConverter : IValueConverter
     {
@@ -20,7 +21,8 @@
             {
                 return null;
             }
-            else if (value is string)
+
+            if (value is string)
             {
                 var sizeParameter = parameter as string;
                 var sizeArray = sizeParameter.Split(',');
@@ -66,23 +68,23 @@
                     }
                     catch { return null; }
                 }
-                else if (extension == ".dds")
+
+                if (extension == ".dds")
                 {
                     var image = ImageTextureUtil.CreateImage(filename, 0, width, height);
                     Cache.Add(name, image);
                     return image;
                 }
+
                 return null;
             }
-            else
-            {
-                throw new NotSupportedException(string.Format("{0} cannot convert from {1}.", this.GetType().FullName, value.GetType().FullName));
-            }
+
+            throw new NotSupportedException(string.Format("{0} cannot convert from {1}.", GetType().FullName, value.GetType().FullName));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException(string.Format("{0} does not support converting back.", this.GetType().FullName));
+            throw new NotSupportedException(string.Format("{0} does not support converting back.", GetType().FullName));
         }
 
         public static void ClearCache()

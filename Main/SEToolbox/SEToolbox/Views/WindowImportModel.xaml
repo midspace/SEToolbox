@@ -41,7 +41,7 @@
                 <Label Content="Model:" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <TextBox Width="180" Text="{Binding Filename, Mode=TwoWay}" VerticalAlignment="Center" Name="uxInitialElement"/>
-                    <Button ToolTip="Browse for Model" Command="{Binding Browse3dModelCommand}" VerticalAlignment="Center">
+                    <Button ToolTip="Browse for Model" Command="{Binding Browse3DModelCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>

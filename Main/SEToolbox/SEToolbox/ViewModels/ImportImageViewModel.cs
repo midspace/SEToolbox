@@ -1,12 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.ImageLibrary;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -16,6 +9,14 @@
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
+
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.ImageLibrary;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
 
     public class ImportImageViewModel : BaseViewModel
@@ -24,7 +25,7 @@
 
         private readonly IDialogService _dialogService;
         private readonly Func<IOpenFileDialog> _openFileDialogFactory;
-        private ImportImageModel _dataModel;
+        private readonly ImportImageModel _dataModel;
 
         private bool? _closeResult;
         private Image _sourceImage;
@@ -46,10 +47,10 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
 
-            this._dialogService = dialogService;
-            this._openFileDialogFactory = openFileDialogFactory;
-            this._dataModel = dataModel;
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dialogService = dialogService;
+            _openFileDialogFactory = openFileDialogFactory;
+            _dataModel = dataModel;
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -58,34 +59,22 @@
 
         public ICommand BrowseImageCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(BrowseImageExecuted), new Func<bool>(BrowseImageCanExecute));
-            }
+            get { return new DelegateCommand(BrowseImageExecuted, BrowseImageCanExecute); }
         }
 
         public ICommand SetToOriginalSizeCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(SetToOriginalSizeExecuted), new Func<bool>(SetToOriginalSizeCanExecute));
-            }
+            get { return new DelegateCommand(SetToOriginalSizeExecuted, SetToOriginalSizeCanExecute); }
         }
 
         public ICommand CreateCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CreateExecuted), new Func<bool>(CreateCanExecute));
-            }
+            get { return new DelegateCommand(CreateExecuted, CreateCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         /// <summary>
@@ -93,150 +82,91 @@
         /// </summary>
         public bool? CloseResult
         {
-            get
-            {
-                return this._closeResult;
-            }
+            get { return _closeResult; }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
         public string Filename
         {
-            get
-            {
-                return this._dataModel.Filename;
-            }
+            get { return _dataModel.Filename; }
 
             set
             {
-                this._dataModel.Filename = value;
-                this.FilenameChanged();
+                _dataModel.Filename = value;
+                FilenameChanged();
             }
         }
 
         public bool IsValidImage
         {
-            get
-            {
-                return this._dataModel.IsValidImage;
-            }
+            get { return _dataModel.IsValidImage; }
 
-            set
-            {
-                this._dataModel.IsValidImage = value;
-            }
+            set { _dataModel.IsValidImage = value; }
         }
 
         public Size OriginalImageSize
         {
-            get
-            {
-                return this._dataModel.OriginalImageSize;
-            }
+            get { return _dataModel.OriginalImageSize; }
 
-            set
-            {
-                this._dataModel.OriginalImageSize = value;
-            }
+            set { _dataModel.OriginalImageSize = value; }
         }
 
         public BindableSizeModel NewImageSize
         {
-            get
-            {
-                return this._dataModel.NewImageSize;
-            }
+            get { return _dataModel.NewImageSize; }
 
             set
             {
-                this._dataModel.NewImageSize = value;
-                this.ProcessImage();
+                _dataModel.NewImageSize = value;
+                ProcessImage();
             }
         }
 
         public BindablePoint3DModel Position
         {
-            get
-            {
-                return this._dataModel.Position;
-            }
-
-            set
-            {
-                this._dataModel.Position = value;
-            }
+            get { return _dataModel.Position; }
+            set { _dataModel.Position = value; }
         }
 
         public BindableVector3DModel Forward
         {
-            get
-            {
-                return this._dataModel.Forward;
-            }
-
-            set
-            {
-                this._dataModel.Forward = value;
-            }
+            get { return _dataModel.Forward; }
+            set { _dataModel.Forward = value; }
         }
 
         public BindableVector3DModel Up
         {
-            get
-            {
-                return this._dataModel.Up;
-            }
-
-            set
-            {
-                this._dataModel.Up = value;
-            }
+            get { return _dataModel.Up; }
+            set { _dataModel.Up = value; }
         }
 
         public ImportImageClassType ClassType
         {
-            get
-            {
-                return this._dataModel.ClassType;
-            }
-
-            set
-            {
-                this._dataModel.ClassType = value;
-            }
+            get { return _dataModel.ClassType; }
+            set { _dataModel.ClassType = value; }
         }
 
         public ImportArmorType ArmorType
         {
-            get
-            {
-                return this._dataModel.ArmorType;
-            }
-
-            set
-            {
-                this._dataModel.ArmorType = value;
-            }
+            get { return _dataModel.ArmorType; }
+            set { _dataModel.ArmorType = value; }
         }
 
         public BitmapImage NewImage
         {
-            get
-            {
-                return this._newImage;
-            }
+            get { return _newImage; }
 
             set
             {
-                if (value != this._newImage)
+                if (value != _newImage)
                 {
-                    this._newImage = value;
-                    this.RaisePropertyChanged(() => NewImage);
+                    _newImage = value;
+                    RaisePropertyChanged(() => NewImage);
                 }
             }
         }
@@ -246,20 +176,17 @@
         /// </summary>
         public bool IsBusy
         {
-            get
-            {
-                return this._isBusy;
-            }
+            get { return _isBusy; }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
-                        System.Windows.Forms.Application.DoEvents();
+                        Application.DoEvents();
                     }
                 }
             }
@@ -276,7 +203,7 @@
 
         public void BrowseImageExecuted()
         {
-            this.IsValidImage = false;
+            IsValidImage = false;
 
             var openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Res.DialogImportImageFilter;
@@ -287,34 +214,34 @@
 
             if (result == DialogResult.OK)
             {
-                this.Filename = openFileDialog.FileName;
+                Filename = openFileDialog.FileName;
             }
         }
 
         private void FilenameChanged()
         {
-            this.ProcessFilename(this.Filename);
+            ProcessFilename(Filename);
         }
 
         public bool SetToOriginalSizeCanExecute()
         {
-            return this.IsValidImage;
+            return IsValidImage;
         }
 
         public void SetToOriginalSizeExecuted()
         {
-            this.NewImageSize.Height = this._sourceImage.Height;
-            this.NewImageSize.Width = this._sourceImage.Width;
+            NewImageSize.Height = _sourceImage.Height;
+            NewImageSize.Width = _sourceImage.Width;
         }
 
         public bool CreateCanExecute()
         {
-            return this.IsValidImage;
+            return IsValidImage;
         }
 
         public void CreateExecuted()
         {
-            this.CloseResult = true;
+            CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -324,7 +251,7 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion
@@ -333,7 +260,7 @@
 
         private void ProcessFilename(string filename)
         {
-            this.IsBusy = true;
+            IsBusy = true;
 
             if (File.Exists(filename))
             {
@@ -341,64 +268,61 @@
 
                 // TODO: read image properties.
 
-                if (this._sourceImage != null)
+                if (_sourceImage != null)
                 {
-                    this._sourceImage.Dispose();
+                    _sourceImage.Dispose();
                 }
 
-                this._sourceImage = Image.FromFile(filename);
-                this.OriginalImageSize = new Size(this._sourceImage.Width, this._sourceImage.Height);
+                _sourceImage = Image.FromFile(filename);
+                OriginalImageSize = new Size(_sourceImage.Width, _sourceImage.Height);
 
-                this.NewImageSize = new BindableSizeModel(this._sourceImage.Width, this._sourceImage.Height);
-                this.NewImageSize.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-                {
-                    this.ProcessImage();
-                };
+                NewImageSize = new BindableSizeModel(_sourceImage.Width, _sourceImage.Height);
+                NewImageSize.PropertyChanged += (sender, e) => ProcessImage();
 
                 // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
-                var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
+                var vector = new BindableVector3DModel(_dataModel.CharacterPosition.Forward).Vector3D;
                 vector.Normalize();
                 vector = Vector3D.Multiply(vector, 10);
-                this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
-                this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Negate();
-                this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
+                Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(_dataModel.CharacterPosition.Position).Point3D, vector));
+                Forward = new BindableVector3DModel(_dataModel.CharacterPosition.Forward).Negate();
+                Up = new BindableVector3DModel(_dataModel.CharacterPosition.Up);
 
-                this.ClassType = ImportImageClassType.SmallShip;
-                this.ArmorType = ImportArmorType.Light;
+                ClassType = ImportImageClassType.SmallShip;
+                ArmorType = ImportArmorType.Light;
 
-                this.IsValidImage = true;
+                IsValidImage = true;
             }
             else
             {
-                this.IsValidImage = false;
-                this.Position = new BindablePoint3DModel(0, 0, 0);
-                this.OriginalImageSize = new Size(0, 0);
-                this.NewImageSize = new BindableSizeModel(0, 0);
+                IsValidImage = false;
+                Position = new BindablePoint3DModel(0, 0, 0);
+                OriginalImageSize = new Size(0, 0);
+                NewImageSize = new BindableSizeModel(0, 0);
             }
 
-            this.IsBusy = false;
+            IsBusy = false;
         }
 
         private void ProcessImage()
         {
-            if (this._sourceImage != null)
+            if (_sourceImage != null)
             {
-                var image = ImageHelper.ResizeImage(this._sourceImage, this.NewImageSize.Size);
+                var image = ImageHelper.ResizeImage(_sourceImage, NewImageSize.Size);
 
                 if (image != null)
                 {
-                    this.NewImage = ImageHelper.ConvertBitmapToBitmapImage(image);
+                    NewImage = ImageHelper.ConvertBitmapToBitmapImage(image);
 
                     //ImageHelper.SavePng(@"C:\temp\test.png", image);
                 }
                 else
                 {
-                    this.NewImage = null;
+                    NewImage = null;
                 }
             }
             else
             {
-                this.NewImage = null;
+                NewImage = null;
             }
         }
 
@@ -414,7 +338,7 @@
             };
 
             var blockPrefix = "";
-            switch (this.ClassType)
+            switch (ClassType)
             {
                 case ImportImageClassType.SmallShip:
                     entity.GridSizeEnum = MyCubeSize.Small;
@@ -432,24 +356,24 @@
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = true;
-                    this.Position = this.Position.RoundOff(MyCubeSize.Large.ToLength());
-                    this.Forward = this.Forward.RoundToAxis();
-                    this.Up = this.Up.RoundToAxis();
+                    Position = Position.RoundOff(MyCubeSize.Large.ToLength());
+                    Forward = Forward.RoundToAxis();
+                    Up = Up.RoundToAxis();
                     break;
             }
 
-            switch (this.ArmorType)
+            switch (ArmorType)
             {
                 case ImportArmorType.Heavy: blockPrefix += "HeavyBlockArmor"; break;
                 case ImportArmorType.Light: blockPrefix += "BlockArmor"; break;
             }
 
-            entity.PositionAndOrientation = new MyPositionAndOrientation()
+            entity.PositionAndOrientation = new MyPositionAndOrientation
             {
                 // TODO: reposition based scale.
-                Position = this.Position.ToVector3(),
-                Forward = this.Forward.ToVector3(),
-                Up = this.Up.ToVector3()
+                Position = Position.ToVector3(),
+                Forward = Forward.ToVector3(),
+                Up = Up.ToVector3()
             };
 
             // Large|BlockArmor|Corner
@@ -459,7 +383,7 @@
             // Small|HeavyBlockArmor|Corner,
 
             entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
-            var image = ImageHelper.ResizeImage(this._sourceImage, this.NewImageSize.Size);
+            var image = ImageHelper.ResizeImage(_sourceImage, NewImageSize.Size);
 
             using (var palatteImage = new Bitmap(image))
             {
@@ -468,7 +392,7 @@
                 {
                     for (var y = palatteImage.Height - 1; y >= 0; y--)
                     {
-                        var z = 0;
+                        const int z = 0;
                         var color = palatteImage.GetPixel(x, y);
 
                         // Specifically ignore anything with "Transparent" Alpha.

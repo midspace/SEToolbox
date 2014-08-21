@@ -17,15 +17,15 @@
         {
             get
             {
-                return this._ietfLanguageTag;
+                return _ietfLanguageTag;
             }
 
             set
             {
-                if (value != this._ietfLanguageTag)
+                if (value != _ietfLanguageTag)
                 {
-                    this._ietfLanguageTag = value;
-                    this.RaisePropertyChanged(() => IetfLanguageTag);
+                    _ietfLanguageTag = value;
+                    RaisePropertyChanged(() => IetfLanguageTag);
                 }
             }
         }
@@ -34,28 +34,22 @@
         {
             get
             {
-                return this._imageName;
+                return _imageName;
             }
 
             set
             {
-                if (value != this._imageName)
+                if (value != _imageName)
                 {
-                    this._imageName = value;
-                    this.RaisePropertyChanged(() => ImageName);
+                    _imageName = value;
+                    RaisePropertyChanged(() => ImageName);
                 }
             }
         }
 
         public string Name
         {
-            get
-            {
-                if (this.NativeName == this.LanguageName)
-                    return this.NativeName;
-                else
-                    return string.Format("{0} / {1}", this.NativeName, this.LanguageName);
-            }
+            get { return NativeName == LanguageName ? NativeName : string.Format("{0} / {1}", NativeName, LanguageName); }
         }
 
         /// <summary>
@@ -65,16 +59,16 @@
         {
             get
             {
-                return this._languageName;
+                return _languageName;
             }
 
             set
             {
-                if (value != this._languageName)
+                if (value != _languageName)
                 {
-                    this._languageName = value;
-                    this.RaisePropertyChanged(() => LanguageName);
-                    this.RaisePropertyChanged(() => Name);
+                    _languageName = value;
+                    RaisePropertyChanged(() => LanguageName);
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -83,16 +77,16 @@
         {
             get
             {
-                return this._nativeName;
+                return _nativeName;
             }
 
             set
             {
-                if (value != this._nativeName)
+                if (value != _nativeName)
                 {
-                    this._nativeName = value;
-                    this.RaisePropertyChanged(() => NativeName);
-                    this.RaisePropertyChanged(() => Name);
+                    _nativeName = value;
+                    RaisePropertyChanged(() => NativeName);
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }

@@ -1,9 +1,9 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
     using System;
     using System.Runtime.Serialization;
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interop;
 
     [Serializable]
     public class StructureUnknownModel : StructureBaseModel
@@ -22,19 +22,19 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_EntityBase>(this.EntityBase);
+            SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_EntityBase>(EntityBase);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_EntityBase>(this.SerializedEntity);
+            EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_EntityBase>(SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
-            this.ClassType = ClassType.Unknown;
-            this.DisplayName = this.EntityBase.TypeId.ToString();
+            ClassType = ClassType.Unknown;
+            DisplayName = EntityBase.TypeId.ToString();
         }
 
         #endregion

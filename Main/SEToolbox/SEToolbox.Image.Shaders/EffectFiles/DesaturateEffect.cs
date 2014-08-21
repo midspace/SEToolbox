@@ -22,7 +22,7 @@ namespace SEToolbox.ImageShaders
         /// <summary>
         /// Gets or sets the Input of the shader.
         /// </summary>
-        public static readonly DependencyProperty InputProperty = ShaderEffect.RegisterPixelShaderSamplerProperty("Input", typeof(DesaturateEffect), 0);
+        public static readonly DependencyProperty InputProperty = RegisterPixelShaderSamplerProperty("Input", typeof(DesaturateEffect), 0);
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace SEToolbox.ImageShaders
         /// <summary>
         /// The shader instance.
         /// </summary>
-        private static PixelShader pixelShader;
+        private static readonly PixelShader pixelShader;
 
         #endregion
 
@@ -42,8 +42,7 @@ namespace SEToolbox.ImageShaders
         /// </summary>
         static DesaturateEffect()
         {
-            pixelShader = new PixelShader();
-            pixelShader.UriSource = Global.MakePackUri("ShaderSource/Desaturate.ps");
+            pixelShader = new PixelShader { UriSource = Global.MakePackUri("ShaderSource/Desaturate.ps") };
         }
 
         /// <summary>
@@ -51,8 +50,7 @@ namespace SEToolbox.ImageShaders
         /// </summary>
         public DesaturateEffect()
         {
-            this.PixelShader = pixelShader;
-
+            PixelShader = pixelShader;
             UpdateShaderValue(InputProperty);
         }
 
@@ -61,7 +59,7 @@ namespace SEToolbox.ImageShaders
         /// <summary>
         /// Gets or sets the input used in the shader.
         /// </summary>
-		[System.ComponentModel.BrowsableAttribute(false)]
+        [System.ComponentModel.BrowsableAttribute(false)]
         public Brush Input
         {
             get { return (Brush)GetValue(InputProperty); }

@@ -11,8 +11,8 @@
 namespace SEToolbox.Interop.Asteroids
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
+
     using VRageMath;
 
     class MyVoxelMaterialCell
@@ -33,7 +33,7 @@ namespace SEToolbox.Interop.Asteroids
         private byte[] _materials;
         private byte[] _indestructibleContent;
         private byte _averageCellMaterial;
-        private readonly Dictionary<byte, long> CellMaterialCounts = new Dictionary<byte, long>();
+        private readonly Dictionary<byte, long> _cellMaterialCounts = new Dictionary<byte, long>();
 
         #endregion
 
@@ -42,7 +42,7 @@ namespace SEToolbox.Interop.Asteroids
         public MyVoxelMaterialCell(byte defaultMaterialIndex, byte defaultIndestructibleContents)
         {
             //  By default cell contains only one single material
-            this.Reset(defaultMaterialIndex, defaultIndestructibleContents);
+            Reset(defaultMaterialIndex, defaultIndestructibleContents);
         }
 
         #endregion
@@ -133,25 +133,25 @@ namespace SEToolbox.Interop.Asteroids
                 {
                     var material = this._materials[xyz];
 
-                    if (!CellMaterialCounts.ContainsKey(material))
-                        CellMaterialCounts.Add(material, 1);
+                    if (!_cellMaterialCounts.ContainsKey(material))
+                        _cellMaterialCounts.Add(material, 1);
                     else
-                        CellMaterialCounts[material]++;
+                        _cellMaterialCounts[material]++;
                 }
 
                 long maxNum = 0;
 
-                var keys = CellMaterialCounts.Keys.ToArray();
+                var keys = _cellMaterialCounts.Keys.ToArray();
                 foreach (var key in keys)
                 {
-                    var val = CellMaterialCounts[key];
+                    var val = _cellMaterialCounts[key];
 
                     if (val > maxNum)
                     {
                         maxNum = val;
                         this._averageCellMaterial = key;
                     }
-                    CellMaterialCounts[key] = 0; // Erase for next operation
+                    _cellMaterialCounts[key] = 0; // Erase for next operation
                 }
             }
         }

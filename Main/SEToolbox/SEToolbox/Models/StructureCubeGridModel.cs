@@ -1,10 +1,5 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.VRageData;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -14,6 +9,12 @@
     using System.Runtime.Serialization;
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders.VRageData;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
     using VRageMath;
 
     [Serializable]
@@ -81,8 +82,8 @@
         public StructureCubeGridModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
             : base(entityBase, settings)
         {
-            this.IsSubsSystemNotReady = true;
-            this.IsConstructionNotReady = true;
+            IsSubsSystemNotReady = true;
+            IsConstructionNotReady = true;
         }
 
         #endregion
@@ -93,23 +94,23 @@
         {
             get
             {
-                return this.EntityBase as MyObjectBuilder_CubeGrid;
+                return EntityBase as MyObjectBuilder_CubeGrid;
             }
         }
 
-        public Sandbox.Common.ObjectBuilders.MyCubeSize GridSize
+        public MyCubeSize GridSize
         {
             get
             {
-                return this.CubeGrid.GridSizeEnum;
+                return CubeGrid.GridSizeEnum;
             }
 
             set
             {
-                if (value != this.CubeGrid.GridSizeEnum)
+                if (value != CubeGrid.GridSizeEnum)
                 {
-                    this.CubeGrid.GridSizeEnum = value;
-                    this.RaisePropertyChanged(() => GridSize);
+                    CubeGrid.GridSizeEnum = value;
+                    RaisePropertyChanged(() => GridSize);
                 }
             }
         }
@@ -118,15 +119,15 @@
         {
             get
             {
-                return this.CubeGrid.IsStatic;
+                return CubeGrid.IsStatic;
             }
 
             set
             {
-                if (value != this.CubeGrid.IsStatic)
+                if (value != CubeGrid.IsStatic)
                 {
-                    this.CubeGrid.IsStatic = value;
-                    this.RaisePropertyChanged(() => IsStatic);
+                    CubeGrid.IsStatic = value;
+                    RaisePropertyChanged(() => IsStatic);
                 }
             }
         }
@@ -135,15 +136,15 @@
         {
             get
             {
-                return this.CubeGrid.DampenersEnabled;
+                return CubeGrid.DampenersEnabled;
             }
 
             set
             {
-                if (value != this.CubeGrid.DampenersEnabled)
+                if (value != CubeGrid.DampenersEnabled)
                 {
-                    this.CubeGrid.DampenersEnabled = value;
-                    this.RaisePropertyChanged(() => Dampeners);
+                    CubeGrid.DampenersEnabled = value;
+                    RaisePropertyChanged(() => Dampeners);
                 }
             }
         }
@@ -152,15 +153,15 @@
         {
             get
             {
-                return this._min;
+                return _min;
             }
 
             set
             {
-                if (value != this._min)
+                if (value != _min)
                 {
-                    this._min = value;
-                    this.RaisePropertyChanged(() => Min);
+                    _min = value;
+                    RaisePropertyChanged(() => Min);
                 }
             }
         }
@@ -169,15 +170,15 @@
         {
             get
             {
-                return this._max;
+                return _max;
             }
 
             set
             {
-                if (value != this._max)
+                if (value != _max)
                 {
-                    this._max = value;
-                    this.RaisePropertyChanged(() => Max);
+                    _max = value;
+                    RaisePropertyChanged(() => Max);
                 }
             }
         }
@@ -186,15 +187,15 @@
         {
             get
             {
-                return this._scale;
+                return _scale;
             }
 
             set
             {
-                if (value != this._scale)
+                if (value != _scale)
                 {
-                    this._scale = value;
-                    this.RaisePropertyChanged(() => Scale);
+                    _scale = value;
+                    RaisePropertyChanged(() => Scale);
                 }
             }
         }
@@ -203,15 +204,15 @@
         {
             get
             {
-                return this._size;
+                return _size;
             }
 
             set
             {
-                if (value != this._size)
+                if (value != _size)
                 {
-                    this._size = value;
-                    this.RaisePropertyChanged(() => Size);
+                    _size = value;
+                    RaisePropertyChanged(() => Size);
                 }
             }
         }
@@ -220,15 +221,15 @@
         {
             get
             {
-                return this._pilots;
+                return _pilots;
             }
 
             set
             {
-                if (value != this._pilots)
+                if (value != _pilots)
                 {
-                    this._pilots = value;
-                    this.RaisePropertyChanged(() => Pilots);
+                    _pilots = value;
+                    RaisePropertyChanged(() => Pilots);
                 }
             }
         }
@@ -237,7 +238,7 @@
         {
             get
             {
-                return this.Pilots > 0;
+                return Pilots > 0;
             }
         }
 
@@ -246,7 +247,7 @@
             get
             {
                 // TODO: check the CubeBlocks/ cube.IntegrityPercent
-                return true; //this.CubeGrid.Skeleton.Count > 0;
+                return true; //CubeGrid.Skeleton.Count > 0;
             }
         }
 
@@ -255,7 +256,7 @@
             get
             {
                 // TODO: create a seperate property for the CubeBlocks/ cube.IntegrityPercent
-                return this.CubeGrid.Skeleton.Count;
+                return CubeGrid.Skeleton.Count;
             }
         }
 
@@ -263,7 +264,7 @@
         {
             get
             {
-                return this.CubeGrid.LinearVelocity.ToVector3().LinearVector();
+                return CubeGrid.LinearVelocity.ToVector3().LinearVector();
             }
         }
 
@@ -272,7 +273,7 @@
         {
             get
             {
-                return this.CubeGrid.AngularVelocity.ToVector3().LinearVector();
+                return CubeGrid.AngularVelocity.ToVector3().LinearVector();
             }
         }
 
@@ -280,15 +281,15 @@
         {
             get
             {
-                return this._timeToProduce;
+                return _timeToProduce;
             }
 
             set
             {
-                if (value != this._timeToProduce)
+                if (value != _timeToProduce)
                 {
-                    this._timeToProduce = value;
-                    this.RaisePropertyChanged(() => TimeToProduce);
+                    _timeToProduce = value;
+                    RaisePropertyChanged(() => TimeToProduce);
                 }
             }
         }
@@ -297,7 +298,7 @@
         {
             get
             {
-                return this.CubeGrid.CubeBlocks.Count;
+                return CubeGrid.CubeBlocks.Count;
             }
         }
 
@@ -305,15 +306,15 @@
         {
             get
             {
-                return this._cockpitOrientation;
+                return _cockpitOrientation;
             }
 
             set
             {
-                if (value != this._cockpitOrientation)
+                if (value != _cockpitOrientation)
                 {
-                    this._cockpitOrientation = value;
-                    this.RaisePropertyChanged(() => CockpitOrientation);
+                    _cockpitOrientation = value;
+                    RaisePropertyChanged(() => CockpitOrientation);
                 }
             }
         }
@@ -325,15 +326,15 @@
         {
             get
             {
-                return this._cubeAssets;
+                return _cubeAssets;
             }
 
             set
             {
-                if (value != this._cubeAssets)
+                if (value != _cubeAssets)
                 {
-                    this._cubeAssets = value;
-                    this.RaisePropertyChanged(() => CubeAssets);
+                    _cubeAssets = value;
+                    RaisePropertyChanged(() => CubeAssets);
                 }
             }
         }
@@ -345,15 +346,15 @@
         {
             get
             {
-                return this._componentAssets;
+                return _componentAssets;
             }
 
             set
             {
-                if (value != this._componentAssets)
+                if (value != _componentAssets)
                 {
-                    this._componentAssets = value;
-                    this.RaisePropertyChanged(() => ComponentAssets);
+                    _componentAssets = value;
+                    RaisePropertyChanged(() => ComponentAssets);
                 }
             }
         }
@@ -365,15 +366,15 @@
         {
             get
             {
-                return this._ingotAssets;
+                return _ingotAssets;
             }
 
             set
             {
-                if (value != this._ingotAssets)
+                if (value != _ingotAssets)
                 {
-                    this._ingotAssets = value;
-                    this.RaisePropertyChanged(() => IngotAssets);
+                    _ingotAssets = value;
+                    RaisePropertyChanged(() => IngotAssets);
                 }
             }
         }
@@ -385,15 +386,15 @@
         {
             get
             {
-                return this._oreAssets;
+                return _oreAssets;
             }
 
             set
             {
-                if (value != this._oreAssets)
+                if (value != _oreAssets)
                 {
-                    this._oreAssets = value;
-                    this.RaisePropertyChanged(() => OreAssets);
+                    _oreAssets = value;
+                    RaisePropertyChanged(() => OreAssets);
                 }
             }
         }
@@ -402,15 +403,15 @@
         {
             get
             {
-                return this._activeComponentFilter;
+                return _activeComponentFilter;
             }
 
             set
             {
-                if (value != this._activeComponentFilter)
+                if (value != _activeComponentFilter)
                 {
-                    this._activeComponentFilter = value;
-                    this.RaisePropertyChanged(() => ActiveComponentFilter);
+                    _activeComponentFilter = value;
+                    RaisePropertyChanged(() => ActiveComponentFilter);
                 }
             }
         }
@@ -419,15 +420,15 @@
         {
             get
             {
-                return this._componentFilter;
+                return _componentFilter;
             }
 
             set
             {
-                if (value != this._componentFilter)
+                if (value != _componentFilter)
                 {
-                    this._componentFilter = value;
-                    this.RaisePropertyChanged(() => ComponentFilter);
+                    _componentFilter = value;
+                    RaisePropertyChanged(() => ComponentFilter);
                 }
             }
         }
@@ -436,43 +437,43 @@
         {
             get
             {
-                return this._cubeList;
+                return _cubeList;
             }
 
             set
             {
-                if (value != this._cubeList)
+                if (value != _cubeList)
                 {
-                    this._cubeList = value;
-                    this.RaisePropertyChanged(() => CubeList);
+                    _cubeList = value;
+                    RaisePropertyChanged(() => CubeList);
                 }
             }
         }
 
         public bool IsSubsSystemNotReady
         {
-            get { return this._isSubsSystemNotReady; }
+            get { return _isSubsSystemNotReady; }
 
             set
             {
-                if (value != this._isSubsSystemNotReady)
+                if (value != _isSubsSystemNotReady)
                 {
-                    this._isSubsSystemNotReady = value;
-                    this.RaisePropertyChanged(() => IsSubsSystemNotReady);
+                    _isSubsSystemNotReady = value;
+                    RaisePropertyChanged(() => IsSubsSystemNotReady);
                 }
             }
         }
 
         public bool IsConstructionNotReady
         {
-            get { return this._isConstructionNotReady; }
+            get { return _isConstructionNotReady; }
 
             set
             {
-                if (value != this._isConstructionNotReady)
+                if (value != _isConstructionNotReady)
                 {
-                    this._isConstructionNotReady = value;
-                    this.RaisePropertyChanged(() => IsConstructionNotReady);
+                    _isConstructionNotReady = value;
+                    RaisePropertyChanged(() => IsConstructionNotReady);
                 }
             }
         }
@@ -484,42 +485,42 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_CubeGrid>(this.CubeGrid);
+            SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_CubeGrid>(CubeGrid);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_CubeGrid>(this.SerializedEntity);
+            EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_CubeGrid>(SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
-            double scaleMultiplyer = this.CubeGrid.GridSizeEnum.ToLength();
-            if (this.IsStatic && this.CubeGrid.GridSizeEnum == MyCubeSize.Large)
+            double scaleMultiplyer = CubeGrid.GridSizeEnum.ToLength();
+            if (IsStatic && CubeGrid.GridSizeEnum == MyCubeSize.Large)
             {
-                this.ClassType = ClassType.Station;
+                ClassType = ClassType.Station;
             }
-            else if (!this.IsStatic && this.CubeGrid.GridSizeEnum == MyCubeSize.Large)
+            else if (!IsStatic && CubeGrid.GridSizeEnum == MyCubeSize.Large)
             {
-                this.ClassType = ClassType.LargeShip;
+                ClassType = ClassType.LargeShip;
             }
-            else if (!this.IsStatic && this.CubeGrid.GridSizeEnum == MyCubeSize.Small)
+            else if (!IsStatic && CubeGrid.GridSizeEnum == MyCubeSize.Small)
             {
-                this.ClassType = ClassType.SmallShip;
+                ClassType = ClassType.SmallShip;
             }
 
             var min = new Point3D(int.MaxValue, int.MaxValue, int.MaxValue);
             var max = new Point3D(int.MinValue, int.MinValue, int.MinValue);
             float totalMass = 0;
 
-            foreach (var block in this.CubeGrid.CubeBlocks)
+            foreach (var block in CubeGrid.CubeBlocks)
             {
                 min.X = Math.Min(min.X, block.Min.X);
                 min.Y = Math.Min(min.Y, block.Min.Y);
                 min.Z = Math.Min(min.Z, block.Min.Z);
 
-                var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, CubeGrid.GridSizeEnum, block.SubtypeName);
 
                 // definition is null when the block no longer exists in the Cube definitions. Ie, Ladder, or a Mod that was removed.
                 if (cubeDefinition == null || (cubeDefinition.Size.X == 1 && cubeDefinition.Size.Y == 1 && cubeDefinition.Size.z == 1))
@@ -537,14 +538,14 @@
                     max.Z = Math.Max(max.Z, block.Min.Z + orientSize.Z);
                 }
 
-                var cubeBlockDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                var cubeBlockDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, CubeGrid.GridSizeEnum, block.SubtypeName);
 
                 float cubeMass = 0;
                 if (cubeBlockDefinition != null)
                 {
                     foreach (var component in cubeBlockDefinition.Components)
                     {
-                        var cd = SpaceEngineersApi.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+                        var cd = (MyObjectBuilder_ComponentDefinition)SpaceEngineersApi.GetDefinition(component.Type, component.Subtype);
                         float componentMass = cd.Mass * component.Count;
                         cubeMass += componentMass;
                     }
@@ -554,7 +555,7 @@
             }
 
             var cockpitOrientation = "None";
-            var cockpits = this.CubeGrid.CubeBlocks.Where(b => b is MyObjectBuilder_Cockpit).ToArray();
+            var cockpits = CubeGrid.CubeBlocks.Where(b => b is MyObjectBuilder_Cockpit).ToArray();
             if (cockpits.Length > 0)
             {
                 var count = cockpits.Count(b => b.BlockOrientation.Forward == cockpits[0].BlockOrientation.Forward && b.BlockOrientation.Up == cockpits[0].BlockOrientation.Up);
@@ -569,23 +570,23 @@
                     cockpitOrientation = "Mixed";
                 }
             }
-            this.CockpitOrientation = cockpitOrientation;
+            CockpitOrientation = cockpitOrientation;
 
             var scale = max - min;
             scale.X++;
             scale.Y++;
             scale.Z++;
 
-            this.Min = min;
-            this.Max = max;
-            this.Scale = scale;
-            this.Size = new Size3D(scale.X * scaleMultiplyer, scale.Y * scaleMultiplyer, scale.Z * scaleMultiplyer);
-            this.Mass = totalMass;
+            Min = min;
+            Max = max;
+            Scale = scale;
+            Size = new Size3D(scale.X * scaleMultiplyer, scale.Y * scaleMultiplyer, scale.Z * scaleMultiplyer);
+            Mass = totalMass;
 
-            this.DisplayName = this.CubeGrid.DisplayName;
+            DisplayName = CubeGrid.DisplayName;
 
             // Add Beacon or Antenna detail for the Description.
-            var broadcasters = this.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString()
+            var broadcasters = CubeGrid.CubeBlocks.Where(b => b.SubtypeName == SubtypeId.LargeBlockBeacon.ToString()
                 || b.SubtypeName == SubtypeId.SmallBlockBeacon.ToString()
                 || b.SubtypeName == SubtypeId.LargeBlockRadioAntenna.ToString()
                 || b.SubtypeName == SubtypeId.SmallBlockRadioAntenna.ToString()).ToArray();
@@ -597,7 +598,7 @@
                 broadcastNames = String.Join("|", beaconNames.Concat(antennaNames).OrderBy(s => s));
             }
 
-            this.Description = string.Format("{0}×{1}×{2} {3}", this.Scale.X, this.Scale.Y, this.Scale.Z, broadcastNames);
+            Description = string.Format("{0}×{1}×{2} {3}", Scale.X, Scale.Y, Scale.Z, broadcastNames);
 
 
             // TODO:
@@ -623,7 +624,7 @@
                     // Because I've bound models to the view, this is going to get messy.
                     var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-                    if (this.IsConstructionNotReady)
+                    if (IsConstructionNotReady)
                     {
                         var ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
                         var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
@@ -635,7 +636,7 @@
                         var ingotAssets = new List<OreAssetModel>();
                         var oreAssets = new List<OreAssetModel>();
 
-                        foreach (var block in this.CubeGrid.CubeBlocks)
+                        foreach (var block in CubeGrid.CubeBlocks)
                         {
                             var blockName = block.SubtypeName;
                             if (string.IsNullOrEmpty(blockName))
@@ -643,7 +644,7 @@
                                 blockName = block.TypeId.ToString();
                             }
 
-                            var cubeBlockDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                            var cubeBlockDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, CubeGrid.GridSizeEnum, block.SubtypeName);
 
                             float cubeMass = 0;
                             TimeSpan blockTime = TimeSpan.Zero;
@@ -657,7 +658,7 @@
                                     SpaceEngineersApi.AccumulateCubeBlueprintRequirements(component.Subtype, component.Type, component.Count, ingotRequirements, out componentTime);
                                     timeTaken += componentTime;
 
-                                    var cd = SpaceEngineersApi.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+                                    var cd = (MyObjectBuilder_ComponentDefinition)SpaceEngineersApi.GetDefinition(component.Type, component.Subtype);
                                     float componentMass = cd.Mass * component.Count;
                                     float componentVolume = cd.Volume.Value * component.Count;
                                     cubeMass += componentMass;
@@ -703,7 +704,7 @@
                         {
                             TimeSpan ingotTime;
                             SpaceEngineersApi.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.Id.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
-                            var cd = SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
+                            var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId);
                             var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
                             var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture };
                             ingotAssets.Add(ingotAsset);
@@ -712,33 +713,33 @@
 
                         foreach (var kvp in oreRequirements)
                         {
-                            var cd = SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId) as MyObjectBuilder_PhysicalItemDefinition;
+                            var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId);
                             var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
                             var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, TextureFile = componentTexture };
                             oreAssets.Add(oreAsset);
                         }
 
-                        this._dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
+                        _dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
                         {
-                            this.CubeAssets = cubeAssets;
-                            this.ComponentAssets = componentAssets;
-                            this.IngotAssets = ingotAssets;
-                            this.OreAssets = oreAssets;
-                            this.TimeToProduce = timeTaken;
+                            CubeAssets = cubeAssets;
+                            ComponentAssets = componentAssets;
+                            IngotAssets = ingotAssets;
+                            OreAssets = oreAssets;
+                            TimeToProduce = timeTaken;
                         });
 
-                        this.IsConstructionNotReady = false;
+                        IsConstructionNotReady = false;
                     }
 
-                    if (this.IsSubsSystemNotReady)
+                    if (IsSubsSystemNotReady)
                     {
                         var cubeList = new List<CubeItemModel>();
 
-                        foreach (var block in this.CubeGrid.CubeBlocks)
+                        foreach (var block in CubeGrid.CubeBlocks)
                         {
-                            var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                            var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, CubeGrid.GridSizeEnum, block.SubtypeName);
 
-                            this._dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
+                            _dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
                             {
                                 cubeList.Add(new CubeItemModel(block, cubeDefinition, Settings)
                                 {
@@ -747,12 +748,12 @@
                             });
                         }
 
-                        this._dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
+                        _dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
                         {
-                            this.CubeList = new ObservableCollection<CubeItemModel>(cubeList);
+                            CubeList = new ObservableCollection<CubeItemModel>(cubeList);
                         });
 
-                        this.IsSubsSystemNotReady = false;
+                        IsSubsSystemNotReady = false;
                     }
                 }
             };
@@ -766,55 +767,55 @@
         /// <returns></returns>
         public List<MyObjectBuilder_Cockpit> GetActiveCockpits()
         {
-            var cubes = this.CubeGrid.CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
+            var cubes = CubeGrid.CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
             return new List<MyObjectBuilder_Cockpit>(cubes.Cast<MyObjectBuilder_Cockpit>());
         }
 
         public void RepairAllDamage()
         {
-            if (this.CubeGrid.Skeleton == null)
-                this.CubeGrid.Skeleton = new System.Collections.Generic.List<BoneInfo>();
+            if (CubeGrid.Skeleton == null)
+                CubeGrid.Skeleton = new List<BoneInfo>();
             else
-                this.CubeGrid.Skeleton.Clear();
+                CubeGrid.Skeleton.Clear();
 
-            foreach (var cube in this.CubeGrid.CubeBlocks)
+            foreach (var cube in CubeGrid.CubeBlocks)
             {
                 cube.IntegrityPercent = cube.BuildPercent;
             }
 
-            this.RaisePropertyChanged(() => IsDamaged);
-            this.RaisePropertyChanged(() => DamageCount);
+            RaisePropertyChanged(() => IsDamaged);
+            RaisePropertyChanged(() => DamageCount);
         }
 
         public void ResetVelocity()
         {
-            this.CubeGrid.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.RaisePropertyChanged(() => LinearVelocity);
+            CubeGrid.LinearVelocity = new Vector3(0, 0, 0);
+            CubeGrid.AngularVelocity = new Vector3(0, 0, 0);
+            RaisePropertyChanged(() => LinearVelocity);
         }
 
         public void ReverseVelocity()
         {
-            this.CubeGrid.LinearVelocity = new VRageMath.Vector3(this.CubeGrid.LinearVelocity.X * -1, this.CubeGrid.LinearVelocity.Y * -1, this.CubeGrid.LinearVelocity.Z * -1);
-            this.CubeGrid.AngularVelocity = new VRageMath.Vector3(this.CubeGrid.AngularVelocity.X * -1, this.CubeGrid.AngularVelocity.Y * -1, this.CubeGrid.AngularVelocity.Z * -1);
-            this.RaisePropertyChanged(() => LinearVelocity);
+            CubeGrid.LinearVelocity = new Vector3(CubeGrid.LinearVelocity.X * -1, CubeGrid.LinearVelocity.Y * -1, CubeGrid.LinearVelocity.Z * -1);
+            CubeGrid.AngularVelocity = new Vector3(CubeGrid.AngularVelocity.X * -1, CubeGrid.AngularVelocity.Y * -1, CubeGrid.AngularVelocity.Z * -1);
+            RaisePropertyChanged(() => LinearVelocity);
         }
 
         public void MaxVelocityAtPlayer(Vector3 playerPosition)
         {
-            var v = playerPosition - this.CubeGrid.PositionAndOrientation.Value.Position;
+            var v = playerPosition - CubeGrid.PositionAndOrientation.Value.Position;
             v.Normalize();
             v = Vector3.Multiply(v, SpaceEngineersConsts.MaxShipVelocity);
 
-            this.CubeGrid.LinearVelocity = v;
-            this.CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.RaisePropertyChanged(() => LinearVelocity);
+            CubeGrid.LinearVelocity = v;
+            CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
+            RaisePropertyChanged(() => LinearVelocity);
         }
 
         public bool ConvertFromLightToHeavyArmor()
         {
             var count = 0;
-            foreach (var cube in this.CubeGrid.CubeBlocks)
+            foreach (var cube in CubeGrid.CubeBlocks)
             {
                 if (cube.SubtypeName.StartsWith("LargeBlockArmor"))
                 {
@@ -828,14 +829,14 @@
                 }
             }
 
-            this.UpdateGeneralFromEntityBase();
+            UpdateGeneralFromEntityBase();
             return count > 0;
         }
 
         public bool ConvertFromHeavyToLightArmor()
         {
             var count = 0;
-            foreach (var cube in this.CubeGrid.CubeBlocks)
+            foreach (var cube in CubeGrid.CubeBlocks)
             {
                 if (cube.SubtypeName.StartsWith("LargeHeavyBlockArmor"))
                 {
@@ -849,42 +850,42 @@
                 }
             }
 
-            this.UpdateGeneralFromEntityBase();
+            UpdateGeneralFromEntityBase();
             return count > 0;
         }
 
         public void ConvertToFramework(float value)
         {
-            foreach (var cube in this.CubeGrid.CubeBlocks)
+            foreach (var cube in CubeGrid.CubeBlocks)
             {
                 cube.IntegrityPercent = value;
                 cube.BuildPercent = value;
             }
 
-            this.UpdateGeneralFromEntityBase();
+            UpdateGeneralFromEntityBase();
         }
 
         public void ConvertToStation()
         {
-            this.ResetVelocity();
-            this.CubeGrid.IsStatic = true;
-            this.UpdateGeneralFromEntityBase();
+            ResetVelocity();
+            CubeGrid.IsStatic = true;
+            UpdateGeneralFromEntityBase();
         }
 
         public void ReorientStation()
         {
-            var pos = this.CubeGrid.PositionAndOrientation.Value;
+            var pos = CubeGrid.PositionAndOrientation.Value;
             pos.Position = pos.Position.RoundOff(MyCubeSize.Large.ToLength());
             pos.Forward = new SerializableVector3(-1, 0, 0); // The Station orientation has to be fixed, otherwise it glitches when you copy the object in game.
             pos.Up = new SerializableVector3(0, 1, 0);
-            this.CubeGrid.PositionAndOrientation = pos;
+            CubeGrid.PositionAndOrientation = pos;
         }
 
         public void RotateCubes(VRageMath.Quaternion quaternion)
         {
-            foreach (var cube in this.CubeGrid.CubeBlocks)
+            foreach (var cube in CubeGrid.CubeBlocks)
             {
-                var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, this.CubeGrid.GridSizeEnum, cube.SubtypeName);
+                var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, CubeGrid.GridSizeEnum, cube.SubtypeName);
 
                 if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
                 {
@@ -910,7 +911,7 @@
             }
 
             // Rotate Groupings.
-            foreach (var group in this.CubeGrid.BlockGroups)
+            foreach (var group in CubeGrid.BlockGroups)
             {
                 for (var i = 0; i < group.Blocks.Count; i++)
                 {
@@ -921,7 +922,7 @@
             }
 
             // TODO: Rotate ConveyorLines
-            foreach (var conveyorLine in this.CubeGrid.ConveyorLines)
+            foreach (var conveyorLine in CubeGrid.ConveyorLines)
             {
                 //conveyorLine.StartPosition = Vector3I.Transform(conveyorLine.StartPosition, quaternion);
                 //conveyorLine.StartDirection = 
@@ -930,47 +931,47 @@
             }
 
             // Rotate the ship also to maintain the appearance that it has not changed.
-            var o = this.CubeGrid.PositionAndOrientation.Value.ToQuaternion() * VRageMath.Quaternion.Inverse(quaternion);
+            var o = CubeGrid.PositionAndOrientation.Value.ToQuaternion() * VRageMath.Quaternion.Inverse(quaternion);
             o.Normalize();
             var p = new MyPositionAndOrientation(o.ToMatrix());
 
-            this.CubeGrid.PositionAndOrientation = new MyPositionAndOrientation()
+            CubeGrid.PositionAndOrientation = new MyPositionAndOrientation
             {
-                Position = this.CubeGrid.PositionAndOrientation.Value.Position,
+                Position = CubeGrid.PositionAndOrientation.Value.Position,
                 Forward = p.Forward,
                 Up = p.Up
             };
 
-            this.UpdateGeneralFromEntityBase();
+            UpdateGeneralFromEntityBase();
         }
 
         public void ConvertToShip()
         {
-            this.CubeGrid.IsStatic = false;
-            this.UpdateGeneralFromEntityBase();
+            CubeGrid.IsStatic = false;
+            UpdateGeneralFromEntityBase();
         }
 
         public bool ConvertToCornerArmor()
         {
             var count = 0;
-            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Corner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCorner.ToString(); return c; }).ToList().Count;
-            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Slope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorSlope.ToString(); return c; }).ToList().Count;
-            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_CornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCornerInv.ToString(); return c; }).ToList().Count;
+            count += CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Corner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCorner.ToString(); return c; }).ToList().Count;
+            count += CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_Slope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorSlope.ToString(); return c; }).ToList().Count;
+            count += CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeRoundArmor_CornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeBlockArmorCornerInv.ToString(); return c; }).ToList().Count;
             return count > 0;
         }
 
         public bool ConvertToRoundArmor()
         {
             var count = 0;
-            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCorner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Corner.ToString(); return c; }).ToList().Count;
-            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorSlope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Slope.ToString(); return c; }).ToList().Count;
-            count += this.CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_CornerInv.ToString(); return c; }).ToList().Count;
+            count += CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCorner.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Corner.ToString(); return c; }).ToList().Count;
+            count += CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorSlope.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_Slope.ToString(); return c; }).ToList().Count;
+            count += CubeGrid.CubeBlocks.Where(c => c.SubtypeName == SubtypeId.LargeBlockArmorCornerInv.ToString()).Select(c => { c.SubtypeName = SubtypeId.LargeRoundArmor_CornerInv.ToString(); return c; }).ToList().Count;
             return count > 0;
         }
 
         public bool ConvertLadderToPassage()
         {
-            var list = this.CubeGrid.CubeBlocks.Where(c => c is MyObjectBuilder_Ladder).ToArray();
+            var list = CubeGrid.CubeBlocks.Where(c => c is MyObjectBuilder_Ladder).ToArray();
 
             for (var i = 0; i < list.Length; i++)
             {
@@ -984,8 +985,8 @@
                     Min = list[i].Min,
                     SubtypeName = list[i].SubtypeName
                 };
-                this.CubeGrid.CubeBlocks.Remove(list[i]);
-                this.CubeGrid.CubeBlocks.Add(c);
+                CubeGrid.CubeBlocks.Remove(list[i]);
+                CubeGrid.CubeBlocks.Add(c);
             }
 
             return list.Length > 0;
@@ -1005,22 +1006,22 @@
 
             if (!usePlane)
             // Find mirror Axis.
-            //if (!this.CubeGrid.XMirroxPlane.HasValue && !this.CubeGrid.YMirroxPlane.HasValue && !this.CubeGrid.ZMirroxPlane.HasValue)
+            //if (!CubeGrid.XMirroxPlane.HasValue && !CubeGrid.YMirroxPlane.HasValue && !CubeGrid.ZMirroxPlane.HasValue)
             {
                 // Find the largest contigious exterior surface to use as the mirror.
-                var minX = this.CubeGrid.CubeBlocks.Min(c => c.Min.X);
-                var maxX = this.CubeGrid.CubeBlocks.Max(c => c.Min.X);
-                var minY = this.CubeGrid.CubeBlocks.Min(c => c.Min.Y);
-                var maxY = this.CubeGrid.CubeBlocks.Max(c => c.Min.Y);
-                var minZ = this.CubeGrid.CubeBlocks.Min(c => c.Min.Z);
-                var maxZ = this.CubeGrid.CubeBlocks.Max(c => c.Min.Z);
+                var minX = CubeGrid.CubeBlocks.Min(c => c.Min.X);
+                var maxX = CubeGrid.CubeBlocks.Max(c => c.Min.X);
+                var minY = CubeGrid.CubeBlocks.Min(c => c.Min.Y);
+                var maxY = CubeGrid.CubeBlocks.Max(c => c.Min.Y);
+                var minZ = CubeGrid.CubeBlocks.Min(c => c.Min.Z);
+                var maxZ = CubeGrid.CubeBlocks.Max(c => c.Min.Z);
 
-                var countMinX = this.CubeGrid.CubeBlocks.Count(c => c.Min.X == minX);
-                var countMinY = this.CubeGrid.CubeBlocks.Count(c => c.Min.Y == minY);
-                var countMinZ = this.CubeGrid.CubeBlocks.Count(c => c.Min.Z == minZ);
-                var countMaxX = this.CubeGrid.CubeBlocks.Count(c => c.Min.X == maxX);
-                var countMaxY = this.CubeGrid.CubeBlocks.Count(c => c.Min.Y == maxY);
-                var countMaxZ = this.CubeGrid.CubeBlocks.Count(c => c.Min.Z == maxZ);
+                var countMinX = CubeGrid.CubeBlocks.Count(c => c.Min.X == minX);
+                var countMinY = CubeGrid.CubeBlocks.Count(c => c.Min.Y == minY);
+                var countMinZ = CubeGrid.CubeBlocks.Count(c => c.Min.Z == minZ);
+                var countMaxX = CubeGrid.CubeBlocks.Count(c => c.Min.X == maxX);
+                var countMaxY = CubeGrid.CubeBlocks.Count(c => c.Min.Y == maxY);
+                var countMaxZ = CubeGrid.CubeBlocks.Count(c => c.Min.Z == maxZ);
 
                 if (countMinX > countMinY && countMinX > countMinZ && countMinX > countMaxX && countMinX > countMaxY && countMinX > countMaxZ)
                 {
@@ -1054,40 +1055,40 @@
                 }
 
                 var cubes = MirrorCubes(this, false, xMirror, xAxis, yMirror, yAxis, zMirror, zAxis).ToArray();
-                this.CubeGrid.CubeBlocks.AddRange(cubes);
+                CubeGrid.CubeBlocks.AddRange(cubes);
                 count += cubes.Length;
             }
             else
             {
                 // Use the built in Mirror plane defined in game.
-                if (this.CubeGrid.XMirroxPlane.HasValue)
+                if (CubeGrid.XMirroxPlane.HasValue)
                 {
-                    xMirror = this.CubeGrid.XMirroxOdd ? Mirror.EvenDown : Mirror.Odd; // Meaning is back to front? Or is it my reasoning?
-                    xAxis = this.CubeGrid.XMirroxPlane.Value.X;
+                    xMirror = CubeGrid.XMirroxOdd ? Mirror.EvenDown : Mirror.Odd; // Meaning is back to front? Or is it my reasoning?
+                    xAxis = CubeGrid.XMirroxPlane.Value.X;
                     var cubes = MirrorCubes(this, true, xMirror, xAxis, Mirror.None, 0, Mirror.None, 0).ToArray();
-                    this.CubeGrid.CubeBlocks.AddRange(cubes);
+                    CubeGrid.CubeBlocks.AddRange(cubes);
                     count += cubes.Length;
 
                     // TODO: mirror BlockGroups
                     // TODO: mirror ConveyorLines 
                 }
-                if (this.CubeGrid.YMirroxPlane.HasValue)
+                if (CubeGrid.YMirroxPlane.HasValue)
                 {
-                    yMirror = this.CubeGrid.YMirroxOdd ? Mirror.EvenDown : Mirror.Odd;
-                    yAxis = this.CubeGrid.YMirroxPlane.Value.Y;
+                    yMirror = CubeGrid.YMirroxOdd ? Mirror.EvenDown : Mirror.Odd;
+                    yAxis = CubeGrid.YMirroxPlane.Value.Y;
                     var cubes = MirrorCubes(this, true, Mirror.None, 0, yMirror, yAxis, Mirror.None, 0).ToArray();
-                    this.CubeGrid.CubeBlocks.AddRange(cubes);
+                    CubeGrid.CubeBlocks.AddRange(cubes);
                     count += cubes.Length;
 
                     // TODO: mirror BlockGroups
                     // TODO: mirror ConveyorLines 
                 }
-                if (this.CubeGrid.ZMirroxPlane.HasValue)
+                if (CubeGrid.ZMirroxPlane.HasValue)
                 {
-                    zMirror = this.CubeGrid.ZMirroxOdd ? Mirror.EvenUp : Mirror.Odd;
-                    zAxis = this.CubeGrid.ZMirroxPlane.Value.Z;
+                    zMirror = CubeGrid.ZMirroxOdd ? Mirror.EvenUp : Mirror.Odd;
+                    zAxis = CubeGrid.ZMirroxPlane.Value.Z;
                     var cubes = MirrorCubes(this, true, Mirror.None, 0, Mirror.None, 0, zMirror, zAxis).ToArray();
-                    this.CubeGrid.CubeBlocks.AddRange(cubes);
+                    CubeGrid.CubeBlocks.AddRange(cubes);
                     count += cubes.Length;
 
                     // TODO: mirror BlockGroups
@@ -1095,8 +1096,8 @@
                 }
             }
 
-            this.UpdateGeneralFromEntityBase();
-            this.RaisePropertyChanged(() => BlockCount);
+            UpdateGeneralFromEntityBase();
+            RaisePropertyChanged(() => BlockCount);
             return count > 0;
         }
 
@@ -1261,32 +1262,32 @@
             return blocks;
         }
 
-        private static readonly Dictionary<OrientType, SerializableBlockOrientation> BaseOrientations = new Dictionary<OrientType, SerializableBlockOrientation>()
+        private static readonly Dictionary<OrientType, SerializableBlockOrientation> BaseOrientations = new Dictionary<OrientType, SerializableBlockOrientation>
         {
-            {OrientType.Axis24_Backward_Down, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Down)},
-            {OrientType.Axis24_Backward_Left, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Left)},
-            {OrientType.Axis24_Backward_Right, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Right)},
-            {OrientType.Axis24_Backward_Up, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Backward, VRageMath.Base6Directions.Direction.Up)},
-            {OrientType.Axis24_Down_Backward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Backward)},
-            {OrientType.Axis24_Down_Forward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Forward)},
-            {OrientType.Axis24_Down_Left, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Left)},
-            {OrientType.Axis24_Down_Right, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right)},
-            {OrientType.Axis24_Forward_Down, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Down)},
-            {OrientType.Axis24_Forward_Left, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Left)},
-            {OrientType.Axis24_Forward_Right, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Right)},
-            {OrientType.Axis24_Forward_Up, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up)},
-            {OrientType.Axis24_Left_Backward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Backward)},
-            {OrientType.Axis24_Left_Down, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Down)},
-            {OrientType.Axis24_Left_Forward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Forward)},
-            {OrientType.Axis24_Left_Up, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Left, VRageMath.Base6Directions.Direction.Up)},
-            {OrientType.Axis24_Right_Backward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Backward)},
-            {OrientType.Axis24_Right_Down, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Down)},
-            {OrientType.Axis24_Right_Forward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Forward)},
-            {OrientType.Axis24_Right_Up, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Right, VRageMath.Base6Directions.Direction.Up)},
-            {OrientType.Axis24_Up_Backward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Backward)},
-            {OrientType.Axis24_Up_Forward, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Forward)},
-            {OrientType.Axis24_Up_Left, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Left)},
-            {OrientType.Axis24_Up_Right, new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Up, VRageMath.Base6Directions.Direction.Right)},
+            {OrientType.Axis24_Backward_Down, new SerializableBlockOrientation(Base6Directions.Direction.Backward, Base6Directions.Direction.Down)},
+            {OrientType.Axis24_Backward_Left, new SerializableBlockOrientation(Base6Directions.Direction.Backward, Base6Directions.Direction.Left)},
+            {OrientType.Axis24_Backward_Right, new SerializableBlockOrientation(Base6Directions.Direction.Backward, Base6Directions.Direction.Right)},
+            {OrientType.Axis24_Backward_Up, new SerializableBlockOrientation(Base6Directions.Direction.Backward, Base6Directions.Direction.Up)},
+            {OrientType.Axis24_Down_Backward, new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Backward)},
+            {OrientType.Axis24_Down_Forward, new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Forward)},
+            {OrientType.Axis24_Down_Left, new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Left)},
+            {OrientType.Axis24_Down_Right, new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Right)},
+            {OrientType.Axis24_Forward_Down, new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Down)},
+            {OrientType.Axis24_Forward_Left, new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Left)},
+            {OrientType.Axis24_Forward_Right, new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Right)},
+            {OrientType.Axis24_Forward_Up, new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Up)},
+            {OrientType.Axis24_Left_Backward, new SerializableBlockOrientation(Base6Directions.Direction.Left, Base6Directions.Direction.Backward)},
+            {OrientType.Axis24_Left_Down, new SerializableBlockOrientation(Base6Directions.Direction.Left, Base6Directions.Direction.Down)},
+            {OrientType.Axis24_Left_Forward, new SerializableBlockOrientation(Base6Directions.Direction.Left, Base6Directions.Direction.Forward)},
+            {OrientType.Axis24_Left_Up, new SerializableBlockOrientation(Base6Directions.Direction.Left, Base6Directions.Direction.Up)},
+            {OrientType.Axis24_Right_Backward, new SerializableBlockOrientation(Base6Directions.Direction.Right, Base6Directions.Direction.Backward)},
+            {OrientType.Axis24_Right_Down, new SerializableBlockOrientation(Base6Directions.Direction.Right, Base6Directions.Direction.Down)},
+            {OrientType.Axis24_Right_Forward, new SerializableBlockOrientation(Base6Directions.Direction.Right, Base6Directions.Direction.Forward)},
+            {OrientType.Axis24_Right_Up, new SerializableBlockOrientation(Base6Directions.Direction.Right, Base6Directions.Direction.Up)},
+            {OrientType.Axis24_Up_Backward, new SerializableBlockOrientation(Base6Directions.Direction.Up, Base6Directions.Direction.Backward)},
+            {OrientType.Axis24_Up_Forward, new SerializableBlockOrientation(Base6Directions.Direction.Up, Base6Directions.Direction.Forward)},
+            {OrientType.Axis24_Up_Left, new SerializableBlockOrientation(Base6Directions.Direction.Up, Base6Directions.Direction.Left)},
+            {OrientType.Axis24_Up_Right, new SerializableBlockOrientation(Base6Directions.Direction.Up, Base6Directions.Direction.Right)},
         };
 
         private static SerializableBlockOrientation MirrorCubeOrientation(string subtypeName, SerializableBlockOrientation orientation, Mirror xMirror, Mirror yMirror, Mirror zMirror)
@@ -1841,20 +1842,11 @@
             switch (Base6Directions.GetAxis(direction))
             {
                 case Base6Directions.Axis.LeftRight: // X
-                    if (Base6Directions.GetVector(direction).X < 0)
-                        return "-X";
-                    else
-                        return "+X";
+                    return Base6Directions.GetVector(direction).X < 0 ? "-X" : "+X";
                 case Base6Directions.Axis.UpDown: // Y
-                    if (Base6Directions.GetVector(direction).Y < 0)
-                        return "-Y";
-                    else
-                        return "+Y";
+                    return Base6Directions.GetVector(direction).Y < 0 ? "-Y" : "+Y";
                 case Base6Directions.Axis.ForwardBackward: // Z
-                    if (Base6Directions.GetVector(direction).Z < 0)
-                        return "-Z";
-                    else
-                        return "+Z";
+                    return Base6Directions.GetVector(direction).Z < 0 ? "-Z" : "+Z";
             }
 
             return null;

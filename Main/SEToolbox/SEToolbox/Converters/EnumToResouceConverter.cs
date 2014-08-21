@@ -11,8 +11,8 @@
             {
                 if (value is Enum)
                 {
-                    string header = ((Enum)value).GetType().Name;
-                    string resource = string.Format("{0}_{1}", header, value);
+                    var header = ((Enum)value).GetType().Name;
+                    var resource = string.Format("{0}_{1}", header, value);
                     return GetResource(resource, value);
                 }
                 else if (value is bool)
@@ -34,14 +34,8 @@
         {
             try
             {
-                string ret = Properties.Resources.ResourceManager.GetString(resource);
-
-                if (ret == null)
-                {
-                    return value;
-                }
-
-                return ret;
+                var ret = Properties.Resources.ResourceManager.GetString(resource);
+                return ret ?? value;
             }
             catch
             {

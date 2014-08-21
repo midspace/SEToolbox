@@ -1,9 +1,5 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Voxels;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -11,6 +7,11 @@
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Voxels;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using VRageMath;
 
     [Serializable]
@@ -36,8 +37,8 @@
         {
             if (voxelPath != null)
             {
-                this.VoxelFilepath = Path.Combine(voxelPath, this.VoxelMap.Filename);
-                this.ReadVoxelDetails(this.VoxelFilepath);
+                VoxelFilepath = Path.Combine(voxelPath, VoxelMap.Filename);
+                ReadVoxelDetails(VoxelFilepath);
             }
         }
 
@@ -50,7 +51,7 @@
         {
             get
             {
-                return this.EntityBase as MyObjectBuilder_VoxelMap;
+                return EntityBase as MyObjectBuilder_VoxelMap;
             }
         }
 
@@ -59,15 +60,15 @@
         {
             get
             {
-                return this.VoxelMap.Filename;
+                return VoxelMap.Filename;
             }
 
             set
             {
-                if (value != this.VoxelMap.Filename)
+                if (value != VoxelMap.Filename)
                 {
-                    this.VoxelMap.Filename = value;
-                    this.RaisePropertyChanged(() => Filename);
+                    VoxelMap.Filename = value;
+                    RaisePropertyChanged(() => Filename);
                 }
             }
         }
@@ -79,16 +80,16 @@
         {
             get
             {
-                return this._sourceVoxelFilepath;
+                return _sourceVoxelFilepath;
             }
 
             set
             {
-                if (value != this._sourceVoxelFilepath)
+                if (value != _sourceVoxelFilepath)
                 {
-                    this._sourceVoxelFilepath = value;
-                    this.RaisePropertyChanged(() => SourceVoxelFilepath);
-                    this.ReadVoxelDetails(this.SourceVoxelFilepath);
+                    _sourceVoxelFilepath = value;
+                    RaisePropertyChanged(() => SourceVoxelFilepath);
+                    ReadVoxelDetails(SourceVoxelFilepath);
                 }
             }
         }
@@ -100,15 +101,15 @@
         {
             get
             {
-                return this._voxelFilepath;
+                return _voxelFilepath;
             }
 
             set
             {
-                if (value != this._voxelFilepath)
+                if (value != _voxelFilepath)
                 {
-                    this._voxelFilepath = value;
-                    this.RaisePropertyChanged(() => VoxelFilepath);
+                    _voxelFilepath = value;
+                    RaisePropertyChanged(() => VoxelFilepath);
                 }
             }
         }
@@ -118,15 +119,15 @@
         {
             get
             {
-                return this._size;
+                return _size;
             }
 
             set
             {
-                if (value != this._size)
+                if (value != _size)
                 {
-                    this._size = value;
-                    this.RaisePropertyChanged(() => Size);
+                    _size = value;
+                    RaisePropertyChanged(() => Size);
                 }
             }
         }
@@ -136,15 +137,15 @@
         {
             get
             {
-                return this._contentSize;
+                return _contentSize;
             }
 
             set
             {
-                if (value != this._contentSize)
+                if (value != _contentSize)
                 {
-                    this._contentSize = value;
-                    this.RaisePropertyChanged(() => ContentSize);
+                    _contentSize = value;
+                    RaisePropertyChanged(() => ContentSize);
                 }
             }
         }
@@ -154,15 +155,15 @@
         {
             get
             {
-                return this._voxCells;
+                return _voxCells;
             }
 
             set
             {
-                if (value != this._voxCells)
+                if (value != _voxCells)
                 {
-                    this._voxCells = value;
-                    this.RaisePropertyChanged(() => VoxCells);
+                    _voxCells = value;
+                    RaisePropertyChanged(() => VoxCells);
                 }
             }
         }
@@ -172,7 +173,7 @@
         {
             get
             {
-                return (double)this._voxCells / 255;
+                return (double)_voxCells / 255;
             }
         }
 
@@ -184,15 +185,15 @@
         {
             get
             {
-                return this._materialAssets;
+                return _materialAssets;
             }
 
             set
             {
-                if (value != this._materialAssets)
+                if (value != _materialAssets)
                 {
-                    this._materialAssets = value;
-                    this.RaisePropertyChanged(() => MaterialAssets);
+                    _materialAssets = value;
+                    RaisePropertyChanged(() => MaterialAssets);
                 }
             }
         }
@@ -204,19 +205,19 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_VoxelMap>(this.VoxelMap);
+            SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_VoxelMap>(VoxelMap);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_VoxelMap>(this.SerializedEntity);
+            EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_VoxelMap>(SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
-            this.ClassType = ClassType.Voxel;
-            this.DisplayName = Path.GetFileNameWithoutExtension(this.VoxelMap.Filename);
+            ClassType = ClassType.Voxel;
+            DisplayName = Path.GetFileNameWithoutExtension(VoxelMap.Filename);
         }
 
         public override void InitializeAsync()
@@ -227,12 +228,12 @@
             {
                 lock (Locker)
                 {
-                    if (this.MaterialAssets == null || this.MaterialAssets.Count == 0)
+                    if (MaterialAssets == null || MaterialAssets.Count == 0)
                     {
-                        this.IsBusy = true;
-                        var filename = this.SourceVoxelFilepath;
+                        IsBusy = true;
+                        var filename = SourceVoxelFilepath;
                         if (string.IsNullOrEmpty(filename))
-                            filename = this.VoxelFilepath;
+                            filename = VoxelFilepath;
 
                         Dictionary<string, long> details;
                         try
@@ -241,7 +242,7 @@
                         }
                         catch
                         {
-                            this.IsBusy = false;
+                            IsBusy = false;
                             return;
                         }
                         var sum = details.Values.ToList().Sum();
@@ -249,11 +250,11 @@
 
                         foreach (var kvp in details)
                         {
-                            list.Add(new VoxelMaterialAssetModel() { MaterialName = kvp.Key, Volume = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
+                            list.Add(new VoxelMaterialAssetModel { MaterialName = kvp.Key, Volume = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
                         }
 
-                        this.MaterialAssets = list;
-                        this.IsBusy = false;
+                        MaterialAssets = list;
+                        IsBusy = false;
                     }
                 }
             };
@@ -265,18 +266,18 @@
         {
             if (filename != null && File.Exists(filename))
             {
-                MyVoxelMap.GetPreview(filename, out this._size, out this._contentSize, out _voxelCenter, out this._voxCells);
-                this.RaisePropertyChanged(() => Size);
-                this.RaisePropertyChanged(() => ContentSize);
-                this.RaisePropertyChanged(() => VoxCells);
-                this.Center = new Vector3(_voxelCenter.X + 0.5f + this.PositionX, _voxelCenter.Y + 0.5f + this.PositionY, _voxelCenter.Z + 0.5f + this.PositionZ);
+                MyVoxelMap.GetPreview(filename, out _size, out _contentSize, out _voxelCenter, out _voxCells);
+                RaisePropertyChanged(() => Size);
+                RaisePropertyChanged(() => ContentSize);
+                RaisePropertyChanged(() => VoxCells);
+                Center = new Vector3(_voxelCenter.X + 0.5f + PositionX, _voxelCenter.Y + 0.5f + PositionY, _voxelCenter.Z + 0.5f + PositionZ);
             }
         }
 
         public override void RecalcPosition(Vector3 playerPosition)
         {
             base.RecalcPosition(playerPosition);
-            this.Center = new Vector3(_voxelCenter.X + 0.5f + this.PositionX, _voxelCenter.Y + 0.5f + this.PositionY, _voxelCenter.Z + 0.5f + this.PositionZ);
+            Center = new Vector3(_voxelCenter.X + 0.5f + PositionX, _voxelCenter.Y + 0.5f + PositionY, _voxelCenter.Z + 0.5f + PositionZ);
         }
 
         #endregion

@@ -79,7 +79,7 @@ namespace SEToolbox.ImageLibrary
 
                 // Then set the color palette on the output bitmap. I'm passing in the current palette 
                 // as there's no way to construct a new, empty palette.
-                output.Palette = this.GetPalette(output.Palette);
+                output.Palette = GetPalette(output.Palette);
 
                 // Then call the second pass which actually does the conversion
                 SecondPass(sourceData, output, width, height, bounds);
@@ -226,7 +226,7 @@ namespace SEToolbox.ImageLibrary
         /// <summary>
         /// Flag used to indicate whether a single pass or two passes are needed for quantization.
         /// </summary>
-        private bool _singlePass;
+        private readonly bool _singlePass;
 
         /// <summary>
         /// Struct that defines a 32 bpp colour

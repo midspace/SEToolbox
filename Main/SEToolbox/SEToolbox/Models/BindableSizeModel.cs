@@ -4,25 +4,25 @@
 
     public class BindableSizeModel : BaseModel
     {
-        private Size size;
+        private Size _size;
 
         public BindableSizeModel()
         {
-            this.size = new Size();
+            _size = new Size();
         }
 
         public BindableSizeModel(int width, int height)
             : this()
         {
-            this.Width = width;
-            this.Height = height;
+            Width = width;
+            Height = height;
         }
 
         public BindableSizeModel(Size size)
             : this()
         {
-            this.Width = size.Width;
-            this.Height = size.Height;
+            Width = size.Width;
+            Height = size.Height;
         }
 
         #region Properties
@@ -31,15 +31,15 @@
         {
             get
             {
-                return this.size.Width;
+                return _size.Width;
             }
 
             set
             {
-                if (value != this.size.Width)
+                if (value != _size.Width)
                 {
-                    this.size.Width = value;
-                    this.RaisePropertyChanged(() => Width);
+                    _size.Width = value;
+                    RaisePropertyChanged(() => Width);
                 }
             }
         }
@@ -48,15 +48,15 @@
         {
             get
             {
-                return this.size.Height;
+                return _size.Height;
             }
 
             set
             {
-                if (value != this.size.Height)
+                if (value != _size.Height)
                 {
-                    this.size.Height = value;
-                    this.RaisePropertyChanged(() => Height);
+                    _size.Height = value;
+                    RaisePropertyChanged(() => Height);
                 }
             }
         }
@@ -65,15 +65,15 @@
         {
             get
             {
-                return this.size;
+                return _size;
             }
 
             set
             {
-                if (value != this.size)
+                if (value != _size)
                 {
-                    this.size = value;
-                    this.RaisePropertyChanged(() => Size, () => Width, () => Height);
+                    _size = value;
+                    RaisePropertyChanged(() => Size, () => Width, () => Height);
                 }
             }
         }

@@ -11,7 +11,7 @@
     {
         #region DPs
 
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(CommandAction), new PropertyMetadata((ICommand)null, OnCommandChanged));
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(CommandAction), new PropertyMetadata(null, OnCommandChanged));
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(CommandAction), new PropertyMetadata());
         public static readonly DependencyProperty CommandTargetProperty = DependencyProperty.Register("CommandTarget", typeof(IInputElement), typeof(CommandAction), new PropertyMetadata());
         public static readonly DependencyProperty SyncOwnerIsEnabledProperty = DependencyProperty.Register("SyncOwnerIsEnabled", typeof(bool), typeof(CommandAction), new PropertyMetadata());
@@ -24,74 +24,43 @@
         [Category("Command Properties")]
         public ICommand Command
         {
-            get
-            {
-                return (ICommand)GetValue(CommandProperty);
-            }
-            set
-            {
-                SetValue(CommandProperty, value);
-            }
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
         }
 
         [Category("Command Properties")]
         public object CommandParameter
         {
-            get
-            {
-                return (object)GetValue(CommandParameterProperty);
-            }
-            set
-            {
-                SetValue(CommandParameterProperty, value);
-            }
+            get { return GetValue(CommandParameterProperty); }
+            set { SetValue(CommandParameterProperty, value); }
         }
 
         [Category("Command Properties")]
         public IInputElement CommandTarget
         {
-            get
-            {
-                return (IInputElement)GetValue(CommandTargetProperty);
-            }
-            set
-            {
-                SetValue(CommandTargetProperty, value);
-            }
+            get { return (IInputElement)GetValue(CommandTargetProperty); }
+            set { SetValue(CommandTargetProperty, value); }
         }
 
         [Category("Command Properties")]
         public bool SyncOwnerIsEnabled
         {
-            get
-            {
-                return (bool)GetValue(SyncOwnerIsEnabledProperty);
-            }
-            set
-            {
-                SetValue(SyncOwnerIsEnabledProperty, value);
-            }
+            get { return (bool)GetValue(SyncOwnerIsEnabledProperty); }
+            set { SetValue(SyncOwnerIsEnabledProperty, value); }
         }
-
 
         [Category("Command Properties")]
         public bool EventArgs
         {
-            get
-            {
-                return (bool)GetValue(EventArgsProperty);
-            }
-            set
-            {
-                SetValue(EventArgsProperty, value);
-            }
+            get { return (bool)GetValue(EventArgsProperty); }
+            set { SetValue(EventArgsProperty, value); }
         }
 
         #endregion
 
         #region Event Declaration
 
-        private EventHandler CanExecuteChanged;
+        private EventHandler _canExecuteChanged;
 
         #endregion
 
@@ -118,31 +87,31 @@
         [DebuggerStepThrough]
         protected override void Invoke(object o)
         {
-            if (this.Command != null)
+            if (Command != null)
             {
-                RoutedCommand comRouted = this.Command as RoutedCommand;
+                var comRouted = Command as RoutedCommand;
                 if (comRouted != null)
                 {
-                    if (this.EventArgs)
+                    if (EventArgs)
                     {
-                        comRouted.Execute(o, this.CommandTarget);
+                        comRouted.Execute(o, CommandTarget);
                     }
                     else
                     {
                         // Is RoutedCommand
-                        comRouted.Execute(this.CommandParameter, this.CommandTarget);
+                        comRouted.Execute(CommandParameter, CommandTarget);
                     }
                 }
                 else
                 {
-                    if (this.EventArgs)
+                    if (EventArgs)
                     {
-                        this.Command.Execute(o);
+                        Command.Execute(o);
                     }
                     else
                     {
                         // Is NOT RoutedCommand
-                        this.Command.Execute(this.CommandParameter);
+                        Command.Execute(CommandParameter);
                     }
                 }
             }
@@ -166,35 +135,35 @@
 
         private void HookupCommandCanExecuteChangedEventHandler(ICommand command)
         {
-            this.CanExecuteChanged = new EventHandler(OnCanExecuteChanged);
-            command.CanExecuteChanged += CanExecuteChanged;
+            _canExecuteChanged = new EventHandler(OnCanExecuteChanged);
+            command.CanExecuteChanged += _canExecuteChanged;
             UpdateCanExecute();
         }
 
         private void UnhookCommandCanExecuteChangedEventHandler(ICommand command)
         {
-            command.CanExecuteChanged -= CanExecuteChanged;
+            command.CanExecuteChanged -= _canExecuteChanged;
             UpdateCanExecute();
         }
 
         private void UpdateCanExecute()
         {
-            if (this.Command != null)
+            if (Command != null)
             {
-                RoutedCommand comRouted = this.Command as RoutedCommand;
+                RoutedCommand comRouted = Command as RoutedCommand;
                 if (comRouted != null)
                 {
                     // Is RoutedCommand
-                    this.IsEnabled = comRouted.CanExecute(this.CommandParameter, this.CommandTarget);
+                    IsEnabled = comRouted.CanExecute(CommandParameter, CommandTarget);
                 }
                 else
                 {
                     // Is NOT RoutedCommand
-                    this.IsEnabled = this.Command.CanExecute(this.CommandParameter);
+                    IsEnabled = Command.CanExecute(CommandParameter);
                 }
-                if (this.Target != null && this.SyncOwnerIsEnabled)
+                if (Target != null && SyncOwnerIsEnabled)
                 {
-                    this.Target.IsEnabled = IsEnabled;
+                    Target.IsEnabled = IsEnabled;
                 }
             }
         }
