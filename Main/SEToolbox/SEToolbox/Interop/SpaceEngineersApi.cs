@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
@@ -292,14 +293,14 @@
                     if (requirements.ContainsKey(item.SubtypeId))
                     {
                         // append existing
-                        requirements[item.SubtypeId].Amount += (amount / bp.Result.Amount) * item.Amount;
+                        requirements[item.SubtypeId].Amount = (((amount / Convert.ToDecimal(bp.Result.Amount)) * Convert.ToDecimal(item.Amount)) +  Convert.ToDecimal(requirements[item.SubtypeId].Amount)).ToString(CultureInfo.InvariantCulture);
                     }
                     else
                     {
                         // add new
                         requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item
                         {
-                            Amount = (amount / bp.Result.Amount) * item.Amount,
+                            Amount = ((amount / Convert.ToDecimal(bp.Result.Amount)) * Convert.ToDecimal(item.Amount)).ToString(CultureInfo.InvariantCulture),
                             TypeId = item.TypeId,
                             SubtypeId = item.SubtypeId,
                             Id = item.Id

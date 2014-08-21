@@ -120,16 +120,16 @@
             if (Meteor.Item.Content is MyObjectBuilder_Ore)
             {
                 DisplayName = string.Format("{0} Ore", Meteor.Item.Content.SubtypeName);
-                Volume = compVolume * Meteor.Item.Amount;
-                Mass = compMass * Meteor.Item.Amount;
+                Volume = compVolume * Convert.ToDouble(Meteor.Item.Amount);
+                Mass = compMass * Convert.ToDouble(Meteor.Item.Amount);
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
             else
             {
                 DisplayName = Meteor.Item.Content.SubtypeName;
                 Description = string.Format("x {0}", Meteor.Item.Amount);
-                Volume = compVolume * Meteor.Item.Amount;
-                Mass = compMass * Meteor.Item.Amount;
+                Volume = compVolume * Convert.ToDouble(Meteor.Item.Amount);
+                Mass = compMass * Convert.ToDouble(Meteor.Item.Amount);
             }
         }
 

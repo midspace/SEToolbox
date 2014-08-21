@@ -255,7 +255,7 @@
             var newItem = new InventoryModel(item)
             {
                 Name = name,
-                Amount = item.AmountDecimal,
+                Amount = (decimal)item.Amount,
                 SubtypeId = item.Content.SubtypeName,
                 TypeId = item.Content.TypeId,
                 MassMultiplyer = massMultiplyer,

@@ -284,13 +284,13 @@
             };
 
             if (IsDecimal && DecimalUnits.HasValue)
-                entity.Item.AmountDecimal = DecimalUnits.Value;
+                entity.Item.Amount = DecimalUnits.Value.ToFixedPoint();
             else if (IsInt && Units.HasValue)
-                entity.Item.AmountDecimal = Units.Value;
+                entity.Item.Amount = Units.Value;
             else if (IsUnique)
-                entity.Item.AmountDecimal = GenerateFloatingObjectModel.UniqueUnits;
+                entity.Item.Amount = GenerateFloatingObjectModel.UniqueUnits;
             else
-                entity.Item.AmountDecimal = 1;
+                entity.Item.Amount = 1;
 
             IsValidItemToImport = true;
             entity.Item.PhysicalContent = (MyObjectBuilder_PhysicalObject)MyObjectBuilder_Base.CreateNewObject(StockItem.TypeId, StockItem.SubtypeId);

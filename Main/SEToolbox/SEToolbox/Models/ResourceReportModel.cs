@@ -334,11 +334,11 @@
 
                     if (floating.FloatingObject.Item.Content.TypeId == SpaceEngineersConsts.Ore || floating.FloatingObject.Item.Content.TypeId == SpaceEngineersConsts.Ingot)
                     {
-                        TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, floating.FloatingObject.Item.AmountDecimal, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
+                        TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, (decimal)floating.FloatingObject.Item.Amount, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                     }
                     else
                     {
-                        TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, floating.FloatingObject.Item.AmountDecimal, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
+                        TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, (decimal)floating.FloatingObject.Item.Amount, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
                     }
                 }
                 else if (entity is StructureCharacterModel)
@@ -351,7 +351,7 @@
                         // Character inventory.
                         foreach (var item in character.Character.Inventory.Items)
                         {
-                            TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
+                            TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
                         }
                     }
                 }
@@ -471,17 +471,17 @@
                                     {
                                         if (isNpc)
                                         {
-                                            TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulateNpcOres, accumulateItems, accumulateComponents);
+                                            TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulateNpcOres, accumulateItems, accumulateComponents);
                                         }
                                         else
                                         {
                                             if (item.Content.TypeId == SpaceEngineersConsts.Ore || item.Content.TypeId == SpaceEngineersConsts.Ingot)
                                             {
-                                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
+                                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                                             }
                                             else
                                             {
-                                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
+                                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
                                             }
                                         }
                                     }
@@ -500,7 +500,7 @@
                                 {
                                     foreach (var item in character.Inventory.Items)
                                     {
-                                        TallyItems(item.Content.TypeId, item.Content.SubtypeName, item.AmountDecimal, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
+                                        TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
                                     }
                                 }
                             }
@@ -629,7 +629,7 @@
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, Convert.ToDecimal(item.Value.Amount), contentPath, accumulateOres, null, null);
                 }
 
                 #endregion
@@ -670,7 +670,7 @@
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, accumulateComponents);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, Convert.ToDecimal(item.Value.Amount), contentPath, accumulateOres, null, accumulateComponents);
                 }
 
                 #endregion
@@ -710,7 +710,7 @@
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, Convert.ToDecimal(item.Value.Amount), contentPath, accumulateOres, null, null);
                 }
 
                 #endregion
