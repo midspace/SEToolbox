@@ -13,6 +13,7 @@
     using Microsoft.VisualBasic.FileIO;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -670,10 +671,29 @@
                 MyObjectBuilder_FloatingObject floatingEntity;
                 MyObjectBuilder_Meteor meteorEntity;
                 MyObjectBuilder_Character characterEntity;
+                MyObjectBuilder_Definitions prefabDefinitions;
 
                 if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed))
                 {
                     MergeData(cubeEntity, ref idReplacementTable);
+                }
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed))
+                {
+                    if (prefabDefinitions.Prefabs != null)
+                    {
+                        foreach (var prefab in prefabDefinitions.Prefabs)
+                        {
+                            if (prefab.CubeGrid != null)
+                                MergeData(prefab.CubeGrid, ref idReplacementTable);
+                            if (prefab.CubeGrids != null)
+                            {
+                                foreach (var cubeGrid in prefab.CubeGrids)
+                                {
+                                    MergeData(cubeGrid, ref idReplacementTable);
+                                }
+                            }
+                        }
+                    }
                 }
                 else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out floatingEntity, out isCompressed))
                 {

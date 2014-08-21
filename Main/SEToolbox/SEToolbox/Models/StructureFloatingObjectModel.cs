@@ -123,32 +123,32 @@
             if (FloatingObject.Item.Content is MyObjectBuilder_Ore)
             {
                 DisplayName = friendlyName;
-                Volume = cd.Volume.Value * FloatingObject.Item.Amount;
-                Mass = cd.Mass * FloatingObject.Item.Amount;
+                Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
+                Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
             else if (FloatingObject.Item.Content is MyObjectBuilder_Ingot)
             {
                 DisplayName = friendlyName;
-                Volume = cd.Volume.Value * FloatingObject.Item.Amount;
-                Mass = cd.Mass * FloatingObject.Item.Amount;
+                Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
+                Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
             else if (FloatingObject.Item.Content is MyObjectBuilder_EntityBase)
             {
                 DisplayName = friendlyName;
                 Description = string.Format("x {0}", FloatingObject.Item.Amount);
-                Units = FloatingObject.Item.Amount;
-                Volume = cd.Volume.Value * FloatingObject.Item.Amount;
-                Mass = cd.Mass * FloatingObject.Item.Amount;
+                Units = (Double)FloatingObject.Item.Amount;
+                Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
+                Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
             }
             else
             {
                 DisplayName = friendlyName;
                 Description = string.Format("x {0}", FloatingObject.Item.Amount);
-                Units = FloatingObject.Item.Amount;
-                Volume = cd.Volume.Value * FloatingObject.Item.Amount;
-                Mass = cd.Mass * FloatingObject.Item.Amount;
+                Units = (Double)FloatingObject.Item.Amount;
+                Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
+                Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
             }
         }
 

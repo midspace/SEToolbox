@@ -2,8 +2,8 @@
 {
     using System;
     using System.ComponentModel;
-
     using Sandbox.Common.ObjectBuilders;
+
     using SEToolbox.Interop;
 
     [Serializable]
@@ -141,7 +141,7 @@
         {
             Mass = MassMultiplyer * (double)Amount;
             Volume = VolumeMultiplyer * (double)Amount;
-            _item.AmountDecimal = Amount;
+            _item.Amount = Amount.ToFixedPoint();
         }
 
         #region IDataErrorInfo interfacing

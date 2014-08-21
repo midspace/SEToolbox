@@ -1,10 +1,12 @@
 ﻿namespace SEToolbox.Interop
 {
     using System;
+    using System.Globalization;
 
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Support;
+    using VRage;
     using VRageMath;
 
     /// <summary>
@@ -136,12 +138,12 @@
             {
                 return new SerializableVector3(Math.Sign(vector.X), 0, 0);
             }
-            
+
             if (Math.Abs(vector.Y) > Math.Abs(vector.X) && Math.Abs(vector.Y) > Math.Abs(vector.Z))
             {
                 return new SerializableVector3(0, Math.Sign(vector.Y), 0);
             }
-            
+
             if (Math.Abs(vector.Z) > Math.Abs(vector.X) && Math.Abs(vector.Z) > Math.Abs(vector.Y))
             {
                 return new SerializableVector3(0, 0, Math.Sign(vector.Z));
@@ -199,6 +201,21 @@
                 case MyCubeSize.Small: return SpaceEngineersCore.Definitions.Configuration.CubeSizes.Small;
             }
             return 0f;
+        }
+
+        public static MyFixedPoint ToFixedPoint(this decimal value)
+        {
+            return MyFixedPoint.DeserializeString(value.ToString(CultureInfo.InvariantCulture));
+        }
+
+        public static MyFixedPoint ToFixedPoint(this double value)
+        {
+            return MyFixedPoint.DeserializeString(value.ToString(CultureInfo.InvariantCulture));
+        }
+
+        public static MyFixedPoint ToFixedPoint(this float value)
+        {
+            return MyFixedPoint.DeserializeString(value.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

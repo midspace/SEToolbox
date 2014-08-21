@@ -5,6 +5,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
@@ -41,12 +42,12 @@
             var fighterPath = Path.Combine(contentPath, @"Data\Prefabs\Fighter.sbc");
             Assert.IsTrue(File.Exists(fighterPath), "Sandbox content file should exist");
 
-            MyObjectBuilder_CubeGrid cubeEntity;
-            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>(fighterPath, out cubeEntity);
+            MyObjectBuilder_Definitions prefabDefinitions;
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>(fighterPath, out prefabDefinitions);
 
-            Assert.IsNotNull(cubeEntity, "Sandbox content should not be null");
+            Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
-            Assert.IsTrue(cubeEntity.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
         [TestMethod]
@@ -57,14 +58,14 @@
             var fighterPath = Path.Combine(contentPath, @"Data\Prefabs\Fighter.sbc");
             Assert.IsTrue(File.Exists(fighterPath), "Sandbox content file should exist");
 
-            MyObjectBuilder_CubeGrid cubeEntity;
+            MyObjectBuilder_Definitions prefabDefinitions;
             bool isCompressed;
-            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid>(fighterPath, out cubeEntity, out isCompressed);
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(fighterPath, out prefabDefinitions, out isCompressed);
 
-            Assert.IsNotNull(cubeEntity, "Sandbox content should not be null");
+            Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsFalse(isCompressed, "Sandbox content should not be compressed");
-            Assert.IsTrue(cubeEntity.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
         [TestMethod]
@@ -75,14 +76,14 @@
             var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\BaseEasyStart1.sbc");
             Assert.IsTrue(File.Exists(baseEasyStart1Path), "Sandbox content file should exist");
 
-            MyObjectBuilder_CubeGrid cubeEntity;
+            MyObjectBuilder_Definitions prefabDefinitions;
             bool isCompressed;
-            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid>(baseEasyStart1Path, out cubeEntity, out isCompressed);
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(baseEasyStart1Path, out prefabDefinitions, out isCompressed);
 
-            Assert.IsNotNull(cubeEntity, "Sandbox content should not be null");
+            Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsTrue(isCompressed, "Sandbox content should be compressed");
-            Assert.IsTrue(cubeEntity.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
         [TestMethod]

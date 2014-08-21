@@ -292,7 +292,7 @@
                             MyObjectBuilder_EntityBase gunEntity;
 
                             character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_InventoryItem)));
-                            item.AmountDecimal = 1;
+                            item.Amount = 1;
                             item.ItemId = 0;
                             item.Content = new MyObjectBuilder_Welder();
                             gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_Welder));
@@ -301,7 +301,7 @@
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
                             character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_InventoryItem)));
-                            item.AmountDecimal = 1;
+                            item.Amount = 1;
                             item.ItemId = 1;
                             item.Content = new MyObjectBuilder_AngleGrinder();
                             gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AngleGrinder));
@@ -310,7 +310,7 @@
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
                             character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_InventoryItem)));
-                            item.AmountDecimal = 1;
+                            item.Amount = 1;
                             item.ItemId = 2;
                             item.Content = new MyObjectBuilder_HandDrill();
                             gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_HandDrill));
@@ -319,7 +319,7 @@
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
                             character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_InventoryItem)));
-                            item.AmountDecimal = 1;
+                            item.Amount = 1;
                             item.ItemId = 3;
                             item.Content = new MyObjectBuilder_AutomaticRifle();
                             gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AutomaticRifle));
