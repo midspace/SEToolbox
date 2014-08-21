@@ -1,13 +1,14 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Voxels;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;
     using System.Windows.Threading;
     using System.Xml.Serialization;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Voxels;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
     using VRageMath;
 
     [Serializable]
@@ -63,8 +64,8 @@
         public StructureBaseModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
         {
             _dispatcher = Dispatcher.CurrentDispatcher;
-            this.Settings = settings;
-            this.EntityBase = entityBase;
+            Settings = settings;
+            EntityBase = entityBase;
         }
 
         #endregion
@@ -76,14 +77,14 @@
         {
             get
             {
-                return this._settings;
+                return _settings;
             }
             set
             {
-                if (!EqualityComparer<MySessionSettings>.Default.Equals(value, this._settings))
+                if (!EqualityComparer<MySessionSettings>.Default.Equals(value, _settings))
                 {
-                    this._settings = value;
-                    this.RaisePropertyChanged(() => Settings);
+                    _settings = value;
+                    RaisePropertyChanged(() => Settings);
                 }
             }
         }
@@ -93,15 +94,15 @@
         {
             get
             {
-                return this._entityBase;
+                return _entityBase;
             }
             set
             {
-                if (value != this._entityBase)
+                if (value != _entityBase)
                 {
-                    this._entityBase = value;
-                    this.UpdateGeneralFromEntityBase();
-                    this.RaisePropertyChanged(() => EntityBase);
+                    _entityBase = value;
+                    UpdateGeneralFromEntityBase();
+                    RaisePropertyChanged(() => EntityBase);
                 }
             }
         }
@@ -111,15 +112,15 @@
         {
             get
             {
-                return this._entityBase.EntityId;
+                return _entityBase.EntityId;
             }
 
             set
             {
-                if (value != this._entityBase.EntityId)
+                if (value != _entityBase.EntityId)
                 {
-                    this._entityBase.EntityId = value;
-                    this.RaisePropertyChanged(() => EntityId);
+                    _entityBase.EntityId = value;
+                    RaisePropertyChanged(() => EntityId);
                 }
             }
         }
@@ -129,16 +130,16 @@
         {
             get
             {
-                return this._entityBase.PositionAndOrientation;
+                return _entityBase.PositionAndOrientation;
             }
 
             set
             {
-                if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, this._entityBase.PositionAndOrientation))
-                //if (value != this.entityBase.PositionAndOrientation)
+                if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, _entityBase.PositionAndOrientation))
+                //if (value != entityBase.PositionAndOrientation)
                 {
-                    this._entityBase.PositionAndOrientation = value;
-                    this.RaisePropertyChanged(() => PositionAndOrientation);
+                    _entityBase.PositionAndOrientation = value;
+                    RaisePropertyChanged(() => PositionAndOrientation);
                 }
             }
         }
@@ -148,17 +149,17 @@
         {
             get
             {
-                return this._entityBase.PositionAndOrientation.Value.Position.X;
+                return _entityBase.PositionAndOrientation.Value.Position.X;
             }
 
             set
             {
-                if ((float)value != this._entityBase.PositionAndOrientation.Value.Position.X)
+                if (value != _entityBase.PositionAndOrientation.Value.Position.X)
                 {
-                    var pos = this._entityBase.PositionAndOrientation.Value;
-                    pos.Position.X = (float)value;
-                    this._entityBase.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionX);
+                    var pos = _entityBase.PositionAndOrientation.Value;
+                    pos.Position.X = value;
+                    _entityBase.PositionAndOrientation = pos;
+                    RaisePropertyChanged(() => PositionX);
                 }
             }
         }
@@ -168,17 +169,17 @@
         {
             get
             {
-                return this._entityBase.PositionAndOrientation.Value.Position.Y;
+                return _entityBase.PositionAndOrientation.Value.Position.Y;
             }
 
             set
             {
-                if ((float)value != this._entityBase.PositionAndOrientation.Value.Position.Y)
+                if (value != _entityBase.PositionAndOrientation.Value.Position.Y)
                 {
-                    var pos = this._entityBase.PositionAndOrientation.Value;
-                    pos.Position.Y = (float)value;
-                    this._entityBase.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionY);
+                    var pos = _entityBase.PositionAndOrientation.Value;
+                    pos.Position.Y = value;
+                    _entityBase.PositionAndOrientation = pos;
+                    RaisePropertyChanged(() => PositionY);
                 }
             }
         }
@@ -188,17 +189,17 @@
         {
             get
             {
-                return this._entityBase.PositionAndOrientation.Value.Position.Z;
+                return _entityBase.PositionAndOrientation.Value.Position.Z;
             }
 
             set
             {
-                if ((float)value != this._entityBase.PositionAndOrientation.Value.Position.Z)
+                if (value != _entityBase.PositionAndOrientation.Value.Position.Z)
                 {
-                    var pos = this._entityBase.PositionAndOrientation.Value;
-                    pos.Position.Z = (float)value;
-                    this._entityBase.PositionAndOrientation = pos;
-                    this.RaisePropertyChanged(() => PositionZ);
+                    var pos = _entityBase.PositionAndOrientation.Value;
+                    pos.Position.Z = value;
+                    _entityBase.PositionAndOrientation = pos;
+                    RaisePropertyChanged(() => PositionZ);
                 }
             }
         }
@@ -208,15 +209,15 @@
         {
             get
             {
-                return this._classType;
+                return _classType;
             }
 
             set
             {
-                if (value != this._classType)
+                if (value != _classType)
                 {
-                    this._classType = value;
-                    this.RaisePropertyChanged(() => ClassType);
+                    _classType = value;
+                    RaisePropertyChanged(() => ClassType);
                 }
             }
         }
@@ -226,15 +227,15 @@
         {
             get
             {
-                return this._name;
+                return _name;
             }
 
             set
             {
-                if (value != this._name)
+                if (value != _name)
                 {
-                    this._name = value;
-                    this.RaisePropertyChanged(() => DisplayName);
+                    _name = value;
+                    RaisePropertyChanged(() => DisplayName);
                 }
             }
         }
@@ -244,15 +245,15 @@
         {
             get
             {
-                return this._description;
+                return _description;
             }
 
             set
             {
-                if (value != this._description)
+                if (value != _description)
                 {
-                    this._description = value;
-                    this.RaisePropertyChanged(() => Description);
+                    _description = value;
+                    RaisePropertyChanged(() => Description);
                 }
             }
         }
@@ -262,15 +263,15 @@
         {
             get
             {
-                return this._playerDistance;
+                return _playerDistance;
             }
 
             set
             {
-                if (value != this._playerDistance)
+                if (value != _playerDistance)
                 {
-                    this._playerDistance = value;
-                    this.RaisePropertyChanged(() => PlayerDistance);
+                    _playerDistance = value;
+                    RaisePropertyChanged(() => PlayerDistance);
                 }
             }
         }
@@ -280,15 +281,15 @@
         {
             get
             {
-                return this._mass;
+                return _mass;
             }
 
             set
             {
-                if (value != this._mass)
+                if (value != _mass)
                 {
-                    this._mass = value;
-                    this.RaisePropertyChanged(() => Mass);
+                    _mass = value;
+                    RaisePropertyChanged(() => Mass);
                 }
             }
         }
@@ -298,15 +299,15 @@
         {
             get
             {
-                return this._blockCount;
+                return _blockCount;
             }
 
             set
             {
-                if (value != this._blockCount)
+                if (value != _blockCount)
                 {
-                    this._blockCount = value;
-                    this.RaisePropertyChanged(() => BlockCount);
+                    _blockCount = value;
+                    RaisePropertyChanged(() => BlockCount);
                 }
             }
         }
@@ -319,15 +320,15 @@
         {
             get
             {
-                return this._center;
+                return _center;
             }
 
             set
             {
-                if (value != this._center)
+                if (value != _center)
                 {
-                    this._center = value;
-                    this.RaisePropertyChanged(() => Center);
+                    _center = value;
+                    RaisePropertyChanged(() => Center);
                 }
             }
         }
@@ -336,15 +337,15 @@
         {
             get
             {
-                return this._serializedEntity;
+                return _serializedEntity;
             }
 
             set
             {
-                if (value != this._serializedEntity)
+                if (value != _serializedEntity)
                 {
-                    this._serializedEntity = value;
-                    this.RaisePropertyChanged(() => SerializedEntity);
+                    _serializedEntity = value;
+                    RaisePropertyChanged(() => SerializedEntity);
                 }
             }
         }
@@ -352,15 +353,15 @@
         [XmlIgnore]
         public bool IsBusy
         {
-            get { return this._isBusy; }
+            get { return _isBusy; }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -374,7 +375,7 @@
 
         public virtual void UpdateGeneralFromEntityBase()
         {
-            this.ClassType = ClassType.Unknown;
+            ClassType = ClassType.Unknown;
         }
 
         public static IStructureBase Create(MyObjectBuilder_EntityBase entityBase, string savefilePath, MySessionSettings settings)
@@ -383,27 +384,29 @@
             {
                 return new StructureVoxelModel(entityBase, settings, savefilePath);
             }
-            else if (entityBase is MyObjectBuilder_Character)
+
+            if (entityBase is MyObjectBuilder_Character)
             {
                 return new StructureCharacterModel(entityBase, settings);
             }
-            else if (entityBase is MyObjectBuilder_CubeGrid)
+
+            if (entityBase is MyObjectBuilder_CubeGrid)
             {
                 return new StructureCubeGridModel(entityBase, settings);
             }
-            else if (entityBase is MyObjectBuilder_FloatingObject)
+
+            if (entityBase is MyObjectBuilder_FloatingObject)
             {
                 return new StructureFloatingObjectModel(entityBase, settings);
             }
-            else if (entityBase is MyObjectBuilder_Meteor)
+
+            if (entityBase is MyObjectBuilder_Meteor)
             {
                 return new StructureMeteorModel(entityBase, settings);
             }
-            else
-            {
-                return new StructureUnknownModel(entityBase, settings);
-                //throw new NotImplementedException(string.Format("A new object has not been catered for in the StructureBase, of type '{0}'.", entityBase.GetType()));
-            }
+
+            return new StructureUnknownModel(entityBase, settings);
+            //throw new NotImplementedException(string.Format("A new object has not been catered for in the StructureBase, of type '{0}'.", entityBase.GetType()));
         }
 
         public virtual void InitializeAsync()
@@ -413,7 +416,7 @@
 
         public virtual void RecalcPosition(Vector3 playerPosition)
         {
-            this.PlayerDistance = (playerPosition - this.PositionAndOrientation.Value.Position.ToVector3()).Length();
+            PlayerDistance = (playerPosition - PositionAndOrientation.Value.Position.ToVector3()).Length();
         }
 
         #endregion

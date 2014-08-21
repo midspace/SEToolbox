@@ -1,21 +1,22 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Interfaces;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
+    using SEToolbox.Interfaces;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+
     public class GroupMoveViewModel : BaseViewModel
     {
         #region Fields
 
-        private readonly IDialogService dialogService;
-        private GroupMoveModel dataModel;
-        private bool? closeResult;
+        private readonly IDialogService _dialogService;
+        private readonly GroupMoveModel _dataModel;
+        private bool? _closeResult;
 
         #endregion
 
@@ -30,13 +31,11 @@
             : base(parentViewModel)
         {
             Contract.Requires(dialogService != null);
-            this.dialogService = dialogService;
-            this.dataModel = dataModel;
-            this.dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-            {
-                // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
-            };
+            _dialogService = dialogService;
+            _dataModel = dataModel;
+
+            // Will bubble property change events from the Model to the ViewModel.
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -45,18 +44,12 @@
 
         public ICommand ApplyCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ApplyExecuted), new Func<bool>(ApplyCanExecute));
-            }
+            get { return new DelegateCommand(ApplyExecuted, ApplyCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         #endregion
@@ -70,16 +63,16 @@
         {
             get
             {
-                return this.closeResult;
+                return _closeResult;
             }
 
             set
             {
-                this.closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether the View is currently in the middle of an asynchonise operation.
         /// </summary>
@@ -87,12 +80,12 @@
         {
             get
             {
-                return this.dataModel.IsBusy;
+                return _dataModel.IsBusy;
             }
 
             set
             {
-                this.dataModel.IsBusy = value;
+                _dataModel.IsBusy = value;
             }
         }
 
@@ -100,13 +93,13 @@
         {
             get
             {
-                return this.dataModel.GlobalOffsetPositionX;
+                return _dataModel.GlobalOffsetPositionX;
             }
 
             set
             {
-                this.dataModel.GlobalOffsetPositionX = value;
-                this.dataModel.CalcOffsetDistances();
+                _dataModel.GlobalOffsetPositionX = value;
+                _dataModel.CalcOffsetDistances();
             }
         }
 
@@ -114,13 +107,13 @@
         {
             get
             {
-                return this.dataModel.GlobalOffsetPositionY;
+                return _dataModel.GlobalOffsetPositionY;
             }
 
             set
             {
-                this.dataModel.GlobalOffsetPositionY = value;
-                this.dataModel.CalcOffsetDistances();
+                _dataModel.GlobalOffsetPositionY = value;
+                _dataModel.CalcOffsetDistances();
             }
         }
 
@@ -128,13 +121,13 @@
         {
             get
             {
-                return this.dataModel.GlobalOffsetPositionZ;
+                return _dataModel.GlobalOffsetPositionZ;
             }
 
             set
             {
-                this.dataModel.GlobalOffsetPositionZ = value;
-                this.dataModel.CalcOffsetDistances();
+                _dataModel.GlobalOffsetPositionZ = value;
+                _dataModel.CalcOffsetDistances();
             }
         }
 
@@ -142,13 +135,13 @@
         {
             get
             {
-                return this.dataModel.IsGlobalOffsetPosition;
+                return _dataModel.IsGlobalOffsetPosition;
             }
 
             set
             {
-                this.dataModel.IsGlobalOffsetPosition = value;
-                this.dataModel.CalcOffsetDistances();
+                _dataModel.IsGlobalOffsetPosition = value;
+                _dataModel.CalcOffsetDistances();
             }
         }
 
@@ -156,13 +149,13 @@
         {
             get
             {
-                return this.dataModel.SinglePositionX;
+                return _dataModel.SinglePositionX;
             }
 
             set
             {
-                this.dataModel.SinglePositionX = value;
-                this.dataModel.CalcOffsetDistances();
+                _dataModel.SinglePositionX = value;
+                _dataModel.CalcOffsetDistances();
             }
         }
 
@@ -170,13 +163,13 @@
         {
             get
             {
-                return this.dataModel.SinglePositionY;
+                return _dataModel.SinglePositionY;
             }
 
             set
             {
-                this.dataModel.SinglePositionY = value;
-                this.dataModel.CalcOffsetDistances();
+                _dataModel.SinglePositionY = value;
+                _dataModel.CalcOffsetDistances();
             }
         }
 
@@ -184,13 +177,13 @@
         {
             get
             {
-                return this.dataModel.SinglePositionZ;
+                return _dataModel.SinglePositionZ;
             }
 
             set
             {
-                this.dataModel.SinglePositionZ = value;
-                this.dataModel.CalcOffsetDistances();
+                _dataModel.SinglePositionZ = value;
+                _dataModel.CalcOffsetDistances();
             }
         }
 
@@ -198,13 +191,13 @@
         {
             get
             {
-                return this.dataModel.IsSinglePosition;
+                return _dataModel.IsSinglePosition;
             }
 
             set
             {
-                this.dataModel.IsSinglePosition = value;
-                this.dataModel.CalcOffsetDistances();
+                _dataModel.IsSinglePosition = value;
+                _dataModel.CalcOffsetDistances();
             }
         }
 
@@ -212,12 +205,12 @@
         {
             get
             {
-                return this.dataModel.Selections;
+                return _dataModel.Selections;
             }
 
             set
             {
-                this.dataModel.Selections = value;
+                _dataModel.Selections = value;
             }
         }
 
@@ -227,13 +220,13 @@
 
         public bool ApplyCanExecute()
         {
-            return this.IsSinglePosition ||
-                (this.IsGlobalOffsetPosition && (this.GlobalOffsetPositionX != 0 || this.GlobalOffsetPositionY != 0 || this.GlobalOffsetPositionZ != 0));
+            return IsSinglePosition ||
+                (IsGlobalOffsetPosition && (GlobalOffsetPositionX != 0 || GlobalOffsetPositionY != 0 || GlobalOffsetPositionZ != 0));
         }
 
         public void ApplyExecuted()
         {
-            this.CloseResult = true;
+            CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -243,7 +236,7 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion

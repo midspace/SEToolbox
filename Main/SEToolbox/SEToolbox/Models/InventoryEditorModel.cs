@@ -1,13 +1,14 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Xml.Serialization;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
 
     [Serializable]
     public class InventoryEditorModel : BaseModel
@@ -53,20 +54,20 @@
 
         public InventoryEditorModel(bool isValid)
         {
-            this.IsValid = isValid;
+            IsValid = isValid;
         }
 
         public InventoryEditorModel(MyObjectBuilder_Inventory inventory, MySessionSettings settings, float maxVolume, MyObjectBuilder_Character character = null)
         {
-            this._inventory = inventory;
-            this._settings = settings;
-            this._maxVolume = maxVolume;
-            this._character = character;
+            _inventory = inventory;
+            _settings = settings;
+            _maxVolume = maxVolume;
+            _character = character;
             UpdateGeneralFromEntityBase();
 
-            // this.CUbe.InventorySize.X * this.CUbe.InventorySize.Y * this.CUbe.InventorySize.Z * 1000 * Sandbox.InventorySizeMultiplier;
-            // or this.Cube.InventoryMaxVolume * 1000 * Sandbox.InventorySizeMultiplier;
-            //this.Character.Inventory = 0.4 * 1000 * Sandbox.InventorySizeMultiplier;
+            // CUbe.InventorySize.X * CUbe.InventorySize.Y * CUbe.InventorySize.Z * 1000 * Sandbox.InventorySizeMultiplier;
+            // or Cube.InventoryMaxVolume * 1000 * Sandbox.InventorySizeMultiplier;
+            //Character.Inventory = 0.4 * 1000 * Sandbox.InventorySizeMultiplier;
         }
 
         #endregion
@@ -78,15 +79,15 @@
         {
             get
             {
-                return this._name;
+                return _name;
             }
 
             set
             {
-                if (value != this._name)
+                if (value != _name)
                 {
-                    this._name = value;
-                    this.RaisePropertyChanged(() => Name);
+                    _name = value;
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -96,15 +97,15 @@
         {
             get
             {
-                return this._isValid;
+                return _isValid;
             }
 
             set
             {
-                if (value != this._isValid)
+                if (value != _isValid)
                 {
-                    this._isValid = value;
-                    this.RaisePropertyChanged(() => IsValid);
+                    _isValid = value;
+                    RaisePropertyChanged(() => IsValid);
                 }
             }
         }
@@ -114,15 +115,15 @@
         {
             get
             {
-                return this._items;
+                return _items;
             }
 
             set
             {
-                if (value != this._items)
+                if (value != _items)
                 {
-                    this._items = value;
-                    this.RaisePropertyChanged(() => Items);
+                    _items = value;
+                    RaisePropertyChanged(() => Items);
                 }
             }
         }
@@ -132,15 +133,15 @@
         {
             get
             {
-                return this._selectedRow;
+                return _selectedRow;
             }
 
             set
             {
-                if (value != this._selectedRow)
+                if (value != _selectedRow)
                 {
-                    this._selectedRow = value;
-                    this.RaisePropertyChanged(() => SelectedRow);
+                    _selectedRow = value;
+                    RaisePropertyChanged(() => SelectedRow);
                 }
             }
         }
@@ -150,15 +151,15 @@
         {
             get
             {
-                return this._totalVolume;
+                return _totalVolume;
             }
 
             set
             {
-                if (value != this._totalVolume)
+                if (value != _totalVolume)
                 {
-                    this._totalVolume = value;
-                    this.RaisePropertyChanged(() => TotalVolume);
+                    _totalVolume = value;
+                    RaisePropertyChanged(() => TotalVolume);
                 }
             }
         }
@@ -168,15 +169,15 @@
         {
             get
             {
-                return this._totalMass;
+                return _totalMass;
             }
 
             set
             {
-                if (value != this._totalMass)
+                if (value != _totalMass)
                 {
-                    this._totalMass = value;
-                    this.RaisePropertyChanged(() => TotalMass);
+                    _totalMass = value;
+                    RaisePropertyChanged(() => TotalMass);
                 }
             }
         }
@@ -186,15 +187,15 @@
         {
             get
             {
-                return this._maxVolume;
+                return _maxVolume;
             }
 
             set
             {
-                if (value != this._maxVolume)
+                if (value != _maxVolume)
                 {
-                    this._maxVolume = value;
-                    this.RaisePropertyChanged(() => MaxVolume);
+                    _maxVolume = value;
+                    RaisePropertyChanged(() => MaxVolume);
                 }
             }
         }
@@ -202,7 +203,7 @@
         [XmlIgnore]
         public MySessionSettings Settings
         {
-            get { return this._settings; }
+            get { return _settings; }
         }
 
         #endregion
@@ -213,8 +214,8 @@
         {
             var list = new ObservableCollection<InventoryModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            this.TotalVolume = 0;
-            this.TotalMass = 0;
+            TotalVolume = 0;
+            TotalMass = 0;
 
             if (_inventory != null)
             {
@@ -224,7 +225,7 @@
                 }
             }
 
-            this.Items = list;
+            Items = list;
         }
 
         private InventoryModel CreateItem(MyObjectBuilder_InventoryItem item, string contentPath)
@@ -266,8 +267,8 @@
                 Exists = definition != null, // item no longer exists in Space Engineers definitions.
             };
 
-            this.TotalVolume += newItem.Volume;
-            this.TotalMass += newItem.Mass;
+            TotalVolume += newItem.Volume;
+            TotalMass += newItem.Mass;
 
             return newItem;
         }
@@ -275,35 +276,35 @@
         internal void Additem(MyObjectBuilder_InventoryItem item)
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            item.ItemId = this._inventory.nextItemId++;
-            this._inventory.Items.Add(item);
-            this.Items.Add(CreateItem(item, contentPath));
+            item.ItemId = _inventory.nextItemId++;
+            _inventory.Items.Add(item);
+            Items.Add(CreateItem(item, contentPath));
         }
 
         internal void RemoveItem(int index)
         {
-            var invItem = this._inventory.Items[index];
+            var invItem = _inventory.Items[index];
 
             // Remove HandWeapon if item is HandWeapon.
-            if (this._character != null && this._character.HandWeapon != null && invItem.Content.TypeId == SpaceEngineersConsts.PhysicalGunObject)
+            if (_character != null && _character.HandWeapon != null && invItem.Content.TypeId == SpaceEngineersConsts.PhysicalGunObject)
             {
                 if (((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity != null &&
-                    ((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity.EntityId == this._character.HandWeapon.EntityId)
+                    ((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity.EntityId == _character.HandWeapon.EntityId)
                 {
-                    this._character.HandWeapon = null;
+                    _character.HandWeapon = null;
                 }
             }
 
-            this.TotalVolume -= this.Items[index].Volume;
-            this.TotalMass -= this.Items[index].Mass;
-            this.Items.RemoveAt(index);
-            this._inventory.Items.RemoveAt(index);
-            this._inventory.nextItemId--;
+            TotalVolume -= Items[index].Volume;
+            TotalMass -= Items[index].Mass;
+            Items.RemoveAt(index);
+            _inventory.Items.RemoveAt(index);
+            _inventory.nextItemId--;
 
             // Re-index ItemId.
-            for (uint i = 0; i < this._inventory.Items.Count; i++)
+            for (uint i = 0; i < _inventory.Items.Count; i++)
             {
-                this._inventory.Items[(int)i].ItemId = i;
+                _inventory.Items[(int)i].ItemId = i;
             }
         }
 

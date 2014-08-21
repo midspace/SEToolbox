@@ -1,9 +1,7 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interfaces;
     using SEToolbox.Models;
-    using System.ComponentModel;
 
     public class StructureFloatingObjectViewModel : StructureBaseViewModel<StructureFloatingObjectModel>
     {
@@ -12,11 +10,8 @@
         public StructureFloatingObjectViewModel(BaseViewModel parentViewModel, StructureFloatingObjectModel dataModel)
             : base(parentViewModel, dataModel)
         {
-            this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-            {
-                // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
-            };
+            // Will bubble property change events from the Model to the ViewModel.
+            DataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -25,57 +20,30 @@
 
         protected new StructureFloatingObjectModel DataModel
         {
-            get
-            {
-                return base.DataModel as StructureFloatingObjectModel;
-            }
+            get { return base.DataModel as StructureFloatingObjectModel; }
         }
 
         public MyObjectBuilder_InventoryItem Item
         {
-            get
-            {
-                return this.DataModel.Item;
-            }
-
-            set
-            {
-                this.DataModel.Item = value;
-            }
+            get { return DataModel.Item; }
+            set { DataModel.Item = value; }
         }
 
         public string SubTypeName
         {
-            get
-            {
-                return this.DataModel.Item.Content.SubtypeName;
-            }
+            get { return DataModel.Item.Content.SubtypeName; }
         }
-      
+
         public double? Volume
         {
-            get
-            {
-                return this.DataModel.Volume;
-            }
-
-            set
-            {
-                this.DataModel.Volume = value;
-            }
+            get { return DataModel.Volume; }
+            set { DataModel.Volume = value; }
         }
 
         public double? Units
         {
-            get
-            {
-                return this.DataModel.Units;
-            }
-
-            set
-            {
-                this.DataModel.Units = value;
-            }
+            get { return DataModel.Units; }
+            set { DataModel.Units = value; }
         }
 
         #endregion

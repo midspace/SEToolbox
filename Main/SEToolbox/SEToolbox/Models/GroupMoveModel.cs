@@ -1,7 +1,8 @@
 ﻿namespace SEToolbox.Models
 {
-    using SEToolbox.Interfaces;
     using System.Collections.ObjectModel;
+
+    using SEToolbox.Interfaces;
     using VRageMath;
 
     public class GroupMoveModel : BaseModel
@@ -29,9 +30,9 @@
 
         public GroupMoveModel()
         {
-            this.GlobalOffsetPositionX = 0f;
-            this.GlobalOffsetPositionY = 0f;
-            this.GlobalOffsetPositionZ = 0f;
+            GlobalOffsetPositionX = 0f;
+            GlobalOffsetPositionY = 0f;
+            GlobalOffsetPositionZ = 0f;
         }
 
         #endregion
@@ -42,15 +43,15 @@
         {
             get
             {
-                return this._selections;
+                return _selections;
             }
 
             set
             {
-                if (value != this._selections)
+                if (value != _selections)
                 {
-                    this._selections = value;
-                    this.RaisePropertyChanged(() => Selections);
+                    _selections = value;
+                    RaisePropertyChanged(() => Selections);
                 }
             }
         }
@@ -62,16 +63,16 @@
         {
             get
             {
-                return this._isBusy;
+                return _isBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -83,15 +84,15 @@
         {
             get
             {
-                return this._globalOffsetPositionX;
+                return _globalOffsetPositionX;
             }
 
             set
             {
-                if (value != this._globalOffsetPositionX)
+                if (value != _globalOffsetPositionX)
                 {
-                    this._globalOffsetPositionX = value;
-                    this.RaisePropertyChanged(() => GlobalOffsetPositionX);
+                    _globalOffsetPositionX = value;
+                    RaisePropertyChanged(() => GlobalOffsetPositionX);
                 }
             }
         }
@@ -100,15 +101,15 @@
         {
             get
             {
-                return this._globalOffsetPositionY;
+                return _globalOffsetPositionY;
             }
 
             set
             {
-                if (value != this._globalOffsetPositionY)
+                if (value != _globalOffsetPositionY)
                 {
-                    this._globalOffsetPositionY = value;
-                    this.RaisePropertyChanged(() => GlobalOffsetPositionY);
+                    _globalOffsetPositionY = value;
+                    RaisePropertyChanged(() => GlobalOffsetPositionY);
                 }
             }
         }
@@ -117,15 +118,15 @@
         {
             get
             {
-                return this._globalOffsetPositionZ;
+                return _globalOffsetPositionZ;
             }
 
             set
             {
-                if (value != this._globalOffsetPositionZ)
+                if (value != _globalOffsetPositionZ)
                 {
-                    this._globalOffsetPositionZ = value;
-                    this.RaisePropertyChanged(() => GlobalOffsetPositionZ);
+                    _globalOffsetPositionZ = value;
+                    RaisePropertyChanged(() => GlobalOffsetPositionZ);
                 }
             }
         }
@@ -134,15 +135,15 @@
         {
             get
             {
-                return this._isGlobalOffsetPosition;
+                return _isGlobalOffsetPosition;
             }
 
             set
             {
-                if (value != this._isGlobalOffsetPosition)
+                if (value != _isGlobalOffsetPosition)
                 {
-                    this._isGlobalOffsetPosition = value;
-                    this.RaisePropertyChanged(() => IsGlobalOffsetPosition);
+                    _isGlobalOffsetPosition = value;
+                    RaisePropertyChanged(() => IsGlobalOffsetPosition);
                 }
             }
         }
@@ -151,15 +152,15 @@
         {
             get
             {
-                return this._singlePositionX;
+                return _singlePositionX;
             }
 
             set
             {
-                if (value != this._singlePositionX)
+                if (value != _singlePositionX)
                 {
-                    this._singlePositionX = value;
-                    this.RaisePropertyChanged(() => SinglePositionX);
+                    _singlePositionX = value;
+                    RaisePropertyChanged(() => SinglePositionX);
                 }
             }
         }
@@ -168,15 +169,15 @@
         {
             get
             {
-                return this._singlePositionY;
+                return _singlePositionY;
             }
 
             set
             {
-                if (value != this._singlePositionY)
+                if (value != _singlePositionY)
                 {
-                    this._singlePositionY = value;
-                    this.RaisePropertyChanged(() => SinglePositionY);
+                    _singlePositionY = value;
+                    RaisePropertyChanged(() => SinglePositionY);
                 }
             }
         }
@@ -185,15 +186,15 @@
         {
             get
             {
-                return this._singlePositionZ;
+                return _singlePositionZ;
             }
 
             set
             {
-                if (value != this._singlePositionZ)
+                if (value != _singlePositionZ)
                 {
-                    this._singlePositionZ = value;
-                    this.RaisePropertyChanged(() => SinglePositionZ);
+                    _singlePositionZ = value;
+                    RaisePropertyChanged(() => SinglePositionZ);
                 }
             }
         }
@@ -202,15 +203,15 @@
         {
             get
             {
-                return this._isSinglePosition;
+                return _isSinglePosition;
             }
 
             set
             {
-                if (value != this._isSinglePosition)
+                if (value != _isSinglePosition)
                 {
-                    this._isSinglePosition = value;
-                    this.RaisePropertyChanged(() => IsSinglePosition);
+                    _isSinglePosition = value;
+                    RaisePropertyChanged(() => IsSinglePosition);
                 }
             }
         }
@@ -221,13 +222,13 @@
 
         public void Load(ObservableCollection<IStructureViewBase> selections, Vector3 playerPosition)
         {
-            this.Selections = new ObservableCollection<GroupMoveItemModel>();
-            this._playerPosition = playerPosition;
-            this.IsGlobalOffsetPosition = true;
+            Selections = new ObservableCollection<GroupMoveItemModel>();
+            _playerPosition = playerPosition;
+            IsGlobalOffsetPosition = true;
 
             foreach (var selection in selections)
             {
-                this.Selections.Add(new GroupMoveItemModel()
+                Selections.Add(new GroupMoveItemModel
                 {
                     Item = selection,
                     PositionX = selection.DataModel.PositionX,
@@ -244,31 +245,31 @@
 
         public void CalcOffsetDistances()
         {
-            foreach (var selection in this.Selections)
+            foreach (var selection in Selections)
             {
-                if (this.IsGlobalOffsetPosition)
+                if (IsGlobalOffsetPosition)
                 {
                     // Apply a Global Offset to all objects.
-                    selection.PositionX = selection.Item.DataModel.PositionX + this.GlobalOffsetPositionX;
-                    selection.PositionY = selection.Item.DataModel.PositionY + this.GlobalOffsetPositionY;
-                    selection.PositionZ = selection.Item.DataModel.PositionZ + this.GlobalOffsetPositionZ;
+                    selection.PositionX = selection.Item.DataModel.PositionX + GlobalOffsetPositionX;
+                    selection.PositionY = selection.Item.DataModel.PositionY + GlobalOffsetPositionY;
+                    selection.PositionZ = selection.Item.DataModel.PositionZ + GlobalOffsetPositionZ;
                 }
 
-                if (this.IsSinglePosition)
+                if (IsSinglePosition)
                 {
                     // Apply a Single Position to all objects.
-                    selection.PositionX = this.SinglePositionX;
-                    selection.PositionY = this.SinglePositionY;
-                    selection.PositionZ = this.SinglePositionZ;
+                    selection.PositionX = SinglePositionX;
+                    selection.PositionY = SinglePositionY;
+                    selection.PositionZ = SinglePositionZ;
                 }
 
-                selection.PlayerDistance = (this._playerPosition - new Vector3((float)selection.PositionX, (float)selection.PositionY, (float)selection.PositionZ)).Length();
+                selection.PlayerDistance = (_playerPosition - new Vector3(selection.PositionX, selection.PositionY, selection.PositionZ)).Length();
             }
         }
 
         public void ApplyNewPositions()
         {
-            foreach (var selection in this.Selections)
+            foreach (var selection in Selections)
             {
                 selection.Item.DataModel.PositionX = selection.PositionX;
                 selection.Item.DataModel.PositionY = selection.PositionY;

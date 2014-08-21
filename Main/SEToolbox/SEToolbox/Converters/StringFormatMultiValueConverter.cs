@@ -9,7 +9,7 @@
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            object[] copy = (object[])values.Clone();
+            var copy = (object[])values.Clone();
 
             // Remove the {DependancyProperty.UnsetValue} from unbound datasources.
             for (int i = 0; i < copy.Length; i++)

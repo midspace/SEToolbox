@@ -16,21 +16,21 @@
         {
             get
             {
-                return this._sortBinding;
+                return _sortBinding;
             }
             set
             {
-                if (this._sortBinding != value)
+                if (_sortBinding != value)
                 {
-                    this._sortBinding = value;
-                    this.OnDisplayMemberBindingChanged();
+                    _sortBinding = value;
+                    OnDisplayMemberBindingChanged();
                 }
             }
         }
 
         private void OnDisplayMemberBindingChanged()
         {
-            this.OnPropertyChanged(new System.ComponentModel.PropertyChangedEventArgs("DisplayMemberBinding"));
+            OnPropertyChanged(new System.ComponentModel.PropertyChangedEventArgs("DisplayMemberBinding"));
         }
 
         #endregion

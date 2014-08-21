@@ -1,13 +1,14 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.VRageData;
-    using SEToolbox.Interop;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders.VRageData;
+    using SEToolbox.Interop;
     using VRageMath;
 
     public class CubeItemModel : BaseModel
@@ -50,7 +51,7 @@
 
         public CubeItemModel(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
-            this.SetProperties(cube, definition, settings);
+            SetProperties(cube, definition, settings);
         }
 
         #endregion
@@ -61,259 +62,215 @@
 
         public MyObjectBuilder_CubeBlock Cube
         {
-            get
-            {
-                return this._cube;
-            }
+            get { return _cube; }
 
             set
             {
-                if (value != this._cube)
+                if (value != _cube)
                 {
-                    this._cube = value;
-                    this.RaisePropertyChanged(() => Cube);
+                    _cube = value;
+                    RaisePropertyChanged(() => Cube);
                 }
             }
         }
 
         public MyObjectBuilderType TypeId
         {
-            get
-            {
-                return this._typeId;
-            }
+            get { return _typeId; }
 
             set
             {
-                if (value != this._typeId)
+                if (value != _typeId)
                 {
-                    this._typeId = value;
-                    this.RaisePropertyChanged(() => TypeId);
+                    _typeId = value;
+                    RaisePropertyChanged(() => TypeId);
                 }
             }
         }
 
         public string SubtypeId
         {
-            get
-            {
-                return this._subtypeId;
-            }
+            get { return _subtypeId; }
 
             set
             {
-                if (value != this._subtypeId)
+                if (value != _subtypeId)
                 {
-                    this._subtypeId = value;
-                    this.RaisePropertyChanged(() => SubtypeId);
+                    _subtypeId = value;
+                    RaisePropertyChanged(() => SubtypeId);
                 }
             }
         }
 
         public string TextureFile
         {
-            get
-            {
-                return this._textureFile;
-            }
+            get { return _textureFile; }
 
             set
             {
-                if (value != this._textureFile)
+                if (value != _textureFile)
                 {
-                    this._textureFile = value;
-                    this.RaisePropertyChanged(() => TextureFile);
+                    _textureFile = value;
+                    RaisePropertyChanged(() => TextureFile);
                 }
             }
         }
 
         public MyCubeSize CubeSize
         {
-            get
-            {
-                return this._cubeSize;
-            }
+            get { return _cubeSize; }
 
             set
             {
-                if (value != this._cubeSize)
+                if (value != _cubeSize)
                 {
-                    this._cubeSize = value;
-                    this.RaisePropertyChanged(() => CubeSize);
+                    _cubeSize = value;
+                    RaisePropertyChanged(() => CubeSize);
                 }
             }
         }
 
         public string FriendlyName
         {
-            get
-            {
-                return this._friendlyName;
-            }
+            get { return _friendlyName; }
 
             set
             {
-                if (value != this._friendlyName)
+                if (value != _friendlyName)
                 {
-                    this._friendlyName = value;
-                    this.RaisePropertyChanged(() => FriendlyName);
+                    _friendlyName = value;
+                    RaisePropertyChanged(() => FriendlyName);
                 }
             }
         }
 
         public string ColorText
         {
-            get
-            {
-                return this._colorText;
-            }
+            get { return _colorText; }
 
             set
             {
-                if (value != this._colorText)
+                if (value != _colorText)
                 {
-                    this._colorText = value;
-                    this.RaisePropertyChanged(() => ColorText);
+                    _colorText = value;
+                    RaisePropertyChanged(() => ColorText);
                 }
             }
         }
 
         public float ColorHue
         {
-            get
-            {
-                return this._colorHue;
-            }
+            get { return _colorHue; }
 
             set
             {
-                if (value != this._colorHue)
+                if (value != _colorHue)
                 {
-                    this._colorHue = value;
-                    this.RaisePropertyChanged(() => ColorHue);
+                    _colorHue = value;
+                    RaisePropertyChanged(() => ColorHue);
                 }
             }
         }
 
         public float ColorSaturation
         {
-            get
-            {
-                return this._colorSaturation;
-            }
+            get { return _colorSaturation; }
 
             set
             {
-                if (value != this._colorSaturation)
+                if (value != _colorSaturation)
                 {
-                    this._colorSaturation = value;
-                    this.RaisePropertyChanged(() => ColorSaturation);
+                    _colorSaturation = value;
+                    RaisePropertyChanged(() => ColorSaturation);
                 }
             }
         }
 
         public float ColorLuminance
         {
-            get
-            {
-                return this._colorLuminance;
-            }
+            get { return _colorLuminance; }
 
             set
             {
-                if (value != this._colorLuminance)
+                if (value != _colorLuminance)
                 {
-                    this._colorLuminance = value;
-                    this.RaisePropertyChanged(() => ColorLuminance);
+                    _colorLuminance = value;
+                    RaisePropertyChanged(() => ColorLuminance);
                 }
             }
         }
 
         public BindablePoint3DIModel Position
         {
-            get
-            {
-                return this._position;
-            }
+            get { return _position; }
 
             set
             {
-                if (value != this._position)
+                if (value != _position)
                 {
-                    this._position = value;
-                    this.RaisePropertyChanged(() => Position);
+                    _position = value;
+                    RaisePropertyChanged(() => Position);
                 }
             }
         }
 
         public override string ToString()
         {
-            return this.FriendlyName;
+            return FriendlyName;
         }
 
         public double BuildPercent
         {
-            get
-            {
-                return this._buildPercent;
-            }
+            get { return _buildPercent; }
 
             set
             {
-                if (value != this._buildPercent)
+                if (value != _buildPercent)
                 {
-                    this._buildPercent = value;
-                    this.RaisePropertyChanged(() => BuildPercent);
+                    _buildPercent = value;
+                    RaisePropertyChanged(() => BuildPercent);
                 }
             }
         }
 
         public System.Windows.Media.Brush Color
         {
-            get
-            {
-                return this._color;
-            }
+            get { return _color; }
 
             set
             {
-                if (value != this._color)
+                if (value != _color)
                 {
-                    this._color = value;
-                    this.RaisePropertyChanged(() => Color);
+                    _color = value;
+                    RaisePropertyChanged(() => Color);
                 }
             }
         }
 
         public ObservableCollection<InventoryEditorModel> Inventory
         {
-            get
-            {
-                return this._inventory;
-            }
+            get { return _inventory; }
 
             set
             {
-                if (value != this._inventory)
+                if (value != _inventory)
                 {
-                    this._inventory = value;
-                    this.RaisePropertyChanged(() => Inventory);
+                    _inventory = value;
+                    RaisePropertyChanged(() => Inventory);
                 }
             }
         }
 
         public MySessionSettings Settings
         {
-            get
-            {
-                return this._settings;
-            }
+            get { return _settings; }
+
             set
             {
-                if (!EqualityComparer<MySessionSettings>.Default.Equals(value, this._settings))
+                if (!EqualityComparer<MySessionSettings>.Default.Equals(value, _settings))
                 {
-                    this._settings = value;
-                    this.RaisePropertyChanged(() => Settings);
+                    _settings = value;
+                    RaisePropertyChanged(() => Settings);
                 }
             }
         }
@@ -322,53 +279,53 @@
 
         public void SetColor(SerializableVector3 vector3)
         {
-            this.Color = new System.Windows.Media.SolidColorBrush(vector3.ToSandboxMediaColor());
-            this.ColorText = this.Color.ToString();
-            this.ColorHue = vector3.X;
-            this.ColorSaturation = vector3.Y;
-            this.ColorLuminance = vector3.Z;
+            Color = new System.Windows.Media.SolidColorBrush(vector3.ToSandboxMediaColor());
+            ColorText = Color.ToString();
+            ColorHue = vector3.X;
+            ColorSaturation = vector3.Y;
+            ColorLuminance = vector3.Z;
 
-            this.RaisePropertyChanged(() => ColorText);
-            this.RaisePropertyChanged(() => ColorHue);
-            this.RaisePropertyChanged(() => ColorSaturation);
-            this.RaisePropertyChanged(() => ColorLuminance);
+            RaisePropertyChanged(() => ColorText);
+            RaisePropertyChanged(() => ColorHue);
+            RaisePropertyChanged(() => ColorSaturation);
+            RaisePropertyChanged(() => ColorLuminance);
         }
 
         public void UpdateColor(SerializableVector3 vector3)
         {
-            this.Cube.ColorMaskHSV = vector3;
+            Cube.ColorMaskHSV = vector3;
             SetColor(vector3);
         }
 
         public void UpdateBuildPercent(double buildPercent)
         {
-            this.Cube.IntegrityPercent = (float)buildPercent;
-            this.Cube.BuildPercent = (float)buildPercent;
-            this.BuildPercent = this.Cube.BuildPercent;
+            Cube.IntegrityPercent = (float)buildPercent;
+            Cube.BuildPercent = (float)buildPercent;
+            BuildPercent = Cube.BuildPercent;
         }
 
         public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
             var newCube = (MyObjectBuilder_CubeBlock)MyObjectBuilder_Base.CreateNewObject(typeId, subTypeId);
-            newCube.BlockOrientation = this.Cube.BlockOrientation;
-            newCube.ColorMaskHSV = this.Cube.ColorMaskHSV;
-            newCube.BuildPercent = this.Cube.BuildPercent;
-            newCube.EntityId = this.Cube.EntityId;
-            newCube.IntegrityPercent = this.Cube.IntegrityPercent;
-            newCube.Min = this.Cube.Min;
+            newCube.BlockOrientation = Cube.BlockOrientation;
+            newCube.ColorMaskHSV = Cube.ColorMaskHSV;
+            newCube.BuildPercent = Cube.BuildPercent;
+            newCube.EntityId = Cube.EntityId;
+            newCube.IntegrityPercent = Cube.IntegrityPercent;
+            newCube.Min = Cube.Min;
 
-            this.SetProperties(newCube, definition, settings);
+            SetProperties(newCube, definition, settings);
 
             return newCube;
         }
 
         private void SetProperties(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
-            this.Cube = cube;
-            this.Settings = settings;
-            this.Position = new BindablePoint3DIModel(cube.Min);
-            this.SetColor(cube.ColorMaskHSV);
-            this.BuildPercent = cube.BuildPercent;
+            Cube = cube;
+            Settings = settings;
+            Position = new BindablePoint3DIModel(cube.Min);
+            SetColor(cube.ColorMaskHSV);
+            BuildPercent = cube.BuildPercent;
 
             if (definition == null)
             {
@@ -376,13 +333,13 @@
                 return;
             }
 
-            this.CubeSize = definition.CubeSize;
-            this.FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayName);
-            this.TypeId = definition.Id.TypeId;
-            this.SubtypeId = definition.Id.SubtypeId;
+            CubeSize = definition.CubeSize;
+            FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayName);
+            TypeId = definition.Id.TypeId;
+            SubtypeId = definition.Id.SubtypeId;
 
-            if (this.Inventory == null)
-                this.Inventory = new ObservableCollection<InventoryEditorModel>();
+            if (Inventory == null)
+                Inventory = new ObservableCollection<InventoryEditorModel>();
 
             var blockType = cube.GetType();
             if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
@@ -395,27 +352,27 @@
 
                     var definitionType = definition.GetType();
                     var invSizeField = definitionType.GetField("InventorySize");
-                    var InventoryMaxVolumeField = definitionType.GetField("InventoryMaxVolume");
+                    var inventoryMaxVolumeField = definitionType.GetField("InventoryMaxVolume");
                     float volumeMultiplier = 1f; // Unsure if there should be a default of 1 if there isn't a InventorySize defined.
                     if (invSizeField != null)
                     {
                         var invSize = (Vector3)invSizeField.GetValue(definition);
                         volumeMultiplier = invSize.X * invSize.Y * invSize.Z;
                     }
-                    if (InventoryMaxVolumeField != null)
+                    if (inventoryMaxVolumeField != null)
                     {
-                        var maxSize = (float)InventoryMaxVolumeField.GetValue(definition);
+                        var maxSize = (float)inventoryMaxVolumeField.GetValue(definition);
                         volumeMultiplier = MathHelper.Min(volumeMultiplier, maxSize);
                     }
 
                     var iem = new InventoryEditorModel(inventory, Settings, volumeMultiplier * 1000 * Settings.InventorySizeMultiplier, null) { Name = field.Name, IsValid = true };
-                    this.Inventory.Add(iem);
+                    Inventory.Add(iem);
                 }
             }
 
-            while (this.Inventory.Count < 2)
+            while (Inventory.Count < 2)
             {
-                this.Inventory.Add(new InventoryEditorModel(false));
+                Inventory.Add(new InventoryEditorModel(false));
             }
         }
     }

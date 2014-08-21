@@ -14,32 +14,32 @@ namespace SEToolbox.ImageLibrary
         /// <summary>
         /// Lookup table for colors
         /// </summary>
-        private Hashtable _colorMap;
+        private readonly Hashtable _colorMap;
 
         /// <summary>
         /// List of all colors. Keys are Quantizer targets. Values are what they will be replaced with.
         /// </summary>
-        private Dictionary<Color, Color> _colorMatcher;
+        private readonly Dictionary<Color, Color> _colorMatcher;
 
         /// <summary>
         /// List of final colors to be used in the palette.
         /// </summary>
-        private List<Color> _finalColors;
+        private readonly List<Color> _finalColors;
 
         /// <summary>
         /// Construct the palette quantizer
         /// </summary>
-        /// <param name="palette">The color palette to quantize to</param>
+        /// <param name="paletteReplacement">The color palette to quantize to</param>
         /// <remarks>
         /// Palette quantization only requires a single quantization step
         /// </remarks>
         public PaletteReplacerQuantizer(Dictionary<Color, Color> paletteReplacement)
             : base(true)
         {
-            this._colorMatcher = paletteReplacement;
+            _colorMatcher = paletteReplacement;
 
             _colorMap = new Hashtable();
-            this._finalColors = new List<Color>(this._colorMatcher.Values.Distinct());
+            _finalColors = new List<Color>(_colorMatcher.Values.Distinct());
         }
 
         /// <summary>
@@ -83,8 +83,7 @@ namespace SEToolbox.ImageLibrary
 
                     // Loop through the entire palette, looking for the closest color match
 
-                    int index = 0;
-                    foreach (KeyValuePair<Color, Color> kvp in this._colorMatcher)
+                    foreach (KeyValuePair<Color, Color> kvp in _colorMatcher)
                     {
                         Color paletteColor = kvp.Key;
 
@@ -98,7 +97,7 @@ namespace SEToolbox.ImageLibrary
 
                         if (distance < leastDistance)
                         {
-                            colorIndex = (byte)this._finalColors.IndexOf(kvp.Value);
+                            colorIndex = (byte)_finalColors.IndexOf(kvp.Value);
 
                             leastDistance = distance;
 
@@ -106,8 +105,6 @@ namespace SEToolbox.ImageLibrary
                             if (0 == distance)
                                 break;
                         }
-
-                        index++;
                     }
                 }
 
@@ -129,8 +126,8 @@ namespace SEToolbox.ImageLibrary
             //for (int index = 0; index < palette.Entries.Length; index++)
             //    palette.Entries[index] = Color.FromArgb(0, 0, 0, 0);
 
-            for (int index = 0; index < this._finalColors.Count; index++)
-                palette.Entries[index] = this._finalColors[index];
+            for (int index = 0; index < _finalColors.Count; index++)
+                palette.Entries[index] = _finalColors[index];
 
             return palette;
         }

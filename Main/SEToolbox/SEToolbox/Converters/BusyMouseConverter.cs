@@ -18,10 +18,6 @@
                 {
                     return Cursors.Wait;
                 }
-                else
-                {
-                    return null;
-                }
             }
 
             return null;
@@ -35,10 +31,8 @@
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
 
             return null;

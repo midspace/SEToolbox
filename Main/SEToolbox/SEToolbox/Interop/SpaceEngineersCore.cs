@@ -92,7 +92,7 @@
         {
             // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
             FindDefinitions(contentPath, modPaths, out _definitions, out _contentDataPaths);
-            this._materialIndex = new Dictionary<string, byte>();
+            _materialIndex = new Dictionary<string, byte>();
         }
 
         /// <summary>
@@ -498,17 +498,16 @@
             {
                 if (Default._contentDataPaths[key.ToLower()].AbsolutePath != null)
                     return Default._contentDataPaths[key.ToLower()].AbsolutePath;
-                else if (Default._contentDataPaths[key.ToLower()].ZipFilePath != null)
+                
+                if (Default._contentDataPaths[key.ToLower()].ZipFilePath != null)
                 {
                     var tempContentFile = TempfileUtil.NewFilename(Path.GetExtension(defaultValue));
                     ZipTools.ExtractZipFileToFile(Default._contentDataPaths[key.ToLower()].ZipFilePath, null, Default._contentDataPaths[key.ToLower()].ReferencePath, tempContentFile);
                     return tempContentFile;
                 }
-                else
-                    return defaultValue;
             }
-            else
-                return defaultValue;
+            
+            return defaultValue;
         }
 
         public static Dictionary<string, byte> MaterialIndex

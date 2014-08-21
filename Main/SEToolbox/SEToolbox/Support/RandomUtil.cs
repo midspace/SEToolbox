@@ -7,17 +7,9 @@
         [ThreadStatic]
         static Random _mSecretRandom;
 
-        static Random random
+        static Random MyRandom
         {
-            get
-            {
-                if (_mSecretRandom == null)
-                {
-                    _mSecretRandom = new Random((int)DateTime.Now.Ticks);
-                }
-
-                return _mSecretRandom;
-            }
+            get { return _mSecretRandom ?? (_mSecretRandom = new Random((int) DateTime.Now.Ticks)); }
         }
 
         /// <summary>
@@ -27,7 +19,7 @@
         /// <returns></returns>
         public static int GetInt(int maxValue)
         {
-            return random.Next(maxValue);
+            return MyRandom.Next(maxValue);
         }
 
         /// <summary>
@@ -38,7 +30,7 @@
         /// <returns></returns>
         public static int GetInt(int minValue, int maxValue)
         {
-            return random.Next(minValue, maxValue);
+            return MyRandom.Next(minValue, maxValue);
         }
 
         /// <summary>
@@ -49,7 +41,7 @@
         /// <returns></returns>
         public static float GetRandomFloat(float minValue, float maxValue)
         {
-            return (float)random.NextDouble() * (maxValue - minValue) + minValue;
+            return (float)MyRandom.NextDouble() * (maxValue - minValue) + minValue;
         }
 
         /// <summary>
@@ -60,7 +52,7 @@
         /// <returns></returns>
         public static double GetDouble(double minValue, double maxValue)
         {
-            return random.NextDouble() * (maxValue - minValue) + minValue;
+            return MyRandom.NextDouble() * (maxValue - minValue) + minValue;
         }
     }
 }

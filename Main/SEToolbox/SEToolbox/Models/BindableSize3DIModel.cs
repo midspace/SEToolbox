@@ -2,6 +2,7 @@
 {
     using System.Drawing;
     using System.Windows.Media.Media3D;
+
     using VRageMath;
 
     public class BindableSize3DIModel : BaseModel
@@ -16,31 +17,31 @@
 
         public BindableSize3DIModel()
         {
-            this.Width = 0;
-            this.Height = 0;
-            this.Depth = 0;
+            Width = 0;
+            Height = 0;
+            Depth = 0;
         }
 
         public BindableSize3DIModel(int width, int height, int depth)
             : this()
         {
-            this.Width = width;
-            this.Height = height;
-            this.Depth = depth;
+            Width = width;
+            Height = height;
+            Depth = depth;
         }
 
         public BindableSize3DIModel(Vector3I size)
         {
-            this.Width = size.X;
-            this.Height = size.Y;
-            this.Depth = size.Z;
+            Width = size.X;
+            Height = size.Y;
+            Depth = size.Z;
         }
 
         public BindableSize3DIModel(Size size)
             : this()
         {
-            this.Width = size.Width;
-            this.Height = size.Height;
+            Width = size.Width;
+            Height = size.Height;
         }
 
         #region Properties
@@ -49,15 +50,15 @@
         {
             get
             {
-                return this._width;
+                return _width;
             }
 
             set
             {
-                if (value != this._width)
+                if (value != _width)
                 {
-                    this._width = value;
-                    this.RaisePropertyChanged(() => Width);
+                    _width = value;
+                    RaisePropertyChanged(() => Width);
                 }
             }
         }
@@ -66,15 +67,15 @@
         {
             get
             {
-                return this._height;
+                return _height;
             }
 
             set
             {
-                if (value != this._height)
+                if (value != _height)
                 {
-                    this._height = value;
-                    this.RaisePropertyChanged(() => Height);
+                    _height = value;
+                    RaisePropertyChanged(() => Height);
                 }
             }
         }
@@ -83,15 +84,15 @@
         {
             get
             {
-                return this._depth;
+                return _depth;
             }
 
             set
             {
-                if (value != this._depth)
+                if (value != _depth)
                 {
-                    this._depth = value;
-                    this.RaisePropertyChanged(() => Depth);
+                    _depth = value;
+                    RaisePropertyChanged(() => Depth);
                 }
             }
         }
@@ -100,7 +101,7 @@
         {
             get
             {
-                return new Size3D(this.Width, this.Height, this.Depth);
+                return new Size3D(Width, Height, Depth);
             }
         }
 
@@ -108,12 +109,12 @@
 
         public Vector3I ToVector3I()
         {
-            return new Vector3I(this.Width, this.Height, this.Depth);
+            return new Vector3I(Width, Height, Depth);
         }
 
         public override string ToString()
         {
-            return string.Format("{0},{1},{2}", this.Width, this.Height, this.Depth);
+            return string.Format("{0},{1},{2}", Width, Height, Depth);
         }
     }
 }

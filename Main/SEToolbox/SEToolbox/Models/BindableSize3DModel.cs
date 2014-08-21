@@ -1,34 +1,33 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Drawing;
     using System.Windows.Media.Media3D;
 
     public class BindableSize3DModel : BaseModel
     {
         #region fields
 
-        private Size3D size;
+        private Size3D _size;
 
         #endregion
 
         public BindableSize3DModel()
         {
-            this.size = new Size3D(0, 0, 0);
+            _size = new Size3D(0, 0, 0);
         }
 
         public BindableSize3DModel(int width, int height, int depth)
         {
-            this.size = new Size3D(width, height, depth);
+            _size = new Size3D(width, height, depth);
         }
 
         public BindableSize3DModel(Rect3D size)
         {
-            this.size = new Size3D(size.SizeX, size.SizeY, size.SizeZ);
+            _size = new Size3D(size.SizeX, size.SizeY, size.SizeZ);
         }
 
         public BindableSize3DModel(Size3D size)
         {
-            this.size = new Size3D(size.X, size.Y, size.Z);
+            _size = new Size3D(size.X, size.Y, size.Z);
         }
 
         #region Properties
@@ -37,15 +36,15 @@
         {
             get
             {
-                return this.size.X;
+                return _size.X;
             }
 
             set
             {
-                if (value != this.size.X)
+                if (value != _size.X)
                 {
-                    this.size.X = value;
-                    this.RaisePropertyChanged(() => Width);
+                    _size.X = value;
+                    RaisePropertyChanged(() => Width);
                 }
             }
         }
@@ -54,15 +53,15 @@
         {
             get
             {
-                return this.size.Y;
+                return _size.Y;
             }
 
             set
             {
-                if (value != this.size.Y)
+                if (value != _size.Y)
                 {
-                    this.size.Y = value;
-                    this.RaisePropertyChanged(() => Height);
+                    _size.Y = value;
+                    RaisePropertyChanged(() => Height);
                 }
             }
         }
@@ -71,15 +70,15 @@
         {
             get
             {
-                return this.size.Z;
+                return _size.Z;
             }
 
             set
             {
-                if (value != this.size.Z)
+                if (value != _size.Z)
                 {
-                    this.size.Z = value;
-                    this.RaisePropertyChanged(() => Depth);
+                    _size.Z = value;
+                    RaisePropertyChanged(() => Depth);
                 }
             }
         }
@@ -88,7 +87,7 @@
         {
             get
             {
-                return size;
+                return _size;
             }
         }
 

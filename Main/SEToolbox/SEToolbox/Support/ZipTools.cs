@@ -7,7 +7,7 @@
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
-    using System.Windows.Documents;
+
     using ICSharpCode.SharpZipLib.Core;
     using ICSharpCode.SharpZipLib.Zip;
 
@@ -52,7 +52,7 @@
                     // Manipulate the output filename here as desired.
                     var fullZipToPath = Path.Combine(outFolder, entryFileName);
                     var directoryName = Path.GetDirectoryName(fullZipToPath);
-                    if (directoryName.Length > 0)
+                    if (!string.IsNullOrEmpty(directoryName))
                         Directory.CreateDirectory(directoryName);
 
                     // Unzip file in buffered chunks. This is just as fast as unpacking to a buffer the full size

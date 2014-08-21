@@ -1,7 +1,7 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System;
     using System.Windows.Input;
+
     using SEToolbox.Models;
     using SEToolbox.Services;
 
@@ -21,9 +21,9 @@
             : base(parentViewModel)
         {
 
-            this._dataModel = dataModel;
+            _dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -32,18 +32,12 @@
 
         public ICommand OkayCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OkayExecuted), new Func<bool>(OkayCanExecute));
-            }
+            get { return new DelegateCommand(OkayExecuted, OkayCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         #endregion
@@ -57,13 +51,13 @@
         {
             get
             {
-                return this._closeResult;
+                return _closeResult;
             }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
@@ -74,16 +68,16 @@
         {
             get
             {
-                return this._isBusy;
+                return _isBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -95,12 +89,12 @@
         {
             get
             {
-                return this._dataModel.BuildPercent;
+                return _dataModel.BuildPercent;
             }
 
             set
             {
-                this._dataModel.BuildPercent = value;
+                _dataModel.BuildPercent = value;
             }
         }
 
@@ -112,12 +106,12 @@
 
         public bool OkayCanExecute()
         {
-            return this.BuildPercent.HasValue;
+            return BuildPercent.HasValue;
         }
 
         public void OkayExecuted()
         {
-            this.CloseResult = true;
+            CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -127,7 +121,7 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion

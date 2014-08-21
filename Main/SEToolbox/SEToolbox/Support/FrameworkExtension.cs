@@ -8,7 +8,6 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Markup;
-    using System.Windows.Media;
     using System.Windows.Threading;
 
     public static class FrameworkExtension
@@ -77,10 +76,10 @@
 
         public static IEnumerable<DependencyObject> VisualDescendents(this DependencyObject root, int depth)
         {
-            var count = VisualTreeHelper.GetChildrenCount(root);
+            var count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
             for (var i = 0; i < count; i++)
             {
-                var child = VisualTreeHelper.GetChild(root, i);
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
                 yield return child;
                 if (depth > 0)
                 {
@@ -101,7 +100,7 @@
             where T : DependencyObject
         {
             // get parent item
-            var parentObject = VisualTreeHelper.GetParent(child);
+            var parentObject = System.Windows.Media.VisualTreeHelper.GetParent(child);
 
             // we’ve reached the end of the tree
             if (parentObject == null) return null;
@@ -158,7 +157,7 @@
                     }
                     else
                     {
-                        elementAtPosition = VisualTreeHelper.GetParent(elementAtPosition) as UIElement;
+                        elementAtPosition = System.Windows.Media.VisualTreeHelper.GetParent(elementAtPosition) as UIElement;
                     }
                 }
             }
@@ -276,7 +275,7 @@
         #endregion
 
         /// <summary>
-        /// Adds an element with the provided key and value to the System.Collections.Generic.IDictionary<TKey,TValue>.
+        /// Adds an element with the provided key and value to the System.Collections.Generic.IDictionary&gt;TKey,TValue&lt;.
         /// If the provide key already exists, then the existing key is updated with the newly supplied value.
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
@@ -285,7 +284,7 @@
         /// <param name="key">The object to use as the key of the element to add.</param>
         /// <param name="value">The object to use as the value of the element to add.</param>
         /// <exception cref="System.ArgumentNullException">key is null</exception>
-        /// <exception cref="System.NotSupportedException">The System.Collections.Generic.IDictionary<TKey,TValue> is read-only.</exception>
+        /// <exception cref="System.NotSupportedException">The System.Collections.Generic.IDictionary&gt;TKey,TValue&lt; is read-only.</exception>
         public static void Update<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
         {
             if (dictionary.ContainsKey(key))

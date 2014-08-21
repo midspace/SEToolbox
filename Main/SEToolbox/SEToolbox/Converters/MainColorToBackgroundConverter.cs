@@ -15,13 +15,13 @@
             {
                 return new SolidColorBrush(Colors.Transparent);
             }
-            
+
             if (mainColor.StartsWith("#"))
             {
                 mainColor = mainColor.Substring(1);
             }
 
-            if (mainColor != null && mainColor.Length == 8)
+            if (mainColor.Length == 8)
             {
                 return new SolidColorBrush(Color.FromArgb(
                     System.Convert.ToByte(mainColor.Substring(0, 2), 16),
@@ -30,7 +30,8 @@
                     System.Convert.ToByte(mainColor.Substring(6, 2), 16)
                 ));
             }
-            else if (mainColor != null && mainColor.Length == 6)
+
+            if (mainColor.Length == 6)
             {
                 return new SolidColorBrush(Color.FromRgb(
                     System.Convert.ToByte(mainColor.Substring(0, 2), 16),
@@ -38,10 +39,8 @@
                     System.Convert.ToByte(mainColor.Substring(4, 2), 16)
                 ));
             }
-            else
-            {
-                return new SolidColorBrush(Colors.Black);
-            }
+
+            return new SolidColorBrush(Colors.Black);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

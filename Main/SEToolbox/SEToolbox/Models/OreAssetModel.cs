@@ -1,7 +1,8 @@
 ﻿namespace SEToolbox.Models
 {
-    using SEToolbox.Interop;
     using System;
+
+    using SEToolbox.Interop;
 
     [Serializable]
     public class OreAssetModel : BaseModel
@@ -24,16 +25,16 @@
         {
             get
             {
-                return this._name;
+                return _name;
             }
 
             set
             {
-                if (value != this._name)
+                if (value != _name)
                 {
-                    this._name = value;
-                    this.FriendlyName = SpaceEngineersApi.GetResourceName(this.Name);
-                    this.RaisePropertyChanged(() => Name);
+                    _name = value;
+                    FriendlyName = SpaceEngineersApi.GetResourceName(Name);
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -44,15 +45,15 @@
         {
             get
             {
-                return this._amount;
+                return _amount;
             }
 
             set
             {
-                if (value != this._amount)
+                if (value != _amount)
                 {
-                    this._amount = value;
-                    this.RaisePropertyChanged(() => Amount);
+                    _amount = value;
+                    RaisePropertyChanged(() => Amount);
                 }
             }
         }
@@ -61,15 +62,15 @@
         {
             get
             {
-                return this._mass;
+                return _mass;
             }
 
             set
             {
-                if (value != this._mass)
+                if (value != _mass)
                 {
-                    this._mass = value;
-                    this.RaisePropertyChanged(() => Mass);
+                    _mass = value;
+                    RaisePropertyChanged(() => Mass);
                 }
             }
         }
@@ -78,15 +79,15 @@
         {
             get
             {
-                return this._volume;
+                return _volume;
             }
 
             set
             {
-                if (value != this._volume)
+                if (value != _volume)
                 {
-                    this._volume = value;
-                    this.RaisePropertyChanged(() => Volume);
+                    _volume = value;
+                    RaisePropertyChanged(() => Volume);
                 }
             }
         }
@@ -95,15 +96,15 @@
         {
             get
             {
-                return this._time;
+                return _time;
             }
 
             set
             {
-                if (value != this._time)
+                if (value != _time)
                 {
-                    this._time = value;
-                    this.RaisePropertyChanged(() => Time);
+                    _time = value;
+                    RaisePropertyChanged(() => Time);
                 }
             }
         }
@@ -112,15 +113,15 @@
         {
             get
             {
-                return this._textureFile;
+                return _textureFile;
             }
 
             set
             {
-                if (value != this._textureFile)
+                if (value != _textureFile)
                 {
-                    this._textureFile = value;
-                    this.RaisePropertyChanged(() => TextureFile);
+                    _textureFile = value;
+                    RaisePropertyChanged(() => TextureFile);
                 }
             }
         }

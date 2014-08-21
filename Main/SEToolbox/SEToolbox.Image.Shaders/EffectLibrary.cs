@@ -14,7 +14,7 @@ namespace SEToolbox.ImageShaders
     {
         public static Uri MakePackUri(string relativeFile)
         {
-            StringBuilder uriString = new StringBuilder(); ;
+            var uriString = new StringBuilder();
 #if !SILVERLIGHT
             uriString.Append("pack://application:,,,");
 #endif

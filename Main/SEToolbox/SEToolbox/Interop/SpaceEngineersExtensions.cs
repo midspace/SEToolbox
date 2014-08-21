@@ -3,7 +3,6 @@
     using System;
 
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Support;
     using VRageMath;
@@ -87,20 +86,20 @@
             return new Vector3((float)point.X, (float)point.Y, (float)point.Z);
         }
 
-        internal static VRageMath.Quaternion ToQuaternion(this SerializableBlockOrientation blockOrientation)
+        internal static Quaternion ToQuaternion(this SerializableBlockOrientation blockOrientation)
         {
             var matrix = Matrix.CreateFromDir(Base6Directions.GetVector(blockOrientation.Forward), Base6Directions.GetVector(blockOrientation.Up));
-            return VRageMath.Quaternion.CreateFromRotationMatrix(matrix);
+            return Quaternion.CreateFromRotationMatrix(matrix);
         }
 
-        internal static VRageMath.Quaternion ToQuaternion(this MyPositionAndOrientation positionOrientation)
+        internal static Quaternion ToQuaternion(this MyPositionAndOrientation positionOrientation)
         {
-            return VRageMath.Quaternion.CreateFromRotationMatrix(positionOrientation.GetMatrix());
+            return Quaternion.CreateFromRotationMatrix(positionOrientation.GetMatrix());
         }
 
-        internal static VRageMath.Matrix ToMatrix(this VRageMath.Quaternion quaternion)
+        internal static Matrix ToMatrix(this Quaternion quaternion)
         {
-            return VRageMath.Matrix.CreateFromQuaternion(quaternion);
+            return Matrix.CreateFromQuaternion(quaternion);
         }
 
         public static Vector3 Transform(this Vector3 vector, SerializableBlockOrientation orientation)
@@ -137,11 +136,13 @@
             {
                 return new SerializableVector3(Math.Sign(vector.X), 0, 0);
             }
-            else if (Math.Abs(vector.Y) > Math.Abs(vector.X) && Math.Abs(vector.Y) > Math.Abs(vector.Z))
+            
+            if (Math.Abs(vector.Y) > Math.Abs(vector.X) && Math.Abs(vector.Y) > Math.Abs(vector.Z))
             {
                 return new SerializableVector3(0, Math.Sign(vector.Y), 0);
             }
-            else if (Math.Abs(vector.Z) > Math.Abs(vector.X) && Math.Abs(vector.Z) > Math.Abs(vector.Y))
+            
+            if (Math.Abs(vector.Z) > Math.Abs(vector.X) && Math.Abs(vector.Z) > Math.Abs(vector.Y))
             {
                 return new SerializableVector3(0, 0, Math.Sign(vector.Z));
             }
@@ -153,31 +154,31 @@
 
         public static System.Drawing.Color ToSandboxDrawingColor(this SerializableVector3 hsv)
         {
-            var vColor = VRageMath.ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
+            var vColor = ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
             return System.Drawing.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
         }
 
         public static System.Windows.Media.Color ToSandboxMediaColor(this SerializableVector3 hsv)
         {
-            var vColor = VRageMath.ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
+            var vColor = ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
             return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
         }
 
         public static System.Windows.Media.Color ToSandboxMediaColor(this Vector3 rgb)
         {
-            var vColor = new VRageMath.Color(rgb);
+            var vColor = new Color(rgb);
             return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
         }
 
         public static SerializableVector3 ToSandboxHsvColor(this System.Drawing.Color color)
         {
-            var vColor = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(color.R, color.G, color.B));
+            var vColor = ColorExtensions.ColorToHSV(new Color(color.R, color.G, color.B));
             return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
         }
 
         public static SerializableVector3 ToSandboxHsvColor(this System.Windows.Media.Color color)
         {
-            var vColor = VRageMath.ColorExtensions.ColorToHSV(new VRageMath.Color(color.R, color.G, color.B));
+            var vColor = ColorExtensions.ColorToHSV(new Color(color.R, color.G, color.B));
             return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
         }
 

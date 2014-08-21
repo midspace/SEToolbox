@@ -1,15 +1,16 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.VRageData;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders.VRageData;
+
+    using SEToolbox.Interfaces;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
 
     public class CubeItemViewModel : BaseViewModel
     {
@@ -32,15 +33,15 @@
             : base(parentViewModel)
         {
             Contract.Requires(dialogService != null);
-            this._dialogService = dialogService;
-            this._dataModel = dataModel;
+            _dialogService = dialogService;
+            _dataModel = dataModel;
 
             Func<InventoryEditorModel, InventoryEditorViewModel> viewModelCreator = model => new InventoryEditorViewModel(this, model);
             Func<ObservableCollection<InventoryEditorViewModel>> collectionCreator =
                 () => new ObservableViewModelCollection<InventoryEditorViewModel, InventoryEditorModel>(dataModel.Inventory, viewModelCreator);
             _inventory = new Lazy<ObservableCollection<InventoryEditorViewModel>>(collectionCreator);
 
-            this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            _dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "Inventory")
                 {
@@ -48,7 +49,7 @@
                     _inventory = new Lazy<ObservableCollection<InventoryEditorViewModel>>(collectionCreator);
                 }
                 // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
+                OnPropertyChanged(e.PropertyName);
             };
         }
 
@@ -83,102 +84,102 @@
 
         public bool IsSelected
         {
-            get { return this._dataModel.IsSelected; }
-            set { this._dataModel.IsSelected = value; }
+            get { return _dataModel.IsSelected; }
+            set { _dataModel.IsSelected = value; }
         }
 
         public MyObjectBuilder_CubeBlock Cube
         {
-            get { return this._dataModel.Cube; }
-            set { this._dataModel.Cube = value; }
+            get { return _dataModel.Cube; }
+            set { _dataModel.Cube = value; }
         }
 
         public MyObjectBuilderType TypeId
         {
-            get { return this._dataModel.TypeId; }
-            set { this._dataModel.TypeId = value; }
+            get { return _dataModel.TypeId; }
+            set { _dataModel.TypeId = value; }
         }
 
         public string SubtypeId
         {
-            get { return this._dataModel.SubtypeId; }
-            set { this._dataModel.SubtypeId = value; }
+            get { return _dataModel.SubtypeId; }
+            set { _dataModel.SubtypeId = value; }
         }
 
         public string TextureFile
         {
-            get { return this._dataModel.TextureFile; }
-            set { this._dataModel.TextureFile = value; }
+            get { return _dataModel.TextureFile; }
+            set { _dataModel.TextureFile = value; }
         }
 
         public MyCubeSize CubeSize
         {
-            get { return this._dataModel.CubeSize; }
-            set { this._dataModel.CubeSize = value; }
+            get { return _dataModel.CubeSize; }
+            set { _dataModel.CubeSize = value; }
         }
 
         public string FriendlyName
         {
-            get { return this._dataModel.FriendlyName; }
-            set { this._dataModel.FriendlyName = value; }
+            get { return _dataModel.FriendlyName; }
+            set { _dataModel.FriendlyName = value; }
         }
 
         public string ColorText
         {
-            get { return this._dataModel.ColorText; }
-            set { this._dataModel.ColorText = value; }
+            get { return _dataModel.ColorText; }
+            set { _dataModel.ColorText = value; }
         }
 
         public float ColorHue
         {
-            get { return this._dataModel.ColorHue; }
-            set { this._dataModel.ColorHue = value; }
+            get { return _dataModel.ColorHue; }
+            set { _dataModel.ColorHue = value; }
         }
 
         public float ColorSaturation
         {
-            get { return this._dataModel.ColorSaturation; }
-            set { this._dataModel.ColorSaturation = value; }
+            get { return _dataModel.ColorSaturation; }
+            set { _dataModel.ColorSaturation = value; }
         }
 
         public float ColorLuminance
         {
-            get { return this._dataModel.ColorLuminance; }
-            set { this._dataModel.ColorLuminance = value; }
+            get { return _dataModel.ColorLuminance; }
+            set { _dataModel.ColorLuminance = value; }
         }
 
         public BindablePoint3DIModel Position
         {
-            get { return this._dataModel.Position; }
-            set { this._dataModel.Position = value; }
+            get { return _dataModel.Position; }
+            set { _dataModel.Position = value; }
         }
 
         public double BuildPercent
         {
-            get { return this._dataModel.BuildPercent; }
-            set { this._dataModel.BuildPercent = value; }
+            get { return _dataModel.BuildPercent; }
+            set { _dataModel.BuildPercent = value; }
         }
 
         public System.Windows.Media.Brush Color
         {
-            get { return this._dataModel.Color; }
-            set { this._dataModel.Color = value; }
+            get { return _dataModel.Color; }
+            set { _dataModel.Color = value; }
         }
 
         public ObservableCollection<InventoryEditorViewModel> Inventory
         {
-            get { return this._inventory.Value; }
+            get { return _inventory.Value; }
         }
 
         public MySessionSettings Settings
         {
-            get { return this._dataModel.Settings; }
-            set { this._dataModel.Settings = value; }
+            get { return _dataModel.Settings; }
+            set { _dataModel.Settings = value; }
         }
 
         public override string ToString()
         {
-            return this.FriendlyName;
+            return FriendlyName;
         }
 
         #endregion
@@ -187,17 +188,17 @@
 
         public void UpdateColor(SerializableVector3 vector3)
         {
-            this._dataModel.UpdateColor(vector3);
+            _dataModel.UpdateColor(vector3);
         }
 
         public void UpdateBuildPercent(double buildPercent)
         {
-            this._dataModel.UpdateBuildPercent(buildPercent);
+            _dataModel.UpdateBuildPercent(buildPercent);
         }
 
         public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
         {
-            return this._dataModel.CreateCube(typeId, subTypeId, definition, settings);
+            return _dataModel.CreateCube(typeId, subTypeId, definition, settings);
         }
 
         #endregion

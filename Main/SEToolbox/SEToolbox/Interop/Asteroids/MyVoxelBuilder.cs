@@ -69,7 +69,7 @@
                 }
             };
 
-            return MyVoxelBuilder.BuildAsteroid(multiThread, buildSize, material, faceMaterial, action);
+            return BuildAsteroid(multiThread, buildSize, material, faceMaterial, action);
         }
 
         public static MyVoxelMap BuildAsteroidCube(bool multiThread, Vector3I min, Vector3I max, string material, string faceMaterial)
@@ -90,7 +90,7 @@
                 }
             };
 
-            return MyVoxelBuilder.BuildAsteroid(multiThread, buildSize, material, faceMaterial, action);
+            return BuildAsteroid(multiThread, buildSize, material, faceMaterial, action);
         }
 
         public static MyVoxelMap BuildAsteroidSphere(bool multiThread, double radius, string material, string faceMaterial,
@@ -133,7 +133,7 @@
                 }
             };
 
-            return MyVoxelBuilder.BuildAsteroid(multiThread, size, material, faceMaterial, action);
+            return BuildAsteroid(multiThread, size, material, faceMaterial, action);
         }
 
 
@@ -178,7 +178,7 @@
                 }
             };
 
-            return MyVoxelBuilder.BuildAsteroid(multiThread, size, material, faceMaterial, action);
+            return BuildAsteroid(multiThread, size, material, faceMaterial, action);
         }
 
         #endregion
@@ -223,7 +223,7 @@
         /// <param name="multiThread"></param>
         /// <param name="material"></param>
         /// <param name="func"></param>
-        /// <param name="writeOnly"></param>
+        /// <param name="readWrite"></param>
         /// <returns></returns>
         public static void ProcessAsteroid(MyVoxelMap voxelMap, bool multiThread, string material, Action<MyVoxelBuilderArgs> func, bool readWrite = true)
         {
@@ -260,8 +260,10 @@
                             {
                                 func(args);
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
+                                threadException = ex;
+                                break;
                             }
 
                             if (args.Volume != MyVoxelConstants.VOXEL_CONTENT_FULL)
@@ -275,7 +277,7 @@
                             }
 
                             counter++;
-                            var prog = Math.Floor((decimal)counter / (decimal)counterTotal * 100);
+                            var prog = Math.Floor(counter / (decimal)counterTotal * 100);
                             if (prog != progress)
                             {
                                 progress = prog;
@@ -303,7 +305,7 @@
                     {
                         for (baseCoords.Z = 0; baseCoords.Z < voxelMap.Size.Z; baseCoords.Z += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE)
                         {
-                            var task = new Task((obj) =>
+                            var task = new Task(obj =>
                             {
                                 var bgw = (MyVoxelTaskWorker)obj;
 
@@ -350,7 +352,7 @@
                                     counter += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
                                             MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
                                             MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE;
-                                    var prog = Math.Floor((decimal)counter / (decimal)counterTotal * 100);
+                                    var prog = Math.Floor(counter / (decimal)counterTotal * 100);
                                     if (prog != progress)
                                     {
                                         progress = prog;
@@ -374,19 +376,19 @@
                 System.Threading.Thread.Sleep(100);
                 System.Windows.Forms.Application.DoEvents();
 
-                if (threadException != null)
-                    throw threadException;
-
                 #endregion
             }
 
             timer.Stop();
 
+            if (threadException != null)
+                throw threadException;
+
             voxelMap.UpdateContentBounds();
 
             var count = voxelMap.SumVoxelCells();
 
-            Debug.WriteLine(string.Format(" Done. | {0}  | VoxCells {1:#,##0}", timer.Elapsed, count));
+            Debug.WriteLine(" Done. | {0}  | VoxCells {1:#,##0}", timer.Elapsed, count);
         }
 
         #endregion

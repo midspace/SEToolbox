@@ -16,15 +16,15 @@
         {
             get
             {
-                return this._buildPercent;
+                return _buildPercent;
             }
 
             set
             {
-                if (value != this._buildPercent)
+                if (value != _buildPercent)
                 {
-                    this._buildPercent = value;
-                    this.RaisePropertyChanged(() => BuildPercent);
+                    _buildPercent = value;
+                    RaisePropertyChanged(() => BuildPercent);
                 }
             }
         }

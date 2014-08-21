@@ -20,15 +20,15 @@
         {
             get
             {
-                return this._materialName;
+                return _materialName;
             }
 
             set
             {
-                if (value != this._materialName)
+                if (value != _materialName)
                 {
-                    this._materialName = value;
-                    this.RaisePropertyChanged(() => MaterialName);
+                    _materialName = value;
+                    RaisePropertyChanged(() => MaterialName);
                 }
             }
         }
@@ -39,15 +39,15 @@
         {
             get
             {
-                return this._volume;
+                return _volume;
             }
 
             set
             {
-                if (value != this._volume)
+                if (value != _volume)
                 {
-                    this._volume = value;
-                    this.RaisePropertyChanged(() => Volume);
+                    _volume = value;
+                    RaisePropertyChanged(() => Volume);
                 }
             }
         }
@@ -56,15 +56,15 @@
         {
             get
             {
-                return this._percent;
+                return _percent;
             }
 
             set
             {
-                if (value != this._percent)
+                if (value != _percent)
                 {
-                    this._percent = value;
-                    this.RaisePropertyChanged(() => Percent);
+                    _percent = value;
+                    RaisePropertyChanged(() => Percent);
                 }
             }
         }

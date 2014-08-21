@@ -1,11 +1,12 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using SEToolbox.Interop;
     using System;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using SEToolbox.Interop;
 
     [Serializable]
     public class StructureFloatingObjectModel : StructureBaseModel
@@ -38,7 +39,7 @@
         {
             get
             {
-                return this.EntityBase as MyObjectBuilder_FloatingObject;
+                return EntityBase as MyObjectBuilder_FloatingObject;
             }
         }
 
@@ -47,15 +48,15 @@
         {
             get
             {
-                return this.FloatingObject.Item;
+                return FloatingObject.Item;
             }
 
             set
             {
-                if (value != this.FloatingObject.Item)
+                if (value != FloatingObject.Item)
                 {
-                    this.FloatingObject.Item = value;
-                    this.RaisePropertyChanged(() => Item);
+                    FloatingObject.Item = value;
+                    RaisePropertyChanged(() => Item);
                 }
             }
         }
@@ -65,15 +66,15 @@
         {
             get
             {
-                return this._volume;
+                return _volume;
             }
 
             set
             {
-                if (value != this._volume)
+                if (value != _volume)
                 {
-                    this._volume = value;
-                    this.RaisePropertyChanged(() => Volume);
+                    _volume = value;
+                    RaisePropertyChanged(() => Volume);
                 }
             }
         }
@@ -83,15 +84,15 @@
         {
             get
             {
-                return this._units;
+                return _units;
             }
 
             set
             {
-                if (value != this._units)
+                if (value != _units)
                 {
-                    this._units = value;
-                    this.RaisePropertyChanged(() => Units);
+                    _units = value;
+                    RaisePropertyChanged(() => Units);
                 }
             }
         }
@@ -103,51 +104,51 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_FloatingObject>(this.FloatingObject);
+            SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_FloatingObject>(FloatingObject);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_FloatingObject>(this.SerializedEntity);
+            EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_FloatingObject>(SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
-            this.ClassType = ClassType.FloatingObject;
+            ClassType = ClassType.FloatingObject;
 
-            var cd = SpaceEngineersApi.GetDefinition(this.FloatingObject.Item.Content.TypeId, this.FloatingObject.Item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
+            var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(FloatingObject.Item.Content.TypeId, FloatingObject.Item.Content.SubtypeName);
             var friendlyName = SpaceEngineersApi.GetResourceName(cd.DisplayName);
 
-            if (this.FloatingObject.Item.Content is MyObjectBuilder_Ore)
+            if (FloatingObject.Item.Content is MyObjectBuilder_Ore)
             {
-                this.DisplayName = friendlyName;
-                this.Volume = cd.Volume.Value * this.FloatingObject.Item.Amount;
-                this.Mass = cd.Mass * this.FloatingObject.Item.Amount;
-                this.Description = string.Format("{0:#,##0.00} Kg", this.Mass);
+                DisplayName = friendlyName;
+                Volume = cd.Volume.Value * FloatingObject.Item.Amount;
+                Mass = cd.Mass * FloatingObject.Item.Amount;
+                Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
-            else if (this.FloatingObject.Item.Content is MyObjectBuilder_Ingot)
+            else if (FloatingObject.Item.Content is MyObjectBuilder_Ingot)
             {
-                this.DisplayName = friendlyName;
-                this.Volume = cd.Volume.Value * this.FloatingObject.Item.Amount;
-                this.Mass = cd.Mass * this.FloatingObject.Item.Amount;
-                this.Description = string.Format("{0:#,##0.00} Kg", this.Mass);
+                DisplayName = friendlyName;
+                Volume = cd.Volume.Value * FloatingObject.Item.Amount;
+                Mass = cd.Mass * FloatingObject.Item.Amount;
+                Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
-            else if (this.FloatingObject.Item.Content is MyObjectBuilder_EntityBase)
+            else if (FloatingObject.Item.Content is MyObjectBuilder_EntityBase)
             {
-                this.DisplayName = friendlyName;
-                this.Description = string.Format("x {0}", this.FloatingObject.Item.Amount);
-                this.Units = this.FloatingObject.Item.Amount;
-                this.Volume = cd.Volume.Value * this.FloatingObject.Item.Amount;
-                this.Mass = cd.Mass * this.FloatingObject.Item.Amount;
+                DisplayName = friendlyName;
+                Description = string.Format("x {0}", FloatingObject.Item.Amount);
+                Units = FloatingObject.Item.Amount;
+                Volume = cd.Volume.Value * FloatingObject.Item.Amount;
+                Mass = cd.Mass * FloatingObject.Item.Amount;
             }
             else
             {
-                this.DisplayName = friendlyName;
-                this.Description = string.Format("x {0}", this.FloatingObject.Item.Amount);
-                this.Units = this.FloatingObject.Item.Amount;
-                this.Volume = cd.Volume.Value * this.FloatingObject.Item.Amount;
-                this.Mass = cd.Mass * this.FloatingObject.Item.Amount;
+                DisplayName = friendlyName;
+                Description = string.Format("x {0}", FloatingObject.Item.Amount);
+                Units = FloatingObject.Item.Amount;
+                Volume = cd.Volume.Value * FloatingObject.Item.Amount;
+                Mass = cd.Mass * FloatingObject.Item.Amount;
             }
         }
 

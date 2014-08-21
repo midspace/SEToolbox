@@ -1,12 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
-    using SEToolbox.Views;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -19,6 +12,14 @@
     using System.Windows.Data;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
+
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
+    using SEToolbox.Views;
 
     public class StructureCubeGridViewModel : StructureBaseViewModel<StructureCubeGridModel>
     {
@@ -38,7 +39,7 @@
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel)
             : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IColorDialog>)
         {
-            this.Selections = new ObservableCollection<CubeItemViewModel>();
+            Selections = new ObservableCollection<CubeItemViewModel>();
         }
 
         public StructureCubeGridViewModel(BaseViewModel parentViewModel, StructureCubeGridModel dataModel, IDialogService dialogService, Func<IColorDialog> colorDialogFactory)
@@ -47,15 +48,15 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(colorDialogFactory != null);
 
-            this._dialogService = dialogService;
-            this._colorDialogFactory = colorDialogFactory;
+            _dialogService = dialogService;
+            _colorDialogFactory = colorDialogFactory;
 
             Func<CubeItemModel, CubeItemViewModel> viewModelCreator = model => new CubeItemViewModel(this, model);
             Func<ObservableCollection<CubeItemViewModel>> collectionCreator =
                 () => new ObservableViewModelCollection<CubeItemViewModel, CubeItemModel>(dataModel.CubeList, viewModelCreator);
             _cubeList = new Lazy<ObservableCollection<CubeItemViewModel>>(collectionCreator);
 
-            this.DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "CubeList")
                 {
@@ -63,7 +64,7 @@
                     _cubeList = new Lazy<ObservableCollection<CubeItemViewModel>>(collectionCreator);
                 }
                 // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
+                OnPropertyChanged(e.PropertyName);
             };
         }
 
@@ -73,266 +74,167 @@
 
         public ICommand OptimizeObjectCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OptimizeObjectExecuted), new Func<bool>(OptimizeObjectCanExecute));
-            }
+            get { return new DelegateCommand(OptimizeObjectExecuted, OptimizeObjectCanExecute); }
         }
 
         public ICommand RepairObjectCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RepairObjectExecuted), new Func<bool>(RepairObjectCanExecute));
-            }
+            get { return new DelegateCommand(RepairObjectExecuted, RepairObjectCanExecute); }
         }
 
         public ICommand ResetVelocityCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ResetVelocityExecuted), new Func<bool>(ResetVelocityCanExecute));
-            }
+            get { return new DelegateCommand(ResetVelocityExecuted, ResetVelocityCanExecute); }
         }
 
         public ICommand ReverseVelocityCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ReverseVelocityExecuted), new Func<bool>(ReverseVelocityCanExecute));
-            }
+            get { return new DelegateCommand(ReverseVelocityExecuted, ReverseVelocityCanExecute); }
         }
 
         public ICommand MaxVelocityAtPlayerCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(MaxVelocityAtPlayerExecuted), new Func<bool>(MaxVelocityAtPlayerCanExecute));
-            }
+            get { return new DelegateCommand(MaxVelocityAtPlayerExecuted, MaxVelocityAtPlayerCanExecute); }
         }
 
         public ICommand ConvertCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertExecuted), new Func<bool>(ConvertCanExecute));
-            }
+            get { return new DelegateCommand(ConvertExecuted, ConvertCanExecute); }
         }
 
         public ICommand ConvertToHeavyArmorCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertToHeavyArmorExecuted), new Func<bool>(ConvertToHeavyArmorCanExecute));
-            }
+            get { return new DelegateCommand(ConvertToHeavyArmorExecuted, ConvertToHeavyArmorCanExecute); }
         }
 
         public ICommand ConvertToLightArmorCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertToLightArmorExecuted), new Func<bool>(ConvertToLightArmorCanExecute));
-            }
+            get { return new DelegateCommand(ConvertToLightArmorExecuted, ConvertToLightArmorCanExecute); }
         }
 
         public ICommand FrameworkCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(FrameworkExecuted), new Func<bool>(FrameworkCanExecute));
-            }
+            get { return new DelegateCommand(FrameworkExecuted, FrameworkCanExecute); }
         }
 
         public ICommand ConvertToFrameworkCommand
         {
-            get
-            {
-                return new DelegateCommand<double>(new Action<double>(ConvertToFrameworkExecuted), new Func<double, bool>(ConvertToFrameworkCanExecute));
-            }
+            get { return new DelegateCommand<double>(ConvertToFrameworkExecuted, ConvertToFrameworkCanExecute); }
         }
 
         public ICommand ConvertToStationCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertToStationExecuted), new Func<bool>(ConvertToStationCanExecute));
-            }
+            get { return new DelegateCommand(ConvertToStationExecuted, ConvertToStationCanExecute); }
         }
 
         public ICommand ReorientStationCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ReorientStationExecuted), new Func<bool>(ReorientStationCanExecute));
-            }
+            get { return new DelegateCommand(ReorientStationExecuted, ReorientStationCanExecute); }
         }
 
         public ICommand RotateCubesYawPositiveCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RotateCubesYawPositiveExecuted), new Func<bool>(RotateCubesYawPositiveCanExecute));
-            }
+            get { return new DelegateCommand(RotateCubesYawPositiveExecuted, RotateCubesYawPositiveCanExecute); }
         }
 
         public ICommand RotateCubesYawNegativeCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RotateCubesYawNegativeExecuted), new Func<bool>(RotateCubesYawNegativeCanExecute));
-            }
+            get { return new DelegateCommand(RotateCubesYawNegativeExecuted, RotateCubesYawNegativeCanExecute); }
         }
 
         public ICommand RotateCubesPitchPositiveCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RotateCubesPitchPositiveExecuted), new Func<bool>(RotateCubesPitchPositiveCanExecute));
-            }
+            get { return new DelegateCommand(RotateCubesPitchPositiveExecuted, RotateCubesPitchPositiveCanExecute); }
         }
 
         public ICommand RotateCubesPitchNegativeCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RotateCubesPitchNegativeExecuted), new Func<bool>(RotateCubesPitchNegativeCanExecute));
-            }
+            get { return new DelegateCommand(RotateCubesPitchNegativeExecuted, RotateCubesPitchNegativeCanExecute); }
         }
 
         public ICommand RotateCubesRollPositiveCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RotateCubesRollPositiveExecuted), new Func<bool>(RotateCubesRollPositiveCanExecute));
-            }
+            get { return new DelegateCommand(RotateCubesRollPositiveExecuted, RotateCubesRollPositiveCanExecute); }
         }
 
         public ICommand RotateCubesRollNegativeCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RotateCubesRollNegativeExecuted), new Func<bool>(RotateCubesRollNegativeCanExecute));
-            }
+            get { return new DelegateCommand(RotateCubesRollNegativeExecuted, RotateCubesRollNegativeCanExecute); }
         }
 
         public ICommand ConvertToShipCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertToShipExecuted), new Func<bool>(ConvertToShipCanExecute));
-            }
+            get { return new DelegateCommand(ConvertToShipExecuted, ConvertToShipCanExecute); }
         }
 
         public ICommand ConvertToCornerArmorCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertToCornerArmorExecuted), new Func<bool>(ConvertToCornerArmorCanExecute));
-            }
+            get { return new DelegateCommand(ConvertToCornerArmorExecuted, ConvertToCornerArmorCanExecute); }
         }
 
         public ICommand ConvertToRoundArmorCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertToRoundArmorExecuted), new Func<bool>(ConvertToRoundArmorCanExecute));
-            }
+            get { return new DelegateCommand(ConvertToRoundArmorExecuted, ConvertToRoundArmorCanExecute); }
         }
 
         public ICommand ConvertLadderToPassageCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ConvertLadderToPassageExecuted), new Func<bool>(ConvertLadderToPassageCanExecute));
-            }
+            get { return new DelegateCommand(ConvertLadderToPassageExecuted, ConvertLadderToPassageCanExecute); }
         }
 
         public ICommand MirrorStructureByPlaneCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(MirrorStructureByPlaneExecuted), new Func<bool>(MirrorStructureByPlaneCanExecute));
-            }
+            get { return new DelegateCommand(MirrorStructureByPlaneExecuted, MirrorStructureByPlaneCanExecute); }
         }
 
         public ICommand MirrorStructureGuessOddCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(MirrorStructureGuessOddExecuted), new Func<bool>(MirrorStructureGuessOddCanExecute));
-            }
+            get { return new DelegateCommand(MirrorStructureGuessOddExecuted, MirrorStructureGuessOddCanExecute); }
         }
 
         public ICommand MirrorStructureGuessEvenCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(MirrorStructureGuessEvenExecuted), new Func<bool>(MirrorStructureGuessEvenCanExecute));
-            }
+            get { return new DelegateCommand(MirrorStructureGuessEvenExecuted, MirrorStructureGuessEvenCanExecute); }
         }
 
         public ICommand CopyDetailCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CopyDetailExecuted), new Func<bool>(CopyDetailCanExecute));
-            }
+            get { return new DelegateCommand(CopyDetailExecuted, CopyDetailCanExecute); }
         }
 
         public ICommand FilterStartCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(FilterStartExecuted), new Func<bool>(FilterStartCanExecute));
-            }
+            get { return new DelegateCommand(FilterStartExecuted, FilterStartCanExecute); }
         }
 
         public ICommand FilterTabStartCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(FilterTabStartExecuted), new Func<bool>(FilterTabStartCanExecute));
-            }
+            get { return new DelegateCommand(FilterTabStartExecuted, FilterTabStartCanExecute); }
         }
 
         public ICommand FilterClearCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(FilterClearExecuted), new Func<bool>(FilterClearCanExecute));
-            }
+            get { return new DelegateCommand(FilterClearExecuted, FilterClearCanExecute); }
         }
 
         public ICommand DeleteCubesCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(DeleteCubesExecuted), new Func<bool>(DeleteCubesCanExecute));
-            }
+            get { return new DelegateCommand(DeleteCubesExecuted, DeleteCubesCanExecute); }
         }
 
         public ICommand ReplaceCubesCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ReplaceCubesExecuted), new Func<bool>(ReplaceCubesCanExecute));
-            }
+            get { return new DelegateCommand(ReplaceCubesExecuted, ReplaceCubesCanExecute); }
         }
 
         public ICommand ColorCubesCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ColorCubesExecuted), new Func<bool>(ColorCubesCanExecute));
-            }
+            get { return new DelegateCommand(ColorCubesExecuted, ColorCubesCanExecute); }
         }
 
         public ICommand FrameworkCubesCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(FrameworkCubesExecuted), new Func<bool>(FrameworkCubesCanExecute));
-            }
+            get { return new DelegateCommand(FrameworkCubesExecuted, FrameworkCubesCanExecute); }
         }
 
         #endregion
@@ -341,33 +243,33 @@
 
         public ObservableCollection<CubeItemViewModel> CubeList
         {
-            get { return this._cubeList.Value; }
+            get { return _cubeList.Value; }
         }
 
         public ObservableCollection<CubeItemViewModel> Selections
         {
-            get { return this._selections; }
+            get { return _selections; }
 
             set
             {
-                if (value != this._selections)
+                if (value != _selections)
                 {
-                    this._selections = value;
-                    this.RaisePropertyChanged(() => Selections);
+                    _selections = value;
+                    RaisePropertyChanged(() => Selections);
                 }
             }
         }
 
         public CubeItemViewModel SelectedCubeItem
         {
-            get { return this._selectedCubeItem; }
+            get { return _selectedCubeItem; }
 
             set
             {
-                if (value != this._selectedCubeItem)
+                if (value != _selectedCubeItem)
                 {
-                    this._selectedCubeItem = value;
-                    this.RaisePropertyChanged(() => SelectedCubeItem);
+                    _selectedCubeItem = value;
+                    RaisePropertyChanged(() => SelectedCubeItem);
                 }
             }
         }
@@ -379,127 +281,127 @@
 
         public bool IsDamaged
         {
-            get { return this.DataModel.IsDamaged; }
+            get { return DataModel.IsDamaged; }
         }
 
         public int DamageCount
         {
-            get { return this.DataModel.DamageCount; }
+            get { return DataModel.DamageCount; }
         }
 
-        public Sandbox.Common.ObjectBuilders.MyCubeSize GridSize
+        public MyCubeSize GridSize
         {
-            get { return this.DataModel.GridSize; }
-            set { this.DataModel.GridSize = value; }
+            get { return DataModel.GridSize; }
+            set { DataModel.GridSize = value; }
         }
 
         public bool IsStatic
         {
-            get { return this.DataModel.IsStatic; }
-            set { this.DataModel.IsStatic = value; }
+            get { return DataModel.IsStatic; }
+            set { DataModel.IsStatic = value; }
         }
 
         public bool Dampeners
         {
-            get { return this.DataModel.Dampeners; }
+            get { return DataModel.Dampeners; }
 
             set
             {
-                this.DataModel.Dampeners = value;
-                this.MainViewModel.IsModified = true;
+                DataModel.Dampeners = value;
+                MainViewModel.IsModified = true;
             }
         }
 
         public Point3D Min
         {
-            get { return this.DataModel.Min; }
-            set { this.DataModel.Min = value; }
+            get { return DataModel.Min; }
+            set { DataModel.Min = value; }
         }
 
         public Point3D Max
         {
-            get { return this.DataModel.Max; }
-            set { this.DataModel.Max = value; }
+            get { return DataModel.Max; }
+            set { DataModel.Max = value; }
         }
 
         public Vector3D Scale
         {
-            get { return this.DataModel.Scale; }
-            set { this.DataModel.Scale = value; }
+            get { return DataModel.Scale; }
+            set { DataModel.Scale = value; }
         }
 
         public BindableSize3DModel Size
         {
-            get { return new BindableSize3DModel(this.DataModel.Size); }
+            get { return new BindableSize3DModel(DataModel.Size); }
         }
 
         public bool IsPiloted
         {
-            get { return this.DataModel.IsPiloted; }
+            get { return DataModel.IsPiloted; }
         }
 
         public double LinearVelocity
         {
-            get { return this.DataModel.LinearVelocity; }
+            get { return DataModel.LinearVelocity; }
         }
 
         public TimeSpan TimeToProduce
         {
-            get { return this.DataModel.TimeToProduce; }
-            set { this.DataModel.TimeToProduce = value; }
+            get { return DataModel.TimeToProduce; }
+            set { DataModel.TimeToProduce = value; }
         }
 
         public string CockpitOrientation
         {
-            get { return this.DataModel.CockpitOrientation; }
+            get { return DataModel.CockpitOrientation; }
         }
 
         public List<CubeAssetModel> CubeAssets
         {
-            get { return this.DataModel.CubeAssets; }
-            set { this.DataModel.CubeAssets = value; }
+            get { return DataModel.CubeAssets; }
+            set { DataModel.CubeAssets = value; }
         }
 
         public List<CubeAssetModel> ComponentAssets
         {
-            get { return this.DataModel.ComponentAssets; }
-            set { this.DataModel.ComponentAssets = value; }
+            get { return DataModel.ComponentAssets; }
+            set { DataModel.ComponentAssets = value; }
         }
 
         public List<OreAssetModel> IngotAssets
         {
-            get { return this.DataModel.IngotAssets; }
-            set { this.DataModel.IngotAssets = value; }
+            get { return DataModel.IngotAssets; }
+            set { DataModel.IngotAssets = value; }
         }
 
         public List<OreAssetModel> OreAssets
         {
-            get { return this.DataModel.OreAssets; }
-            set { this.DataModel.OreAssets = value; }
+            get { return DataModel.OreAssets; }
+            set { DataModel.OreAssets = value; }
         }
 
         public string ActiveComponentFilter
         {
-            get { return this.DataModel.ActiveComponentFilter; }
-            set { this.DataModel.ActiveComponentFilter = value; }
+            get { return DataModel.ActiveComponentFilter; }
+            set { DataModel.ActiveComponentFilter = value; }
         }
 
         public string ComponentFilter
         {
-            get { return this.DataModel.ComponentFilter; }
-            set { this.DataModel.ComponentFilter = value; }
+            get { return DataModel.ComponentFilter; }
+            set { DataModel.ComponentFilter = value; }
         }
 
         public bool IsConstructionNotReady
         {
-            get { return this.DataModel.IsConstructionNotReady; }
-            set { this.DataModel.IsConstructionNotReady = value; }
+            get { return DataModel.IsConstructionNotReady; }
+            set { DataModel.IsConstructionNotReady = value; }
         }
 
         public bool IsSubsSystemNotReady
         {
-            get { return this.DataModel.IsSubsSystemNotReady; }
-            set { this.DataModel.IsSubsSystemNotReady = value; }
+            get { return DataModel.IsSubsSystemNotReady; }
+            set { DataModel.IsSubsSystemNotReady = value; }
         }
 
         #endregion
@@ -513,55 +415,55 @@
 
         public void OptimizeObjectExecuted()
         {
-            this.MainViewModel.OptimizeModel(this);
-            this.IsSubsSystemNotReady = true;
-            this.DataModel.InitializeAsync();
+            MainViewModel.OptimizeModel(this);
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool RepairObjectCanExecute()
         {
-            return this.IsDamaged;
+            return IsDamaged;
         }
 
         public void RepairObjectExecuted()
         {
-            this.DataModel.RepairAllDamage();
-            this.MainViewModel.IsModified = true;
+            DataModel.RepairAllDamage();
+            MainViewModel.IsModified = true;
         }
 
         public bool ResetVelocityCanExecute()
         {
-            return this.DataModel.LinearVelocity != 0f || this.DataModel.AngularSpeed != 0f;
+            return DataModel.LinearVelocity != 0f || DataModel.AngularSpeed != 0f;
         }
 
         public void ResetVelocityExecuted()
         {
-            this.DataModel.ResetVelocity();
-            this.MainViewModel.IsModified = true;
+            DataModel.ResetVelocity();
+            MainViewModel.IsModified = true;
         }
 
         public bool ReverseVelocityCanExecute()
         {
-            return this.DataModel.LinearVelocity != 0f || this.DataModel.AngularSpeed != 0f;
+            return DataModel.LinearVelocity != 0f || DataModel.AngularSpeed != 0f;
         }
 
         public void ReverseVelocityExecuted()
         {
-            this.DataModel.ReverseVelocity();
-            this.MainViewModel.IsModified = true;
+            DataModel.ReverseVelocity();
+            MainViewModel.IsModified = true;
         }
 
         public bool MaxVelocityAtPlayerCanExecute()
         {
-            return this.MainViewModel.ThePlayerCharacter != null;
+            return MainViewModel.ThePlayerCharacter != null;
         }
 
         public void MaxVelocityAtPlayerExecuted()
         {
 
-            var position = this.MainViewModel.ThePlayerCharacter.PositionAndOrientation.Value.Position;
-            this.DataModel.MaxVelocityAtPlayer(position);
-            this.MainViewModel.IsModified = true;
+            var position = MainViewModel.ThePlayerCharacter.PositionAndOrientation.Value.Position;
+            DataModel.MaxVelocityAtPlayer(position);
+            MainViewModel.IsModified = true;
         }
 
         public bool ConvertCanExecute()
@@ -580,9 +482,9 @@
 
         public void ConvertToHeavyArmorExecuted()
         {
-            if (this.DataModel.ConvertFromLightToHeavyArmor())
+            if (DataModel.ConvertFromLightToHeavyArmor())
             {
-                this.MainViewModel.IsModified = true;
+                MainViewModel.IsModified = true;
             }
         }
 
@@ -593,9 +495,9 @@
 
         public void ConvertToLightArmorExecuted()
         {
-            if (this.DataModel.ConvertFromHeavyToLightArmor())
+            if (DataModel.ConvertFromHeavyToLightArmor())
             {
-                this.MainViewModel.IsModified = true;
+                MainViewModel.IsModified = true;
             }
         }
 
@@ -616,32 +518,32 @@
 
         public void ConvertToFrameworkExecuted(double value)
         {
-            this.DataModel.ConvertToFramework((float)value);
-            this.MainViewModel.IsModified = true;
-            this.IsSubsSystemNotReady = true;
-            this.DataModel.InitializeAsync();
+            DataModel.ConvertToFramework((float)value);
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool ConvertToStationCanExecute()
         {
-            return !this.DataModel.IsStatic && this.DataModel.GridSize == MyCubeSize.Large;
+            return !DataModel.IsStatic && DataModel.GridSize == MyCubeSize.Large;
         }
 
         public void ConvertToStationExecuted()
         {
-            this.DataModel.ConvertToStation();
-            this.MainViewModel.IsModified = true;
+            DataModel.ConvertToStation();
+            MainViewModel.IsModified = true;
         }
 
         public bool ReorientStationCanExecute()
         {
-            return this.DataModel.GridSize == MyCubeSize.Large;
+            return DataModel.GridSize == MyCubeSize.Large;
         }
 
         public void ReorientStationExecuted()
         {
-            this.DataModel.ReorientStation();
-            this.MainViewModel.IsModified = true;
+            DataModel.ReorientStation();
+            MainViewModel.IsModified = true;
         }
 
         public bool RotateCubesYawPositiveCanExecute()
@@ -652,10 +554,10 @@
         public void RotateCubesPitchPositiveExecuted()
         {
             // +90 around X
-            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, VRageMath.MathHelper.PiOver2, 0));
-            this.MainViewModel.IsModified = true;
-            this.IsSubsSystemNotReady = true;
-            this.DataModel.InitializeAsync();
+            DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, VRageMath.MathHelper.PiOver2, 0));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool RotateCubesPitchNegativeCanExecute()
@@ -666,10 +568,10 @@
         public void RotateCubesPitchNegativeExecuted()
         {
             // -90 around X
-            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, -VRageMath.MathHelper.PiOver2, 0));
-            this.MainViewModel.IsModified = true;
-            this.IsSubsSystemNotReady = true;
-            this.DataModel.InitializeAsync();
+            DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, -VRageMath.MathHelper.PiOver2, 0));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool RotateCubesRollPositiveCanExecute()
@@ -680,10 +582,10 @@
         public void RotateCubesYawPositiveExecuted()
         {
             // +90 around Y
-            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(VRageMath.MathHelper.PiOver2, 0, 0));
-            this.MainViewModel.IsModified = true;
-            this.IsSubsSystemNotReady = true;
-            this.DataModel.InitializeAsync();
+            DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(VRageMath.MathHelper.PiOver2, 0, 0));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool RotateCubesYawNegativeCanExecute()
@@ -694,10 +596,10 @@
         public void RotateCubesYawNegativeExecuted()
         {
             // -90 around Y
-            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(-VRageMath.MathHelper.PiOver2, 0, 0));
-            this.MainViewModel.IsModified = true;
-            this.IsSubsSystemNotReady = true;
-            this.DataModel.InitializeAsync();
+            DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(-VRageMath.MathHelper.PiOver2, 0, 0));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool RotateCubesPitchPositiveCanExecute()
@@ -708,10 +610,10 @@
         public void RotateCubesRollPositiveExecuted()
         {
             // +90 around Z
-            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, VRageMath.MathHelper.PiOver2));
-            this.MainViewModel.IsModified = true;
-            this.IsSubsSystemNotReady = true;
-            this.DataModel.InitializeAsync();
+            DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, VRageMath.MathHelper.PiOver2));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool RotateCubesRollNegativeCanExecute()
@@ -722,59 +624,59 @@
         public void RotateCubesRollNegativeExecuted()
         {
             // -90 around Z
-            this.DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2));
-            this.MainViewModel.IsModified = true;
-            this.IsSubsSystemNotReady = true;
-            this.DataModel.InitializeAsync();
+            DataModel.RotateCubes(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool ConvertToShipCanExecute()
         {
-            return this.DataModel.IsStatic && this.DataModel.GridSize == MyCubeSize.Large;
+            return DataModel.IsStatic && DataModel.GridSize == MyCubeSize.Large;
         }
 
         public void ConvertToShipExecuted()
         {
-            this.DataModel.ConvertToShip();
-            this.MainViewModel.IsModified = true;
+            DataModel.ConvertToShip();
+            MainViewModel.IsModified = true;
         }
 
         public bool ConvertToCornerArmorCanExecute()
         {
-            return this.DataModel.GridSize == MyCubeSize.Large;
+            return DataModel.GridSize == MyCubeSize.Large;
         }
 
         public void ConvertToCornerArmorExecuted()
         {
-            if (this.DataModel.ConvertToCornerArmor())
+            if (DataModel.ConvertToCornerArmor())
             {
-                this.MainViewModel.IsModified = true;
+                MainViewModel.IsModified = true;
             }
         }
 
         public bool ConvertToRoundArmorCanExecute()
         {
-            return this.DataModel.GridSize == MyCubeSize.Large;
+            return DataModel.GridSize == MyCubeSize.Large;
         }
 
         public void ConvertToRoundArmorExecuted()
         {
-            if (this.DataModel.ConvertToRoundArmor())
+            if (DataModel.ConvertToRoundArmor())
             {
-                this.MainViewModel.IsModified = true;
+                MainViewModel.IsModified = true;
             }
         }
 
         public bool ConvertLadderToPassageCanExecute()
         {
-            return this.DataModel.GridSize == MyCubeSize.Large;
+            return DataModel.GridSize == MyCubeSize.Large;
         }
 
         public void ConvertLadderToPassageExecuted()
         {
-            if (this.DataModel.ConvertLadderToPassage())
+            if (DataModel.ConvertLadderToPassage())
             {
-                this.MainViewModel.IsModified = true;
+                MainViewModel.IsModified = true;
             }
         }
 
@@ -785,15 +687,15 @@
 
         public void MirrorStructureByPlaneExecuted()
         {
-            this.MainViewModel.IsBusy = true;
-            if (this.DataModel.MirrorModel(true, false))
+            MainViewModel.IsBusy = true;
+            if (DataModel.MirrorModel(true, false))
             {
-                this.MainViewModel.IsModified = true;
-                this.IsSubsSystemNotReady = true;
-                this.IsConstructionNotReady = true;
-                this.DataModel.InitializeAsync();
+                MainViewModel.IsModified = true;
+                IsSubsSystemNotReady = true;
+                IsConstructionNotReady = true;
+                DataModel.InitializeAsync();
             }
-            this.MainViewModel.IsBusy = false;
+            MainViewModel.IsBusy = false;
         }
 
         public bool MirrorStructureGuessOddCanExecute()
@@ -803,15 +705,15 @@
 
         public void MirrorStructureGuessOddExecuted()
         {
-            this.MainViewModel.IsBusy = true;
-            if (this.DataModel.MirrorModel(false, true))
+            MainViewModel.IsBusy = true;
+            if (DataModel.MirrorModel(false, true))
             {
-                this.MainViewModel.IsModified = true;
-                this.IsSubsSystemNotReady = true;
-                this.IsConstructionNotReady = true;
-                this.DataModel.InitializeAsync();
+                MainViewModel.IsModified = true;
+                IsSubsSystemNotReady = true;
+                IsConstructionNotReady = true;
+                DataModel.InitializeAsync();
             }
-            this.MainViewModel.IsBusy = false;
+            MainViewModel.IsBusy = false;
         }
 
         public bool MirrorStructureGuessEvenCanExecute()
@@ -821,15 +723,15 @@
 
         public void MirrorStructureGuessEvenExecuted()
         {
-            this.MainViewModel.IsBusy = true;
-            if (this.DataModel.MirrorModel(false, false))
+            MainViewModel.IsBusy = true;
+            if (DataModel.MirrorModel(false, false))
             {
-                this.MainViewModel.IsModified = true;
-                this.IsSubsSystemNotReady = true;
-                this.IsConstructionNotReady = true;
-                this.DataModel.InitializeAsync();
+                MainViewModel.IsModified = true;
+                IsSubsSystemNotReady = true;
+                IsConstructionNotReady = true;
+                DataModel.InitializeAsync();
             }
-            this.MainViewModel.IsBusy = false;
+            MainViewModel.IsBusy = false;
         }
 
         public bool CopyDetailCanExecute()
@@ -840,44 +742,44 @@
         public void CopyDetailExecuted()
         {
             var cubes = new StringBuilder();
-            if (this.CubeAssets != null)
+            if (CubeAssets != null)
             {
-                foreach (var mat in this.CubeAssets)
+                foreach (var mat in CubeAssets)
                 {
                     cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, mat.Time);
                 }
             }
 
             var components = new StringBuilder();
-            if (this.ComponentAssets != null)
+            if (ComponentAssets != null)
             {
-                foreach (var mat in this.ComponentAssets)
+                foreach (var mat in ComponentAssets)
                 {
                     components.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, mat.Volume, mat.Time);
                 }
             }
 
             var ingots = new StringBuilder();
-            if (this.IngotAssets != null)
+            if (IngotAssets != null)
             {
-                foreach (var mat in this.IngotAssets)
+                foreach (var mat in IngotAssets)
                 {
                     ingots.AppendFormat("{0}\t{1:#,##0.00}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Amount, mat.Mass, mat.Volume, mat.Time);
                 }
             }
 
             var ores = new StringBuilder();
-            if (this.OreAssets != null)
+            if (OreAssets != null)
             {
-                foreach (var mat in this.OreAssets)
+                foreach (var mat in OreAssets)
                 {
                     ores.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\r\n", mat.FriendlyName, mat.Amount, mat.Mass, mat.Volume);
                 }
             }
 
             var detail = string.Format(Properties.Resources.CubeDetail,
-                this.DisplayName,
-                this.ClassType,
+                DisplayName,
+                ClassType,
                 IsPiloted,
                 DamageCount,
                 LinearVelocity,
@@ -898,17 +800,20 @@
                 Clipboard.Clear();
                 Clipboard.SetText(detail);
             }
-            catch { }
+            catch
+            {
+                // Ignore exception which may be generated by a Remote desktop session where Clipboard access has not been granted.
+            }
         }
 
         public bool FilterStartCanExecute()
         {
-            return this.ActiveComponentFilter != this.ComponentFilter;
+            return ActiveComponentFilter != ComponentFilter;
         }
 
         public void FilterStartExecuted()
         {
-            this.ActiveComponentFilter = this.ComponentFilter;
+            ActiveComponentFilter = ComponentFilter;
             ApplyCubeFilter();
         }
 
@@ -919,148 +824,148 @@
 
         public void FilterTabStartExecuted()
         {
-            this.ActiveComponentFilter = this.ComponentFilter;
+            ActiveComponentFilter = ComponentFilter;
             ApplyCubeFilter();
             FrameworkExtension.FocusedElementMoveFocus();
         }
 
         public bool FilterClearCanExecute()
         {
-            return !string.IsNullOrEmpty(this.ComponentFilter);
+            return !string.IsNullOrEmpty(ComponentFilter);
         }
 
         public void FilterClearExecuted()
         {
-            this.ComponentFilter = string.Empty;
-            this.ActiveComponentFilter = this.ComponentFilter;
+            ComponentFilter = string.Empty;
+            ActiveComponentFilter = ComponentFilter;
             ApplyCubeFilter();
         }
 
         public bool DeleteCubesCanExecute()
         {
-            return this.SelectedCubeItem != null;
+            return SelectedCubeItem != null;
         }
 
         public void DeleteCubesExecuted()
         {
-            this.IsBusy = true;
+            IsBusy = true;
 
-            this.MainViewModel.ResetProgress(0, this.Selections.Count);
+            MainViewModel.ResetProgress(0, Selections.Count);
 
-            while (this.Selections.Count > 0)
+            while (Selections.Count > 0)
             {
-                this.MainViewModel.Progress++;
-                var cube = this.Selections[0];
-                if (this.DataModel.CubeGrid.CubeBlocks.Remove(cube.Cube))
-                    this.DataModel.CubeList.Remove(cube.DataModel);
+                MainViewModel.Progress++;
+                var cube = Selections[0];
+                if (DataModel.CubeGrid.CubeBlocks.Remove(cube.Cube))
+                    DataModel.CubeList.Remove(cube.DataModel);
             }
 
-            this.MainViewModel.ClearProgress();
-            this.IsBusy = false;
+            MainViewModel.ClearProgress();
+            IsBusy = false;
         }
 
         public bool ReplaceCubesCanExecute()
         {
-            return this.SelectedCubeItem != null;
+            return SelectedCubeItem != null;
         }
 
         public void ReplaceCubesExecuted()
         {
             var model = new SelectCubeModel();
             var loadVm = new SelectCubeViewModel(this, model);
-            model.Load(this.GridSize, this.SelectedCubeItem.Cube.TypeId, this.SelectedCubeItem.SubtypeId);
-            var result = this._dialogService.ShowDialog<WindowSelectCube>(this, loadVm);
+            model.Load(GridSize, SelectedCubeItem.Cube.TypeId, SelectedCubeItem.SubtypeId);
+            var result = _dialogService.ShowDialog<WindowSelectCube>(this, loadVm);
             if (result == true)
             {
-                this.MainViewModel.IsBusy = true;
+                MainViewModel.IsBusy = true;
                 var contentPath = ToolboxUpdater.GetApplicationContentPath();
                 var change = false;
-                this.MainViewModel.ResetProgress(0, this.Selections.Count);
+                MainViewModel.ResetProgress(0, Selections.Count);
 
-                foreach (var cube in this.Selections)
+                foreach (var cube in Selections)
                 {
-                    this.MainViewModel.Progress++;
+                    MainViewModel.Progress++;
                     if (cube.TypeId != model.CubeItem.TypeId || cube.SubtypeId != model.CubeItem.SubtypeId)
                     {
-                        var idx = this.DataModel.CubeGrid.CubeBlocks.IndexOf(cube.Cube);
-                        this.DataModel.CubeGrid.CubeBlocks.RemoveAt(idx);
+                        var idx = DataModel.CubeGrid.CubeBlocks.IndexOf(cube.Cube);
+                        DataModel.CubeGrid.CubeBlocks.RemoveAt(idx);
 
-                        var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(model.CubeItem.TypeId, this.GridSize, model.CubeItem.SubtypeId);
+                        var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(model.CubeItem.TypeId, GridSize, model.CubeItem.SubtypeId);
                         var newCube = cube.CreateCube(model.CubeItem.TypeId, model.CubeItem.SubtypeId, cubeDefinition, DataModel.Settings);
                         cube.TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon));
-                        this.DataModel.CubeGrid.CubeBlocks.Insert(idx, newCube);
+                        DataModel.CubeGrid.CubeBlocks.Insert(idx, newCube);
 
                         change = true;
                     }
                 }
 
-                this.MainViewModel.ClearProgress();
+                MainViewModel.ClearProgress();
                 if (change)
                 {
-                    this.MainViewModel.IsModified = true;
+                    MainViewModel.IsModified = true;
                 }
-                this.MainViewModel.IsBusy = false;
+                MainViewModel.IsBusy = false;
             }
         }
 
         public bool ColorCubesCanExecute()
         {
-            return this.SelectedCubeItem != null;
+            return SelectedCubeItem != null;
         }
 
         public void ColorCubesExecuted()
         {
             var colorDialog = _colorDialogFactory();
             colorDialog.FullOpen = true;
-            colorDialog.BrushColor = this.SelectedCubeItem.Color as System.Windows.Media.SolidColorBrush;
-            colorDialog.CustomColors = this.MainViewModel.CreativeModeColors;
+            colorDialog.BrushColor = SelectedCubeItem.Color as System.Windows.Media.SolidColorBrush;
+            colorDialog.CustomColors = MainViewModel.CreativeModeColors;
 
-            var result = _dialogService.ShowColorDialog(this.OwnerViewModel, colorDialog);
+            var result = _dialogService.ShowColorDialog(OwnerViewModel, colorDialog);
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                this.MainViewModel.IsBusy = true;
-                this.MainViewModel.ResetProgress(0, this.Selections.Count);
+                MainViewModel.IsBusy = true;
+                MainViewModel.ResetProgress(0, Selections.Count);
 
-                foreach (var cube in this.Selections)
+                foreach (var cube in Selections)
                 {
-                    this.MainViewModel.Progress++;
+                    MainViewModel.Progress++;
                     if (colorDialog.DrawingColor.HasValue)
                         cube.UpdateColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
                 }
 
-                this.MainViewModel.ClearProgress();
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.IsBusy = false;
+                MainViewModel.ClearProgress();
+                MainViewModel.IsModified = true;
+                MainViewModel.IsBusy = false;
             }
 
-            this.MainViewModel.CreativeModeColors = colorDialog.CustomColors;
+            MainViewModel.CreativeModeColors = colorDialog.CustomColors;
         }
 
         public bool FrameworkCubesCanExecute()
         {
-            return this.SelectedCubeItem != null;
+            return SelectedCubeItem != null;
         }
 
         public void FrameworkCubesExecuted()
         {
-            var model = new FrameworkBuildModel { BuildPercent = this.SelectedCubeItem.BuildPercent * 100 };
+            var model = new FrameworkBuildModel { BuildPercent = SelectedCubeItem.BuildPercent * 100 };
             var loadVm = new FrameworkBuildViewModel(this, model);
-            var result = this._dialogService.ShowDialog<WindowFrameworkBuild>(this, loadVm);
+            var result = _dialogService.ShowDialog<WindowFrameworkBuild>(this, loadVm);
             if (result == true)
             {
-                this.MainViewModel.IsBusy = true;
-                this.MainViewModel.ResetProgress(0, this.Selections.Count);
+                MainViewModel.IsBusy = true;
+                MainViewModel.ResetProgress(0, Selections.Count);
 
-                foreach (var cube in this.Selections)
+                foreach (var cube in Selections)
                 {
-                    this.MainViewModel.Progress++;
+                    MainViewModel.Progress++;
                     cube.UpdateBuildPercent(model.BuildPercent.Value / 100);
                 }
 
-                this.MainViewModel.ClearProgress();
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.IsBusy = false;
+                MainViewModel.ClearProgress();
+                MainViewModel.IsModified = true;
+                MainViewModel.IsBusy = false;
             }
         }
 
@@ -1071,12 +976,12 @@
         private void ApplyCubeFilter()
         {
             // Prepare filter beforehand.
-            if (string.IsNullOrEmpty(this.ActiveComponentFilter))
+            if (string.IsNullOrEmpty(ActiveComponentFilter))
                 _filerView = new string[0];
             else
-                _filerView = this.ActiveComponentFilter.ToLowerInvariant().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Distinct().ToArray();
+                _filerView = ActiveComponentFilter.ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Distinct().ToArray();
 
-            var view = (CollectionView)CollectionViewSource.GetDefaultView(this.CubeList);
+            var view = (CollectionView)CollectionViewSource.GetDefaultView(CubeList);
             view.Filter = UserFilter;
         }
 

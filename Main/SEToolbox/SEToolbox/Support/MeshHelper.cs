@@ -1,10 +1,11 @@
 ﻿namespace SEToolbox.Support
 {
-    using HelixToolkit.Wpf;
     using System;
     using System.IO;
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
+
+    using HelixToolkit.Wpf;
 
     public static class MeshHelper
     {
@@ -23,11 +24,7 @@
             }
 
             Model3DGroup model;
-            var ext = Path.GetExtension(path);
-            if (ext != null)
-            {
-                ext = ext.ToLower();
-            }
+            var ext = Path.GetExtension(path).ToLower();
 
             switch (ext)
             {
@@ -89,7 +86,7 @@
         {
             foreach (GeometryModel3D gm in model.Children)
             {
-                var g = gm.Geometry as MeshGeometry3D;
+                var g = (MeshGeometry3D)gm.Geometry;
 
                 for (var i = 0; i < g.Positions.Count; i++)
                 {

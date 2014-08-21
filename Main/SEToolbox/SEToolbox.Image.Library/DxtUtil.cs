@@ -42,13 +42,13 @@
 // 
 namespace SEToolbox.ImageLibrary
 {
-    using SEToolbox.ImageLibrary.Effects;
-    using System;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Windows.Media;
+
+    using SEToolbox.ImageLibrary.Effects;
 
     public static class DxtUtil
     {
@@ -105,22 +105,20 @@ namespace SEToolbox.ImageLibrary
 
                 if (effect == null)
                     return System.Windows.Media.Imaging.BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgra32, null, pixelRgba, stride);
-                else
-                {
-                    var bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                    var bmpData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, bmp.PixelFormat);
+                var bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                    //Copy the data from the byte array into BitmapData.Scan0
-                    Marshal.Copy(pixelRgba, 0, bmpData.Scan0, pixelRgba.Length);
+                var bmpData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, bmp.PixelFormat);
 
-                    // Unlock the pixels
-                    bmp.UnlockBits(bmpData);
+                //Copy the data from the byte array into BitmapData.Scan0
+                Marshal.Copy(pixelRgba, 0, bmpData.Scan0, pixelRgba.Length);
 
-                    bmp = effect.Quantize(bmp);
+                // Unlock the pixels
+                bmp.UnlockBits(bmpData);
 
-                    return ImageHelper.ConvertBitmapToBitmapImage(bmp);
-                }
+                bmp = effect.Quantize(bmp);
+
+                return ImageHelper.ConvertBitmapToBitmapImage(bmp);
             }
         }
 

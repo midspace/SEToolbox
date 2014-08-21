@@ -1,13 +1,14 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
+
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
 
     public class SelectCubeModel : BaseModel
     {
@@ -22,7 +23,7 @@
 
         public SelectCubeModel()
         {
-            this._cubeList = new ObservableCollection<ComponentItemModel>();
+            _cubeList = new ObservableCollection<ComponentItemModel>();
         }
 
         #endregion
@@ -33,15 +34,15 @@
         {
             get
             {
-                return this._cubeList;
+                return _cubeList;
             }
 
             set
             {
-                if (value != this._cubeList)
+                if (value != _cubeList)
                 {
-                    this._cubeList = value;
-                    this.RaisePropertyChanged(() => CubeList);
+                    _cubeList = value;
+                    RaisePropertyChanged(() => CubeList);
                 }
             }
         }
@@ -50,15 +51,15 @@
         {
             get
             {
-                return this._cubeItem;
+                return _cubeItem;
             }
 
             set
             {
-                if (value != this._cubeItem)
+                if (value != _cubeItem)
                 {
-                    this._cubeItem = value;
-                    this.RaisePropertyChanged(() => CubeItem);
+                    _cubeItem = value;
+                    RaisePropertyChanged(() => CubeItem);
                 }
             }
         }
@@ -69,14 +70,14 @@
 
         public void Load(MyCubeSize cubeSize, MyObjectBuilderType typeId, string subTypeId)
         {
-            this.CubeList.Clear();
+            CubeList.Clear();
             var list = new SortedList<string, ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             var cubeDefinitions = SpaceEngineersCore.Definitions.CubeBlocks.Where(c => c.CubeSize == cubeSize);
 
             foreach (var cubeDefinition in cubeDefinitions)
             {
-                var c = new ComponentItemModel()
+                var c = new ComponentItemModel
                 {
                     Name = cubeDefinition.DisplayName,
                     TypeId = cubeDefinition.Id.TypeId,
@@ -94,10 +95,10 @@
 
             foreach (var kvp in list)
             {
-                this.CubeList.Add(kvp.Value);
+                CubeList.Add(kvp.Value);
             }
 
-            this.CubeItem = this.CubeList.FirstOrDefault(c => c.TypeId == typeId && c.SubtypeId == subTypeId);
+            CubeItem = CubeList.FirstOrDefault(c => c.TypeId == typeId && c.SubtypeId == subTypeId);
         }
 
         #endregion

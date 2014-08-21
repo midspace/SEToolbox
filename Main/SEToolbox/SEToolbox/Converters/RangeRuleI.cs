@@ -29,10 +29,8 @@
                 return new ValidationResult(false,
                   "Please enter a value in the range: " + Min + " - " + Max + ".");
             }
-            else
-            {
-                return new ValidationResult(true, null);
-            }
+
+            return new ValidationResult(true, null);
         }
     }
 }

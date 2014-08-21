@@ -1,11 +1,12 @@
 ﻿namespace SEToolbox.Support
 {
-    using SEToolbox.ImageLibrary;
     using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
     using System.Xml;
+
+    using SEToolbox.ImageLibrary;
 
     public static class ToolboxExtensions
     {

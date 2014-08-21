@@ -1,10 +1,11 @@
 ﻿namespace SEToolbox.Support
 {
-    using SEToolbox.Controls;
     using System;
     using System.Diagnostics;
     using System.Net;
     using System.Text.RegularExpressions;
+
+    using SEToolbox.Controls;
 
     /// <summary>
     /// Extracts the CodePlex website information to determine the version of the current release.
@@ -34,8 +35,8 @@
 #endif
 
             var currentVersion = GlobalSettings.GetVersion();
-            string webContent = null;
-            string link = null;
+            string webContent;
+            string link;
 
             // Create the WebClient with Proxy Credentials.
             using (var webclient = new MyWebClient())
@@ -59,7 +60,7 @@
                     return null;
                 }
 
-                if (webContent == null)
+                if (string.IsNullOrEmpty(webContent))
                     return null;
 
                 // link should be in the form "http://setoolbox.codeplex.com/releases/view/120855"
@@ -72,8 +73,8 @@
             if (!match.Success)
                 return null;
 
-            var item = new CodeplexReleases() { Link = link, Version = GetVersion(match.Groups["version"].Value) };
-            Version ignoreVersion = null;
+            var item = new CodeplexReleases { Link = link, Version = GetVersion(match.Groups["version"].Value) };
+            Version ignoreVersion;
             Version.TryParse(GlobalSettings.Default.IgnoreUpdateVersion, out ignoreVersion);
             if (item.Version > currentVersion && item.Version != ignoreVersion)
                 return item;
@@ -92,16 +93,14 @@
             {
                 return new Version(match.Groups["v1"].Value + "." + match.Groups["v2"].Value + "." + match.Groups["v3"].Value + "." + match.Groups["v4"].Value);
             }
-            else
+
+            match = Regex.Match(version, @"(?<v1>\d+)\.(?<v2>\d+)\.(?<v3>\d+).(?<v4>\d+)");
+            if (match.Success)
             {
-                match = Regex.Match(version, @"(?<v1>\d+)\.(?<v2>\d+)\.(?<v3>\d+).(?<v4>\d+)");
-                if (match.Success)
-                {
-                    return new Version(match.Groups["v1"].Value + "." + match.Groups["v2"].Value + "." + match.Groups["v3"].Value + "." + match.Groups["v4"].Value);
-                }
-                else
-                    return new Version(0, 0, 0, 0);
+                return new Version(match.Groups["v1"].Value + "." + match.Groups["v2"].Value + "." + match.Groups["v3"].Value + "." + match.Groups["v4"].Value);
             }
+
+            return new Version(0, 0, 0, 0);
         }
 
         #endregion

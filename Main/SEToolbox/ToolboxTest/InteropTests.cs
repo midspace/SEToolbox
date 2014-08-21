@@ -41,7 +41,7 @@
             var fighterPath = Path.Combine(contentPath, @"Data\Prefabs\Fighter.sbc");
             Assert.IsTrue(File.Exists(fighterPath), "Sandbox content file should exist");
 
-            MyObjectBuilder_CubeGrid cubeEntity = null;
+            MyObjectBuilder_CubeGrid cubeEntity;
             var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>(fighterPath, out cubeEntity);
 
             Assert.IsNotNull(cubeEntity, "Sandbox content should not be null");
@@ -57,7 +57,7 @@
             var fighterPath = Path.Combine(contentPath, @"Data\Prefabs\Fighter.sbc");
             Assert.IsTrue(File.Exists(fighterPath), "Sandbox content file should exist");
 
-            MyObjectBuilder_CubeGrid cubeEntity = null;
+            MyObjectBuilder_CubeGrid cubeEntity;
             bool isCompressed;
             var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid>(fighterPath, out cubeEntity, out isCompressed);
 
@@ -75,7 +75,7 @@
             var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\BaseEasyStart1.sbc");
             Assert.IsTrue(File.Exists(baseEasyStart1Path), "Sandbox content file should exist");
 
-            MyObjectBuilder_CubeGrid cubeEntity = null;
+            MyObjectBuilder_CubeGrid cubeEntity;
             bool isCompressed;
             var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid>(baseEasyStart1Path, out cubeEntity, out isCompressed);
 
@@ -98,7 +98,7 @@
 
             //======//
 
-            var orient = new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Forward, VRageMath.Base6Directions.Direction.Up);
+            var orient = new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Up);
 
             var f = Base6Directions.GetVector(orient.Forward);
             var u = Base6Directions.GetVector(orient.Up);
@@ -125,7 +125,7 @@
 
             //======//
 
-            var newOrient = new SerializableBlockOrientation(VRageMath.Base6Directions.Direction.Down, VRageMath.Base6Directions.Direction.Right);
+            var newOrient = new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Right);
 
             var newM = Matrix.CreateFromDir(Base6Directions.GetVector(newOrient.Forward), Base6Directions.GetVector(newOrient.Up));
 

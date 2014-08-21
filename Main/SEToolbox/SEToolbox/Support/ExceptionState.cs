@@ -6,22 +6,20 @@
 
     public class ToolboxException : ArgumentException
     {
-        private ExceptionState _state;
         private readonly string _friendlyMessage;
 
         public ToolboxException(ExceptionState state, params string[] arguments)
         {
             var converter = new EnumToResouceConverter();
-            this._state = state;
-            this.Arguments = arguments;
-            this._friendlyMessage = string.Format((string)converter.Convert(state, typeof(string), null, CultureInfo.CurrentUICulture), this.Arguments);
+            Arguments = arguments;
+            _friendlyMessage = string.Format((string)converter.Convert(state, typeof(string), null, CultureInfo.CurrentUICulture), Arguments);
         }
 
         public override string Message
         {
             get
             {
-                return this._friendlyMessage;
+                return _friendlyMessage;
             }
         }
 

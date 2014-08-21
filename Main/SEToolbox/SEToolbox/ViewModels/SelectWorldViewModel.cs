@@ -1,10 +1,5 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
     using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
@@ -12,6 +7,12 @@
     using System.Media;
     using System.Windows.Forms;
     using System.Windows.Input;
+
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
 
     public class SelectWorldViewModel : BaseViewModel
@@ -38,11 +39,11 @@
         {
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
-            this._dialogService = dialogService;
-            this._openFileDialogFactory = openFileDialogFactory;
-            this._dataModel = dataModel;
+            _dialogService = dialogService;
+            _openFileDialogFactory = openFileDialogFactory;
+            _dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -51,58 +52,37 @@
 
         public ICommand LoadCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(LoadExecuted), new Func<bool>(LoadCanExecute));
-            }
+            get { return new DelegateCommand(LoadExecuted, LoadCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         public ICommand RepairCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(RepairExecuted), new Func<bool>(RepairCanExecute));
-            }
+            get { return new DelegateCommand(RepairExecuted, RepairCanExecute); }
         }
 
         public ICommand BrowseCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(BrowseExecuted), new Func<bool>(BrowseCanExecute));
-            }
+            get { return new DelegateCommand(BrowseExecuted, BrowseCanExecute); }
         }
 
         public ICommand OpenFolderCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenFolderExecuted), new Func<bool>(OpenFolderCanExecute));
-            }
+            get { return new DelegateCommand(OpenFolderExecuted, OpenFolderCanExecute); }
         }
 
         public ICommand OpenWorkshopCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(OpenWorkshopExecuted), new Func<bool>(OpenWorkshopCanExecute));
-            }
+            get { return new DelegateCommand(OpenWorkshopExecuted, OpenWorkshopCanExecute); }
         }
 
         public ICommand ZoomThumbnailCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ZoomThumbnailExecuted), new Func<bool>(ZoomThumbnailCanExecute));
-            }
+            get { return new DelegateCommand(ZoomThumbnailExecuted, ZoomThumbnailCanExecute); }
         }
 
         #endregion
@@ -114,59 +94,40 @@
         /// </summary>
         public bool? CloseResult
         {
-            get
-            {
-                return this._closeResult;
-            }
-
+            get { return _closeResult; }
             set
             {
-                if (this._closeResult != value)
+                if (_closeResult != value)
                 {
-                    this._closeResult = value;
-                    this.RaisePropertyChanged(() => CloseResult);
+                    _closeResult = value;
+                    RaisePropertyChanged(() => CloseResult);
                 }
             }
         }
 
         public bool ZoomThumbnail
         {
-            get
-            {
-                return this._zoomThumbnail;
-            }
+            get { return _zoomThumbnail; }
 
             set
             {
-                if (this._zoomThumbnail != value)
+                if (_zoomThumbnail != value)
                 {
-                    this._zoomThumbnail = value;
-                    this.RaisePropertyChanged(() => ZoomThumbnail);
+                    _zoomThumbnail = value;
+                    RaisePropertyChanged(() => ZoomThumbnail);
                 }
             }
         }
 
         public SaveResource SelectedWorld
         {
-            get
-            {
-                return this._dataModel.SelectedWorld;
-            }
-            set
-            {
-                if (value != this._dataModel.SelectedWorld)
-                {
-                    this._dataModel.SelectedWorld = value;
-                }
-            }
+            get { return _dataModel.SelectedWorld; }
+            set { _dataModel.SelectedWorld = value; }
         }
 
         public ObservableCollection<SaveResource> Worlds
         {
-            get
-            {
-                return this._dataModel.Worlds;
-            }
+            get { return _dataModel.Worlds; }
         }
 
         /// <summary>
@@ -174,15 +135,8 @@
         /// </summary>
         public bool IsBusy
         {
-            get
-            {
-                return this._dataModel.IsBusy;
-            }
-
-            set
-            {
-                this._dataModel.IsBusy = value;
-            }
+            get { return _dataModel.IsBusy; }
+            set { _dataModel.IsBusy = value; }
         }
 
         #endregion
@@ -191,12 +145,12 @@
 
         public bool LoadCanExecute()
         {
-            return this.SelectedWorld != null && this.SelectedWorld.IsValid;
+            return SelectedWorld != null && SelectedWorld.IsValid;
         }
 
         public void LoadExecuted()
         {
-            this.CloseResult = true;
+            CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -206,22 +160,22 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         public bool RepairCanExecute()
         {
-            return this.SelectedWorld != null &&
-                (this.SelectedWorld.SaveType != SaveWorldType.DedicatedServerService ||
-                (this.SelectedWorld.SaveType == SaveWorldType.DedicatedServerService && ToolboxUpdater.IsRuningElevated()));
+            return SelectedWorld != null &&
+                (SelectedWorld.SaveType != SaveWorldType.DedicatedServerService ||
+                (SelectedWorld.SaveType == SaveWorldType.DedicatedServerService && ToolboxUpdater.IsRuningElevated()));
         }
 
         public void RepairExecuted()
         {
-            this.IsBusy = true;
-            var results = this._dataModel.RepairSandBox();
-            this.IsBusy = false;
-            var result = _dialogService.ShowMessageBox(this, results, "Repair results", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
+            IsBusy = true;
+            var results = _dataModel.RepairSandBox();
+            IsBusy = false;
+            _dialogService.ShowMessageBox(this, results, "Repair results", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
         }
 
         public bool BrowseCanExecute()
@@ -248,9 +202,9 @@
 
                 try
                 {
-                    using (FileStream fs = File.OpenWrite(openFileDialog.FileName))
+                    using (var fs = File.OpenWrite(openFileDialog.FileName))
                     {
-                        // test opening the file.
+                        // test opening the file to verify that we have Write Access.
                     }
                 }
                 catch
@@ -266,13 +220,13 @@
                     dp = new UserDataPath(Path.Combine(basePath, "Saves"), Path.Combine(basePath, "Mods"));
                 }
 
-                var saveResource = this._dataModel.LoadSaveFromPath(savePath, userName, saveType, dp);
+                var saveResource = _dataModel.LoadSaveFromPath(savePath, userName, saveType, dp);
                 saveResource.LoadCheckpoint();
 
                 if (saveResource.IsValid)
                 {
-                    this.SelectedWorld = saveResource;
-                    this.CloseResult = true;
+                    SelectedWorld = saveResource;
+                    CloseResult = true;
                 }
                 else
                 {
@@ -283,33 +237,34 @@
 
         public bool OpenFolderCanExecute()
         {
-            return this.SelectedWorld != null;
+            return SelectedWorld != null;
         }
 
         public void OpenFolderExecuted()
         {
-            System.Diagnostics.Process.Start("Explorer", string.Format("\"{0}\"", this.SelectedWorld.Savepath));
+            System.Diagnostics.Process.Start("Explorer", string.Format("\"{0}\"", SelectedWorld.Savepath));
         }
 
         public bool OpenWorkshopCanExecute()
         {
-            return this.SelectedWorld != null && this.SelectedWorld.WorkshopId.HasValue &&
-                   this.SelectedWorld.WorkshopId.Value != 0;
+            return SelectedWorld != null && SelectedWorld.WorkshopId.HasValue &&
+                   SelectedWorld.WorkshopId.Value != 0;
         }
 
         public void OpenWorkshopExecuted()
         {
-            System.Diagnostics.Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", this.SelectedWorld.WorkshopId.Value), null);
+            if (SelectedWorld.WorkshopId.HasValue)
+                System.Diagnostics.Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", SelectedWorld.WorkshopId.Value), null);
         }
 
         public bool ZoomThumbnailCanExecute()
         {
-            return this.SelectedWorld != null && SelectedWorld.ThumbnailImageFilename != null;
+            return SelectedWorld != null && SelectedWorld.ThumbnailImageFilename != null;
         }
 
         public void ZoomThumbnailExecuted()
         {
-            this.ZoomThumbnail = !this.ZoomThumbnail;
+            ZoomThumbnail = !ZoomThumbnail;
         }
 
         #endregion

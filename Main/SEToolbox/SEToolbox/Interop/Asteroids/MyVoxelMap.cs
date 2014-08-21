@@ -8,17 +8,16 @@
 // All rights reserved.
 //===================================================================================
 
-using System.Collections;
 
 namespace SEToolbox.Interop.Asteroids
 {
-    using System.Windows;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
+
+    using SEToolbox.Support;
     using VRageMath;
 
     public class MyVoxelMap
@@ -50,12 +49,12 @@ namespace SEToolbox.Interop.Asteroids
 
         public Vector3I Size { get; private set; }
 
-        public Vector3I ContentSize { get { return new Vector3I(this._boundingContent.Size()) + 1; } }
+        public Vector3I ContentSize { get { return new Vector3I(_boundingContent.Size()) + 1; } }
 
         /// <summary>
         /// The center cell in the asteroid.
         /// </summary>
-        public Vector3 ContentCenter { get { return this._boundingContent.Center; } }
+        public Vector3 ContentCenter { get { return _boundingContent.Center; } }
 
         public byte VoxelMaterial { get; private set; }
 
@@ -828,7 +827,7 @@ namespace SEToolbox.Interop.Asteroids
         #endregion
 
         #region ReplaceMaterial
-        
+
         public void ReplaceMaterial(string materialName, string replaceFillMaterial)
         {
             var materialIndex = SpaceEngineersApi.GetMaterialIndex(materialName);
@@ -922,7 +921,7 @@ namespace SEToolbox.Interop.Asteroids
                     }
                 }
             }
-        } 
+        }
 
         #endregion
 

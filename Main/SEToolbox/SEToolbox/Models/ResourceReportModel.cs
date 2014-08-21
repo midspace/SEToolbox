@@ -1,12 +1,5 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using SEToolbox.ImageLibrary;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -16,6 +9,14 @@
     using System.Text;
     using System.Web.UI;
     using System.Xml;
+
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using SEToolbox.ImageLibrary;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Support;
 
     public class ResourceReportModel : BaseModel
     {
@@ -81,9 +82,9 @@
 
         public ResourceReportModel()
         {
-            this._timer = new Stopwatch();
-            this.Progress = 0;
-            this.MaximumProgress = 100;
+            _timer = new Stopwatch();
+            Progress = 0;
+            MaximumProgress = 100;
         }
 
         #endregion
@@ -97,17 +98,17 @@
         {
             get
             {
-                return this._isBusy;
+                return _isBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    this.SetActiveStatus();
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    SetActiveStatus();
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -122,37 +123,37 @@
         {
             get
             {
-                return this._isActive;
+                return _isActive;
             }
 
             set
             {
-                if (value != this._isActive)
+                if (value != _isActive)
                 {
-                    this._isActive = value;
-                    this.RaisePropertyChanged(() => IsActive);
+                    _isActive = value;
+                    RaisePropertyChanged(() => IsActive);
                 }
             }
         }
 
         public string SaveName
         {
-            get { return this._saveName; }
+            get { return _saveName; }
         }
 
         public bool IsReportReady
         {
             get
             {
-                return this._isReportReady;
+                return _isReportReady;
             }
 
             set
             {
-                if (value != this._isReportReady)
+                if (value != _isReportReady)
                 {
-                    this._isReportReady = value;
-                    this.RaisePropertyChanged(() => IsReportReady);
+                    _isReportReady = value;
+                    RaisePropertyChanged(() => IsReportReady);
                 }
             }
         }
@@ -161,15 +162,15 @@
         {
             get
             {
-                return this._reportHtml;
+                return _reportHtml;
             }
 
             set
             {
-                if (value != this._reportHtml)
+                if (value != _reportHtml)
                 {
-                    this._reportHtml = value;
-                    this.RaisePropertyChanged(() => ReportHtml);
+                    _reportHtml = value;
+                    RaisePropertyChanged(() => ReportHtml);
                 }
             }
         }
@@ -178,15 +179,15 @@
         {
             get
             {
-                return this._showProgress;
+                return _showProgress;
             }
 
             set
             {
-                if (value != this._showProgress)
+                if (value != _showProgress)
                 {
-                    this._showProgress = value;
-                    this.RaisePropertyChanged(() => ShowProgress);
+                    _showProgress = value;
+                    RaisePropertyChanged(() => ShowProgress);
                 }
             }
         }
@@ -195,18 +196,18 @@
         {
             get
             {
-                return this._progress;
+                return _progress;
             }
 
             set
             {
-                if (value != this._progress)
+                if (value != _progress)
                 {
-                    this._progress = value;
+                    _progress = value;
 
                     if (!_timer.IsRunning || _timer.ElapsedMilliseconds > 100)
                     {
-                        this.RaisePropertyChanged(() => Progress);
+                        RaisePropertyChanged(() => Progress);
                         System.Windows.Forms.Application.DoEvents();
                         _timer.Restart();
                     }
@@ -218,15 +219,15 @@
         {
             get
             {
-                return this._maximumProgress;
+                return _maximumProgress;
             }
 
             set
             {
-                if (value != this._maximumProgress)
+                if (value != _maximumProgress)
                 {
-                    this._maximumProgress = value;
-                    this.RaisePropertyChanged(() => MaximumProgress);
+                    _maximumProgress = value;
+                    RaisePropertyChanged(() => MaximumProgress);
                 }
             }
         }
@@ -237,41 +238,41 @@
 
         public void Load(string saveName, IList<IStructureBase> entities)
         {
-            this._saveName = saveName;
-            this._entities = entities;
-            this.SetActiveStatus();
+            _saveName = saveName;
+            _entities = entities;
+            SetActiveStatus();
         }
 
         public void SetActiveStatus()
         {
-            this.IsActive = !this.IsBusy;
+            IsActive = !IsBusy;
         }
 
         public void ResetProgress(double initial, double maximumProgress)
         {
-            this.MaximumProgress = maximumProgress;
-            this.Progress = initial;
-            this.ShowProgress = true;
+            MaximumProgress = maximumProgress;
+            Progress = initial;
+            ShowProgress = true;
             _timer.Restart();
             System.Windows.Forms.Application.DoEvents();
         }
 
         public void IncrementProgress()
         {
-            this.Progress++;
+            Progress++;
         }
 
         public void ClearProgress()
         {
             _timer.Stop();
-            this.ShowProgress = false;
-            this.Progress = 0;
+            ShowProgress = false;
+            Progress = 0;
         }
 
         public void GenerateReport()
         {
-            this.IsReportReady = false;
-            this._generatedDate = DateTime.Now;
+            IsReportReady = false;
+            _generatedDate = DateTime.Now;
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             var accumulateMaterials = new SortedDictionary<string, long>();
             var accumulateUnusedOres = new SortedDictionary<string, OreAssetModel>();
@@ -282,11 +283,11 @@
             var accumulateComponents = new SortedDictionary<string, ComponentItemModel>();
             var accumulateCubes = new SortedDictionary<string, ComponentItemModel>();
 
-            this.ResetProgress(0, _entities.Count);
+            ResetProgress(0, _entities.Count);
 
             foreach (var entity in _entities)
             {
-                this.Progress++;
+                Progress++;
 
                 if (entity is StructureVoxelModel)
                 {
@@ -294,7 +295,7 @@
 
                     #region untouched materials (in asteroid)
 
-                    Dictionary<string, long> details = null;
+                    Dictionary<string, long> details;
 
                     var filename = asteroid.SourceVoxelFilepath;
                     if (string.IsNullOrEmpty(filename))
@@ -306,6 +307,7 @@
                     }
                     catch
                     {
+                        details = null;
                     }
 
                     // Accumulate into untouched.
@@ -356,7 +358,7 @@
                 else if (entity is StructureCubeGridModel)
                 {
                     var ship = entity as StructureCubeGridModel;
-                    var isNpc = ship.CubeGrid.CubeBlocks.Any<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Autopilot != null);
+                    var isNpc = ship.CubeGrid.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Autopilot != null);
 
                     foreach (MyObjectBuilder_CubeBlock block in ship.CubeGrid.CubeBlocks)
                     {
@@ -369,9 +371,9 @@
                         // Unconstructed portion.
                         if (block.ConstructionStockpile != null && block.ConstructionStockpile.Items.Count > 0)
                         {
-                            foreach (MyObjectBuilder_StockpileItem item in block.ConstructionStockpile.Items)
+                            foreach (var item in block.ConstructionStockpile.Items)
                             {
-                                var cd = SpaceEngineersApi.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName) as MyObjectBuilder_ComponentDefinition;
+                                var cd = (MyObjectBuilder_ComponentDefinition)SpaceEngineersApi.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName);
 
                                 if (isNpc)
                                 {
@@ -429,7 +431,7 @@
                                 // Fully armed and operational cube.
                                 foreach (var component in cubeBlockDefinition.Components)
                                 {
-                                    var cd = SpaceEngineersApi.GetDefinition(component.Type, component.Subtype) as MyObjectBuilder_ComponentDefinition;
+                                    var cd = (MyObjectBuilder_ComponentDefinition)SpaceEngineersApi.GetDefinition(component.Type, component.Subtype);
 
                                     #region used ore value
 
@@ -444,7 +446,7 @@
 
                                     #endregion
 
-                                    float componentMass = cd.Mass * component.Count;
+                                    var componentMass = cd.Mass * component.Count;
                                     cubeMass += componentMass;
                                 }
                             }
@@ -508,16 +510,20 @@
 
                         #region tally cubes
 
-                        var itemsKey = cubeBlockDefinition.DisplayName;
-                        if (accumulateCubes.ContainsKey(itemsKey))
+                        if (cubeBlockDefinition != null)
                         {
-                            accumulateCubes[itemsKey].Count += 1;
-                            accumulateCubes[itemsKey].Mass += cubeMass;
-                            accumulateCubes[itemsKey].Time += blockTime;
-                        }
-                        else
-                        {
-                            accumulateCubes.Add(itemsKey, new ComponentItemModel() { Name = cubeBlockDefinition.DisplayName, Count = 1, Mass = cubeMass, TypeId = cubeBlockDefinition.Id.TypeId, SubtypeId = cubeBlockDefinition.Id.SubtypeName, TextureFile = blockTexture, Time = blockTime });
+                            var itemsKey = cubeBlockDefinition.DisplayName;
+
+                            if (accumulateCubes.ContainsKey(itemsKey))
+                            {
+                                accumulateCubes[itemsKey].Count += 1;
+                                accumulateCubes[itemsKey].Mass += cubeMass;
+                                accumulateCubes[itemsKey].Time += blockTime;
+                            }
+                            else
+                            {
+                                accumulateCubes.Add(itemsKey, new ComponentItemModel { Name = cubeBlockDefinition.DisplayName, Count = 1, Mass = cubeMass, TypeId = cubeBlockDefinition.Id.TypeId, SubtypeId = cubeBlockDefinition.Id.SubtypeName, TextureFile = blockTexture, Time = blockTime });
+                            }
                         }
 
                         #endregion
@@ -532,7 +538,7 @@
 
             foreach (var kvp in accumulateMaterials)
             {
-                _untouchedOre.Add(new VoxelMaterialAssetModel() { MaterialName = kvp.Key, Volume = Math.Round((double)kvp.Value / 255, 7), Percent = (double)kvp.Value / (double)sum });
+                _untouchedOre.Add(new VoxelMaterialAssetModel { MaterialName = kvp.Key, Volume = Math.Round((double)kvp.Value / 255, 7), Percent = kvp.Value / (double)sum });
             }
 
             _unusedOre = accumulateUnusedOres.Values.ToList();
@@ -547,9 +553,9 @@
 
             #region create report
 
-            this.IsReportReady = true;
+            IsReportReady = true;
 
-            this.ClearProgress();
+            ClearProgress();
 
             #endregion
         }
@@ -584,7 +590,7 @@
                 }
                 else
                 {
-                    accumulateOres.Add(unusedKey, new OreAssetModel() { Name = cd.DisplayName, Amount = amountDecimal, Mass = mass, Volume = volume, TextureFile = componentTexture });
+                    accumulateOres.Add(unusedKey, new OreAssetModel { Name = cd.DisplayName, Amount = amountDecimal, Mass = mass, Volume = volume, TextureFile = componentTexture });
                 }
 
                 #endregion
@@ -602,7 +608,7 @@
                     }
                     else
                     {
-                        accumulateItems.Add(itemsKey, new ComponentItemModel() { Name = cd.DisplayName, Count = amountDecimal, Mass = mass, Volume = volume, TypeId = tallyTypeId, SubtypeId = tallySubTypeId, TextureFile = componentTexture, Time = TimeSpan.Zero });
+                        accumulateItems.Add(itemsKey, new ComponentItemModel { Name = cd.DisplayName, Count = amountDecimal, Mass = mass, Volume = volume, TypeId = tallyTypeId, SubtypeId = tallySubTypeId, TextureFile = componentTexture, Time = TimeSpan.Zero });
                     }
                 }
 
@@ -642,7 +648,7 @@
                     }
                     else
                     {
-                        accumulateItems.Add(itemsKey, new ComponentItemModel() { Name = cd.DisplayName, Count = amountDecimal, Mass = mass, Volume = volume, TypeId = tallyTypeId, SubtypeId = tallySubTypeId, TextureFile = componentTexture, Time = timeToMake });
+                        accumulateItems.Add(itemsKey, new ComponentItemModel { Name = cd.DisplayName, Count = amountDecimal, Mass = mass, Volume = volume, TypeId = tallyTypeId, SubtypeId = tallySubTypeId, TextureFile = componentTexture, Time = timeToMake });
                     }
                 }
 
@@ -857,8 +863,8 @@ td.right { text-align: right; }");
                 writer.RenderElement(HtmlTextWriterTag.P, "Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.");
 
                 writer.RenderElement(HtmlTextWriterTag.H3, "Untouched Ore (Asteroids)");
-                writer.BeginTable("1", "3", "0", new String[] { "Name", "Volume m³" });
-                foreach (var item in this._untouchedOre)
+                writer.BeginTable("1", "3", "0", new[] { "Name", "Volume m³" });
+                foreach (var item in _untouchedOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
                     writer.RenderElement(HtmlTextWriterTag.Td, item.MaterialName);
@@ -869,7 +875,7 @@ td.right { text-align: right; }");
                 writer.EndTable();
 
                 writer.RenderElement(HtmlTextWriterTag.H3, "Unused Ore (Ore and Ingots, either floating or in containers)");
-                writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
+                writer.BeginTable("1", "3", "0", new[] { "Name", "Mass Kg", "Volume L" });
                 foreach (var item in _unusedOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -883,7 +889,7 @@ td.right { text-align: right; }");
                 writer.EndTable();
 
                 writer.RenderElement(HtmlTextWriterTag.H3, "Used Ore (in tools, items, components, cubes)");
-                writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
+                writer.BeginTable("1", "3", "0", new[] { "Name", "Mass Kg", "Volume L" });
                 foreach (var item in _usedOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -897,7 +903,7 @@ td.right { text-align: right; }");
                 writer.EndTable();
 
                 writer.RenderElement(HtmlTextWriterTag.H3, "Player Ore (Player inventories)");
-                writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
+                writer.BeginTable("1", "3", "0", new[] { "Name", "Mass Kg", "Volume L" });
                 foreach (var item in _playerOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -911,7 +917,7 @@ td.right { text-align: right; }");
                 writer.EndTable();
 
                 writer.RenderElement(HtmlTextWriterTag.H3, "NPC Ore (Controlled by NPC)");
-                writer.BeginTable("1", "3", "0", new String[] { "Name", "Mass Kg", "Volume L" });
+                writer.BeginTable("1", "3", "0", new[] { "Name", "Mass Kg", "Volume L" });
                 foreach (var item in _npcOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -931,7 +937,7 @@ td.right { text-align: right; }");
                 writer.RenderElement(HtmlTextWriterTag.P, "Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine.");
 
                 writer.RenderElement(HtmlTextWriterTag.H3, "All Cubes");
-                writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Time" });
+                writer.BeginTable("1", "3", "0", new[] { "Icon", "Name", "Count", "Mass Kg", "Time" });
                 foreach (var item in _allCubes)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -958,7 +964,7 @@ td.right { text-align: right; }");
                 writer.EndTable();
 
                 writer.RenderElement(HtmlTextWriterTag.H3, "All Components");
-                writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
+                writer.BeginTable("1", "3", "0", new[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
                 foreach (var item in _allComponents)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -987,7 +993,7 @@ td.right { text-align: right; }");
                 writer.EndTable();
 
                 writer.RenderElement(HtmlTextWriterTag.H3, "All Items");
-                writer.BeginTable("1", "3", "0", new String[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
+                writer.BeginTable("1", "3", "0", new[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
                 foreach (var item in _allItems)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1027,7 +1033,7 @@ td.right { text-align: right; }");
 
         internal string CreateXmlReport()
         {
-            var settingsDestination = new XmlWriterSettings()
+            var settingsDestination = new XmlWriterSettings
             {
                 Indent = true, // Set indent to false to compress.
                 Encoding = new UTF8Encoding(false)   // codepage 65001 without signature. Removes the Byte Order Mark from the start of the file.
@@ -1042,7 +1048,7 @@ td.right { text-align: right; }");
                 xmlWriter.WriteAttributeString("world", _saveName);
                 xmlWriter.WriteAttributeFormat("date", "{0:o}", _generatedDate);
 
-                foreach (var item in this._untouchedOre)
+                foreach (var item in _untouchedOre)
                 {
                     xmlWriter.WriteStartElement("untouched");
                     xmlWriter.WriteElementFormat("name", "{0}", item.MaterialName);
@@ -1050,7 +1056,7 @@ td.right { text-align: right; }");
                     xmlWriter.WriteEndElement();
                 }
 
-                foreach (var item in this._unusedOre)
+                foreach (var item in _unusedOre)
                 {
                     xmlWriter.WriteStartElement("unused");
                     xmlWriter.WriteElementFormat("name", "{0}", item.FriendlyName);
@@ -1148,6 +1154,7 @@ td.right { text-align: right; }");
         /// /WR "\\SERVER\Dedicated Saves\Super Excellent Map" "\\SERVER\Reports\Super Excellent Map.txt"
         /// </example>
         /// </summary>
+        /// <param name="baseModel"></param>
         /// <param name="args"></param>
         public static void GenerateOfflineReport(ExplorerModel baseModel, string[] args)
         {

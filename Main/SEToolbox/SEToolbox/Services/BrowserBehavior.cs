@@ -24,9 +24,9 @@
 
         static void OnHtmlChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            WebBrowser webBrowser = dependencyObject as WebBrowser;
+            var webBrowser = (WebBrowser)dependencyObject;
             if (webBrowser != null)
-                webBrowser.NavigateToString(e.NewValue as string);
+                webBrowser.NavigateToString((string)e.NewValue);
         }
     }
 }

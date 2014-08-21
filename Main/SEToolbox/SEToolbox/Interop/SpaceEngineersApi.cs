@@ -30,11 +30,10 @@
                 IgnoreWhitespace = true,
             };
 
-            object obj = null;
+            object obj;
 
             using (var xmlReader = XmlReader.Create(stream, settings))
             {
-
                 var serializer = (TS)Activator.CreateInstance(typeof(TS));
                 //serializer.UnknownAttribute += serializer_UnknownAttribute;
                 //serializer.UnknownElement += serializer_UnknownElement;
@@ -51,7 +50,7 @@
         {
             try
             {
-                entity = SpaceEngineersApi.ReadSpaceEngineersFile<T, TS>(filename);
+                entity = ReadSpaceEngineersFile<T, TS>(filename);
                 return true;
             }
             catch
@@ -65,7 +64,7 @@
         public static T ReadSpaceEngineersFile<T, TS>(string filename)
             where TS : XmlSerializer1
         {
-            var settings = new XmlReaderSettings()
+            var settings = new XmlReaderSettings
             {
                 IgnoreComments = true,
                 // Space Engineers is able to read partially corrupted files,
@@ -90,7 +89,7 @@
         {
             try
             {
-                entity = SpaceEngineersApi.ReadSpaceEngineersFile<T>(filename, out isCompressed);
+                entity = ReadSpaceEngineersFile<T>(filename, out isCompressed);
                 return true;
             }
             catch
@@ -109,7 +108,6 @@
 
         public static T ReadSpaceEngineersFile<T>(string filename, out bool isCompressed)
         {
-            var contract = new XmlSerializerContract();
             isCompressed = false;
 
             if (File.Exists(filename))
@@ -134,10 +132,8 @@
                             return ReadSpaceEngineersFileRaw<T>(outStream);
                         }
                     }
-                    else
-                    {
-                        return ReadSpaceEngineersFileRaw<T>(fileStream);
-                    }
+                    
+                    return ReadSpaceEngineersFileRaw<T>(fileStream);
                 }
             }
 
@@ -146,7 +142,6 @@
 
         public static T ReadSpaceEngineersFile<T>(Stream fileStream, out bool isCompressed)
         {
-            var contract = new XmlSerializerContract();
             isCompressed = false;
 
             if (fileStream != null)
@@ -169,10 +164,8 @@
                         return ReadSpaceEngineersFileRaw<T>(outStream);
                     }
                 }
-                else
-                {
-                    return ReadSpaceEngineersFileRaw<T>(fileStream);
-                }
+                
+                return ReadSpaceEngineersFileRaw<T>(fileStream);
             }
 
             return default(T);
@@ -304,7 +297,7 @@
                     else
                     {
                         // add new
-                        requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item()
+                        requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item
                         {
                             Amount = (amount / bp.Result.Amount) * item.Amount,
                             TypeId = item.TypeId,
@@ -385,21 +378,19 @@
         {
             if (SpaceEngineersCore.MaterialIndex.ContainsKey(materialName))
                 return SpaceEngineersCore.MaterialIndex[materialName];
-            else
-            {
-                var material = SpaceEngineersCore.Definitions.VoxelMaterials.FirstOrDefault(m => m.Id.SubtypeId == materialName);
-                var index = (byte)SpaceEngineersCore.Definitions.VoxelMaterials.ToList().IndexOf(material);
-                SpaceEngineersCore.MaterialIndex.Add(materialName, index);
-                return index;
-            }
+
+            var material = SpaceEngineersCore.Definitions.VoxelMaterials.FirstOrDefault(m => m.Id.SubtypeId == materialName);
+            var index = (byte)SpaceEngineersCore.Definitions.VoxelMaterials.ToList().IndexOf(material);
+            SpaceEngineersCore.MaterialIndex.Add(materialName, index);
+            return index;
         }
 
         public static string GetMaterialName(byte materialIndex, byte defaultMaterialIndex)
         {
             if (materialIndex <= SpaceEngineersCore.Definitions.VoxelMaterials.Length)
                 return SpaceEngineersCore.Definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
-            else
-                return SpaceEngineersCore.Definitions.VoxelMaterials[defaultMaterialIndex].Id.SubtypeId;
+
+            return SpaceEngineersCore.Definitions.VoxelMaterials[defaultMaterialIndex].Id.SubtypeId;
         }
 
         public static string GetMaterialName(byte materialIndex)

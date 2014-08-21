@@ -1,10 +1,11 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
     using System;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interop;
     using VRageMath;
 
     [Serializable]
@@ -35,7 +36,7 @@
         {
             get
             {
-                return this.EntityBase as MyObjectBuilder_Meteor;
+                return EntityBase as MyObjectBuilder_Meteor;
             }
         }
 
@@ -44,15 +45,15 @@
         {
             get
             {
-                return this.Meteor.Item;
+                return Meteor.Item;
             }
 
             set
             {
-                if (value != this.Meteor.Item)
+                if (value != Meteor.Item)
                 {
-                    this.Meteor.Item = value;
-                    this.RaisePropertyChanged(() => Item);
+                    Meteor.Item = value;
+                    RaisePropertyChanged(() => Item);
                 }
             }
         }
@@ -62,15 +63,15 @@
         {
             get
             {
-                return this._volume;
+                return _volume;
             }
 
             set
             {
-                if (value != this._volume)
+                if (value != _volume)
                 {
-                    this._volume = value;
-                    this.RaisePropertyChanged(() => Volume);
+                    _volume = value;
+                    RaisePropertyChanged(() => Volume);
                 }
             }
         }
@@ -81,7 +82,7 @@
         {
             get
             {
-                return this.Meteor.AngularVelocity.LinearVector();
+                return Meteor.AngularVelocity.LinearVector();
             }
         }
 
@@ -90,7 +91,7 @@
         {
             get
             {
-                return this.Meteor.LinearVelocity.LinearVector();
+                return Meteor.LinearVelocity.LinearVector();
             }
         }
 
@@ -101,60 +102,60 @@
         [OnSerializing]
         internal void OnSerializingMethod(StreamingContext context)
         {
-            this.SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_Meteor>(this.Meteor);
+            SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_Meteor>(Meteor);
         }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
-            this.EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_Meteor>(this.SerializedEntity);
+            EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_Meteor>(SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
-            this.ClassType = ClassType.Meteor;
-            var compMass = SpaceEngineersApi.GetItemMass(this.Meteor.Item.Content.TypeId, this.Meteor.Item.Content.SubtypeName);
-            var compVolume = SpaceEngineersApi.GetItemVolume(this.Meteor.Item.Content.TypeId, this.Meteor.Item.Content.SubtypeName);
+            ClassType = ClassType.Meteor;
+            var compMass = SpaceEngineersApi.GetItemMass(Meteor.Item.Content.TypeId, Meteor.Item.Content.SubtypeName);
+            var compVolume = SpaceEngineersApi.GetItemVolume(Meteor.Item.Content.TypeId, Meteor.Item.Content.SubtypeName);
 
-            if (this.Meteor.Item.Content is MyObjectBuilder_Ore)
+            if (Meteor.Item.Content is MyObjectBuilder_Ore)
             {
-                this.DisplayName = string.Format("{0} Ore", this.Meteor.Item.Content.SubtypeName);
-                this.Volume = compVolume * this.Meteor.Item.Amount;
-                this.Mass = compMass * this.Meteor.Item.Amount;
-                this.Description = string.Format("{0:#,##0.00} Kg", this.Mass);
+                DisplayName = string.Format("{0} Ore", Meteor.Item.Content.SubtypeName);
+                Volume = compVolume * Meteor.Item.Amount;
+                Mass = compMass * Meteor.Item.Amount;
+                Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
             else
             {
-                this.DisplayName = this.Meteor.Item.Content.SubtypeName;
-                this.Description = string.Format("x {0}", this.Meteor.Item.Amount);
-                this.Volume = compVolume * this.Meteor.Item.Amount;
-                this.Mass = compMass * this.Meteor.Item.Amount;
+                DisplayName = Meteor.Item.Content.SubtypeName;
+                Description = string.Format("x {0}", Meteor.Item.Amount);
+                Volume = compVolume * Meteor.Item.Amount;
+                Mass = compMass * Meteor.Item.Amount;
             }
         }
 
         public void ResetVelocity()
         {
-            this.Meteor.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.Meteor.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.RaisePropertyChanged(() => LinearVelocity);
+            Meteor.LinearVelocity = new Vector3(0, 0, 0);
+            Meteor.AngularVelocity = new Vector3(0, 0, 0);
+            RaisePropertyChanged(() => LinearVelocity);
         }
 
         public void ReverseVelocity()
         {
-            this.Meteor.LinearVelocity = new VRageMath.Vector3(this.Meteor.LinearVelocity.X * -1, this.Meteor.LinearVelocity.Y * -1, this.Meteor.LinearVelocity.Z * -1);
-            this.Meteor.AngularVelocity = new VRageMath.Vector3(this.Meteor.AngularVelocity.X * -1, this.Meteor.AngularVelocity.Y * -1, this.Meteor.AngularVelocity.Z * -1);
-            this.RaisePropertyChanged(() => LinearVelocity);
+            Meteor.LinearVelocity = new Vector3(Meteor.LinearVelocity.X * -1, Meteor.LinearVelocity.Y * -1, Meteor.LinearVelocity.Z * -1);
+            Meteor.AngularVelocity = new Vector3(Meteor.AngularVelocity.X * -1, Meteor.AngularVelocity.Y * -1, Meteor.AngularVelocity.Z * -1);
+            RaisePropertyChanged(() => LinearVelocity);
         }
 
         public void MaxVelocityAtPlayer(Vector3 playerPosition)
         {
-            var v = playerPosition - this.Meteor.PositionAndOrientation.Value.Position;
+            var v = playerPosition - Meteor.PositionAndOrientation.Value.Position;
             v.Normalize();
             v = Vector3.Multiply(v, SpaceEngineersConsts.MaxMeteorVelocity);
 
-            this.Meteor.LinearVelocity = v;
-            this.Meteor.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-            this.RaisePropertyChanged(() => LinearVelocity);
+            Meteor.LinearVelocity = v;
+            Meteor.AngularVelocity = new Vector3(0, 0, 0);
+            RaisePropertyChanged(() => LinearVelocity);
         }
 
         #endregion

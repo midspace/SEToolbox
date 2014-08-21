@@ -7,7 +7,7 @@
     {
         #region fields
 
-        protected IStructureBase dataModel;
+        private IStructureBase _dataModel;
 
         #endregion
 
@@ -16,7 +16,7 @@
         public DataBaseViewModel(BaseViewModel parentViewModel, IStructureBase dataModel)
             : base(parentViewModel)
         {
-            this.dataModel = dataModel;
+            _dataModel = dataModel;
         }
 
         #endregion
@@ -25,13 +25,13 @@
 
         public IStructureBase DataModel
         {
-            get { return this.dataModel; }
+            get { return _dataModel; }
             set
             {
-                if (value != this.dataModel)
+                if (value != _dataModel)
                 {
-                    this.dataModel = value;
-                    this.RaisePropertyChanged(() => DataModel);
+                    _dataModel = value;
+                    RaisePropertyChanged(() => DataModel);
                 }
             }
         }

@@ -1,12 +1,5 @@
 ﻿namespace SEToolbox.Models
 {
-    using Microsoft.VisualBasic.FileIO;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Voxels;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -16,6 +9,14 @@
     using System.Windows.Shell;
     using System.Windows.Threading;
     using System.Xml;
+
+    using Microsoft.VisualBasic.FileIO;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Voxels;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
     using VRageMath;
 
     public class ExplorerModel : BaseModel
@@ -65,9 +66,9 @@
 
         public ExplorerModel()
         {
-            this.Structures = new ObservableCollection<IStructureBase>();
-            this._manageDeleteVoxelList = new List<string>();
-            this._timer = new Stopwatch();
+            Structures = new ObservableCollection<IStructureBase>();
+            _manageDeleteVoxelList = new List<string>();
+            _timer = new Stopwatch();
         }
 
         #endregion
@@ -78,15 +79,15 @@
         {
             get
             {
-                return this._structures;
+                return _structures;
             }
 
             set
             {
-                if (value != this._structures)
+                if (value != _structures)
                 {
-                    this._structures = value;
-                    this.RaisePropertyChanged(() => Structures);
+                    _structures = value;
+                    RaisePropertyChanged(() => Structures);
                 }
             }
         }
@@ -95,15 +96,15 @@
         {
             get
             {
-                return this._thePlayerCharacter;
+                return _thePlayerCharacter;
             }
 
             set
             {
-                if (value != this._thePlayerCharacter)
+                if (value != _thePlayerCharacter)
                 {
-                    this._thePlayerCharacter = value;
-                    this.RaisePropertyChanged(() => ThePlayerCharacter);
+                    _thePlayerCharacter = value;
+                    RaisePropertyChanged(() => ThePlayerCharacter);
                 }
             }
         }
@@ -112,15 +113,15 @@
         {
             get
             {
-                return this._activeWorld;
+                return _activeWorld;
             }
 
             set
             {
-                if (value != this._activeWorld)
+                if (value != _activeWorld)
                 {
-                    this._activeWorld = value;
-                    this.RaisePropertyChanged(() => ActiveWorld);
+                    _activeWorld = value;
+                    RaisePropertyChanged(() => ActiveWorld);
                 }
             }
         }
@@ -132,15 +133,15 @@
         {
             get
             {
-                return this._isActive;
+                return _isActive;
             }
 
             set
             {
-                if (value != this._isActive)
+                if (value != _isActive)
                 {
-                    this._isActive = value;
-                    this.RaisePropertyChanged(() => IsActive);
+                    _isActive = value;
+                    RaisePropertyChanged(() => IsActive);
                 }
             }
         }
@@ -152,17 +153,17 @@
         {
             get
             {
-                return this._isBusy;
+                return _isBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    this.SetActiveStatus();
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    SetActiveStatus();
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -177,15 +178,15 @@
         {
             get
             {
-                return this._isModified;
+                return _isModified;
             }
 
             set
             {
-                if (value != this._isModified)
+                if (value != _isModified)
                 {
-                    this._isModified = value;
-                    this.RaisePropertyChanged(() => IsModified);
+                    _isModified = value;
+                    RaisePropertyChanged(() => IsModified);
                 }
             }
         }
@@ -197,15 +198,15 @@
         {
             get
             {
-                return this._isBaseSaveChanged;
+                return _isBaseSaveChanged;
             }
 
             set
             {
-                if (value != this._isBaseSaveChanged)
+                if (value != _isBaseSaveChanged)
                 {
-                    this._isBaseSaveChanged = value;
-                    this.RaisePropertyChanged(() => IsBaseSaveChanged);
+                    _isBaseSaveChanged = value;
+                    RaisePropertyChanged(() => IsBaseSaveChanged);
                 }
             }
         }
@@ -214,15 +215,15 @@
         {
             get
             {
-                return this._sectorData;
+                return _sectorData;
             }
 
             set
             {
-                if (value != this._sectorData)
+                if (value != _sectorData)
                 {
-                    this._sectorData = value;
-                    this.RaisePropertyChanged(() => SectorData);
+                    _sectorData = value;
+                    RaisePropertyChanged(() => SectorData);
                 }
             }
         }
@@ -231,15 +232,15 @@
         {
             get
             {
-                return this._showProgress;
+                return _showProgress;
             }
 
             set
             {
-                if (value != this._showProgress)
+                if (value != _showProgress)
                 {
-                    this._showProgress = value;
-                    this.RaisePropertyChanged(() => ShowProgress);
+                    _showProgress = value;
+                    RaisePropertyChanged(() => ShowProgress);
                 }
             }
         }
@@ -248,20 +249,20 @@
         {
             get
             {
-                return this._progress;
+                return _progress;
             }
 
             set
             {
-                if (value != this._progress)
+                if (value != _progress)
                 {
-                    this._progress = value;
-                    this._progressValue = this._progress / this._maximumProgress;
+                    _progress = value;
+                    _progressValue = _progress / _maximumProgress;
 
-                    if (!_timer.IsRunning || _timer.ElapsedMilliseconds > 200 )
+                    if (!_timer.IsRunning || _timer.ElapsedMilliseconds > 200)
                     {
-                        this.RaisePropertyChanged(() => Progress);
-                        this.RaisePropertyChanged(() => ProgressValue);
+                        RaisePropertyChanged(() => Progress);
+                        RaisePropertyChanged(() => ProgressValue);
                         System.Windows.Forms.Application.DoEvents();
                         _timer.Restart();
                     }
@@ -273,15 +274,15 @@
         {
             get
             {
-                return this._progressState;
+                return _progressState;
             }
 
             set
             {
-                if (value != this._progressState)
+                if (value != _progressState)
                 {
-                    this._progressState = value;
-                    this.RaisePropertyChanged(() => ProgressState);
+                    _progressState = value;
+                    RaisePropertyChanged(() => ProgressState);
                 }
             }
         }
@@ -290,15 +291,15 @@
         {
             get
             {
-                return this._progressValue;
+                return _progressValue;
             }
 
             set
             {
-                if (value != this._progressValue)
+                if (value != _progressValue)
                 {
-                    this._progressValue = value;
-                    this.RaisePropertyChanged(() => ProgressValue);
+                    _progressValue = value;
+                    RaisePropertyChanged(() => ProgressValue);
                 }
             }
         }
@@ -308,15 +309,15 @@
         {
             get
             {
-                return this._maximumProgress;
+                return _maximumProgress;
             }
 
             set
             {
-                if (value != this._maximumProgress)
+                if (value != _maximumProgress)
                 {
-                    this._maximumProgress = value;
-                    this.RaisePropertyChanged(() => MaximumProgress);
+                    _maximumProgress = value;
+                    RaisePropertyChanged(() => MaximumProgress);
                 }
             }
         }
@@ -332,7 +333,7 @@
                 if (_customColors == null)
                 {
                     _customColors = new List<int>();
-                    foreach (VRageMath.Vector3 hsv in this.ActiveWorld.Content.CharacterToolbar.ColorMaskHSVList)
+                    foreach (Vector3 hsv in ActiveWorld.Content.CharacterToolbar.ColorMaskHSVList)
                     {
                         var rgb = ((Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3)hsv).ToSandboxDrawingColor();
                         _customColors.Add(((rgb.B << 0x10) | (rgb.G << 8) | rgb.R) & 0xffffff);
@@ -361,29 +362,29 @@
 
         public void SetActiveStatus()
         {
-            this.IsActive = !this.IsBusy;
+            IsActive = !IsBusy;
         }
 
         public void Load()
         {
-            this.SetActiveStatus();
+            SetActiveStatus();
         }
 
         public void LoadSandBox(bool snapshot = false)
         {
-            this.IsBusy = true;
+            IsBusy = true;
 
             Dispatcher.CurrentDispatcher.Invoke(
                 DispatcherPriority.DataBind,
                 new Action(delegate
                 {
-                    if (this.ActiveWorld == null)
+                    if (ActiveWorld == null)
                     {
-                        this.SectorData = null;
+                        SectorData = null;
                     }
                     else
                     {
-                        var filename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+                        var filename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
 
                         if (ZipTools.IsGzipedFile(filename))
                         {
@@ -392,7 +393,7 @@
                             // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
                             var tempFilename = TempfileUtil.NewFilename();
                             ZipTools.GZipUncompress(filename, tempFilename);
-                            this.SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
+                            SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
                             _compressedSectorFormat = true;
                         }
                         else
@@ -404,18 +405,18 @@
                             {
                                 var tempFilename = TempfileUtil.NewFilename();
                                 File.Copy(filename, tempFilename);
-                                this.SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
+                                SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
                             }
                             else
                             {
-                                this.SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+                                SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
                             }
                             _compressedSectorFormat = false;
                         }
                     }
-                    this.LoadSectorDetail();
-                    this.IsModified = false;
-                    this.IsBusy = false;
+                    LoadSectorDetail();
+                    IsModified = false;
+                    IsBusy = false;
                 }));
         }
 
@@ -423,13 +424,13 @@
         {
             var xDoc = new XmlDocument();
 
-            if (this.ActiveWorld == null)
+            if (ActiveWorld == null)
             {
                 xDoc = null;
             }
             else
             {
-                var filename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+                var filename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
 
                 if (ZipTools.IsGzipedFile(filename))
                 {
@@ -444,7 +445,7 @@
                 else
                 {
                     // Old file format is raw XML.
-                    this.SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
+                    SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
                     xDoc.Load(filename);
                     _compressedSectorFormat = false;
                 }
@@ -455,7 +456,7 @@
 
         public void RepairerSaveSandBoxXml(XmlDocument xDoc)
         {
-            var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+            var sectorFilename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
             var sectorBackupFilename = sectorFilename + ".bak";
 
             if (File.Exists(sectorBackupFilename))
@@ -477,11 +478,11 @@
 
         public void SaveCheckPointAndSandBox()
         {
-            this.IsBusy = true;
-            this.ActiveWorld.LastSaveTime = DateTime.Now;
-            var checkpointFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
+            IsBusy = true;
+            ActiveWorld.LastSaveTime = DateTime.Now;
+            var checkpointFilename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
             var checkpointBackupFilename = checkpointFilename + ".bak";
-            var sectorFilename = Path.Combine(this.ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
+            var sectorFilename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
             var sectorBackupFilename = sectorFilename + ".bak";
 
             if (File.Exists(checkpointBackupFilename))
@@ -491,18 +492,18 @@
 
             File.Move(checkpointFilename, checkpointBackupFilename);
 
-            this.ActiveWorld.Content.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
-            this.SectorData.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
+            ActiveWorld.Content.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
+            SectorData.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
 
-            if (this.ActiveWorld.CompressedCheckpointFormat)
+            if (ActiveWorld.CompressedCheckpointFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, tempFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(ActiveWorld.Content, tempFilename);
                 ZipTools.GZipCompress(tempFilename, checkpointFilename);
             }
             else
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(this.ActiveWorld.Content, checkpointFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(ActiveWorld.Content, checkpointFilename);
             }
 
             if (File.Exists(sectorBackupFilename))
@@ -515,14 +516,14 @@
             if (_compressedSectorFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(SectorData, tempFilename);
                 ZipTools.GZipCompress(tempFilename, sectorFilename);
             }
             else
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, sectorFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(SectorData, sectorFilename);
 
             // Manages the adding of new voxel files.
-            foreach (var entity in this.Structures)
+            foreach (var entity in Structures)
             {
                 if (entity is StructureVoxelModel)
                 {
@@ -543,28 +544,28 @@
             }
 
             // Manages the removal old voxels files.
-            foreach (var file in this._manageDeleteVoxelList)
+            foreach (var file in _manageDeleteVoxelList)
             {
-                var filename = Path.Combine(this.ActiveWorld.Savepath, file);
+                var filename = Path.Combine(ActiveWorld.Savepath, file);
                 if (File.Exists(filename))
                 {
                     FileSystem.DeleteFile(filename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 }
             }
-            this._manageDeleteVoxelList.Clear();
+            _manageDeleteVoxelList.Clear();
 
-            this.IsModified = false;
-            this.IsBusy = false;
+            IsModified = false;
+            IsBusy = false;
         }
 
         public string SaveTemporarySandbox()
         {
-            this.IsBusy = true;
+            IsBusy = true;
 
             var tempFilename = TempfileUtil.NewFilename() + ".xml";
-            SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(this.SectorData, tempFilename);
+            SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(SectorData, tempFilename);
 
-            this.IsBusy = false;
+            IsBusy = false;
             return tempFilename;
         }
 
@@ -573,25 +574,25 @@
         /// </summary>
         private void LoadSectorDetail()
         {
-            this.Structures.Clear();
-            this._manageDeleteVoxelList.Clear();
-            this.ThePlayerCharacter = null;
-            this._customColors = null;
+            Structures.Clear();
+            _manageDeleteVoxelList.Clear();
+            ThePlayerCharacter = null;
+            _customColors = null;
 
-            if (this.SectorData != null && this.ActiveWorld.Content != null)
+            if (SectorData != null && ActiveWorld.Content != null)
             {
-                foreach (var entityBase in this.SectorData.SectorObjects)
+                foreach (var entityBase in SectorData.SectorObjects)
                 {
-                    var structure = StructureBaseModel.Create(entityBase, this.ActiveWorld.Savepath, this.ActiveWorld.Content.Settings);
+                    var structure = StructureBaseModel.Create(entityBase, ActiveWorld.Savepath, ActiveWorld.Content.Settings);
 
                     if (structure is StructureCharacterModel)
                     {
                         var character = structure as StructureCharacterModel;
 
-                        if (this.ActiveWorld.Content != null && character.EntityId == this.ActiveWorld.Content.ControlledObject)
+                        if (ActiveWorld.Content != null && character.EntityId == ActiveWorld.Content.ControlledObject)
                         {
                             character.IsPlayer = true;
-                            this.ThePlayerCharacter = character;
+                            ThePlayerCharacter = character;
                         }
                     }
                     else if (structure is StructureCubeGridModel)
@@ -602,34 +603,34 @@
                         foreach (var cockpit in list)
                         {
                             cubeGrid.Pilots++;
-                            var character = (StructureCharacterModel)StructureBaseModel.Create(cockpit.Pilot, null, this.ActiveWorld.Content.Settings);
+                            var character = (StructureCharacterModel)StructureBaseModel.Create(cockpit.Pilot, null, ActiveWorld.Content.Settings);
                             character.IsPilot = true;
 
-                            if (this.ActiveWorld.Content != null && cockpit.EntityId == this.ActiveWorld.Content.ControlledObject)
+                            if (ActiveWorld.Content != null && cockpit.EntityId == ActiveWorld.Content.ControlledObject)
                             {
-                                this.ThePlayerCharacter = character;
-                                this.ThePlayerCharacter.IsPlayer = true;
+                                ThePlayerCharacter = character;
+                                ThePlayerCharacter.IsPlayer = true;
                             }
 
-                            this.Structures.Add(character);
+                            Structures.Add(character);
                         }
                     }
 
-                    this.Structures.Add(structure);
+                    Structures.Add(structure);
                 }
 
-                this.CalcDistances();
+                CalcDistances();
             }
 
-            this.RaisePropertyChanged(() => Structures);
+            RaisePropertyChanged(() => Structures);
         }
 
         public void CalcDistances()
         {
-            if (this.SectorData != null)
+            if (SectorData != null)
             {
-                var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
-                foreach (var structure in this.Structures)
+                var position = ThePlayerCharacter != null && ThePlayerCharacter.PositionAndOrientation.HasValue ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
+                foreach (var structure in Structures)
                 {
                     structure.RecalcPosition(position);
                 }
@@ -658,35 +659,35 @@
 
         public List<string> LoadEntities(string[] filenames)
         {
-            this.IsBusy = true;
+            IsBusy = true;
             var idReplacementTable = new Dictionary<long, long>();
             var badfiles = new List<string>();
 
             foreach (var filename in filenames)
             {
                 bool isCompressed;
-                MyObjectBuilder_CubeGrid cubeEntity = null;
-                MyObjectBuilder_FloatingObject floatingEntity = null;
-                MyObjectBuilder_Meteor meteorEntity = null;
-                MyObjectBuilder_Character characterEntity = null;
+                MyObjectBuilder_CubeGrid cubeEntity;
+                MyObjectBuilder_FloatingObject floatingEntity;
+                MyObjectBuilder_Meteor meteorEntity;
+                MyObjectBuilder_Character characterEntity;
 
-                if (SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_CubeGrid>(filename, out cubeEntity, out isCompressed))
+                if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed))
                 {
-                    this.MergeData(cubeEntity, ref idReplacementTable);
+                    MergeData(cubeEntity, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_FloatingObject>(filename, out floatingEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out floatingEntity, out isCompressed))
                 {
-                    var newEntity = this.AddEntity(floatingEntity);
+                    var newEntity = AddEntity(floatingEntity);
                     newEntity.EntityId = MergeId(floatingEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Meteor>(filename, out meteorEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out meteorEntity, out isCompressed))
                 {
-                    var newEntity = this.AddEntity(meteorEntity);
+                    var newEntity = AddEntity(meteorEntity);
                     newEntity.EntityId = MergeId(meteorEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Character>(filename, out characterEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out characterEntity, out isCompressed))
                 {
-                    var newEntity = this.AddEntity(characterEntity);
+                    var newEntity = AddEntity(characterEntity);
                     newEntity.EntityId = MergeId(characterEntity.EntityId, ref idReplacementTable);
                 }
                 else
@@ -695,7 +696,7 @@
                 }
             }
 
-            this.IsBusy = false;
+            IsBusy = false;
             return badfiles;
         }
 
@@ -706,7 +707,7 @@
             //if (cubeGrid != null)
             //{
             //    BoundingBox bb = SpaceEngineersAPI.GetBoundingBox(cubeGrid);
-            //    foreach (var sectorObject in this.SectorData.SectorObjects)
+            //    foreach (var sectorObject in SectorData.SectorObjects)
             //    {
             //        if (sectorObject is MyObjectBuilder_CubeGrid)
             //        {
@@ -722,12 +723,12 @@
         {
             if (entity != null)
             {
-                this.SectorData.SectorObjects.Add(entity);
-                var structure = StructureBaseModel.Create(entity, this.ActiveWorld.Savepath, this.ActiveWorld.Content.Settings);
-                var position = this.ThePlayerCharacter != null ? this.ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
+                SectorData.SectorObjects.Add(entity);
+                var structure = StructureBaseModel.Create(entity, ActiveWorld.Savepath, ActiveWorld.Content.Settings);
+                var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
                 structure.PlayerDistance = (position - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
-                this.Structures.Add(structure);
-                this.IsModified = true;
+                Structures.Add(structure);
+                IsModified = true;
                 return structure;
             }
             return null;
@@ -737,39 +738,37 @@
         {
             if (entity != null)
             {
-                if (this.SectorData.SectorObjects.Contains(entity))
+                if (SectorData.SectorObjects.Contains(entity))
                 {
                     if (entity is MyObjectBuilder_VoxelMap)
                     {
                         _manageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).Filename);
                     }
 
-                    this.SectorData.SectorObjects.Remove(entity);
-                    this.IsModified = true;
+                    SectorData.SectorObjects.Remove(entity);
+                    IsModified = true;
                     return true;
                 }
-                else
-                {
-                    // TODO: write as linq;
-                    //var x = this.SectorData.SectorObjects.Where(s => s is MyObjectBuilder_CubeGrid).Cast<MyObjectBuilder_CubeGrid>().
-                    //    Where(s => s.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot == entity)).Select(e => e).ToArray();
 
-                    foreach (var sectorObject in this.SectorData.SectorObjects)
+                // TODO: write as linq;
+                //var x = SectorData.SectorObjects.Where(s => s is MyObjectBuilder_CubeGrid).Cast<MyObjectBuilder_CubeGrid>().
+                //    Where(s => s.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot == entity)).Select(e => e).ToArray();
+
+                foreach (var sectorObject in SectorData.SectorObjects)
+                {
+                    if (sectorObject is MyObjectBuilder_CubeGrid)
                     {
-                        if (sectorObject is MyObjectBuilder_CubeGrid)
+                        foreach (var cubeGrid in ((MyObjectBuilder_CubeGrid)sectorObject).CubeBlocks)
                         {
-                            foreach (var cubeGrid in ((MyObjectBuilder_CubeGrid)sectorObject).CubeBlocks)
+                            if (cubeGrid is MyObjectBuilder_Cockpit)
                             {
-                                if (cubeGrid is MyObjectBuilder_Cockpit)
+                                var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
+                                if (cockpit.Pilot == entity)
                                 {
-                                    var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
-                                    if (cockpit.Pilot == entity)
-                                    {
-                                        cockpit.Pilot = null;
-                                        var structure = this.Structures.FirstOrDefault(s => s.EntityBase == sectorObject) as StructureCubeGridModel;
-                                        structure.Pilots--;
-                                        return true;
-                                    }
+                                    cockpit.Pilot = null;
+                                    var structure = Structures.FirstOrDefault(s => s.EntityBase == sectorObject) as StructureCubeGridModel;
+                                    structure.Pilots--;
+                                    return true;
                                 }
                             }
                         }
@@ -782,7 +781,7 @@
 
         public bool ContainsVoxelFilename(string filename, MyObjectBuilder_EntityBase[] additionalList)
         {
-            bool contains = this.Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || this._manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
+            bool contains = Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || _manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
 
             if (contains || additionalList == null)
             {
@@ -796,9 +795,9 @@
 
         public MyObjectBuilder_Character FindAstronautCharacter()
         {
-            if (this.SectorData != null)
+            if (SectorData != null)
             {
-                foreach (var entityBase in this.SectorData.SectorObjects)
+                foreach (var entityBase in SectorData.SectorObjects)
                 {
                     if (entityBase is MyObjectBuilder_Character)
                     {
@@ -811,9 +810,9 @@
 
         public MyObjectBuilder_Cockpit FindPilotCharacter()
         {
-            if (this.SectorData != null)
+            if (SectorData != null)
             {
-                foreach (var entityBase in this.SectorData.SectorObjects)
+                foreach (var entityBase in SectorData.SectorObjects)
                 {
                     if (entityBase is MyObjectBuilder_CubeGrid)
                     {
@@ -833,18 +832,19 @@
         /// automatically number all voxel files, and check for duplicate filenames.
         /// </summary>
         /// <param name="originalFile"></param>
+        /// <param name="additionalList"></param>
         /// <returns></returns>
         public string CreateUniqueVoxelFilename(string originalFile, MyObjectBuilder_EntityBase[] additionalList)
         {
             var filepartname = Path.GetFileNameWithoutExtension(originalFile).ToLower();
             var extension = Path.GetExtension(originalFile).ToLower();
             var index = 0;
-            var filename = filepartname + index.ToString() + extension;
+            var filename = string.Format("{0}{1}{2}", filepartname, index, extension);
 
-            while (this.ContainsVoxelFilename(filename, additionalList))
+            while (ContainsVoxelFilename(filename, additionalList))
             {
                 index++;
-                filename = filepartname + index.ToString() + extension;
+                filename = string.Format("{0}{1}{2}", filepartname, index, extension);
             }
 
             return filename;
@@ -854,23 +854,23 @@
         {
             var idReplacementTable = new Dictionary<long, long>();
 
-            foreach (var item in (IList<IStructureBase>)data)
+            foreach (var item in data)
             {
                 if (item is StructureCubeGridModel)
                 {
                     var ship = item as StructureCubeGridModel;
-                    this.MergeData(ship.CubeGrid, ref idReplacementTable);
+                    MergeData(ship.CubeGrid, ref idReplacementTable);
                 }
                 else if (item is StructureVoxelModel)
                 {
                     var asteroid = item as StructureVoxelModel;
 
-                    if (this.ContainsVoxelFilename(asteroid.Filename, null))
+                    if (ContainsVoxelFilename(asteroid.Filename, null))
                     {
                         asteroid.Filename = CreateUniqueVoxelFilename(asteroid.Filename, null);
                     }
 
-                    var entity = (StructureVoxelModel)this.AddEntity(asteroid.VoxelMap);
+                    var entity = (StructureVoxelModel)AddEntity(asteroid.VoxelMap);
                     entity.EntityId = MergeId(asteroid.EntityId, ref idReplacementTable);
 
                     if (asteroid.SourceVoxelFilepath != null)
@@ -881,19 +881,19 @@
                 else if (item is StructureFloatingObjectModel)
                 {
                     var floatObject = item as StructureFloatingObjectModel;
-                    var entity = this.AddEntity(floatObject.FloatingObject);
+                    var entity = AddEntity(floatObject.FloatingObject);
                     entity.EntityId = MergeId(floatObject.EntityId, ref idReplacementTable);
                 }
                 else if (item is StructureMeteorModel)
                 {
                     var meteor = item as StructureMeteorModel;
-                    var entity = this.AddEntity(meteor.Meteor);
+                    var entity = AddEntity(meteor.Meteor);
                     entity.EntityId = MergeId(meteor.EntityId, ref idReplacementTable);
                 }
                 else if (item is StructureUnknownModel)
                 {
                     var unknown = item as StructureUnknownModel;
-                    var entity = this.AddEntity(unknown.EntityBase);
+                    var entity = AddEntity(unknown.EntityBase);
                     entity.EntityId = MergeId(unknown.EntityId, ref idReplacementTable);
                 }
 
@@ -924,20 +924,19 @@
                 }
             }
 
-            this.AddEntity(cubeGridObject);
+            AddEntity(cubeGridObject);
         }
 
         private static Int64 MergeId(long currentId, ref Dictionary<Int64, Int64> idReplacementTable)
         {
             if (currentId == 0)
                 return 0;
-            else if (idReplacementTable.ContainsKey(currentId))
+
+            if (idReplacementTable.ContainsKey(currentId))
                 return idReplacementTable[currentId];
-            else
-            {
-                idReplacementTable[currentId] = SpaceEngineersApi.GenerateEntityId();
-                return idReplacementTable[currentId];
-            }
+
+            idReplacementTable[currentId] = SpaceEngineersApi.GenerateEntityId();
+            return idReplacementTable[currentId];
         }
 
         public void OptimizeModel(StructureCubeGridModel viewModel)
@@ -948,7 +947,7 @@
             // Optimise ordering of CubeBlocks within structure, so that loops can load quickly based on {X+, Y+, Z+}.
             var neworder = viewModel.CubeGrid.CubeBlocks.OrderBy(c => c.Min.Z).ThenBy(c => c.Min.Y).ThenBy(c => c.Min.X).ToList();
             viewModel.CubeGrid.CubeBlocks = neworder;
-            this.IsModified = true;
+            IsModified = true;
         }
 
         public void TestDisplayRotation(StructureCubeGridModel viewModel)
@@ -975,7 +974,7 @@
             //        block.SubtypeName = SubtypeId.SmallBlockArmorBlockRed.ToString();
             //    }
             //}
-            //this.IsModified = true;
+            //IsModified = true;
 
             //viewModel.CubeGrid.CubeBlocks.RemoveAll(b => b.SubtypeName == SubtypeId.SmallLight.ToString());
 
@@ -1070,7 +1069,7 @@
             // Merge Groupings
             foreach (var group in model2.CubeGrid.BlockGroups)
             {
-                var existingGroup = model1.CubeGrid.BlockGroups.FirstOrDefault(bg => bg.Name == group.Name) as MyObjectBuilder_BlockGroup;
+                var existingGroup = model1.CubeGrid.BlockGroups.FirstOrDefault(bg => bg.Name == group.Name);
                 if (existingGroup == null)
                 {
                     model1.CubeGrid.BlockGroups.Add(group);
@@ -1151,7 +1150,7 @@
                 // Merge cubes in.
                 foreach (var cube2 in model2.CubeGrid.CubeBlocks)
                 {
-                    var newcube = cube2.Clone() as MyObjectBuilder_CubeBlock;
+                    var newcube = (MyObjectBuilder_CubeBlock)cube2.Clone();
                     newcube.Min = cube2.Min + offset;
                     model1.CubeGrid.CubeBlocks.Add(newcube);
                 }
@@ -1159,10 +1158,10 @@
                 // Merge Groupings in.
                 foreach (var group in model2.CubeGrid.BlockGroups)
                 {
-                    var existingGroup = model1.CubeGrid.BlockGroups.FirstOrDefault(bg => bg.Name == group.Name) as MyObjectBuilder_BlockGroup;
+                    var existingGroup = model1.CubeGrid.BlockGroups.FirstOrDefault(bg => bg.Name == group.Name);
                     if (existingGroup == null)
                     {
-                        existingGroup = new MyObjectBuilder_BlockGroup(){Name = group.Name};
+                        existingGroup = new MyObjectBuilder_BlockGroup { Name = group.Name };
                         model1.CubeGrid.BlockGroups.Add(existingGroup);
                     }
 
@@ -1185,26 +1184,26 @@
 
         public void ResetProgress(double initial, double maximumProgress)
         {
-            this.MaximumProgress = maximumProgress;
-            this.Progress = initial;
-            this.ShowProgress = true;
-            this.ProgressState = TaskbarItemProgressState.Normal;
+            MaximumProgress = maximumProgress;
+            Progress = initial;
+            ShowProgress = true;
+            ProgressState = TaskbarItemProgressState.Normal;
             _timer.Restart();
             System.Windows.Forms.Application.DoEvents();
         }
 
         public void IncrementProgress()
         {
-            this.Progress++;
+            Progress++;
         }
 
         public void ClearProgress()
         {
             _timer.Stop();
-            this.ShowProgress = false;
-            this.Progress = 0;
-            this.ProgressState = TaskbarItemProgressState.None;
-            this.ProgressValue = 0;
+            ShowProgress = false;
+            Progress = 0;
+            ProgressState = TaskbarItemProgressState.None;
+            ProgressValue = 0;
         }
     }
 }

@@ -1,17 +1,14 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Windows.Input;
+    using System.Windows.Media.Media3D;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
-    using SEToolbox.Support;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.IO;
-    using System.Linq;
-    using System.Windows.Input;
-    using System.Windows.Media.Media3D;
 
     public class GenerateFloatingObjectViewModel : BaseViewModel
     {
@@ -29,9 +26,9 @@
             : base(parentViewModel)
         {
 
-            this._dataModel = dataModel;
+            _dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -40,18 +37,12 @@
 
         public ICommand CreateCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CreateExecuted), new Func<bool>(CreateCanExecute));
-            }
+            get { return new DelegateCommand(CreateExecuted, CreateCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         #endregion
@@ -65,13 +56,13 @@
         {
             get
             {
-                return this._closeResult;
+                return _closeResult;
             }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
@@ -82,16 +73,16 @@
         {
             get
             {
-                return this._isBusy;
+                return _isBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -103,7 +94,7 @@
         {
             get
             {
-                return this._dataModel.StockItemList;
+                return _dataModel.StockItemList;
             }
         }
 
@@ -111,12 +102,12 @@
         {
             get
             {
-                return this._dataModel.StockItem;
+                return _dataModel.StockItem;
             }
 
             set
             {
-                this._dataModel.StockItem = value;
+                _dataModel.StockItem = value;
             }
         }
 
@@ -124,12 +115,12 @@
         {
             get
             {
-                return this._dataModel.IsValidItemToImport;
+                return _dataModel.IsValidItemToImport;
             }
 
             set
             {
-                this._dataModel.IsValidItemToImport = value;
+                _dataModel.IsValidItemToImport = value;
             }
         }
 
@@ -137,12 +128,12 @@
         {
             get
             {
-                return this._dataModel.Volume;
+                return _dataModel.Volume;
             }
 
             set
             {
-                this._dataModel.Volume = value;
+                _dataModel.Volume = value;
             }
         }
 
@@ -150,12 +141,12 @@
         {
             get
             {
-                return this._dataModel.Mass;
+                return _dataModel.Mass;
             }
 
             set
             {
-                this._dataModel.Mass = value;
+                _dataModel.Mass = value;
             }
         }
 
@@ -163,12 +154,12 @@
         {
             get
             {
-                return this._dataModel.Units;
+                return _dataModel.Units;
             }
 
             set
             {
-                this._dataModel.Units = value;
+                _dataModel.Units = value;
             }
         }
 
@@ -176,12 +167,12 @@
         {
             get
             {
-                return this._dataModel.DecimalUnits;
+                return _dataModel.DecimalUnits;
             }
 
             set
             {
-                this._dataModel.DecimalUnits = value;
+                _dataModel.DecimalUnits = value;
             }
         }
 
@@ -189,12 +180,12 @@
         {
             get
             {
-                return this._dataModel.IsDecimal;
+                return _dataModel.IsDecimal;
             }
 
             set
             {
-                this._dataModel.IsDecimal = value;
+                _dataModel.IsDecimal = value;
             }
         }
 
@@ -202,12 +193,12 @@
         {
             get
             {
-                return this._dataModel.IsInt;
+                return _dataModel.IsInt;
             }
 
             set
             {
-                this._dataModel.IsInt = value;
+                _dataModel.IsInt = value;
             }
         }
 
@@ -215,12 +206,12 @@
         {
             get
             {
-                return this._dataModel.IsUnique;
+                return _dataModel.IsUnique;
             }
 
             set
             {
-                this._dataModel.IsUnique = value;
+                _dataModel.IsUnique = value;
             }
         }
 
@@ -228,12 +219,12 @@
         {
             get
             {
-                return this._dataModel.Multiplier;
+                return _dataModel.Multiplier;
             }
 
             set
             {
-                this._dataModel.Multiplier = value;
+                _dataModel.Multiplier = value;
             }
         }
 
@@ -241,12 +232,12 @@
         {
             get
             {
-                return this._dataModel.MaxFloatingObjects;
+                return _dataModel.MaxFloatingObjects;
             }
 
             set
             {
-                this._dataModel.MaxFloatingObjects = value;
+                _dataModel.MaxFloatingObjects = value;
             }
         }
 
@@ -258,15 +249,15 @@
 
         public bool CreateCanExecute()
         {
-            return this.StockItem != null &&
-                (this.IsUnique ||
-                (this.IsInt && this.Units.HasValue && this.Units.Value > 0) ||
-                (this.IsDecimal && this.DecimalUnits.HasValue && this.DecimalUnits.Value > 0));
+            return StockItem != null &&
+                (IsUnique ||
+                (IsInt && Units.HasValue && Units.Value > 0) ||
+                (IsDecimal && DecimalUnits.HasValue && DecimalUnits.Value > 0));
         }
 
         public void CreateExecuted()
         {
-            this.CloseResult = true;
+            CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -276,7 +267,7 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion
@@ -292,17 +283,19 @@
                 Item = new MyObjectBuilder_InventoryItem { ItemId = 0 },
             };
 
-            if (this.IsDecimal)
-                entity.Item.AmountDecimal = this.DecimalUnits.Value;
-            else if (this.IsInt)
-                entity.Item.AmountDecimal = this.Units.Value;
-            else if (this.IsUnique)
+            if (IsDecimal && DecimalUnits.HasValue)
+                entity.Item.AmountDecimal = DecimalUnits.Value;
+            else if (IsInt && Units.HasValue)
+                entity.Item.AmountDecimal = Units.Value;
+            else if (IsUnique)
                 entity.Item.AmountDecimal = GenerateFloatingObjectModel.UniqueUnits;
+            else
+                entity.Item.AmountDecimal = 1;
 
-            this.IsValidItemToImport = true;
-            entity.Item.PhysicalContent = (MyObjectBuilder_PhysicalObject)MyObjectBuilder_Base.CreateNewObject(this.StockItem.TypeId, this.StockItem.SubtypeId);
+            IsValidItemToImport = true;
+            entity.Item.PhysicalContent = (MyObjectBuilder_PhysicalObject)MyObjectBuilder_Base.CreateNewObject(StockItem.TypeId, StockItem.SubtypeId);
 
-            //switch (this.StockItem.TypeId)
+            //switch (StockItem.TypeId)
             //{
             //    case MyObjectBuilderTypeEnum.Component:
             //    case MyObjectBuilderTypeEnum.Ingot:
@@ -317,7 +310,7 @@
 
             //  ###  Only required for pre-generating the Entity id for a gun that has been handled.  ####
             //        // This is a hack approach, to find the Enum from a SubtypeName like "AngleGrinderItem".
-            //        var enumName = this.StockItem.SubtypeId.Substring(0, this.StockItem.SubtypeId.Length - 4);
+            //        var enumName = StockItem.SubtypeId.Substring(0, StockItem.SubtypeId.Length - 4);
             //        MyObjectBuilderTypeEnum itemEnum;
             //        if (Enum.TryParse<MyObjectBuilderTypeEnum>(enumName, out itemEnum))
             //        {
@@ -330,31 +323,31 @@
 
             //    default:
             //        // As yet uncatered for items which may be new.
-            //        this.IsValidItemToImport = false;
+            //        IsValidItemToImport = false;
             //        break;
             //}
 
             // Figure out where the Character is facing, and plant the new construct 1m out in front, and 1m up from the feet, facing the Character.
-            var vectorFwd = this._dataModel.CharacterPosition.Forward.ToVector3D();
-            var vectorUp = this._dataModel.CharacterPosition.Up.ToVector3D();
+            var vectorFwd = _dataModel.CharacterPosition.Forward.ToVector3D();
+            var vectorUp = _dataModel.CharacterPosition.Up.ToVector3D();
             vectorFwd.Normalize();
             vectorUp.Normalize();
             var vector = Vector3D.Multiply(vectorFwd, 1.0f) + Vector3D.Multiply(vectorUp, 1.0f);
 
-            entity.PositionAndOrientation = new MyPositionAndOrientation()
+            entity.PositionAndOrientation = new MyPositionAndOrientation
             {
-                Position = Point3D.Add(this._dataModel.CharacterPosition.Position.ToPoint3D(), vector).ToVector3(),
-                Forward = this._dataModel.CharacterPosition.Forward,
-                Up = this._dataModel.CharacterPosition.Up
+                Position = Point3D.Add(_dataModel.CharacterPosition.Position.ToPoint3D(), vector).ToVector3(),
+                Forward = _dataModel.CharacterPosition.Forward,
+                Up = _dataModel.CharacterPosition.Up
             };
 
             var entities = new List<MyObjectBuilder_EntityBase>();
 
-            for (var i = 0; i < this.Multiplier; i++)
+            for (var i = 0; i < Multiplier; i++)
             {
                 var newEntity = (MyObjectBuilder_FloatingObject)entity.Clone();
                 newEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
-                //if (this.StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
+                //if (StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
                 //{
                 //    Only required for pre-generating the Entity id for a gun that has been handled.
                 //    ((MyObjectBuilder_PhysicalGunObject)entity.Item.PhysicalContent).GunEntity.EntityId = SpaceEngineersAPI.GenerateEntityId();

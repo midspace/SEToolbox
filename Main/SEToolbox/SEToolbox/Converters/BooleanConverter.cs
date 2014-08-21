@@ -7,12 +7,12 @@
 
     public class BooleanConverter : IValueConverter
     {
-        private bool isInverse;
+        private bool _isInverse;
 
         public bool IsInverse
         {
-            get { return isInverse; }
-            set { isInverse = value; }
+            get { return _isInverse; }
+            set { _isInverse = value; }
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -28,7 +28,7 @@
             else
                 finalValue = true;
 
-            finalValue ^= isInverse;
+            finalValue ^= _isInverse;
 
             if (targetType == typeof(Visibility))
                 return finalValue ? Visibility.Visible : Visibility.Collapsed;
@@ -49,7 +49,7 @@
             else
                 finalValue = true;
 
-            return finalValue ^ isInverse;
+            return finalValue ^ _isInverse;
         }
     }
 }

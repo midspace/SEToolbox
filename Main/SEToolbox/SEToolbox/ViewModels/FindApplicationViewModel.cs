@@ -35,12 +35,12 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
 
-            this._dialogService = dialogService;
-            this._openFileDialogFactory = openFileDialogFactory;
-            this._dataModel = dataModel;
+            _dialogService = dialogService;
+            _openFileDialogFactory = openFileDialogFactory;
+            _dataModel = dataModel;
 
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -49,26 +49,17 @@
 
         public ICommand BrowseApplicationCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(BrowseApplicationExecuted), new Func<bool>(BrowseApplicationCanExecute));
-            }
+            get { return new DelegateCommand(BrowseApplicationExecuted, BrowseApplicationCanExecute); }
         }
 
         public ICommand ContinueCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ContinueExecuted), new Func<bool>(ContinueCanExecute));
-            }
+            get { return new DelegateCommand(new Action(ContinueExecuted), new Func<bool>(ContinueCanExecute)); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute)); }
         }
 
         #endregion
@@ -82,13 +73,13 @@
         {
             get
             {
-                return this._closeResult;
+                return _closeResult;
             }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
@@ -96,12 +87,12 @@
         {
             get
             {
-                return this._dataModel.GameApplicationPath;
+                return _dataModel.GameApplicationPath;
             }
 
             set
             {
-                this._dataModel.GameApplicationPath = value;
+                _dataModel.GameApplicationPath = value;
             }
         }
 
@@ -109,12 +100,12 @@
         {
             get
             {
-                return this._dataModel.GameBinPath;
+                return _dataModel.GameBinPath;
             }
 
             set
             {
-                this._dataModel.GameBinPath = value;
+                _dataModel.GameBinPath = value;
             }
         }
 
@@ -123,12 +114,12 @@
         {
             get
             {
-                return this._dataModel.IsValidApplication;
+                return _dataModel.IsValidApplication;
             }
 
             set
             {
-                this._dataModel.IsValidApplication = value;
+                _dataModel.IsValidApplication = value;
             }
         }
 
@@ -136,12 +127,12 @@
         {
             get
             {
-                return this._dataModel.IsWrongApplication;
+                return _dataModel.IsWrongApplication;
             }
 
             set
             {
-                this._dataModel.IsWrongApplication = value;
+                _dataModel.IsWrongApplication = value;
             }
         }
 
@@ -156,7 +147,7 @@
 
         public void BrowseApplicationExecuted()
         {
-            var startPath = this.GameApplicationPath;
+            var startPath = GameApplicationPath;
             if (string.IsNullOrEmpty(startPath))
             {
                 startPath = ToolboxUpdater.GetSteamFilePath();
@@ -166,8 +157,8 @@
                 }
             }
 
-            this.IsValidApplication = false;
-            this.IsWrongApplication = false;
+            IsValidApplication = false;
+            IsWrongApplication = false;
 
             var openFileDialog = _openFileDialogFactory();
             openFileDialog.CheckFileExists = true;
@@ -180,7 +171,7 @@
             openFileDialog.Title = Res.DialogLocateApplicationTitle;
 
             // Open the dialog
-            if  (_dialogService.ShowOpenFileDialog(this, openFileDialog) == DialogResult.OK)
+            if (_dialogService.ShowOpenFileDialog(this, openFileDialog) == DialogResult.OK)
             {
                 GameApplicationPath = openFileDialog.FileName;
             }
@@ -188,12 +179,12 @@
 
         public bool ContinueCanExecute()
         {
-            return this.IsValidApplication;
+            return IsValidApplication;
         }
 
         public void ContinueExecuted()
         {
-            this.CloseResult = true;
+            CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -203,7 +194,7 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion

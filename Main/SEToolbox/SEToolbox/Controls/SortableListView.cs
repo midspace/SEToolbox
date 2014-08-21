@@ -1,18 +1,19 @@
 ﻿namespace SEToolbox.Controls
 {
-    using System.Linq;
-    using SEToolbox.Support;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
 
+    using SEToolbox.Support;
+
     public class SortableListView : ListView
     {
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
-        GridViewColumnHeader _lastHeaderClicked = null;
+        GridViewColumnHeader _lastHeaderClicked;
 
         #region ColumnHeaderArrowUpTemplate
 
@@ -41,8 +42,8 @@
             base.OnApplyTemplate();
 
             // add the event handler to the GridViewColumnHeader. This strongly ties this ListView to a GridView.
-            this.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(GridViewColumnHeaderClickedHandler));
-            this.AddHandler(ListView.MouseDoubleClickEvent, new RoutedEventHandler(MouseDoubleClickedHandler));
+            AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(GridViewColumnHeaderClickedHandler));
+            AddHandler(ListView.MouseDoubleClickEvent, new RoutedEventHandler(MouseDoubleClickedHandler));
         }
 
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
@@ -102,13 +103,13 @@
 
                     if (direction == ListSortDirection.Ascending)
                     {
-                        if (this.ColumnHeaderArrowUpTemplate != null)
-                            headerClicked.Column.HeaderTemplate = this.ColumnHeaderArrowUpTemplate;
+                        if (ColumnHeaderArrowUpTemplate != null)
+                            headerClicked.Column.HeaderTemplate = ColumnHeaderArrowUpTemplate;
                     }
                     else
                     {
-                        if (this.ColumnHeaderArrowDownTemplate != null)
-                            headerClicked.Column.HeaderTemplate = this.ColumnHeaderArrowDownTemplate;
+                        if (ColumnHeaderArrowDownTemplate != null)
+                            headerClicked.Column.HeaderTemplate = ColumnHeaderArrowDownTemplate;
                     }
 
                     // Remove arrow from previously sorted header 
@@ -150,10 +151,10 @@
             var item = ((ListView)sender).GetHitControl<ListViewItem>((MouseEventArgs)e);
             if (item != null)
             {
-                if (this.MouseDoubleClickItem != null)
+                if (MouseDoubleClickItem != null)
                 {
                     var args = e as MouseButtonEventArgs;
-                    this.MouseDoubleClickItem(sender, args);
+                    MouseDoubleClickItem(sender, args);
                 }
             }
         }

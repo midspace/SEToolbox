@@ -24,21 +24,21 @@
         static void Main(string[] args)
         {
             // Install.
-            if (args.Any(a => a.Equals("/I", System.StringComparison.InvariantCultureIgnoreCase) || a.Equals("-I", System.StringComparison.InvariantCultureIgnoreCase)))
+            if (args.Any(a => a.Equals("/I", StringComparison.InvariantCultureIgnoreCase) || a.Equals("-I", StringComparison.InvariantCultureIgnoreCase)))
             {
                 InstallConfigurationSettings();
                 return;
             }
 
             // Uninstall.
-            if (args.Any(a => a.Equals("/U", System.StringComparison.InvariantCultureIgnoreCase) || a.Equals("-U", System.StringComparison.InvariantCultureIgnoreCase)))
+            if (args.Any(a => a.Equals("/U", StringComparison.InvariantCultureIgnoreCase) || a.Equals("-U", StringComparison.InvariantCultureIgnoreCase)))
             {
                 UninstallConfigurationSettings();
                 return;
             }
 
             // Binaries.
-            if (args.Any(a => a.Equals("/B", System.StringComparison.InvariantCultureIgnoreCase) || a.Equals("-B", System.StringComparison.InvariantCultureIgnoreCase)))
+            if (args.Any(a => a.Equals("/B", StringComparison.InvariantCultureIgnoreCase) || a.Equals("-B", StringComparison.InvariantCultureIgnoreCase)))
             {
                 UpdateBaseLibrariesFromSpaceEngineers(args);
                 return;
@@ -54,7 +54,7 @@
 
         private static void InstallConfigurationSettings()
         {
-            var success = DiagnosticsLogging.CreateLog();
+            DiagnosticsLogging.CreateLog();
             CleanBinCache();
         }
 
@@ -64,7 +64,7 @@
 
         private static void UninstallConfigurationSettings()
         {
-            var success = DiagnosticsLogging.RemoveLog();
+            DiagnosticsLogging.RemoveLog();
             CleanBinCache();
         }
 

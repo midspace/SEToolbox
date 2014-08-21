@@ -14,11 +14,6 @@
             DefaultStyleKeyProperty.OverrideMetadata(typeof(BusyIndicator), new FrameworkPropertyMetadata(typeof(BusyIndicator)));
         }
 
-        public BusyIndicator()
-            : base()
-        {
-        }
-
         #endregion
     }
 }

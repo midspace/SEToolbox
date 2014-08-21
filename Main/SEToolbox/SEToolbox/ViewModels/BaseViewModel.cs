@@ -1,10 +1,11 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Interfaces;
-    using SEToolbox.Support;
     using System;
     using System.ComponentModel;
     using System.Linq.Expressions;
+
+    using SEToolbox.Interfaces;
+    using SEToolbox.Support;
 
     public class BaseViewModel : INotifyPropertyChanged
     {
@@ -17,9 +18,8 @@
         #region ctor
 
         public BaseViewModel(BaseViewModel ownerViewModel)
-            : base()
         {
-            this._ownerViewModel = ownerViewModel;
+            _ownerViewModel = ownerViewModel;
         }
 
         #endregion
@@ -30,14 +30,14 @@
         {
             get
             {
-                return this._ownerViewModel;
+                return _ownerViewModel;
             }
 
             set
             {
-                if (this._ownerViewModel != value)
+                if (_ownerViewModel != value)
                 {
-                    this._ownerViewModel = value;
+                    _ownerViewModel = value;
                     PropertyChanged.Raise(() => OwnerViewModel);
                 }
             }
@@ -47,7 +47,7 @@
         {
             get
             {
-                return (IMainView)this._ownerViewModel;
+                return (IMainView)_ownerViewModel;
             }
         }
 
@@ -62,9 +62,9 @@
         //[Obsolete("Use RaisePropertyChanged(() => PropertyName) instead.")]
         protected void OnPropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
+            if (PropertyChanged != null)
             {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

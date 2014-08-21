@@ -36,7 +36,7 @@
                 </Grid.ColumnDefinitions>
                 <Label Content="Model:" />
                 <TextBox Width="180" Text="{Binding Filename, Mode=TwoWay}" VerticalAlignment="Center" Name="uxInitialElement" Grid.Column="1"/>
-                <Button ToolTip="Browse for Model" Command="{Binding Browse3dModelCommand}" VerticalAlignment="Center" Grid.Column="2">
+                <Button ToolTip="Browse for Model" Command="{Binding Browse3DModelCommand}" VerticalAlignment="Center" Grid.Column="2">
                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                 </Button>
                 <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8,0,0,0" Visibility="{Binding IsValidFile, Converter={StaticResource BooleanToVisibilityConverter}}">

@@ -1,10 +1,5 @@
 ﻿namespace SEToolbox.Models
 {
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Converters;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -13,6 +8,11 @@
     using System.Linq;
     using System.Text;
     using System.Xml.XPath;
+
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Converters;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
 
     public class SelectWorldModel : BaseModel
     {
@@ -30,8 +30,8 @@
 
         public SelectWorldModel()
         {
-            this.SelectedWorld = null;
-            this.Worlds = new ObservableCollection<SaveResource>();
+            SelectedWorld = null;
+            Worlds = new ObservableCollection<SaveResource>();
         }
 
         #endregion
@@ -51,15 +51,15 @@
         {
             get
             {
-                return this._selectedWorld;
+                return _selectedWorld;
             }
 
             set
             {
-                if (value != this._selectedWorld)
+                if (value != _selectedWorld)
                 {
-                    this._selectedWorld = value;
-                    this.RaisePropertyChanged(() => SelectedWorld);
+                    _selectedWorld = value;
+                    RaisePropertyChanged(() => SelectedWorld);
                 }
             }
         }
@@ -68,15 +68,15 @@
         {
             get
             {
-                return this._worlds;
+                return _worlds;
             }
 
             set
             {
-                if (value != this._worlds)
+                if (value != _worlds)
                 {
-                    this._worlds = value;
-                    this.RaisePropertyChanged(() => Worlds);
+                    _worlds = value;
+                    RaisePropertyChanged(() => Worlds);
                 }
             }
         }
@@ -88,16 +88,16 @@
         {
             get
             {
-                return this._isBusy;
+                return _isBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -111,10 +111,10 @@
 
         public void Load(UserDataPath baseLocalPath, UserDataPath baseDedicatedServerHostPath, UserDataPath baseDedicatedServerServicePath)
         {
-            this.BaseLocalPath = baseLocalPath;
-            this.BaseDedicatedServerHostPath = baseDedicatedServerHostPath;
-            this.BaseDedicatedServerServicePath = baseDedicatedServerServicePath;
-            this.LoadSaveList();
+            BaseLocalPath = baseLocalPath;
+            BaseDedicatedServerHostPath = baseDedicatedServerHostPath;
+            BaseDedicatedServerServicePath = baseDedicatedServerServicePath;
+            LoadSaveList();
         }
 
         public string RepairSandBox()
@@ -126,7 +126,7 @@
 
             var model = new ExplorerModel
             {
-                ActiveWorld = this.SelectedWorld
+                ActiveWorld = SelectedWorld
             };
 
             model.ActiveWorld.LoadCheckpoint();
@@ -243,7 +243,7 @@
 
             if (!missingFiles)
             {
-                if (this.SelectedWorld.SaveType == SaveWorldType.Local && model.ThePlayerCharacter == null)
+                if (SelectedWorld.SaveType == SaveWorldType.Local && model.ThePlayerCharacter == null)
                 {
                     statusNormal = false;
                     str.AppendLine("! No active Player in Save content.");
@@ -252,7 +252,7 @@
                     if (character != null)
                     {
                         model.ActiveWorld.Content.ControlledObject = character.EntityId;
-                        model.ActiveWorld.Content.CameraController = Sandbox.Common.ObjectBuilders.MyCameraControllerEnum.Entity;
+                        model.ActiveWorld.Content.CameraController = MyCameraControllerEnum.Entity;
                         model.ActiveWorld.Content.CameraEntity = character.EntityId;
                         str.AppendLine("* Found and Set new active Player.");
                         model.SaveCheckPointAndSandBox();
@@ -264,7 +264,7 @@
                         if (cockpit != null)
                         {
                             model.ActiveWorld.Content.ControlledObject = cockpit.EntityId;
-                            model.ActiveWorld.Content.CameraController = Sandbox.Common.ObjectBuilders.MyCameraControllerEnum.ThirdPersonSpectator;
+                            model.ActiveWorld.Content.CameraController = MyCameraControllerEnum.ThirdPersonSpectator;
                             model.ActiveWorld.Content.CameraEntity = 0;
                             str.AppendLine("* Found and Set new active Player.");
                             model.SaveCheckPointAndSandBox();
@@ -273,13 +273,13 @@
                         else
                         {
                             str.AppendLine("! Could not find any Player Characters.");
-                            character = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Character();
+                            character = new MyObjectBuilder_Character();
                             character.EntityId = SpaceEngineersApi.GenerateEntityId();
-                            character.PersistentFlags = Sandbox.Common.ObjectBuilders.MyPersistentEntityFlags2.CastShadows | Sandbox.Common.ObjectBuilders.MyPersistentEntityFlags2.InScene;
-                            character.PositionAndOrientation = new Sandbox.Common.ObjectBuilders.MyPositionAndOrientation(VRageMath.Vector3.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
+                            character.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
+                            character.PositionAndOrientation = new MyPositionAndOrientation(VRageMath.Vector3.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
                             character.CharacterModel = SpaceEngineersCore.Definitions.Characters[0].Name;
                             character.ColorMaskHSV = new Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3(0, -1, 1); // White
-                            character.Battery = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Battery() { CurrentCapacity = 0.5f };
+                            character.Battery = new MyObjectBuilder_Battery { CurrentCapacity = 0.5f };
                             character.LightEnabled = false;
                             character.HeadAngle = new VRageMath.Vector2();
                             character.LinearVelocity = new VRageMath.Vector3();
@@ -295,7 +295,7 @@
                             item.AmountDecimal = 1;
                             item.ItemId = 0;
                             item.Content = new MyObjectBuilder_Welder();
-                            gunEntity = MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_Welder)) as MyObjectBuilder_EntityBase;
+                            gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_Welder));
                             gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                             gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
@@ -304,7 +304,7 @@
                             item.AmountDecimal = 1;
                             item.ItemId = 1;
                             item.Content = new MyObjectBuilder_AngleGrinder();
-                            gunEntity = MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AngleGrinder)) as MyObjectBuilder_EntityBase;
+                            gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AngleGrinder));
                             gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                             gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
@@ -313,7 +313,7 @@
                             item.AmountDecimal = 1;
                             item.ItemId = 2;
                             item.Content = new MyObjectBuilder_HandDrill();
-                            gunEntity = MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_HandDrill)) as MyObjectBuilder_EntityBase;
+                            gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_HandDrill));
                             gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                             gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
@@ -322,13 +322,13 @@
                             item.AmountDecimal = 1;
                             item.ItemId = 3;
                             item.Content = new MyObjectBuilder_AutomaticRifle();
-                            gunEntity = MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AutomaticRifle)) as MyObjectBuilder_EntityBase;
+                            gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AutomaticRifle));
                             gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                             gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                             ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
                             model.ActiveWorld.Content.ControlledObject = character.EntityId;
-                            model.ActiveWorld.Content.CameraController = Sandbox.Common.ObjectBuilders.MyCameraControllerEnum.Entity;
+                            model.ActiveWorld.Content.CameraController = MyCameraControllerEnum.Entity;
                             model.ActiveWorld.Content.CameraEntity = character.EntityId;
 
                             model.SectorData.SectorObjects.Add(character);
@@ -343,18 +343,19 @@
                 saveAfterScan = false;
 
                 // Make sure the character in a locally saved world has all tools.
-                if (this.SelectedWorld.SaveType == SaveWorldType.Local)
+                if (SelectedWorld.SaveType == SaveWorldType.Local)
                 {
                     // SubtypeNames for required tools.
-                    string[] requiredItems = new string[] { 
+                    var requiredItems = new[] { 
                         "WelderItem", "AngleGrinderItem", "HandDrillItem" };
 
-                    var character = model.FindAstronautCharacter() 
+                    var character = model.FindAstronautCharacter()
                         ?? model.FindPilotCharacter().Pilot;
 
                     MyObjectBuilder_Inventory inventory = character.Inventory;
                     requiredItems.ForEach(
-                        delegate(string subtypeName) {
+                        delegate(string subtypeName)
+                        {
                             if (!inventory.Items.Any(i =>
                                 i.PhysicalContent != null &&
                                 i.PhysicalContent.SubtypeName == subtypeName))
@@ -362,13 +363,13 @@
                                 statusNormal = false;
                                 str.AppendLine("! Replaced astronaut's missing " + subtypeName + ".");
                                 saveAfterScan = true;
-                                inventory.Items.Add(new MyObjectBuilder_InventoryItem()
+                                inventory.Items.Add(new MyObjectBuilder_InventoryItem
                                 {
                                     Amount = 1,
-                                    Content = new MyObjectBuilder_PhysicalGunObject() { SubtypeName = subtypeName },
+                                    Content = new MyObjectBuilder_PhysicalGunObject { SubtypeName = subtypeName },
                                     ItemId = inventory.nextItemId
                                 });
-                                inventory.nextItemId++; 
+                                inventory.nextItemId++;
                             }
                         });
                 }
@@ -384,7 +385,7 @@
 
                         for (var i = 0; i < list.Length; i++)
                         {
-                            var c = new MyObjectBuilder_Passage()
+                            var c = new MyObjectBuilder_Passage
                             {
                                 EntityId = list[i].EntityId,
                                 BlockOrientation = list[i].BlockOrientation,
@@ -425,7 +426,7 @@
                         }
 
                         // TODO: search for cubeblocks that don't exist in the definitions.
-                        //var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), this.CubeGrid.GridSizeEnum, block.SubtypeName);
+                        //var definition = SpaceEngineersAPI.GetCubeDefinition(block.GetType(), CubeGrid.GridSizeEnum, block.SubtypeName);
                     }
 
                     if (entity is MyObjectBuilder_Character)
@@ -441,7 +442,7 @@
                     }
                 }
 
-                foreach (var item in this.SelectedWorld.Content.Players.Dictionary)
+                foreach (var item in SelectedWorld.Content.Players.Dictionary)
                 {
                     if (!SpaceEngineersCore.Definitions.Characters.Any(c => c.Name == item.Value.PlayerModel))
                     {
@@ -454,7 +455,7 @@
                     if (item.Value.PlayerId == 0)
                     {
                         item.Value.PlayerId = SpaceEngineersApi.GenerateEntityId();
-                        this.SelectedWorld.Content.AllPlayers.Add(new Sandbox.Common.ObjectBuilders.MyObjectBuilder_Checkpoint.PlayerItem(item.Value.PlayerId, "Repair", false, item.Value.SteamID, null));
+                        SelectedWorld.Content.AllPlayers.Add(new MyObjectBuilder_Checkpoint.PlayerItem(item.Value.PlayerId, "Repair", false, item.Value.SteamID, null));
                         statusNormal = false;
                         str.AppendLine("! Fixed corrupt or missing Player defitinion.");
                         saveAfterScan = true;
@@ -482,19 +483,19 @@
 
         private void LoadSaveList()
         {
-            this.Worlds.Clear();
+            Worlds.Clear();
             var list = new List<SaveResource>();
 
             #region local saves
 
-            if (Directory.Exists(this.BaseLocalPath.SavesPath))
+            if (Directory.Exists(BaseLocalPath.SavesPath))
             {
-                var userPaths = Directory.GetDirectories(this.BaseLocalPath.SavesPath);
+                var userPaths = Directory.GetDirectories(BaseLocalPath.SavesPath);
 
                 foreach (var userPath in userPaths)
                 {
                     var userName = Path.GetFileName(userPath);
-                    list.AddRange(FindSaveFiles(userPath, userName, SaveWorldType.Local, this.BaseLocalPath));
+                    list.AddRange(FindSaveFiles(userPath, userName, SaveWorldType.Local, BaseLocalPath));
                 }
             }
 
@@ -502,18 +503,18 @@
 
             #region Host Server
 
-            if (Directory.Exists(this.BaseDedicatedServerHostPath.SavesPath))
+            if (Directory.Exists(BaseDedicatedServerHostPath.SavesPath))
             {
-                list.AddRange(FindSaveFiles(this.BaseDedicatedServerHostPath.SavesPath, "Local / Console", SaveWorldType.DedicatedServerHost, this.BaseDedicatedServerHostPath));
+                list.AddRange(FindSaveFiles(BaseDedicatedServerHostPath.SavesPath, "Local / Console", SaveWorldType.DedicatedServerHost, BaseDedicatedServerHostPath));
             }
 
             #endregion
 
             #region Service Server
 
-            if (Directory.Exists(this.BaseDedicatedServerServicePath.SavesPath))
+            if (Directory.Exists(BaseDedicatedServerServicePath.SavesPath))
             {
-                var instancePaths = Directory.GetDirectories(this.BaseDedicatedServerServicePath.SavesPath);
+                var instancePaths = Directory.GetDirectories(BaseDedicatedServerServicePath.SavesPath);
 
                 foreach (var instancePath in instancePaths)
                 {
@@ -530,7 +531,7 @@
 
             #endregion
 
-            this.Worlds = new ObservableCollection<SaveResource>(list.OrderByDescending(w => w.LastLoadTime));
+            Worlds = new ObservableCollection<SaveResource>(list.OrderByDescending(w => w.LastLoadTime));
         }
 
         private IEnumerable<SaveResource> FindSaveFiles(string lastLoadedPath, string userName, SaveWorldType saveType, UserDataPath dataPath)
@@ -574,7 +575,7 @@
 
         internal SaveResource LoadSaveFromPath(string savePath, string userName, SaveWorldType saveType, UserDataPath dataPath)
         {
-            var saveResource = new SaveResource()
+            var saveResource = new SaveResource
             {
                 GroupDescription = string.Format("{0}: {1}", new EnumToResouceConverter().Convert(saveType, typeof(string), null, CultureInfo.CurrentUICulture), userName),
                 SaveType = saveType,
@@ -605,7 +606,7 @@
                         // Still check every potential game world path.
                         foreach (var savePath in savePaths)
                         {
-                            var saveResource = new SaveResource()
+                            var saveResource = new SaveResource
                             {
                                 Savename = Path.GetFileName(savePath),
                                 UserName = Path.GetFileName(userPath),
@@ -632,7 +633,7 @@
             {
                 var userPath = Path.GetDirectoryName(savePath);
 
-                var saveResource = new SaveResource()
+                var saveResource = new SaveResource
                 {
                     Savename = Path.GetFileName(savePath),
                     UserName = Path.GetFileName(userPath),

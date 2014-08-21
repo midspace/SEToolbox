@@ -46,11 +46,11 @@
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
 
-            this._dialogService = dialogService;
-            this._openFileDialogFactory = openFileDialogFactory;
-            this._dataModel = dataModel;
+            _dialogService = dialogService;
+            _openFileDialogFactory = openFileDialogFactory;
+            _dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -59,26 +59,17 @@
 
         public ICommand BrowseVoxelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(BrowseVoxelExecuted), new Func<bool>(BrowseVoxelCanExecute));
-            }
+            get { return new DelegateCommand(BrowseVoxelExecuted, BrowseVoxelCanExecute); }
         }
 
         public ICommand CreateCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CreateExecuted), new Func<bool>(CreateCanExecute));
-            }
+            get { return new DelegateCommand(CreateExecuted, CreateCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         /// <summary>
@@ -86,95 +77,53 @@
         /// </summary>
         public bool? CloseResult
         {
-            get
-            {
-                return this._closeResult;
-            }
+            get { return _closeResult; }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
         public string Filename
         {
-            get
-            {
-                return this._dataModel.Filename;
-            }
-
-            set
-            {
-                this._dataModel.Filename = value;
-            }
+            get { return _dataModel.Filename; }
+            set { _dataModel.Filename = value; }
         }
 
         public string SourceFile
         {
-            get
-            {
-                return this._dataModel.SourceFile;
-            }
-
+            get { return _dataModel.SourceFile; }
             set
             {
-                this._dataModel.SourceFile = value;
-                this.SourceFileChanged();
+                _dataModel.SourceFile = value;
+                SourceFileChanged();
             }
         }
 
         public bool IsValidVoxelFile
         {
-            get
-            {
-                return this._dataModel.IsValidVoxelFile;
-            }
-
-            set
-            {
-                this._dataModel.IsValidVoxelFile = value;
-            }
+            get { return _dataModel.IsValidVoxelFile; }
+            set { _dataModel.IsValidVoxelFile = value; }
         }
 
         public BindablePoint3DModel Position
         {
-            get
-            {
-                return this._dataModel.Position;
-            }
-
-            set
-            {
-                this._dataModel.Position = value;
-            }
+            get { return _dataModel.Position; }
+            set { _dataModel.Position = value; }
         }
 
         public BindableVector3DModel Forward
         {
-            get
-            {
-                return this._dataModel.Forward;
-            }
-
-            set
-            {
-                this._dataModel.Forward = value;
-            }
+            get { return _dataModel.Forward; }
+            set { _dataModel.Forward = value; }
         }
 
         public BindableVector3DModel Up
         {
-            get
-            {
-                return this._dataModel.Up;
-            }
-
-            set
-            {
-                this._dataModel.Up = value;
-            }
+            get { return _dataModel.Up; }
+            set { _dataModel.Up = value; }
         }
 
         /// <summary>
@@ -182,20 +131,17 @@
         /// </summary>
         public bool IsBusy
         {
-            get
-            {
-                return this._isBusy;
-            }
+            get { return _isBusy; }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
-                        System.Windows.Forms.Application.DoEvents();
+                        Application.DoEvents();
                     }
                 }
             }
@@ -203,70 +149,36 @@
 
         public bool IsStockVoxel
         {
-            get
-            {
-                return this._dataModel.IsStockVoxel;
-            }
-
-            set
-            {
-                this._dataModel.IsStockVoxel = value;
-            }
+            get { return _dataModel.IsStockVoxel; }
+            set { _dataModel.IsStockVoxel = value; }
         }
 
         public bool IsFileVoxel
         {
-            get
-            {
-                return this._dataModel.IsFileVoxel;
-            }
-
-            set
-            {
-                this._dataModel.IsFileVoxel = value;
-            }
+            get { return _dataModel.IsFileVoxel; }
+            set { _dataModel.IsFileVoxel = value; }
         }
 
         public string StockVoxel
         {
-            get
-            {
-                return this._dataModel.StockVoxel;
-            }
-
-            set
-            {
-                this._dataModel.StockVoxel = value;
-            }
+            get { return _dataModel.StockVoxel; }
+            set { _dataModel.StockVoxel = value; }
         }
 
         public List<string> StockVoxelFileList
         {
-            get
-            {
-                return this._dataModel.StockVoxelFileList;
-            }
+            get { return _dataModel.StockVoxelFileList; }
         }
 
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
         {
-            get
-            {
-                return this._dataModel.MaterialsCollection;
-            }
+            get { return _dataModel.MaterialsCollection; }
         }
 
         public MaterialSelectionModel StockMaterial
         {
-            get
-            {
-                return this._dataModel.StockMaterial;
-            }
-
-            set
-            {
-                this._dataModel.StockMaterial = value;
-            }
+            get { return _dataModel.StockMaterial; }
+            set { _dataModel.StockMaterial = value; }
         }
 
         #endregion
@@ -280,17 +192,17 @@
 
         public void BrowseVoxelExecuted()
         {
-            this.BrowseVoxel();
+            BrowseVoxel();
         }
 
         public bool CreateCanExecute()
         {
-            return (this.IsValidVoxelFile && this.IsFileVoxel) || (this.IsStockVoxel && this.StockVoxel != null);
+            return (IsValidVoxelFile && IsFileVoxel) || (IsStockVoxel && StockVoxel != null);
         }
 
         public void CreateExecuted()
         {
-            this.CloseResult = true;
+            CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -300,7 +212,7 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion
@@ -309,41 +221,41 @@
 
         private void BrowseVoxel()
         {
-            this.IsValidVoxelFile = false;
+            IsValidVoxelFile = false;
             var openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Res.DialogImportVoxelFilter;
             openFileDialog.Title = Res.DialogImportVoxelTitle;
 
             // Open the dialog
-            var result = _dialogService.ShowOpenFileDialog(this.OwnerViewModel, openFileDialog);
+            var result = _dialogService.ShowOpenFileDialog(OwnerViewModel, openFileDialog);
 
             if (result == DialogResult.OK)
             {
-                this.SourceFile = openFileDialog.FileName;
+                SourceFile = openFileDialog.FileName;
             }
         }
 
         private void SourceFileChanged()
         {
-            this.ProcessSourceFile(this.SourceFile);
+            ProcessSourceFile(SourceFile);
         }
 
         private void ProcessSourceFile(string filename)
         {
-            this.IsBusy = true;
+            IsBusy = true;
 
             if (File.Exists(filename))
             {
-                this.IsValidVoxelFile = MyVoxelMap.IsVoxelMapFile(filename);
-                this.IsFileVoxel = true;
+                IsValidVoxelFile = MyVoxelMap.IsVoxelMapFile(filename);
+                IsFileVoxel = true;
             }
             else
             {
-                this.IsValidVoxelFile = false;
-                this.IsFileVoxel = false;
+                IsValidVoxelFile = false;
+                IsFileVoxel = false;
             }
 
-            this.IsBusy = false;
+            IsBusy = false;
         }
 
         public MyObjectBuilder_EntityBase BuildEntity()
@@ -352,14 +264,14 @@
             var asteroidSize = new Vector3I();
 
             string originalFile = null;
-            if (this.IsStockVoxel)
+            if (IsStockVoxel)
             {
-                var stockfile = Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps", this.StockVoxel + ".vox");
+                var stockfile = Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps", StockVoxel + ".vox");
 
-                if (this.StockMaterial == null || this.StockMaterial.Value == null)
+                if (StockMaterial == null || StockMaterial.Value == null)
                 {
-                    this.SourceFile = stockfile;
-                    originalFile = this.SourceFile;
+                    SourceFile = stockfile;
+                    originalFile = SourceFile;
                     var asteroid = new MyVoxelMap();
                     asteroid.Load(stockfile, SpaceEngineersApi.GetMaterialName(0), false);
                     asteroidCenter = asteroid.ContentCenter;
@@ -368,59 +280,59 @@
                 else
                 {
                     var asteroid = new MyVoxelMap();
-                    asteroid.Load(stockfile, this.StockMaterial.Value);
-                    asteroid.ForceBaseMaterial(SpaceEngineersApi.GetMaterialName(0), this.StockMaterial.Value);
-                    this.SourceFile = TempfileUtil.NewFilename();
-                    asteroid.Save(this.SourceFile);
+                    asteroid.Load(stockfile, StockMaterial.Value);
+                    asteroid.ForceBaseMaterial(SpaceEngineersApi.GetMaterialName(0), StockMaterial.Value);
+                    SourceFile = TempfileUtil.NewFilename();
+                    asteroid.Save(SourceFile);
 
-                    originalFile = this.StockVoxel + ".vox";
+                    originalFile = StockVoxel + ".vox";
                     asteroidCenter = asteroid.ContentCenter;
                     asteroidSize = asteroid.ContentSize;
                 }
             }
-            else if (this.IsFileVoxel)
+            else if (IsFileVoxel)
             {
-                originalFile = this.SourceFile;
+                originalFile = SourceFile;
 
                 var asteroid = new MyVoxelMap();
-                asteroid.Load(this.SourceFile, SpaceEngineersApi.GetMaterialName(0), false);
+                asteroid.Load(SourceFile, SpaceEngineersApi.GetMaterialName(0), false);
                 asteroidCenter = asteroid.ContentCenter;
                 asteroidSize = asteroid.ContentSize;
 
-                if (this.StockMaterial != null && this.StockMaterial.Value != null)
+                if (StockMaterial != null && StockMaterial.Value != null)
                 {
-                    asteroid.ForceBaseMaterial(SpaceEngineersApi.GetMaterialName(0), this.StockMaterial.Value);
-                    this.SourceFile = TempfileUtil.NewFilename();
-                    asteroid.Save(this.SourceFile);
+                    asteroid.ForceBaseMaterial(SpaceEngineersApi.GetMaterialName(0), StockMaterial.Value);
+                    SourceFile = TempfileUtil.NewFilename();
+                    asteroid.Save(SourceFile);
                 }
             }
 
             // automatically number all files, and check for duplicate filenames.
-            this.Filename = this.MainViewModel.CreateUniqueVoxelFilename(originalFile);
+            Filename = MainViewModel.CreateUniqueVoxelFilename(originalFile);
 
             // Figure out where the Character is facing, and plant the new constrcut right in front.
             // Calculate the hypotenuse, as it will be the safest distance to place in front.
             double distance = Math.Sqrt(Math.Pow(asteroidSize.X, 2) + Math.Pow(asteroidSize.Y, 2) + Math.Pow(asteroidSize.Z, 2)) / 2;
 
-            var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
+            var vector = new BindableVector3DModel(_dataModel.CharacterPosition.Forward).Vector3D;
             vector.Normalize();
             vector = Vector3D.Multiply(vector, distance);
-            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
-            //this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward);
-            //this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
-            this.Forward = new BindableVector3DModel(Vector3.Forward);  // Asteroids currently don't have any orientation.
-            this.Up = new BindableVector3DModel(Vector3.Up);
+            Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(_dataModel.CharacterPosition.Position).Point3D, vector));
+            //Forward = new BindableVector3DModel(_dataModel.CharacterPosition.Forward);
+            //Up = new BindableVector3DModel(_dataModel.CharacterPosition.Up);
+            Forward = new BindableVector3DModel(Vector3.Forward);  // Asteroids currently don't have any orientation.
+            Up = new BindableVector3DModel(Vector3.Up);
 
-            var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3() - asteroidCenter, this.Filename)
+            var entity = new MyObjectBuilder_VoxelMap(Position.ToVector3() - asteroidCenter, Filename)
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                Filename = this.Filename,
+                Filename = Filename,
                 PositionAndOrientation = new MyPositionAndOrientation
                 {
-                    Position = this.Position.ToVector3() - asteroidCenter,
-                    Forward = this.Forward.ToVector3(),
-                    Up = this.Up.ToVector3()
+                    Position = Position.ToVector3() - asteroidCenter,
+                    Forward = Forward.ToVector3(),
+                    Up = Up.ToVector3()
                 }
             };
 

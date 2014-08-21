@@ -7,7 +7,6 @@
     This is sample code and is freely distributable. 
 */
 
-using System;
 using System.Collections;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -120,11 +119,11 @@ namespace SEToolbox.ImageLibrary
         /// <summary>
         /// Lookup table for colors
         /// </summary>
-        private Hashtable _colorMap;
+        private readonly Hashtable _colorMap;
 
         /// <summary>
         /// List of all colors in the palette
         /// </summary>
-        private Color[] _colors;
+        private readonly Color[] _colors;
     }
 }

@@ -7,7 +7,7 @@
     {
         #region fields
 
-        private Vector3D vector;
+        private Vector3D _vector;
 
         #endregion
 
@@ -15,39 +15,39 @@
 
         public BindableVector3DModel()
         {
-            this.vector = new Vector3D();
+            _vector = new Vector3D();
         }
 
         public BindableVector3DModel(double x, double y, double z)
             : this()
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public BindableVector3DModel(Vector3D vector)
             : this()
         {
-            this.X = vector.X;
-            this.Y = vector.Y;
-            this.Z = vector.Z;
+            X = vector.X;
+            Y = vector.Y;
+            Z = vector.Z;
         }
 
         public BindableVector3DModel(float x, float y, float z)
             : this()
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public BindableVector3DModel(VRageMath.Vector3 vector)
             : this()
         {
-            this.X = vector.X;
-            this.Y = vector.Y;
-            this.Z = vector.Z;
+            X = vector.X;
+            Y = vector.Y;
+            Z = vector.Z;
         }
 
         #endregion
@@ -58,15 +58,15 @@
         {
             get
             {
-                return this.vector.X;
+                return _vector.X;
             }
 
             set
             {
-                if (value != this.vector.X)
+                if (value != _vector.X)
                 {
-                    this.vector.X = value;
-                    this.RaisePropertyChanged(() => X);
+                    _vector.X = value;
+                    RaisePropertyChanged(() => X);
                 }
             }
         }
@@ -75,15 +75,15 @@
         {
             get
             {
-                return this.vector.Y;
+                return _vector.Y;
             }
 
             set
             {
-                if (value != this.vector.Y)
+                if (value != _vector.Y)
                 {
-                    this.vector.Y = value;
-                    this.RaisePropertyChanged(() => Y);
+                    _vector.Y = value;
+                    RaisePropertyChanged(() => Y);
                 }
             }
         }
@@ -92,15 +92,15 @@
         {
             get
             {
-                return this.vector.Z;
+                return _vector.Z;
             }
 
             set
             {
-                if (value != this.vector.Z)
+                if (value != _vector.Z)
                 {
-                    this.vector.Z = value;
-                    this.RaisePropertyChanged(() => Z);
+                    _vector.Z = value;
+                    RaisePropertyChanged(() => Z);
                 }
             }
         }
@@ -109,15 +109,15 @@
         {
             get
             {
-                return this.vector;
+                return _vector;
             }
 
             set
             {
-                if (value != this.vector)
+                if (value != _vector)
                 {
-                    this.vector = value;
-                    this.RaisePropertyChanged(() => Vector3D, () => X, () => Y, () => Z);
+                    _vector = value;
+                    RaisePropertyChanged(() => Vector3D, () => X, () => Y, () => Z);
                 }
             }
         }
@@ -128,7 +128,7 @@
 
         public VRageMath.Vector3 ToVector3()
         {
-            return new VRageMath.Vector3(ToFloat(this.X), ToFloat(this.Y), ToFloat(this.Z));
+            return new VRageMath.Vector3(ToFloat(X), ToFloat(Y), ToFloat(Z));
         }
 
         private float ToFloat(double value)
@@ -147,12 +147,12 @@
 
         public override string ToString()
         {
-            return this.vector.ToString();
+            return _vector.ToString();
         }
 
         public BindableVector3DModel Negate()
         {
-            Vector3D v = this.vector;
+            Vector3D v = _vector;
             v.Negate();
             return new BindableVector3DModel(v);
         }
@@ -161,17 +161,17 @@
         {
             Vector3D v = new Vector3D();
 
-            if (Math.Abs(this.vector.X) > Math.Abs(this.vector.Y) && Math.Abs(this.vector.X) > Math.Abs(this.vector.Z))
+            if (Math.Abs(_vector.X) > Math.Abs(_vector.Y) && Math.Abs(_vector.X) > Math.Abs(_vector.Z))
             {
-                v = new Vector3D(Math.Sign(this.vector.X), 0, 0);
+                v = new Vector3D(Math.Sign(_vector.X), 0, 0);
             }
-            else if (Math.Abs(this.vector.Y) > Math.Abs(this.vector.X) && Math.Abs(this.vector.Y) > Math.Abs(this.vector.Z))
+            else if (Math.Abs(_vector.Y) > Math.Abs(_vector.X) && Math.Abs(_vector.Y) > Math.Abs(_vector.Z))
             {
-                v = new Vector3D(0, Math.Sign(this.vector.Y), 0);
+                v = new Vector3D(0, Math.Sign(_vector.Y), 0);
             }
-            else if (Math.Abs(this.vector.Z) > Math.Abs(this.vector.X) && Math.Abs(this.vector.Z) > Math.Abs(this.vector.Y))
+            else if (Math.Abs(_vector.Z) > Math.Abs(_vector.X) && Math.Abs(_vector.Z) > Math.Abs(_vector.Y))
             {
-                v = new Vector3D(0, 0, Math.Sign(this.vector.Z));
+                v = new Vector3D(0, 0, Math.Sign(_vector.Z));
             }
 
             return new BindableVector3DModel(v);

@@ -1,9 +1,10 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Collections.Generic;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
-    using System.Collections.Generic;
 
     public abstract class StructureBaseViewModel<TModel> : DataBaseViewModel, IStructureViewBase where TModel : IStructureBase
     {
@@ -26,14 +27,14 @@
 
         public bool IsSelected
         {
-            get { return this._isSelected; }
+            get { return _isSelected; }
 
             set
             {
-                if (value != this._isSelected)
+                if (value != _isSelected)
                 {
-                    this._isSelected = value;
-                    this.RaisePropertyChanged(() => IsSelected);
+                    _isSelected = value;
+                    RaisePropertyChanged(() => IsSelected);
                 }
             }
         }
@@ -45,12 +46,12 @@
         {
             get
             {
-                return this.dataModel.IsBusy;
+                return DataModel.IsBusy;
             }
 
             set
             {
-                this.dataModel.IsBusy = value;
+                DataModel.IsBusy = value;
             }
         }
 
@@ -58,15 +59,15 @@
         {
             get
             {
-                return this.DataModel.EntityId;
+                return DataModel.EntityId;
             }
 
             set
             {
-                if (value != this.DataModel.EntityId)
+                if (value != DataModel.EntityId)
                 {
-                    this.DataModel.EntityId = value;
-                    this.RaisePropertyChanged(() => EntityId);
+                    DataModel.EntityId = value;
+                    RaisePropertyChanged(() => EntityId);
                 }
             }
         }
@@ -75,16 +76,16 @@
         {
             get
             {
-                return this.DataModel.PositionAndOrientation;
+                return DataModel.PositionAndOrientation;
             }
 
             set
             {
-                if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, this.DataModel.PositionAndOrientation))
-                //if (value != this.entityBase.PositionAndOrientation)
+                if (!EqualityComparer<MyPositionAndOrientation?>.Default.Equals(value, DataModel.PositionAndOrientation))
+                //if (value != entityBase.PositionAndOrientation)
                 {
-                    this.DataModel.PositionAndOrientation = value;
-                    this.RaisePropertyChanged(() => PositionAndOrientation);
+                    DataModel.PositionAndOrientation = value;
+                    RaisePropertyChanged(() => PositionAndOrientation);
                 }
             }
         }
@@ -93,15 +94,15 @@
         {
             get
             {
-                return this.DataModel.ClassType;
+                return DataModel.ClassType;
             }
 
             set
             {
-                if (value != this.DataModel.ClassType)
+                if (value != DataModel.ClassType)
                 {
-                    this.DataModel.ClassType = value;
-                    this.RaisePropertyChanged(() => ClassType);
+                    DataModel.ClassType = value;
+                    RaisePropertyChanged(() => ClassType);
                 }
             }
         }
@@ -110,12 +111,12 @@
         {
             get
             {
-                return this.DataModel.DisplayName;
+                return DataModel.DisplayName;
             }
 
             set
             {
-                this.DataModel.DisplayName = value;
+                DataModel.DisplayName = value;
             }
         }
 
@@ -123,12 +124,12 @@
         {
             get
             {
-                return this.DataModel.Description;
+                return DataModel.Description;
             }
 
             set
             {
-                this.DataModel.Description = value;
+                DataModel.Description = value;
             }
         }
 
@@ -136,12 +137,12 @@
         {
             get
             {
-                return this.DataModel.PlayerDistance;
+                return DataModel.PlayerDistance;
             }
 
             set
             {
-                this.DataModel.PlayerDistance = value;
+                DataModel.PlayerDistance = value;
             }
         }
 
@@ -149,12 +150,12 @@
         {
             get
             {
-                return this.DataModel.Mass;
+                return DataModel.Mass;
             }
 
             set
             {
-                this.DataModel.Mass = value;
+                DataModel.Mass = value;
             }
         }
 
@@ -162,12 +163,12 @@
         {
             get
             {
-                return this.DataModel.BlockCount;
+                return DataModel.BlockCount;
             }
 
             set
             {
-                this.DataModel.BlockCount = value;
+                DataModel.BlockCount = value;
             }
         }
 
@@ -175,14 +176,14 @@
         {
             get
             {
-                return this.DataModel.PositionX;
+                return DataModel.PositionX;
             }
 
             set
             {
-                this.DataModel.PositionX = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
+                DataModel.PositionX = value;
+                MainViewModel.IsModified = true;
+                MainViewModel.CalcDistances();
             }
         }
 
@@ -190,14 +191,14 @@
         {
             get
             {
-                return this.DataModel.PositionY;
+                return DataModel.PositionY;
             }
 
             set
             {
-                this.DataModel.PositionY = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
+                DataModel.PositionY = value;
+                MainViewModel.IsModified = true;
+                MainViewModel.CalcDistances();
             }
         }
 
@@ -205,14 +206,14 @@
         {
             get
             {
-                return this.DataModel.PositionZ;
+                return DataModel.PositionZ;
             }
 
             set
             {
-                this.DataModel.PositionZ = value;
-                this.MainViewModel.IsModified = true;
-                this.MainViewModel.CalcDistances();
+                DataModel.PositionZ = value;
+                MainViewModel.IsModified = true;
+                MainViewModel.CalcDistances();
             }
         }
 

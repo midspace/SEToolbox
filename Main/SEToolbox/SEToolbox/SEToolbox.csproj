@@ -157,7 +157,7 @@
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
-    <Compile Include="Models\Import3dAsteroidModel.cs" />
+    <Compile Include="Models\Import3DAsteroidModel.cs" />
     <Compile Include="Models\InventoryEditorModel.cs" />
     <Compile Include="Models\InventoryModel.cs" />
     <Compile Include="Models\LanguageModel.cs" />
@@ -190,7 +190,7 @@
     <Compile Include="Models\StructureCharacterModel.cs" />
     <Compile Include="Models\StructureVoxelModel.cs" />
     <Compile Include="Models\StructureBaseModel.cs" />
-    <Compile Include="Models\Import3dModelModel.cs" />
+    <Compile Include="Models\Import3DModelModel.cs" />
     <Compile Include="Models\ImportImageModel.cs" />
     <Compile Include="Interfaces\IStructureBase.cs" />
     <Compile Include="Models\StructureCubeGridModel.cs" />
@@ -273,7 +273,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
-    <Compile Include="ViewModels\Import3dAsteroidViewModel.cs" />
+    <Compile Include="ViewModels\Import3DAsteroidViewModel.cs" />
     <Compile Include="ViewModels\CubeItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryEditorViewModel.cs" />
     <Compile Include="ViewModels\ResourceReportViewModel.cs" />
@@ -288,7 +288,7 @@
     <Compile Include="ViewModels\DataBaseViewModel.cs" />
     <Compile Include="ViewModels\ImportVoxelViewModel.cs" />
     <Compile Include="ViewModels\StructureFloatingObjectViewModel.cs" />
-    <Compile Include="ViewModels\Import3dModelViewModel.cs" />
+    <Compile Include="ViewModels\Import3DModelViewModel.cs" />
     <Compile Include="ViewModels\ImportImageViewModel.cs" />
     <Compile Include="ViewModels\ExplorerViewModel.cs" />
     <Compile Include="Interfaces\IStructureViewBase.cs" />

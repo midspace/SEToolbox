@@ -15,39 +15,39 @@
 
         public BindablePoint3DModel()
         {
-            this._point = new Point3D();
+            _point = new Point3D();
         }
 
         public BindablePoint3DModel(double x, double y, double z)
             : this()
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public BindablePoint3DModel(Point3D point)
             : this()
         {
-            this.X = point.X;
-            this.Y = point.Y;
-            this.Z = point.Z;
+            X = point.X;
+            Y = point.Y;
+            Z = point.Z;
         }
 
         public BindablePoint3DModel(float x, float y, float z)
             : this()
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public BindablePoint3DModel(VRageMath.Vector3 vector)
             : this()
         {
-            this.X = vector.X;
-            this.Y = vector.Y;
-            this.Z = vector.Z;
+            X = vector.X;
+            Y = vector.Y;
+            Z = vector.Z;
         }
 
         #endregion
@@ -58,15 +58,15 @@
         {
             get
             {
-                return this._point.X;
+                return _point.X;
             }
 
             set
             {
-                if (value != this._point.X)
+                if (value != _point.X)
                 {
-                    this._point.X = value;
-                    this.RaisePropertyChanged(() => X);
+                    _point.X = value;
+                    RaisePropertyChanged(() => X);
                 }
             }
         }
@@ -75,15 +75,15 @@
         {
             get
             {
-                return this._point.Y;
+                return _point.Y;
             }
 
             set
             {
-                if (value != this._point.Y)
+                if (value != _point.Y)
                 {
-                    this._point.Y = value;
-                    this.RaisePropertyChanged(() => Y);
+                    _point.Y = value;
+                    RaisePropertyChanged(() => Y);
                 }
             }
         }
@@ -92,15 +92,15 @@
         {
             get
             {
-                return this._point.Z;
+                return _point.Z;
             }
 
             set
             {
-                if (value != this._point.Z)
+                if (value != _point.Z)
                 {
-                    this._point.Z = value;
-                    this.RaisePropertyChanged(() => Z);
+                    _point.Z = value;
+                    RaisePropertyChanged(() => Z);
                 }
             }
         }
@@ -109,15 +109,15 @@
         {
             get
             {
-                return this._point;
+                return _point;
             }
 
             set
             {
-                if (value != this._point)
+                if (value != _point)
                 {
-                    this._point = value;
-                    this.RaisePropertyChanged(() => Point3D, () => X, () => Y, () => Z);
+                    _point = value;
+                    RaisePropertyChanged(() => Point3D, () => X, () => Y, () => Z);
                 }
             }
         }
@@ -128,7 +128,7 @@
 
         public VRageMath.Vector3 ToVector3()
         {
-            return new VRageMath.Vector3(ToFloat(this.X), ToFloat(this.Y), ToFloat(this.Z));
+            return new VRageMath.Vector3(ToFloat(X), ToFloat(Y), ToFloat(Z));
         }
 
         private float ToFloat(double value)
@@ -147,13 +147,13 @@
 
         public BindablePoint3DModel RoundOff(double roundTo)
         {
-            var v = new Point3D(Math.Round(this._point.X / roundTo, 0, MidpointRounding.ToEven) * roundTo, Math.Round(this._point.Y / roundTo, 0, MidpointRounding.ToEven) * roundTo, Math.Round(this._point.Z / roundTo, 0, MidpointRounding.ToEven) * roundTo);
+            var v = new Point3D(Math.Round(_point.X / roundTo, 0, MidpointRounding.ToEven) * roundTo, Math.Round(_point.Y / roundTo, 0, MidpointRounding.ToEven) * roundTo, Math.Round(_point.Z / roundTo, 0, MidpointRounding.ToEven) * roundTo);
             return new BindablePoint3DModel(v);
         }
 
         public override string ToString()
         {
-            return string.Format("{0},{1},{2}", this.X, this.Y, this.Z);
+            return string.Format("{0},{1},{2}", X, Y, Z);
         }
 
         #endregion

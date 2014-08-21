@@ -50,7 +50,7 @@
         public ViewModelCollection(ObservableCollection<TModel> modelCollection, Func<TModel, TViewModel> viewModelCreator)
         {
             if (modelCollection == null) throw new ArgumentNullException("modelCollection");
-            if (viewModelCreator == null) throw new ArgumentNullException("viewModelFactory");
+            if (viewModelCreator == null) throw new ArgumentNullException("viewModelCreator");
 
             _model = modelCollection;
             _model.CollectionChanged += new NotifyCollectionChangedEventHandler(model_CollectionChanged);
@@ -113,8 +113,9 @@
                     //notify the change
                     OnCollectionChanged(e.Action, null, e.NewStartingIndex);
                     break;
-                default:
-                    break;
+                
+                //default:
+                //    break;
             }
 
         }
@@ -133,7 +134,7 @@
 
         public void RemoveAt(int index)
         {
-            this.Remove(_list[index]);
+            Remove(_list[index]);
         }
 
         public TViewModel this[int index]
@@ -203,7 +204,7 @@
 
         protected void OnCollectionChanged(NotifyCollectionChangedAction action, object item, int index)
         {
-            var handler = this.CollectionChanged;
+            var handler = CollectionChanged;
             if (handler != null)
             {
                 /* Note that there exist several ctors for NotifyCollectionChangedEventArgs

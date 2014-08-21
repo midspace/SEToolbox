@@ -1,14 +1,14 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Views;
-    using System;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics.Contracts;
-    using System.Windows.Input;
     using VRageMath;
 
     public class InventoryEditorViewModel : BaseViewModel
@@ -33,11 +33,11 @@
         {
             Contract.Requires(dialogService != null);
 
-            this._dialogService = dialogService;
-            this._dataModel = dataModel;
-            this.Selections = new ObservableCollection<InventoryModel>();
+            _dialogService = dialogService;
+            _dataModel = dataModel;
+            Selections = new ObservableCollection<InventoryModel>();
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -46,18 +46,12 @@
 
         public ICommand AddItemCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(AddItemExecuted), new Func<bool>(AddItemCanExecute));
-            }
+            get { return new DelegateCommand(AddItemExecuted, AddItemCanExecute); }
         }
 
         public ICommand DeleteItemCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(DeleteItemExecuted), new Func<bool>(DeleteItemCanExecute));
-            }
+            get { return new DelegateCommand(DeleteItemExecuted, DeleteItemCanExecute); }
         }
 
         #endregion
@@ -66,55 +60,52 @@
 
         public ObservableCollection<InventoryModel> Selections
         {
-            get
-            {
-                return this._selections;
-            }
+            get { return _selections; }
 
             set
             {
-                if (value != this._selections)
+                if (value != _selections)
                 {
-                    this._selections = value;
-                    this.RaisePropertyChanged(() => Selections);
+                    _selections = value;
+                    RaisePropertyChanged(() => Selections);
                 }
             }
         }
 
         public ObservableCollection<InventoryModel> Items
         {
-            get { return this._dataModel.Items; }
-            set { this._dataModel.Items = value; }
+            get { return _dataModel.Items; }
+            set { _dataModel.Items = value; }
         }
 
         public InventoryModel SelectedRow
         {
-            get { return this._dataModel.SelectedRow; }
-            set { this._dataModel.SelectedRow = value; }
+            get { return _dataModel.SelectedRow; }
+            set { _dataModel.SelectedRow = value; }
         }
 
         public double TotalVolume
         {
-            get { return this._dataModel.TotalVolume; }
-            set { this._dataModel.TotalVolume = value; }
+            get { return _dataModel.TotalVolume; }
+            set { _dataModel.TotalVolume = value; }
         }
 
         public float MaxVolume
         {
-            get { return this._dataModel.MaxVolume; }
-            set { this._dataModel.MaxVolume = value; }
+            get { return _dataModel.MaxVolume; }
+            set { _dataModel.MaxVolume = value; }
         }
 
         public string Name
         {
-            get { return this._dataModel.Name; }
-            set { this._dataModel.Name = value; }
+            get { return _dataModel.Name; }
+            set { _dataModel.Name = value; }
         }
 
         public bool IsValid
         {
-            get { return this._dataModel.IsValid; }
-            set { this._dataModel.IsValid = value; }
+            get { return _dataModel.IsValid; }
+            set { _dataModel.IsValid = value; }
         }
 
         #endregion
@@ -141,26 +132,26 @@
                 {
                     for (var i = 0; i < newEntities.Length; i++)
                     {
-                        var item = (MyObjectBuilder_InventoryItem)((MyObjectBuilder_FloatingObject)newEntities[i]).Item;
+                        var item = ((MyObjectBuilder_FloatingObject)newEntities[i]).Item;
                         _dataModel.Additem(item);
                     }
 
-                    //  TODO: need to bubble change up to this.MainViewModel.IsModified = true;
+                    //  TODO: need to bubble change up to MainViewModel.IsModified = true;
                 }
             }
         }
 
         public bool DeleteItemCanExecute()
         {
-            return this.SelectedRow != null;
+            return SelectedRow != null;
         }
 
         public void DeleteItemExecuted()
         {
-            var index = this.Items.IndexOf(this.SelectedRow);
+            var index = Items.IndexOf(SelectedRow);
             _dataModel.RemoveItem(index);
 
-            //  TODO: need to bubble change up to this.MainViewModel.IsModified = true;
+            //  TODO: need to bubble change up to MainViewModel.IsModified = true;
         }
 
         #endregion

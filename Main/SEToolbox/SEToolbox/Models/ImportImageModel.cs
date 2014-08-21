@@ -1,8 +1,9 @@
 ﻿namespace SEToolbox.Models
 {
+    using System.Drawing;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
-    using System.Drawing;
 
     public class ImportImageModel : BaseModel
     {
@@ -21,30 +22,22 @@
         private MyPositionAndOrientation _characterPosition;
 
         #endregion
-
-        #region ctor
-
-        public ImportImageModel()
-        {
-        }
-
-        #endregion
-
+        
         #region Properties
 
         public string Filename
         {
             get
             {
-                return this._filename;
+                return _filename;
             }
 
             set
             {
-                if (value != this._filename)
+                if (value != _filename)
                 {
-                    this._filename = value;
-                    this.RaisePropertyChanged(() => Filename);
+                    _filename = value;
+                    RaisePropertyChanged(() => Filename);
                 }
             }
         }
@@ -53,15 +46,15 @@
         {
             get
             {
-                return this._isValidImage;
+                return _isValidImage;
             }
 
             set
             {
-                if (value != this._isValidImage)
+                if (value != _isValidImage)
                 {
-                    this._isValidImage = value;
-                    this.RaisePropertyChanged(() => IsValidImage);
+                    _isValidImage = value;
+                    RaisePropertyChanged(() => IsValidImage);
                 }
             }
         }
@@ -70,15 +63,15 @@
         {
             get
             {
-                return this._originalImageSize;
+                return _originalImageSize;
             }
 
             set
             {
-                if (value != this._originalImageSize)
+                if (value != _originalImageSize)
                 {
-                    this._originalImageSize = value;
-                    this.RaisePropertyChanged(() => OriginalImageSize);
+                    _originalImageSize = value;
+                    RaisePropertyChanged(() => OriginalImageSize);
                 }
             }
         }
@@ -87,15 +80,15 @@
         {
             get
             {
-                return this._newImageSize;
+                return _newImageSize;
             }
 
             set
             {
-                if (value != this._newImageSize)
+                if (value != _newImageSize)
                 {
-                    this._newImageSize = value;
-                    this.RaisePropertyChanged(() => NewImageSize);
+                    _newImageSize = value;
+                    RaisePropertyChanged(() => NewImageSize);
                 }
             }
         }
@@ -104,15 +97,15 @@
         {
             get
             {
-                return this._position;
+                return _position;
             }
 
             set
             {
-                if (value != this._position)
+                if (value != _position)
                 {
-                    this._position = value;
-                    this.RaisePropertyChanged(() => Position);
+                    _position = value;
+                    RaisePropertyChanged(() => Position);
                 }
             }
         }
@@ -121,15 +114,15 @@
         {
             get
             {
-                return this._forward;
+                return _forward;
             }
 
             set
             {
-                if (value != this._forward)
+                if (value != _forward)
                 {
-                    this._forward = value;
-                    this.RaisePropertyChanged(() => Forward);
+                    _forward = value;
+                    RaisePropertyChanged(() => Forward);
                 }
             }
         }
@@ -138,15 +131,15 @@
         {
             get
             {
-                return this._up;
+                return _up;
             }
 
             set
             {
-                if (value != this._up)
+                if (value != _up)
                 {
-                    this._up = value;
-                    this.RaisePropertyChanged(() => Up);
+                    _up = value;
+                    RaisePropertyChanged(() => Up);
                 }
             }
         }
@@ -155,15 +148,15 @@
         {
             get
             {
-                return this._classType;
+                return _classType;
             }
 
             set
             {
-                if (value != this._classType)
+                if (value != _classType)
                 {
-                    this._classType = value;
-                    this.RaisePropertyChanged(() => ClassType);
+                    _classType = value;
+                    RaisePropertyChanged(() => ClassType);
                 }
             }
         }
@@ -172,15 +165,15 @@
         {
             get
             {
-                return this._armorType;
+                return _armorType;
             }
 
             set
             {
-                if (value != this._armorType)
+                if (value != _armorType)
                 {
-                    this._armorType = value;
-                    this.RaisePropertyChanged(() => ArmorType);
+                    _armorType = value;
+                    RaisePropertyChanged(() => ArmorType);
                 }
             }
         }
@@ -190,14 +183,14 @@
         {
             get
             {
-                return this._characterPosition;
+                return _characterPosition;
             }
 
             set
             {
-                //if (value != this.characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
-                this._characterPosition = value;
-                this.RaisePropertyChanged(() => CharacterPosition);
+                //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
+                _characterPosition = value;
+                RaisePropertyChanged(() => CharacterPosition);
             }
         }
 
@@ -207,7 +200,7 @@
 
         public void Load(MyPositionAndOrientation characterPosition)
         {
-            this.CharacterPosition = characterPosition;
+            CharacterPosition = characterPosition;
         }
 
         #endregion

@@ -14,25 +14,25 @@
 
         public BindablePoint3DIModel()
         {
-            this.X = 0;
-            this.Y = 0;
-            this.Z = 0;
+            X = 0;
+            Y = 0;
+            Z = 0;
         }
 
         public BindablePoint3DIModel(int x, int y, int z)
             : this()
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public BindablePoint3DIModel(VRageMath.Vector3I vector)
             : this()
         {
-            this.X = vector.X;
-            this.Y = vector.Y;
-            this.Z = vector.Z;
+            X = vector.X;
+            Y = vector.Y;
+            Z = vector.Z;
         }
 
         #endregion
@@ -43,15 +43,15 @@
         {
             get
             {
-                return this._x;
+                return _x;
             }
 
             set
             {
-                if (value != this._x)
+                if (value != _x)
                 {
-                    this._x = value;
-                    this.RaisePropertyChanged(() => X);
+                    _x = value;
+                    RaisePropertyChanged(() => X);
                 }
             }
         }
@@ -60,15 +60,15 @@
         {
             get
             {
-                return this._y;
+                return _y;
             }
 
             set
             {
-                if (value != this._y)
+                if (value != _y)
                 {
-                    this._y = value;
-                    this.RaisePropertyChanged(() => Y);
+                    _y = value;
+                    RaisePropertyChanged(() => Y);
                 }
             }
         }
@@ -77,15 +77,15 @@
         {
             get
             {
-                return this._z;
+                return _z;
             }
 
             set
             {
-                if (value != this._z)
+                if (value != _z)
                 {
-                    this._z = value;
-                    this.RaisePropertyChanged(() => Z);
+                    _z = value;
+                    RaisePropertyChanged(() => Z);
                 }
             }
         }
@@ -96,12 +96,12 @@
 
         public VRageMath.Vector3I ToVector3I()
         {
-            return new VRageMath.Vector3I(this.X, this.Y, this.Z);
+            return new VRageMath.Vector3I(X, Y, Z);
         }
 
         public override string ToString()
         {
-            return string.Format("{0},{1},{2}", this.X, this.Y, this.Z);
+            return string.Format("{0},{1},{2}", X, Y, Z);
         }
 
         #endregion

@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Input;
+
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
@@ -31,9 +32,9 @@
         public GenerateVoxelFieldViewModel(BaseViewModel parentViewModel, GenerateVoxelFieldModel dataModel)
             : base(parentViewModel)
         {
-            this._dataModel = dataModel;
+            _dataModel = dataModel;
             // Will bubble property change events from the Model to the ViewModel.
-            this._dataModel.PropertyChanged += (sender, e) => this.OnPropertyChanged(e.PropertyName);
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -42,51 +43,32 @@
 
         public ICommand ClearRowsCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(ClearRowsExecuted), new Func<bool>(ClearRowsCanExecute));
-            }
+            get { return new DelegateCommand(ClearRowsExecuted, ClearRowsCanExecute); }
         }
 
         public ICommand AddRandomRowCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(AddRandomRowExecuted), new Func<bool>(AddRandomRowCanExecute));
-            }
+            get { return new DelegateCommand(AddRandomRowExecuted, AddRandomRowCanExecute); }
         }
-
 
         public ICommand AddRowCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(AddRowExecuted), new Func<bool>(AddRowCanExecute));
-            }
+            get { return new DelegateCommand(AddRowExecuted, AddRowCanExecute); }
         }
 
         public ICommand DeleteRowCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(DeleteRowExecuted), new Func<bool>(DeleteRowCanExecute));
-            }
+            get { return new DelegateCommand(DeleteRowExecuted, DeleteRowCanExecute); }
         }
 
         public ICommand CreateCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CreateExecuted), new Func<bool>(CreateCanExecute));
-            }
+            get { return new DelegateCommand(CreateExecuted, CreateCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         /// <summary>
@@ -94,69 +76,42 @@
         /// </summary>
         public bool? CloseResult
         {
-            get
-            {
-                return this._closeResult;
-            }
+            get { return _closeResult; }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
         public GenerateVoxelModel SelectedRow
         {
-            get
-            {
-                return this._selectedRow;
-            }
+            get { return _selectedRow; }
 
             set
             {
-                this._selectedRow = value;
-                this.RaisePropertyChanged(() => SelectedRow);
+                _selectedRow = value;
+                RaisePropertyChanged(() => SelectedRow);
             }
         }
 
         public ObservableCollection<GenerateVoxelModel> VoxelCollection
         {
-            get
-            {
-                return this._dataModel.VoxelCollection;
-            }
-
-            set
-            {
-                this._dataModel.VoxelCollection = value;
-            }
+            get { return _dataModel.VoxelCollection; }
+            set { _dataModel.VoxelCollection = value; }
         }
 
         public int MinimumRange
         {
-            get
-            {
-                return this._dataModel.MinimumRange;
-            }
-
-            set
-            {
-                this._dataModel.MinimumRange = value;
-            }
+            get { return _dataModel.MinimumRange; }
+            set { _dataModel.MinimumRange = value; }
         }
 
         public int MaximumRange
         {
-            get
-            {
-                return this._dataModel.MaximumRange;
-            }
-
-            set
-            {
-                this._dataModel.MaximumRange = value;
-            }
+            get { return _dataModel.MaximumRange; }
+            set { _dataModel.MaximumRange = value; }
         }
 
         /// <summary>
@@ -166,16 +121,16 @@
         {
             get
             {
-                return this._isBusy;
+                return _isBusy;
             }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
@@ -185,42 +140,27 @@
 
         public ObservableCollection<GenerateVoxelDetailModel> StockVoxelFileList
         {
-            get
-            {
-                return this._dataModel.StockVoxelFileList;
-            }
+            get { return _dataModel.StockVoxelFileList; }
         }
 
         public List<GenerateVoxelDetailModel> SmallVoxelFileList
         {
-            get
-            {
-                return this._dataModel.SmallVoxelFileList;
-            }
+            get { return _dataModel.SmallVoxelFileList; }
         }
 
         public List<GenerateVoxelDetailModel> LargeVoxelFileList
         {
-            get
-            {
-                return this._dataModel.LargeVoxelFileList;
-            }
+            get { return _dataModel.LargeVoxelFileList; }
         }
 
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
         {
-            get
-            {
-                return this._dataModel.MaterialsCollection;
-            }
+            get { return _dataModel.MaterialsCollection; }
         }
 
         public List<int> PercentList
         {
-            get
-            {
-                return this._dataModel.PercentList;
-            }
+            get { return _dataModel.PercentList; }
         }
 
         #endregion
@@ -229,14 +169,14 @@
 
         public bool ClearRowsCanExecute()
         {
-            return this.VoxelCollection.Count > 0;
+            return VoxelCollection.Count > 0;
         }
 
         public void ClearRowsExecuted()
         {
-            this.VoxelCollection.Clear();
-            this.MinimumRange = 400;
-            this.MaximumRange = 800;
+            VoxelCollection.Clear();
+            MinimumRange = 400;
+            MaximumRange = 800;
         }
 
         public bool AddRandomRowCanExecute()
@@ -248,16 +188,16 @@
         {
             int idx;
 
-            var randomModel = new GenerateVoxelModel()
+            var randomModel = new GenerateVoxelModel
             {
-                Index = this.VoxelCollection.Count + 1,
-                MainMaterial = this._dataModel.BaseMaterial,
-                SecondMaterial = this._dataModel.BaseMaterial,
-                ThirdMaterial = this._dataModel.BaseMaterial,
-                ForthMaterial = this._dataModel.BaseMaterial,
-                FifthMaterial = this._dataModel.BaseMaterial,
-                SixthMaterial = this._dataModel.BaseMaterial,
-                SeventhMaterial = this._dataModel.BaseMaterial,
+                Index = VoxelCollection.Count + 1,
+                MainMaterial = _dataModel.BaseMaterial,
+                SecondMaterial = _dataModel.BaseMaterial,
+                ThirdMaterial = _dataModel.BaseMaterial,
+                ForthMaterial = _dataModel.BaseMaterial,
+                FifthMaterial = _dataModel.BaseMaterial,
+                SixthMaterial = _dataModel.BaseMaterial,
+                SeventhMaterial = _dataModel.BaseMaterial,
             };
 
             // Random Asteroid.
@@ -265,24 +205,24 @@
             var islarge = false;
             if (d > 70)
             {
-                idx = RandomUtil.GetInt(this.LargeVoxelFileList.Count);
-                randomModel.VoxelFile = this.LargeVoxelFileList[idx];
+                idx = RandomUtil.GetInt(LargeVoxelFileList.Count);
+                randomModel.VoxelFile = LargeVoxelFileList[idx];
                 islarge = true;
             }
             else
             {
-                idx = RandomUtil.GetInt(this.SmallVoxelFileList.Count);
-                randomModel.VoxelFile = this.SmallVoxelFileList[idx];
+                idx = RandomUtil.GetInt(SmallVoxelFileList.Count);
+                randomModel.VoxelFile = SmallVoxelFileList[idx];
             }
 
             // Random Main Material non-Rare.
-            var nonRare = this.MaterialsCollection.Where(m => m.IsRare == false).ToArray();
+            var nonRare = MaterialsCollection.Where(m => m.IsRare == false).ToArray();
             idx = RandomUtil.GetInt(nonRare.Length);
             randomModel.MainMaterial = nonRare[idx];
 
             int percent;
-            var rare = this.MaterialsCollection.Where(m => m.IsRare == true && m.MinedRatio >= 1).ToList();
-            var superRare = this.MaterialsCollection.Where(m => m.IsRare == true && m.MinedRatio < 1).ToList();
+            var rare = MaterialsCollection.Where(m => m.IsRare && m.MinedRatio >= 1).ToList();
+            var superRare = MaterialsCollection.Where(m => m.IsRare && m.MinedRatio < 1).ToList();
 
             if (islarge)
             {
@@ -372,16 +312,16 @@
                 superRare.RemoveAt(idx);
             }
 
-            if (this.SelectedRow != null)
+            if (SelectedRow != null)
             {
-                this.VoxelCollection.Insert(this.VoxelCollection.IndexOf(this.SelectedRow) + 1, randomModel);
+                VoxelCollection.Insert(VoxelCollection.IndexOf(SelectedRow) + 1, randomModel);
             }
             else
             {
-                this.VoxelCollection.Add(randomModel);
+                VoxelCollection.Add(randomModel);
             }
 
-            this._dataModel.RenumberCollection();
+            _dataModel.RenumberCollection();
         }
 
         public bool AddRowCanExecute()
@@ -391,48 +331,48 @@
 
         public void AddRowExecuted()
         {
-            if (this.SelectedRow != null)
+            if (SelectedRow != null)
             {
-                this.VoxelCollection.Insert(this.VoxelCollection.IndexOf(this.SelectedRow) + 1, this.SelectedRow.Clone());
+                VoxelCollection.Insert(VoxelCollection.IndexOf(SelectedRow) + 1, SelectedRow.Clone());
             }
             else
             {
-                this.VoxelCollection.Add(this._dataModel.NewDefaultVoxel(this.VoxelCollection.Count + 1));
+                VoxelCollection.Add(_dataModel.NewDefaultVoxel(VoxelCollection.Count + 1));
             }
 
-            this._dataModel.RenumberCollection();
+            _dataModel.RenumberCollection();
         }
 
         public bool DeleteRowCanExecute()
         {
-            return this.SelectedRow != null;
+            return SelectedRow != null;
         }
 
         public void DeleteRowExecuted()
         {
-            var index = this.VoxelCollection.IndexOf(this.SelectedRow);
-            this.VoxelCollection.Remove(this.SelectedRow);
-            this._dataModel.RenumberCollection();
+            var index = VoxelCollection.IndexOf(SelectedRow);
+            VoxelCollection.Remove(SelectedRow);
+            _dataModel.RenumberCollection();
 
-            while (index >= this.VoxelCollection.Count)
+            while (index >= VoxelCollection.Count)
             {
                 index--;
             }
             if (index >= 0)
             {
-                this.SelectedRow = this.VoxelCollection[index];
+                SelectedRow = VoxelCollection[index];
             }
         }
 
         public bool CreateCanExecute()
         {
-            var valid = this.VoxelCollection.Count > 0;
-            return this.VoxelCollection.Aggregate(valid, (current, t) => current & (t.SecondPercent + t.ThirdPercent + t.ForthPercent + t.FifthPercent + t.SixthPercent + t.SeventhPercent) <= 100);
+            var valid = VoxelCollection.Count > 0;
+            return VoxelCollection.Aggregate(valid, (current, t) => current & (t.SecondPercent + t.ThirdPercent + t.ForthPercent + t.FifthPercent + t.SixthPercent + t.SeventhPercent) <= 100);
         }
 
         public void CreateExecuted()
         {
-            this.CloseResult = true;
+            CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -442,7 +382,7 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion
@@ -454,11 +394,11 @@
             var entities = new List<MyObjectBuilder_EntityBase>();
             var sourceFiles = new List<string>();
 
-            this.MainViewModel.ResetProgress(0, this.VoxelCollection.Count);
+            MainViewModel.ResetProgress(0, VoxelCollection.Count);
 
-            foreach (var voxelDesign in this.VoxelCollection)
+            foreach (var voxelDesign in VoxelCollection)
             {
-                this.MainViewModel.Progress++;
+                MainViewModel.Progress++;
                 if (string.IsNullOrEmpty(voxelDesign.VoxelFile.SourceFilename) || !MyVoxelMap.IsVoxelMapFile(voxelDesign.VoxelFile.SourceFilename))
                     continue;
 
@@ -522,34 +462,34 @@
 
                 newDistributiuon.Shuffle();
                 asteroid.SetMaterialAssets(newDistributiuon);
-                asteroid.ForceVoxelFaceMaterial(this._dataModel.BaseMaterial.DisplayName);
+                asteroid.ForceVoxelFaceMaterial(_dataModel.BaseMaterial.DisplayName);
 
                 var tempfilename = TempfileUtil.NewFilename();
                 asteroid.Save(tempfilename);
 
                 // automatically number all files, and check for duplicate filenames.
-                var filename = this.MainViewModel.CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox", entities.ToArray());
+                var filename = MainViewModel.CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox", entities.ToArray());
 
-                var radius = RandomUtil.GetDouble(this.MinimumRange, this.MaximumRange);
+                var radius = RandomUtil.GetDouble(MinimumRange, MaximumRange);
                 var longitude = RandomUtil.GetDouble(0, 2 * Math.PI);
                 var latitude = RandomUtil.GetDouble(-Math.PI / 2, (Math.PI / 2) + double.Epsilon);
 
                 // Test data. Place asteroids items into a circle.
                 //radius = 500;
-                //longitude = Math.PI * 2 * ((double)voxelDesign.Index / this.VoxelCollection.Count);
+                //longitude = Math.PI * 2 * ((double)voxelDesign.Index / VoxelCollection.Count);
                 //latitude = 0;
 
                 var x = radius * Math.Cos(latitude) * Math.Cos(longitude);
                 var z = radius * Math.Cos(latitude) * Math.Sin(longitude);
                 var y = radius * Math.Sin(latitude);
 
-                var position = this._dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
+                var position = _dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)
                 {
                     EntityId = SpaceEngineersApi.GenerateEntityId(),
                     PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                     Filename = filename,
-                    PositionAndOrientation = new MyPositionAndOrientation()
+                    PositionAndOrientation = new MyPositionAndOrientation
                     {
                         Position = position,
                         Forward = Vector3.Forward, // Asteroids currently don't have any orientation.
