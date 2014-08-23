@@ -80,7 +80,7 @@
 
             if (typeof(T).Equals(typeof(double)))
             {
-                item = Convert.ToDouble(item);
+                item = Convert.ToDouble(item, CultureInfo.InvariantCulture);
                 return (T)item;
             }
 
@@ -130,7 +130,7 @@
 
             if (typeof(T).Equals(typeof(Point3D)))
             {
-                item = new Point3D(Convert.ToDouble(node.SelectSingleNode("X").Value), Convert.ToDouble(node.SelectSingleNode("Y").Value), Convert.ToDouble(node.SelectSingleNode("Z").Value));
+                item = new Point3D(Convert.ToDouble(node.SelectSingleNode("X").Value, CultureInfo.InvariantCulture), Convert.ToDouble(node.SelectSingleNode("Y").Value, CultureInfo.InvariantCulture), Convert.ToDouble(node.SelectSingleNode("Z").Value, CultureInfo.InvariantCulture));
                 return (T)item;
             }
 

@@ -117,6 +117,7 @@
             set
             {
                 DataModel.DisplayName = value;
+                MainViewModel.IsModified = true;
             }
         }
 

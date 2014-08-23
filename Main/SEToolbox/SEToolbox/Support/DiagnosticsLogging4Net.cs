@@ -6,6 +6,7 @@
     using System.Text;
     using log4net;
     using System;
+    using System.Globalization;
 
     public static partial class DiagnosticsLogging
     {
@@ -41,6 +42,8 @@
             diagReport.AppendFormat("Is64BitOperatingSystem: {0}\r\n", Environment.Is64BitOperatingSystem);
             diagReport.AppendFormat("IntPtr.Size: {0}\r\n", IntPtr.Size);
             diagReport.AppendFormat("IsAdmin: {0}\r\n", ToolboxUpdater.IsRuningElevated());
+            diagReport.AppendFormat("CurrentUICulture: {0}\r\n", CultureInfo.CurrentUICulture.IetfLanguageTag);
+            diagReport.AppendFormat("CurrentCulture: {0}\r\n", CultureInfo.CurrentCulture.IetfLanguageTag);
 
             diagReport.AppendFormat("\r\n");
 

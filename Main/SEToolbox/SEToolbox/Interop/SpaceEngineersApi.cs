@@ -282,7 +282,7 @@
             return mass;
         }
 
-        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderType typeId, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, out TimeSpan timeTaken)
+        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderType typeId, decimal amount, Dictionary<string, BlueprintRequirement> requirements, out TimeSpan timeTaken)
         {
             var time = new TimeSpan();
             var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.Id.TypeId == typeId);
@@ -293,14 +293,14 @@
                     if (requirements.ContainsKey(item.SubtypeId))
                     {
                         // append existing
-                        requirements[item.SubtypeId].Amount = (((amount / Convert.ToDecimal(bp.Result.Amount)) * Convert.ToDecimal(item.Amount)) +  Convert.ToDecimal(requirements[item.SubtypeId].Amount)).ToString(CultureInfo.InvariantCulture);
+                        requirements[item.SubtypeId].Amount = ((amount / Convert.ToDecimal(bp.Result.Amount, CultureInfo.InvariantCulture)) * Convert.ToDecimal(item.Amount, CultureInfo.InvariantCulture)) + Convert.ToDecimal(requirements[item.SubtypeId].Amount, CultureInfo.InvariantCulture);
                     }
                     else
                     {
                         // add new
-                        requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item
+                        requirements.Add(item.SubtypeId, new BlueprintRequirement
                         {
-                            Amount = ((amount / Convert.ToDecimal(bp.Result.Amount)) * Convert.ToDecimal(item.Amount)).ToString(CultureInfo.InvariantCulture),
+                            Amount = (amount / Convert.ToDecimal(bp.Result.Amount, CultureInfo.InvariantCulture)) * Convert.ToDecimal(item.Amount, CultureInfo.InvariantCulture),
                             TypeId = item.TypeId,
                             SubtypeId = item.SubtypeId,
                             Id = item.Id
