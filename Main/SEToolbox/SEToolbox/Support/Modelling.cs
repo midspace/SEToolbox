@@ -957,7 +957,7 @@
 
         #region BuildStructureFromCubic
 
-        internal static void BuildStructureFromCubic(MyObjectBuilder_CubeGrid entity, CubeType[][][] cubic, SubtypeId blockType, SubtypeId slopeBlockType, SubtypeId cornerBlockType, SubtypeId inverseCornerBlockType)
+        internal static void BuildStructureFromCubic(MyObjectBuilder_CubeGrid entity, CubeType[][][] cubic, bool fillObject, SubtypeId blockType, SubtypeId slopeBlockType, SubtypeId cornerBlockType, SubtypeId inverseCornerBlockType)
         {
             var xCount = cubic.Length;
             var yCount = cubic[0].Length;
@@ -969,7 +969,8 @@
                 {
                     for (var z = 0; z < zCount; z++)
                     {
-                        if (cubic[x][y][z] != CubeType.None && cubic[x][y][z] != CubeType.Interior)
+                        if ((cubic[x][y][z] != CubeType.None && cubic[x][y][z] != CubeType.Interior) ||
+                            (cubic[x][y][z] == CubeType.Interior && fillObject))
                         {
                             MyObjectBuilder_CubeBlock newCube;
                             entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
@@ -989,6 +990,11 @@
                             else if (cubic[x][y][z].ToString().StartsWith("InverseCorner"))
                             {
                                 newCube.SubtypeName = inverseCornerBlockType.ToString();
+                            }
+                            else if (cubic[x][y][z] == CubeType.Interior && fillObject)
+                            {
+                                newCube.SubtypeName = blockType.ToString();
+                                cubic[x][y][z] = CubeType.Cube;
                             }
 
                             newCube.EntityId = 0;

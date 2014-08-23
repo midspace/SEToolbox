@@ -223,7 +223,7 @@
         }
 
         [XmlIgnore]
-        public string DisplayName
+        public virtual string DisplayName
         {
             get
             {

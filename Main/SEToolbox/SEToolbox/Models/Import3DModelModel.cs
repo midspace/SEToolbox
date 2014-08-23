@@ -35,6 +35,7 @@
         private MaterialSelectionModel _outsideStockMaterial;
         private MaterialSelectionModel _insideStockMaterial;
         private string _sourceFile;
+        private bool _fillObject;
 
         #endregion
 
@@ -452,6 +453,23 @@
                 {
                     _sourceFile = value;
                     RaisePropertyChanged(() => SourceFile);
+                }
+            }
+        }
+
+        public bool FillObject
+        {
+            get
+            {
+                return _fillObject;
+            }
+
+            set
+            {
+                if (value != _fillObject)
+                {
+                    _fillObject = value;
+                    RaisePropertyChanged(() => FillObject);
                 }
             }
         }

@@ -149,6 +149,19 @@
             }
         }
 
+        public override string DisplayName
+        {
+            get
+            {
+                return base.DisplayName;
+            }
+            set
+            {
+                base.DisplayName = value;
+                CubeGrid.DisplayName = value;
+            }
+        }
+
         public Point3D Min
         {
             get
@@ -626,8 +639,8 @@
 
                     if (IsConstructionNotReady)
                     {
-                        var ingotRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
-                        var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                        var ingotRequirements = new Dictionary<string, BlueprintRequirement>();
+                        var oreRequirements = new Dictionary<string, BlueprintRequirement>();
                         var timeTaken = new TimeSpan();
                         var cubeAssetDict = new Dictionary<string, CubeAssetModel>();
                         var componentAssetDict = new Dictionary<string, CubeAssetModel>();
@@ -703,10 +716,10 @@
                         foreach (var kvp in ingotRequirements)
                         {
                             TimeSpan ingotTime;
-                            SpaceEngineersApi.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.Id.TypeId, Convert.ToDecimal(kvp.Value.Amount), oreRequirements, out ingotTime);
+                            SpaceEngineersApi.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.Id.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
                             var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId);
                             var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
-                            var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = Convert.ToDecimal(kvp.Value.Amount), Mass = Convert.ToDouble(kvp.Value.Amount) * cd.Mass, Volume = Convert.ToDouble(kvp.Value.Amount) * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture };
+                            var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture };
                             ingotAssets.Add(ingotAsset);
                             timeTaken += ingotTime;
                         }
@@ -715,7 +728,7 @@
                         {
                             var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId);
                             var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
-                            var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = Convert.ToDecimal(kvp.Value.Amount), Mass = Convert.ToDouble(kvp.Value.Amount) * cd.Mass, Volume = Convert.ToDouble(kvp.Value.Amount) * cd.Volume.Value, TextureFile = componentTexture };
+                            var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, TextureFile = componentTexture };
                             oreAssets.Add(oreAsset);
                         }
 

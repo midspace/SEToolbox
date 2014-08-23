@@ -86,10 +86,7 @@
         /// </summary>
         public bool? CloseResult
         {
-            get
-            {
-                return _closeResult;
-            }
+            get { return _closeResult; }
 
             set
             {
@@ -103,10 +100,7 @@
         /// </summary>
         public bool IsBusy
         {
-            get
-            {
-                return _isBusy;
-            }
+            get { return _isBusy; }
 
             set
             {
@@ -124,10 +118,7 @@
 
         public string Filename
         {
-            get
-            {
-                return _dataModel.Filename;
-            }
+            get { return _dataModel.Filename; }
 
             set
             {
@@ -138,49 +129,25 @@
 
         public Model3D Model
         {
-            get
-            {
-                return _dataModel.Model;
-            }
-
-            set
-            {
-                _dataModel.Model = value;
-            }
+            get { return _dataModel.Model; }
+            set { _dataModel.Model = value; }
         }
 
         public bool IsValidModel
         {
-            get
-            {
-                return _dataModel.IsValidModel;
-            }
-
-            set
-            {
-                _dataModel.IsValidModel = value;
-            }
+            get { return _dataModel.IsValidModel; }
+            set { _dataModel.IsValidModel = value; }
         }
 
         public BindableSize3DModel OriginalModelSize
         {
-            get
-            {
-                return _dataModel.OriginalModelSize;
-            }
-
-            set
-            {
-                _dataModel.OriginalModelSize = value;
-            }
+            get { return _dataModel.OriginalModelSize; }
+            set { _dataModel.OriginalModelSize = value; }
         }
 
         public BindableSize3DIModel NewModelSize
         {
-            get
-            {
-                return _dataModel.NewModelSize;
-            }
+            get { return _dataModel.NewModelSize; }
 
             set
             {
@@ -191,75 +158,37 @@
 
         public BindablePoint3DModel NewModelScale
         {
-            get
-            {
-                return _dataModel.NewModelScale;
-            }
-
-            set
-            {
-                _dataModel.NewModelScale = value;
-            }
+            get { return _dataModel.NewModelScale; }
+            set { _dataModel.NewModelScale = value; }
         }
 
         public BindablePoint3DModel Position
         {
-            get
-            {
-                return _dataModel.Position;
-            }
-
-            set
-            {
-                _dataModel.Position = value;
-            }
+            get { return _dataModel.Position; }
+            set { _dataModel.Position = value; }
         }
 
         public BindableVector3DModel Forward
         {
-            get
-            {
-                return _dataModel.Forward;
-            }
-
-            set
-            {
-                _dataModel.Forward = value;
-            }
+            get { return _dataModel.Forward; }
+            set { _dataModel.Forward = value; }
         }
 
         public BindableVector3DModel Up
         {
-            get
-            {
-                return _dataModel.Up;
-            }
-
-            set
-            {
-                _dataModel.Up = value;
-            }
+            get { return _dataModel.Up; }
+            set { _dataModel.Up = value; }
         }
 
         public ModelTraceVoxel TraceType
         {
-            get
-            {
-                return _dataModel.TraceType;
-            }
-
-            set
-            {
-                _dataModel.TraceType = value;
-            }
+            get { return _dataModel.TraceType; }
+            set { _dataModel.TraceType = value; }
         }
 
         public ImportModelClassType ClassType
         {
-            get
-            {
-                return _dataModel.ClassType;
-            }
+            get { return _dataModel.ClassType; }
 
             set
             {
@@ -270,40 +199,24 @@
 
         public bool IsAsteroid
         {
-            get
-            {
-                return _dataModel.IsAsteroid;
-            }
+            get { return _dataModel.IsAsteroid; }
         }
 
         public bool IsShip
         {
-            get
-            {
-                return _dataModel.IsShip;
-            }
+            get { return _dataModel.IsShip; }
         }
 
         public ImportArmorType ArmorType
         {
-            get
-            {
-                return _dataModel.ArmorType;
-            }
-
-            set
-            {
-                _dataModel.ArmorType = value;
-            }
+            get { return _dataModel.ArmorType; }
+            set { _dataModel.ArmorType = value; }
         }
 
 
         public double MultipleScale
         {
-            get
-            {
-                return _dataModel.MultipleScale;
-            }
+            get { return _dataModel.MultipleScale; }
 
             set
             {
@@ -314,10 +227,7 @@
 
         public double MaxLengthScale
         {
-            get
-            {
-                return _dataModel.MaxLengthScale;
-            }
+            get { return _dataModel.MaxLengthScale; }
 
             set
             {
@@ -342,10 +252,7 @@
 
         public bool IsMultipleScale
         {
-            get
-            {
-                return _dataModel.IsMultipleScale;
-            }
+            get { return _dataModel.IsMultipleScale; }
 
             set
             {
@@ -356,10 +263,7 @@
 
         public bool IsMaxLengthScale
         {
-            get
-            {
-                return _dataModel.IsMaxLengthScale;
-            }
+            get { return _dataModel.IsMaxLengthScale; }
 
             set
             {
@@ -370,58 +274,37 @@
 
         public ObservableCollection<MaterialSelectionModel> OutsideMaterialsCollection
         {
-            get
-            {
-                return _dataModel.OutsideMaterialsCollection;
-            }
+            get { return _dataModel.OutsideMaterialsCollection; }
         }
 
 
         public ObservableCollection<MaterialSelectionModel> InsideMaterialsCollection
         {
-            get
-            {
-                return _dataModel.InsideMaterialsCollection;
-            }
+            get { return _dataModel.InsideMaterialsCollection; }
         }
 
         public MaterialSelectionModel OutsideStockMaterial
         {
-            get
-            {
-                return _dataModel.OutsideStockMaterial;
-            }
-
-            set
-            {
-                _dataModel.OutsideStockMaterial = value;
-            }
+            get { return _dataModel.OutsideStockMaterial; }
+            set { _dataModel.OutsideStockMaterial = value; }
         }
 
         public MaterialSelectionModel InsideStockMaterial
         {
-            get
-            {
-                return _dataModel.InsideStockMaterial;
-            }
-
-            set
-            {
-                _dataModel.InsideStockMaterial = value;
-            }
+            get { return _dataModel.InsideStockMaterial; }
+            set { _dataModel.InsideStockMaterial = value; }
         }
 
         public string SourceFile
         {
-            get
-            {
-                return _dataModel.SourceFile;
-            }
+            get { return _dataModel.SourceFile; }
+            set { _dataModel.SourceFile = value; }
+        }
 
-            set
-            {
-                _dataModel.SourceFile = value;
-            }
+        public bool FillObject
+        {
+            get { return _dataModel.FillObject; }
+            set { _dataModel.FillObject = value; }
         }
 
         #endregion
@@ -608,9 +491,7 @@
             var ccubic = Modelling.TestCreateTrayShape();
             //var ccubic = ReadModelVolmetic(@"..\..\..\..\..\..\building 3D\models\Rhino_corrected.obj", 10, null, ModelTraceVoxel.ThickSmoothedDown);
 
-            #region Read in voxel and set main cube space.
-
-            #endregion
+            var fillObject = false;
 
             //if (smoothObject)
             //{
@@ -619,7 +500,7 @@
             //    CalculateAddedCorners(ccubic);
             //}
 
-            Modelling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
+            Modelling.BuildStructureFromCubic(entity, ccubic, fillObject, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
 
             return entity;
         }
@@ -755,10 +636,7 @@
 
             var ccubic = Modelling.ReadModelVolmetic(Filename, multiplier, null, TraceType, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
 
-            // TODO: fillobject UI.
-            //var fillObject = false;
-
-            Modelling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
+            Modelling.BuildStructureFromCubic(entity, ccubic, FillObject, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
 
             MainViewModel.ClearProgress();
 

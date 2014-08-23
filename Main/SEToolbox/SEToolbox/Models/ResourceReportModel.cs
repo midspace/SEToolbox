@@ -623,13 +623,13 @@
 
                 #region unused ore value
 
-                var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                var oreRequirements = new Dictionary<string, BlueprintRequirement>();
                 TimeSpan ingotTime;
                 SpaceEngineersApi.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, Convert.ToDecimal(item.Value.Amount), contentPath, accumulateOres, null, null);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
                 }
 
                 #endregion
@@ -664,13 +664,13 @@
 
                 #region unused ore value
 
-                var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                var oreRequirements = new Dictionary<string, BlueprintRequirement>();
                 TimeSpan ingotTime;
                 SpaceEngineersApi.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, Convert.ToDecimal(item.Value.Amount), contentPath, accumulateOres, null, accumulateComponents);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, accumulateComponents);
                 }
 
                 #endregion
@@ -704,13 +704,13 @@
 
                 #region unused ore value
 
-                var oreRequirements = new Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item>();
+                var oreRequirements = new Dictionary<string, BlueprintRequirement>();
                 TimeSpan ingotTime;
                 SpaceEngineersApi.AccumulateCubeBlueprintRequirements(tallySubTypeId, tallyTypeId, amountDecimal, oreRequirements, out ingotTime);
 
                 foreach (var item in oreRequirements)
                 {
-                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, Convert.ToDecimal(item.Value.Amount), contentPath, accumulateOres, null, null);
+                    TallyItems(item.Value.Id.TypeId, item.Value.SubtypeId, item.Value.Amount, contentPath, accumulateOres, null, null);
                 }
 
                 #endregion

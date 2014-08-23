@@ -6,7 +6,7 @@
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import 3D Model" Height="400" Width="520" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="Import 3D Model" Height="440" Width="520" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -20,9 +20,14 @@
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
     </Window.Cursor>
     <Grid>
-        <StackPanel Margin="8" Orientation="Vertical">
-            <Grid Margin="0,0,0,8" Height="300">
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Margin="0,0,0,8">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -71,6 +76,8 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <Label Content="Fill:" Grid.Row="4" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" IsChecked="{Binding FillObject}" Visibility="{Binding IsShip, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <!--Import To Asteroid settings-->
                 <Label Content="Ore Shell:" Grid.Row="2" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -87,7 +94,7 @@
                         </helix:HelixViewport3D>
                     </Border>
                 </Grid>
-                <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal">
+                <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal">
                     <GroupBox Header="Original Size" MinWidth="120">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -167,7 +174,7 @@
                         </Grid>
                     </GroupBox>
                 </StackPanel>
-                <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal">
+                <StackPanel Grid.Row="6" Grid.ColumnSpan="3" Orientation="Horizontal">
                     <GroupBox Header="Position" MinWidth="120">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -206,11 +213,11 @@
                     </GroupBox>
                 </StackPanel>
             </Grid>
-            <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
                 <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
             </StackPanel>
-        </StackPanel>
+        </Grid>
         <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>
