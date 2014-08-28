@@ -286,9 +286,9 @@
             if (IsDecimal && DecimalUnits.HasValue)
                 entity.Item.Amount = DecimalUnits.Value.ToFixedPoint();
             else if (IsInt && Units.HasValue)
-                entity.Item.Amount = Units.Value;
+                entity.Item.Amount = Units.Value.ToFixedPoint();
             else if (IsUnique)
-                entity.Item.Amount = GenerateFloatingObjectModel.UniqueUnits;
+                entity.Item.Amount = GenerateFloatingObjectModel.UniqueUnits.ToFixedPoint();
             else
                 entity.Item.Amount = 1;
 

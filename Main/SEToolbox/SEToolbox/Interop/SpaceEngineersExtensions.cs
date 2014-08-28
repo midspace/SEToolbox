@@ -217,5 +217,10 @@
         {
             return MyFixedPoint.DeserializeString(value.ToString(CultureInfo.InvariantCulture));
         }
+
+        public static MyFixedPoint ToFixedPoint(this int value)
+        {
+            return MyFixedPoint.DeserializeString(value.ToString(CultureInfo.InvariantCulture));
+        }
     }
 }
