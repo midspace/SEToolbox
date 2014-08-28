@@ -14,9 +14,10 @@
     {
         private static readonly object Locker = new object();
         private enum MeshFace : byte { Undefined, Nearside, Farside };
-        
+
         // Determines offset of trace to the grid.
-        public enum TraceType : byte { 
+        public enum TraceType : byte
+        {
             /// <summary>
             /// Will center the voxel on the origin, creating an odd number of voxels.
             /// </summary>
@@ -36,7 +37,7 @@
             /// 0.0 to +1.0, centered on +0.5
             /// +1.0 to +2.0, centered on +1.5
             /// </example>
-            Even 
+            Even
         };
 
         #region ReadModelAsteroidVolmetic
@@ -138,6 +139,25 @@
                 for (var i = 0; i < meshes.Geometery.Length; i++)
                     geometries[i] = new GeometeryDetail(meshes.Geometery[i]);
 
+                var startOffset = 0.5f;
+                var endOffset = 0.5f;
+                var volumeOffset = 0.5f;
+                Func<double, int> roundFunc = null;
+                if (traceType == TraceType.Odd)
+                {
+                    startOffset = 0.5f;
+                    endOffset = 0.5f;
+                    volumeOffset = 0.5f;
+                    roundFunc = delegate(double d) { return (int)Math.Round(d, 0); };
+                }
+                else if (traceType == TraceType.Even)
+                {
+                    startOffset = 0.0f;
+                    endOffset = 1.0f;
+                    volumeOffset = 1.0f;
+                    roundFunc = delegate(double d) { return (int)Math.Floor(d); };
+                }
+
                 #region X ray trace
 
                 Debug.WriteLine("X Rays");
@@ -147,17 +167,25 @@
                 {
                     for (var z = zMin; z < zMax; z++)
                     {
-                        //if (traceType == TraceType.Odd)
-                        // TODO: traceType determines position offset of ray.
-
-                        var testRays = new List<Point3D[]>()
-                        {
-                            new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
-                            new [] {new Point3D(xMin, y -0.5f + offset, z -0.5f + offset), new Point3D(xMax, y -0.5f + offset, z -0.5f + offset)},
-                            new [] {new Point3D(xMin, y + 0.5f - offset, z -0.5f + offset), new Point3D(xMax, y + 0.5f - offset, z -0.5f + offset)},
-                            new [] {new Point3D(xMin, y -0.5f + offset, z + 0.5f - offset), new Point3D(xMax, y -0.5f + offset, z + 0.5f - offset)},
-                            new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)}
-                        };
+                        List<Point3D[]> testRays = null;
+                        if (traceType == TraceType.Odd)
+                            testRays = new List<Point3D[]>()
+                            {
+                                new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
+                                new [] {new Point3D(xMin, y -0.5f + offset, z -0.5f + offset), new Point3D(xMax, y -0.5f + offset, z -0.5f + offset)},
+                                new [] {new Point3D(xMin, y + 0.5f - offset, z -0.5f + offset), new Point3D(xMax, y + 0.5f - offset, z -0.5f + offset)},
+                                new [] {new Point3D(xMin, y -0.5f + offset, z + 0.5f - offset), new Point3D(xMax, y -0.5f + offset, z + 0.5f - offset)},
+                                new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)}
+                            };
+                        else if (traceType == TraceType.Even)
+                            testRays = new List<Point3D[]>()
+                            {
+                                new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)},
+                                new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
+                                new [] {new Point3D(xMin, y + 1.0f - offset, z + offset), new Point3D(xMax, y + 1.0f - offset, z + offset)},
+                                new [] {new Point3D(xMin, y + offset, z + 1.0f - offset), new Point3D(xMax, y + offset, z + 1.0f - offset)},
+                                new [] {new Point3D(xMin, y + 1.0f - offset, z + 1.0f - offset), new Point3D(xMax, y + 1.0f - offset, z + 1.0f - offset)}
+                            };
 
                         var task = new Task((obj) =>
                         {
@@ -208,34 +236,30 @@
                             if (tracers.Count > 1)
                             {
                                 var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.X).ToArray();
-                                var startCoord = (int)Math.Round(order[0].Point.X, 0);
-                                var endCoord = (int)Math.Round(order[order.Length - 1].Point.X, 0);
+                                var startCoord = roundFunc(order[0].Point.X);
+                                var endCoord = roundFunc(order[order.Length - 1].Point.X);
                                 var surfaces = 0;
 
                                 for (var x = startCoord; x <= endCoord; x++)
                                 {
-                                    // TODO: traceType determines offset
-                                    var points = order.Where(p => p.Point.X > x - 0.5 && p.Point.X < x + 0.5).ToArray();
-
+                                    var points = order.Where(p => p.Point.X > x - startOffset && p.Point.X < x + endOffset).ToArray();
                                     var volume = (byte)(0xff / testRays.Count * surfaces);
 
                                     foreach (var point in points)
                                     {
                                         if (point.Face == MeshFace.Farside)
                                         {
-                                            volume += (byte)(Math.Round(Math.Abs(x + 0.5 - point.Point.X) * 255 / testRays.Count, 0));
+                                            volume += (byte)(Math.Round(Math.Abs(x + volumeOffset - point.Point.X) * 255 / testRays.Count, 0));
                                             surfaces++;
                                         }
                                         else if (point.Face == MeshFace.Nearside)
                                         {
-                                            volume -= (byte)(Math.Round(Math.Abs(x + 0.5 - point.Point.X) * 255 / testRays.Count, 0));
+                                            volume -= (byte)(Math.Round(Math.Abs(x + volumeOffset - point.Point.X) * 255 / testRays.Count, 0));
                                             surfaces--;
                                         }
                                     }
 
-                                    //if (endCoord - startCoord < 6) // 2 voxels or less
-                                    //    volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
-
+                                    // TODO: retest detailed model export.
                                     //volume = volume.RoundUpToNearest(8);
 
                                     modelCubic[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = volume;
@@ -287,14 +311,25 @@
                 {
                     for (var z = zMin; z < zMax; z++)
                     {
-                        var testRays = new List<Point3D[]>()
-                        {
-                            new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
-                            new [] {new Point3D(x -0.5f + offset, yMin, z -0.5f + offset), new Point3D(x -0.5f + offset, yMax, z -0.5f + offset)},
-                            new [] {new Point3D(x + 0.5f - offset, yMin, z -0.5f + offset), new Point3D(x + 0.5f - offset, yMax, z -0.5f + offset)},
-                            new [] {new Point3D(x -0.5f + offset, yMin, z + 0.5f - offset), new Point3D(x -0.5f + offset, yMax, z + 0.5f - offset)},
-                            new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)}
-                        };
+                        List<Point3D[]> testRays = null;
+                        if (traceType == TraceType.Odd)
+                            testRays = new List<Point3D[]>()
+                            {
+                                new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
+                                new [] {new Point3D(x -0.5f + offset, yMin, z -0.5f + offset), new Point3D(x -0.5f + offset, yMax, z -0.5f + offset)},
+                                new [] {new Point3D(x + 0.5f - offset, yMin, z -0.5f + offset), new Point3D(x + 0.5f - offset, yMax, z -0.5f + offset)},
+                                new [] {new Point3D(x -0.5f + offset, yMin, z + 0.5f - offset), new Point3D(x -0.5f + offset, yMax, z + 0.5f - offset)},
+                                new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)}
+                            };
+                        else if (traceType == TraceType.Even)
+                            testRays = new List<Point3D[]>()
+                            {
+                                new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)},
+                                new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
+                                new [] {new Point3D(x + 1.0f - offset, yMin, z + offset), new Point3D(x + 1.0f - offset, yMax, z + offset)},
+                                new [] {new Point3D(x + offset, yMin, z + 1.0f - offset), new Point3D(x + offset, yMax, z + 1.0f - offset)},
+                                new [] {new Point3D(x + 1.0f - offset, yMin, z + 1.0f - offset), new Point3D(x + 1.0f - offset, yMax, z + 1.0f - offset)}
+                            };
 
                         var task = new Task((obj) =>
                         {
@@ -345,26 +380,25 @@
                             if (tracers.Count > 1)
                             {
                                 var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Y).ToArray();
-                                var startCoord = (int)Math.Round(order[0].Point.Y, 0);
-                                var endCoord = (int)Math.Round(order[order.Length - 1].Point.Y, 0);
+                                var startCoord = roundFunc(order[0].Point.Y);
+                                var endCoord = roundFunc(order[order.Length - 1].Point.Y);
                                 var surfaces = 0;
 
                                 for (var y = startCoord; y <= endCoord; y++)
                                 {
-                                    var points = order.Where(p => p.Point.Y > y - 0.5 && p.Point.Y < y + 0.5).ToArray();
-
+                                    var points = order.Where(p => p.Point.Y > y - startOffset && p.Point.Y < y + endOffset).ToArray();
                                     var volume = (byte)(0xff / testRays.Count * surfaces);
 
                                     foreach (var point in points)
                                     {
                                         if (point.Face == MeshFace.Farside)
                                         {
-                                            volume += (byte)(Math.Round(Math.Abs(y + 0.5 - point.Point.Y) * 255 / testRays.Count, 0));
+                                            volume += (byte)(Math.Round(Math.Abs(y + volumeOffset - point.Point.Y) * 255 / testRays.Count, 0));
                                             surfaces++;
                                         }
                                         else if (point.Face == MeshFace.Nearside)
                                         {
-                                            volume -= (byte)(Math.Round(Math.Abs(y + 0.5 - point.Point.Y) * 255 / testRays.Count, 0));
+                                            volume -= (byte)(Math.Round(Math.Abs(y + volumeOffset - point.Point.Y) * 255 / testRays.Count, 0));
                                             surfaces--;
                                         }
                                     }
@@ -375,9 +409,6 @@
                                         // average with the pre-existing X volume.
                                         volume = (byte)Math.Round(((float)prevolumme + (float)volume) / 2f, 0);
                                     }
-
-                                    //if (endCoord - startCoord < 6) // 2 voxels or less
-                                    //    volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
 
                                     //volume = volume.RoundUpToNearest(8);
 
@@ -430,14 +461,25 @@
                 {
                     for (var y = yMin; y < yMax; y++)
                     {
-                        var testRays = new List<Point3D[]>()
-                        {
-                            new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
-                            new [] {new Point3D(x -0.5f + offset, y -0.5f + offset, zMin), new Point3D(x -0.5f + offset, y -0.5f + offset, zMax)},
-                            new [] {new Point3D(x + 0.5f - offset, y -0.5f + offset, zMin), new Point3D(x + 0.5f - offset, y -0.5f + offset, zMax)},
-                            new [] {new Point3D(x -0.5f + offset, y + 0.5f - offset, zMin), new Point3D(x -0.5f + offset, y + 0.5f - offset, zMax)},
-                            new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)}
-                        };
+                        List<Point3D[]> testRays = null;
+                        if (traceType == TraceType.Odd)
+                            testRays = new List<Point3D[]>()
+                            {
+                                new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
+                                new [] {new Point3D(x -0.5f + offset, y -0.5f + offset, zMin), new Point3D(x -0.5f + offset, y -0.5f + offset, zMax)},
+                                new [] {new Point3D(x + 0.5f - offset, y -0.5f + offset, zMin), new Point3D(x + 0.5f - offset, y -0.5f + offset, zMax)},
+                                new [] {new Point3D(x -0.5f + offset, y + 0.5f - offset, zMin), new Point3D(x -0.5f + offset, y + 0.5f - offset, zMax)},
+                                new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)}
+                            };
+                        else if (traceType == TraceType.Even)
+                            testRays = new List<Point3D[]>()
+                            {
+                                new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)},
+                                new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
+                                new [] {new Point3D(x + 1.0f - offset, y + offset, zMin), new Point3D(x + 1.0f - offset, y + offset, zMax)},
+                                new [] {new Point3D(x + offset, y + 1.0f - offset, zMin), new Point3D(x + offset, y + 1.0f - offset, zMax)},
+                                new [] {new Point3D(x + 1.0f - offset, y + 1.0f - offset, zMin), new Point3D(x + 1.0f - offset, y + 1.0f - offset, zMax)}
+                            };
 
                         var task = new Task((obj) =>
                         {
@@ -488,26 +530,25 @@
                             if (tracers.Count > 1)
                             {
                                 var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Z).ToArray();
-                                var startCoord = (int)Math.Round(order[0].Point.Z, 0);
-                                var endCoord = (int)Math.Round(order[order.Length - 1].Point.Z, 0);
+                                var startCoord = roundFunc(order[0].Point.Z);
+                                var endCoord = roundFunc(order[order.Length - 1].Point.Z);
                                 var surfaces = 0;
 
                                 for (var z = startCoord; z <= endCoord; z++)
                                 {
-                                    var points = order.Where(p => p.Point.Z > z - 0.5 && p.Point.Z < z + 0.5).ToArray();
-
+                                    var points = order.Where(p => p.Point.Z > z - startOffset && p.Point.Z < z + endOffset).ToArray();
                                     var volume = (byte)(0xff / testRays.Count * surfaces);
 
                                     foreach (var point in points)
                                     {
                                         if (point.Face == MeshFace.Farside)
                                         {
-                                            volume += (byte)(Math.Round(Math.Abs(z + 0.5 - point.Point.Z) * 255 / testRays.Count, 0));
+                                            volume += (byte)(Math.Round(Math.Abs(z + volumeOffset - point.Point.Z) * 255 / testRays.Count, 0));
                                             surfaces++;
                                         }
                                         else if (point.Face == MeshFace.Nearside)
                                         {
-                                            volume -= (byte)(Math.Round(Math.Abs(z + 0.5 - point.Point.Z) * 255 / testRays.Count, 0));
+                                            volume -= (byte)(Math.Round(Math.Abs(z + volumeOffset - point.Point.Z) * 255 / testRays.Count, 0));
                                             surfaces--;
                                         }
                                     }
@@ -518,9 +559,6 @@
                                         // average with the pre-existing X and Y volumes.
                                         volume = (byte)Math.Round((((float)prevolumme * 2) + (float)volume) / 3f, 0);
                                     }
-
-                                    //if (endCoord - startCoord < 6) // 2 voxels or less
-                                    //    volume = volume > 0 && volume < 0x80 ? (byte)0x80 : volume;
 
                                     //volume = volume.RoundUpToNearest(8);
 

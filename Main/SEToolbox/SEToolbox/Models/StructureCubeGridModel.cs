@@ -611,7 +611,10 @@
                 broadcastNames = String.Join("|", beaconNames.Concat(antennaNames).OrderBy(s => s));
             }
 
-            Description = string.Format("{0}×{1}×{2} {3}", Scale.X, Scale.Y, Scale.Z, broadcastNames);
+            if (string.IsNullOrEmpty(broadcastNames))
+                Description = string.Format("{0}×{1}×{2}", Scale.X, Scale.Y, Scale.Z, broadcastNames);
+            else
+                Description = string.Format("{3} {0}×{1}×{2}", Scale.X, Scale.Y, Scale.Z, broadcastNames);
 
 
             // TODO:
