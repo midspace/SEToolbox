@@ -43,6 +43,7 @@
         public static readonly MyObjectBuilderType Component;
         public static readonly MyObjectBuilderType MedicalRoom;
         public static readonly MyObjectBuilderType Cockpit;
+        public static readonly MyObjectBuilderType Thrust;
 
         /// <summary>
         /// The base path of the save files, minus the userid.
@@ -63,6 +64,7 @@
             Component = new MyObjectBuilderType(typeof(MyObjectBuilder_Component));
             MedicalRoom = new MyObjectBuilderType(typeof(MyObjectBuilder_MedicalRoom));
             Cockpit = new MyObjectBuilderType(typeof(MyObjectBuilder_Cockpit));
+            Thrust = new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust));
 
             BaseLocalPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves", @"SpaceEngineers\Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
             BaseDedicatedServerHostPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineersDedicated\Saves", @"SpaceEngineersDedicated\Mods"); // Followed by .\LastLoaded.sbl

@@ -74,6 +74,19 @@
             }
         }
 
+        public long Owner
+        {
+            get { return _cube.Owner; }
+            set
+            {
+                if (value != _cube.Owner)
+                {
+                    _cube.Owner = value;
+                    RaisePropertyChanged(() => Owner);
+                }
+            }
+        }
+
         public MyObjectBuilderType TypeId
         {
             get { return _typeId; }
