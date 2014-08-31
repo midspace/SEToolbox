@@ -5,6 +5,7 @@
         #region Fields
 
         private int _index;
+        private int _totalPercent;
         private GenerateVoxelDetailModel _voxelFile;
         private MaterialSelectionModel _mainMaterial;
         private MaterialSelectionModel _secondMaterial;
@@ -37,6 +38,23 @@
                 {
                     _index = value;
                     RaisePropertyChanged(() => Index);
+                }
+            }
+        }
+
+        public int TotalPercent
+        {
+            get
+            {
+                return _totalPercent;
+            }
+
+            set
+            {
+                if (value != _totalPercent)
+                {
+                    _totalPercent = value;
+                    RaisePropertyChanged(() => TotalPercent);
                 }
             }
         }
@@ -105,6 +123,7 @@
                 {
                     _secondPercent = value;
                     RaisePropertyChanged(() => SecondPercent);
+                    UpdateTotal();
                 }
             }
         }
@@ -139,6 +158,7 @@
                 {
                     _thirdPercent = value;
                     RaisePropertyChanged(() => ThirdPercent);
+                    UpdateTotal();
                 }
             }
         }
@@ -173,6 +193,7 @@
                 {
                     _forthPercent = value;
                     RaisePropertyChanged(() => ForthPercent);
+                    UpdateTotal();
                 }
             }
         }
@@ -207,6 +228,7 @@
                 {
                     _fifthPercent = value;
                     RaisePropertyChanged(() => FifthPercent);
+                    UpdateTotal();
                 }
             }
         }
@@ -241,6 +263,7 @@
                 {
                     _sixthPercent = value;
                     RaisePropertyChanged(() => SixthPercent);
+                    UpdateTotal();
                 }
             }
         }
@@ -275,6 +298,7 @@
                 {
                     _seventhPercent = value;
                     RaisePropertyChanged(() => SeventhPercent);
+                    UpdateTotal();
                 }
             }
         }
@@ -286,6 +310,7 @@
             return new GenerateVoxelModel
             {
                 Index = Index,
+                TotalPercent = TotalPercent,
                 VoxelFile = VoxelFile,
                 MainMaterial = MainMaterial,
                 SecondMaterial = SecondMaterial,
@@ -301,6 +326,11 @@
                 SeventhMaterial = SeventhMaterial,
                 SeventhPercent = SeventhPercent,
             };
+        }
+
+        public void UpdateTotal()
+        {
+            TotalPercent = SecondPercent + ThirdPercent + ForthPercent + FifthPercent + SixthPercent + SeventhPercent;
         }
     }
 }

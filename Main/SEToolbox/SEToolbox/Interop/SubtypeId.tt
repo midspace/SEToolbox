@@ -44,7 +44,9 @@ namespace SEToolbox.Interop
 			var definitions = nav.Select("Definitions/CubeBlocks/Definition");
 			while (definitions.MoveNext())
 			{
-				var name = definitions.Current.SelectSingleNode("Id/SubtypeId").Value;
+				var fullName = definitions.Current.SelectSingleNode("Id/SubtypeId").Value;
+				var name = fullName.Replace(" ", "_");
+				var originalName = fullName != name ? fullName : "";
 
 				if (definitions.Current.SelectSingleNode("Variants") != null)
 				{
@@ -59,7 +61,11 @@ namespace SEToolbox.Interop
 				}
 				else
 				{
-					if (!string.IsNullOrEmpty(name))
+					if (!string.IsNullOrEmpty(originalName))
+					{
+						Write(string.Format("        {0},        // '{1}'\r\n", name, originalName));
+					}
+					else if (!string.IsNullOrEmpty(name))
 					{
 						Write(string.Format("        {0},\r\n", name));
 					}
