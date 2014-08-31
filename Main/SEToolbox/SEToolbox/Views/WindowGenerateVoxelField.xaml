@@ -55,6 +55,10 @@
             <controls:MyDataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Index}" IsReadOnly="True" />
+                    
+                    <DataGridTextColumn Header="Percent" Binding="{Binding TotalPercent}">
+                    </DataGridTextColumn>
+                    
                     <DataGridComboBoxColumn Header="Asteroid" SelectedValueBinding="{Binding VoxelFile}" DisplayMemberPath="Name">
                         <DataGridComboBoxColumn.ElementStyle>
                             <Style TargetType="ComboBox">
