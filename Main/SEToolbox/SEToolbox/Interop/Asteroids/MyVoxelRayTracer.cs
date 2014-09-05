@@ -1,13 +1,14 @@
 ﻿namespace SEToolbox.Interop.Asteroids
 {
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Media.Media3D;
+
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
     using VRageMath;
 
     public static class MyVoxelRayTracer
@@ -15,38 +16,14 @@
         private static readonly object Locker = new object();
         private enum MeshFace : byte { Undefined, Nearside, Farside };
 
-        // Determines offset of trace to the grid.
-        public enum TraceType : byte
-        {
-            /// <summary>
-            /// Will center the voxel on the origin, creating an odd number of voxels.
-            /// </summary>
-            /// <example>
-            /// -1.5 to -0.5, centered on -1.0
-            /// -0.5 to +0.5, centered on 0.0
-            /// +0.5 to +1.5, centered on +1.0
-            /// </example>
-            Odd,
-
-            /// <summary>
-            /// Will center the voxel to the side of the origin, creating an even number of voxels.
-            /// </summary>
-            /// <example>
-            /// -2.0 to -1.0, centered on -1.5
-            /// -1.0 to 0.0, centered on -0.5
-            /// 0.0 to +1.0, centered on +0.5
-            /// +1.0 to +2.0, centered on +1.5
-            /// </example>
-            Even
-        };
-
         #region ReadModelAsteroidVolmetic
 
         // For a 1024 cubed asteroid, it takes approximately 6.5Gb of system memory.
 
-        public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, string asteroidFile, ScaleTransform3D scale, Transform3D rotateTransform, TraceType traceType,
+        public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, ScaleTransform3D scale, Transform3D rotateTransform, TraceType traceType, TraceCount traceCount, TraceDirection traceDirection,
             Action<double, double> resetProgress, Action incrementProgress)
         {
+            var traceDirectionCount = 0;
             var materials = new List<byte>();
             var faceMaterials = new List<byte>();
             foreach (var mesh in mappedMesh)
@@ -107,7 +84,15 @@
             if (resetProgress != null)
             {
                 long triangles = (from GeometryModel3D gm in model.Children select gm.Geometry as MeshGeometry3D).Aggregate<MeshGeometry3D, long>(0, (current, g) => current + (g.TriangleIndices.Count / 3));
-                long rays = ((yMax - yMin) * (zMax - zMin)) + ((xMax - xMin) * (zMax - zMin)) + ((xMax - xMin) * (yMax - yMin));
+                long rays = 0;
+
+                if ((traceDirection & TraceDirection.X) == TraceDirection.X)
+                    rays += ((yMax - yMin) * (zMax - zMin));
+                if ((traceDirection & TraceDirection.Y) == TraceDirection.Y)
+                    rays += ((xMax - xMin) * (zMax - zMin));
+                if ((traceDirection & TraceDirection.Z) == TraceDirection.Z)
+                    rays += ((xMax - xMin) * (yMax - yMin));
+
                 resetProgress.Invoke(0, rays * triangles);
             }
 
@@ -160,16 +145,19 @@
 
                 #region X ray trace
 
-                Debug.WriteLine("X Rays");
-                threadCounter = (yMax - yMin) * (zMax - zMin);
-
-                for (var y = yMin; y < yMax; y++)
+                if ((traceDirection & TraceDirection.X) == TraceDirection.X)
                 {
-                    for (var z = zMin; z < zMax; z++)
+                    Debug.WriteLine("X Rays");
+                    traceDirectionCount++;
+                    threadCounter = (yMax - yMin) * (zMax - zMin);
+
+                    for (var y = yMin; y < yMax; y++)
                     {
-                        List<Point3D[]> testRays = null;
-                        if (traceType == TraceType.Odd)
-                            testRays = new List<Point3D[]>()
+                        for (var z = zMin; z < zMax; z++)
+                        {
+                            List<Point3D[]> testRays = null;
+                            if (traceType == TraceType.Odd)
+                                testRays = new List<Point3D[]>()
                             {
                                 new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
                                 new [] {new Point3D(xMin, y -0.5f + offset, z -0.5f + offset), new Point3D(xMax, y -0.5f + offset, z -0.5f + offset)},
@@ -177,8 +165,8 @@
                                 new [] {new Point3D(xMin, y -0.5f + offset, z + 0.5f - offset), new Point3D(xMax, y -0.5f + offset, z + 0.5f - offset)},
                                 new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)}
                             };
-                        else if (traceType == TraceType.Even)
-                            testRays = new List<Point3D[]>()
+                            else if (traceType == TraceType.Even)
+                                testRays = new List<Point3D[]>()
                             {
                                 new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)},
                                 new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
@@ -187,133 +175,137 @@
                                 new [] {new Point3D(xMin, y + 1.0f - offset, z + 1.0f - offset), new Point3D(xMax, y + 1.0f - offset, z + 1.0f - offset)}
                             };
 
-                        var task = new Task((obj) =>
-                        {
-                            var bgw = (RayTracerTaskWorker)obj;
-                            var tracers = new List<Trace>();
-
-                            foreach (var geometery in geometries)
+                            var task = new Task((obj) =>
                             {
-                                for (var t = 0; t < geometery.Triangles.Length; t += 3)
+                                var bgw = (RayTracerTaskWorker)obj;
+                                var tracers = new List<Trace>();
+
+                                foreach (var geometery in geometries)
                                 {
-                                    if (incrementProgress != null)
+                                    for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                     {
-                                        lock (Locker)
+                                        if (incrementProgress != null)
                                         {
-                                            incrementProgress.Invoke();
+                                            lock (Locker)
+                                            {
+                                                incrementProgress.Invoke();
+                                            }
                                         }
-                                    }
 
-                                    var p1 = geometery.Positions[geometery.Triangles[t]];
-                                    var p2 = geometery.Positions[geometery.Triangles[t + 1]];
-                                    var p3 = geometery.Positions[geometery.Triangles[t + 2]];
+                                        var p1 = geometery.Positions[geometery.Triangles[t]];
+                                        var p2 = geometery.Positions[geometery.Triangles[t + 1]];
+                                        var p3 = geometery.Positions[geometery.Triangles[t + 2]];
 
-                                    if (rotate.HasValue)
-                                    {
-                                        p1 = rotate.Value.Transform(p1);
-                                        p2 = rotate.Value.Transform(p2);
-                                        p3 = rotate.Value.Transform(p3);
-                                    }
-
-                                    foreach (var ray in testRays)
-                                    {
-                                        if ((p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
-                                            (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y) ||
-                                            (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
-                                            (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
-                                            continue;
-
-                                        Point3D intersect;
-                                        int normal;
-                                        if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                        if (rotate.HasValue)
                                         {
-                                            tracers.Add(new Trace(intersect, normal));
+                                            p1 = rotate.Value.Transform(p1);
+                                            p2 = rotate.Value.Transform(p2);
+                                            p3 = rotate.Value.Transform(p3);
+                                        }
+
+                                        foreach (var ray in testRays)
+                                        {
+                                            if ((p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
+                                                (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y) ||
+                                                (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
+                                                (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
+                                                continue;
+
+                                            Point3D intersect;
+                                            int normal;
+                                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                            {
+                                                tracers.Add(new Trace(intersect, normal));
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            if (tracers.Count > 1)
-                            {
-                                var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.X).ToArray();
-                                var startCoord = roundFunc(order[0].Point.X);
-                                var endCoord = roundFunc(order[order.Length - 1].Point.X);
-                                var surfaces = 0;
-
-                                for (var x = startCoord; x <= endCoord; x++)
+                                if (tracers.Count > 1)
                                 {
-                                    var points = order.Where(p => p.Point.X > x - startOffset && p.Point.X < x + endOffset).ToArray();
-                                    var volume = (byte)(0xff / testRays.Count * surfaces);
+                                    var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.X).ToArray();
+                                    var startCoord = roundFunc(order[0].Point.X);
+                                    var endCoord = roundFunc(order[order.Length - 1].Point.X);
+                                    var surfaces = 0;
 
-                                    foreach (var point in points)
+                                    for (var x = startCoord; x <= endCoord; x++)
                                     {
-                                        if (point.Face == MeshFace.Farside)
+                                        var points = order.Where(p => p.Point.X > x - startOffset && p.Point.X < x + endOffset).ToArray();
+                                        var volume = (byte)(0xff / testRays.Count * surfaces);
+
+                                        foreach (var point in points)
                                         {
-                                            volume += (byte)(Math.Round(Math.Abs(x + volumeOffset - point.Point.X) * 255 / testRays.Count, 0));
-                                            surfaces++;
+                                            if (point.Face == MeshFace.Farside)
+                                            {
+                                                volume += (byte)(Math.Round(Math.Abs(x + volumeOffset - point.Point.X) * 255 / testRays.Count, 0));
+                                                surfaces++;
+                                            }
+                                            else if (point.Face == MeshFace.Nearside)
+                                            {
+                                                volume -= (byte)(Math.Round(Math.Abs(x + volumeOffset - point.Point.X) * 255 / testRays.Count, 0));
+                                                surfaces--;
+                                            }
                                         }
-                                        else if (point.Face == MeshFace.Nearside)
-                                        {
-                                            volume -= (byte)(Math.Round(Math.Abs(x + volumeOffset - point.Point.X) * 255 / testRays.Count, 0));
-                                            surfaces--;
-                                        }
+
+                                        // TODO: retest detailed model export.
+                                        //volume = volume.RoundUpToNearest(8);
+
+                                        modelCubic[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = volume;
+                                        modelMater[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
                                     }
 
-                                    // TODO: retest detailed model export.
-                                    //volume = volume.RoundUpToNearest(8);
-
-                                    modelCubic[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = volume;
-                                    modelMater[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
-                                }
-
-                                if (faceMaterials[bgw.ModelIdx] != 0xff)
-                                {
-                                    for (var i = 1; i < 6; i++)
+                                    if (faceMaterials[bgw.ModelIdx] != 0xff)
                                     {
-                                        if (xMin < startCoord - i && modelCubic[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
+                                        for (var i = 1; i < 6; i++)
                                         {
-                                            modelMater[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
-                                        }
-                                        if (endCoord + i < xMax && modelCubic[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
-                                        {
-                                            modelMater[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                            if (xMin < startCoord - i && modelCubic[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
+                                            {
+                                                modelMater[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                            }
+                                            if (endCoord + i < xMax && modelCubic[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
+                                            {
+                                                modelMater[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            lock (Locker)
-                            {
-                                threadCounter--;
-                            }
-                        }, new RayTracerTaskWorker(modelIdx, 0, y, z));
+                                lock (Locker)
+                                {
+                                    threadCounter--;
+                                }
+                            }, new RayTracerTaskWorker(modelIdx, 0, y, z));
 
-                        task.Start();
+                            task.Start();
+                        }
                     }
-                }
 
-                // Wait for Multithread parts to finish.
-                while (threadCounter > 0)
-                {
-                    System.Windows.Forms.Application.DoEvents();
-                }
+                    // Wait for Multithread parts to finish.
+                    while (threadCounter > 0)
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                    }
 
-                GC.Collect();
+                    GC.Collect();
+                }
 
                 #endregion
 
                 #region Y rays trace
 
-                Debug.WriteLine("Y Rays");
-                threadCounter = (xMax - xMin) * (zMax - zMin);
-
-                for (var x = xMin; x < xMax; x++)
+                if ((traceDirection & TraceDirection.Y) == TraceDirection.Y)
                 {
-                    for (var z = zMin; z < zMax; z++)
+                    Debug.WriteLine("Y Rays");
+                    traceDirectionCount++;
+                    threadCounter = (xMax - xMin) * (zMax - zMin);
+
+                    for (var x = xMin; x < xMax; x++)
                     {
-                        List<Point3D[]> testRays = null;
-                        if (traceType == TraceType.Odd)
-                            testRays = new List<Point3D[]>()
+                        for (var z = zMin; z < zMax; z++)
+                        {
+                            List<Point3D[]> testRays = null;
+                            if (traceType == TraceType.Odd)
+                                testRays = new List<Point3D[]>()
                             {
                                 new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
                                 new [] {new Point3D(x -0.5f + offset, yMin, z -0.5f + offset), new Point3D(x -0.5f + offset, yMax, z -0.5f + offset)},
@@ -321,8 +313,8 @@
                                 new [] {new Point3D(x -0.5f + offset, yMin, z + 0.5f - offset), new Point3D(x -0.5f + offset, yMax, z + 0.5f - offset)},
                                 new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)}
                             };
-                        else if (traceType == TraceType.Even)
-                            testRays = new List<Point3D[]>()
+                            else if (traceType == TraceType.Even)
+                                testRays = new List<Point3D[]>()
                             {
                                 new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)},
                                 new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
@@ -331,139 +323,146 @@
                                 new [] {new Point3D(x + 1.0f - offset, yMin, z + 1.0f - offset), new Point3D(x + 1.0f - offset, yMax, z + 1.0f - offset)}
                             };
 
-                        var task = new Task((obj) =>
-                        {
-                            var bgw = (RayTracerTaskWorker)obj;
-                            var tracers = new List<Trace>();
-
-                            foreach (var geometery in geometries)
+                            var task = new Task((obj) =>
                             {
-                                for (var t = 0; t < geometery.Triangles.Length; t += 3)
+                                var bgw = (RayTracerTaskWorker)obj;
+                                var tracers = new List<Trace>();
+
+                                foreach (var geometery in geometries)
                                 {
-                                    if (incrementProgress != null)
+                                    for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                     {
-                                        lock (Locker)
+                                        if (incrementProgress != null)
                                         {
-                                            incrementProgress.Invoke();
+                                            lock (Locker)
+                                            {
+                                                incrementProgress.Invoke();
+                                            }
                                         }
-                                    }
 
-                                    var p1 = geometery.Positions[geometery.Triangles[t]];
-                                    var p2 = geometery.Positions[geometery.Triangles[t + 1]];
-                                    var p3 = geometery.Positions[geometery.Triangles[t + 2]];
+                                        var p1 = geometery.Positions[geometery.Triangles[t]];
+                                        var p2 = geometery.Positions[geometery.Triangles[t + 1]];
+                                        var p3 = geometery.Positions[geometery.Triangles[t + 2]];
 
-                                    if (rotate.HasValue)
-                                    {
-                                        p1 = rotate.Value.Transform(p1);
-                                        p2 = rotate.Value.Transform(p2);
-                                        p3 = rotate.Value.Transform(p3);
-                                    }
-
-                                    foreach (var ray in testRays)
-                                    {
-                                        if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
-                                            (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
-                                            (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
-                                            (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
-                                            continue;
-
-                                        Point3D intersect;
-                                        int normal;
-                                        if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                        if (rotate.HasValue)
                                         {
-                                            tracers.Add(new Trace(intersect, normal));
+                                            p1 = rotate.Value.Transform(p1);
+                                            p2 = rotate.Value.Transform(p2);
+                                            p3 = rotate.Value.Transform(p3);
+                                        }
+
+                                        foreach (var ray in testRays)
+                                        {
+                                            if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
+                                                (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
+                                                (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
+                                                (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
+                                                continue;
+
+                                            Point3D intersect;
+                                            int normal;
+                                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                            {
+                                                tracers.Add(new Trace(intersect, normal));
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            if (tracers.Count > 1)
-                            {
-                                var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Y).ToArray();
-                                var startCoord = roundFunc(order[0].Point.Y);
-                                var endCoord = roundFunc(order[order.Length - 1].Point.Y);
-                                var surfaces = 0;
-
-                                for (var y = startCoord; y <= endCoord; y++)
+                                if (tracers.Count > 1)
                                 {
-                                    var points = order.Where(p => p.Point.Y > y - startOffset && p.Point.Y < y + endOffset).ToArray();
-                                    var volume = (byte)(0xff / testRays.Count * surfaces);
+                                    var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Y).ToArray();
+                                    var startCoord = roundFunc(order[0].Point.Y);
+                                    var endCoord = roundFunc(order[order.Length - 1].Point.Y);
+                                    var surfaces = 0;
 
-                                    foreach (var point in points)
+                                    for (var y = startCoord; y <= endCoord; y++)
                                     {
-                                        if (point.Face == MeshFace.Farside)
+                                        var points = order.Where(p => p.Point.Y > y - startOffset && p.Point.Y < y + endOffset).ToArray();
+                                        var volume = (byte)(0xff / testRays.Count * surfaces);
+
+                                        foreach (var point in points)
                                         {
-                                            volume += (byte)(Math.Round(Math.Abs(y + volumeOffset - point.Point.Y) * 255 / testRays.Count, 0));
-                                            surfaces++;
+                                            if (point.Face == MeshFace.Farside)
+                                            {
+                                                volume += (byte)(Math.Round(Math.Abs(y + volumeOffset - point.Point.Y) * 255 / testRays.Count, 0));
+                                                surfaces++;
+                                            }
+                                            else if (point.Face == MeshFace.Nearside)
+                                            {
+                                                volume -= (byte)(Math.Round(Math.Abs(y + volumeOffset - point.Point.Y) * 255 / testRays.Count, 0));
+                                                surfaces--;
+                                            }
                                         }
-                                        else if (point.Face == MeshFace.Nearside)
+
+                                        if (traceDirectionCount > 1)
                                         {
-                                            volume -= (byte)(Math.Round(Math.Abs(y + volumeOffset - point.Point.Y) * 255 / testRays.Count, 0));
-                                            surfaces--;
+                                            var prevolumme = modelCubic[bgw.X - xMin][y - yMin][bgw.Z - zMin];
+                                            if (prevolumme != 0)
+                                            {
+                                                // average with the pre-existing X volume.
+                                                volume = (byte)Math.Round(((float)prevolumme + (float)volume) / (float)traceDirectionCount, 0);
+                                            }
                                         }
+
+                                        //volume = volume.RoundUpToNearest(8);
+
+                                        modelCubic[bgw.X - xMin][y - yMin][bgw.Z - zMin] = volume;
+                                        modelMater[bgw.X - xMin][y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
                                     }
 
-                                    var prevolumme = modelCubic[bgw.X - xMin][y - yMin][bgw.Z - zMin];
-                                    if (prevolumme != 0)
+                                    if (faceMaterials[bgw.ModelIdx] != 0xff)
                                     {
-                                        // average with the pre-existing X volume.
-                                        volume = (byte)Math.Round(((float)prevolumme + (float)volume) / 2f, 0);
+                                        for (var i = 1; i < 6; i++)
+                                        {
+                                            if (yMin < startCoord - i && modelCubic[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] == 0)
+                                            {
+                                                modelMater[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                            }
+                                            if (endCoord + i < yMax && modelCubic[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] == 0)
+                                            {
+                                                modelMater[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
+                                            }
+                                        }
                                     }
-
-                                    //volume = volume.RoundUpToNearest(8);
-
-                                    modelCubic[bgw.X - xMin][y - yMin][bgw.Z - zMin] = volume;
-                                    modelMater[bgw.X - xMin][y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
                                 }
 
-                                if (faceMaterials[bgw.ModelIdx] != 0xff)
+                                lock (Locker)
                                 {
-                                    for (var i = 1; i < 6; i++)
-                                    {
-                                        if (yMin < startCoord - i && modelCubic[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] == 0)
-                                        {
-                                            modelMater[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
-                                        }
-                                        if (endCoord + i < yMax && modelCubic[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] == 0)
-                                        {
-                                            modelMater[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
-                                        }
-                                    }
+                                    threadCounter--;
                                 }
-                            }
+                            }, new RayTracerTaskWorker(modelIdx, x, 0, z));
 
-                            lock (Locker)
-                            {
-                                threadCounter--;
-                            }
-                        }, new RayTracerTaskWorker(modelIdx, x, 0, z));
-
-                        task.Start();
+                            task.Start();
+                        }
                     }
-                }
 
-                // Wait for Multithread parts to finish.
-                while (threadCounter > 0)
-                {
-                    System.Windows.Forms.Application.DoEvents();
-                }
+                    // Wait for Multithread parts to finish.
+                    while (threadCounter > 0)
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                    }
 
-                GC.Collect();
+                    GC.Collect();
+                }
 
                 #endregion
 
                 #region Z ray trace
 
-                Debug.WriteLine("Z Rays");
-                threadCounter = (xMax - xMin) * (yMax - yMin);
-
-                for (var x = xMin; x < xMax; x++)
+                if ((traceDirection & TraceDirection.Z) == TraceDirection.Z)
                 {
-                    for (var y = yMin; y < yMax; y++)
+                    Debug.WriteLine("Z Rays");
+                    traceDirectionCount++;
+                    threadCounter = (xMax - xMin) * (yMax - yMin);
+
+                    for (var x = xMin; x < xMax; x++)
                     {
-                        List<Point3D[]> testRays = null;
-                        if (traceType == TraceType.Odd)
-                            testRays = new List<Point3D[]>()
+                        for (var y = yMin; y < yMax; y++)
+                        {
+                            List<Point3D[]> testRays = null;
+                            if (traceType == TraceType.Odd)
+                                testRays = new List<Point3D[]>()
                             {
                                 new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
                                 new [] {new Point3D(x -0.5f + offset, y -0.5f + offset, zMin), new Point3D(x -0.5f + offset, y -0.5f + offset, zMax)},
@@ -471,8 +470,8 @@
                                 new [] {new Point3D(x -0.5f + offset, y + 0.5f - offset, zMin), new Point3D(x -0.5f + offset, y + 0.5f - offset, zMax)},
                                 new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)}
                             };
-                        else if (traceType == TraceType.Even)
-                            testRays = new List<Point3D[]>()
+                            else if (traceType == TraceType.Even)
+                                testRays = new List<Point3D[]>()
                             {
                                 new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)},
                                 new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
@@ -481,124 +480,128 @@
                                 new [] {new Point3D(x + 1.0f - offset, y + 1.0f - offset, zMin), new Point3D(x + 1.0f - offset, y + 1.0f - offset, zMax)}
                             };
 
-                        var task = new Task((obj) =>
-                        {
-                            var bgw = (RayTracerTaskWorker)obj;
-                            var tracers = new List<Trace>();
-
-                            foreach (var geometery in geometries)
+                            var task = new Task((obj) =>
                             {
-                                for (var t = 0; t < geometery.Triangles.Length; t += 3)
+                                var bgw = (RayTracerTaskWorker)obj;
+                                var tracers = new List<Trace>();
+
+                                foreach (var geometery in geometries)
                                 {
-                                    if (incrementProgress != null)
+                                    for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                     {
-                                        lock (Locker)
+                                        if (incrementProgress != null)
                                         {
-                                            incrementProgress.Invoke();
+                                            lock (Locker)
+                                            {
+                                                incrementProgress.Invoke();
+                                            }
                                         }
-                                    }
 
-                                    var p1 = geometery.Positions[geometery.Triangles[t]];
-                                    var p2 = geometery.Positions[geometery.Triangles[t + 1]];
-                                    var p3 = geometery.Positions[geometery.Triangles[t + 2]];
+                                        var p1 = geometery.Positions[geometery.Triangles[t]];
+                                        var p2 = geometery.Positions[geometery.Triangles[t + 1]];
+                                        var p3 = geometery.Positions[geometery.Triangles[t + 2]];
 
-                                    if (rotate.HasValue)
-                                    {
-                                        p1 = rotate.Value.Transform(p1);
-                                        p2 = rotate.Value.Transform(p2);
-                                        p3 = rotate.Value.Transform(p3);
-                                    }
-
-                                    foreach (var ray in testRays)
-                                    {
-                                        if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
-                                            (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
-                                            (p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
-                                            (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y))
-                                            continue;
-
-                                        Point3D intersect;
-                                        int normal;
-                                        if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                        if (rotate.HasValue)
                                         {
-                                            tracers.Add(new Trace(intersect, normal));
+                                            p1 = rotate.Value.Transform(p1);
+                                            p2 = rotate.Value.Transform(p2);
+                                            p3 = rotate.Value.Transform(p3);
+                                        }
+
+                                        foreach (var ray in testRays)
+                                        {
+                                            if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
+                                                (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
+                                                (p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
+                                                (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y))
+                                                continue;
+
+                                            Point3D intersect;
+                                            int normal;
+                                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
+                                            {
+                                                tracers.Add(new Trace(intersect, normal));
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            if (tracers.Count > 1)
-                            {
-                                var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Z).ToArray();
-                                var startCoord = roundFunc(order[0].Point.Z);
-                                var endCoord = roundFunc(order[order.Length - 1].Point.Z);
-                                var surfaces = 0;
-
-                                for (var z = startCoord; z <= endCoord; z++)
+                                if (tracers.Count > 1)
                                 {
-                                    var points = order.Where(p => p.Point.Z > z - startOffset && p.Point.Z < z + endOffset).ToArray();
-                                    var volume = (byte)(0xff / testRays.Count * surfaces);
+                                    var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Z).ToArray();
+                                    var startCoord = roundFunc(order[0].Point.Z);
+                                    var endCoord = roundFunc(order[order.Length - 1].Point.Z);
+                                    var surfaces = 0;
 
-                                    foreach (var point in points)
+                                    for (var z = startCoord; z <= endCoord; z++)
                                     {
-                                        if (point.Face == MeshFace.Farside)
+                                        var points = order.Where(p => p.Point.Z > z - startOffset && p.Point.Z < z + endOffset).ToArray();
+                                        var volume = (byte)(0xff / testRays.Count * surfaces);
+
+                                        foreach (var point in points)
                                         {
-                                            volume += (byte)(Math.Round(Math.Abs(z + volumeOffset - point.Point.Z) * 255 / testRays.Count, 0));
-                                            surfaces++;
+                                            if (point.Face == MeshFace.Farside)
+                                            {
+                                                volume += (byte)(Math.Round(Math.Abs(z + volumeOffset - point.Point.Z) * 255 / testRays.Count, 0));
+                                                surfaces++;
+                                            }
+                                            else if (point.Face == MeshFace.Nearside)
+                                            {
+                                                volume -= (byte)(Math.Round(Math.Abs(z + volumeOffset - point.Point.Z) * 255 / testRays.Count, 0));
+                                                surfaces--;
+                                            }
                                         }
-                                        else if (point.Face == MeshFace.Nearside)
+
+                                        if (traceDirectionCount > 1)
                                         {
-                                            volume -= (byte)(Math.Round(Math.Abs(z + volumeOffset - point.Point.Z) * 255 / testRays.Count, 0));
-                                            surfaces--;
+                                            var prevolumme = modelCubic[bgw.X - xMin][bgw.Y - yMin][z - zMin];
+                                            if (prevolumme != 0)
+                                            {
+                                                // average with the pre-existing X and Y volumes.
+                                                volume = (byte)Math.Round((((float)prevolumme * (traceDirectionCount - 1)) + (float)volume) / (float)traceDirectionCount, 0);
+                                            }
                                         }
+
+                                        //volume = volume.RoundUpToNearest(8);
+
+                                        modelCubic[bgw.X - xMin][bgw.Y - yMin][z - zMin] = volume;
+                                        modelMater[bgw.X - xMin][bgw.Y - yMin][z - zMin] = materials[bgw.ModelIdx];
                                     }
 
-                                    var prevolumme = modelCubic[bgw.X - xMin][bgw.Y - yMin][z - zMin];
-                                    if (prevolumme != 0)
+                                    if (faceMaterials[bgw.ModelIdx] != 0xff)
                                     {
-                                        // average with the pre-existing X and Y volumes.
-                                        volume = (byte)Math.Round((((float)prevolumme * 2) + (float)volume) / 3f, 0);
+                                        for (var i = 1; i < 6; i++)
+                                        {
+                                            if (zMin < startCoord - i && modelCubic[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] == 0)
+                                            {
+                                                modelMater[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] = faceMaterials[bgw.ModelIdx];
+                                            }
+                                            if (endCoord + i < zMax && modelCubic[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] == 0)
+                                            {
+                                                modelMater[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] = faceMaterials[bgw.ModelIdx];
+                                            }
+                                        }
                                     }
-
-                                    //volume = volume.RoundUpToNearest(8);
-
-                                    modelCubic[bgw.X - xMin][bgw.Y - yMin][z - zMin] = volume;
-                                    modelMater[bgw.X - xMin][bgw.Y - yMin][z - zMin] = materials[bgw.ModelIdx];
                                 }
 
-                                if (faceMaterials[bgw.ModelIdx] != 0xff)
+                                lock (Locker)
                                 {
-                                    for (var i = 1; i < 6; i++)
-                                    {
-                                        if (zMin < startCoord - i && modelCubic[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] == 0)
-                                        {
-                                            modelMater[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] = faceMaterials[bgw.ModelIdx];
-                                        }
-                                        if (endCoord + i < zMax && modelCubic[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] == 0)
-                                        {
-                                            modelMater[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] = faceMaterials[bgw.ModelIdx];
-                                        }
-                                    }
+                                    threadCounter--;
                                 }
-                            }
+                            }, new RayTracerTaskWorker(modelIdx, x, y, 0));
 
-                            lock (Locker)
-                            {
-                                threadCounter--;
-                            }
-                        }, new RayTracerTaskWorker(modelIdx, x, y, 0));
-
-                        task.Start();
+                            task.Start();
+                        }
                     }
-                }
 
-                // Wait for Multithread parts to finish.
-                while (threadCounter > 0)
-                {
-                    System.Windows.Forms.Application.DoEvents();
-                }
+                    // Wait for Multithread parts to finish.
+                    while (threadCounter > 0)
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                    }
 
-                GC.Collect();
+                    GC.Collect();
+                }
 
                 #endregion
 

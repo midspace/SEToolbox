@@ -135,6 +135,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IMainView.cs" />
+    <Compile Include="Interop\Asteroids\MyVoxelRayTracerConsts.cs" />
+    <Compile Include="Models\Asteroids\AsteroidByteFiller.cs" />
+    <Compile Include="Models\Asteroids\AsteroidSeedFiller.cs" />
+    <Compile Include="Models\Asteroids\AsteroidSeedFillProperties.cs" />
+    <Compile Include="Models\Asteroids\AsteroidByteFillProperties.cs" />
+    <Compile Include="Models\Asteroids\IMyVoxelFiller.cs" />
+    <Compile Include="Models\Asteroids\IMyVoxelFillProperties.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelTaskWorker.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilder.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilderArgs.cs" />
@@ -178,7 +185,6 @@
     <Compile Include="Models\CubeAssetModel.cs" />
     <Compile Include="Models\VoxelMaterialAssetModel.cs" />
     <Compile Include="Models\GenerateVoxelDetailModel.cs" />
-    <Compile Include="Models\GenerateVoxelModel.cs" />
     <Compile Include="Models\GenerateVoxelFieldModel.cs" />
     <Compile Include="Models\ImportVoxelModel.cs" />
     <Compile Include="Models\MaterialSelectionModel.cs" />

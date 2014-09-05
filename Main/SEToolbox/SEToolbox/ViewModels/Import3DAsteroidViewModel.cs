@@ -180,10 +180,22 @@
             set { _dataModel.Up = value; }
         }
 
-        public MyVoxelRayTracer.TraceType TraceType
+        public TraceType TraceType
         {
             get { return _dataModel.TraceType; }
             set { _dataModel.TraceType = value; }
+        }
+
+        public TraceCount TraceCount
+        {
+            get { return _dataModel.TraceCount; }
+            set { _dataModel.TraceCount = value; }
+        }
+
+        public TraceDirection TraceDirection
+        {
+            get { return _dataModel.TraceDirection; }
+            set { _dataModel.TraceDirection = value; }
         }
 
         public double MultipleScale
@@ -431,7 +443,7 @@
             }
             meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), OutsideStockMaterial.Value, OutsideStockMaterial.Value));
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, SourceFile, scale, rotateTransform, TraceType, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, TraceType, TraceCount, TraceDirection, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
             voxelMap.Save(SourceFile);
 
             MainViewModel.ClearProgress();

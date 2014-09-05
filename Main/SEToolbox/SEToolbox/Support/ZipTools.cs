@@ -10,6 +10,7 @@
 
     using ICSharpCode.SharpZipLib.Core;
     using ICSharpCode.SharpZipLib.Zip;
+    using Res = SEToolbox.Properties.Resources;
 
     /// <summary>
     /// Sourced from: https://github.com/icsharpcode/SharpZipLib/wiki/Zip-Samples
@@ -185,9 +186,11 @@
                     zf.Password = password; // AES encrypted entries are handled automatically
                 }
 
-                var seperator = Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentUICulture);
-                fileList.AddRange(from ZipEntry zipEntry in zf where zipEntry.IsFile select zipEntry.Name.Replace("/", seperator));
-                //fileList.AddRange(from ZipEntry zipEntry in zf where zipEntry.IsFile select zipEntry.Name);
+                fileList.AddRange(from ZipEntry zipEntry in zf where zipEntry.IsFile select zipEntry.Name.Replace('/', Path.DirectorySeparatorChar));
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(String.Format(Res.Exception_CorruptZipFile, archiveFilenameIn), ex);
             }
             finally
             {

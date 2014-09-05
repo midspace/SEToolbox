@@ -1,8 +1,8 @@
-﻿namespace SEToolbox.Models
+﻿namespace SEToolbox.Models.Asteroids
 {
-    public class GenerateVoxelModel : BaseModel
+    public class AsteroidByteFillProperties : BaseModel, IMyVoxelFillProperties
     {
-        #region Fields
+        #region fields
 
         private int _index;
         private int _totalPercent;
@@ -12,8 +12,8 @@
         private int _secondPercent;
         private MaterialSelectionModel _thirdMaterial;
         private int _thirdPercent;
-        private MaterialSelectionModel _forthMaterial;
-        private int _forthPercent;
+        private MaterialSelectionModel _fourthMaterial;
+        private int _fourthPercent;
         private MaterialSelectionModel _fifthMaterial;
         private int _fifthPercent;
         private MaterialSelectionModel _sixthMaterial;
@@ -23,7 +23,7 @@
 
         #endregion
 
-        #region Properties
+        #region properties
 
         public int Index
         {
@@ -163,36 +163,36 @@
             }
         }
 
-        public MaterialSelectionModel ForthMaterial
+        public MaterialSelectionModel FourthMaterial
         {
             get
             {
-                return _forthMaterial;
+                return _fourthMaterial;
             }
 
             set
             {
-                if (value != _forthMaterial)
+                if (value != _fourthMaterial)
                 {
-                    _forthMaterial = value;
-                    RaisePropertyChanged(() => ForthMaterial);
+                    _fourthMaterial = value;
+                    RaisePropertyChanged(() => FourthMaterial);
                 }
             }
         }
 
-        public int ForthPercent
+        public int FourthPercent
         {
             get
             {
-                return _forthPercent;
+                return _fourthPercent;
             }
 
             set
             {
-                if (value != _forthPercent)
+                if (value != _fourthPercent)
                 {
-                    _forthPercent = value;
-                    RaisePropertyChanged(() => ForthPercent);
+                    _fourthPercent = value;
+                    RaisePropertyChanged(() => FourthPercent);
                     UpdateTotal();
                 }
             }
@@ -305,9 +305,9 @@
 
         #endregion
 
-        public GenerateVoxelModel Clone()
+        public IMyVoxelFillProperties Clone()
         {
-            return new GenerateVoxelModel
+            return new AsteroidByteFillProperties
             {
                 Index = Index,
                 TotalPercent = TotalPercent,
@@ -317,8 +317,8 @@
                 SecondPercent = SecondPercent,
                 ThirdMaterial = ThirdMaterial,
                 ThirdPercent = ThirdPercent,
-                ForthMaterial = ForthMaterial,
-                ForthPercent = ForthPercent,
+                FourthMaterial = FourthMaterial,
+                FourthPercent = FourthPercent,
                 FifthMaterial = FifthMaterial,
                 FifthPercent = FifthPercent,
                 SixthMaterial = SixthMaterial,
@@ -328,9 +328,9 @@
             };
         }
 
-        public void UpdateTotal()
+        private void UpdateTotal()
         {
-            TotalPercent = SecondPercent + ThirdPercent + ForthPercent + FifthPercent + SixthPercent + SeventhPercent;
+            TotalPercent = SecondPercent + ThirdPercent + FourthPercent + FifthPercent + SixthPercent + SeventhPercent;
         }
     }
 }

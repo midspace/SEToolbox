@@ -134,7 +134,7 @@
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
                     
-                    <DataGridComboBoxColumn Header="4th Material" SelectedValueBinding="{Binding ForthMaterial}" DisplayMemberPath="DisplayName">
+                    <DataGridComboBoxColumn Header="4th Material" SelectedValueBinding="{Binding FourthMaterial}" DisplayMemberPath="DisplayName">
                         <DataGridComboBoxColumn.ElementStyle>
                             <Style TargetType="ComboBox">
                                 <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
@@ -146,7 +146,7 @@
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
-                    <DataGridComboBoxColumn Header="4th Percent" SelectedValueBinding="{Binding ForthPercent}">
+                    <DataGridComboBoxColumn Header="4th Percent" SelectedValueBinding="{Binding FourthPercent}">
                         <DataGridComboBoxColumn.ElementStyle>
                             <Style TargetType="ComboBox">
                                 <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
