@@ -12,6 +12,7 @@
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
+    using SEToolbox.Models.Asteroids;
 
     [TestClass]
     public class VoxelTests
@@ -646,6 +647,59 @@
                 Debug.WriteLine(string.Format("Volume:\t{0:##,###.00} m³", (double)voxelMap.SumVoxelCells() / 255));
                 Debug.WriteLine("");
             }
+        }
+
+        [TestMethod]
+        public void FillVoxelFile()
+        {
+            //const string fileNew = @".\TestOutput\randomSeedMaterialCube.vox";
+            const string fileNew = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Easy 01.045.013\hopebase5120.vox";
+
+            SpaceEngineersCore.LoadDefinitions();
+
+            var materials = SpaceEngineersApi.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone_01"));
+            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+
+            var ironMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Iron_02"));
+            Assert.IsNotNull(ironMaterial, "Iron material should exist.");
+
+            var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, 64, 64, 64, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, false, 0);
+            //var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, 64, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, false, 0);
+
+            var filler = new AsteroidSeedFiller();
+            var fillProperties = new AsteroidSeedFillProperties
+            {
+                MainMaterial = new SEToolbox.Models.MaterialSelectionModel { Value = stoneMaterial.Id.SubtypeId },
+                FirstMaterial = new SEToolbox.Models.MaterialSelectionModel { Value = ironMaterial.Id.SubtypeId },
+                FirstRadius = 3,
+                FirstVeins = 2,
+                SecondMaterial = new SEToolbox.Models.MaterialSelectionModel { Value = goldMaterial.Id.SubtypeId },
+                SecondRadius = 1,
+                SecondVeins = 1,
+            };
+
+            filler.FillAsteroid(voxelMap, fillProperties);
+
+            // Strip the original material.
+            voxelMap.RemoveMaterial(stoneMaterial.Id.SubtypeId, null);
+
+            voxelMap.Save(fileNew);
+
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(128, voxelMap.Size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(128, voxelMap.Size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(128, voxelMap.Size.Z, "Voxel Bounding size must match.");
+
+            Assert.AreEqual(64, voxelMap.ContentSize.X, "Voxel Content size must match.");
+            Assert.AreEqual(64, voxelMap.ContentSize.Y, "Voxel Content size must match.");
+            Assert.AreEqual(64, voxelMap.ContentSize.Z, "Voxel Content size must match.");
         }
     }
 }

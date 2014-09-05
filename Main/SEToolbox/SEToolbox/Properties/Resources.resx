@@ -618,4 +618,7 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="DialogOldSEVersionTitle" xml:space="preserve">
     <value>Cannot run with old version of Space Engineers</value>
   </data>
+  <data name="Exception_CorruptZipFile" xml:space="preserve">
+    <value>The specified file '{0}' is corrupt and does not apper to be a valid compressed archive file.</value>
+  </data>
 </root>

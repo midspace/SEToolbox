@@ -47,6 +47,8 @@
 
         public UserDataPath BaseDedicatedServerServicePath { get; set; }
 
+        public bool ReloadModsRequired { get; set; }
+
         public SaveResource SelectedWorld
         {
             get
@@ -223,6 +225,8 @@
                 }
             }
 
+            SpaceEngineersCore.LoadDefinitionsAndMods(model.ActiveWorld.DataPath.ModsPath, model.ActiveWorld.Content.Mods.ToArray());
+            ReloadModsRequired = true;
             model.LoadSandBox();
 
             if (model.ActiveWorld.Content == null)

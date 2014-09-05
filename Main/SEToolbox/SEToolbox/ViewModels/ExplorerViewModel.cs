@@ -506,6 +506,14 @@
                 SpaceEngineersCore.LoadDefinitionsAndMods(model.SelectedWorld.DataPath.ModsPath, ActiveWorld.Content.Mods.ToArray());
                 _dataModel.LoadSandBox();
             }
+            else
+            {
+                // Reload mods if other mods were loaded up during a Repair.
+                if (model.ReloadModsRequired && _dataModel.ActiveWorld != null)
+                {
+                    SpaceEngineersCore.LoadDefinitionsAndMods(_dataModel.ActiveWorld.DataPath.ModsPath, _dataModel.ActiveWorld.Content.Mods.ToArray());
+                }
+            }
         }
 
         public bool SaveCanExecute()

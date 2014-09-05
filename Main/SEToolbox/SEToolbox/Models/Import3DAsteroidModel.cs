@@ -22,7 +22,9 @@
         private BindableVector3DModel _forward;
         private BindableVector3DModel _up;
         private MyPositionAndOrientation _characterPosition;
-        private MyVoxelRayTracer.TraceType _traceType;
+        private TraceType _traceType;
+        private TraceCount _traceCount;
+        private TraceDirection _traceDirection;
         private double _multipleScale;
         private double _maxLengthScale;
         private double _buildDistance;
@@ -54,6 +56,10 @@
 
             InsideStockMaterial = InsideMaterialsCollection[0];
             OutsideStockMaterial = OutsideMaterialsCollection[0];
+
+            TraceType = Interop.Asteroids.TraceType.Odd;
+            TraceCount = Interop.Asteroids.TraceCount.Trace5;
+            TraceDirection = Interop.Asteroids.TraceDirection.XYZ;
         }
 
         #endregion
@@ -229,7 +235,7 @@
             }
         }
 
-        public SEToolbox.Interop.Asteroids.MyVoxelRayTracer.TraceType TraceType
+        public TraceType TraceType
         {
             get
             {
@@ -242,6 +248,40 @@
                 {
                     _traceType = value;
                     RaisePropertyChanged(() => TraceType);
+                }
+            }
+        }
+
+        public TraceCount TraceCount
+        {
+            get
+            {
+                return _traceCount;
+            }
+
+            set
+            {
+                if (value != _traceCount)
+                {
+                    _traceCount = value;
+                    RaisePropertyChanged(() => TraceCount);
+                }
+            }
+        }
+
+        public TraceDirection TraceDirection
+        {
+            get
+            {
+                return _traceDirection;
+            }
+
+            set
+            {
+                if (value != _traceDirection)
+                {
+                    _traceDirection = value;
+                    RaisePropertyChanged(() => TraceDirection);
                 }
             }
         }

@@ -633,6 +633,22 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
+        #region SetVoxelMaterialRegion
+
+        /// <summary>
+        /// Change the material of the voxel cell with the given coordinates
+        /// </summary>
+        /// <param name="materialName">The material name to set the cell to</param>
+        /// <param name="cellCoord">Cell coordinates vector (internal)</param>
+        public void SetVoxelMaterialRegion(string materialName, ref Vector3I cellCoord)
+        {
+            if (!(this.CheckVoxelCoord(ref cellCoord)))
+                return;
+            this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+        }
+
+        #endregion
+
         #region GetVoxelMaterialContent
 
         public void GetVoxelMaterialContent(ref Vector3I voxelCoord, out string materialName, out byte content)
@@ -643,6 +659,50 @@ namespace SEToolbox.Interop.Asteroids
             var oldMaterial = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
             materialName = SpaceEngineersApi.GetMaterialName(oldMaterial);
             content = GetVoxelContent(ref voxelCoordInCell);
+        }
+
+        #endregion
+
+        #region SeedMaterialSphere
+
+        /// <summary>
+        /// Set a material for a random voxel cell and possibly nearest ones to it.
+        /// </summary>
+        /// <param name="materialName">material name</param>
+        /// <param name="radius">radius in voxels, defaults to zero, meaning only a random grid.</param>
+        /// <param name="mixed"></param>
+        public void SeedMaterialSphere(string materialName, byte radius = 0)
+        {
+            var fullCells = new List<Vector3I> { };
+            Vector3I cellCoord;
+            // Collect the non-empty cell coordinates
+            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                        if (!CheckCellType(ref _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z], MyVoxelCellType.EMPTY))
+                            fullCells.Add(cellCoord);
+
+            // Choose random cell and switch material there
+            fullCells.Shuffle();
+            int cellCount = fullCells.Count;
+            Vector3I cell, vlen;
+            for (int i = 0; i < cellCount; i++)
+            {
+                cell = fullCells[i];
+                if (i == 0)
+                {
+                    this.SetVoxelMaterialRegion(materialName, ref cell);
+                    continue;
+                }
+                // Optionally seek adjanced cells and set their material too.
+                if (radius == 0)
+                    return;
+                vlen = fullCells[0] - cell;
+                if (vlen.RectangularLength() <= radius)
+                {
+                    this.SetVoxelMaterialRegion(materialName, ref cell);
+                }
+            }
         }
 
         #endregion
@@ -722,12 +782,122 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
+        #region ForceShellFaceMaterials
+
+        /// <summary>
+        /// Force the material of the outermost mixed voxcells to the given material
+        /// </summary>
+        /// <param name="materialName"></param>
+        public void ForceShellMaterial(string materialName, byte tgtThickness = 0)
+        {
+            Vector3I vector;
+            byte curThickness = 0;
+
+            for (vector.X = 0; vector.X < this._dataCellsCount.X; vector.X++)
+            {
+                for (vector.Y = 0; vector.Y < this._dataCellsCount.Y; vector.Y++)
+                {
+                    for (curThickness = 0, vector.Z = 0; vector.Z < this._dataCellsCount.Z - 1; vector.Z++)
+                    {
+                        if (
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z + 1], MyVoxelCellType.EMPTY)
+                        )
+                        {
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z + 1], MyVoxelCellType.FULL))
+                                break;
+                        }
+                    }
+                    for (curThickness = 0, vector.Z = this._dataCellsCount.Z - 1; vector.Z > 0; vector.Z--)
+                    {
+                        if (
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z - 1], MyVoxelCellType.EMPTY)
+                        )
+                        {
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z - 1], MyVoxelCellType.FULL))
+                                break;
+                        }
+                    }
+                }
+            }
+
+            for (vector.X = 0; vector.X < this._dataCellsCount.X; vector.X++)
+            {
+                for (vector.Z = 0; vector.Z < this._dataCellsCount.Z; vector.Z++)
+                {
+                    for (curThickness = 0, vector.Y = 0; vector.Y < this._dataCellsCount.Y - 1; vector.Y++)
+                    {
+                        if (
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y + 1][vector.Z], MyVoxelCellType.EMPTY)
+                        )
+                        {
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y + 1][vector.Z], MyVoxelCellType.FULL))
+                                break;
+                        }
+                    }
+                    for (curThickness = 0, vector.Y = this._dataCellsCount.Y - 1; vector.Y > 0; vector.Y--)
+                    {
+                        if (
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y - 1][vector.Z], MyVoxelCellType.EMPTY)
+                        )
+                        {
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y - 1][vector.Z], MyVoxelCellType.FULL))
+                                break;
+                        }
+                    }
+                }
+            }
+
+            for (vector.Z = 0; vector.Z < this._dataCellsCount.Z; vector.Z++)
+            {
+                for (vector.Y = 0; vector.Y < this._dataCellsCount.Y; vector.Y++)
+                {
+                    for (curThickness = 0, vector.X = 0; vector.X < this._dataCellsCount.X - 1; vector.X++)
+                    {
+                        if (
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
+                            !CheckCellType(ref _voxelContentCells[vector.X + 1][vector.Y][vector.Z], MyVoxelCellType.EMPTY)
+                        )
+                        {
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X + 1][vector.Y][vector.Z], MyVoxelCellType.FULL))
+                                break;
+                        }
+                    }
+                    for (curThickness = 0, vector.X = this._dataCellsCount.X - 1; vector.X > 0; vector.X--)
+                    {
+                        if (
+                            !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
+                            !CheckCellType(ref _voxelContentCells[vector.X - 1][vector.Y][vector.Z], MyVoxelCellType.EMPTY)
+                        )
+                        {
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X - 1][vector.Y][vector.Z], MyVoxelCellType.FULL))
+                                break;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        #endregion
+
         #region RemoveMaterial
 
         public void RemoveMaterial(string materialName, string replaceFillMaterial)
         {
             var materialIndex = SpaceEngineersApi.GetMaterialIndex(materialName);
-            var replaceMaterialIndex = SpaceEngineersApi.GetMaterialIndex(replaceFillMaterial);
+            var replaceMaterialIndex = materialIndex;
+            if (!string.IsNullOrEmpty(replaceFillMaterial))
+                replaceMaterialIndex = SpaceEngineersApi.GetMaterialIndex(replaceFillMaterial);
             Vector3I cellCoord;
 
             for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
@@ -1386,6 +1556,19 @@ namespace SEToolbox.Interop.Asteroids
             var ret = new MyVoxelContentCell();
             this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = ret;
             return ret;
+        }
+
+        /// <summary>
+        /// Check the given cell type against a possible cell contents state (full, empty, mixed)
+        /// </summary>
+        /// <param name="cell">MyVoxelContentCell object to check</param>
+        /// <param name="type">A cell state to check against (MyVoxelCellType enum)</param>
+        /// <returns>whether the cell has the given type or not.</returns>
+        private bool CheckCellType(ref MyVoxelContentCell cell, MyVoxelCellType type)
+        {
+            if (cell == null)
+                return type == MyVoxelCellType.FULL;
+            return cell.CellType == type;
         }
 
         #endregion

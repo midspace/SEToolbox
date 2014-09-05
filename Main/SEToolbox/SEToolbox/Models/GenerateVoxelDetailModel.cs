@@ -83,6 +83,8 @@
             }
         }
 
+        public long FileSize { get; set; }
+
         #endregion
     }
 }

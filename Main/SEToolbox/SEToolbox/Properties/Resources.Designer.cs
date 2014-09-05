@@ -644,6 +644,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The specified file &apos;{0}&apos; is corrupt and does not apper to be a valid compressed archive file..
+        /// </summary>
+        public static string Exception_CorruptZipFile {
+            get {
+                return ResourceManager.GetString("Exception_CorruptZipFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Space Engineers content file &apos;{0}&apos; could not be loaded, either because it is corrupt, or it is newer than expected..
         /// </summary>
         public static string ExceptionState_CorruptContentFile {

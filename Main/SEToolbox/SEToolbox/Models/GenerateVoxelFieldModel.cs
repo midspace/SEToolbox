@@ -8,10 +8,11 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using SEToolbox.Models.Asteroids;
 
     public class GenerateVoxelFieldModel : BaseModel
     {
-        private static readonly List<GenerateVoxelModel> VoxelStore;
+        private static readonly List<AsteroidByteFillProperties> VoxelStore;
 
         #region Fields
 
@@ -20,7 +21,7 @@
         private MyPositionAndOrientation _characterPosition;
         private ObservableCollection<GenerateVoxelDetailModel> _stockVoxelFileList;
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
-        private ObservableCollection<GenerateVoxelModel> _voxelCollection;
+        private ObservableCollection<AsteroidByteFillProperties> _voxelCollection;
         private readonly List<int> _percentList;
 
         #endregion
@@ -31,20 +32,20 @@
         {
             _stockVoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>();
             _materialsCollection = new ObservableCollection<MaterialSelectionModel>();
-            _voxelCollection = new ObservableCollection<GenerateVoxelModel>();
+            _voxelCollection = new ObservableCollection<AsteroidByteFillProperties>();
             _percentList = new List<int>();
         }
 
         static GenerateVoxelFieldModel()
         {
-            VoxelStore = new List<GenerateVoxelModel>();
+            VoxelStore = new List<AsteroidByteFillProperties>();
         }
 
         #endregion
 
         #region Properties
 
-        public ObservableCollection<GenerateVoxelModel> VoxelCollection
+        public ObservableCollection<AsteroidByteFillProperties> VoxelCollection
         {
             get
             {
@@ -127,10 +128,6 @@
             }
         }
 
-        public List<GenerateVoxelDetailModel> SmallVoxelFileList { get; set; }
-
-        public List<GenerateVoxelDetailModel> LargeVoxelFileList { get; set; }
-
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
         {
             get
@@ -168,22 +165,15 @@
             var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*.vox");
 
             StockVoxelFileList.Clear();
-            SmallVoxelFileList = new List<GenerateVoxelDetailModel>();
-            LargeVoxelFileList = new List<GenerateVoxelDetailModel>();
             foreach (var file in files)
             {
                 var voxel = new GenerateVoxelDetailModel
                 {
                     Name = Path.GetFileNameWithoutExtension(file),
                     SourceFilename = file,
+                    FileSize = new FileInfo(file).Length
                 };
                 StockVoxelFileList.Add(voxel);
-                var fileLength = new FileInfo(file).Length;
-
-                if (fileLength > 100000)
-                    LargeVoxelFileList.Add(voxel);
-                else if (fileLength > 0)
-                    SmallVoxelFileList.Add(voxel);
             }
 
             // Set up a default start.
@@ -195,12 +185,12 @@
             {
                 foreach (var item in VoxelStore)
                 {
-                    var v1 = item.Clone();
+                    var v1 = (AsteroidByteFillProperties)item.Clone();
                     v1.VoxelFile = StockVoxelFileList.FirstOrDefault(v => v.Name == v1.VoxelFile.Name);
                     v1.MainMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.MainMaterial.DisplayName);
                     v1.SecondMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SecondMaterial.DisplayName);
                     v1.ThirdMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ThirdMaterial.DisplayName);
-                    v1.ForthMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ForthMaterial.DisplayName);
+                    v1.FourthMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.FourthMaterial.DisplayName);
                     v1.FifthMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.FifthMaterial.DisplayName);
                     v1.SixthMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SixthMaterial.DisplayName);
                     v1.SeventhMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SeventhMaterial.DisplayName);
@@ -224,20 +214,20 @@
             VoxelStore.AddRange(_voxelCollection);
         }
 
-        public GenerateVoxelModel NewDefaultVoxel(int index)
+        public AsteroidByteFillProperties NewDefaultVoxel(int index)
         {
-            return new GenerateVoxelModel
-                {
-                    Index = index,
-                    VoxelFile = StockVoxelFileList[0],
-                    MainMaterial = MaterialsCollection[0],
-                    SecondMaterial = MaterialsCollection[0],
-                    ThirdMaterial = MaterialsCollection[0],
-                    ForthMaterial = MaterialsCollection[0],
-                    FifthMaterial = MaterialsCollection[0],
-                    SixthMaterial = MaterialsCollection[0],
-                    SeventhMaterial = MaterialsCollection[0],
-                };
+            return new AsteroidByteFillProperties
+            {
+                Index = index,
+                VoxelFile = StockVoxelFileList[0],
+                MainMaterial = MaterialsCollection[0],
+                SecondMaterial = MaterialsCollection[0],
+                ThirdMaterial = MaterialsCollection[0],
+                FourthMaterial = MaterialsCollection[0],
+                FifthMaterial = MaterialsCollection[0],
+                SixthMaterial = MaterialsCollection[0],
+                SeventhMaterial = MaterialsCollection[0],
+            };
         }
 
         public void RenumberCollection()

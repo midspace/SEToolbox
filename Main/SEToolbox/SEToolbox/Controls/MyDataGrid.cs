@@ -12,7 +12,8 @@
     {
         public MyDataGrid()
         {
-            PreviewMouseLeftButtonDown += MyDataGrid_PreviewMouseLeftButtonDown;
+            // TODO: fix the eventhandler, so it responds correctly when clicking on the dropdown list items.
+            //PreviewMouseLeftButtonDown += MyDataGrid_PreviewMouseLeftButtonDown;
         }
 
         void MyDataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
