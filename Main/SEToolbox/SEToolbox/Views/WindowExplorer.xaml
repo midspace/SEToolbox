@@ -111,12 +111,12 @@
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                     </MenuItem.Icon>
-                    <MenuItem Header="Export with owner and MedBay" Command="{Binding ExportSandboxObjectCommand}" ToolTip="Export ships ans stations to a .xml file, to store, and import into other worlds.">
+                    <MenuItem Header="Export with owner and MedBay" Command="{Binding ExportSandboxObjectCommand}" ToolTip="Export ships and stations to an .xml file, to store, allowing import into other worlds.">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Export without owner and MedBay" Command="{Binding ExportBasicSandboxObjectCommand}" ToolTip="Export ships ans stations to a .xml file, to store, and import into other worlds.">
+                    <MenuItem Header="Export without owner and MedBay" Command="{Binding ExportBasicSandboxObjectCommand}" ToolTip="Export ships and stations to an .xml file, to store, allowing import into other worlds.">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                         </MenuItem.Icon>
