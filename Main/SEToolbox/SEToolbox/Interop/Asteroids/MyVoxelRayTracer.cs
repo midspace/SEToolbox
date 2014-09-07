@@ -21,8 +21,9 @@
         // For a 1024 cubed asteroid, it takes approximately 6.5Gb of system memory.
 
         public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, ScaleTransform3D scale, Transform3D rotateTransform, TraceType traceType, TraceCount traceCount, TraceDirection traceDirection,
-            Action<double, double> resetProgress, Action incrementProgress)
+            Action<double, double> resetProgress, Action incrementProgress, Func<bool> checkCancel, Action complete)
         {
+            var cancel = false;
             var traceDirectionCount = 0;
             var materials = new List<byte>();
             var faceMaterials = new List<byte>();
@@ -96,6 +97,13 @@
                 resetProgress.Invoke(0, rays * triangles);
             }
 
+            if (checkCancel != null && checkCancel.Invoke())
+            {
+                if (complete != null)
+                    complete.Invoke();
+                return null;
+            }
+
             #region basic ray trace of every individual triangle.
 
             // Start from the last mesh, which represents the bottom of the UI stack, and overlay each other mesh on top of it.
@@ -155,6 +163,13 @@
                     {
                         for (var z = zMin; z < zMax; z++)
                         {
+                            if (checkCancel != null && checkCancel.Invoke())
+                            {
+                                if (complete != null)
+                                    complete.Invoke();
+                                return null;
+                            }
+
                             List<Point3D[]> testRays = null;
                             if (traceType == TraceType.Odd)
                                 testRays = new List<Point3D[]>()
@@ -184,6 +199,9 @@
                                 {
                                     for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                     {
+                                        if (checkCancel != null && checkCancel.Invoke())
+                                            return;
+
                                         if (incrementProgress != null)
                                         {
                                             lock (Locker)
@@ -284,6 +302,8 @@
                     while (threadCounter > 0)
                     {
                         System.Windows.Forms.Application.DoEvents();
+                        if (checkCancel != null && checkCancel.Invoke())
+                            break;
                     }
 
                     GC.Collect();
@@ -303,6 +323,13 @@
                     {
                         for (var z = zMin; z < zMax; z++)
                         {
+                            if (checkCancel != null && checkCancel.Invoke())
+                            {
+                                if (complete != null)
+                                    complete.Invoke();
+                                return null;
+                            }
+
                             List<Point3D[]> testRays = null;
                             if (traceType == TraceType.Odd)
                                 testRays = new List<Point3D[]>()
@@ -332,6 +359,9 @@
                                 {
                                     for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                     {
+                                        if (checkCancel != null && checkCancel.Invoke())
+                                            return;
+
                                         if (incrementProgress != null)
                                         {
                                             lock (Locker)
@@ -441,6 +471,8 @@
                     while (threadCounter > 0)
                     {
                         System.Windows.Forms.Application.DoEvents();
+                        if (checkCancel != null && checkCancel.Invoke())
+                            break;
                     }
 
                     GC.Collect();
@@ -460,6 +492,13 @@
                     {
                         for (var y = yMin; y < yMax; y++)
                         {
+                            if (checkCancel != null && checkCancel.Invoke())
+                            {
+                                if (complete != null)
+                                    complete.Invoke();
+                                return null;
+                            }
+
                             List<Point3D[]> testRays = null;
                             if (traceType == TraceType.Odd)
                                 testRays = new List<Point3D[]>()
@@ -489,6 +528,9 @@
                                 {
                                     for (var t = 0; t < geometery.Triangles.Length; t += 3)
                                     {
+                                        if (checkCancel != null && checkCancel.Invoke())
+                                            return;
+
                                         if (incrementProgress != null)
                                         {
                                             lock (Locker)
@@ -598,12 +640,21 @@
                     while (threadCounter > 0)
                     {
                         System.Windows.Forms.Application.DoEvents();
+                        if (checkCancel != null && checkCancel.Invoke())
+                            break;
                     }
 
                     GC.Collect();
                 }
 
                 #endregion
+
+                if (checkCancel != null && checkCancel.Invoke())
+                {
+                    if (complete != null)
+                        complete.Invoke();
+                    return null;
+                }
 
                 #region merge individual model results into final
 
@@ -635,6 +686,13 @@
 
             #endregion
 
+            if (checkCancel != null && checkCancel.Invoke())
+            {
+                if (complete != null)
+                    complete.Invoke();
+                return null;
+            }
+
             var size = new Vector3I(xCount, yCount, zCount);
             var fillerMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false).Id.SubtypeId;  // Default to first non-rare material.
 
@@ -644,7 +702,12 @@
                 e.Material = SpaceEngineersApi.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
             };
 
-            return MyVoxelBuilder.BuildAsteroid(true, size, fillerMaterial, fillerMaterial, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, fillerMaterial, fillerMaterial, action);
+
+            if (complete != null)
+                complete.Invoke();
+            
+            return voxelMap;
         }
 
         #endregion

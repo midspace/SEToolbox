@@ -167,6 +167,7 @@
     <Compile Include="Models\ComponentListModel.cs" />
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
+    <Compile Include="Models\ProgressCancelModel.cs" />
     <Compile Include="Models\Import3DAsteroidModel.cs" />
     <Compile Include="Models\InventoryEditorModel.cs" />
     <Compile Include="Models\InventoryModel.cs" />
@@ -282,6 +283,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
+    <Compile Include="ViewModels\ProgressCancelViewModel.cs" />
     <Compile Include="ViewModels\Import3DAsteroidViewModel.cs" />
     <Compile Include="ViewModels\CubeItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryEditorViewModel.cs" />
@@ -338,6 +340,9 @@
     </Compile>
     <Compile Include="Views\ControlInventory.xaml.cs">
       <DependentUpon>ControlInventory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowProgressCancel.xaml.cs">
+      <DependentUpon>WindowProgressCancel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowResourceReport.xaml.cs">
       <DependentUpon>WindowResourceReport.xaml</DependentUpon>
@@ -436,6 +441,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlInventory.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowProgressCancel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

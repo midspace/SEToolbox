@@ -1,14 +1,15 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using SEToolbox.Interfaces;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
     using System;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Windows.Forms;
     using System.Windows.Input;
+
+    using SEToolbox.Interfaces;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
 
     public class FindApplicationViewModel : BaseViewModel
@@ -54,12 +55,12 @@
 
         public ICommand ContinueCommand
         {
-            get { return new DelegateCommand(new Action(ContinueExecuted), new Func<bool>(ContinueCanExecute)); }
+            get { return new DelegateCommand(ContinueExecuted, ContinueCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get { return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute)); }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         #endregion
@@ -71,10 +72,7 @@
         /// </summary>
         public bool? CloseResult
         {
-            get
-            {
-                return _closeResult;
-            }
+            get { return _closeResult; }
 
             set
             {
@@ -85,55 +83,27 @@
 
         public string GameApplicationPath
         {
-            get
-            {
-                return _dataModel.GameApplicationPath;
-            }
-
-            set
-            {
-                _dataModel.GameApplicationPath = value;
-            }
+            get { return _dataModel.GameApplicationPath; }
+            set { _dataModel.GameApplicationPath = value; }
         }
 
         public string GameBinPath
         {
-            get
-            {
-                return _dataModel.GameBinPath;
-            }
-
-            set
-            {
-                _dataModel.GameBinPath = value;
-            }
+            get { return _dataModel.GameBinPath; }
+            set { _dataModel.GameBinPath = value; }
         }
 
 
         public bool IsValidApplication
         {
-            get
-            {
-                return _dataModel.IsValidApplication;
-            }
-
-            set
-            {
-                _dataModel.IsValidApplication = value;
-            }
+            get { return _dataModel.IsValidApplication; }
+            set { _dataModel.IsValidApplication = value; }
         }
 
         public bool IsWrongApplication
         {
-            get
-            {
-                return _dataModel.IsWrongApplication;
-            }
-
-            set
-            {
-                _dataModel.IsWrongApplication = value;
-            }
+            get { return _dataModel.IsWrongApplication; }
+            set { _dataModel.IsWrongApplication = value; }
         }
 
         #endregion

@@ -18,6 +18,7 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
+    using SEToolbox.Views;
 
     public class Import3DAsteroidViewModel : BaseViewModel
     {
@@ -31,6 +32,7 @@
 
         private bool? _closeResult;
         private bool _isBusy;
+        private Rect3D _originalBounds;
 
         #endregion
 
@@ -136,7 +138,22 @@
         public bool IsValidModel
         {
             get { return _dataModel.IsValidModel; }
-            set { _dataModel.IsValidModel = value; }
+            set
+            {
+                _dataModel.IsValidModel = value;
+                RaisePropertyChanged(() => IsWrongModel);
+            }
+        }
+
+        public bool IsValidEntity
+        {
+            get { return _dataModel.IsValidEntity; }
+            set { _dataModel.IsValidEntity = value; }
+        }
+
+        public bool IsWrongModel
+        {
+            get { return !_dataModel.IsValidModel; }
         }
 
         public BindableSize3DModel OriginalModelSize
@@ -148,12 +165,7 @@
         public BindableSize3DIModel NewModelSize
         {
             get { return _dataModel.NewModelSize; }
-
-            set
-            {
-                _dataModel.NewModelSize = value;
-                ProcessModelScale();
-            }
+            set { _dataModel.NewModelSize = value; ProcessModelScale(); }
         }
 
         public BindablePoint3DModel NewModelScale
@@ -213,41 +225,25 @@
         public double BuildDistance
         {
             get { return _dataModel.BuildDistance; }
-
-            set
-            {
-                _dataModel.BuildDistance = value;
-                ProcessModelScale();
-            }
+            set { _dataModel.BuildDistance = value; ProcessModelScale(); }
         }
 
         public bool IsMultipleScale
         {
             get { return _dataModel.IsMultipleScale; }
-
-            set
-            {
-                _dataModel.IsMultipleScale = value;
-                ProcessModelScale();
-            }
+            set { _dataModel.IsMultipleScale = value; ProcessModelScale(); }
         }
 
         public bool IsMaxLengthScale
         {
             get { return _dataModel.IsMaxLengthScale; }
-
-            set
-            {
-                _dataModel.IsMaxLengthScale = value;
-                ProcessModelScale();
-            }
+            set { _dataModel.IsMaxLengthScale = value; ProcessModelScale(); }
         }
 
         public ObservableCollection<MaterialSelectionModel> OutsideMaterialsCollection
         {
             get { return _dataModel.OutsideMaterialsCollection; }
         }
-
 
         public ObservableCollection<MaterialSelectionModel> InsideMaterialsCollection
         {
@@ -272,6 +268,26 @@
             set { _dataModel.SourceFile = value; }
         }
 
+        public double RotatePitch
+        {
+            get { return _dataModel.RotatePitch; }
+            set { _dataModel.RotatePitch = value; ProcessModelScale(); }
+        }
+
+        public double RotateYaw
+        {
+            get { return _dataModel.RotateYaw; }
+            set { _dataModel.RotateYaw = value; ProcessModelScale(); }
+        }
+
+        public double RotateRoll
+        {
+            get { return _dataModel.RotateRoll; }
+            set { _dataModel.RotateRoll = value; ProcessModelScale(); }
+        }
+
+        public MyObjectBuilder_VoxelMap NewEntity { get; set; }
+
         #endregion
 
         #region command methods
@@ -284,6 +300,7 @@
         public void Browse3DModelExecuted()
         {
             IsValidModel = false;
+            IsValidEntity = false;
 
             IOpenFileDialog openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Res.DialogImportModelFilter;
@@ -310,7 +327,11 @@
 
         public void CreateExecuted()
         {
-            CloseResult = true;
+            var ok = BuildEntity();
+
+            // do not close if cancelled.
+            if (ok)
+                CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -330,6 +351,7 @@
         private void ProcessFilename(string filename)
         {
             IsValidModel = false;
+            IsValidEntity = false;
             IsBusy = true;
 
             OriginalModelSize = new BindableSize3DModel(0, 0, 0);
@@ -341,12 +363,19 @@
                 // validate file is a real model.
                 // read model properties.
                 Model3D model;
-                var size = Modelling.PreviewModelVolmetic(filename, out model);
-                Model = model;
+                _originalBounds = Modelling.PreviewModelVolmetic(filename, out model);
 
-                if (size != null && size.Height != 0 && size.Width != 0 && size.Depth != 0)
+                if (!_originalBounds.IsEmpty && _originalBounds.SizeX != 0 && _originalBounds.SizeY != 0 && _originalBounds.SizeZ != 0)
                 {
-                    OriginalModelSize = size;
+                    Model = model;
+                    var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), RotateYaw + 90, RotatePitch, RotateRoll - 90);
+                    var bounds = _originalBounds;
+                    if (rotateTransform != null)
+                    {
+                        bounds = rotateTransform.TransformBounds(bounds);
+                    }
+
+                    OriginalModelSize = new BindableSize3DModel(bounds);
                     BuildDistance = 10;
                     IsValidModel = true;
                     ProcessModelScale();
@@ -360,19 +389,28 @@
         {
             if (IsValidModel)
             {
+                var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), RotateYaw + 90, RotatePitch, RotateRoll - 90);
+                var bounds = _originalBounds;
+                if (rotateTransform != null)
+                {
+                    bounds = rotateTransform.TransformBounds(bounds);
+                }
+
+                var newSize = new BindableSize3DModel(bounds);
+
                 if (IsMaxLengthScale)
                 {
-                    var factor = MaxLengthScale / Math.Max(Math.Max(OriginalModelSize.Height, OriginalModelSize.Width), OriginalModelSize.Depth);
+                    var factor = MaxLengthScale / Math.Max(Math.Max(newSize.Height, newSize.Width), newSize.Depth);
 
-                    NewModelSize.Height = (int)(factor * OriginalModelSize.Height);
-                    NewModelSize.Width = (int)(factor * OriginalModelSize.Width);
-                    NewModelSize.Depth = (int)(factor * OriginalModelSize.Depth);
+                    NewModelSize.Height = (int)(factor * newSize.Height);
+                    NewModelSize.Width = (int)(factor * newSize.Width);
+                    NewModelSize.Depth = (int)(factor * newSize.Depth);
                 }
                 else if (IsMultipleScale)
                 {
-                    NewModelSize.Height = (int)(MultipleScale * OriginalModelSize.Height);
-                    NewModelSize.Width = (int)(MultipleScale * OriginalModelSize.Width);
-                    NewModelSize.Depth = (int)(MultipleScale * OriginalModelSize.Depth);
+                    NewModelSize.Height = (int)(MultipleScale * newSize.Height);
+                    NewModelSize.Width = (int)(MultipleScale * newSize.Width);
+                    NewModelSize.Depth = (int)(MultipleScale * newSize.Depth);
                 }
 
                 double vectorDistance = BuildDistance;
@@ -394,7 +432,7 @@
 
         #region BuildEntity
 
-        public MyObjectBuilder_VoxelMap BuildEntity()
+        private bool BuildEntity()
         {
             var filenamepart = Path.GetFileNameWithoutExtension(Filename);
             var filename = MainViewModel.CreateUniqueVoxelFilename(filenamepart + ".vox");
@@ -419,7 +457,7 @@
             }
 
             var scale = new ScaleTransform3D(multiplier, multiplier, multiplier);
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), RotateYaw + 90, RotatePitch, RotateRoll - 90);
             SourceFile = TempfileUtil.NewFilename();
 
             //var baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false);
@@ -427,7 +465,6 @@
             //    baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault();
 
             //var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, Filename, SourceFile, OutsideStockMaterial.Value, baseMaterial.Name, InsideStockMaterial.Value != null, InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
-
 
             var model = MeshHelper.Load(Filename, ignoreErrors: true);
 
@@ -441,23 +478,64 @@
                 if (geometry != null)
                     geometeries.Add(geometry);
             }
-            meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), OutsideStockMaterial.Value, OutsideStockMaterial.Value));
+            meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), InsideStockMaterial.Value, InsideStockMaterial.Value));
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, TraceType, TraceCount, TraceDirection, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
-            voxelMap.Save(SourceFile);
+            #region handle dialogs and process the conversion
 
-            MainViewModel.ClearProgress();
+            bool doCancel = false;
 
-            entity.PositionAndOrientation = new MyPositionAndOrientation
+            var progressModel = new ProgressCancelModel { Title = "Processing...", SubTitle = "Processing...", DialogText = "Time remaining: Calculating..." };
+            var progressVm = new ProgressCancelViewModel(this, progressModel);
+            progressVm.CloseRequested += delegate(object sender, EventArgs e)
             {
-                Position = Position.ToVector3(),
-                Forward = Forward.ToVector3(),
-                Up = Up.ToVector3()
+                doCancel = true;
             };
 
-            IsValidModel = voxelMap.ContentSize.X > 0 && voxelMap.ContentSize.Y > 0 && voxelMap.ContentSize.Z > 0;
+            var cancelFunc = (Func<bool>)delegate
+            {
+                return doCancel;
+            };
 
-            return entity;
+            var completedAction = (Action)delegate
+            {
+                progressVm.Close();
+            };
+
+            MyVoxelMap voxelMap = null;
+
+            var action = (Action)delegate
+            {
+                voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, TraceType, TraceCount, TraceDirection,
+                    progressModel.ResetProgress, progressModel.IncrementProgress, cancelFunc, completedAction);
+            };
+
+            var ret = _dialogService.ShowDialog<WindowProgressCancel>(this, progressVm, action);
+
+            #endregion
+
+            if (doCancel || voxelMap == null)
+            {
+                IsValidEntity = false;
+                NewEntity = null;
+            }
+            else
+            {
+                voxelMap.ForceShellMaterial(OutsideStockMaterial.Value, 1);
+                voxelMap.Save(SourceFile);
+
+                entity.PositionAndOrientation = new MyPositionAndOrientation
+                {
+                    Position = Position.ToVector3(),
+                    Forward = Forward.ToVector3(),
+                    Up = Up.ToVector3()
+                };
+
+                IsValidEntity = voxelMap.ContentSize.X > 0 && voxelMap.ContentSize.Y > 0 && voxelMap.ContentSize.Z > 0;
+
+                NewEntity = entity;
+            }
+
+            return !doCancel;
         }
 
         #endregion

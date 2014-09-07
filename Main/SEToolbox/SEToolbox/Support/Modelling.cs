@@ -16,7 +16,7 @@
     {
         #region PreviewModelVolmetic
 
-        public static BindableSize3DModel PreviewModelVolmetic(string modelFile, out Model3D model)
+        public static Rect3D PreviewModelVolmetic(string modelFile, out Model3D model)
         {
             if (modelFile != null)
             {
@@ -27,20 +27,20 @@
                 catch
                 {
                     model = null;
-                    return null;
+                    return Rect3D.Empty;
                 }
 
                 if (model.Bounds == Rect3D.Empty)
                 {
                     model = null;
-                    return null;
+                    return Rect3D.Empty;
                 }
 
-                return new BindableSize3DModel(model.Bounds);
+                return model.Bounds;
             }
 
             model = null;
-            return null;
+            return Rect3D.Empty;
         }
 
         #endregion

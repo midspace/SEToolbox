@@ -12,6 +12,7 @@
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
+    using System.Timers;
 
     [TestClass]
     public class VoxelVolumeTests
@@ -25,7 +26,6 @@
             var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
 
-            // Basic test...
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(5, 5, 5);
             var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
@@ -46,7 +46,8 @@
                     meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId));
             }
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection, ResetProgress, IncrementProgress);
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
+                ResetProgress, IncrementProgress, null, CompleteProgress);
             voxelMap.Save(asteroidFile);
 
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
@@ -69,7 +70,6 @@
             var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
 
-            // Basic test...
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(5, 5, 5);
             var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
@@ -89,7 +89,8 @@
                     meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId));
             }
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection, ResetProgress, IncrementProgress);
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
+                ResetProgress, IncrementProgress, CheckCancel, CompleteProgress);
             voxelMap.Save(asteroidFile);
 
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
@@ -101,6 +102,56 @@
 
             var voxCells = voxelMap.SumVoxelCells();
             Assert.AreEqual(2043244, voxCells, "Voxel cells must match.");
+        }
+
+        [TestMethod]
+        public void VoxelConvertToVolmeticCancel()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+            var materials = SpaceEngineersApi.GetMaterialList();
+
+            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
+            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+
+            var modelFile = @".\TestAssets\Sphere_Gold.3ds";
+            var scale = new ScaleTransform3D(50, 50, 50);
+            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            var traceType = SEToolbox.Interop.Asteroids.TraceType.Odd;
+            var traceCount = SEToolbox.Interop.Asteroids.TraceCount.Trace5;
+            var traceDirection = SEToolbox.Interop.Asteroids.TraceDirection.XYZ;
+
+            var model = MeshHelper.Load(modelFile, ignoreErrors: true);
+            var meshes = new List<SEToolbox.Interop.Asteroids.MyVoxelRayTracer.MyMeshModel>();
+            foreach (var model3D in model.Children)
+            {
+                var gm = (GeometryModel3D)model3D;
+                var geometry = gm.Geometry as MeshGeometry3D;
+
+                if (geometry != null)
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId));
+            }
+
+            bool doCancel = false;
+
+            // cancel the convertion after 5 seconds.
+            var timer = new Timer(5000);
+            timer.Elapsed += delegate
+            {
+                Debug.WriteLine("Cancelling!!!");
+                doCancel = true;
+                timer.Stop();
+            };
+            timer.Start();
+
+            var cancelFunc = (Func<bool>)delegate
+            {
+                return doCancel;
+            };
+
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
+                ResetProgress, IncrementProgress, cancelFunc, CompleteProgress);
+            
+            Assert.IsNull(voxelMap, "Asteroid must not exist.");
         }
 
         //[TestMethod]
@@ -164,7 +215,8 @@
                     meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, "Stone_01", "Stone_01"));
             }
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection, ResetProgress, IncrementProgress);
+            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
+                ResetProgress, IncrementProgress, CheckCancel, CompleteProgress);
             voxelMap.Save(asteroidFile);
 
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
@@ -215,6 +267,16 @@
                 _percent = p;
                 Debug.WriteLine("{0}%  {1:#,##0}/{2:#,##0}  {3}/{4}", _percent, _counter, _maximumProgress, elapsed, estimate);
             }
+        }
+
+        public static bool CheckCancel()
+        {
+            return false;
+        }
+
+        public static void CompleteProgress()
+        {
+            Debug.WriteLine("Complete Step finished.");
         }
 
         #endregion

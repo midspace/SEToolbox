@@ -621,4 +621,40 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="Exception_CorruptZipFile" xml:space="preserve">
     <value>The specified file '{0}' is corrupt and does not apper to be a valid compressed archive file.</value>
   </data>
+  <data name="TraceDirection_X" xml:space="preserve">
+    <value>X axis</value>
+  </data>
+  <data name="TraceDirection_XY" xml:space="preserve">
+    <value>X+Y axis</value>
+  </data>
+  <data name="TraceDirection_XYZ" xml:space="preserve">
+    <value>All 3 axis</value>
+  </data>
+  <data name="TraceDirection_XZ" xml:space="preserve">
+    <value>X+Z axis</value>
+  </data>
+  <data name="TraceDirection_Y" xml:space="preserve">
+    <value>Y axis</value>
+  </data>
+  <data name="TraceDirection_YZ" xml:space="preserve">
+    <value>Y+Z axis</value>
+  </data>
+  <data name="TraceDirection_Z" xml:space="preserve">
+    <value>Z axis</value>
+  </data>
+  <data name="TraceId_Id1" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="TraceId_Id2" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="TraceId_Id3" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="TraceId_Id4" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="TraceId_Id5" xml:space="preserve">
+    <value>5</value>
+  </data>
 </root>
