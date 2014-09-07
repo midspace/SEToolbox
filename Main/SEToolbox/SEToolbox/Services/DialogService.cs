@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.Services
 {
-    using SEToolbox.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -8,6 +7,8 @@
     using System.Linq;
     using System.Windows;
     using DialogResult = System.Windows.Forms.DialogResult;
+
+    using SEToolbox.Interfaces;
 
     /// <summary>
     /// Class responsible for abstracting ViewModels from Views.
@@ -79,7 +80,12 @@
         /// </returns>
         public bool? ShowDialog<T>(object ownerViewModel, object viewModel) where T : Window
         {
-            return ShowDialog(ownerViewModel, viewModel, typeof(T));
+            return ShowDialog(ownerViewModel, viewModel, typeof(T), null);
+        }
+
+        public bool? ShowDialog<T>(object ownerViewModel, object viewModel, Action action) where T : Window
+        {
+            return ShowDialog(ownerViewModel, viewModel, typeof(T), action);
         }
 
         /// <summary>
@@ -262,12 +268,15 @@
         /// <returns>
         /// A nullable value of type bool that signifies how a window was closed by the user.
         /// </returns>
-        private bool? ShowDialog(object ownerViewModel, object viewModel, Type dialogType)
+        private bool? ShowDialog(object ownerViewModel, object viewModel, Type dialogType, Action action)
         {
             // Create dialog and set properties
             var dialog = (Window)Activator.CreateInstance(dialogType);
             dialog.Owner = FindOwnerWindow(ownerViewModel);
             dialog.DataContext = viewModel;
+
+            if (action != null)
+                dialog.Loaded += (sender, e) => { action.Invoke(); };
 
             // Show dialog
             var retValue = dialog.ShowDialog();

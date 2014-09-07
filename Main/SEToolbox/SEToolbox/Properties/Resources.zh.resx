@@ -129,6 +129,10 @@
     <value>有新版本可用</value>
     <comment>test</comment>
   </data>
+  <data name="String1" xml:space="preserve">
+    <value>太空工程师工具箱</value>
+    <comment>Space Engineers Toolbox</comment>
+  </data>
   <data name="WindowMainTitle" xml:space="preserve">
     <value>太空工程师 工具箱 - {0} ({1})</value>
     <comment>test</comment>

@@ -27,6 +27,7 @@
     <!--         Copy the Control folder structure into the build output     -->
     <Copy SourceFiles="@(EditorFiles)" DestinationFolder="$(BinariesRoot)" SkipUnchangedFiles="false"></Copy>
     <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/en-us/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-en.msi" SkipUnchangedFiles="false"></Copy>
+    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/de-de/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-de.msi" SkipUnchangedFiles="false"></Copy>
   </Target>
 
   <Target Name="WriteToDeploymentBinaries">

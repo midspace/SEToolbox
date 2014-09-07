@@ -374,7 +374,8 @@
                 // validate file is a real model.
                 // read model properties.
                 Model3D model;
-                var size = Modelling.PreviewModelVolmetic(filename, out model);
+                var bounds = Modelling.PreviewModelVolmetic(filename, out model);
+                var size = new BindableSize3DModel(bounds);
                 Model = model;
 
                 if (size != null && size.Height != 0 && size.Width != 0 && size.Depth != 0)

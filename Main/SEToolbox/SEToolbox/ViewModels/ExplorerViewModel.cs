@@ -664,18 +664,14 @@
             var loadVm = new Import3DAsteroidViewModel(this, model);
 
             var result = _dialogService.ShowDialog<WindowImportAsteroidModel>(this, loadVm);
-            if (result == true)
+            if (result == true && loadVm.IsValidEntity)
             {
                 IsBusy = true;
-                var newEntity = loadVm.BuildEntity();
-                if (loadVm.IsValidModel)
-                {
-                    _dataModel.CollisionCorrectEntity(newEntity);
-                    var structure = _dataModel.AddEntity(newEntity);
-                    ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
-                    if (_preSelectedStructure != null)
-                        SelectedStructure = _preSelectedStructure;
-                }
+                _dataModel.CollisionCorrectEntity(loadVm.NewEntity);
+                var structure = _dataModel.AddEntity(loadVm.NewEntity);
+                ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                if (_preSelectedStructure != null)
+                    SelectedStructure = _preSelectedStructure;
                 IsBusy = false;
             }
         }

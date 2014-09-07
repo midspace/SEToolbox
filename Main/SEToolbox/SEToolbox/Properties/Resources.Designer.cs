@@ -1436,6 +1436,114 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to X axis.
+        /// </summary>
+        public static string TraceDirection_X {
+            get {
+                return ResourceManager.GetString("TraceDirection_X", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X+Y axis.
+        /// </summary>
+        public static string TraceDirection_XY {
+            get {
+                return ResourceManager.GetString("TraceDirection_XY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All 3 axis.
+        /// </summary>
+        public static string TraceDirection_XYZ {
+            get {
+                return ResourceManager.GetString("TraceDirection_XYZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X+Z axis.
+        /// </summary>
+        public static string TraceDirection_XZ {
+            get {
+                return ResourceManager.GetString("TraceDirection_XZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y axis.
+        /// </summary>
+        public static string TraceDirection_Y {
+            get {
+                return ResourceManager.GetString("TraceDirection_Y", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y+Z axis.
+        /// </summary>
+        public static string TraceDirection_YZ {
+            get {
+                return ResourceManager.GetString("TraceDirection_YZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Z axis.
+        /// </summary>
+        public static string TraceDirection_Z {
+            get {
+                return ResourceManager.GetString("TraceDirection_Z", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.
+        /// </summary>
+        public static string TraceId_Id1 {
+            get {
+                return ResourceManager.GetString("TraceId_Id1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        public static string TraceId_Id2 {
+            get {
+                return ResourceManager.GetString("TraceId_Id2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3.
+        /// </summary>
+        public static string TraceId_Id3 {
+            get {
+                return ResourceManager.GetString("TraceId_Id3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4.
+        /// </summary>
+        public static string TraceId_Id4 {
+            get {
+                return ResourceManager.GetString("TraceId_Id4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5.
+        /// </summary>
+        public static string TraceId_Id5 {
+            get {
+                return ResourceManager.GetString("TraceId_Id5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap transform {

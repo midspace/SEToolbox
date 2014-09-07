@@ -12,8 +12,8 @@
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter"/>
     </Window.Resources>
     <Window.Cursor>
@@ -39,11 +39,11 @@
                 <Button ToolTip="Browse for Model" Command="{Binding Browse3DModelCommand}" VerticalAlignment="Center" Grid.Column="2">
                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                 </Button>
-                <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8,0,0,0" Visibility="{Binding IsValidFile, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8,0,0,0" Visibility="{Binding IsValidModel, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=check24}" VerticalAlignment="Center"/>
                     <TextBlock Text="" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8,0,0,0" Visibility="{Binding IsWrongFile, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8,0,0,0" Visibility="{Binding IsWrongModel, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=error24}" VerticalAlignment="Center"/>
                     <TextBlock Text="Invalid file specified" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
@@ -51,10 +51,30 @@
             </Grid>
             <Grid Grid.Row="1">
                 <Border BorderBrush="Black" BorderThickness="1">
-                    <helix:HelixViewport3D>
+                    <helix:HelixViewport3D ShowCoordinateSystem="True" ShowCameraTarget="True" ShowFieldOfView="False" ShowTriangleCountInfo="True">
                         <helix:DefaultLights/>
-                        <helix:CoordinateSystemVisual3D/>
-                        <ModelVisual3D Content="{Binding Model}"/>
+                        <ModelVisual3D Content="{Binding Model}">
+                            <ModelVisual3D.Transform>
+                                <Transform3DGroup>
+                                    <RotateTransform3D>
+                                        <RotateTransform3D.Rotation>
+                                            <AxisAngleRotation3D Axis="0,0,1" Angle="{Binding RotateRoll}"/>
+                                        </RotateTransform3D.Rotation>
+                                    </RotateTransform3D>
+                                    <RotateTransform3D>
+                                        <RotateTransform3D.Rotation>
+                                            <AxisAngleRotation3D Axis="0,1,0" Angle="{Binding RotatePitch}"/>
+                                        </RotateTransform3D.Rotation>
+                                    </RotateTransform3D>
+                                    <RotateTransform3D>
+                                        <RotateTransform3D.Rotation>
+                                            <AxisAngleRotation3D Axis="-1,0,0" Angle="{Binding RotateYaw}"/>
+                                        </RotateTransform3D.Rotation>
+                                    </RotateTransform3D>
+                                    <TranslateTransform3D OffsetX="0" OffsetY="0" OffsetZ="0" />
+                                </Transform3DGroup>
+                            </ModelVisual3D.Transform>
+                        </ModelVisual3D>
                     </helix:HelixViewport3D>
                 </Border>
             </Grid>
@@ -185,6 +205,46 @@
                         </GroupBox>
                     </StackPanel>
                 </TabItem>
+                <TabItem Header="Quality/Speed">
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Trace Type:" Grid.Row="0"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceTypeEnum}}" SelectedValue="{Binding TraceType}" Margin="0,1,0,3">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Label Content="Trace Directions:" Grid.Row="1"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceDirectionEnum}}" SelectedValue="{Binding TraceDirection}" Margin="0,1,0,3">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <!--<Label Content="Trace Count:" Grid.Row="2"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceIdEnum}}" SelectedValue="{Binding TraceCount}" Margin="0,1,0,3">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>-->
+                    </Grid>
+                </TabItem>
                 <TabItem Header="Position">
                     <StackPanel Grid.Row="6" Grid.ColumnSpan="3" Orientation="Horizontal">
                         <GroupBox Header="Position" MinWidth="120">
@@ -246,10 +306,10 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <!--Import To Asteroid settings-->
-                            <Label Content="Ore Shell:" Grid.Row="2" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding OutsideMaterialsCollection}" SelectedValue="{Binding OutsideStockMaterial}" DisplayMemberPath="DisplayName" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <Label Content="Ore Inside:" Grid.Row="3" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName" Visibility="{Binding IsAsteroid, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <Label Content="Ore Shell:" Grid.Row="2"/>
+                            <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding OutsideMaterialsCollection}" SelectedValue="{Binding OutsideStockMaterial}" DisplayMemberPath="DisplayName"/>
+                            <Label Content="Ore Inside:" Grid.Row="3"/>
+                            <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName"/>
                         </Grid>
                         <ListView Grid.Column="1" ItemsSource="{Binding VolmeticMapList, Mode=OneWay}" SelectedValue="{Binding SelectedVolmeticMapList}">
                             <ListView.View>

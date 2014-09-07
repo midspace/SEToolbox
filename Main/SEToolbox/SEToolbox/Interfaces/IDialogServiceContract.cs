@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Interfaces
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Windows;
@@ -68,6 +69,14 @@
         /// A nullable value of type bool that signifies how a window was closed by the user.
         /// </returns>
         public bool? ShowDialog<T>(object ownerViewModel, object viewModel) where T : Window
+        {
+            Contract.Requires(ownerViewModel != null);
+            Contract.Requires(viewModel != null);
+
+            return default(bool?);
+        }
+
+        public bool? ShowDialog<T>(object ownerViewModel, object viewModel, Action action) where T : Window
         {
             Contract.Requires(ownerViewModel != null);
             Contract.Requires(viewModel != null);

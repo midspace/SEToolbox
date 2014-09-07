@@ -14,6 +14,7 @@
         private string _filename;
         private Model3D _model;
         private bool _isValidModel;
+        private bool _isValidEntity;
 
         private BindableSize3DModel _originalModelSize;
         private BindableSize3DIModel _newModelSize;
@@ -35,6 +36,9 @@
         private MaterialSelectionModel _outsideStockMaterial;
         private MaterialSelectionModel _insideStockMaterial;
         private string _sourceFile;
+        private double _rotateYaw;
+        private double _rotatePitch;
+        private double _rotateRoll;
 
         #endregion
 
@@ -43,10 +47,7 @@
         public Import3DAsteroidModel()
         {
             _outsideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>();
-            _insideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>
-            {
-                new MaterialSelectionModel {Value = null, DisplayName = "Empty"}
-            };
+            _insideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>();
 
             foreach (var material in SpaceEngineersApi.GetMaterialList())
             {
@@ -59,7 +60,7 @@
 
             TraceType = Interop.Asteroids.TraceType.Odd;
             TraceCount = Interop.Asteroids.TraceCount.Trace5;
-            TraceDirection = Interop.Asteroids.TraceDirection.XYZ;
+            TraceDirection = Interop.Asteroids.TraceDirection.X;
         }
 
         #endregion
@@ -68,10 +69,7 @@
 
         public string Filename
         {
-            get
-            {
-                return _filename;
-            }
+            get { return _filename; }
 
             set
             {
@@ -85,10 +83,7 @@
 
         public Model3D Model
         {
-            get
-            {
-                return _model;
-            }
+            get { return _model; }
 
             set
             {
@@ -100,13 +95,12 @@
             }
         }
 
-
+        /// <summary>
+        /// Indicates if the selected model file the user has specified is a valid model.
+        /// </summary>
         public bool IsValidModel
         {
-            get
-            {
-                return _isValidModel;
-            }
+            get { return _isValidModel; }
 
             set
             {
@@ -118,12 +112,26 @@
             }
         }
 
+        /// <summary>
+        /// Indicates if the Entity created at the end of processing is valid.
+        /// </summary>
+        public bool IsValidEntity
+        {
+            get { return _isValidEntity; }
+
+            set
+            {
+                if (value != _isValidEntity)
+                {
+                    _isValidEntity = value;
+                    RaisePropertyChanged(() => IsValidEntity);
+                }
+            }
+        }
+
         public BindableSize3DModel OriginalModelSize
         {
-            get
-            {
-                return _originalModelSize;
-            }
+            get { return _originalModelSize; }
 
             set
             {
@@ -137,10 +145,7 @@
 
         public BindableSize3DIModel NewModelSize
         {
-            get
-            {
-                return _newModelSize;
-            }
+            get { return _newModelSize; }
 
             set
             {
@@ -154,10 +159,7 @@
 
         public BindablePoint3DModel NewModelScale
         {
-            get
-            {
-                return _newModelScale;
-            }
+            get { return _newModelScale; }
 
             set
             {
@@ -171,10 +173,7 @@
 
         public BindablePoint3DModel Position
         {
-            get
-            {
-                return _position;
-            }
+            get { return _position; }
 
             set
             {
@@ -188,10 +187,7 @@
 
         public BindableVector3DModel Forward
         {
-            get
-            {
-                return _forward;
-            }
+            get { return _forward; }
 
             set
             {
@@ -205,10 +201,7 @@
 
         public BindableVector3DModel Up
         {
-            get
-            {
-                return _up;
-            }
+            get { return _up; }
 
             set
             {
@@ -222,10 +215,7 @@
 
         public MyPositionAndOrientation CharacterPosition
         {
-            get
-            {
-                return _characterPosition;
-            }
+            get { return _characterPosition; }
 
             set
             {
@@ -237,10 +227,7 @@
 
         public TraceType TraceType
         {
-            get
-            {
-                return _traceType;
-            }
+            get { return _traceType; }
 
             set
             {
@@ -254,10 +241,7 @@
 
         public TraceCount TraceCount
         {
-            get
-            {
-                return _traceCount;
-            }
+            get { return _traceCount; }
 
             set
             {
@@ -271,10 +255,7 @@
 
         public TraceDirection TraceDirection
         {
-            get
-            {
-                return _traceDirection;
-            }
+            get { return _traceDirection; }
 
             set
             {
@@ -288,10 +269,7 @@
 
         public double MultipleScale
         {
-            get
-            {
-                return _multipleScale;
-            }
+            get { return _multipleScale; }
 
             set
             {
@@ -305,10 +283,7 @@
 
         public double MaxLengthScale
         {
-            get
-            {
-                return _maxLengthScale;
-            }
+            get { return _maxLengthScale; }
 
             set
             {
@@ -322,10 +297,7 @@
 
         public double BuildDistance
         {
-            get
-            {
-                return _buildDistance;
-            }
+            get { return _buildDistance; }
 
             set
             {
@@ -339,10 +311,7 @@
 
         public bool IsMultipleScale
         {
-            get
-            {
-                return _isMultipleScale;
-            }
+            get { return _isMultipleScale; }
 
             set
             {
@@ -356,10 +325,7 @@
 
         public bool IsMaxLengthScale
         {
-            get
-            {
-                return _isMaxLengthScale;
-            }
+            get { return _isMaxLengthScale; }
 
             set
             {
@@ -373,27 +339,18 @@
 
         public ObservableCollection<MaterialSelectionModel> OutsideMaterialsCollection
         {
-            get
-            {
-                return _outsideMaterialsCollection;
-            }
+            get { return _outsideMaterialsCollection; }
         }
 
 
         public ObservableCollection<MaterialSelectionModel> InsideMaterialsCollection
         {
-            get
-            {
-                return _insideMaterialsCollection;
-            }
+            get { return _insideMaterialsCollection; }
         }
 
         public MaterialSelectionModel OutsideStockMaterial
         {
-            get
-            {
-                return _outsideStockMaterial;
-            }
+            get { return _outsideStockMaterial; }
 
             set
             {
@@ -407,10 +364,7 @@
 
         public MaterialSelectionModel InsideStockMaterial
         {
-            get
-            {
-                return _insideStockMaterial;
-            }
+            get { return _insideStockMaterial; }
 
             set
             {
@@ -424,10 +378,7 @@
 
         public string SourceFile
         {
-            get
-            {
-                return _sourceFile;
-            }
+            get { return _sourceFile; }
 
             set
             {
@@ -435,6 +386,48 @@
                 {
                     _sourceFile = value;
                     RaisePropertyChanged(() => SourceFile);
+                }
+            }
+        }
+
+        public double RotateYaw
+        {
+            get { return _rotateYaw; }
+
+            set
+            {
+                if (value != _rotateYaw)
+                {
+                    _rotateYaw = value;
+                    RaisePropertyChanged(() => RotateYaw);
+                }
+            }
+        }
+
+        public double RotatePitch
+        {
+            get { return _rotatePitch; }
+
+            set
+            {
+                if (value != _rotatePitch)
+                {
+                    _rotatePitch = value;
+                    RaisePropertyChanged(() => RotatePitch);
+                }
+            }
+        }
+
+        public double RotateRoll
+        {
+            get { return _rotateRoll; }
+
+            set
+            {
+                if (value != _rotateRoll)
+                {
+                    _rotateRoll = value;
+                    RaisePropertyChanged(() => RotateRoll);
                 }
             }
         }
