@@ -15,6 +15,7 @@
         <Style TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
+        <TextBlock x:Shared="False" x:Key="DisplayBlock" Text="{Binding DisplayName}" />
     </UserControl.Resources>
     <Grid>
         <Grid>
@@ -43,6 +44,36 @@
                         <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
+                <MenuItem Header="Ore/Material">
+                    <!--<MenuItem Header="Re-seed Ore" Command="{Binding ReseedCommand}" />-->
+                    <MenuItem Header="Replace All Material" ItemsSource="{Binding GameMaterialList}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
+                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.ReplaceAllCommand}" />
+                                <Setter Property="CommandParameter" Value="{Binding MaterialName}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                    <MenuItem Header="Replace surface Material" ItemsSource="{Binding GameMaterialList}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
+                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.ReplaceSurfaceCommand}" />
+                                <Setter Property="CommandParameter" Value="{Binding MaterialName}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                    <MenuItem Header="Replace Selected Material" Command="{Binding ReplaceSelectedMenuCommand}" ItemsSource="{Binding EditMaterialList}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
+                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.ReplaceSelectedCommand}" />
+                                <Setter Property="CommandParameter" Value="{Binding MaterialName}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Copy text detail to Clipboard" Command="{Binding CopyDetailCommand}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />
@@ -92,7 +123,7 @@
             <TextBlock Grid.Row="10" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
             <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
 
-            <controls:SortableListView Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding MaterialAssets}"
+            <controls:SortableListView Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding MaterialAssets, Mode=OneWay}" SelectedValue="{Binding SelectedMaterialAsset}"
                 ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                 <ListView.View>
                     <GridView>
@@ -113,6 +144,24 @@
                         </controls:SortableGridViewColumn>
                     </GridView>
                 </ListView.View>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <!--<MenuItem Header="Delete" Command="{Binding DeleteObjectCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" />
+                            </MenuItem.Icon>
+                        </MenuItem>-->
+                        <MenuItem Header="Replace Material" Command="{Binding ReplaceSelectedMenuCommand}" ItemsSource="{Binding EditMaterialList}">
+                            <MenuItem.ItemContainerStyle>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
+                                    <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.ReplaceSelectedCommand}" />
+                                    <Setter Property="CommandParameter" Value="{Binding MaterialName}" />
+                                </Style>
+                            </MenuItem.ItemContainerStyle>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
             </controls:SortableListView>
             <controls:BusyIndicator Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>

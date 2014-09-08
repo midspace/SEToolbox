@@ -21,10 +21,13 @@
         private MyPositionAndOrientation _characterPosition;
         private bool _isStockVoxel;
         private bool _isFileVoxel;
+        private bool _isSphere;
         private string _stockVoxel;
         private MaterialSelectionModel _stockMaterial;
         private List<string> _stockVoxelFileList;
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
+        private int _sphereRadius;
+        private int _sphereShellRadius;
 
         #endregion
 
@@ -42,6 +45,9 @@
             {
                 _materialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
             }
+            
+            SphereRadius = 150;
+            SphereShellRadius = 0;
         }
 
         #endregion
@@ -50,10 +56,7 @@
 
         public string Filename
         {
-            get
-            {
-                return _filename;
-            }
+            get { return _filename; }
 
             set
             {
@@ -67,10 +70,7 @@
 
         public string SourceFile
         {
-            get
-            {
-                return _sourceFile;
-            }
+            get { return _sourceFile; }
 
             set
             {
@@ -88,10 +88,7 @@
 
         public bool IsValidVoxelFile
         {
-            get
-            {
-                return _isValidVoxelFile;
-            }
+            get { return _isValidVoxelFile; }
 
             set
             {
@@ -105,10 +102,7 @@
 
         public BindablePoint3DModel Position
         {
-            get
-            {
-                return _position;
-            }
+            get { return _position; }
 
             set
             {
@@ -122,10 +116,7 @@
 
         public BindableVector3DModel Forward
         {
-            get
-            {
-                return _forward;
-            }
+            get { return _forward; }
 
             set
             {
@@ -139,10 +130,7 @@
 
         public BindableVector3DModel Up
         {
-            get
-            {
-                return _up;
-            }
+            get { return _up; }
 
             set
             {
@@ -156,10 +144,7 @@
 
         public MyPositionAndOrientation CharacterPosition
         {
-            get
-            {
-                return _characterPosition;
-            }
+            get { return _characterPosition; }
 
             set
             {
@@ -171,10 +156,7 @@
 
         public bool IsStockVoxel
         {
-            get
-            {
-                return _isStockVoxel;
-            }
+            get { return _isStockVoxel; }
 
             set
             {
@@ -188,10 +170,7 @@
 
         public bool IsFileVoxel
         {
-            get
-            {
-                return _isFileVoxel;
-            }
+            get { return _isFileVoxel; }
 
             set
             {
@@ -203,12 +182,23 @@
             }
         }
 
+        public bool IsSphere
+        {
+            get { return _isSphere; }
+
+            set
+            {
+                if (value != _isSphere)
+                {
+                    _isSphere = value;
+                    RaisePropertyChanged(() => IsSphere);
+                }
+            }
+        }
+
         public string StockVoxel
         {
-            get
-            {
-                return _stockVoxel;
-            }
+            get { return _stockVoxel; }
 
             set
             {
@@ -227,10 +217,7 @@
 
         public List<string> StockVoxelFileList
         {
-            get
-            {
-                return _stockVoxelFileList;
-            }
+            get { return _stockVoxelFileList; }
 
             set
             {
@@ -244,18 +231,12 @@
 
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
         {
-            get
-            {
-                return _materialsCollection;
-            }
+            get { return _materialsCollection; }
         }
 
         public MaterialSelectionModel StockMaterial
         {
-            get
-            {
-                return _stockMaterial;
-            }
+            get { return _stockMaterial; }
 
             set
             {
@@ -263,6 +244,34 @@
                 {
                     _stockMaterial = value;
                     RaisePropertyChanged(() => StockMaterial);
+                }
+            }
+        }
+
+        public int SphereRadius
+        {
+            get { return _sphereRadius; }
+
+            set
+            {
+                if (value != _sphereRadius)
+                {
+                    _sphereRadius = value;
+                    RaisePropertyChanged(() => SphereRadius);
+                }
+            }
+        }
+
+        public int SphereShellRadius
+        {
+            get { return _sphereShellRadius; }
+
+            set
+            {
+                if (value != _sphereShellRadius)
+                {
+                    _sphereShellRadius = value;
+                    RaisePropertyChanged(() => SphereShellRadius);
                 }
             }
         }

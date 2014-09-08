@@ -5,7 +5,7 @@
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Asteroid" Height="190" Width="440" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="Import Asteroid" Height="220" Width="445" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -23,6 +23,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -31,22 +32,49 @@
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <RadioButton Content="Stock:" Margin="0,0,4,0" VerticalAlignment="Center" Name="uxInitialElement" IsChecked="{Binding IsStockVoxel}" />
+                <RadioButton Margin="0,0,4,0" Content="Stock" VerticalAlignment="Center" Name="uxInitialElement" IsChecked="{Binding IsStockVoxel}" />
                 <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding StockVoxelFileList}" SelectedValue="{Binding StockVoxel}"/>
-                <RadioButton Content="File" Grid.Row="1" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
+                <RadioButton Grid.Row="1" Grid.Column="0" Content="File" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
                     <TextBox Width="178" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="Must be valid Space Engineers Asteroid VOX file."/>
                     <Button ToolTip="Browse for Image" Command="{Binding BrowseVoxelCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>
-                <Canvas Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Width="20" Height="60" Margin="0,0" VerticalAlignment="Center">
-                    <Line Fill="Red" Stroke="Black" Width="10" Height="10" StrokeThickness="2" />
-                    <Path StrokeThickness="1" Stroke="black" Data= "M 0,15 L 10,15 L 10,45 L 0,45"/>
-                    <Path StrokeThickness="1" Stroke="black" Data= "M 10,30 L 15,30"/>
-                    <Path StrokeThickness="1" Fill="Black" Data= "M 15,25 L 20,30 L 15,35 L 15,25"/>
+
+                <RadioButton Grid.Row="2" Grid.Column="0" Content="Sphere" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsSphere}"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" >
+                    <Grid Width="100">
+                        <TextBox ToolTip="Radius (M) (1 to 500)" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="SphereRadius" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <converters:RangeRuleI Min="1" Max="500"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBlock Text="Radius" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                    </Grid>
+                    <Grid Width="100">
+                        <TextBox ToolTip="Shell thickness. 0 = No shell" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="SphereShellRadius" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <converters:RangeRuleI Min="0" Max="500"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBlock Text="Shell" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                    </Grid>
+                </StackPanel>
+
+                <Canvas Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Width="20" Height="80" Margin="0,0" VerticalAlignment="Center">
+                    <Path StrokeThickness="1" Stroke="black" Data= "M 0,10 L 10,10 L 10,70 L 0,70 M 00,40 L 15,40 "/>
+                    <Path StrokeThickness="1" Fill="Black" Data= "M 15,35 L 20,40 L 15,45 L 15,35"/>
                 </Canvas>
-                <ComboBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="130" ItemsSource="{Binding MaterialsCollection}" SelectedValue="{Binding StockMaterial}" DisplayMemberPath="DisplayName"/>
+                <ComboBox Grid.Row="0" Grid.RowSpan="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="130" ItemsSource="{Binding MaterialsCollection}" SelectedValue="{Binding StockMaterial}" DisplayMemberPath="DisplayName"/>
             </Grid>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8">

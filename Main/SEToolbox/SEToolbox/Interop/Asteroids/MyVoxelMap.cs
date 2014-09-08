@@ -712,6 +712,7 @@ namespace SEToolbox.Interop.Asteroids
         /// <summary>
         /// This will replace all the materials inside the asteroid with specified material.
         /// </summary>
+        /// <param name="defaultMaterial"></param>
         /// <param name="materialName"></param>
         public void ForceBaseMaterial(string defaultMaterial, string materialName)
         {

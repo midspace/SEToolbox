@@ -55,6 +55,11 @@
             get { return new DelegateCommand(LoadExecuted, LoadCanExecute); }
         }
 
+        public ICommand RefreshCommand
+        {
+            get { return new DelegateCommand(RefreshExecuted, RefreshCanExecute); }
+        }
+
         public ICommand CancelCommand
         {
             get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
@@ -151,6 +156,16 @@
         public void LoadExecuted()
         {
             CloseResult = true;
+        }
+
+        public bool RefreshCanExecute()
+        {
+            return !IsBusy;
+        }
+
+        public void RefreshExecuted()
+        {
+            _dataModel.Refresh();
         }
 
         public bool CancelCanExecute()

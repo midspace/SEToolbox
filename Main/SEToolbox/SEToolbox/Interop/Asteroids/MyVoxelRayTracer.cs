@@ -23,7 +23,6 @@
         public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, ScaleTransform3D scale, Transform3D rotateTransform, TraceType traceType, TraceCount traceCount, TraceDirection traceDirection,
             Action<double, double> resetProgress, Action incrementProgress, Func<bool> checkCancel, Action complete)
         {
-            var cancel = false;
             var traceDirectionCount = 0;
             var materials = new List<byte>();
             var faceMaterials = new List<byte>();
@@ -172,7 +171,7 @@
 
                             List<Point3D[]> testRays = null;
                             if (traceType == TraceType.Odd)
-                                testRays = new List<Point3D[]>()
+                                testRays = new List<Point3D[]>
                             {
                                 new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
                                 new [] {new Point3D(xMin, y -0.5f + offset, z -0.5f + offset), new Point3D(xMax, y -0.5f + offset, z -0.5f + offset)},
@@ -181,7 +180,7 @@
                                 new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)}
                             };
                             else if (traceType == TraceType.Even)
-                                testRays = new List<Point3D[]>()
+                                testRays = new List<Point3D[]>
                             {
                                 new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)},
                                 new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
@@ -190,7 +189,7 @@
                                 new [] {new Point3D(xMin, y + 1.0f - offset, z + 1.0f - offset), new Point3D(xMax, y + 1.0f - offset, z + 1.0f - offset)}
                             };
 
-                            var task = new Task((obj) =>
+                            var task = new Task(obj =>
                             {
                                 var bgw = (RayTracerTaskWorker)obj;
                                 var tracers = new List<Trace>();
@@ -332,7 +331,7 @@
 
                             List<Point3D[]> testRays = null;
                             if (traceType == TraceType.Odd)
-                                testRays = new List<Point3D[]>()
+                                testRays = new List<Point3D[]>
                             {
                                 new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
                                 new [] {new Point3D(x -0.5f + offset, yMin, z -0.5f + offset), new Point3D(x -0.5f + offset, yMax, z -0.5f + offset)},
@@ -341,7 +340,7 @@
                                 new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)}
                             };
                             else if (traceType == TraceType.Even)
-                                testRays = new List<Point3D[]>()
+                                testRays = new List<Point3D[]>
                             {
                                 new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)},
                                 new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
@@ -350,7 +349,7 @@
                                 new [] {new Point3D(x + 1.0f - offset, yMin, z + 1.0f - offset), new Point3D(x + 1.0f - offset, yMax, z + 1.0f - offset)}
                             };
 
-                            var task = new Task((obj) =>
+                            var task = new Task(obj =>
                             {
                                 var bgw = (RayTracerTaskWorker)obj;
                                 var tracers = new List<Trace>();
@@ -501,7 +500,7 @@
 
                             List<Point3D[]> testRays = null;
                             if (traceType == TraceType.Odd)
-                                testRays = new List<Point3D[]>()
+                                testRays = new List<Point3D[]>
                             {
                                 new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
                                 new [] {new Point3D(x -0.5f + offset, y -0.5f + offset, zMin), new Point3D(x -0.5f + offset, y -0.5f + offset, zMax)},
@@ -510,7 +509,7 @@
                                 new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)}
                             };
                             else if (traceType == TraceType.Even)
-                                testRays = new List<Point3D[]>()
+                                testRays = new List<Point3D[]>
                             {
                                 new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)},
                                 new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
@@ -519,7 +518,7 @@
                                 new [] {new Point3D(x + 1.0f - offset, y + 1.0f - offset, zMin), new Point3D(x + 1.0f - offset, y + 1.0f - offset, zMax)}
                             };
 
-                            var task = new Task((obj) =>
+                            var task = new Task(obj =>
                             {
                                 var bgw = (RayTracerTaskWorker)obj;
                                 var tracers = new List<Trace>();
@@ -718,9 +717,9 @@
         {
             public MyMeshModel(MeshGeometry3D[] geometery, string material, string faceMaterial)
             {
-                this.Geometery = geometery;
-                this.Material = material;
-                this.FaceMaterial = faceMaterial;
+                Geometery = geometery;
+                Material = material;
+                FaceMaterial = faceMaterial;
             }
 
             public MeshGeometry3D[] Geometery { get; set; }
@@ -737,8 +736,8 @@
 
             public GeometeryDetail(Int32[] triangles, Point3D[] positions)
             {
-                this.Triangles = triangles;
-                this.Positions = positions;
+                Triangles = triangles;
+                Positions = positions;
             }
 
             public Int32[] Triangles { get; set; }
@@ -749,12 +748,12 @@
         {
             public Trace(Point3D point, int normal)
             {
-                this.Point = point;
-                this.Face = MeshFace.Undefined;
+                Point = point;
+                Face = MeshFace.Undefined;
                 if (normal == 1)
-                    this.Face = MeshFace.Nearside;
+                    Face = MeshFace.Nearside;
                 else if (normal == -1)
-                    this.Face = MeshFace.Farside;
+                    Face = MeshFace.Farside;
             }
 
             public Point3D Point { get; private set; }
@@ -767,10 +766,10 @@
 
             public RayTracerTaskWorker(int modelIdx, int x, int y, int z)
             {
-                this.ModelIdx = modelIdx;
-                this.X = x;
-                this.Y = y;
-                this.Z = z;
+                ModelIdx = modelIdx;
+                X = x;
+                Y = y;
+                Z = z;
             }
 
             #endregion

@@ -136,6 +136,9 @@ Offical file extensions in use.
 ".sbw" Sand Box World. Zip compressed game world, used by workshop downloads.
 ".sbm" Sand Box Mod. Zip compressed mods, used by workshop downloads.
 
+Localization
+  http://www.spaceengineersgame.com/localization.html
+
 Unoffical file extensions.
 ".sbo" Sand Box Object. I made this one up for import and export of ships (MyObjectBuilder_CubeGrid).  .sbc seemed like it would conflict with the other offical extensions.
   Though looking at content assets, prefab fighters use the ".sbc" extension which are MyObjectBuilder_CubeGrid, so I will change this now.

@@ -1,13 +1,17 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Text;
     using System.Windows;
     using System.Windows.Input;
 
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using SEToolbox.Support;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -30,6 +34,31 @@
         public ICommand CopyDetailCommand
         {
             get { return new DelegateCommand(CopyDetailExecuted, CopyDetailCanExecute); }
+        }
+
+        public ICommand ReseedCommand
+        {
+            get { return new DelegateCommand(ReseedExecuted, ReseedCanExecute); }
+        }
+
+        public ICommand ReplaceSurfaceCommand
+        {
+            get { return new DelegateCommand<string>(ReplaceSurfaceExecuted, ReplaceSurfaceCanExecute); }
+        }
+
+        public ICommand ReplaceAllCommand
+        {
+            get { return new DelegateCommand<string>(ReplaceAllExecuted, ReplaceAllCanExecute); }
+        }
+
+        public ICommand ReplaceSelectedMenuCommand
+        {
+            get { return new DelegateCommand<string>(new Func<string, bool>(ReplaceSelectedMenuCanExecute)); }
+        }
+
+        public ICommand ReplaceSelectedCommand
+        {
+            get { return new DelegateCommand<string>(ReplaceSelectedExecuted, ReplaceSelectedCanExecute); }
         }
 
         #endregion
@@ -82,6 +111,24 @@
             set { DataModel.MaterialAssets = value; }
         }
 
+        public VoxelMaterialAssetModel SelectedMaterialAsset
+        {
+            get { return DataModel.SelectedMaterialAsset; }
+            set { DataModel.SelectedMaterialAsset = value; }
+        }
+
+        public List<VoxelMaterialAssetModel> GameMaterialList
+        {
+            get { return DataModel.GameMaterialList; }
+            set { DataModel.GameMaterialList = value; }
+        }
+
+        public List<VoxelMaterialAssetModel> EditMaterialList
+        {
+            get { return DataModel.EditMaterialList; }
+            set { DataModel.EditMaterialList = value; }
+        }
+
         #endregion
 
         #region methods
@@ -112,9 +159,111 @@
                 VoxCells,
                 PlayerDistance,
                 PositionAndOrientation.Value.Position.X, PositionAndOrientation.Value.Position.Y, PositionAndOrientation.Value.Position.Z,
-                ore.ToString());
+                ore);
 
             Clipboard.SetText(detail);
+        }
+
+        public bool ReseedCanExecute()
+        {
+            return true;
+        }
+
+        public void ReseedExecuted()
+        {
+
+        }
+
+        public bool ReplaceSurfaceCanExecute(string materialName)
+        {
+            return true;
+        }
+
+        public void ReplaceSurfaceExecuted(string materialName)
+        {
+            MainViewModel.IsBusy = true;
+            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
+
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile, SpaceEngineersApi.GetMaterialName(0), true);
+
+            asteroid.ForceShellMaterial(materialName, 1);
+
+            var tempfilename = TempfileUtil.NewFilename();
+            asteroid.Save(tempfilename);
+            DataModel.SourceVoxelFilepath = tempfilename;
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+
+            DataModel.MaterialAssets = null;
+            DataModel.InitializeAsync();
+        }
+
+        public bool ReplaceAllCanExecute(string materialName)
+        {
+            return true;
+        }
+
+        public void ReplaceAllExecuted(string materialName)
+        {
+            MainViewModel.IsBusy = true;
+            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
+
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile, SpaceEngineersApi.GetMaterialName(0), true);
+
+            asteroid.ForceBaseMaterial(materialName, materialName);
+            asteroid.ForceVoxelFaceMaterial(SpaceEngineersApi.GetMaterialName(0));
+
+            var tempfilename = TempfileUtil.NewFilename();
+            asteroid.Save(tempfilename);
+            DataModel.SourceVoxelFilepath = tempfilename;
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+
+            DataModel.MaterialAssets = null;
+            DataModel.InitializeAsync();
+        }
+
+        public bool ReplaceSelectedMenuCanExecute(string materialName)
+        {
+            return SelectedMaterialAsset != null;
+        }
+
+        public bool ReplaceSelectedCanExecute(string materialName)
+        {
+            return SelectedMaterialAsset != null;
+        }
+
+        public void ReplaceSelectedExecuted(string materialName)
+        {
+            MainViewModel.IsBusy = true;
+            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
+
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile, SpaceEngineersApi.GetMaterialName(0), true);
+
+            if (string.IsNullOrEmpty(materialName))
+            {
+                asteroid.RemoveMaterial(SelectedMaterialAsset.MaterialName, null);
+                DataModel.VoxCells = asteroid.SumVoxelCells();
+            }
+            else
+                asteroid.ReplaceMaterial(SelectedMaterialAsset.MaterialName, materialName);
+
+            var tempfilename = TempfileUtil.NewFilename();
+            asteroid.Save(tempfilename);
+            DataModel.SourceVoxelFilepath = tempfilename;
+
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+
+            DataModel.UpdateGeneralFromEntityBase();
+            DataModel.MaterialAssets = null;
+            DataModel.InitializeAsync();
         }
 
         #endregion

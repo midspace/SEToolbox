@@ -17,6 +17,8 @@
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
     {
+        #region fields
+
         [NonSerialized]
         private static readonly object Locker = new object();
 
@@ -28,7 +30,18 @@
         private long _voxCells;
 
         [NonSerialized]
+        private VoxelMaterialAssetModel _selectedMaterialAsset;
+
+        [NonSerialized]
         private List<VoxelMaterialAssetModel> _materialAssets;
+
+        [NonSerialized]
+        private List<VoxelMaterialAssetModel> _gameMaterialList;
+
+        [NonSerialized]
+        private List<VoxelMaterialAssetModel> _editMaterialList;
+
+        #endregion
 
         #region ctor
 
@@ -40,6 +53,12 @@
                 VoxelFilepath = Path.Combine(voxelPath, VoxelMap.Filename);
                 ReadVoxelDetails(VoxelFilepath);
             }
+
+            var materialList = SpaceEngineersApi.GetMaterialList().Select(m => m.Id.SubtypeName).OrderBy(s => s).ToList();
+            
+            GameMaterialList = new List<VoxelMaterialAssetModel>(materialList.Select(s => new VoxelMaterialAssetModel { MaterialName = s, DisplayName = s }));
+            EditMaterialList = new List<VoxelMaterialAssetModel> { new VoxelMaterialAssetModel { MaterialName = null, DisplayName = "Delete/Remove" } };
+            EditMaterialList.AddRange(materialList.Select(s => new VoxelMaterialAssetModel { MaterialName = s, DisplayName = s }));
         }
 
         #endregion
@@ -164,6 +183,7 @@
                 {
                     _voxCells = value;
                     RaisePropertyChanged(() => VoxCells);
+                    RaisePropertyChanged(() => Volume);
                 }
             }
         }
@@ -183,10 +203,7 @@
         [XmlIgnore]
         public List<VoxelMaterialAssetModel> MaterialAssets
         {
-            get
-            {
-                return _materialAssets;
-            }
+            get { return _materialAssets; }
 
             set
             {
@@ -194,6 +211,51 @@
                 {
                     _materialAssets = value;
                     RaisePropertyChanged(() => MaterialAssets);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public VoxelMaterialAssetModel SelectedMaterialAsset
+        {
+            get { return _selectedMaterialAsset; }
+
+            set
+            {
+                if (value != _selectedMaterialAsset)
+                {
+                    _selectedMaterialAsset = value;
+                    RaisePropertyChanged(() => SelectedMaterialAsset);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public List<VoxelMaterialAssetModel> GameMaterialList
+        {
+            get { return _gameMaterialList; }
+
+            set
+            {
+                if (value != _gameMaterialList)
+                {
+                    _gameMaterialList = value;
+                    RaisePropertyChanged(() => GameMaterialList);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public List<VoxelMaterialAssetModel> EditMaterialList
+        {
+            get { return _editMaterialList; }
+
+            set
+            {
+                if (value != _editMaterialList)
+                {
+                    _editMaterialList = value;
+                    RaisePropertyChanged(() => EditMaterialList);
                 }
             }
         }
@@ -270,6 +332,7 @@
                 RaisePropertyChanged(() => Size);
                 RaisePropertyChanged(() => ContentSize);
                 RaisePropertyChanged(() => VoxCells);
+                RaisePropertyChanged(() => Volume);
                 Center = new Vector3(_voxelCenter.X + 0.5f + PositionX, _voxelCenter.Y + 0.5f + PositionY, _voxelCenter.Z + 0.5f + PositionZ);
             }
         }

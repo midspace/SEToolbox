@@ -159,6 +159,12 @@
             set { _dataModel.IsFileVoxel = value; }
         }
 
+        public bool IsSphere
+        {
+            get { return _dataModel.IsSphere; }
+            set { _dataModel.IsSphere = value; }
+        }
+
         public string StockVoxel
         {
             get { return _dataModel.StockVoxel; }
@@ -181,6 +187,18 @@
             set { _dataModel.StockMaterial = value; }
         }
 
+        public int SphereRadius
+        {
+            get { return _dataModel.SphereRadius; }
+            set { _dataModel.SphereRadius = value; }
+        }
+
+        public int SphereShellRadius
+        {
+            get { return _dataModel.SphereShellRadius; }
+            set { _dataModel.SphereShellRadius = value; }
+        }
+
         #endregion
 
         #region command methods
@@ -197,7 +215,9 @@
 
         public bool CreateCanExecute()
         {
-            return (IsValidVoxelFile && IsFileVoxel) || (IsStockVoxel && StockVoxel != null);
+            return (IsValidVoxelFile && IsFileVoxel) 
+                || (IsStockVoxel && StockVoxel != null)
+                || (IsSphere && SphereRadius > 0 && SphereRadius <= 500);
         }
 
         public void CreateExecuted()
@@ -305,6 +325,23 @@
                     SourceFile = TempfileUtil.NewFilename();
                     asteroid.Save(SourceFile);
                 }
+            }
+            else if (IsSphere)
+            {
+                string material;
+                if (StockMaterial != null && StockMaterial.Value != null)
+                    material = StockMaterial.Value;
+                else
+                    material = SpaceEngineersApi.GetMaterialName(0);
+
+                originalFile = string.Format("sphere_{0}_{1}_{2}_", material.ToLowerInvariant(), SphereRadius, SphereShellRadius);
+
+                var asteroid = MyVoxelBuilder.BuildAsteroidSphere(SphereRadius > 32, SphereRadius, material, material, SphereShellRadius != 0, SphereShellRadius);
+                // TODO: progress bar.
+                asteroidCenter = asteroid.ContentCenter;
+                asteroidSize = asteroid.ContentSize;
+                SourceFile = TempfileUtil.NewFilename();
+                asteroid.Save(SourceFile);
             }
 
             // automatically number all files, and check for duplicate filenames.

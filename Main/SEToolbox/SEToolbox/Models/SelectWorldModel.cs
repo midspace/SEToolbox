@@ -119,6 +119,11 @@
             LoadSaveList();
         }
 
+        public void Refresh()
+        {
+            LoadSaveList();
+        }
+
         public string RepairSandBox()
         {
             var str = new StringBuilder();
@@ -535,7 +540,8 @@
 
             #endregion
 
-            Worlds = new ObservableCollection<SaveResource>(list.OrderByDescending(w => w.LastLoadTime));
+            foreach (var item in list.OrderByDescending(w => w.LastLoadTime))
+                Worlds.Add(item);
         }
 
         private IEnumerable<SaveResource> FindSaveFiles(string lastLoadedPath, string userName, SaveWorldType saveType, UserDataPath dataPath)

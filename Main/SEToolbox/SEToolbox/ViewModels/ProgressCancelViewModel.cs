@@ -123,7 +123,7 @@
 
                 CloseResult = false;
             }
-            
+
             _dataModel.ClearProgress();
         }
 

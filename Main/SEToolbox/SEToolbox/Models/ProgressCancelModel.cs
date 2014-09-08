@@ -144,18 +144,16 @@
         {
             MaximumProgress = maximumProgress;
             Progress = initial;
-            _elapsedTimer = new System.Diagnostics.Stopwatch();
-            
+            _elapsedTimer = new Stopwatch();
+
             _updateTimer = new Timer(1000);
             var incrementTimer = 0;
             _updateTimer.Elapsed += delegate
             {
-            //    _initEstimateTimer.Stop();
-                //calcElapsedTime(true);
                 var elapsed = _elapsedTimer.Elapsed;
                 var estimate = new TimeSpan((long)(elapsed.Ticks / (Progress / _maximumProgress)));
                 EstimatedTimeLeft = estimate - elapsed;
-                
+
                 if (incrementTimer == 10)
                 {
                     _updateTimer.Interval = 5000;
@@ -171,19 +169,9 @@
             System.Windows.Forms.Application.DoEvents();
         }
 
-        //bool fiveSecondCheck = false;
-
         public void IncrementProgress()
         {
             Progress++;
-
-            //if (!fiveSecondCheck && _elapsedTimer.Elapsed.TotalSeconds > 5 && _percent == 0)
-            //{
-            //    fiveSecondCheck = true;
-            //    calcElapsedTime(true);
-            //}
-
-            //calcElapsedTime(false);
         }
 
         public void ClearProgress()
@@ -197,30 +185,6 @@
             _elapsedTimer.Stop();
             Progress = 0;
         }
-
-        #endregion
-
-        #region helper methods
-
-        private void calcElapsedTime(bool force)
-        {
-            var p = (int)((double)Progress / _maximumProgress * 100);
-
-            if (force)
-            {
-                var elapsed = _elapsedTimer.Elapsed;
-                var estimate = new TimeSpan((long)(elapsed.Ticks / (Progress / _maximumProgress)));
-                EstimatedTimeLeft = estimate - elapsed;
-            }
-            else if (_percent < p)
-            {
-                var elapsed = _elapsedTimer.Elapsed;
-                var estimate = new TimeSpan(p == 0 ? 0 : (long)((double)elapsed.Ticks / ((double)p / 100f)));
-                _percent = p;
-                Debug.WriteLine("{0}%  {1:#,##0}/{2:#,##0}  {3}/{4}", _percent, Progress, _maximumProgress, elapsed, estimate);
-                EstimatedTimeLeft = estimate - elapsed;
-            }
-        } 
 
         #endregion
     }

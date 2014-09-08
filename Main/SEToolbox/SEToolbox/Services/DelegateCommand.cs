@@ -192,13 +192,16 @@
         /// <summary>
         ///     Constructor
         /// </summary>
+        public DelegateCommand(Func<T, bool> canExecuteMethod)
+            : this(null, canExecuteMethod, false)
+        {
+        }
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
         public DelegateCommand(Action<T> executeMethod, Func<T, bool> canExecuteMethod, bool isAutomaticRequeryDisabled)
         {
-            if (executeMethod == null)
-            {
-                throw new ArgumentNullException("executeMethod");
-            }
-
             _executeMethod = executeMethod;
             _canExecuteMethod = canExecuteMethod;
             _isAutomaticRequeryDisabled = isAutomaticRequeryDisabled;
