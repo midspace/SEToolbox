@@ -304,7 +304,7 @@
 
             foreach (var physicalItemDefinition in SpaceEngineersCore.Definitions.PhysicalItems)
             {
-                if (physicalItemDefinition.Id.SubtypeId == "CubePlacerItem")
+                if (physicalItemDefinition.Id.SubtypeId == "CubePlacerItem" || physicalItemDefinition.Id.SubtypeId == "WallPlacerItem")
                     continue;
 
                 var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);

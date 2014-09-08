@@ -26,15 +26,14 @@
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
-        <converters:StringFormatMultiValueConverter x:Key="StringFormatConverter"/>
         <converters:DistanceConverter x:Key="DistanceConverter"/>
-        <converters:I18NFormatterConverter x:Key="i18nFormatter"  />
+        <converters:I18NFormatterConverter x:Key="I18NFormatter"  />
     </Window.Resources>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
     </Window.Cursor>
     <Window.Title>
-        <MultiBinding Converter="{StaticResource i18nFormatter}" ConverterParameter="WindowMainTitle">
+        <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="WindowMainTitle">
             <Binding Path="ActiveWorld.SessionName"/>
             <Binding Path="ActiveWorld.SaveType" Converter="{StaticResource EnumToResouceConverter}"/>
         </MultiBinding>

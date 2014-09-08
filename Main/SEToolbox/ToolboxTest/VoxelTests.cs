@@ -650,11 +650,8 @@
         }
 
         [TestMethod]
-        public void FillVoxelFile()
+        public void SeedFillVoxelFile()
         {
-            //const string fileNew = @".\TestOutput\randomSeedMaterialCube.vox";
-            const string fileNew = @"C:\Users\Christopher\AppData\Roaming\SpaceEngineers\Saves\76561197961224864\Easy 01.045.013\hopebase5120.vox";
-
             SpaceEngineersCore.LoadDefinitions();
 
             var materials = SpaceEngineersApi.GetMaterialList();
@@ -686,13 +683,6 @@
 
             filler.FillAsteroid(voxelMap, fillProperties);
 
-            // Strip the original material.
-            voxelMap.RemoveMaterial(stoneMaterial.Id.SubtypeId, null);
-
-            voxelMap.Save(fileNew);
-
-            var lengthNew = new FileInfo(fileNew).Length;
-
             Assert.AreEqual(128, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(128, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(128, voxelMap.Size.Z, "Voxel Bounding size must match.");
@@ -700,6 +690,31 @@
             Assert.AreEqual(64, voxelMap.ContentSize.X, "Voxel Content size must match.");
             Assert.AreEqual(64, voxelMap.ContentSize.Y, "Voxel Content size must match.");
             Assert.AreEqual(64, voxelMap.ContentSize.Z, "Voxel Content size must match.");
+
+            var voxCells = voxelMap.SumVoxelCells();
+            Assert.AreEqual(66846720, voxCells, "Voxel cells must match.");
+
+            IList<byte> materialAssets;
+            Dictionary<byte, long> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
+
+            var stoneAssets = materialAssets.Where(c => c == SpaceEngineersApi.GetMaterialIndex(stoneMaterial.Id.SubtypeId)).ToList();
+            var ironAssets = materialAssets.Where(c => c == SpaceEngineersApi.GetMaterialIndex(ironMaterial.Id.SubtypeId)).ToList();
+            var goldAssets = materialAssets.Where(c => c == SpaceEngineersApi.GetMaterialIndex(goldMaterial.Id.SubtypeId)).ToList();
+
+            var sumAssets = (stoneAssets.Count + ironAssets.Count + goldAssets.Count) * 255;  // A cube should produce full voxcells, so all of them are 255.
+            Assert.AreEqual(voxCells, sumAssets, "Assets sum should equal cells");
+
+            // Seeder is too random to provide stable values.
+            //Assert.AreEqual(236032, stoneAssets.Count, "Stone assets should equal.");
+            //Assert.AreEqual(23040,  ironAssets.Count , "Iron assets should equal.");
+            //Assert.AreEqual(3072,  goldAssets.Count, "Gold assets should equal.");
+
+            // Strip the original material.
+            //voxelMap.RemoveMaterial(stoneMaterial.Id.SubtypeId, null);
+            //const string fileNew = @".\TestOutput\randomSeedMaterialCube.vox";
+            //voxelMap.Save(fileNew);
+            //var lengthNew = new FileInfo(fileNew).Length;
         }
     }
 }

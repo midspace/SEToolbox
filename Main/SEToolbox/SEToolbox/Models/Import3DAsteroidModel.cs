@@ -58,9 +58,9 @@
             InsideStockMaterial = InsideMaterialsCollection[0];
             OutsideStockMaterial = OutsideMaterialsCollection[0];
 
-            TraceType = Interop.Asteroids.TraceType.Odd;
-            TraceCount = Interop.Asteroids.TraceCount.Trace5;
-            TraceDirection = Interop.Asteroids.TraceDirection.X;
+            TraceType = TraceType.Odd;
+            TraceCount = TraceCount.Trace5;
+            TraceDirection = TraceDirection.X;
         }
 
         #endregion

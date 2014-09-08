@@ -17,14 +17,12 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
-    using Res = SEToolbox.Properties.Resources;
     using SEToolbox.Views;
+    using Res = SEToolbox.Properties.Resources;
 
     public class Import3DAsteroidViewModel : BaseViewModel
     {
         #region Fields
-
-        private static readonly object Locker = new object();
 
         private readonly IDialogService _dialogService;
         private readonly Func<IOpenFileDialog> _openFileDialogFactory;
@@ -302,14 +300,12 @@
             IsValidModel = false;
             IsValidEntity = false;
 
-            IOpenFileDialog openFileDialog = _openFileDialogFactory();
+            var openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Res.DialogImportModelFilter;
             openFileDialog.Title = Res.DialogImportModelTitle;
 
             // Open the dialog
-            DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
-
-            if (result == DialogResult.OK)
+            if (_dialogService.ShowOpenFileDialog(this, openFileDialog) == DialogResult.OK)
             {
                 Filename = openFileDialog.FileName;
             }
@@ -482,7 +478,7 @@
 
             #region handle dialogs and process the conversion
 
-            bool doCancel = false;
+            var doCancel = false;
 
             var progressModel = new ProgressCancelModel { Title = "Processing...", SubTitle = "Processing...", DialogText = "Time remaining: Calculating..." };
             var progressVm = new ProgressCancelViewModel(this, progressModel);
@@ -509,7 +505,7 @@
                     progressModel.ResetProgress, progressModel.IncrementProgress, cancelFunc, completedAction);
             };
 
-            var ret = _dialogService.ShowDialog<WindowProgressCancel>(this, progressVm, action);
+            _dialogService.ShowDialog<WindowProgressCancel>(this, progressVm, action);
 
             #endregion
 

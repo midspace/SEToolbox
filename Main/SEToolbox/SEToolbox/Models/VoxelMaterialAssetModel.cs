@@ -7,6 +7,8 @@
     {
         private string _materialName;
 
+        private string _displayName;
+
         private double _volume;
 
         private double _percent;
@@ -18,10 +20,7 @@
         /// </summary>
         public string MaterialName
         {
-            get
-            {
-                return _materialName;
-            }
+            get { return _materialName; }
 
             set
             {
@@ -33,14 +32,23 @@
             }
         }
 
-        // 'AssetName', which represent the texture.
+        public string DisplayName
+        {
+            get { return _displayName; }
+
+            set
+            {
+                if (value != _displayName)
+                {
+                    _displayName = value;
+                    RaisePropertyChanged(() => DisplayName);
+                }
+            }
+        }
 
         public double Volume
         {
-            get
-            {
-                return _volume;
-            }
+            get { return _volume; }
 
             set
             {
@@ -54,10 +62,7 @@
 
         public double Percent
         {
-            get
-            {
-                return _percent;
-            }
+            get { return _percent; }
 
             set
             {

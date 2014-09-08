@@ -61,7 +61,7 @@
         //{
         //    get
         //    {
-        //        return new DelegateCommand(new Action(ApplyExecuted), new Func<bool>(ApplyCanExecute));
+        //        return new DelegateCommand(ApplyExecuted, ApplyCanExecute);
         //    }
         //}
 
@@ -69,7 +69,7 @@
         //{
         //    get
         //    {
-        //        return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
+        //        return new DelegateCommand(CancelExecuted, CancelCanExecute);
         //    }
         //}
 
