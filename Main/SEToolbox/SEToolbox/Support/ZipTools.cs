@@ -316,22 +316,25 @@
         /// <returns></returns>
         public static bool IsGzipedFile(string filename)
         {
-            using (var stream = File.OpenRead(filename))
+            try
             {
-                try
+                using (var stream = File.OpenRead(filename))
                 {
-                    var b1 = stream.ReadByte();
-                    var b2 = stream.ReadByte();
-                    return (b1 == 0x1f && b2 == 0x8b);
+                    try
+                    {
+                        var b1 = stream.ReadByte();
+                        var b2 = stream.ReadByte();
+                        return (b1 == 0x1f && b2 == 0x8b);
+                    }
+                    finally
+                    {
+                        stream.Close();
+                    }
                 }
-                catch
-                {
-                    return false;
-                }
-                finally
-                {
-                    stream.Close();
-                }
+            }
+            catch
+            {
+                return false;
             }
         }
     }

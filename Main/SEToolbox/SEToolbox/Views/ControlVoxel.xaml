@@ -146,11 +146,6 @@
                 </ListView.View>
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <!--<MenuItem Header="Delete" Command="{Binding DeleteObjectCommand}">
-                            <MenuItem.Icon>
-                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" />
-                            </MenuItem.Icon>
-                        </MenuItem>-->
                         <MenuItem Header="Replace Material" Command="{Binding ReplaceSelectedMenuCommand}" ItemsSource="{Binding EditMaterialList}">
                             <MenuItem.ItemContainerStyle>
                                 <Style TargetType="MenuItem">

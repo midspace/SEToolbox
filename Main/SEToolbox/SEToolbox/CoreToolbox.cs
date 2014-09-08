@@ -143,11 +143,14 @@
 
         public bool Load(string[] args)
         {
+            // Fetch the game version and store, so it can be retrieved during crash if the toolbox makes it this far.
+            GlobalSettings.Default.SEVersion = SpaceEngineersConsts.GetSEVersion();
+
             // Test the Space Engineers version to make sure users are using an version that is new enough for SEToolbox to run with!
             // This is usually because a user has not updated a manual install of a Dedicated Server, or their Steam did not update properly.
-            if (SpaceEngineersConsts.GetSEVersion() < GlobalSettings.GetVersion(true))
+            if (GlobalSettings.Default.SEVersion < GlobalSettings.GetAppVersion(true))
             {
-                MessageBox.Show(string.Format(Res.DialogOldSEVersionMessage, SpaceEngineersConsts.GetSEVersion(), GlobalSettings.Default.SEBinPath, GlobalSettings.GetVersion()), Res.DialogOldSEVersionTitle, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show(string.Format(Res.DialogOldSEVersionMessage, SpaceEngineersConsts.GetSEVersion(), GlobalSettings.Default.SEBinPath, GlobalSettings.GetAppVersion()), Res.DialogOldSEVersionTitle, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 Application.Current.Shutdown();
                 return false;
             }

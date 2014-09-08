@@ -34,7 +34,7 @@
                 return null;
 #endif
 
-            var currentVersion = GlobalSettings.GetVersion();
+            var currentVersion = GlobalSettings.GetAppVersion();
             string webContent;
             string link;
 
