@@ -65,6 +65,11 @@
         /// </summary>
         public string IgnoreUpdateVersion { get; set; }
 
+        /// <summary>
+        /// Temporary store for Game Version.
+        /// </summary>
+        public Version SEVersion;
+
         #endregion
 
         #region methods
@@ -83,7 +88,6 @@
             UpdateValue(key, "WindowHeight", WindowHeight);
             UpdateValue(key, "AlwaysCheckForUpdates", AlwaysCheckForUpdates);
             UpdateValue(key, "IgnoreUpdateVersion", IgnoreUpdateVersion);
-            
         }
 
         public void Load()
@@ -125,7 +129,7 @@
             IgnoreUpdateVersion = null;
         }
 
-        public static Version GetVersion(bool ignoreRevision = false)
+        public static Version GetAppVersion(bool ignoreRevision = false)
         {
             var assemblyVersion = Assembly.GetExecutingAssembly()
               .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
@@ -184,6 +188,11 @@
                     }
 
                     return (T)Convert.ChangeType(item, baseType);
+                }
+
+                if (typeof(T) == typeof(Version))
+                {
+                    item = new Version((string)item);
                 }
             }
             catch

@@ -66,7 +66,7 @@
 
         public Version Version
         {
-            get { return GlobalSettings.GetVersion(); }
+            get { return GlobalSettings.GetAppVersion(); }
         }
 
         public string HomepageUrl

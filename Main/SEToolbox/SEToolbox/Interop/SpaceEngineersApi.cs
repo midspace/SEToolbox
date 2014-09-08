@@ -219,7 +219,7 @@
                     var serializer = (TS)Activator.CreateInstance(typeof(TS));
                     serializer.Serialize(xmlTextWriter, sector);
 
-                    xmlTextWriter.WriteComment(string.Format(" Saved '{0:o}' with SEToolbox version '{1}' ", DateTime.Now, GlobalSettings.GetVersion()));
+                    xmlTextWriter.WriteComment(string.Format(" Saved '{0:o}' with SEToolbox version '{1}' ", DateTime.Now, GlobalSettings.GetAppVersion()));
                 }
             }
             catch
