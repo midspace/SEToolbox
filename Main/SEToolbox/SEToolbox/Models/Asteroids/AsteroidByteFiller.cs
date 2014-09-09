@@ -157,37 +157,37 @@
             asteroid.CalculateMaterialCellAssets(out baseAssets, out materialVoxelCells);
 
             var distribution = new List<double> { Double.NaN };
-            var materialSelection = new List<byte> { SpaceEngineersApi.GetMaterialIndex(properties.MainMaterial.Value) };
+            var materialSelection = new List<byte> { SpaceEngineersCore.Resources.GetMaterialIndex(properties.MainMaterial.Value) };
 
             if (properties.SecondPercent > 0)
             {
                 distribution.Add((double)properties.SecondPercent / 100);
-                materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(properties.SecondMaterial.Value));
+                materialSelection.Add(SpaceEngineersCore.Resources.GetMaterialIndex(properties.SecondMaterial.Value));
             }
             if (properties.ThirdPercent > 0)
             {
                 distribution.Add((double)properties.ThirdPercent / 100);
-                materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(properties.ThirdMaterial.Value));
+                materialSelection.Add(SpaceEngineersCore.Resources.GetMaterialIndex(properties.ThirdMaterial.Value));
             }
             if (properties.FourthPercent > 0)
             {
                 distribution.Add((double)properties.FourthPercent / 100);
-                materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(properties.FourthMaterial.Value));
+                materialSelection.Add(SpaceEngineersCore.Resources.GetMaterialIndex(properties.FourthMaterial.Value));
             }
             if (properties.FifthPercent > 0)
             {
                 distribution.Add((double)properties.FifthPercent / 100);
-                materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(properties.FifthMaterial.Value));
+                materialSelection.Add(SpaceEngineersCore.Resources.GetMaterialIndex(properties.FifthMaterial.Value));
             }
             if (properties.SixthPercent > 0)
             {
                 distribution.Add((double)properties.SixthPercent / 100);
-                materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(properties.SixthMaterial.Value));
+                materialSelection.Add(SpaceEngineersCore.Resources.GetMaterialIndex(properties.SixthMaterial.Value));
             }
             if (properties.SeventhPercent > 0)
             {
                 distribution.Add((double)properties.SeventhPercent / 100);
-                materialSelection.Add(SpaceEngineersApi.GetMaterialIndex(properties.SeventhMaterial.Value));
+                materialSelection.Add(SpaceEngineersCore.Resources.GetMaterialIndex(properties.SeventhMaterial.Value));
             }
 
             var newDistributiuon = new List<byte>();

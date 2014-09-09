@@ -547,7 +547,7 @@
             var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
             SourceFile = TempfileUtil.NewFilename();
 
-            var baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false) ?? SpaceEngineersApi.GetMaterialList().FirstOrDefault();
+            var baseMaterial = SpaceEngineersCore.Resources.GetMaterialList().FirstOrDefault(m => m.IsRare == false) ?? SpaceEngineersCore.Resources.GetMaterialList().FirstOrDefault();
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, Filename, OutsideStockMaterial.Value, baseMaterial.Id.SubtypeId, InsideStockMaterial.Value != null, InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
             voxelMap.Save(SourceFile);

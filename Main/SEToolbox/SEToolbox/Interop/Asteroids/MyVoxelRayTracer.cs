@@ -31,12 +31,12 @@
                 if (string.IsNullOrEmpty(mesh.Material))
                     materials.Add(0xff); // represent empty materials.
                 else
-                    materials.Add(SpaceEngineersApi.GetMaterialIndex(mesh.Material));
+                    materials.Add(SpaceEngineersCore.Resources.GetMaterialIndex(mesh.Material));
 
                 if (string.IsNullOrEmpty(mesh.FaceMaterial))
                     faceMaterials.Add(0xff); // represent empty materials.
                 else
-                    faceMaterials.Add(SpaceEngineersApi.GetMaterialIndex(mesh.FaceMaterial));
+                    faceMaterials.Add(SpaceEngineersCore.Resources.GetMaterialIndex(mesh.FaceMaterial));
             }
 
             // How far to check in from the proposed Volumetric edge.
@@ -693,19 +693,19 @@
             }
 
             var size = new Vector3I(xCount, yCount, zCount);
-            var fillerMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false).Id.SubtypeId;  // Default to first non-rare material.
+            var fillerMaterial = SpaceEngineersCore.Resources.GetMaterialList().FirstOrDefault(m => m.IsRare == false).Id.SubtypeId;  // Default to first non-rare material.
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
             {
                 e.Volume = finalCubic[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z];
-                e.Material = SpaceEngineersApi.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
+                e.Material = SpaceEngineersCore.Resources.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
             };
 
             var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, fillerMaterial, fillerMaterial, action);
 
             if (complete != null)
                 complete.Invoke();
-            
+
             return voxelMap;
         }
 

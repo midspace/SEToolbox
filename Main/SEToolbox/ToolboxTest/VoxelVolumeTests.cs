@@ -21,7 +21,7 @@
         public void VoxelConvertToVolmeticOdd()
         {
             SpaceEngineersCore.LoadDefinitions();
-            var materials = SpaceEngineersApi.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
@@ -65,7 +65,7 @@
         public void VoxelConvertToVolmeticEven()
         {
             SpaceEngineersCore.LoadDefinitions();
-            var materials = SpaceEngineersApi.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
@@ -108,7 +108,7 @@
         public void VoxelConvertToVolmeticCancel()
         {
             SpaceEngineersCore.LoadDefinitions();
-            var materials = SpaceEngineersApi.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
@@ -150,7 +150,7 @@
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
                 ResetProgress, IncrementProgress, cancelFunc, CompleteProgress);
-            
+
             Assert.IsNull(voxelMap, "Asteroid must not exist.");
         }
 
@@ -158,7 +158,7 @@
         public void VoxelConvertToVolmeticMisc()
         {
             SpaceEngineersCore.LoadDefinitions();
-            var materials = SpaceEngineersApi.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
 
             var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");

@@ -73,7 +73,7 @@
             CubeList.Clear();
             var list = new SortedList<string, ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            var cubeDefinitions = SpaceEngineersCore.Definitions.CubeBlocks.Where(c => c.CubeSize == cubeSize);
+            var cubeDefinitions = SpaceEngineersCore.Resources.Definitions.CubeBlocks.Where(c => c.CubeSize == cubeSize);
 
             foreach (var cubeDefinition in cubeDefinitions)
             {

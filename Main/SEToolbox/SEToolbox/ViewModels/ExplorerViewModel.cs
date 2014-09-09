@@ -356,7 +356,7 @@
             }
         }
 
-        public SaveResource ActiveWorld
+        public WorldResource ActiveWorld
         {
             get
             {
@@ -501,18 +501,13 @@
             var result = _dialogService.ShowDialog<WindowLoad>(this, loadVm);
             if (result == true)
             {
+                _dataModel.BeginLoad();
                 _dataModel.ActiveWorld = model.SelectedWorld;
                 ActiveWorld.LoadCheckpoint();
-                SpaceEngineersCore.LoadDefinitionsAndMods(model.SelectedWorld.DataPath.ModsPath, ActiveWorld.Content.Mods.ToArray());
-                _dataModel.LoadSandBox();
-            }
-            else
-            {
-                // Reload mods if other mods were loaded up during a Repair.
-                if (model.ReloadModsRequired && _dataModel.ActiveWorld != null)
-                {
-                    SpaceEngineersCore.LoadDefinitionsAndMods(_dataModel.ActiveWorld.DataPath.ModsPath, _dataModel.ActiveWorld.Content.Mods.ToArray());
-                }
+                ActiveWorld.LoadDefinitionsAndMods();
+                ActiveWorld.LoadSector();
+                _dataModel.ParseSandBox();
+                _dataModel.EndLoad();
             }
         }
 
@@ -551,15 +546,20 @@
         {
             // TODO: check is save directory is still valid.
 
+            _dataModel.BeginLoad();
+
             // Reload Checkpoint file.
             ActiveWorld.LoadCheckpoint();
 
             // Reload Definitions, Mods, and clear out Materials, Textures.
-            SpaceEngineersCore.LoadDefinitionsAndMods(ActiveWorld.DataPath.ModsPath, ActiveWorld.Content.Mods.ToArray());
+            ActiveWorld.LoadDefinitionsAndMods();
             Converters.DDSConverter.ClearCache();
 
             // Load Sector file.
-            _dataModel.LoadSandBox();
+            ActiveWorld.LoadSector();
+
+            _dataModel.ParseSandBox();
+            _dataModel.EndLoad();
         }
 
         public bool IsActiveCanExecute()
@@ -831,109 +831,6 @@
             }
         }
 
-        public bool Test1CanExecute()
-        {
-            return _dataModel.ActiveWorld != null;
-        }
-
-        public void Test1Executed()
-        {
-            var model = new Import3DModelModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
-            model.Load(position);
-            var loadVm = new Import3DModelViewModel(this, model);
-
-            IsBusy = true;
-            var newEntity = loadVm.BuildTestEntity();
-
-            // Split object where X=28|29.
-            //newEntity.CubeBlocks.RemoveAll(c => c.Min.X <= 3);
-            //newEntity.CubeBlocks.RemoveAll(c => c.Min.X > 4);
-
-            _selectNewStructure = true;
-            _dataModel.CollisionCorrectEntity(newEntity);
-            _dataModel.AddEntity(newEntity);
-            _selectNewStructure = false;
-            IsBusy = false;
-        }
-
-        public bool Test2CanExecute()
-        {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
-        }
-
-        public void Test2Executed()
-        {
-            TestCalcCubesModel(Selections.ToArray());
-            //OptimizeModel(Selections.ToArray());
-        }
-
-        public bool Test3CanExecute()
-        {
-            return _dataModel.ActiveWorld != null;
-        }
-
-        public void Test3Executed()
-        {
-            var model = new Import3DModelModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
-            model.Load(position);
-            var loadVm = new Import3DModelViewModel(this, model);
-
-            loadVm.ArmorType = ImportArmorType.Light;
-            loadVm.BuildDistance = 10;
-            loadVm.ClassType = ImportModelClassType.SmallShip;
-            loadVm.Filename = @"D:\Development\SpaceEngineers\building 3D\models\algos.obj";
-            loadVm.Forward = new BindableVector3DModel(Vector3.Forward);
-            loadVm.IsMaxLengthScale = false;
-            loadVm.IsMultipleScale = true;
-            loadVm.IsValidModel = true;
-            loadVm.MultipleScale = 1;
-            loadVm.Up = new BindableVector3DModel(Vector3.Up);
-
-            IsBusy = true;
-            var newEntity = loadVm.BuildEntity();
-
-            // Split object where X=28|29.
-            ((MyObjectBuilder_CubeGrid)newEntity).CubeBlocks.RemoveAll(c => c.Min.X <= 28);
-
-            _selectNewStructure = true;
-            _dataModel.CollisionCorrectEntity(newEntity);
-            _dataModel.AddEntity(newEntity);
-            _selectNewStructure = false;
-            IsBusy = false;
-        }
-
-        public bool Test4CanExecute()
-        {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
-        }
-
-        public void Test4Executed()
-        {
-            MirrorModel(false, Selections.ToArray());
-        }
-
-        public bool Test5CanExecute()
-        {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
-        }
-
-        public void Test5Executed()
-        {
-            _dataModel.TestDisplayRotation(Selections[0].DataModel as StructureCubeGridModel);
-        }
-
-        public bool Test6CanExecute()
-        {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
-        }
-
-        public void Test6Executed()
-        {
-            _dataModel.TestConvert(Selections[0].DataModel as StructureCubeGridModel);
-        }
-
         public bool OpenUpdatesLinkCanExecute()
         {
             return true;
@@ -1056,6 +953,113 @@
             IsBusy = true;
             MergeShipPartModels(Selections[0], Selections[1]);
             IsBusy = false;
+        }
+
+        #endregion
+
+        #region Test command methods
+
+        public bool Test1CanExecute()
+        {
+            return _dataModel.ActiveWorld != null;
+        }
+
+        public void Test1Executed()
+        {
+            var model = new Import3DModelModel();
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
+            var loadVm = new Import3DModelViewModel(this, model);
+
+            IsBusy = true;
+            var newEntity = loadVm.BuildTestEntity();
+
+            // Split object where X=28|29.
+            //newEntity.CubeBlocks.RemoveAll(c => c.Min.X <= 3);
+            //newEntity.CubeBlocks.RemoveAll(c => c.Min.X > 4);
+
+            _selectNewStructure = true;
+            _dataModel.CollisionCorrectEntity(newEntity);
+            _dataModel.AddEntity(newEntity);
+            _selectNewStructure = false;
+            IsBusy = false;
+        }
+
+        public bool Test2CanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void Test2Executed()
+        {
+            TestCalcCubesModel(Selections.ToArray());
+            //OptimizeModel(Selections.ToArray());
+        }
+
+        public bool Test3CanExecute()
+        {
+            return _dataModel.ActiveWorld != null;
+        }
+
+        public void Test3Executed()
+        {
+            var model = new Import3DModelModel();
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            model.Load(position);
+            var loadVm = new Import3DModelViewModel(this, model);
+
+            loadVm.ArmorType = ImportArmorType.Light;
+            loadVm.BuildDistance = 10;
+            loadVm.ClassType = ImportModelClassType.SmallShip;
+            loadVm.Filename = @"D:\Development\SpaceEngineers\building 3D\models\algos.obj";
+            loadVm.Forward = new BindableVector3DModel(Vector3.Forward);
+            loadVm.IsMaxLengthScale = false;
+            loadVm.IsMultipleScale = true;
+            loadVm.IsValidModel = true;
+            loadVm.MultipleScale = 1;
+            loadVm.Up = new BindableVector3DModel(Vector3.Up);
+
+            IsBusy = true;
+            var newEntity = loadVm.BuildEntity();
+
+            // Split object where X=28|29.
+            ((MyObjectBuilder_CubeGrid)newEntity).CubeBlocks.RemoveAll(c => c.Min.X <= 28);
+
+            _selectNewStructure = true;
+            _dataModel.CollisionCorrectEntity(newEntity);
+            _dataModel.AddEntity(newEntity);
+            _selectNewStructure = false;
+            IsBusy = false;
+        }
+
+        public bool Test4CanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void Test4Executed()
+        {
+            MirrorModel(false, Selections.ToArray());
+        }
+
+        public bool Test5CanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void Test5Executed()
+        {
+            _dataModel.TestDisplayRotation(Selections[0].DataModel as StructureCubeGridModel);
+        }
+
+        public bool Test6CanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void Test6Executed()
+        {
+            _dataModel.TestConvert(Selections[0].DataModel as StructureCubeGridModel);
         }
 
         #endregion

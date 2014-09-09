@@ -155,7 +155,7 @@
             CharacterPosition = characterPosition;
 
             MaterialsCollection.Clear();
-            foreach (var material in SpaceEngineersApi.GetMaterialList())
+            foreach (var material in SpaceEngineersCore.Resources.GetMaterialList())
             {
                 MaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId, IsRare = material.IsRare, MinedRatio = material.MinedOreRatio });
             }

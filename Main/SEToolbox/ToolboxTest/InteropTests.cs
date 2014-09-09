@@ -35,22 +35,6 @@
         }
 
         [TestMethod]
-        public void LoadSandbox_Oldmethod_Fighter()
-        {
-            var contentPath = ToolboxUpdater.GetApplicationContentPath();
-
-            var fighterPath = Path.Combine(contentPath, @"Data\Prefabs\Fighter.sbc");
-            Assert.IsTrue(File.Exists(fighterPath), "Sandbox content file should exist");
-
-            MyObjectBuilder_Definitions prefabDefinitions;
-            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>(fighterPath, out prefabDefinitions);
-
-            Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
-            Assert.IsTrue(ret, "Sandbox content should have been detected");
-            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
-        }
-
-        [TestMethod]
         public void LoadSandbox_Fighter()
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();

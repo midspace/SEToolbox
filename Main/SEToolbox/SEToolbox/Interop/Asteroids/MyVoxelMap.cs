@@ -72,7 +72,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             this.Size = size;
             this._sizeMinusOne = new Vector3I(Size.X - 1, Size.Y - 1, Size.Z - 1);
-            this.VoxelMaterial = SpaceEngineersApi.GetMaterialIndex(materialName);
+            this.VoxelMaterial = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             this._positionLeftBottomCorner = position;
             this._boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
 
@@ -128,7 +128,7 @@ namespace SEToolbox.Interop.Asteroids
         public static void GetPreview(string filename, out Vector3I size, out Vector3I contentSize, out Vector3 center, out long voxCells)
         {
             var map = new MyVoxelMap();
-            map.Load(filename, SpaceEngineersApi.GetMaterialName(0), false);
+            map.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
             size = map.Size;
             contentSize = map.ContentSize;
             center = map.ContentCenter;
@@ -140,7 +140,7 @@ namespace SEToolbox.Interop.Asteroids
         public static Dictionary<string, long> GetMaterialAssetDetails(string filename)
         {
             var map = new MyVoxelMap();
-            map.Load(filename, SpaceEngineersApi.GetMaterialName(0), true);
+            map.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
             IList<byte> materialAssetList;
             Dictionary<byte, long> materialVoxelCells;
@@ -188,7 +188,7 @@ namespace SEToolbox.Interop.Asteroids
         public void Load(string filename, string defaultMaterial)
         {
             if (string.IsNullOrEmpty(defaultMaterial))
-                defaultMaterial = SpaceEngineersApi.GetMaterialName(0);
+                defaultMaterial = SpaceEngineersCore.Resources.GetDefaultMaterialName();
             this.Load(filename, defaultMaterial, true);
         }
 
@@ -284,7 +284,7 @@ namespace SEToolbox.Interop.Asteroids
                         {
                             indestructibleContent = reader.ReadByte();
                             var materialName = reader.ReadString();
-                            matCell.Reset(SpaceEngineersApi.GetMaterialIndex(materialName), indestructibleContent);
+                            matCell.Reset(SpaceEngineersCore.Resources.GetMaterialIndex(materialName), indestructibleContent);
                         }
                         else
                         {
@@ -299,7 +299,7 @@ namespace SEToolbox.Interop.Asteroids
                                         var materialName = reader.ReadString();
                                         materialCount = reader.ReadByte();
                                         var coord = new Vector3I(voxelCoordInCellX, voxelCoordInCellY, voxelCoordInCellZ);
-                                        matCell.SetMaterialAndIndestructibleContent(SpaceEngineersApi.GetMaterialIndex(materialName), indestructibleContent, ref coord);
+                                        matCell.SetMaterialAndIndestructibleContent(SpaceEngineersCore.Resources.GetMaterialIndex(materialName), indestructibleContent, ref coord);
                                     }
                                 }
                             }
@@ -408,7 +408,7 @@ namespace SEToolbox.Interop.Asteroids
                             if (isWholeMaterial)
                             {
                                 writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
-                                writer.Write(SpaceEngineersApi.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), this.VoxelMaterial));
+                                writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), this.VoxelMaterial));
                             }
                             else
                             {
@@ -419,7 +419,7 @@ namespace SEToolbox.Interop.Asteroids
                                         for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
                                         {
                                             writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
-                                            writer.Write(SpaceEngineersApi.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), this.VoxelMaterial));
+                                            writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), this.VoxelMaterial));
                                             writer.Write((byte)0x0);
                                         }
                                     }
@@ -628,7 +628,7 @@ namespace SEToolbox.Interop.Asteroids
             var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
             var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
             var oldMaterial = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
-            this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].SetMaterialAndIndestructibleContent(SpaceEngineersApi.GetMaterialIndex(materialName), indestructibleContent, ref voxelCoordInCell);
+            this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].SetMaterialAndIndestructibleContent(SpaceEngineersCore.Resources.GetMaterialIndex(materialName), indestructibleContent, ref voxelCoordInCell);
         }
 
         #endregion
@@ -644,7 +644,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             if (!(this.CheckVoxelCoord(ref cellCoord)))
                 return;
-            this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+            this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
         }
 
         #endregion
@@ -657,7 +657,7 @@ namespace SEToolbox.Interop.Asteroids
             var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
 
             var oldMaterial = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
-            materialName = SpaceEngineersApi.GetMaterialName(oldMaterial);
+            materialName = SpaceEngineersCore.Resources.GetMaterialName(oldMaterial);
             content = GetVoxelContent(ref voxelCoordInCell);
         }
 
@@ -716,7 +716,7 @@ namespace SEToolbox.Interop.Asteroids
         /// <param name="materialName"></param>
         public void ForceBaseMaterial(string defaultMaterial, string materialName)
         {
-            var materialIndex = SpaceEngineersApi.GetMaterialIndex(materialName);
+            var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
 
             for (var x = 0; x < this._voxelMaterialCells.Length; x++)
             {
@@ -805,7 +805,7 @@ namespace SEToolbox.Interop.Asteroids
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z + 1], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z + 1], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -817,7 +817,7 @@ namespace SEToolbox.Interop.Asteroids
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z - 1], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z - 1], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -836,7 +836,7 @@ namespace SEToolbox.Interop.Asteroids
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y + 1][vector.Z], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y + 1][vector.Z], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -848,7 +848,7 @@ namespace SEToolbox.Interop.Asteroids
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y - 1][vector.Z], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y - 1][vector.Z], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -867,7 +867,7 @@ namespace SEToolbox.Interop.Asteroids
                             !CheckCellType(ref _voxelContentCells[vector.X + 1][vector.Y][vector.Z], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X + 1][vector.Y][vector.Z], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -879,7 +879,7 @@ namespace SEToolbox.Interop.Asteroids
                             !CheckCellType(ref _voxelContentCells[vector.X - 1][vector.Y][vector.Z], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersApi.GetMaterialIndex(materialName));
+                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X - 1][vector.Y][vector.Z], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -895,10 +895,10 @@ namespace SEToolbox.Interop.Asteroids
 
         public void RemoveMaterial(string materialName, string replaceFillMaterial)
         {
-            var materialIndex = SpaceEngineersApi.GetMaterialIndex(materialName);
+            var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             var replaceMaterialIndex = materialIndex;
             if (!string.IsNullOrEmpty(replaceFillMaterial))
-                replaceMaterialIndex = SpaceEngineersApi.GetMaterialIndex(replaceFillMaterial);
+                replaceMaterialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(replaceFillMaterial);
             Vector3I cellCoord;
 
             for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
@@ -1001,8 +1001,8 @@ namespace SEToolbox.Interop.Asteroids
 
         public void ReplaceMaterial(string materialName, string replaceFillMaterial)
         {
-            var materialIndex = SpaceEngineersApi.GetMaterialIndex(materialName);
-            var replaceMaterialIndex = SpaceEngineersApi.GetMaterialIndex(replaceFillMaterial);
+            var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
+            var replaceMaterialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(replaceFillMaterial);
             Vector3I cellCoord;
 
             for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
@@ -1413,7 +1413,7 @@ namespace SEToolbox.Interop.Asteroids
                 }
             }
 
-            var materialDefinitions = SpaceEngineersApi.GetMaterialList();
+            var materialDefinitions = SpaceEngineersCore.Resources.GetMaterialList();
             var assetNameCount = new Dictionary<string, long>();
 
             foreach (var kvp in assetCount)
@@ -1440,7 +1440,7 @@ namespace SEToolbox.Interop.Asteroids
 
         public Dictionary<string, long> CountAssets(Dictionary<byte, long> assetCount)
         {
-            var materialDefinitions = SpaceEngineersApi.GetMaterialList();
+            var materialDefinitions = SpaceEngineersCore.Resources.GetMaterialList();
             var assetNameCount = new Dictionary<string, long>();
 
             foreach (var kvp in assetCount)
