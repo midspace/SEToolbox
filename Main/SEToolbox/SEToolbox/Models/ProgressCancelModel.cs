@@ -18,8 +18,6 @@
 
         private double _maximumProgress;
 
-        private int _percent;
-
         private TimeSpan? _estimatedTimeLeft;
 
         private Stopwatch _elapsedTimer;

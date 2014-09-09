@@ -136,6 +136,8 @@
     </Compile>
     <Compile Include="Interfaces\IMainView.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelRayTracerConsts.cs" />
+    <Compile Include="Interop\SpaceEngineersResources.cs" />
+    <Compile Include="Interop\SpaceEngineersRepair.cs" />
     <Compile Include="Models\Asteroids\AsteroidByteFiller.cs" />
     <Compile Include="Models\Asteroids\AsteroidSeedFiller.cs" />
     <Compile Include="Models\Asteroids\AsteroidSeedFillProperties.cs" />
@@ -189,7 +191,7 @@
     <Compile Include="Models\GenerateVoxelFieldModel.cs" />
     <Compile Include="Models\ImportVoxelModel.cs" />
     <Compile Include="Models\MaterialSelectionModel.cs" />
-    <Compile Include="Models\SaveResource.cs">
+    <Compile Include="Models\WorldResource.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\SelectWorldModel.cs">

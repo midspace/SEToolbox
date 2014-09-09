@@ -286,9 +286,9 @@
             var list = new List<ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            foreach (var componentDefinition in SpaceEngineersCore.Definitions.Components)
+            foreach (var componentDefinition in SpaceEngineersCore.Resources.Definitions.Components)
             {
-                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.Id.TypeId == componentDefinition.Id.TypeId);
+                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.Id.TypeId == componentDefinition.Id.TypeId);
                 list.Add(new ComponentItemModel
                 {
                     Name = componentDefinition.DisplayName,
@@ -302,12 +302,12 @@
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersCore.Definitions.PhysicalItems)
+            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.PhysicalItems)
             {
                 if (physicalItemDefinition.Id.SubtypeId == "CubePlacerItem" || physicalItemDefinition.Id.SubtypeId == "WallPlacerItem")
                     continue;
 
-                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
                 list.Add(new ComponentItemModel
                 {
                     Name = physicalItemDefinition.DisplayName,
@@ -321,9 +321,9 @@
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersCore.Definitions.AmmoMagazines)
+            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.AmmoMagazines)
             {
-                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
                 list.Add(new ComponentItemModel
                 {
                     Name = physicalItemDefinition.DisplayName,

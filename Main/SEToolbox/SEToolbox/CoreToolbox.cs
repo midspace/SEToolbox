@@ -133,7 +133,7 @@
             }
 
 #if DEBUG
-            // Force the local debugger to load the Types
+            //#warning Force the local debugger to load the Types
             // This will make it hairy for testing the AppDomain stuff.
             //var settings0 = new Sandbox.Common.ObjectBuilders.MySessionSettings();
 #endif
@@ -160,7 +160,6 @@
 
             // Load the Space Engineers assemblies, or dependant classes after this point.
             var explorerModel = new ExplorerModel();
-            explorerModel.Load();
 
             if (args.Any(a => a.ToUpper() == "/WR" || a.ToUpper() == "-WR"))
             {
@@ -214,7 +213,7 @@
             // Retrieve the list of referenced assemblies in an array of AssemblyName.
             var filename = args.Name.Substring(0, args.Name.IndexOf(",", StringComparison.InvariantCulture)) + ".dll";
 
-            var filter = @"^(?<assembly>(?:\w+(?:\.?\w+)+))\s*(?:,\s?Version=(?<version>\d+\.\d+\.\d+\.\d+))?(?:,\s?Culture=(?<culture>[\w-]+))?(?:,\s?PublicKeyToken=(?<token>\w+))?$";
+            const string filter = @"^(?<assembly>(?:\w+(?:\.?\w+)+))\s*(?:,\s?Version=(?<version>\d+\.\d+\.\d+\.\d+))?(?:,\s?Culture=(?<culture>[\w-]+))?(?:,\s?PublicKeyToken=(?<token>\w+))?$";
             var match = Regex.Match(args.Name, filter);
             if (match.Success)
             {

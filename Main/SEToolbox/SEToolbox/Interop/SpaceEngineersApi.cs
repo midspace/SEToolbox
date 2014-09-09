@@ -45,47 +45,6 @@
             return (T)obj;
         }
 
-        [Obsolete]
-        public static bool TryReadSpaceEngineersFile<T, TS>(string filename, out T entity)
-             where TS : XmlSerializer1
-        {
-            try
-            {
-                entity = ReadSpaceEngineersFile<T, TS>(filename);
-                return true;
-            }
-            catch
-            {
-                entity = default(T);
-                return false;
-            }
-        }
-
-        [Obsolete]
-        public static T ReadSpaceEngineersFile<T, TS>(string filename)
-            where TS : XmlSerializer1
-        {
-            var settings = new XmlReaderSettings
-            {
-                IgnoreComments = true,
-                // Space Engineers is able to read partially corrupted files,
-                // which means Keen probably aren't using any XML reader settings in general. 
-            };
-
-            object obj = null;
-
-            if (File.Exists(filename))
-            {
-                using (var xmlReader = XmlReader.Create(filename, settings))
-                {
-                    var serializer = (TS)Activator.CreateInstance(typeof(TS));
-                    obj = serializer.Deserialize(xmlReader);
-                }
-            }
-
-            return (T)obj;
-        }
-
         public static bool TryReadSpaceEngineersFile<T>(string filename, out T entity, out bool isCompressed)
         {
             try
@@ -107,13 +66,22 @@
             return ReadSpaceEngineersFile<T>(filename, out isCompressed);
         }
 
-        public static T ReadSpaceEngineersFile<T>(string filename, out bool isCompressed)
+        public static T ReadSpaceEngineersFile<T>(string filename, out bool isCompressed, bool snapshot = false)
         {
             isCompressed = false;
 
             if (File.Exists(filename))
             {
-                using (var fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                var tempFilename = filename;
+
+                if (snapshot)
+                {
+                    // Snapshot used for Report on Dedicated servers to prevent locking of the orginal file whilst reading it.
+                    tempFilename = TempfileUtil.NewFilename();
+                    File.Copy(filename, tempFilename);
+                }
+
+                using (var fileStream = new FileStream(tempFilename, FileMode.Open, FileAccess.Read))
                 {
                     var b1 = fileStream.ReadByte();
                     var b2 = fileStream.ReadByte();
@@ -133,7 +101,7 @@
                             return ReadSpaceEngineersFileRaw<T>(outStream);
                         }
                     }
-                    
+
                     return ReadSpaceEngineersFileRaw<T>(fileStream);
                 }
             }
@@ -165,7 +133,7 @@
                         return ReadSpaceEngineersFileRaw<T>(outStream);
                     }
                 }
-                
+
                 return ReadSpaceEngineersFileRaw<T>(fileStream);
             }
 
@@ -275,7 +243,7 @@
             {
                 foreach (var component in cubeBlockDefinition.Components)
                 {
-                    mass += SpaceEngineersCore.Definitions.Components.Where(c => c.Id.SubtypeId == component.Subtype).Sum(c => c.Mass) * component.Count;
+                    mass += SpaceEngineersCore.Resources.Definitions.Components.Where(c => c.Id.SubtypeId == component.Subtype).Sum(c => c.Mass) * component.Count;
                 }
             }
 
@@ -285,7 +253,7 @@
         public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderType typeId, decimal amount, Dictionary<string, BlueprintRequirement> requirements, out TimeSpan timeTaken)
         {
             var time = new TimeSpan();
-            var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.Id.TypeId == typeId);
+            var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.Id.TypeId == typeId);
             if (bp != null)
             {
                 foreach (var item in bp.Prerequisites)
@@ -318,25 +286,25 @@
 
         public static MyObjectBuilder_DefinitionBase GetDefinition(MyObjectBuilderType typeId, string subTypeId)
         {
-            var cube = SpaceEngineersCore.Definitions.CubeBlocks.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            var cube = SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
             if (cube != null)
             {
                 return cube;
             }
 
-            var item = SpaceEngineersCore.Definitions.PhysicalItems.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            var item = SpaceEngineersCore.Resources.Definitions.PhysicalItems.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
             if (item != null)
             {
                 return item;
             }
 
-            var component = SpaceEngineersCore.Definitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
+            var component = SpaceEngineersCore.Resources.Definitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
             if (component != null)
             {
                 return component;
             }
 
-            var magazine = SpaceEngineersCore.Definitions.AmmoMagazines.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
+            var magazine = SpaceEngineersCore.Resources.Definitions.AmmoMagazines.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
             if (magazine != null)
             {
                 return magazine;
@@ -370,35 +338,6 @@
             return 0;
         }
 
-        public static IList<MyObjectBuilder_VoxelMaterialDefinition> GetMaterialList()
-        {
-            return SpaceEngineersCore.Definitions.VoxelMaterials;
-        }
-
-        public static byte GetMaterialIndex(string materialName)
-        {
-            if (SpaceEngineersCore.MaterialIndex.ContainsKey(materialName))
-                return SpaceEngineersCore.MaterialIndex[materialName];
-
-            var material = SpaceEngineersCore.Definitions.VoxelMaterials.FirstOrDefault(m => m.Id.SubtypeId == materialName);
-            var index = (byte)SpaceEngineersCore.Definitions.VoxelMaterials.ToList().IndexOf(material);
-            SpaceEngineersCore.MaterialIndex.Add(materialName, index);
-            return index;
-        }
-
-        public static string GetMaterialName(byte materialIndex, byte defaultMaterialIndex)
-        {
-            if (materialIndex <= SpaceEngineersCore.Definitions.VoxelMaterials.Length)
-                return SpaceEngineersCore.Definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
-
-            return SpaceEngineersCore.Definitions.VoxelMaterials[defaultMaterialIndex].Id.SubtypeId;
-        }
-
-        public static string GetMaterialName(byte materialIndex)
-        {
-            return SpaceEngineersCore.Definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
-        }
-
         #endregion
 
         #region GetCubeDefinition
@@ -407,10 +346,10 @@
         {
             if (string.IsNullOrEmpty(subtypeId))
             {
-                return SpaceEngineersCore.Definitions.CubeBlocks.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
+                return SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
             }
 
-            return SpaceEngineersCore.Definitions.CubeBlocks.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
+            return SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
         }
 
@@ -462,7 +401,7 @@
 
             Sandbox.Common.Localization.MyTextsWrapperEnum myText;
 
-            if (Enum.TryParse<Sandbox.Common.Localization.MyTextsWrapperEnum>(value, out myText))
+            if (Enum.TryParse(value, out myText))
             {
                 try
                 {
@@ -476,7 +415,7 @@
 
             return value;
         }
-        
+
         #endregion
     }
 }

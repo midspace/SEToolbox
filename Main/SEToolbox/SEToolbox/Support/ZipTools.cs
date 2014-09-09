@@ -215,7 +215,7 @@
             // This setting will strip the leading part of the folder path in the entries, to
             // make the entries relative to the starting folder.
             // To include the full path for each entry up to the drive root, assign folderOffset = 0.
-            var folderOffset = sourceFolderName.Length + (sourceFolderName.EndsWith("\\") ? 0 : 1);
+            var folderOffset = sourceFolderName.Length + (sourceFolderName.EndsWith(Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentUICulture)) ? 0 : 1);
 
             CompressFolder(sourceFolderName, zipStream, folderOffset);
 

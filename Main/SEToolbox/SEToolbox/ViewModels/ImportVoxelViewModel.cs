@@ -293,7 +293,7 @@
                     SourceFile = stockfile;
                     originalFile = SourceFile;
                     var asteroid = new MyVoxelMap();
-                    asteroid.Load(stockfile, SpaceEngineersApi.GetMaterialName(0), false);
+                    asteroid.Load(stockfile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
                     asteroidCenter = asteroid.ContentCenter;
                     asteroidSize = asteroid.ContentSize;
                 }
@@ -301,7 +301,7 @@
                 {
                     var asteroid = new MyVoxelMap();
                     asteroid.Load(stockfile, StockMaterial.Value);
-                    asteroid.ForceBaseMaterial(SpaceEngineersApi.GetMaterialName(0), StockMaterial.Value);
+                    asteroid.ForceBaseMaterial(SpaceEngineersCore.Resources.GetDefaultMaterialName(), StockMaterial.Value);
                     SourceFile = TempfileUtil.NewFilename();
                     asteroid.Save(SourceFile);
 
@@ -315,13 +315,13 @@
                 originalFile = SourceFile;
 
                 var asteroid = new MyVoxelMap();
-                asteroid.Load(SourceFile, SpaceEngineersApi.GetMaterialName(0), false);
+                asteroid.Load(SourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
                 asteroidCenter = asteroid.ContentCenter;
                 asteroidSize = asteroid.ContentSize;
 
                 if (StockMaterial != null && StockMaterial.Value != null)
                 {
-                    asteroid.ForceBaseMaterial(SpaceEngineersApi.GetMaterialName(0), StockMaterial.Value);
+                    asteroid.ForceBaseMaterial(SpaceEngineersCore.Resources.GetDefaultMaterialName(), StockMaterial.Value);
                     SourceFile = TempfileUtil.NewFilename();
                     asteroid.Save(SourceFile);
                 }
@@ -332,7 +332,7 @@
                 if (StockMaterial != null && StockMaterial.Value != null)
                     material = StockMaterial.Value;
                 else
-                    material = SpaceEngineersApi.GetMaterialName(0);
+                    material = SpaceEngineersCore.Resources.GetDefaultMaterialName();
 
                 originalFile = string.Format("sphere_{0}_{1}_{2}_", material.ToLowerInvariant(), SphereRadius, SphereShellRadius);
 

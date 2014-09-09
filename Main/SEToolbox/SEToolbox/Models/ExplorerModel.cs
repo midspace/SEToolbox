@@ -8,7 +8,6 @@
     using System.Linq;
     using System.Windows.Shell;
     using System.Windows.Threading;
-    using System.Xml;
 
     using Microsoft.VisualBasic.FileIO;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
@@ -24,8 +23,6 @@
     {
         #region Fields
 
-        private SaveResource _activeWorld;
-
         private bool _isActive;
 
         private bool _isBusy;
@@ -33,8 +30,6 @@
         private bool _isModified;
 
         private bool _isBaseSaveChanged;
-
-        private MyObjectBuilder_Sector _sectorData;
 
         private StructureCharacterModel _thePlayerCharacter;
 
@@ -44,8 +39,6 @@
         private ObservableCollection<IStructureBase> _structures;
 
         private readonly List<string> _manageDeleteVoxelList;
-
-        private bool _compressedSectorFormat;
 
         private bool _showProgress;
 
@@ -70,6 +63,7 @@
             Structures = new ObservableCollection<IStructureBase>();
             _manageDeleteVoxelList = new List<string>();
             _timer = new Stopwatch();
+            SetActiveStatus();
         }
 
         #endregion
@@ -110,18 +104,15 @@
             }
         }
 
-        public SaveResource ActiveWorld
+        public WorldResource ActiveWorld
         {
-            get
-            {
-                return _activeWorld;
-            }
+            get { return SpaceEngineersCore.WorldResource; }
 
             set
             {
-                if (value != _activeWorld)
+                if (value != SpaceEngineersCore.WorldResource)
                 {
-                    _activeWorld = value;
+                    SpaceEngineersCore.WorldResource = value;
                     RaisePropertyChanged(() => ActiveWorld);
                 }
             }
@@ -208,23 +199,6 @@
                 {
                     _isBaseSaveChanged = value;
                     RaisePropertyChanged(() => IsBaseSaveChanged);
-                }
-            }
-        }
-
-        public MyObjectBuilder_Sector SectorData
-        {
-            get
-            {
-                return _sectorData;
-            }
-
-            set
-            {
-                if (value != _sectorData)
-                {
-                    _sectorData = value;
-                    RaisePropertyChanged(() => SectorData);
                 }
             }
         }
@@ -366,162 +340,29 @@
             IsActive = !IsBusy;
         }
 
-        public void Load()
-        {
-            SetActiveStatus();
-        }
-
-        public void LoadSandBox(bool snapshot = false)
+        public void BeginLoad()
         {
             IsBusy = true;
+        }
 
+        public void EndLoad()
+        {
+            IsModified = false;
+            IsBusy = false;
+        }
+
+        public void ParseSandBox()
+        {
+            // make sure the LoadSector is called on the right thread for binding of data.
             Dispatcher.CurrentDispatcher.Invoke(
                 DispatcherPriority.DataBind,
-                new Action(delegate
-                {
-                    if (ActiveWorld == null)
-                    {
-                        SectorData = null;
-                    }
-                    else
-                    {
-                        var filename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
-
-                        if (ZipTools.IsGzipedFile(filename))
-                        {
-                            // New file format is compressed.
-                            // These steps could probably be combined, but would have to use a MemoryStream, which has memory limits before it causes performance issues when chunking memory.
-                            // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
-                            var tempFilename = TempfileUtil.NewFilename();
-                            ZipTools.GZipUncompress(filename, tempFilename);
-                            SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
-                            _compressedSectorFormat = true;
-                        }
-                        else
-                        {
-                            // Old file format is raw XML.
-
-                            // Snapshot used for Report on Dedicated servers.
-                            if (snapshot)
-                            {
-                                var tempFilename = TempfileUtil.NewFilename();
-                                File.Copy(filename, tempFilename);
-                                SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(tempFilename);
-                            }
-                            else
-                            {
-                                SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
-                            }
-                            _compressedSectorFormat = false;
-                        }
-                    }
-                    LoadSectorDetail();
-                    IsModified = false;
-                    IsBusy = false;
-                }));
-        }
-
-        public XmlDocument RepairerLoadSandBoxXml()
-        {
-            var xDoc = new XmlDocument();
-
-            if (ActiveWorld == null)
-            {
-                xDoc = null;
-            }
-            else
-            {
-                var filename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
-
-                if (ZipTools.IsGzipedFile(filename))
-                {
-                    // New file format is compressed.
-                    // These steps could probably be combined, but would have to use a MemoryStream, which has memory limits before it causes performance issues when chunking memory.
-                    // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
-                    var tempFilename = TempfileUtil.NewFilename();
-                    ZipTools.GZipUncompress(filename, tempFilename);
-                    xDoc.Load(tempFilename);
-                    _compressedSectorFormat = true;
-                }
-                else
-                {
-                    // Old file format is raw XML.
-                    SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(filename);
-                    xDoc.Load(filename);
-                    _compressedSectorFormat = false;
-                }
-            }
-
-            return xDoc;
-        }
-
-        public void RepairerSaveSandBoxXml(XmlDocument xDoc)
-        {
-            var sectorFilename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
-            var sectorBackupFilename = sectorFilename + ".bak";
-
-            if (File.Exists(sectorBackupFilename))
-            {
-                FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-            }
-
-            File.Move(sectorFilename, sectorBackupFilename);
-
-            if (_compressedSectorFormat)
-            {
-                var tempFilename = TempfileUtil.NewFilename();
-                xDoc.Save(tempFilename);
-                ZipTools.GZipCompress(tempFilename, sectorFilename);
-            }
-            else
-                xDoc.Save(sectorFilename);
+                new Action(LoadSectorDetail));
         }
 
         public void SaveCheckPointAndSandBox()
         {
             IsBusy = true;
-            ActiveWorld.LastSaveTime = DateTime.Now;
-            var checkpointFilename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
-            var checkpointBackupFilename = checkpointFilename + ".bak";
-            var sectorFilename = Path.Combine(ActiveWorld.Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
-            var sectorBackupFilename = sectorFilename + ".bak";
-
-            if (File.Exists(checkpointBackupFilename))
-            {
-                FileSystem.DeleteFile(checkpointBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-            }
-
-            File.Move(checkpointFilename, checkpointBackupFilename);
-
-            ActiveWorld.Content.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
-            SectorData.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
-
-            if (ActiveWorld.CompressedCheckpointFormat)
-            {
-                var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(ActiveWorld.Content, tempFilename);
-                ZipTools.GZipCompress(tempFilename, checkpointFilename);
-            }
-            else
-            {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(ActiveWorld.Content, checkpointFilename);
-            }
-
-            if (File.Exists(sectorBackupFilename))
-            {
-                FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-            }
-
-            File.Move(sectorFilename, sectorBackupFilename);
-
-            if (_compressedSectorFormat)
-            {
-                var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(SectorData, tempFilename);
-                ZipTools.GZipCompress(tempFilename, sectorFilename);
-            }
-            else
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(SectorData, sectorFilename);
+            ActiveWorld.SaveCheckPointAndSector(true);
 
             // Manages the adding of new voxel files.
             foreach (var entity in Structures)
@@ -564,7 +405,7 @@
             IsBusy = true;
 
             var tempFilename = TempfileUtil.NewFilename() + ".xml";
-            SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(SectorData, tempFilename);
+            SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(ActiveWorld.SectorData, tempFilename);
 
             IsBusy = false;
             return tempFilename;
@@ -580,9 +421,9 @@
             ThePlayerCharacter = null;
             _customColors = null;
 
-            if (SectorData != null && ActiveWorld.Content != null)
+            if (ActiveWorld.SectorData != null && ActiveWorld.Content != null)
             {
-                foreach (var entityBase in SectorData.SectorObjects)
+                foreach (var entityBase in ActiveWorld.SectorData.SectorObjects)
                 {
                     var structure = StructureBaseModel.Create(entityBase, ActiveWorld.Savepath, ActiveWorld.Content.Settings);
 
@@ -628,7 +469,7 @@
 
         public void CalcDistances()
         {
-            if (SectorData != null)
+            if (ActiveWorld.SectorData != null)
             {
                 var position = ThePlayerCharacter != null && ThePlayerCharacter.PositionAndOrientation.HasValue ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
                 foreach (var structure in Structures)
@@ -743,7 +584,7 @@
         {
             if (entity != null)
             {
-                SectorData.SectorObjects.Add(entity);
+                ActiveWorld.SectorData.SectorObjects.Add(entity);
                 var structure = StructureBaseModel.Create(entity, ActiveWorld.Savepath, ActiveWorld.Content.Settings);
                 var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
                 structure.PlayerDistance = (position - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
@@ -758,14 +599,14 @@
         {
             if (entity != null)
             {
-                if (SectorData.SectorObjects.Contains(entity))
+                if (ActiveWorld.SectorData.SectorObjects.Contains(entity))
                 {
                     if (entity is MyObjectBuilder_VoxelMap)
                     {
                         _manageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).Filename);
                     }
 
-                    SectorData.SectorObjects.Remove(entity);
+                    ActiveWorld.SectorData.SectorObjects.Remove(entity);
                     IsModified = true;
                     return true;
                 }
@@ -774,7 +615,7 @@
                 //var x = SectorData.SectorObjects.Where(s => s is MyObjectBuilder_CubeGrid).Cast<MyObjectBuilder_CubeGrid>().
                 //    Where(s => s.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot == entity)).Select(e => e).ToArray();
 
-                foreach (var sectorObject in SectorData.SectorObjects)
+                foreach (var sectorObject in ActiveWorld.SectorData.SectorObjects)
                 {
                     if (sectorObject is MyObjectBuilder_CubeGrid)
                     {
@@ -811,41 +652,6 @@
             contains |= additionalList.Any(s => s is MyObjectBuilder_VoxelMap && ((MyObjectBuilder_VoxelMap)s).Filename.ToUpper() == filename.ToUpper());
 
             return contains;
-        }
-
-        public MyObjectBuilder_Character FindAstronautCharacter()
-        {
-            if (SectorData != null)
-            {
-                foreach (var entityBase in SectorData.SectorObjects)
-                {
-                    if (entityBase is MyObjectBuilder_Character)
-                    {
-                        return (MyObjectBuilder_Character)entityBase;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public MyObjectBuilder_Cockpit FindPilotCharacter()
-        {
-            if (SectorData != null)
-            {
-                foreach (var entityBase in SectorData.SectorObjects)
-                {
-                    if (entityBase is MyObjectBuilder_CubeGrid)
-                    {
-                        var cubes = ((MyObjectBuilder_CubeGrid)entityBase).CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null).ToList();
-                        if (cubes.Count > 0)
-                        {
-                            return (MyObjectBuilder_Cockpit)cubes[0];
-                        }
-                    }
-                }
-            }
-
-            return null;
         }
 
         /// <summary>

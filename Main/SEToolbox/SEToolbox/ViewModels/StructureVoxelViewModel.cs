@@ -185,7 +185,7 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersApi.GetMaterialName(0), true);
+            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
             asteroid.ForceShellMaterial(materialName, 1);
 
@@ -211,10 +211,10 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersApi.GetMaterialName(0), true);
+            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
             asteroid.ForceBaseMaterial(materialName, materialName);
-            asteroid.ForceVoxelFaceMaterial(SpaceEngineersApi.GetMaterialName(0));
+            asteroid.ForceVoxelFaceMaterial(SpaceEngineersCore.Resources.GetDefaultMaterialName());
 
             var tempfilename = TempfileUtil.NewFilename();
             asteroid.Save(tempfilename);
@@ -243,7 +243,7 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersApi.GetMaterialName(0), true);
+            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
             if (string.IsNullOrEmpty(materialName))
             {

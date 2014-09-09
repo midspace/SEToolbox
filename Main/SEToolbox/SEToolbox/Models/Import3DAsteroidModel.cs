@@ -49,7 +49,7 @@
             _outsideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>();
             _insideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>();
 
-            foreach (var material in SpaceEngineersApi.GetMaterialList())
+            foreach (var material in SpaceEngineersCore.Resources.GetMaterialList())
             {
                 _outsideMaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
                 _insideMaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });

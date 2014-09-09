@@ -364,7 +364,7 @@
                     {
                         var blockType = block.GetType();
                         var cubeBlockDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, ship.CubeGrid.GridSizeEnum, block.SubtypeName);
-                        TimeSpan blockTime = TimeSpan.Zero;
+                        var blockTime = TimeSpan.Zero;
                         string blockTexture = null;
                         float cubeMass = 0;
 
@@ -618,7 +618,7 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
+                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
@@ -659,7 +659,7 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
+                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
@@ -699,7 +699,7 @@
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
-                var bp = SpaceEngineersCore.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
+                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == tallySubTypeId && b.Result.Id.TypeId == tallyTypeId);
                 var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
@@ -1186,7 +1186,7 @@ td.right { text-align: right; }");
                 findSession = Path.GetDirectoryName(findSession);
             }
 
-            SaveResource world;
+            WorldResource world;
 
             if (Directory.Exists(findSession))
             {
@@ -1204,7 +1204,9 @@ td.right { text-align: right; }");
             }
 
             baseModel.ActiveWorld = world;
-            baseModel.LoadSandBox(true);
+            baseModel.ActiveWorld.LoadDefinitionsAndMods();
+            baseModel.ActiveWorld.LoadSector(true);
+            baseModel.ParseSandBox();
 
             var model = new ResourceReportModel();
             model.Load(baseModel.ActiveWorld.Savename, baseModel.Structures);
