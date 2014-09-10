@@ -31,5 +31,7 @@
         MyObjectBuilder_Checkpoint Checkpoint { get; }
 
         int[] CreativeModeColors { get; set; }
+
+        IStructureBase AddEntity(MyObjectBuilder_EntityBase entity);
     }
 }

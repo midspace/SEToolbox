@@ -35,6 +35,7 @@
         private readonly ObservableCollection<MaterialSelectionModel> _insideMaterialsCollection;
         private MaterialSelectionModel _outsideStockMaterial;
         private MaterialSelectionModel _insideStockMaterial;
+        private int _outsideMaterialDepth;
         private string _sourceFile;
         private double _rotateYaw;
         private double _rotatePitch;
@@ -342,6 +343,19 @@
             get { return _outsideMaterialsCollection; }
         }
 
+        public int OutsideMaterialDepth
+        {
+            get { return _outsideMaterialDepth; }
+
+            set
+            {
+                if (value != _outsideMaterialDepth)
+                {
+                    _outsideMaterialDepth = value;
+                    RaisePropertyChanged(() => OutsideMaterialDepth);
+                }
+            }
+        }
 
         public ObservableCollection<MaterialSelectionModel> InsideMaterialsCollection
         {

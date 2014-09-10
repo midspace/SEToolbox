@@ -6,7 +6,8 @@
     using System.Text;
     using System.Windows;
     using System.Windows.Input;
-
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
@@ -59,6 +60,16 @@
         public ICommand ReplaceSelectedCommand
         {
             get { return new DelegateCommand<string>(ReplaceSelectedExecuted, ReplaceSelectedCanExecute); }
+        }
+
+        public ICommand SliceQuarterCommand
+        {
+            get { return new DelegateCommand(SliceQuarterExecuted, SliceQuarterCanExecute); }
+        }
+
+        public ICommand SliceHalfCommand
+        {
+            get { return new DelegateCommand(SliceHalfExecuted, SliceHalfCanExecute); }
         }
 
         #endregion
@@ -171,7 +182,26 @@
 
         public void ReseedExecuted()
         {
+            MainViewModel.IsBusy = true;
+            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+
+            var cellCount = asteroid.SumVoxelCells();
+
+            // TODO: regenerate the materials inside of the asteroid randomly.
+
+
+            var tempfilename = TempfileUtil.NewFilename();
+            asteroid.Save(tempfilename);
+            DataModel.SourceVoxelFilepath = tempfilename;
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+
+            DataModel.MaterialAssets = null;
+            DataModel.InitializeAsync();
         }
 
         public bool ReplaceSurfaceCanExecute(string materialName)
@@ -187,7 +217,7 @@
             var asteroid = new MyVoxelMap();
             asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
-            asteroid.ForceShellMaterial(materialName, 1);
+            asteroid.ForceShellMaterial(materialName, 2);
 
             var tempfilename = TempfileUtil.NewFilename();
             asteroid.Save(tempfilename);
@@ -264,6 +294,98 @@
             DataModel.UpdateGeneralFromEntityBase();
             DataModel.MaterialAssets = null;
             DataModel.InitializeAsync();
+        }
+
+        public bool SliceQuarterCanExecute()
+        {
+            return true;
+        }
+
+        public void SliceQuarterExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
+
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+
+            var height = asteroid.ContentSize.Y;
+
+            // remove the Top half.
+            asteroid.RemoveMaterial((int)Math.Round(asteroid.ContentCenter.X, 0), asteroid.Size.X, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, 0, (int)Math.Round(asteroid.ContentCenter.Z, 0));
+
+            var tempfilename = TempfileUtil.NewFilename();
+            asteroid.Save(tempfilename);
+
+            var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Filename);
+            var posOrient = DataModel.PositionAndOrientation.HasValue ? DataModel.PositionAndOrientation.Value : new MyPositionAndOrientation();
+            posOrient.Position.y += height;
+
+            // genreate a new Asteroid entry.
+            var newEntity = new MyObjectBuilder_VoxelMap(posOrient.Position, newFilename)
+            {
+                EntityId = SpaceEngineersApi.GenerateEntityId(),
+                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Filename = newFilename,
+                PositionAndOrientation = new MyPositionAndOrientation
+                {
+                    Position = posOrient.Position,
+                    Forward = posOrient.Forward,
+                    Up = posOrient.Up
+                }
+            };
+
+            var structure = MainViewModel.AddEntity(newEntity);
+            ((StructureVoxelModel)structure).SourceVoxelFilepath = tempfilename; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool SliceHalfCanExecute()
+        {
+            return true;
+        }
+
+        public void SliceHalfExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
+
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+
+            var height = asteroid.ContentSize.Y;
+
+            // remove the Top half.
+            asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, null, null);
+
+            var tempfilename = TempfileUtil.NewFilename();
+            asteroid.Save(tempfilename);
+
+            var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Filename);
+            var posOrient = DataModel.PositionAndOrientation.HasValue ? DataModel.PositionAndOrientation.Value : new MyPositionAndOrientation();
+            posOrient.Position.y += height;
+
+            // genreate a new Asteroid entry.
+            var newEntity = new MyObjectBuilder_VoxelMap(posOrient.Position, newFilename)
+            {
+                EntityId = SpaceEngineersApi.GenerateEntityId(),
+                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Filename = newFilename,
+                PositionAndOrientation = new MyPositionAndOrientation
+                {
+                    Position = posOrient.Position,
+                    Forward = posOrient.Forward,
+                    Up = posOrient.Up
+                }
+            };
+
+            var structure = MainViewModel.AddEntity(newEntity);
+            ((StructureVoxelModel)structure).SourceVoxelFilepath = tempfilename; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
         }
 
         #endregion
