@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
@@ -43,15 +42,13 @@
 
         private ObservableCollection<InventoryEditorModel> _inventory;
 
-        private MySessionSettings _settings;
-
         #endregion
 
         #region ctor
 
-        public CubeItemModel(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
+        public CubeItemModel(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition)
         {
-            SetProperties(cube, definition, settings);
+            SetProperties(cube, definition);
         }
 
         #endregion
@@ -274,20 +271,6 @@
             }
         }
 
-        public MySessionSettings Settings
-        {
-            get { return _settings; }
-
-            set
-            {
-                if (!EqualityComparer<MySessionSettings>.Default.Equals(value, _settings))
-                {
-                    _settings = value;
-                    RaisePropertyChanged(() => Settings);
-                }
-            }
-        }
-
         #endregion
 
         public void SetColor(SerializableVector3 vector3)
@@ -317,9 +300,9 @@
             BuildPercent = Cube.BuildPercent;
         }
 
-        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
+        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition)
         {
-            var newCube = (MyObjectBuilder_CubeBlock)MyObjectBuilder_Base.CreateNewObject(typeId, subTypeId);
+            var newCube = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_CubeBlock>(typeId, subTypeId);
             newCube.BlockOrientation = Cube.BlockOrientation;
             newCube.ColorMaskHSV = Cube.ColorMaskHSV;
             newCube.BuildPercent = Cube.BuildPercent;
@@ -327,15 +310,14 @@
             newCube.IntegrityPercent = Cube.IntegrityPercent;
             newCube.Min = Cube.Min;
 
-            SetProperties(newCube, definition, settings);
+            SetProperties(newCube, definition);
 
             return newCube;
         }
 
-        private void SetProperties(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
+        private void SetProperties(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition)
         {
             Cube = cube;
-            Settings = settings;
             Position = new BindablePoint3DIModel(cube.Min);
             SetColor(cube.ColorMaskHSV);
             BuildPercent = cube.BuildPercent;
@@ -378,7 +360,8 @@
                         volumeMultiplier = MathHelper.Min(volumeMultiplier, maxSize);
                     }
 
-                    var iem = new InventoryEditorModel(inventory, Settings, volumeMultiplier * 1000 * Settings.InventorySizeMultiplier, null) { Name = field.Name, IsValid = true };
+                    var settings = SpaceEngineersCore.WorldResource.Content.Settings;
+                    var iem = new InventoryEditorModel(inventory, volumeMultiplier * 1000 * settings.InventorySizeMultiplier, null) { Name = field.Name, IsValid = true };
                     Inventory.Add(iem);
                 }
             }

@@ -79,8 +79,8 @@
 
         #region ctor
 
-        public StructureCubeGridModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
-            : base(entityBase, settings)
+        public StructureCubeGridModel(MyObjectBuilder_EntityBase entityBase)
+            : base(entityBase)
         {
             IsSubsSystemNotReady = true;
             IsConstructionNotReady = true;
@@ -757,7 +757,7 @@
 
                             _dispatcher.Invoke(DispatcherPriority.Input, (Action)delegate
                             {
-                                cubeList.Add(new CubeItemModel(block, cubeDefinition, Settings)
+                                cubeList.Add(new CubeItemModel(block, cubeDefinition)
                                 {
                                     TextureFile = cubeDefinition == null ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon))
                                 });

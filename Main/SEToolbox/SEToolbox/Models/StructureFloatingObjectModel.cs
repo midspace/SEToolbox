@@ -25,8 +25,8 @@
 
         #region ctor
 
-        public StructureFloatingObjectModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
-            : base(entityBase, settings)
+        public StructureFloatingObjectModel(MyObjectBuilder_EntityBase entityBase)
+            : base(entityBase)
         {
         }
 

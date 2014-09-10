@@ -425,7 +425,7 @@
             {
                 foreach (var entityBase in ActiveWorld.SectorData.SectorObjects)
                 {
-                    var structure = StructureBaseModel.Create(entityBase, ActiveWorld.Savepath, ActiveWorld.Content.Settings);
+                    var structure = StructureBaseModel.Create(entityBase, ActiveWorld.Savepath);
 
                     if (structure is StructureCharacterModel)
                     {
@@ -445,7 +445,7 @@
                         foreach (var cockpit in list)
                         {
                             cubeGrid.Pilots++;
-                            var character = (StructureCharacterModel)StructureBaseModel.Create(cockpit.Pilot, null, ActiveWorld.Content.Settings);
+                            var character = (StructureCharacterModel)StructureBaseModel.Create(cockpit.Pilot, null);
                             character.IsPilot = true;
 
                             if (ActiveWorld.Content != null && cockpit.EntityId == ActiveWorld.Content.ControlledObject)
@@ -585,7 +585,7 @@
             if (entity != null)
             {
                 ActiveWorld.SectorData.SectorObjects.Add(entity);
-                var structure = StructureBaseModel.Create(entity, ActiveWorld.Savepath, ActiveWorld.Content.Settings);
+                var structure = StructureBaseModel.Create(entity, ActiveWorld.Savepath);
                 var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
                 structure.PlayerDistance = (position - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
                 Structures.Add(structure);

@@ -6,6 +6,7 @@
 
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Views;
@@ -121,8 +122,9 @@
         {
             var model = new GenerateFloatingObjectModel();
             var position = new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var settings = SpaceEngineersCore.WorldResource.Content.Settings;
 
-            model.Load(position, _dataModel.Settings.MaxFloatingObjects);
+            model.Load(position, settings.MaxFloatingObjects);
             var loadVm = new GenerateFloatingObjectViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowGenerateFloatingObject>(this, loadVm);
             if (result == true)

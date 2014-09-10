@@ -293,7 +293,7 @@
                 entity.Item.Amount = 1;
 
             IsValidItemToImport = true;
-            entity.Item.PhysicalContent = (MyObjectBuilder_PhysicalObject)MyObjectBuilder_Base.CreateNewObject(StockItem.TypeId, StockItem.SubtypeId);
+            entity.Item.PhysicalContent = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_PhysicalObject>(StockItem.TypeId, StockItem.SubtypeId);
 
             //switch (StockItem.TypeId)
             //{
