@@ -74,6 +74,10 @@
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
                 </MenuItem>
+                <MenuItem Header="Slice">
+                    <MenuItem Header="Slice quarter (to copy)" Command="{Binding SliceQuarterCommand}" ToolTip="Removes a quarter from the direction of the sun" />
+                    <MenuItem Header="Slice half (to copy)" Command="{Binding SliceHalfCommand}"  ToolTip="Removes a half from the direction of the sun"  />
+                </MenuItem>
                 <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Copy text detail to Clipboard" Command="{Binding CopyDetailCommand}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />

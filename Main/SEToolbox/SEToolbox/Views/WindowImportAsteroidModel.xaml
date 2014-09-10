@@ -206,7 +206,7 @@
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Quality/Speed">
-                    <Grid Grid.Column="0">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -220,15 +220,15 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Content="Trace Type:" Grid.Row="0"/>
-                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceTypeEnum}}" SelectedValue="{Binding TraceType}" Margin="0,1,0,3">
+                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceTypeEnum}}" SelectedValue="{Binding TraceType}" Margin="0,1,0,3" ToolTip="Affects the balance of symmetrical model, whether the voxels generated are odd or even from the origin.  Visually you may not see any difference on large asteroids.">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Label Content="Trace Directions:" Grid.Row="1"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceDirectionEnum}}" SelectedValue="{Binding TraceDirection}" Margin="0,1,0,3">
+                        <Label Grid.Row="1" Grid.Column="0" Content="Trace Directions:"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceDirectionEnum}}" SelectedValue="{Binding TraceDirection}" Margin="0,1,0,3" ToolTip="Specifies the direction of rays. Having rays from all 3 directions takes 3 times longer but produces a more accurate conversion for highly detailed models.">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
@@ -246,7 +246,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Position">
-                    <StackPanel Grid.Row="6" Grid.ColumnSpan="3" Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
                         <GroupBox Header="Position" MinWidth="120">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -298,6 +298,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -306,12 +307,24 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <!--Import To Asteroid settings-->
-                            <Label Content="Ore Shell:" Grid.Row="2"/>
-                            <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding OutsideMaterialsCollection}" SelectedValue="{Binding OutsideStockMaterial}" DisplayMemberPath="DisplayName"/>
-                            <Label Content="Ore Inside:" Grid.Row="3"/>
-                            <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName"/>
+                            <Label Grid.Row="2" Grid.Column="0" Content="Ore Inside:"/>
+                            <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName"/>
+
+                            <Label Grid.Row="3" Grid.Column="0" Content="Ore Shell:"/>
+                            <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding OutsideMaterialsCollection}" SelectedValue="{Binding OutsideStockMaterial}" DisplayMemberPath="DisplayName"/>
+
+                            <Label Grid.Row="4" Grid.Column="0" Content="Ore shell depth:"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200">
+                                <TextBox.Text>
+                                    <Binding Path="OutsideMaterialDepth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleI Min="1" Max="10"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                         </Grid>
-                        <ListView Grid.Column="1" ItemsSource="{Binding VolmeticMapList, Mode=OneWay}" SelectedValue="{Binding SelectedVolmeticMapList}">
+                        <!--<ListView Grid.Column="1" ItemsSource="{Binding VolmeticMapList, Mode=OneWay}" SelectedValue="{Binding SelectedVolmeticMapList}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Width="40" Header="Move">
@@ -357,7 +370,7 @@
                                     <Button Grid.Row="1" ToolTip="Move Down" Style="{StaticResource SpinDownButton}" />
                                 </Grid>
                             </Border>
-                        </Grid>
+                        </Grid>-->
                     </Grid>
                 </TabItem>
             </TabControl>

@@ -56,6 +56,7 @@
             IsMultipleScale = true;
             MultipleScale = 1;
             MaxLengthScale = 100;
+            OutsideMaterialDepth = 1;
         }
 
         #endregion
@@ -241,6 +242,12 @@
         public ObservableCollection<MaterialSelectionModel> OutsideMaterialsCollection
         {
             get { return _dataModel.OutsideMaterialsCollection; }
+        }
+
+        public int OutsideMaterialDepth
+        {
+            get { return _dataModel.OutsideMaterialDepth; }
+            set { _dataModel.OutsideMaterialDepth = value; }
         }
 
         public ObservableCollection<MaterialSelectionModel> InsideMaterialsCollection
@@ -516,7 +523,7 @@
             }
             else
             {
-                voxelMap.ForceShellMaterial(OutsideStockMaterial.Value, 1);
+                voxelMap.ForceShellMaterial(OutsideStockMaterial.Value, (byte)OutsideMaterialDepth);
                 voxelMap.Save(SourceFile);
 
                 entity.PositionAndOrientation = new MyPositionAndOrientation

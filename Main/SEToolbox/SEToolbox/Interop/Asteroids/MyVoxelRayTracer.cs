@@ -693,7 +693,9 @@
             }
 
             var size = new Vector3I(xCount, yCount, zCount);
-            var fillerMaterial = SpaceEngineersCore.Resources.GetMaterialList().FirstOrDefault(m => m.IsRare == false).Id.SubtypeId;  // Default to first non-rare material.
+            // TODO: at the moment the Mesh list is not complete, so the faceMaterial setting is kind of vague.
+            var defaultMaterial = mappedMesh[0].Material; // Use the FaceMaterial from the first Mesh in the object list.
+            var faceMaterial = mappedMesh[0].FaceMaterial; // Use the FaceMaterial from the first Mesh in the object list.
 
             var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
             {
@@ -701,7 +703,7 @@
                 e.Material = SpaceEngineersCore.Resources.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, fillerMaterial, fillerMaterial, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, defaultMaterial, faceMaterial, action);
 
             if (complete != null)
                 complete.Invoke();

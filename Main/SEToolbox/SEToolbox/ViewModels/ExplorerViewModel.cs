@@ -1437,6 +1437,11 @@
             Languages = new ObservableCollection<LanguageModel>(list);
         }
 
+        public IStructureBase AddEntity(MyObjectBuilder_EntityBase entity)
+        {
+            return _dataModel.AddEntity(entity);
+        }
+
         #endregion
 
         #region IDragable Interface
