@@ -542,6 +542,18 @@
             return material.Id.SubtypeId;
         }
 
+        public T CreateNewObject<T>()
+            where T : MyObjectBuilder_Base
+        {
+            return (T)MyObjectBuilder_Base.CreateNewObject(typeof(T));
+        }
+
+        public T CreateNewObject<T>(MyObjectBuilderType typeId, string subtypeId)
+           where T : MyObjectBuilder_Base
+        {
+            return (T)MyObjectBuilder_Base.CreateNewObject(typeId, subtypeId);
+        }
+
         #endregion
     }
 }

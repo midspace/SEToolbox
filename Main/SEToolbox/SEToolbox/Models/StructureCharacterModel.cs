@@ -32,8 +32,8 @@
 
         #region ctor
 
-        public StructureCharacterModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
-            : base(entityBase, settings)
+        public StructureCharacterModel(MyObjectBuilder_EntityBase entityBase)
+            : base(entityBase)
         {
             CharacterModels = new List<string>(Enum.GetNames(typeof(MyCharacterModelEnum)));
         }
@@ -262,7 +262,8 @@
 
             if (Inventory == null)
             {
-                Inventory = new InventoryEditorModel(Character.Inventory, Settings, 0.4f * 1000 * Settings.InventorySizeMultiplier, Character);
+                var settings = SpaceEngineersCore.WorldResource.Content.Settings;
+                Inventory = new InventoryEditorModel(Character.Inventory, 0.4f * 1000 * settings.InventorySizeMultiplier, Character);
                 Mass += Inventory.TotalMass;
             }
         }

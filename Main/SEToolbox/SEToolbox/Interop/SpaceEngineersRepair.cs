@@ -192,44 +192,44 @@
                                 character.LinearVelocity = new VRageMath.Vector3();
                                 character.AutoenableJetpackDelay = -1;
                                 character.JetpackEnabled = true;
-                                character.Inventory = (MyObjectBuilder_Inventory)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_Inventory));
+                                character.Inventory = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_Inventory>();
 
                                 // Add default items to Inventory.
                                 MyObjectBuilder_InventoryItem item;
                                 MyObjectBuilder_EntityBase gunEntity;
 
-                                character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_InventoryItem)));
+                                character.Inventory.Items.Add(item = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_InventoryItem>());
                                 item.Amount = 1;
                                 item.ItemId = 0;
                                 item.Content = new MyObjectBuilder_Welder();
-                                gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_Welder));
+                                gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_Welder>();
                                 gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
-                                character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_InventoryItem)));
+                                character.Inventory.Items.Add(item = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_InventoryItem>());
                                 item.Amount = 1;
                                 item.ItemId = 1;
                                 item.Content = new MyObjectBuilder_AngleGrinder();
-                                gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AngleGrinder));
+                                gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_AngleGrinder>();
                                 gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
-                                character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_InventoryItem)));
+                                character.Inventory.Items.Add(item = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_InventoryItem>());
                                 item.Amount = 1;
                                 item.ItemId = 2;
                                 item.Content = new MyObjectBuilder_HandDrill();
-                                gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_HandDrill));
+                                gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_HandDrill>();
                                 gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
-                                character.Inventory.Items.Add(item = (MyObjectBuilder_InventoryItem)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_InventoryItem)));
+                                character.Inventory.Items.Add(item = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_InventoryItem>());
                                 item.Amount = 1;
                                 item.ItemId = 3;
                                 item.Content = new MyObjectBuilder_AutomaticRifle();
-                                gunEntity = (MyObjectBuilder_EntityBase)MyObjectBuilder_Base.CreateNewObject(typeof(MyObjectBuilder_AutomaticRifle));
+                                gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_AutomaticRifle>();
                                 gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;

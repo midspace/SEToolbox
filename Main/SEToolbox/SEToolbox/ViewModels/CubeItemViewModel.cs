@@ -171,12 +171,6 @@
             get { return _inventory.Value; }
         }
 
-        public MySessionSettings Settings
-        {
-            get { return _dataModel.Settings; }
-            set { _dataModel.Settings = value; }
-        }
-
         public override string ToString()
         {
             return FriendlyName;
@@ -196,9 +190,9 @@
             _dataModel.UpdateBuildPercent(buildPercent);
         }
 
-        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition, MySessionSettings settings)
+        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition)
         {
-            return _dataModel.CreateCube(typeId, subTypeId, definition, settings);
+            return _dataModel.CreateCube(typeId, subTypeId, definition);
         }
 
         #endregion

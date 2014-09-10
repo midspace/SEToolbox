@@ -45,8 +45,8 @@
 
         #region ctor
 
-        public StructureVoxelModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings, string voxelPath)
-            : base(entityBase, settings)
+        public StructureVoxelModel(MyObjectBuilder_EntityBase entityBase, string voxelPath)
+            : base(entityBase)
         {
             if (voxelPath != null)
             {
@@ -55,7 +55,7 @@
             }
 
             var materialList = SpaceEngineersCore.Resources.GetMaterialList().Select(m => m.Id.SubtypeName).OrderBy(s => s).ToList();
-            
+
             GameMaterialList = new List<VoxelMaterialAssetModel>(materialList.Select(s => new VoxelMaterialAssetModel { MaterialName = s, DisplayName = s }));
             EditMaterialList = new List<VoxelMaterialAssetModel> { new VoxelMaterialAssetModel { MaterialName = null, DisplayName = "Delete/Remove" } };
             EditMaterialList.AddRange(materialList.Select(s => new VoxelMaterialAssetModel { MaterialName = s, DisplayName = s }));

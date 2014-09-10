@@ -39,9 +39,6 @@
         private float _maxVolume;
 
         [NonSerialized]
-        private readonly MySessionSettings _settings;
-
-        [NonSerialized]
         private readonly MyObjectBuilder_Inventory _inventory;
 
         // not required for Cube inventories.
@@ -57,15 +54,14 @@
             IsValid = isValid;
         }
 
-        public InventoryEditorModel(MyObjectBuilder_Inventory inventory, MySessionSettings settings, float maxVolume, MyObjectBuilder_Character character = null)
+        public InventoryEditorModel(MyObjectBuilder_Inventory inventory, float maxVolume, MyObjectBuilder_Character character = null)
         {
             _inventory = inventory;
-            _settings = settings;
             _maxVolume = maxVolume;
             _character = character;
             UpdateGeneralFromEntityBase();
 
-            // CUbe.InventorySize.X * CUbe.InventorySize.Y * CUbe.InventorySize.Z * 1000 * Sandbox.InventorySizeMultiplier;
+            // Cube.InventorySize.X * CUbe.InventorySize.Y * CUbe.InventorySize.Z * 1000 * Sandbox.InventorySizeMultiplier;
             // or Cube.InventoryMaxVolume * 1000 * Sandbox.InventorySizeMultiplier;
             //Character.Inventory = 0.4 * 1000 * Sandbox.InventorySizeMultiplier;
         }
@@ -198,12 +194,6 @@
                     RaisePropertyChanged(() => MaxVolume);
                 }
             }
-        }
-
-        [XmlIgnore]
-        public MySessionSettings Settings
-        {
-            get { return _settings; }
         }
 
         #endregion

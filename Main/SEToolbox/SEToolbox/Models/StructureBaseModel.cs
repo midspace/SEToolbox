@@ -48,9 +48,6 @@
         private string _serializedEntity;
 
         [NonSerialized]
-        private MySessionSettings _settings;
-
-        [NonSerialized]
         internal Dispatcher _dispatcher;
 
         #endregion
@@ -61,33 +58,15 @@
         {
         }
 
-        public StructureBaseModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
+        public StructureBaseModel(MyObjectBuilder_EntityBase entityBase)
         {
             _dispatcher = Dispatcher.CurrentDispatcher;
-            Settings = settings;
             EntityBase = entityBase;
         }
 
         #endregion
 
         #region Properties
-
-        [XmlIgnore]
-        public MySessionSettings Settings
-        {
-            get
-            {
-                return _settings;
-            }
-            set
-            {
-                if (!EqualityComparer<MySessionSettings>.Default.Equals(value, _settings))
-                {
-                    _settings = value;
-                    RaisePropertyChanged(() => Settings);
-                }
-            }
-        }
 
         [XmlIgnore]
         public virtual MyObjectBuilder_EntityBase EntityBase
@@ -378,34 +357,34 @@
             ClassType = ClassType.Unknown;
         }
 
-        public static IStructureBase Create(MyObjectBuilder_EntityBase entityBase, string savefilePath, MySessionSettings settings)
+        public static IStructureBase Create(MyObjectBuilder_EntityBase entityBase, string savefilePath)
         {
             if (entityBase is MyObjectBuilder_VoxelMap)
             {
-                return new StructureVoxelModel(entityBase, settings, savefilePath);
+                return new StructureVoxelModel(entityBase, savefilePath);
             }
 
             if (entityBase is MyObjectBuilder_Character)
             {
-                return new StructureCharacterModel(entityBase, settings);
+                return new StructureCharacterModel(entityBase);
             }
 
             if (entityBase is MyObjectBuilder_CubeGrid)
             {
-                return new StructureCubeGridModel(entityBase, settings);
+                return new StructureCubeGridModel(entityBase);
             }
 
             if (entityBase is MyObjectBuilder_FloatingObject)
             {
-                return new StructureFloatingObjectModel(entityBase, settings);
+                return new StructureFloatingObjectModel(entityBase);
             }
 
             if (entityBase is MyObjectBuilder_Meteor)
             {
-                return new StructureMeteorModel(entityBase, settings);
+                return new StructureMeteorModel(entityBase);
             }
 
-            return new StructureUnknownModel(entityBase, settings);
+            return new StructureUnknownModel(entityBase);
             //throw new NotImplementedException(string.Format("A new object has not been catered for in the StructureBase, of type '{0}'.", entityBase.GetType()));
         }
 

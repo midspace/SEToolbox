@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.Serialization;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
 
@@ -10,8 +11,8 @@
     {
         #region ctor
 
-        public StructureUnknownModel(MyObjectBuilder_EntityBase entityBase, MySessionSettings settings)
-            : base(entityBase, settings)
+        public StructureUnknownModel(MyObjectBuilder_EntityBase entityBase)
+            : base(entityBase)
         {
         }
 
