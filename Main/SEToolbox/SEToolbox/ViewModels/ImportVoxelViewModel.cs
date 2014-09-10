@@ -334,7 +334,7 @@
                 else
                     material = SpaceEngineersCore.Resources.GetDefaultMaterialName();
 
-                originalFile = string.Format("sphere_{0}_{1}_{2}_", material.ToLowerInvariant(), SphereRadius, SphereShellRadius);
+                originalFile = string.Format("sphere_{0}_{1}_{2}_.vox", material.ToLowerInvariant(), SphereRadius, SphereShellRadius);
 
                 var asteroid = MyVoxelBuilder.BuildAsteroidSphere(SphereRadius > 32, SphereRadius, material, material, SphereShellRadius != 0, SphereShellRadius);
                 // TODO: progress bar.
