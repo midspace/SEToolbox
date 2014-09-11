@@ -3,9 +3,11 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
+    using System.Linq;
 
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
 
     public class ImportVoxelModel : BaseModel
@@ -45,7 +47,7 @@
             {
                 _materialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
             }
-            
+
             SphereRadius = 150;
             SphereShellRadius = 0;
         }
@@ -283,11 +285,13 @@
         public void Load(MyPositionAndOrientation characterPosition)
         {
             CharacterPosition = characterPosition;
-            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*.vox");
+            var filesV1 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V1FileExtension);
+            var filesV2 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V2FileExtension);
+            var files = filesV1.Concat(filesV2).OrderBy(s => s);
 
             foreach (var file in files)
             {
-                StockVoxelFileList.Add(Path.GetFileNameWithoutExtension(file));
+                StockVoxelFileList.Add(Path.GetFileName(file));
             }
         }
 

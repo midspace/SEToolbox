@@ -438,7 +438,7 @@
         private bool BuildEntity()
         {
             var filenamepart = Path.GetFileNameWithoutExtension(Filename);
-            var filename = MainViewModel.CreateUniqueVoxelFilename(filenamepart + ".vox");
+            var filename = MainViewModel.CreateUniqueVoxelFilename(filenamepart + MyVoxelMap.V2FileExtension);
             Position = Position.RoundOff(1.0);
             Forward = Forward.RoundToAxis();
             Up = Up.RoundToAxis();
@@ -461,7 +461,7 @@
 
             var scale = new ScaleTransform3D(multiplier, multiplier, multiplier);
             var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), RotateYaw + 90, RotatePitch, RotateRoll - 90);
-            SourceFile = TempfileUtil.NewFilename();
+            SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
 
             //var baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false);
             //if (baseMaterial == null)

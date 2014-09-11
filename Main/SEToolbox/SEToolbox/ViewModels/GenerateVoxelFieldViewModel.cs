@@ -277,11 +277,11 @@
                 var filler = new AsteroidByteFiller();
                 filler.FillAsteroid(asteroid, voxelDesign);
 
-                var tempfilename = TempfileUtil.NewFilename();
+                var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
                 asteroid.Save(tempfilename);
 
                 // automatically number all files, and check for duplicate filenames.
-                var filename = MainViewModel.CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + ".vox", entities.ToArray());
+                var filename = MainViewModel.CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + MyVoxelMap.V2FileExtension, entities.ToArray());
 
                 var radius = RandomUtil.GetDouble(MinimumRange, MaximumRange);
                 var longitude = RandomUtil.GetDouble(0, 2 * Math.PI);

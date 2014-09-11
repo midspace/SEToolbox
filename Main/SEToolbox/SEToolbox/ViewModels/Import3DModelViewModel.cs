@@ -523,7 +523,7 @@
         private MyObjectBuilder_VoxelMap BuildAsteroidEntity()
         {
             var filenamepart = Path.GetFileNameWithoutExtension(Filename);
-            var filename = MainViewModel.CreateUniqueVoxelFilename(filenamepart + ".vox");
+            var filename = MainViewModel.CreateUniqueVoxelFilename(filenamepart + MyVoxelMap.V2FileExtension);
             Position = Position.RoundOff(1.0);
             Forward = Forward.RoundToAxis();
             Up = Up.RoundToAxis();
@@ -545,7 +545,7 @@
             }
 
             var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
-            SourceFile = TempfileUtil.NewFilename();
+            SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
 
             var baseMaterial = SpaceEngineersCore.Resources.GetMaterialList().FirstOrDefault(m => m.IsRare == false) ?? SpaceEngineersCore.Resources.GetMaterialList().FirstOrDefault();
 

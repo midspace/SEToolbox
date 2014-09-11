@@ -228,6 +228,8 @@
         SmallRotor,
         ButtonPanelLarge,
         ButtonPanelSmall,
+        TimerBlockLarge,
+        TimerBlockSmall,
         LargeRailStraight,
         LargeBlockSolarPanel,
         SmallBlockSolarPanel,
