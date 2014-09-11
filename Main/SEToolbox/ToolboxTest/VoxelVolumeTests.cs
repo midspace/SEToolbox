@@ -33,7 +33,7 @@
             var traceCount = SEToolbox.Interop.Asteroids.TraceCount.Trace5;
             var traceDirection = SEToolbox.Interop.Asteroids.TraceDirection.XYZ;
 
-            var asteroidFile = @".\TestOutput\test_sphere_odd.vox";
+            var asteroidFile = @".\TestOutput\test_sphere_odd.vx2";
 
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);
             var meshes = new List<SEToolbox.Interop.Asteroids.MyVoxelRayTracer.MyMeshModel>();
@@ -53,7 +53,7 @@
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            //Assert.AreEqual(2021, voxelFileLength, "File size must match.");
+            Assert.AreEqual(2026, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(64, 64, 64), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(25, 25, 25), voxelMap.ContentSize, "Voxel Content size must match.");
 
@@ -76,7 +76,7 @@
             var traceType = SEToolbox.Interop.Asteroids.TraceType.Even;
             var traceCount = SEToolbox.Interop.Asteroids.TraceCount.Trace5;
             var traceDirection = SEToolbox.Interop.Asteroids.TraceDirection.XYZ;
-            var asteroidFile = @".\TestOutput\test_sphere_even.vox";
+            var asteroidFile = @".\TestOutput\test_sphere_even.vx2";
 
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);
             var meshes = new List<SEToolbox.Interop.Asteroids.MyVoxelRayTracer.MyMeshModel>();
@@ -96,7 +96,7 @@
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(1908, voxelFileLength, "File size must match.");
+            Assert.AreEqual(1913, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(64, 64, 64), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(26, 26, 26), voxelMap.ContentSize, "Voxel Content size must match.");
 
@@ -202,7 +202,7 @@
 
             var modelMaterials = new string[] { stoneMaterial.Id.SubtypeId, goldMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId };
             var fillerMaterial = silverMaterial.Id.SubtypeId;
-            var asteroidFile = @".\TestOutput\test_sphere.vox";
+            var asteroidFile = @".\TestOutput\test_sphere.vx2";
 
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);
             var meshes = new List<SEToolbox.Interop.Asteroids.MyVoxelRayTracer.MyMeshModel>();

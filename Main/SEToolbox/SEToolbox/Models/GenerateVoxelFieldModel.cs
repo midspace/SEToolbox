@@ -7,6 +7,7 @@
 
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using SEToolbox.Models.Asteroids;
 
@@ -162,7 +163,9 @@
 
             BaseMaterial = MaterialsCollection.FirstOrDefault(m => m.IsRare == false) ?? MaterialsCollection.FirstOrDefault();
 
-            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*.vox");
+            var filesV1 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V1FileExtension);
+            var filesV2 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V2FileExtension);
+            var files = filesV1.Concat(filesV2).OrderBy(s => s);
 
             StockVoxelFileList.Clear();
             foreach (var file in files)

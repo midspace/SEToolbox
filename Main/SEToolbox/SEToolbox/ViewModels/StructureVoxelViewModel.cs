@@ -13,6 +13,7 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
+    using System.IO;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -193,7 +194,7 @@
             // TODO: regenerate the materials inside of the asteroid randomly.
 
 
-            var tempfilename = TempfileUtil.NewFilename();
+            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
             asteroid.Save(tempfilename);
             DataModel.SourceVoxelFilepath = tempfilename;
 
@@ -219,7 +220,7 @@
 
             asteroid.ForceShellMaterial(materialName, 2);
 
-            var tempfilename = TempfileUtil.NewFilename();
+            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
             asteroid.Save(tempfilename);
             DataModel.SourceVoxelFilepath = tempfilename;
 
@@ -246,7 +247,7 @@
             asteroid.ForceBaseMaterial(materialName, materialName);
             asteroid.ForceVoxelFaceMaterial(SpaceEngineersCore.Resources.GetDefaultMaterialName());
 
-            var tempfilename = TempfileUtil.NewFilename();
+            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
             asteroid.Save(tempfilename);
             DataModel.SourceVoxelFilepath = tempfilename;
 
@@ -283,10 +284,9 @@
             else
                 asteroid.ReplaceMaterial(SelectedMaterialAsset.MaterialName, materialName);
 
-            var tempfilename = TempfileUtil.NewFilename();
+            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
             asteroid.Save(tempfilename);
             DataModel.SourceVoxelFilepath = tempfilename;
-
 
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
@@ -360,7 +360,7 @@
             // remove the Top half.
             asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, null, null);
 
-            var tempfilename = TempfileUtil.NewFilename();
+            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
             asteroid.Save(tempfilename);
 
             var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Filename);

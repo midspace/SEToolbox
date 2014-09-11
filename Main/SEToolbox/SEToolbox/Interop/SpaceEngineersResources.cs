@@ -8,6 +8,7 @@
 
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders.Serializer;
     using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
 
@@ -462,8 +463,8 @@
 
 
             // AddAsteroidPrefab.PrefabFile is an Enumeration currently, so it might be useless to consider tracking it for mods.
-            //var voxelMaps = new List<string>(); // .vox
-            // Find: "VoxelMaps\*.vox"
+            //var voxelMaps = new List<string>(); // .vox ; .vx2
+            // Find: "VoxelMaps\*.vox;*.vx2"
             //voxelMaps.AddRange(definitions.Scenarios.Where(s => s.WorldGeneratorOperations != null).SelectMany(s => s.WorldGeneratorOperations).
             //    Where(o => o is MyObjectBuilder_WorldGeneratorOperation_AddAsteroidPrefab).
             //    Cast<MyObjectBuilder_WorldGeneratorOperation_AddAsteroidPrefab>().
@@ -545,13 +546,13 @@
         public T CreateNewObject<T>()
             where T : MyObjectBuilder_Base
         {
-            return (T)MyObjectBuilder_Base.CreateNewObject(typeof(T));
+            return (T)MyObjectBuilderSerializer.CreateNewObject(typeof(T));
         }
 
         public T CreateNewObject<T>(MyObjectBuilderType typeId, string subtypeId)
            where T : MyObjectBuilder_Base
         {
-            return (T)MyObjectBuilder_Base.CreateNewObject(typeId, subtypeId);
+            return (T)MyObjectBuilderSerializer.CreateNewObject(typeId, subtypeId);
         }
 
         #endregion

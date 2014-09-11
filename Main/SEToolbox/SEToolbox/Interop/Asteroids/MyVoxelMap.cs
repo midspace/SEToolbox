@@ -22,6 +22,10 @@ namespace SEToolbox.Interop.Asteroids
 
     public class MyVoxelMap
     {
+        public const string V1FileExtension = ".vox";
+        public const string V2FileExtension = ".vx2";
+        internal const string TagCell = "Cell";
+
         #region fields
 
         // Count of voxel data cells in all directions.
@@ -70,11 +74,11 @@ namespace SEToolbox.Interop.Asteroids
 
         private void InitVoxelMap(Vector3 position, Vector3I size, string materialName)
         {
-            this.Size = size;
-            this._sizeMinusOne = new Vector3I(Size.X - 1, Size.Y - 1, Size.Z - 1);
-            this.VoxelMaterial = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
-            this._positionLeftBottomCorner = position;
-            this._boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
+            Size = size;
+            _sizeMinusOne = new Vector3I(Size.X - 1, Size.Y - 1, Size.Z - 1);
+            VoxelMaterial = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
+            _positionLeftBottomCorner = position;
+            _boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
 
             // If you need larged voxel maps, enlarge this constant.
             Debug.Assert(Size.X <= MyVoxelConstants.MAX_VOXEL_MAP_SIZE_IN_VOXELS);
@@ -85,9 +89,9 @@ namespace SEToolbox.Interop.Asteroids
             Debug.Assert((Size.X & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
             Debug.Assert((Size.Y & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
             Debug.Assert((Size.Z & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
-            this._dataCellsCount.X = Size.X >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS;
-            this._dataCellsCount.Y = Size.Y >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS;
-            this._dataCellsCount.Z = Size.Z >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS;
+            _dataCellsCount.X = Size.X >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS;
+            _dataCellsCount.Y = Size.Y >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS;
+            _dataCellsCount.Z = Size.Z >> MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS;
 
             // Voxel map size must be multiple of a voxel data cell size.
             Debug.Assert((Size.X % MyVoxelConstants.VOXEL_RENDER_CELL_SIZE_IN_VOXELS) == 0);
@@ -95,27 +99,27 @@ namespace SEToolbox.Interop.Asteroids
             Debug.Assert((Size.Z % MyVoxelConstants.VOXEL_RENDER_CELL_SIZE_IN_VOXELS) == 0);
 
             // Array of voxel cells in this voxel map.
-            this._voxelContentCells = new MyVoxelContentCell[this._dataCellsCount.X][][];
-            for (var x = 0; x < this._voxelContentCells.Length; x++)
+            _voxelContentCells = new MyVoxelContentCell[_dataCellsCount.X][][];
+            for (var x = 0; x < _voxelContentCells.Length; x++)
             {
-                this._voxelContentCells[x] = new MyVoxelContentCell[this._dataCellsCount.Y][];
-                for (var y = 0; y < this._voxelContentCells[x].Length; y++)
+                _voxelContentCells[x] = new MyVoxelContentCell[_dataCellsCount.Y][];
+                for (var y = 0; y < _voxelContentCells[x].Length; y++)
                 {
-                    this._voxelContentCells[x][y] = new MyVoxelContentCell[this._dataCellsCount.Z];
+                    _voxelContentCells[x][y] = new MyVoxelContentCell[_dataCellsCount.Z];
                 }
             }
 
             //  Set base material.
-            this._voxelMaterialCells = new MyVoxelMaterialCell[_dataCellsCount.X][][];
-            for (var x = 0; x < this._dataCellsCount.X; x++)
+            _voxelMaterialCells = new MyVoxelMaterialCell[_dataCellsCount.X][][];
+            for (var x = 0; x < _dataCellsCount.X; x++)
             {
-                this._voxelMaterialCells[x] = new MyVoxelMaterialCell[_dataCellsCount.Y][];
-                for (var y = 0; y < this._dataCellsCount.Y; y++)
+                _voxelMaterialCells[x] = new MyVoxelMaterialCell[_dataCellsCount.Y][];
+                for (var y = 0; y < _dataCellsCount.Y; y++)
                 {
-                    this._voxelMaterialCells[x][y] = new MyVoxelMaterialCell[_dataCellsCount.Z];
-                    for (var z = 0; z < this._dataCellsCount.Z; z++)
+                    _voxelMaterialCells[x][y] = new MyVoxelMaterialCell[_dataCellsCount.Z];
+                    for (var z = 0; z < _dataCellsCount.Z; z++)
                     {
-                        this._voxelMaterialCells[x][y][z] = new MyVoxelMaterialCell(this.VoxelMaterial, 0xFF);
+                        _voxelMaterialCells[x][y][z] = new MyVoxelMaterialCell(VoxelMaterial, 0xFF);
                     }
                 }
             }
@@ -158,27 +162,44 @@ namespace SEToolbox.Interop.Asteroids
         /// <returns></returns>
         public static bool IsVoxelMapFile(string filename)
         {
-            using (var stream = File.OpenRead(filename))
+            var extension = Path.GetExtension(filename);
+            if (extension != null && extension.Equals(V1FileExtension, StringComparison.InvariantCultureIgnoreCase))
+            {
+                using (var stream = File.OpenRead(filename))
+                {
+                    try
+                    {
+                        var msgLength1 = stream.ReadByte();
+                        var msgLength2 = stream.ReadByte();
+                        var msgLength3 = stream.ReadByte();
+                        var msgLength4 = stream.ReadByte();
+                        var b1 = stream.ReadByte();
+                        var b2 = stream.ReadByte();
+                        return (b1 == 0x1f && b2 == 0x8b);
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                    finally
+                    {
+                        stream.Close();
+                    }
+                }
+            }
+            if (extension != null && extension.Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase))
             {
                 try
                 {
-                    var msgLength1 = stream.ReadByte();
-                    var msgLength2 = stream.ReadByte();
-                    var msgLength3 = stream.ReadByte();
-                    var msgLength4 = stream.ReadByte();
-                    var b1 = stream.ReadByte();
-                    var b2 = stream.ReadByte();
-                    return (b1 == 0x1f && b2 == 0x8b);
+                    return ZipTools.IsGzipedFile(filename);
                 }
                 catch
                 {
                     return false;
                 }
-                finally
-                {
-                    stream.Close();
-                }
             }
+
+            return false;
         }
 
         #endregion
@@ -189,28 +210,44 @@ namespace SEToolbox.Interop.Asteroids
         {
             if (string.IsNullOrEmpty(defaultMaterial))
                 defaultMaterial = SpaceEngineersCore.Resources.GetDefaultMaterialName();
-            this.Load(filename, defaultMaterial, true);
+           
+            Load(filename, defaultMaterial, true);
         }
 
         public void Load(string filename, string defaultMaterial, bool loadMaterial)
         {
             var tempfilename = TempfileUtil.NewFilename();
-            Uncompress(filename, tempfilename);
+            var version = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 2 : 1;
+
+            if (version == 2)
+                ZipTools.GZipUncompress(filename, tempfilename);
+            else
+                Uncompress(filename, tempfilename);
 
             using (var ms = new FileStream(tempfilename, FileMode.Open))
             {
                 using (var reader = new BinaryReader(ms))
                 {
-                    this.LoadUncompressed(Vector3.Zero, reader, defaultMaterial, loadMaterial);
+                    LoadUncompressed(version, Vector3.Zero, reader, defaultMaterial, loadMaterial);
                 }
             }
 
             File.Delete(tempfilename);
         }
 
-        public void LoadUncompressed(Vector3 position, BinaryReader reader, string defaultMaterial, bool loadMaterial)
+        public void LoadUncompressed(int version, Vector3 position, BinaryReader reader, string defaultMaterial, bool loadMaterial)
         {
-            this.FileVersion = reader.ReadInt32();
+            switch (version)
+            {
+                case 2:
+                    // cell tag header
+                    reader.ReadString();
+                    FileVersion = reader.ReadByte();
+                    break;
+                default:
+                    FileVersion = reader.ReadInt32();
+                    break;
+            }
 
             var sizeX = reader.ReadInt32();
             var sizeY = reader.ReadInt32();
@@ -220,10 +257,10 @@ namespace SEToolbox.Interop.Asteroids
             var cellSizeY = reader.ReadInt32();
             var cellSizeZ = reader.ReadInt32();
 
-            this._cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
+            _cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
 
-            this.InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
-            var cellsCount = this.Size / this._cellSize;
+            InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
+            var cellsCount = Size / _cellSize;
 
             for (var x = 0; x < cellsCount.X; x++)
             {
@@ -239,7 +276,7 @@ namespace SEToolbox.Interop.Asteroids
                             var cellCoord = new Vector3I(x, y, z);
 
                             var newCell = new MyVoxelContentCell();
-                            this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                            _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
 
                             if (cellType == MyVoxelCellType.EMPTY)
                             {
@@ -248,16 +285,16 @@ namespace SEToolbox.Interop.Asteroids
                             else if (cellType == MyVoxelCellType.MIXED)
                             {
                                 BoundingBox box;
-                                newCell.SetAllVoxelContents(reader.ReadBytes(this._cellSize.X * this._cellSize.Y * this._cellSize.Z), out box);
-                                this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
-                                this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
+                                newCell.SetAllVoxelContents(reader.ReadBytes(_cellSize.X * _cellSize.Y * _cellSize.Z), out box);
+                                _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
+                                _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
                             }
                             // ignore else condition
                         }
                         else
                         {
-                            this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
-                            this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                            _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
                         }
                     }
                 }
@@ -276,7 +313,7 @@ namespace SEToolbox.Interop.Asteroids
                     for (var z = 0; z < cellsCount.Z; z++)
                     {
                         byte indestructibleContent;
-                        var matCell = this._voxelMaterialCells[x][y][z];
+                        var matCell = _voxelMaterialCells[x][y][z];
 
                         var materialCount = reader.ReadByte();
 
@@ -315,30 +352,53 @@ namespace SEToolbox.Interop.Asteroids
 
         #region Save
 
+        /// <summary>
+        /// Saves the asteroid to the specified filename.
+        /// </summary>
+        /// <param name="filename">the file extension indicates the version of file been saved.</param>
         public void Save(string filename)
         {
             Debug.Write("Saving binary.");
+
+            var version = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 2 : 1;
+
             var tempfilename = TempfileUtil.NewFilename();
             using (var ms = new FileStream(tempfilename, FileMode.Create))
             {
-                this.Save(new BinaryWriter(ms), true);
+                Save(version, new BinaryWriter(ms), true);
             }
 
             Debug.Write("Compressing.");
-            Compress(tempfilename, filename);
+
+            if (version == 2)
+                ZipTools.GZipCompress(tempfilename, filename);
+            else
+                Compress(tempfilename, filename);
+
             File.Delete(tempfilename);
             Debug.Write("Done.");
         }
 
-        public void Save(BinaryWriter writer, bool saveMaterialContent)
+        public void Save(int version, BinaryWriter writer, bool saveMaterialContent)
         {
-            //  Version of a VOX file
-            writer.Write(MyVoxelConstants.VOXEL_FILE_ACTUAL_VERSION);
+            switch (version)
+            {
+                case 2:
+                    writer.Write(TagCell);
+
+                    //  Version of a VOX file
+                    writer.Write((byte)MyVoxelConstants.VOXEL_FILE_ACTUAL_VERSION);
+                    break;
+                default:
+                    //  Version of a VOX file
+                    writer.Write(MyVoxelConstants.VOXEL_FILE_ACTUAL_VERSION);
+                    break;
+            }
 
             //  Size of this voxel map (in voxels)
-            writer.Write(this.Size.X);
-            writer.Write(this.Size.Y);
-            writer.Write(this.Size.Z);
+            writer.Write(Size.X);
+            writer.Write(Size.Y);
+            writer.Write(Size.Z);
 
             //  Size of data cell in voxels, doesn't have to be same as current size specified by our constants.
             writer.Write(MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS);
@@ -346,13 +406,13 @@ namespace SEToolbox.Interop.Asteroids
             writer.Write(MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS);
 
             Vector3I cellCoord;
-            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
             {
-                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
                 {
-                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
                     {
-                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
 
                         if (voxelCell == null)
                         {
@@ -395,20 +455,20 @@ namespace SEToolbox.Interop.Asteroids
             if (saveMaterialContent)
             {
                 // Save material cells
-                for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+                for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
                 {
-                    for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                    for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
                     {
-                        for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                        for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
                         {
-                            var matCell = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                            var matCell = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
                             var voxelCoordInCell = new Vector3I(0, 0, 0);
                             var isWholeMaterial = matCell.IsSingleMaterialForWholeCell;
                             writer.Write((byte)(isWholeMaterial ? 0x01 : 0x00));
                             if (isWholeMaterial)
                             {
                                 writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
-                                writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), this.VoxelMaterial));
+                                writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), VoxelMaterial));
                             }
                             else
                             {
@@ -419,7 +479,7 @@ namespace SEToolbox.Interop.Asteroids
                                         for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
                                         {
                                             writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
-                                            writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), this.VoxelMaterial));
+                                            writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), VoxelMaterial));
                                             writer.Write((byte)0x0);
                                         }
                                     }
@@ -463,7 +523,8 @@ namespace SEToolbox.Interop.Asteroids
             using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read))
             {
                 var reader = new BinaryReader(compressedByteStream);
-                var msgLength = reader.ReadInt32();
+                // message Length.
+                reader.ReadInt32();
 
                 if (File.Exists(destinationFilename))
                     File.Delete(destinationFilename);
@@ -491,10 +552,10 @@ namespace SEToolbox.Interop.Asteroids
         internal void SetVoxelContent(byte content, ref Vector3I voxelCoord, bool needLock = true)
         {
             //  We don't change voxel if it's a border voxel and it would be an empty voxel (not full). Because that would make voxel map with wrong/missing edges.
-            if ((content > 0) && (this.IsVoxelAtBorder(ref voxelCoord))) return;
+            if ((content > 0) && (IsVoxelAtBorder(ref voxelCoord))) return;
 
-            var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
-            var voxelCell = this.GetCell(ref cellCoord);
+            var cellCoord = GetDataCellCoordinate(ref voxelCoord);
+            var voxelCell = GetCell(ref cellCoord);
 
             if (voxelCell == null)
             {
@@ -508,8 +569,8 @@ namespace SEToolbox.Interop.Asteroids
                 else
                 {
                     //  We are switching cell from type FULL to EMPTY or MIXED, therefore we need to allocate new cell
-                    var newCell = this.AddCell(ref cellCoord);
-                    var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
+                    var newCell = AddCell(ref cellCoord);
+                    var voxelCoordInCell = GetVoxelCoordinatesInDataCell(ref voxelCoord);
                     newCell.SetVoxelContent(content, ref voxelCoordInCell);
                 }
             }
@@ -522,9 +583,9 @@ namespace SEToolbox.Interop.Asteroids
                 }
                 else
                 {
-                    var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
+                    var voxelCoordInCell = GetVoxelCoordinatesInDataCell(ref voxelCoord);
                     voxelCell.SetVoxelContent(content, ref voxelCoordInCell);
-                    this.CheckIfCellChangedToFull(voxelCell, ref cellCoord);
+                    CheckIfCellChangedToFull(voxelCell, ref cellCoord);
                 }
             }
             else if (voxelCell.CellType == MyVoxelCellType.EMPTY)
@@ -536,17 +597,17 @@ namespace SEToolbox.Interop.Asteroids
                 }
                 else
                 {
-                    var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
+                    var voxelCoordInCell = GetVoxelCoordinatesInDataCell(ref voxelCoord);
                     voxelCell.SetVoxelContent(content, ref voxelCoordInCell);
-                    this.CheckIfCellChangedToFull(voxelCell, ref cellCoord);
+                    CheckIfCellChangedToFull(voxelCell, ref cellCoord);
                 }
             }
             else if (voxelCell.CellType == MyVoxelCellType.MIXED)
             {
-                var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
+                var voxelCoordInCell = GetVoxelCoordinatesInDataCell(ref voxelCoord);
                 var oldContent = voxelCell.GetVoxelContent(ref voxelCoordInCell);
                 voxelCell.SetVoxelContent(content, ref voxelCoordInCell);
-                this.CheckIfCellChangedToFull(voxelCell, ref cellCoord);
+                CheckIfCellChangedToFull(voxelCell, ref cellCoord);
             }
             // ignore else condition.
         }
@@ -625,10 +686,10 @@ namespace SEToolbox.Interop.Asteroids
 
         public void SetVoxelMaterialAndIndestructibleContent(string materialName, byte indestructibleContent, ref Vector3I voxelCoord)
         {
-            var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
-            var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
-            var oldMaterial = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
-            this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].SetMaterialAndIndestructibleContent(SpaceEngineersCore.Resources.GetMaterialIndex(materialName), indestructibleContent, ref voxelCoordInCell);
+            var cellCoord = GetDataCellCoordinate(ref voxelCoord);
+            var voxelCoordInCell = GetVoxelCoordinatesInDataCell(ref voxelCoord);
+            var oldMaterial = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
+            _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].SetMaterialAndIndestructibleContent(SpaceEngineersCore.Resources.GetMaterialIndex(materialName), indestructibleContent, ref voxelCoordInCell);
         }
 
         #endregion
@@ -642,9 +703,9 @@ namespace SEToolbox.Interop.Asteroids
         /// <param name="cellCoord">Cell coordinates vector (internal)</param>
         public void SetVoxelMaterialRegion(string materialName, ref Vector3I cellCoord)
         {
-            if (!(this.CheckVoxelCoord(ref cellCoord)))
+            if (!(CheckVoxelCoord(ref cellCoord)))
                 return;
-            this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
+            _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
         }
 
         #endregion
@@ -653,10 +714,10 @@ namespace SEToolbox.Interop.Asteroids
 
         public void GetVoxelMaterialContent(ref Vector3I voxelCoord, out string materialName, out byte content)
         {
-            var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
-            var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
+            var cellCoord = GetDataCellCoordinate(ref voxelCoord);
+            var voxelCoordInCell = GetVoxelCoordinatesInDataCell(ref voxelCoord);
 
-            var oldMaterial = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
+            var oldMaterial = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
             materialName = SpaceEngineersCore.Resources.GetMaterialName(oldMaterial);
             content = GetVoxelContent(ref voxelCoordInCell);
         }
@@ -670,15 +731,14 @@ namespace SEToolbox.Interop.Asteroids
         /// </summary>
         /// <param name="materialName">material name</param>
         /// <param name="radius">radius in voxels, defaults to zero, meaning only a random grid.</param>
-        /// <param name="mixed"></param>
         public void SeedMaterialSphere(string materialName, byte radius = 0)
         {
             var fullCells = new List<Vector3I> { };
             Vector3I cellCoord;
             // Collect the non-empty cell coordinates
-            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
-                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
-                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
                         if (!CheckCellType(ref _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z], MyVoxelCellType.EMPTY))
                             fullCells.Add(cellCoord);
 
@@ -691,7 +751,7 @@ namespace SEToolbox.Interop.Asteroids
                 cell = fullCells[i];
                 if (i == 0)
                 {
-                    this.SetVoxelMaterialRegion(materialName, ref cell);
+                    SetVoxelMaterialRegion(materialName, ref cell);
                     continue;
                 }
                 // Optionally seek adjanced cells and set their material too.
@@ -700,7 +760,7 @@ namespace SEToolbox.Interop.Asteroids
                 vlen = fullCells[0] - cell;
                 if (vlen.RectangularLength() <= radius)
                 {
-                    this.SetVoxelMaterialRegion(materialName, ref cell);
+                    SetVoxelMaterialRegion(materialName, ref cell);
                 }
             }
         }
@@ -718,18 +778,18 @@ namespace SEToolbox.Interop.Asteroids
         {
             var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
 
-            for (var x = 0; x < this._voxelMaterialCells.Length; x++)
+            for (var x = 0; x < _voxelMaterialCells.Length; x++)
             {
-                for (var y = 0; y < this._voxelMaterialCells[x].Length; y++)
+                for (var y = 0; y < _voxelMaterialCells[x].Length; y++)
                 {
-                    for (var z = 0; z < this._voxelMaterialCells[x][y].Length; z++)
+                    for (var z = 0; z < _voxelMaterialCells[x][y].Length; z++)
                     {
-                        this._voxelMaterialCells[x][y][z].ForceReplaceMaterial(materialIndex);
+                        _voxelMaterialCells[x][y][z].ForceReplaceMaterial(materialIndex);
                     }
                 }
             }
 
-            this.ForceVoxelFaceMaterial(defaultMaterial);
+            ForceVoxelFaceMaterial(defaultMaterial);
         }
 
         #endregion
@@ -744,39 +804,39 @@ namespace SEToolbox.Interop.Asteroids
         {
             Vector3I coords;
 
-            for (var y = 0; y < this.Size.Y; y++)
+            for (var y = 0; y < Size.Y; y++)
             {
-                for (var z = 0; z < this.Size.Z; z++)
+                for (var z = 0; z < Size.Z; z++)
                 {
                     coords = new Vector3I(0, y, z);
-                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                    SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
 
-                    coords = new Vector3I(this.Size.X - 1, y, z);
-                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                    coords = new Vector3I(Size.X - 1, y, z);
+                    SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
                 }
             }
 
-            for (var x = 0; x < this.Size.X; x++)
+            for (var x = 0; x < Size.X; x++)
             {
-                for (var z = 0; z < this.Size.Z; z++)
+                for (var z = 0; z < Size.Z; z++)
                 {
                     coords = new Vector3I(x, 0, z);
-                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                    SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
 
-                    coords = new Vector3I(x, this.Size.Y - 1, z);
-                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                    coords = new Vector3I(x, Size.Y - 1, z);
+                    SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
                 }
             }
 
-            for (var x = 0; x < this.Size.X; x++)
+            for (var x = 0; x < Size.X; x++)
             {
-                for (var y = 0; y < this.Size.Y; y++)
+                for (var y = 0; y < Size.Y; y++)
                 {
                     coords = new Vector3I(x, y, 0);
-                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                    SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
 
-                    coords = new Vector3I(x, y, this.Size.Z - 1);
-                    this.SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
+                    coords = new Vector3I(x, y, Size.Z - 1);
+                    SetVoxelMaterialAndIndestructibleContent(materialName, 0xff, ref coords);
                 }
             }
         }
@@ -789,35 +849,36 @@ namespace SEToolbox.Interop.Asteroids
         /// Force the material of the outermost mixed voxcells to the given material
         /// </summary>
         /// <param name="materialName"></param>
+        /// <param name="tgtThickness"></param>
         public void ForceShellMaterial(string materialName, byte tgtThickness = 0)
         {
             Vector3I vector;
             byte curThickness = 0;
 
-            for (vector.X = 0; vector.X < this._dataCellsCount.X; vector.X++)
+            for (vector.X = 0; vector.X < _dataCellsCount.X; vector.X++)
             {
-                for (vector.Y = 0; vector.Y < this._dataCellsCount.Y; vector.Y++)
+                for (vector.Y = 0; vector.Y < _dataCellsCount.Y; vector.Y++)
                 {
-                    for (curThickness = 0, vector.Z = 0; vector.Z < this._dataCellsCount.Z - 1; vector.Z++)
+                    for (curThickness = 0, vector.Z = 0; vector.Z < _dataCellsCount.Z - 1; vector.Z++)
                     {
                         if (
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z + 1], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
+                            _voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z + 1], MyVoxelCellType.FULL))
                                 break;
                         }
                     }
-                    for (curThickness = 0, vector.Z = this._dataCellsCount.Z - 1; vector.Z > 0; vector.Z--)
+                    for (curThickness = 0, vector.Z = _dataCellsCount.Z - 1; vector.Z > 0; vector.Z--)
                     {
                         if (
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z - 1], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
+                            _voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z - 1], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -825,30 +886,30 @@ namespace SEToolbox.Interop.Asteroids
                 }
             }
 
-            for (vector.X = 0; vector.X < this._dataCellsCount.X; vector.X++)
+            for (vector.X = 0; vector.X < _dataCellsCount.X; vector.X++)
             {
-                for (vector.Z = 0; vector.Z < this._dataCellsCount.Z; vector.Z++)
+                for (vector.Z = 0; vector.Z < _dataCellsCount.Z; vector.Z++)
                 {
-                    for (curThickness = 0, vector.Y = 0; vector.Y < this._dataCellsCount.Y - 1; vector.Y++)
+                    for (curThickness = 0, vector.Y = 0; vector.Y < _dataCellsCount.Y - 1; vector.Y++)
                     {
                         if (
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y + 1][vector.Z], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
+                            _voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y + 1][vector.Z], MyVoxelCellType.FULL))
                                 break;
                         }
                     }
-                    for (curThickness = 0, vector.Y = this._dataCellsCount.Y - 1; vector.Y > 0; vector.Y--)
+                    for (curThickness = 0, vector.Y = _dataCellsCount.Y - 1; vector.Y > 0; vector.Y--)
                     {
                         if (
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y - 1][vector.Z], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
+                            _voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X][vector.Y - 1][vector.Z], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -856,30 +917,30 @@ namespace SEToolbox.Interop.Asteroids
                 }
             }
 
-            for (vector.Z = 0; vector.Z < this._dataCellsCount.Z; vector.Z++)
+            for (vector.Z = 0; vector.Z < _dataCellsCount.Z; vector.Z++)
             {
-                for (vector.Y = 0; vector.Y < this._dataCellsCount.Y; vector.Y++)
+                for (vector.Y = 0; vector.Y < _dataCellsCount.Y; vector.Y++)
                 {
-                    for (curThickness = 0, vector.X = 0; vector.X < this._dataCellsCount.X - 1; vector.X++)
+                    for (curThickness = 0, vector.X = 0; vector.X < _dataCellsCount.X - 1; vector.X++)
                     {
                         if (
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
                             !CheckCellType(ref _voxelContentCells[vector.X + 1][vector.Y][vector.Z], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
+                            _voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X + 1][vector.Y][vector.Z], MyVoxelCellType.FULL))
                                 break;
                         }
                     }
-                    for (curThickness = 0, vector.X = this._dataCellsCount.X - 1; vector.X > 0; vector.X--)
+                    for (curThickness = 0, vector.X = _dataCellsCount.X - 1; vector.X > 0; vector.X--)
                     {
                         if (
                             !CheckCellType(ref _voxelContentCells[vector.X][vector.Y][vector.Z], MyVoxelCellType.EMPTY) &&
                             !CheckCellType(ref _voxelContentCells[vector.X - 1][vector.Y][vector.Z], MyVoxelCellType.EMPTY)
                         )
                         {
-                            this._voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
+                            _voxelMaterialCells[vector.X][vector.Y][vector.Z].ForceReplaceMaterial(SpaceEngineersCore.Resources.GetMaterialIndex(materialName));
                             if ((tgtThickness > 0 && ++curThickness >= tgtThickness) || CheckCellType(ref _voxelContentCells[vector.X - 1][vector.Y][vector.Z], MyVoxelCellType.FULL))
                                 break;
                         }
@@ -901,14 +962,14 @@ namespace SEToolbox.Interop.Asteroids
                 replaceMaterialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(replaceFillMaterial);
             Vector3I cellCoord;
 
-            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
             {
-                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
                 {
-                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
                     {
-                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
-                        var matCell = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var matCell = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
 
                         if (voxelCell == null)
                         {
@@ -918,7 +979,7 @@ namespace SEToolbox.Interop.Asteroids
                                 if (matCell.SingleMaterial == materialIndex)
                                 {
                                     var newCell = new MyVoxelContentCell();
-                                    this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                                    _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
                                     newCell.SetToEmpty();
                                     matCell.Reset(replaceMaterialIndex, 0xff);
                                 }
@@ -942,7 +1003,7 @@ namespace SEToolbox.Interop.Asteroids
                                                 if (newCell == null)
                                                 {
                                                     newCell = new MyVoxelContentCell();
-                                                    this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                                                    _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
                                                 }
 
                                                 newCell.SetVoxelContent(0x00, ref voxelCoordInCell);
@@ -1005,14 +1066,14 @@ namespace SEToolbox.Interop.Asteroids
             var replaceMaterialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(replaceFillMaterial);
             Vector3I cellCoord;
 
-            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
             {
-                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
                 {
-                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
                     {
-                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
-                        var matCell = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var matCell = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
 
                         if (voxelCell == null)
                         {
@@ -1046,7 +1107,7 @@ namespace SEToolbox.Interop.Asteroids
                                                 if (newCell == null)
                                                 {
                                                     newCell = new MyVoxelContentCell();
-                                                    this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                                                    _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
                                                 }
 
                                                 //newCell.SetVoxelContent(0x00, ref voxelCoordInCell);
@@ -1102,15 +1163,15 @@ namespace SEToolbox.Interop.Asteroids
         {
             long sum = 0;
 
-            for (var x = 0; x < this._voxelContentCells.Length; x++)
+            for (var x = 0; x < _voxelContentCells.Length; x++)
             {
-                for (var y = 0; y < this._voxelContentCells[x].Length; y++)
+                for (var y = 0; y < _voxelContentCells[x].Length; y++)
                 {
-                    for (var z = 0; z < this._voxelContentCells[x][y].Length; z++)
+                    for (var z = 0; z < _voxelContentCells[x][y].Length; z++)
                     {
-                        if (this._voxelContentCells[x][y][z] != null)
+                        if (_voxelContentCells[x][y][z] != null)
                         {
-                            sum += this._voxelContentCells[x][y][z].VoxelSum;
+                            sum += _voxelContentCells[x][y][z].VoxelSum;
                         }
                         else
                         {
@@ -1131,15 +1192,15 @@ namespace SEToolbox.Interop.Asteroids
         {
             long sum = 0;
 
-            for (var x = 0; x < this._voxelContentCells.Length; x++)
+            for (var x = 0; x < _voxelContentCells.Length; x++)
             {
-                for (var y = 0; y < this._voxelContentCells[x].Length; y++)
+                for (var y = 0; y < _voxelContentCells[x].Length; y++)
                 {
-                    for (var z = 0; z < this._voxelContentCells[x][y].Length; z++)
+                    for (var z = 0; z < _voxelContentCells[x][y].Length; z++)
                     {
-                        if (this._voxelContentCells[x][y][z] != null)
+                        if (_voxelContentCells[x][y][z] != null)
                         {
-                            sum += this._voxelContentCells[x][y][z].VoxelFullCells;
+                            sum += _voxelContentCells[x][y][z].VoxelFullCells;
                         }
                         else
                         {
@@ -1160,15 +1221,15 @@ namespace SEToolbox.Interop.Asteroids
         {
             long sum = 0;
 
-            for (var x = 0; x < this._voxelContentCells.Length; x++)
+            for (var x = 0; x < _voxelContentCells.Length; x++)
             {
-                for (var y = 0; y < this._voxelContentCells[x].Length; y++)
+                for (var y = 0; y < _voxelContentCells[x].Length; y++)
                 {
-                    for (var z = 0; z < this._voxelContentCells[x][y].Length; z++)
+                    for (var z = 0; z < _voxelContentCells[x][y].Length; z++)
                     {
-                        if (this._voxelContentCells[x][y][z] != null)
+                        if (_voxelContentCells[x][y][z] != null)
                         {
-                            sum += this._voxelContentCells[x][y][z].VoxelPartCells;
+                            sum += _voxelContentCells[x][y][z].VoxelPartCells;
                         }
                         else
                         {
@@ -1191,14 +1252,14 @@ namespace SEToolbox.Interop.Asteroids
             materialVoxelCells = new Dictionary<byte, long>();
             Vector3I cellCoord;
 
-            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
             {
-                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
                 {
-                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
                     {
-                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
-                        var matCell = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var matCell = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
 
                         if (voxelCell == null)
                         {
@@ -1304,14 +1365,14 @@ namespace SEToolbox.Interop.Asteroids
         {
             var materialsIndex = 0;
             Vector3I cellCoord;
-            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
             {
-                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
                 {
-                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
                     {
-                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
-                        var matCell = this._voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var matCell = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
 
                         // A mixed cell, with mixed materials.
                         Vector3I voxelCoordInCell;
@@ -1351,21 +1412,21 @@ namespace SEToolbox.Interop.Asteroids
 
         public void UpdateContentBounds()
         {
-            this._boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
+            _boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
             Vector3I cellCoord;
 
-            for (cellCoord.X = 0; cellCoord.X < this._dataCellsCount.X; cellCoord.X++)
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
             {
-                for (cellCoord.Y = 0; cellCoord.Y < this._dataCellsCount.Y; cellCoord.Y++)
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
                 {
-                    for (cellCoord.Z = 0; cellCoord.Z < this._dataCellsCount.Z; cellCoord.Z++)
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
                     {
-                        var voxelCell = this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
 
                         if (voxelCell == null)
                         {
-                            this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3(cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
-                            this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((cellCoord.X + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                            _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3(cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((cellCoord.X + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
                         }
                         //  Cell's are FULL by default, therefore we don't need to change them
                         else if (voxelCell.CellType == MyVoxelCellType.MIXED)
@@ -1381,8 +1442,8 @@ namespace SEToolbox.Interop.Asteroids
                                         var content = voxelCell.GetVoxelContent(ref voxelCoordInCell);
                                         if (content > 0)
                                         {
-                                            this._boundingContent.Min = Vector3.Min(this._boundingContent.Min, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
-                                            this._boundingContent.Max = Vector3.Max(this._boundingContent.Max, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
+                                            _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
+                                            _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
                                         }
 
                                     }
@@ -1421,7 +1482,7 @@ namespace SEToolbox.Interop.Asteroids
                 string name;
 
                 if (kvp.Key >= materialDefinitions.Count)
-                    name = materialDefinitions[this.VoxelMaterial].Id.SubtypeId;
+                    name = materialDefinitions[VoxelMaterial].Id.SubtypeId;
                 else
                     name = materialDefinitions[kvp.Key].Id.SubtypeId;
 
@@ -1448,7 +1509,7 @@ namespace SEToolbox.Interop.Asteroids
                 string name;
 
                 if (kvp.Key >= materialDefinitions.Count)
-                    name = materialDefinitions[this.VoxelMaterial].Id.SubtypeId;
+                    name = materialDefinitions[VoxelMaterial].Id.SubtypeId;
                 else
                     name = materialDefinitions[kvp.Key].Id.SubtypeId;
 
@@ -1472,20 +1533,18 @@ namespace SEToolbox.Interop.Asteroids
         //  Coordinates are relative to voxel map
         private byte GetVoxelContent(ref Vector3I voxelCoord)
         {
-            var cellCoord = this.GetDataCellCoordinate(ref voxelCoord);
-            var voxelCell = this.GetCell(ref cellCoord);
+            var cellCoord = GetDataCellCoordinate(ref voxelCoord);
+            var voxelCell = GetCell(ref cellCoord);
 
             if (voxelCell == null)
             {
                 //  Voxel wasn't found in cell dictionary, therefore cell must be full
                 return MyVoxelConstants.VOXEL_CONTENT_FULL;
             }
-            else
-            {
-                var voxelCoordInCell = this.GetVoxelCoordinatesInDataCell(ref voxelCoord);
-                var ret = voxelCell.GetVoxelContent(ref voxelCoordInCell);
-                return ret;
-            }
+
+            var voxelCoordInCell = GetVoxelCoordinatesInDataCell(ref voxelCoord);
+            var ret = voxelCell.GetVoxelContent(ref voxelCoordInCell);
+            return ret;
         }
 
         //  Return data cell to which belongs specified voxel (data cell)
@@ -1500,8 +1559,8 @@ namespace SEToolbox.Interop.Asteroids
         //  IMPORTANT: This method has overloaded version that is sometimes needed too.
         private MyVoxelContentCell GetCell(ref Vector3I cellCoord)
         {
-            if (!this.CheckVoxelCoord(ref cellCoord)) return null;
-            return this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+            if (!CheckVoxelCoord(ref cellCoord)) return null;
+            return _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
         }
 
         //  Return voxel's coordinates relative to cell (in voxel space)
@@ -1515,9 +1574,9 @@ namespace SEToolbox.Interop.Asteroids
         {
             if (cellCoord.X >= 0 && cellCoord.Y >= 0 && cellCoord.Z >= 0)
             {
-                if (cellCoord.X < this._voxelContentCells.Length &&
-                    cellCoord.Y < this._voxelContentCells[cellCoord.X].Length &&
-                    cellCoord.Z < this._voxelContentCells[cellCoord.X][cellCoord.Y].Length)
+                if (cellCoord.X < _voxelContentCells.Length &&
+                    cellCoord.Y < _voxelContentCells[cellCoord.X].Length &&
+                    cellCoord.Z < _voxelContentCells[cellCoord.X][cellCoord.Y].Length)
                 {
                     return true;
                 }
@@ -1531,7 +1590,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             if (voxelCell.CellType == MyVoxelCellType.FULL)
             {
-                this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = null;
+                _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = null;
             }
         }
 
@@ -1541,9 +1600,9 @@ namespace SEToolbox.Interop.Asteroids
             if (voxelCoord.X <= 0) return true;
             if (voxelCoord.Y <= 0) return true;
             if (voxelCoord.Z <= 0) return true;
-            if (voxelCoord.X >= this._sizeMinusOne.X - 1) return true;
-            if (voxelCoord.Y >= this._sizeMinusOne.Y - 1) return true;
-            if (voxelCoord.Z >= this._sizeMinusOne.Z - 1) return true;
+            if (voxelCoord.X >= _sizeMinusOne.X - 1) return true;
+            if (voxelCoord.Y >= _sizeMinusOne.Y - 1) return true;
+            if (voxelCoord.Z >= _sizeMinusOne.Z - 1) return true;
             return false;
         }
 
@@ -1552,10 +1611,10 @@ namespace SEToolbox.Interop.Asteroids
         private MyVoxelContentCell AddCell(ref Vector3I cellCoord)
         {
             //  Adding or creating cell can be made only once
-            Debug.Assert(this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] == null);
+            Debug.Assert(_voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] == null);
 
             var ret = new MyVoxelContentCell();
-            this._voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = ret;
+            _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = ret;
             return ret;
         }
 

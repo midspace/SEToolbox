@@ -307,13 +307,13 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <!--Import To Asteroid settings-->
-                            <Label Grid.Row="2" Grid.Column="0" Content="Ore Inside:"/>
+                            <Label Grid.Row="2" Grid.Column="0" Content="Material Inside:"/>
                             <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName"/>
 
-                            <Label Grid.Row="3" Grid.Column="0" Content="Ore Shell:"/>
+                            <Label Grid.Row="3" Grid.Column="0" Content="Material Shell:"/>
                             <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding OutsideMaterialsCollection}" SelectedValue="{Binding OutsideStockMaterial}" DisplayMemberPath="DisplayName"/>
 
-                            <Label Grid.Row="4" Grid.Column="0" Content="Ore shell depth:"/>
+                            <Label Grid.Row="4" Grid.Column="0" Content="Depth of shell material :"/>
                             <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200">
                                 <TextBox.Text>
                                     <Binding Path="OutsideMaterialDepth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
