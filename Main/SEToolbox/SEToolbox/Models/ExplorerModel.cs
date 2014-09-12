@@ -308,7 +308,7 @@
                 if (_customColors == null)
                 {
                     _customColors = new List<int>();
-                    foreach (Vector3 hsv in ActiveWorld.Content.CharacterToolbar.ColorMaskHSVList)
+                    foreach (Vector3 hsv in ActiveWorld.Checkpoint.CharacterToolbar.ColorMaskHSVList)
                     {
                         var rgb = ((Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3)hsv).ToSandboxDrawingColor();
                         _customColors.Add(((rgb.B << 0x10) | (rgb.G << 8) | rgb.R) & 0xffffff);
@@ -421,7 +421,7 @@
             ThePlayerCharacter = null;
             _customColors = null;
 
-            if (ActiveWorld.SectorData != null && ActiveWorld.Content != null)
+            if (ActiveWorld.SectorData != null && ActiveWorld.Checkpoint != null)
             {
                 foreach (var entityBase in ActiveWorld.SectorData.SectorObjects)
                 {
@@ -431,7 +431,7 @@
                     {
                         var character = structure as StructureCharacterModel;
 
-                        if (ActiveWorld.Content != null && character.EntityId == ActiveWorld.Content.ControlledObject)
+                        if (ActiveWorld.Checkpoint != null && character.EntityId == ActiveWorld.Checkpoint.ControlledObject)
                         {
                             character.IsPlayer = true;
                             ThePlayerCharacter = character;
@@ -448,7 +448,7 @@
                             var character = (StructureCharacterModel)StructureBaseModel.Create(cockpit.Pilot, null);
                             character.IsPilot = true;
 
-                            if (ActiveWorld.Content != null && cockpit.EntityId == ActiveWorld.Content.ControlledObject)
+                            if (ActiveWorld.Checkpoint != null && cockpit.EntityId == ActiveWorld.Checkpoint.ControlledObject)
                             {
                                 ThePlayerCharacter = character;
                                 ThePlayerCharacter.IsPlayer = true;

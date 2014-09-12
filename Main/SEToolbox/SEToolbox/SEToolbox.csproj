@@ -632,9 +632,6 @@
     <None Include="Resources\book_open2.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\elements2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_great_britain.png" />
   </ItemGroup>
   <ItemGroup>
@@ -735,6 +732,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\components.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\selection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Asteroid_model.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

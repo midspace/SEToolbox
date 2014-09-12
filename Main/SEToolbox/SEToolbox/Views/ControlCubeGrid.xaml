@@ -358,16 +358,8 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <!--<controls:SortableGridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="80">
-                                            <controls:SortableGridViewColumn.SortBinding>
-                                                <MultiBinding>
-                                                    <Binding Path="Position.X" />
-                                                    <Binding Path="Position.Y" />
-                                                    <Binding Path="Position.Z" />
-                                                </MultiBinding>
-                                            </controls:SortableGridViewColumn.SortBinding>
-                                        </controls:SortableGridViewColumn>-->
                                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
+                                        <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding OwnerName}" Width="175"/>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>

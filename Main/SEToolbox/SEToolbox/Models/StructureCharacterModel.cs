@@ -262,7 +262,7 @@
 
             if (Inventory == null)
             {
-                var settings = SpaceEngineersCore.WorldResource.Content.Settings;
+                var settings = SpaceEngineersCore.WorldResource.Checkpoint.Settings;
                 Inventory = new InventoryEditorModel(Character.Inventory, 0.4f * 1000 * settings.InventorySizeMultiplier, Character);
                 Mass += Inventory.TotalMass;
             }

@@ -20,7 +20,7 @@
         private string _userName;
         private string _saveName;
         private string _savePath;
-        private MyObjectBuilder_Checkpoint _content;
+        private MyObjectBuilder_Checkpoint _checkpoint;
         private bool _compressedCheckpointFormat;
         private MyObjectBuilder_Sector _sectorData;
         private bool _compressedSectorFormat;
@@ -115,16 +115,16 @@
 
         public UserDataPath DataPath { get; set; }
 
-        public MyObjectBuilder_Checkpoint Content
+        public MyObjectBuilder_Checkpoint Checkpoint
         {
-            get { return _content; }
+            get { return _checkpoint; }
 
             set
             {
-                if (value != _content)
+                if (value != _checkpoint)
                 {
-                    _content = value;
-                    RaisePropertyChanged(() => Content, () => SessionName, () => LastSaveTime, () => IsValid);
+                    _checkpoint = value;
+                    RaisePropertyChanged(() => Checkpoint, () => SessionName, () => LastSaveTime, () => IsValid);
                 }
             }
         }
@@ -133,17 +133,17 @@
         {
             get
             {
-                if (_content == null)
+                if (_checkpoint == null)
                     return " # Invalid Save # ";
 
-                return _content.SessionName;
+                return _checkpoint.SessionName;
             }
 
             set
             {
-                if (value != _content.SessionName)
+                if (value != _checkpoint.SessionName)
                 {
-                    _content.SessionName = value;
+                    _checkpoint.SessionName = value;
                     RaisePropertyChanged(() => SessionName);
                 }
             }
@@ -153,17 +153,17 @@
         {
             get
             {
-                if (_content == null)
+                if (_checkpoint == null)
                     return null;
 
-                return _content.LastSaveTime;
+                return _checkpoint.LastSaveTime;
             }
 
             set
             {
-                if (value != _content.LastSaveTime)
+                if (value != _checkpoint.LastSaveTime)
                 {
-                    _content.LastSaveTime = value.Value;
+                    _checkpoint.LastSaveTime = value.Value;
                     RaisePropertyChanged(() => LastSaveTime);
                 }
             }
@@ -185,23 +185,23 @@
 
         public bool IsWorkshopItem
         {
-            get { return _content.WorkshopId.HasValue; }
+            get { return _checkpoint.WorkshopId.HasValue; }
         }
 
         public ulong? WorkshopId
         {
             get
             {
-                if (_content == null)
+                if (_checkpoint == null)
                     return null;
 
-                return _content.WorkshopId;
+                return _checkpoint.WorkshopId;
             }
         }
 
         public bool IsValid
         {
-            get { return Content != null; }
+            get { return Checkpoint != null; }
         }
 
         public string ThumbnailImageFilename
@@ -250,22 +250,22 @@
             {
                 try
                 {
-                    Content = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(filename, out _compressedCheckpointFormat, snapshot);
+                    Checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(filename, out _compressedCheckpointFormat, snapshot);
                 }
                 catch
                 {
-                    Content = null;
+                    Checkpoint = null;
                 }
             }
             else
             {
-                Content = null;
+                Checkpoint = null;
             }
         }
 
         public void LoadDefinitionsAndMods()
         {
-            _resources.LoadDefinitionsAndMods(DataPath.ModsPath, Content.Mods.ToArray());
+            _resources.LoadDefinitionsAndMods(DataPath.ModsPath, Checkpoint.Mods.ToArray());
         }
 
         public void LoadSector(bool snapshot = false)
@@ -307,12 +307,12 @@
             if (_compressedCheckpointFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(Content, tempFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(Checkpoint, tempFilename);
                 ZipTools.GZipCompress(tempFilename, checkpointFilename);
             }
             else
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(Content, checkpointFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(Checkpoint, checkpointFilename);
             }
         }
 
@@ -407,7 +407,7 @@
         public void SaveCheckPointAndSector(bool backupFile)
         {
             LastSaveTime = DateTime.Now;
-            Content.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
+            Checkpoint.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
             SectorData.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
             SaveCheckPoint(backupFile);
             SaveSector(backupFile);
@@ -419,13 +419,13 @@
 
         public MyObjectBuilder_Character FindPlayerCharacter()
         {
-            if (SectorData == null || Content == null)
+            if (SectorData == null || Checkpoint == null)
                 return null;
 
             foreach (var entityBase in SectorData.SectorObjects)
             {
                 var character = entityBase as MyObjectBuilder_Character;
-                if (character != null && character.EntityId == Content.ControlledObject)
+                if (character != null && character.EntityId == Checkpoint.ControlledObject)
                 {
                     return character;
                 }
@@ -433,7 +433,7 @@
                 var cubeGrid = entityBase as MyObjectBuilder_CubeGrid;
                 if (cubeGrid != null)
                 {
-                    var cockpit = (MyObjectBuilder_Cockpit)cubeGrid.CubeBlocks.FirstOrDefault(e => e.EntityId == Content.ControlledObject && e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
+                    var cockpit = (MyObjectBuilder_Cockpit)cubeGrid.CubeBlocks.FirstOrDefault(e => e.EntityId == Checkpoint.ControlledObject && e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
                     if (cockpit != null)
                         return cockpit.Pilot;
                 }

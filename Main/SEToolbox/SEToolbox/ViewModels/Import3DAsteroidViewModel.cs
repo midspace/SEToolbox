@@ -19,6 +19,7 @@
     using SEToolbox.Support;
     using SEToolbox.Views;
     using Res = SEToolbox.Properties.Resources;
+    using VRageMath;
 
     public class Import3DAsteroidViewModel : BaseViewModel
     {
@@ -57,6 +58,9 @@
             MultipleScale = 1;
             MaxLengthScale = 100;
             OutsideMaterialDepth = 1;
+            IsInfrontofPlayer = true;
+            Position = new BindablePoint3DModel();
+            BuildDistance = 10;
         }
 
         #endregion
@@ -239,6 +243,18 @@
             set { _dataModel.IsMaxLengthScale = value; ProcessModelScale(); }
         }
 
+        public bool IsAbsolutePosition
+        {
+            get { return _dataModel.IsAbsolutePosition; }
+            set { _dataModel.IsAbsolutePosition = value; }
+        }
+
+        public bool IsInfrontofPlayer
+        {
+            get { return _dataModel.IsInfrontofPlayer; }
+            set { _dataModel.IsInfrontofPlayer = value; }
+        }
+
         public ObservableCollection<MaterialSelectionModel> OutsideMaterialsCollection
         {
             get { return _dataModel.OutsideMaterialsCollection; }
@@ -371,7 +387,7 @@
                 if (!_originalBounds.IsEmpty && _originalBounds.SizeX != 0 && _originalBounds.SizeY != 0 && _originalBounds.SizeZ != 0)
                 {
                     Model = model;
-                    var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), RotateYaw + 90, RotatePitch, RotateRoll - 90);
+                    var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
                     var bounds = _originalBounds;
                     if (rotateTransform != null)
                     {
@@ -379,7 +395,6 @@
                     }
 
                     OriginalModelSize = new BindableSize3DModel(bounds);
-                    BuildDistance = 10;
                     IsValidModel = true;
                     ProcessModelScale();
                 }
@@ -392,7 +407,7 @@
         {
             if (IsValidModel)
             {
-                var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), RotateYaw + 90, RotatePitch, RotateRoll - 90);
+                var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
                 var bounds = _originalBounds;
                 if (rotateTransform != null)
                 {
@@ -416,18 +431,7 @@
                     NewModelSize.Depth = (int)(MultipleScale * newSize.Depth);
                 }
 
-                double vectorDistance = BuildDistance;
-
-                vectorDistance += NewModelSize.Depth;
                 NewModelScale = new BindablePoint3DModel(NewModelSize.Width, NewModelSize.Height, NewModelSize.Depth);
-
-                // Figure out where the Character is facing, and plant the new construct right in front, by "10" units, facing the Character.
-                var vector = new BindableVector3DModel(_dataModel.CharacterPosition.Forward).Vector3D;
-                vector.Normalize();
-                vector = Vector3D.Multiply(vector, vectorDistance);
-                Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(_dataModel.CharacterPosition.Position).Point3D, vector));
-                Forward = new BindableVector3DModel(_dataModel.CharacterPosition.Forward);
-                Up = new BindableVector3DModel(_dataModel.CharacterPosition.Up);
             }
         }
 
@@ -439,15 +443,6 @@
         {
             var filenamepart = Path.GetFileNameWithoutExtension(Filename);
             var filename = MainViewModel.CreateUniqueVoxelFilename(filenamepart + MyVoxelMap.V2FileExtension);
-            Position = Position.RoundOff(1.0);
-            Forward = Forward.RoundToAxis();
-            Up = Up.RoundToAxis();
-
-            var entity = new MyObjectBuilder_VoxelMap(Position.ToVector3(), filename)
-            {
-                EntityId = SpaceEngineersApi.GenerateEntityId(),
-                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-            };
 
             double multiplier;
             if (IsMultipleScale)
@@ -460,14 +455,8 @@
             }
 
             var scale = new ScaleTransform3D(multiplier, multiplier, multiplier);
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), RotateYaw + 90, RotatePitch, RotateRoll - 90);
+            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
             SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
-
-            //var baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false);
-            //if (baseMaterial == null)
-            //    baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault();
-
-            //var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, Filename, SourceFile, OutsideStockMaterial.Value, baseMaterial.Name, InsideStockMaterial.Value != null, InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
 
             var model = MeshHelper.Load(Filename, ignoreErrors: true);
 
@@ -526,11 +515,37 @@
                 voxelMap.ForceShellMaterial(OutsideStockMaterial.Value, (byte)OutsideMaterialDepth);
                 voxelMap.Save(SourceFile);
 
+                var position = new Vector3();
+                var forward = Vector3.Forward;
+                var up = Vector3.Up;
+
+                if (IsAbsolutePosition)
+                {
+                    position = Position.ToVector3();
+                }
+                else if (IsInfrontofPlayer)
+                {
+                    // Figure out where the Character is facing, and plant the new construct right in front, by "10" units, facing the Character.
+                    var vector = new BindableVector3DModel(_dataModel.CharacterPosition.Forward).Vector3D;
+                    vector.Normalize();
+                    
+                    // TODO: correctly position the asteroid center out in front of the player.
+                    vector = Vector3D.Multiply(vector, BuildDistance + voxelMap.ContentSize.Z);
+                    var p = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(_dataModel.CharacterPosition.Position).Point3D, vector));
+                    position = p.RoundOff(1.0).ToVector3();
+                }
+
+                var entity = new MyObjectBuilder_VoxelMap(position, filename)
+                {
+                    EntityId = SpaceEngineersApi.GenerateEntityId(),
+                    PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                };
+
                 entity.PositionAndOrientation = new MyPositionAndOrientation
                 {
-                    Position = Position.ToVector3(),
-                    Forward = Forward.ToVector3(),
-                    Up = Up.ToVector3()
+                    Position = position,
+                    Forward = forward,
+                    Up = up
                 };
 
                 IsValidEntity = voxelMap.ContentSize.X > 0 && voxelMap.ContentSize.Y > 0 && voxelMap.ContentSize.Z > 0;

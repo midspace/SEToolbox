@@ -124,6 +124,12 @@
             set { _dataModel.FriendlyName = value; }
         }
 
+        public string OwnerName
+        {
+            get { return _dataModel.OwnerName; }
+            set { _dataModel.OwnerName = value; }
+        }
+
         public string ColorText
         {
             get { return _dataModel.ColorText; }
