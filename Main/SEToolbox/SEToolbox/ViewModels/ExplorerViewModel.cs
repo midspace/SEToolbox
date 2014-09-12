@@ -274,6 +274,11 @@
             get { return new DelegateCommand(JoinShipPartsExecuted, JoinShipPartsCanExecute); }
         }
 
+        public ICommand RepairShipsCommand
+        {
+            get { return new DelegateCommand(RepairShipsExecuted, RepairShipsCanExecute); }
+        }
+
         #endregion
 
         #region Properties
@@ -775,7 +780,7 @@
         {
             var model = new GenerateFloatingObjectModel();
             var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
-            model.Load(position, _dataModel.ActiveWorld.Content.MaxFloatingObjects);
+            model.Load(position, _dataModel.ActiveWorld.Checkpoint.MaxFloatingObjects);
             var loadVm = new GenerateFloatingObjectViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowGenerateFloatingObject>(this, loadVm);
             if (result == true)
@@ -952,6 +957,18 @@
         {
             IsBusy = true;
             MergeShipPartModels(Selections[0], Selections[1]);
+            IsBusy = false;
+        }
+
+        public bool RepairShipsCanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void RepairShipsExecuted()
+        {
+            IsBusy = true;
+            RepairShips(Selections);
             IsBusy = false;
         }
 
@@ -1214,6 +1231,19 @@
                 // Any overlapping blocks between the two, will automatically be removed by Space Engineers when the world is loaded.
 
                 viewModel1.DataModel.UpdateGeneralFromEntityBase();
+            }
+        }
+
+        private void RepairShips(IEnumerable<IStructureViewBase> structures)
+        {
+            foreach (var structure in structures)
+            {
+                if (structure.DataModel.ClassType == ClassType.SmallShip
+                    || structure.DataModel.ClassType == ClassType.LargeShip
+                    || structure.DataModel.ClassType == ClassType.Station)
+                {
+                    ((StructureCubeGridViewModel)structure).RepairObjectExecuted();
+                }
             }
         }
 
@@ -1542,7 +1572,7 @@
 
         public MyObjectBuilder_Checkpoint Checkpoint
         {
-            get { return ActiveWorld.Content; }
+            get { return ActiveWorld.Checkpoint; }
         }
 
         /// <summary>

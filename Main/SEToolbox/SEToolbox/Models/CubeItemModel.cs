@@ -26,6 +26,8 @@
 
         private string _friendlyName;
 
+        private string _ownerName;
+
         private string _colorText;
 
         private float _colorHue;
@@ -150,6 +152,20 @@
                 {
                     _friendlyName = value;
                     RaisePropertyChanged(() => FriendlyName);
+                }
+            }
+        }
+
+        public string OwnerName
+        {
+            get { return _ownerName; }
+
+            set
+            {
+                if (value != _ownerName)
+                {
+                    _ownerName = value;
+                    RaisePropertyChanged(() => OwnerName);
                 }
             }
         }
@@ -330,6 +346,10 @@
 
             CubeSize = definition.CubeSize;
             FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayName);
+
+            var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayers.FirstOrDefault(p => p.PlayerId == Owner);
+            OwnerName = player.Name;
+
             TypeId = definition.Id.TypeId;
             SubtypeId = definition.Id.SubtypeId;
 
@@ -360,7 +380,7 @@
                         volumeMultiplier = MathHelper.Min(volumeMultiplier, maxSize);
                     }
 
-                    var settings = SpaceEngineersCore.WorldResource.Content.Settings;
+                    var settings = SpaceEngineersCore.WorldResource.Checkpoint.Settings;
                     var iem = new InventoryEditorModel(inventory, volumeMultiplier * 1000 * settings.InventorySizeMultiplier, null) { Name = field.Name, IsValid = true };
                     Inventory.Add(iem);
                 }

@@ -125,7 +125,7 @@
             repairWorld.LoadDefinitionsAndMods();
             repairWorld.LoadSector();
 
-            if (repairWorld.Content == null)
+            if (repairWorld.Checkpoint == null)
             {
                 statusNormal = false;
                 str.AppendLine("! Checkpoint file is missing or broken.");
@@ -158,9 +158,9 @@
                         character = repairWorld.FindAstronautCharacter();
                         if (character != null)
                         {
-                            repairWorld.Content.ControlledObject = character.EntityId;
-                            repairWorld.Content.CameraController = MyCameraControllerEnum.Entity;
-                            repairWorld.Content.CameraEntity = character.EntityId;
+                            repairWorld.Checkpoint.ControlledObject = character.EntityId;
+                            repairWorld.Checkpoint.CameraController = MyCameraControllerEnum.Entity;
+                            repairWorld.Checkpoint.CameraEntity = character.EntityId;
                             str.AppendLine("* Found and Set new active Player.");
                             repairWorld.SaveCheckPointAndSector(true);
                             str.AppendLine("* Saved changes.");
@@ -170,9 +170,9 @@
                             var cockpit = repairWorld.FindPilotCharacter();
                             if (cockpit != null)
                             {
-                                repairWorld.Content.ControlledObject = cockpit.EntityId;
-                                repairWorld.Content.CameraController = MyCameraControllerEnum.ThirdPersonSpectator;
-                                repairWorld.Content.CameraEntity = 0;
+                                repairWorld.Checkpoint.ControlledObject = cockpit.EntityId;
+                                repairWorld.Checkpoint.CameraController = MyCameraControllerEnum.ThirdPersonSpectator;
+                                repairWorld.Checkpoint.CameraEntity = 0;
                                 str.AppendLine("* Found and Set new active Player.");
                                 repairWorld.SaveCheckPointAndSector(true);
                                 str.AppendLine("* Saved changes.");
@@ -234,9 +234,9 @@
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
-                                repairWorld.Content.ControlledObject = character.EntityId;
-                                repairWorld.Content.CameraController = MyCameraControllerEnum.Entity;
-                                repairWorld.Content.CameraEntity = character.EntityId;
+                                repairWorld.Checkpoint.ControlledObject = character.EntityId;
+                                repairWorld.Checkpoint.CameraController = MyCameraControllerEnum.Entity;
+                                repairWorld.Checkpoint.CameraEntity = character.EntityId;
 
                                 repairWorld.SectorData.SectorObjects.Add(character);
 
@@ -347,9 +347,9 @@
                     }
                 }
 
-                if (world.Content.Players != null)
+                if (world.Checkpoint.Players != null)
                 {
-                    foreach (var item in world.Content.Players.Dictionary)
+                    foreach (var item in world.Checkpoint.Players.Dictionary)
                     {
                         if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Name == item.Value.PlayerModel))
                         {
@@ -362,7 +362,7 @@
                         if (item.Value.PlayerId == 0)
                         {
                             item.Value.PlayerId = SpaceEngineersApi.GenerateEntityId();
-                            world.Content.AllPlayers.Add(new MyObjectBuilder_Checkpoint.PlayerItem(item.Value.PlayerId, "Repair", false, item.Value.SteamID, null));
+                            world.Checkpoint.AllPlayers.Add(new MyObjectBuilder_Checkpoint.PlayerItem(item.Value.PlayerId, "Repair", false, item.Value.SteamID, null));
                             statusNormal = false;
                             str.AppendLine("! Fixed corrupt or missing Player defitinion.");
                             saveAfterScan = true;

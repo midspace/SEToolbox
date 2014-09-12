@@ -58,17 +58,17 @@
                                 <Transform3DGroup>
                                     <RotateTransform3D>
                                         <RotateTransform3D.Rotation>
-                                            <AxisAngleRotation3D Axis="0,0,1" Angle="{Binding RotateRoll}"/>
+                                            <AxisAngleRotation3D Axis="0,0,1" Angle="{Binding RotateYaw}"/>
                                         </RotateTransform3D.Rotation>
                                     </RotateTransform3D>
                                     <RotateTransform3D>
                                         <RotateTransform3D.Rotation>
-                                            <AxisAngleRotation3D Axis="0,1,0" Angle="{Binding RotatePitch}"/>
+                                            <AxisAngleRotation3D Axis="0,-1,0" Angle="{Binding RotatePitch}"/>
                                         </RotateTransform3D.Rotation>
                                     </RotateTransform3D>
                                     <RotateTransform3D>
                                         <RotateTransform3D.Rotation>
-                                            <AxisAngleRotation3D Axis="-1,0,0" Angle="{Binding RotateYaw}"/>
+                                            <AxisAngleRotation3D Axis="-1,0,0" Angle="{Binding RotateRoll}"/>
                                         </RotateTransform3D.Rotation>
                                     </RotateTransform3D>
                                     <TranslateTransform3D OffsetX="0" OffsetY="0" OffsetZ="0" />
@@ -111,20 +111,20 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Yaw:" VerticalAlignment="Center" Margin="4,0"/>
-                                <TextBox Width="80" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBlock Grid.Row="0" Text="Pitch:" VerticalAlignment="Center" Margin="4,0"/>
+                                <TextBox Width="80" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
                                     <TextBox.Text>
-                                        <Binding Path="RotateYaw" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding Path="RotatePitch" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                                             <Binding.ValidationRules>
                                                 <converters:RangeRuleD Min="-360" Max="360"/>
                                             </Binding.ValidationRules>
                                         </Binding>
                                     </TextBox.Text>
                                 </TextBox>
-                                <TextBlock Grid.Row="1" Text="Pitch:" VerticalAlignment="Center" Margin="4,0"/>
+                                <TextBlock Text="Yaw:" Grid.Row="1" VerticalAlignment="Center" Margin="4,0"/>
                                 <TextBox Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
                                     <TextBox.Text>
-                                        <Binding Path="RotatePitch" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding Path="RotateYaw" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                                             <Binding.ValidationRules>
                                                 <converters:RangeRuleD Min="-360" Max="360"/>
                                             </Binding.ValidationRules>
@@ -246,44 +246,54 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Position">
-                    <StackPanel Orientation="Horizontal">
-                        <GroupBox Header="Position" MinWidth="120">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Content="X:" Margin="0,0,4,0" VerticalAlignment="Center" />
-                                <TextBox Grid.Column="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
-                                <TextBox Grid.Column="1" Grid.Row="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <Label Content="X:" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
-                                <TextBox Grid.Column="1" Grid.Row="2" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox Header="Orientation" MinWidth="120" Margin="8,0,0,0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <RadioButton IsChecked="True" Content="Facing Player" Grid.ColumnSpan="2" />
-                                <Label Content="Distance:" Grid.Row="2" />
-                                <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" ToolTip="Distance in front of Player in Meters." />
-                            </Grid>
-                        </GroupBox>
-                    </StackPanel>
+                    <Grid Margin="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <RadioButton IsChecked="{Binding IsAbsolutePosition}" Content="Absolute" />
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="X:" Margin="0,0,4,0" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Grid.Row="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Label Content="X:" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                        <Separator Grid.Column="1" Grid.RowSpan="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Width="1"/>
+                        <RadioButton Grid.Column="2" IsChecked="{Binding IsInfrontofPlayer}" Content="Infront of Player"/>
+                        <Grid Grid.Column="2" Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Content="Distance:" Grid.Row="2" />
+                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" ToolTip="Distance in front of Player in Meters." />
+                        </Grid>
+
+                    </Grid>
+                   
                 </TabItem>
                 <TabItem Header="Materials">
                     <Grid>

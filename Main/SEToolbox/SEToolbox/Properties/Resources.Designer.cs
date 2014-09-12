@@ -93,6 +93,16 @@ namespace SEToolbox.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Asteroid_model {
+            get {
+                object obj = ResourceManager.GetObject("Asteroid_model", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap battery {
             get {
                 object obj = ResourceManager.GetObject("battery", resourceCulture);
@@ -575,7 +585,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Space Engineers Toolbox Error.
+        ///   Looks up a localized string similar to Space Engineers Toolbox &apos;{0}&apos; Error.
         /// </summary>
         public static string DialogUnhandledExceptionTitle {
             get {
@@ -619,16 +629,6 @@ namespace SEToolbox.Properties {
         public static System.Drawing.Bitmap document_view {
             get {
                 object obj = ResourceManager.GetObject("document_view", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap elements2 {
-            get {
-                object obj = ResourceManager.GetObject("elements2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1351,6 +1351,16 @@ namespace SEToolbox.Properties {
         public static System.Drawing.Bitmap SECubes16 {
             get {
                 object obj = ResourceManager.GetObject("SECubes16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap selection {
+            get {
+                object obj = ResourceManager.GetObject("selection", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

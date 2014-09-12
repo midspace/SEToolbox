@@ -31,6 +31,8 @@
         private double _buildDistance;
         private bool _isMultipleScale;
         private bool _isMaxLengthScale;
+        private bool _isAbsolutePosition;
+        private bool _isInfrontofPlayer;
         private readonly ObservableCollection<MaterialSelectionModel> _outsideMaterialsCollection;
         private readonly ObservableCollection<MaterialSelectionModel> _insideMaterialsCollection;
         private MaterialSelectionModel _outsideStockMaterial;
@@ -334,6 +336,34 @@
                 {
                     _isMaxLengthScale = value;
                     RaisePropertyChanged(() => IsMaxLengthScale);
+                }
+            }
+        }
+
+        public bool IsAbsolutePosition
+        {
+            get { return _isAbsolutePosition; }
+
+            set
+            {
+                if (value != _isAbsolutePosition)
+                {
+                    _isAbsolutePosition = value;
+                    RaisePropertyChanged(() => IsAbsolutePosition);
+                }
+            }
+        }
+
+        public bool IsInfrontofPlayer
+        {
+            get { return _isInfrontofPlayer; }
+
+            set
+            {
+                if (value != _isInfrontofPlayer)
+                {
+                    _isInfrontofPlayer = value;
+                    RaisePropertyChanged(() => IsInfrontofPlayer);
                 }
             }
         }

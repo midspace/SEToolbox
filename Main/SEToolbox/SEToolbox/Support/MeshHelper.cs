@@ -310,14 +310,20 @@
             return Math.Round(Math.Round(Math.Round(vector1.X * vector2.X, 14) + Math.Round(vector1.Y * vector2.Y, 14), 14) + Math.Round(vector1.Z * vector2.Z, 14), 13);
         }
 
-        public static Transform3D TransformVector(Vector3D origin, double xAngle, double yAngle, double zAngle)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="roll"></param>
+        /// <param name="yaw"></param>
+        /// <param name="pitch"></param>
+        /// <returns></returns>
+        public static Transform3D TransformVector(Vector3D origin, double roll, double yaw, double pitch)
         {
             var transform = new Transform3DGroup();
-            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), zAngle)));
-            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), yAngle)));
-            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(-1, 0, 0), xAngle)));
-            //transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), -90)));
-            //transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(-1, 0, 0), 90)));
+            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), yaw))); // y angle
+            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, -1, 0), roll))); // z angle
+            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(-1, 0, 0), pitch))); // x angle
             transform.Children.Add(new TranslateTransform3D(origin));
             return transform;
         }

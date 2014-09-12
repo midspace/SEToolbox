@@ -122,7 +122,7 @@
         {
             var model = new GenerateFloatingObjectModel();
             var position = new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
-            var settings = SpaceEngineersCore.WorldResource.Content.Settings;
+            var settings = SpaceEngineersCore.WorldResource.Checkpoint.Settings;
 
             model.Load(position, settings.MaxFloatingObjects);
             var loadVm = new GenerateFloatingObjectViewModel(this, model);

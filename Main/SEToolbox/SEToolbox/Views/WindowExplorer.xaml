@@ -85,22 +85,25 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="3D Model for Asteroid" Command="{Binding ImportAsteroidModelCommand}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=Asteroid_model}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
                     <MenuItem Header="Image" Command="{Binding ImportImageCommand}" ToolTip="Import a image into a flat array of armor, with color matched to each pixel in the image.">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=photo_scenery}" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <Separator/>
                     <MenuItem Header="3D Model" Command="{Binding ImportModelCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=icecube}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="3D Model for Asteroid" Command="{Binding ImportAsteroidModelCommand}">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=icecube}" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Sandbox Content files" Command="{Binding ImportSandboxObjectCommand}" ToolTip="Import previously exported ships and station .xml files.">
+                    <Separator/>
+                    <MenuItem Header="Sandbox Content files" Command="{Binding ImportSandboxObjectCommand}" ToolTip="Import previously exported ships and station .sbc files.">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SECubes16}" />
                         </MenuItem.Icon>
@@ -136,16 +139,33 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="_Merge" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="_Selection" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=elements2}" />
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=selection}" />
                     </MenuItem.Icon>
+                    <MenuItem Command="{Binding DeleteObjectCommand}" Header="Delete">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Command="{Binding GroupMoveCommand}" Header="Group Move">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Command="{Binding RepairShipsCommand}" Header="Repair">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Command="{Binding RejoinShipCommand}" Header="Rejoin Ship" ToolTip="Rejoins 2 parts from a broken ship back togeather">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=first_aid}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding JoinShipPartsCommand}" Header="Join into Ship" ToolTip="Joins 2 foriegn parts to form a new ship">
+                    <MenuItem Command="{Binding JoinShipPartsCommand}" Header="Merge into 1 Ship" ToolTip="Joins 2 foriegn parts to form a new ship">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=components}"/>
                         </MenuItem.Icon>
@@ -225,18 +245,27 @@
                     </MenuItem>
                 </MenuItem>
             </Menu>
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Command="{Binding DeleteObjectCommand}" Header="Delete" Style="{StaticResource ToolBarTopMenuitem}">
-                    <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Command="{Binding GroupMoveCommand}" Header="Group Move" Style="{StaticResource ToolBarTopMenuitem}">
-                    <MenuItem.Icon>
+            <ToolBarPanel DockPanel.Dock="Top" >
+                <ToolBar>
+                    <Button Command="{Binding OpenCommand}" ToolTip="Open">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}"/>
+                    </Button>
+                    <Button Command="{Binding SaveCommand}" ToolTip="Save">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
+                    </Button>
+                    <Separator />
+                    <Button Command="{Binding RepairShipsCommand}" ToolTip="Repair">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}"/>
+                    </Button>
+                    <Button Command="{Binding GroupMoveCommand}" ToolTip="Group Move">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </Menu>
+                    </Button>
+                    <Separator />
+                    <Button Command="{Binding DeleteObjectCommand}" ToolTip="Delete">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
+                    </Button>
+                </ToolBar>
+            </ToolBarPanel>
             <ToolBarPanel DockPanel.Dock="Top" Visibility="{Binding IsDebugger, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ToolBar>
                     <Button Content="Clear" Command="{Binding ClearCommand}"/>
@@ -286,7 +315,7 @@
                 <Grid Grid.Column="0">
                     <TabControl>
                         <TabItem Header="Craft/Objects">
-                            <controls:SortableListView Grid.Row="2" Grid.ColumnSpan="2" DisplayMemberPath="ClassType" SelectionMode="Extended" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
+                            <controls:SortableListView DisplayMemberPath="ClassType" SelectionMode="Extended" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.Resources>
                                     <commands:Behaviors x:Key="dragBehavior" x:Shared="False">
@@ -301,14 +330,13 @@
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
                                     <GridView>
-                                        <!--<GridViewColumn Header="Name" DisplayMemberBinding="{Binding EntityId}"/>-->
                                         <controls:SortableGridViewColumn SortBinding="{Binding ClassType}" Header="Type" Width="70">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                            </controls:SortableGridViewColumn>
+                                        </controls:SortableGridViewColumn>
                                         <controls:SortableGridViewColumn SortBinding="{Binding DisplayName}" Header="Name" Width="100">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -344,7 +372,6 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>
@@ -366,6 +393,9 @@
                                 </ListBox.ContextMenu>
                             </controls:SortableListView>
                         </TabItem>
+                        <!--<TabItem Header="Factions/Owners">
+                            
+                        </TabItem>-->
                         <!--<TabItem Header="Properties">
                             
                         </TabItem>-->
