@@ -642,14 +642,14 @@
 
         public bool ContainsVoxelFilename(string filename, MyObjectBuilder_EntityBase[] additionalList)
         {
-            bool contains = Structures.Any(s => s is StructureVoxelModel && ((StructureVoxelModel)s).Filename.ToUpper() == filename.ToUpper()) || _manageDeleteVoxelList.Any(f => f.ToUpper() == filename.ToUpper());
+            bool contains = Structures.Any(s => s is StructureVoxelModel && Path.GetFileNameWithoutExtension(((StructureVoxelModel)s).Filename).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper()) || _manageDeleteVoxelList.Any(f => Path.GetFileNameWithoutExtension(f).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper());
 
             if (contains || additionalList == null)
             {
                 return contains;
             }
 
-            contains |= additionalList.Any(s => s is MyObjectBuilder_VoxelMap && ((MyObjectBuilder_VoxelMap)s).Filename.ToUpper() == filename.ToUpper());
+            contains |= additionalList.Any(s => s is MyObjectBuilder_VoxelMap && Path.GetFileNameWithoutExtension(((MyObjectBuilder_VoxelMap)s).Filename).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper());
 
             return contains;
         }
