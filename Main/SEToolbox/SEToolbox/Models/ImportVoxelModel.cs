@@ -43,7 +43,7 @@
                 new MaterialSelectionModel {Value = null, DisplayName = "No change"}
             };
 
-            foreach (var material in SpaceEngineersCore.Resources.GetMaterialList())
+            foreach (var material in SpaceEngineersCore.Resources.GetMaterialList().OrderBy(m => m.Id.SubtypeId))
             {
                 _materialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
             }

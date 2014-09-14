@@ -609,9 +609,9 @@
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             const string modelFile = @".\TestAssets\buddha-fixed-bottom.stl";
-            const string voxelFile = @".\TestOutput\buddha-fixed-bottom.vox";
+            const string voxelFile = @".\TestOutput\buddha-fixed-bottom.vx2";
 
-            var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 180, 0, 0);
+            var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 180);
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, modelFile, goldMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, true, stoneMaterial.Id.SubtypeId, ModelTraceVoxel.ThinSmoothed, 0.766, transform);
             voxelMap.Save(voxelFile);

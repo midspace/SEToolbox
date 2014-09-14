@@ -73,6 +73,11 @@
             return new System.Windows.Media.Media3D.Vector3D(vector.X, vector.Y, vector.Z);
         }
 
+        public static System.Windows.Media.Media3D.Point3D ToPoint3D(this Vector3 vector)
+        {
+            return new System.Windows.Media.Media3D.Point3D(vector.X, vector.Y, vector.Z);
+        }
+
         internal static System.Windows.Media.Media3D.Point3D ToPoint3D(this SerializableVector3 point)
         {
             return new System.Windows.Media.Media3D.Point3D(point.X, point.Y, point.Z);
@@ -221,6 +226,37 @@
         public static MyFixedPoint ToFixedPoint(this int value)
         {
             return MyFixedPoint.DeserializeString(value.ToString(CultureInfo.InvariantCulture));
+        }
+
+        public static Vector3? IntersectsRayAt(this BoundingBox boundingBox, Vector3 position, Vector3 rayTo)
+        {
+            var corners = boundingBox.GetCorners();
+            var tariangles = new int[][] {
+                new [] {2,1,0},
+                new [] {3,2,0},
+                new [] {4,5,6},
+                new [] {4,6,7},
+                new [] {0,1,5},
+                new [] {0,5,4},
+                new [] {7,6,2},
+                new [] {7,2,3},
+                new [] {0,4,7},
+                new [] {0,7,3},
+                new [] {5,1,2},
+                new [] {5,2,6}};
+
+            System.Windows.Media.Media3D.Point3D intersection;
+            int norm;
+
+            foreach (var triangle in tariangles)
+            {
+                if (MeshHelper.RayIntersetTriangleRound(corners[triangle[0]].ToPoint3D(), corners[triangle[1]].ToPoint3D(), corners[triangle[2]].ToPoint3D(), position.ToPoint3D(), rayTo.ToPoint3D(), out intersection, out norm))
+                {
+                    return intersection.ToVector3();
+                }
+            }
+
+            return null;
         }
     }
 }
