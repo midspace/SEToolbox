@@ -202,5 +202,30 @@
             Assert.AreEqual(f2, g2, "Should Equal");
             Assert.AreEqual(f3, g3, "Should Equal");
         }
+
+        [TestMethod]
+        public void BoundingBoxIntersectKeen()
+        {
+            var point = new VRageMath.Vector3(5f, 3.5f, 4f);
+            var vector = new VRageMath.Vector3(-0.03598167f, 0.0110336f, 0.9992915f);
+            var box = new VRageMath.BoundingBox(new VRageMath.Vector3(3f, 3f, 2f), new VRageMath.Vector3(7f, 4f, 6f));
+            var ray = new VRageMath.Ray(point, vector);
+
+            float? f = box.Intersects(ray);
+
+            Assert.AreEqual(0, f, "Should Equal");
+        }
+
+        [TestMethod]
+        public void BoundingBoxIntersectCustom()
+        {
+            var point = new VRageMath.Vector3(5f, 3.5f, 4f);
+            var vector = new VRageMath.Vector3(-0.03598167f, 0.0110336f, 0.9992915f);
+            var box = new VRageMath.BoundingBox(new VRageMath.Vector3(3f, 3f, 2f), new VRageMath.Vector3(7f, 4f, 6f));
+
+            VRageMath.Vector3? p = box.IntersectsRayAt(point, vector * 1000);
+
+            Assert.AreEqual(new VRageMath.Vector3(4.917649f, 3.51513839f, 6f), p.Value, "Should Equal");
+        }
     }
 }

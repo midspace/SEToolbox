@@ -18,8 +18,8 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using SEToolbox.Views;
-    using Res = SEToolbox.Properties.Resources;
     using VRageMath;
+    using Res = SEToolbox.Properties.Resources;
 
     public class Import3DAsteroidViewModel : BaseViewModel
     {
@@ -525,14 +525,19 @@
                 }
                 else if (IsInfrontofPlayer)
                 {
-                    // Figure out where the Character is facing, and plant the new construct right in front, by "10" units, facing the Character.
-                    var vector = new BindableVector3DModel(_dataModel.CharacterPosition.Forward).Vector3D;
-                    vector.Normalize();
-                    
-                    // TODO: correctly position the asteroid center out in front of the player.
-                    vector = Vector3D.Multiply(vector, BuildDistance + voxelMap.ContentSize.Z);
-                    var p = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(_dataModel.CharacterPosition.Position).Point3D, vector));
-                    position = p.RoundOff(1.0).ToVector3();
+                    // Figure out where the Character is facing, and plant the new construct centered in front of the Character, but "BuildDistance" units out in front.
+                    var lookVector = _dataModel.CharacterPosition.Forward.ToVector3();
+                    lookVector.Normalize();
+                    VRageMath.Vector3? boundingIntersectPoint = voxelMap.BoundingContent.IntersectsRayAt(voxelMap.ContentCenter, -lookVector * 5000);
+
+                    if (!boundingIntersectPoint.HasValue)
+                    {
+                        boundingIntersectPoint = voxelMap.ContentCenter;
+                    }
+
+                    var distance = VRageMath.Vector3.Distance(boundingIntersectPoint.Value, voxelMap.ContentCenter) + (float)BuildDistance;
+                    var vector = lookVector * distance;
+                    position = Vector3.Add(_dataModel.CharacterPosition.Position, vector) - voxelMap.ContentCenter;
                 }
 
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)

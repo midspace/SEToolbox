@@ -60,6 +60,11 @@ namespace SEToolbox.Interop.Asteroids
         /// </summary>
         public Vector3 ContentCenter { get { return _boundingContent.Center; } }
 
+        // TODO: WeightedCenter.  Center of mass, as opposed to center by dimension.
+        // public Vector3 WeightedCenter { get; private set; }
+
+        public BoundingBox BoundingContent { get { return _boundingContent; } }
+
         public byte VoxelMaterial { get; private set; }
 
         #endregion

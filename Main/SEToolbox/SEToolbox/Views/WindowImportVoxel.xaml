@@ -36,8 +36,8 @@
                 <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding StockVoxelFileList}" SelectedValue="{Binding StockVoxel}"/>
                 <RadioButton Grid.Row="1" Grid.Column="0" Content="File" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
-                    <TextBox Width="178" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="Must be valid Space Engineers Asteroid VOX file."/>
-                    <Button ToolTip="Browse for Image" Command="{Binding BrowseVoxelCommand}" VerticalAlignment="Center">
+                    <TextBox Width="178" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="Must be valid Space Engineers Asteroid file."/>
+                    <Button ToolTip="Browse for Asteroid file" Command="{Binding BrowseVoxelCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>

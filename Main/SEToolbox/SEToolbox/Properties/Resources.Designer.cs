@@ -376,7 +376,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asteroid files (*.vox)|*.vox|All files (*.*)|*.*.
+        ///   Looks up a localized string similar to Asteroid version 2 files (*.vx2)|*.vx2|Asteroid version 1 files (*.vox)|*.vx2|All files (*.*)|*.*.
         /// </summary>
         public static string DialogExportVoxelFilter {
             get {
@@ -466,7 +466,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asteroid files (*.vox)|*.vox|All files (*.*)|*.*.
+        ///   Looks up a localized string similar to Asteroid files (*.vox;*.vx2)|*.vox;*.vx2|All files (*.*)|*.*.
         /// </summary>
         public static string DialogImportVoxelFilter {
             get {
