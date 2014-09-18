@@ -410,7 +410,7 @@
                             <Label Grid.Row="1" Grid.Column="0" Content="Run in low priority:"/>
                             <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding RunInLowPrioity}"/>
 
-                            <Label Grid.Row="2" Grid.Column="0" Content="Save when finsihed:"/>
+                            <Label Grid.Row="2" Grid.Column="0" Content="Save when finished:"/>
                             <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding SaveWhenFinsihed}"/>
                         </Grid>
                     </Grid>
