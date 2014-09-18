@@ -1,17 +1,28 @@
 ﻿namespace SEToolbox.Support
 {
-    using Microsoft.Win32;
     using System;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using System.Windows;
 
+    using Microsoft.Win32;
+
     public class GlobalSettings
     {
         #region fields
 
         public static GlobalSettings Default = new GlobalSettings();
+
+        /// <summary>
+        /// Temporary store for Game Version.
+        /// </summary>
+        public Version SEVersion;
+
+        /// <summary>
+        /// Temporary property to reprompt user to game installation path.
+        /// </summary>
+        public bool PromptUser;
 
         private bool _isLoaded;
 
@@ -64,11 +75,6 @@
         /// Ignore this specific version during Toolbox version check.
         /// </summary>
         public string IgnoreUpdateVersion { get; set; }
-
-        /// <summary>
-        /// Temporary store for Game Version.
-        /// </summary>
-        public Version SEVersion;
 
         #endregion
 

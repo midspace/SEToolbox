@@ -937,6 +937,17 @@
                 }
             }
 
+            // TODO: Rotate Bones
+            //if (CubeGrid.Skeleton != null)
+            //{
+            //    for (var i = 0; i < CubeGrid.Skeleton.Count; i++)
+            //    {
+            //        var bone = CubeGrid.Skeleton[i];
+            //        bone.BonePosition = Vector3I.Transform(bone.BonePosition, quaternion);
+            //        bone.BoneOffset = bone.BoneOffset.Transform(VRageMath.Quaternion.Inverse(quaternion));
+            //    }
+            //}
+
             // TODO: Rotate ConveyorLines
             foreach (var conveyorLine in CubeGrid.ConveyorLines)
             {

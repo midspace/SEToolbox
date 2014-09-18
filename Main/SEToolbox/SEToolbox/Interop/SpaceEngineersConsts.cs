@@ -2,6 +2,7 @@
 {
     using Sandbox.Common.ObjectBuilders;
     using System;
+    using Sandbox.Common.ObjectBuilders.Definitions;
 
     public class SpaceEngineersConsts
     {
@@ -41,6 +42,7 @@
         public static readonly MyObjectBuilderType Ore;
         public static readonly MyObjectBuilderType Ingot;
         public static readonly MyObjectBuilderType Component;
+        public static readonly MyObjectBuilderType VoxelMaterialDefinition;
         public static readonly MyObjectBuilderType MedicalRoom;
         public static readonly MyObjectBuilderType Cockpit;
         public static readonly MyObjectBuilderType Thrust;
@@ -62,6 +64,7 @@
             Ore = new MyObjectBuilderType(typeof(MyObjectBuilder_Ore));
             Ingot = new MyObjectBuilderType(typeof(MyObjectBuilder_Ingot));
             Component = new MyObjectBuilderType(typeof(MyObjectBuilder_Component));
+            VoxelMaterialDefinition = new MyObjectBuilderType(typeof(MyObjectBuilder_VoxelMaterialDefinition));
             MedicalRoom = new MyObjectBuilderType(typeof(MyObjectBuilder_MedicalRoom));
             Cockpit = new MyObjectBuilderType(typeof(MyObjectBuilder_Cockpit));
             Thrust = new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust));

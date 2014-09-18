@@ -677,6 +677,12 @@
                 ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
                 if (_preSelectedStructure != null)
                     SelectedStructure = _preSelectedStructure;
+
+                if (loadVm.SaveWhenFinsihed)
+                {
+                    _dataModel.SaveCheckPointAndSandBox();
+                }
+
                 IsBusy = false;
             }
         }

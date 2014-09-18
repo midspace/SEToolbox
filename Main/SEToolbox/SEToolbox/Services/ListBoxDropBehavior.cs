@@ -75,34 +75,37 @@ namespace SEToolbox.Services
             {
                 if (e.Data.GetDataPresent(_dataType))
                 {
-                    // first find the UIElement that it was dropped over, then we determine if it's 
-                    // dropped above or under the UIElement, then insert at the correct index.
-                    var dropContainer = sender as ItemsControl;
-                    // get the UIElement that was dropped over.
-                    var droppedOverItem = dropContainer.GetUIElement(e.GetPosition(dropContainer));
-                    var dropIndex = -1; // the location where the item will be dropped.
-                    if (droppedOverItem != null)
+                    if (this.AllowDropToSource || (string) e.Data.GetData(typeof (string)) != ((FrameworkElement) sender).Uid)
                     {
-                        dropIndex = dropContainer.ItemContainerGenerator.IndexFromContainer(droppedOverItem) + 1;
-                        // find if it was dropped above or below the index item so that we can insert 
-                        // the item in the correct place.
-                        if (droppedOverItem.IsPositionAboveElement(e.GetPosition(droppedOverItem))) //if above
+                        // first find the UIElement that it was dropped over, then we determine if it's 
+                        // dropped above or under the UIElement, then insert at the correct index.
+                        var dropContainer = sender as ItemsControl;
+                        // get the UIElement that was dropped over.
+                        var droppedOverItem = dropContainer.GetUIElement(e.GetPosition(dropContainer));
+                        var dropIndex = -1; // the location where the item will be dropped.
+                        if (droppedOverItem != null)
                         {
-                            dropIndex = dropIndex - 1; //we insert at the index above it
+                            dropIndex = dropContainer.ItemContainerGenerator.IndexFromContainer(droppedOverItem) + 1;
+                            // find if it was dropped above or below the index item so that we can insert 
+                            // the item in the correct place.
+                            if (droppedOverItem.IsPositionAboveElement(e.GetPosition(droppedOverItem))) //if above
+                            {
+                                dropIndex = dropIndex - 1; //we insert at the index above it
+                            }
                         }
-                    }
 
-                    // remove the data from each source.
-                    foreach (var item in (IList)e.Data.GetData(_dataType))
-                    {
-                        var source = item as IDragable;
-                        if (source != null)
-                            source.Remove(item);
-                    }
+                        // remove the data from each source.
+                        foreach (var item in (IList) e.Data.GetData(_dataType))
+                        {
+                            var source = item as IDragable;
+                            if (source != null)
+                                source.Remove(item);
+                        }
 
-                    // drop the data into destination.
-                    var target = this.AssociatedObject.DataContext as IDropable;
-                    target.Drop(e.Data.GetData(_dataType), dropIndex);
+                        // drop the data into destination.
+                        var target = this.AssociatedObject.DataContext as IDropable;
+                        target.Drop(e.Data.GetData(_dataType), dropIndex);
+                    }
                 }
             }
 

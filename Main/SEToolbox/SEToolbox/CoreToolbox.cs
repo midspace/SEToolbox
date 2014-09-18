@@ -7,7 +7,7 @@
     using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Windows;
-
+    
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Support;
@@ -26,14 +26,32 @@
             // Detection and correction of local settings of SE install location.
             var filePath = ToolboxUpdater.GetApplicationFilePath();
 
-            if (!ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
+            if (GlobalSettings.Default.PromptUser || !ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
             {
-                var faModel = new FindApplicationModel();
-                faModel.GameApplicationPath = filePath;
+                if (Directory.Exists(filePath))
+                {
+                    var testPath = Path.Combine(filePath, "SpaceEngineers.exe");
+                    if (File.Exists(testPath))
+                    {
+                        filePath = testPath;
+                    }
+                    else
+                    {
+                        testPath = Path.Combine(filePath, "SpaceEngineersDedicated.exe");
+                        if (File.Exists(testPath))
+                        {
+                            filePath = testPath;
+                        }
+                    }
+                }
+
+                var faModel = new FindApplicationModel()
+                {
+                    GameApplicationPath = filePath
+                };
                 var faViewModel = new FindApplicationViewModel(faModel);
                 var faWindow = new WindowFindApplication(faViewModel);
-                var ret = faWindow.ShowDialog();
-                if (ret == true)
+                if (faWindow.ShowDialog() == true)
                 {
                     filePath = faModel.GameBinPath;
                 }

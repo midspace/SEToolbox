@@ -68,6 +68,11 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <!--<MenuItem Command="{Binding SaveAsCommand}" Header="Save _As (Ctrl+A)">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>-->
                     <Separator />
                     <MenuItem Command="{Binding ReloadCommand}" Header="_Reload (Ctrl+R)" ToolTip="Undo any changes, and reload world again.">
                         <MenuItem.Icon>

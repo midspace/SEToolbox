@@ -307,6 +307,30 @@
             set { _dataModel.RotateRoll = value; ProcessModelScale(); }
         }
 
+        public bool BeepWhenFinished
+        {
+            get { return _dataModel.BeepWhenFinished; }
+            set { _dataModel.BeepWhenFinished = value; }
+        }
+
+        public bool SaveWhenFinsihed
+        {
+            get { return _dataModel.SaveWhenFinsihed; }
+            set { _dataModel.SaveWhenFinsihed = value; }
+        }
+
+        public bool ShutdownWhenFinished
+        {
+            get { return _dataModel.ShutdownWhenFinished; }
+            set { _dataModel.ShutdownWhenFinished = value; }
+        }
+
+        public bool RunInLowPrioity
+        {
+            get { return _dataModel.RunInLowPrioity; }
+            set { _dataModel.RunInLowPrioity = value; }
+        }
+
         public MyObjectBuilder_VoxelMap NewEntity { get; set; }
 
         #endregion
@@ -501,7 +525,13 @@
                     progressModel.ResetProgress, progressModel.IncrementProgress, cancelFunc, completedAction);
             };
 
+            if (RunInLowPrioity)
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.Idle;
+
             _dialogService.ShowDialog<WindowProgressCancel>(this, progressVm, action);
+
+            if (RunInLowPrioity)
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal;
 
             #endregion
 
@@ -556,6 +586,9 @@
                 IsValidEntity = voxelMap.ContentSize.X > 0 && voxelMap.ContentSize.Y > 0 && voxelMap.ContentSize.Z > 0;
 
                 NewEntity = entity;
+
+                if (BeepWhenFinished)
+                    System.Media.SystemSounds.Asterisk.Play();
             }
 
             return !doCancel;
