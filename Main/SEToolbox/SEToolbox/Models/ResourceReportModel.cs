@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -17,6 +18,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
+    using VRageMath;
 
     public class ResourceReportModel : BaseModel
     {
@@ -36,30 +38,35 @@
         private IList<IStructureBase> _entities;
 
         /// <summary>
-        /// untouched (in asteroid), measured in m³
+        /// untouched (in all asteroids), measured in m³.
         /// </summary>
         private List<VoxelMaterialAssetModel> _untouchedOre;
 
         /// <summary>
+        /// untouched (by asteroid), measured in m³.
+        /// </summary>
+        private List<AsteroidContent> _untouchedOreByAsteroid;
+
+        /// <summary>
         /// unused (ore and ingot), measured in Kg and L.
         /// </summary>
-        private List<OreAssetModel> _unusedOre;
+        private List<OreContent> _unusedOre;
 
         /// <summary>
         /// used (component, tool, cube), measured in Kg and L.
         /// Everything is measured in it's regressed state. Ie., how much ore was used/needed to build this item.
         /// </summary>
-        private List<OreAssetModel> _usedOre;
+        private List<OreContent> _usedOre;
 
         /// <summary>
         /// player controlled (inventory), measured in Kg and L.
         /// </summary>
-        private List<OreAssetModel> _playerOre;
+        private List<OreContent> _playerOre;
 
         /// <summary>
         /// npc (everything currently in an AI controlled ship with ore, ingot, component, tool, cube), measured in Kg and L.
         /// </summary>
-        private List<OreAssetModel> _npcOre;
+        private List<OreContent> _npcOre;
 
         /// <summary>
         /// tally of cubes to indicate time spent to construct.
@@ -274,11 +281,12 @@
             IsReportReady = false;
             _generatedDate = DateTime.Now;
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            var accumulateMaterials = new SortedDictionary<string, long>();
-            var accumulateUnusedOres = new SortedDictionary<string, OreAssetModel>();
-            var accumulateUsedOres = new SortedDictionary<string, OreAssetModel>();
-            var accumulatePlayerOres = new SortedDictionary<string, OreAssetModel>();
-            var accumulateNpcOres = new SortedDictionary<string, OreAssetModel>();
+            var accumulateOres = new SortedDictionary<string, long>();
+            var accumulateAsteroidOres = new List<AsteroidContent>();
+            var accumulateUnusedOres = new SortedDictionary<string, OreContent>();
+            var accumulateUsedOres = new SortedDictionary<string, OreContent>();
+            var accumulatePlayerOres = new SortedDictionary<string, OreContent>();
+            var accumulateNpcOres = new SortedDictionary<string, OreContent>();
             var accumulateItems = new SortedDictionary<string, ComponentItemModel>();
             var accumulateComponents = new SortedDictionary<string, ComponentItemModel>();
             var accumulateCubes = new SortedDictionary<string, ComponentItemModel>();
@@ -291,9 +299,9 @@
 
                 if (entity is StructureVoxelModel)
                 {
-                    var asteroid = entity as StructureVoxelModel;
+                    var asteroid = (StructureVoxelModel)entity;
 
-                    #region untouched materials (in asteroid)
+                    #region untouched ores (in asteroid)
 
                     Dictionary<string, long> details;
 
@@ -313,24 +321,52 @@
                     // Accumulate into untouched.
                     if (details != null)
                     {
+                        var ores = new Dictionary<string, long>();
                         foreach (var kvp in details)
                         {
-                            if (accumulateMaterials.ContainsKey(kvp.Key))
+                            var bp = SpaceEngineersCore.Resources.Definitions.VoxelMaterials.FirstOrDefault(b => b.Id.SubtypeId == kvp.Key && b.Id.TypeId == SpaceEngineersConsts.VoxelMaterialDefinition);
+
+                            if (bp != null && bp.CanBeHarvested)
                             {
-                                accumulateMaterials[kvp.Key] += kvp.Value;
+                                var cd = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Ore, bp.MinedOre) as MyObjectBuilder_PhysicalItemDefinition;
+
+                                if (cd != null)
+                                {
+                                    if (ores.ContainsKey(cd.DisplayName))
+                                        ores[cd.DisplayName] += kvp.Value;
+                                    else
+                                        ores.Add(cd.DisplayName, kvp.Value);
+                                }
+                            }
+                        }
+
+                        foreach (var kvp in ores)
+                        {
+                            if (accumulateOres.ContainsKey(kvp.Key))
+                            {
+                                accumulateOres[kvp.Key] += kvp.Value;
                             }
                             else
                             {
-                                accumulateMaterials.Add(kvp.Key, kvp.Value);
+                                accumulateOres.Add(kvp.Key, kvp.Value);
                             }
                         }
+
+
+                        var oreSum = ores.Values.ToList().Sum();
+                        accumulateAsteroidOres.Add(new AsteroidContent()
+                        {
+                            Filename = Path.GetFileName(filename),
+                            Position =  asteroid.PositionAndOrientation.Value.Position,
+                            UntouchedOreList = ores.Select(kvp => new VoxelMaterialAssetModel { MaterialName = SpaceEngineersApi.GetResourceName(kvp.Key), Volume = Math.Round((double)kvp.Value / 255, 7), Percent = kvp.Value / (double)oreSum }).ToList()
+                        });
                     }
 
                     #endregion
                 }
                 else if (entity is StructureFloatingObjectModel)
                 {
-                    var floating = entity as StructureFloatingObjectModel;
+                    var floating = (StructureFloatingObjectModel)entity;
 
                     if (floating.FloatingObject.Item.Content.TypeId == SpaceEngineersConsts.Ore || floating.FloatingObject.Item.Content.TypeId == SpaceEngineersConsts.Ingot)
                     {
@@ -343,7 +379,7 @@
                 }
                 else if (entity is StructureCharacterModel)
                 {
-                    var character = entity as StructureCharacterModel;
+                    var character = (StructureCharacterModel)entity;
 
                     // Ignore pilots, as we'll check those in the ship.
                     if (!character.IsPilot)
@@ -533,13 +569,15 @@
 
             #region build lists
 
-            var sum = accumulateMaterials.Values.ToList().Sum();
+            var sum = accumulateOres.Values.ToList().Sum();
             _untouchedOre = new List<VoxelMaterialAssetModel>();
 
-            foreach (var kvp in accumulateMaterials)
+            foreach (var kvp in accumulateOres)
             {
-                _untouchedOre.Add(new VoxelMaterialAssetModel { MaterialName = kvp.Key, Volume = Math.Round((double)kvp.Value / 255, 7), Percent = kvp.Value / (double)sum });
+                _untouchedOre.Add(new VoxelMaterialAssetModel { MaterialName = SpaceEngineersApi.GetResourceName(kvp.Key), Volume = Math.Round((double)kvp.Value / 255, 7), Percent = kvp.Value / (double)sum });
             }
+
+            _untouchedOreByAsteroid = accumulateAsteroidOres;
 
             _unusedOre = accumulateUnusedOres.Values.ToList();
             _usedOre = accumulateUsedOres.Values.ToList();
@@ -562,7 +600,7 @@
 
         #region TallyItems
 
-        private void TallyItems(MyObjectBuilderType tallyTypeId, string tallySubTypeId, Decimal amountDecimal, string contentPath, SortedDictionary<string, OreAssetModel> accumulateOres, SortedDictionary<string, ComponentItemModel> accumulateItems, SortedDictionary<string, ComponentItemModel> accumulateComponents)
+        private void TallyItems(MyObjectBuilderType tallyTypeId, string tallySubTypeId, Decimal amountDecimal, string contentPath, SortedDictionary<string, OreContent> accumulateOres, SortedDictionary<string, ComponentItemModel> accumulateItems, SortedDictionary<string, ComponentItemModel> accumulateComponents)
         {
             var cd = SpaceEngineersApi.GetDefinition(tallyTypeId, tallySubTypeId) as MyObjectBuilder_PhysicalItemDefinition;
 
@@ -590,7 +628,7 @@
                 }
                 else
                 {
-                    accumulateOres.Add(unusedKey, new OreAssetModel { Name = cd.DisplayName, Amount = amountDecimal, Mass = mass, Volume = volume, TextureFile = componentTexture });
+                    accumulateOres.Add(unusedKey, new OreContent { Name = cd.DisplayName, Amount = amountDecimal, Mass = mass, Volume = volume, TextureFile = componentTexture });
                 }
 
                 #endregion
@@ -755,6 +793,8 @@
             bld.AppendFormat("Date: {0}\r\n", _generatedDate);
             bld.AppendLine();
 
+            #region In game resources
+
             bld.AppendLine("In game resources");
             bld.AppendLine("Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.");
             bld.AppendLine();
@@ -798,6 +838,10 @@
                 bld.AppendFormat("{0}\t{1:#,##0.000}\t{2:#,##0.000}\r\n", item.FriendlyName, item.Mass, item.Volume);
             }
 
+            #endregion
+
+            #region In game assets
+
             bld.AppendLine();
             bld.AppendLine("In game assets");
             bld.AppendLine("Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine.");
@@ -826,6 +870,29 @@
                 bld.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.000}\t{3:#,##0.000}\t{4}\r\n", item.FriendlyName, item.Count, item.Mass, item.Volume, item.Time);
             }
 
+            #endregion
+
+            #region Asteroid breakdown
+
+            bld.AppendLine();
+            bld.AppendFormat("Untouched Ores (Asteroids)\r\n");
+            bld.AppendFormat("Asteroid\tOre Name\tVolume m³\r\n");
+            foreach (var asteroid in _untouchedOreByAsteroid)
+            {
+                foreach (var item in asteroid.UntouchedOreList)
+                {
+                    bld.AppendFormat("{0}\t{1}\t{2:#,##0.000}\r\n", asteroid.Filename, item.MaterialName, item.Volume);
+                }
+            }
+
+            #endregion
+
+            #region Ship breakdown
+
+            // TODO:
+
+            #endregion
+
             return bld.ToString();
         }
 
@@ -842,9 +909,10 @@
             {
                 #region header
 
-                writer.BeginDocument("Resource Report",
+                writer.BeginDocument(string.Format("Resource Report - {0}", _saveName),
                     @"
 body { background-color: #F6F6FA }
+b { font-family: Arial, Helvetica, sans-serif; }
 p { font-family: Arial, Helvetica, sans-serif; }
 h1,h2,h3 { font-family: Arial, Helvetica, sans-serif; }
 table { background-color: #FFFFFF; }
@@ -858,6 +926,8 @@ td.right { text-align: right; }");
 
                 writer.RenderElement(HtmlTextWriterTag.P, "Save World: {0}", _saveName);
                 writer.RenderElement(HtmlTextWriterTag.P, "Date: {0}", _generatedDate);
+
+                #region In game resources
 
                 writer.RenderElement(HtmlTextWriterTag.H2, "In game resources");
                 writer.RenderElement(HtmlTextWriterTag.P, "Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.");
@@ -930,8 +1000,12 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
+                #endregion
+
                 writer.RenderElement(HtmlTextWriterTag.Br);
                 writer.RenderElement(HtmlTextWriterTag.Hr);
+
+                #region In game assets
 
                 writer.RenderElement(HtmlTextWriterTag.H2, "In game assets");
                 writer.RenderElement(HtmlTextWriterTag.P, "Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine.");
@@ -1021,6 +1095,51 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
+                #endregion
+
+                writer.RenderElement(HtmlTextWriterTag.Br);
+                writer.RenderElement(HtmlTextWriterTag.Hr);
+
+                writer.RenderElement(HtmlTextWriterTag.H2, "Resources breakdown");
+
+                #region Asteroid breakdown
+
+                writer.RenderElement(HtmlTextWriterTag.H3, "Untouched Ores (Asteroids)");
+                writer.BeginTable("1", "3", "0", new[] { "Asteroid", "Position", "Ore name", "Volume m³" });
+                foreach (var asteroid in _untouchedOreByAsteroid)
+                {
+                    var inx = 0;
+                    foreach (var item in asteroid.UntouchedOreList)
+                    {
+                        writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                        if (inx == 0)
+                        {
+                            writer.AddAttribute(HtmlTextWriterAttribute.Rowspan, asteroid.UntouchedOreList.Count.ToString(CultureInfo.InvariantCulture));
+                            writer.RenderElement(HtmlTextWriterTag.Td, asteroid.Filename);
+
+                            writer.AddAttribute(HtmlTextWriterAttribute.Rowspan, asteroid.UntouchedOreList.Count.ToString(CultureInfo.InvariantCulture));
+                            writer.RenderElement(HtmlTextWriterTag.Td, "{0},{1},{2}", asteroid.Position.X, asteroid.Position.Y, asteroid.Position.Z);
+                        }
+                        writer.RenderElement(HtmlTextWriterTag.Td, item.MaterialName);
+                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                        writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Volume);
+                        writer.RenderEndTag(); // Tr
+                        inx++;
+                    }
+                }
+                writer.EndTable();
+
+                #endregion
+
+                writer.RenderElement(HtmlTextWriterTag.Br);
+                writer.RenderElement(HtmlTextWriterTag.Hr);
+
+                #region Ship breakdown
+
+                // TODO:
+
+                #endregion
+
                 writer.EndDocument();
             }
 
@@ -1048,10 +1167,12 @@ td.right { text-align: right; }");
                 xmlWriter.WriteAttributeString("world", _saveName);
                 xmlWriter.WriteAttributeFormat("date", "{0:o}", _generatedDate);
 
+                #region In game resources
+
                 foreach (var item in _untouchedOre)
                 {
                     xmlWriter.WriteStartElement("untouched");
-                    xmlWriter.WriteElementFormat("name", "{0}", item.MaterialName);
+                    xmlWriter.WriteElementFormat("orename", "{0}", item.MaterialName);
                     xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
                     xmlWriter.WriteEndElement();
                 }
@@ -1091,6 +1212,10 @@ td.right { text-align: right; }");
                     xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
                     xmlWriter.WriteEndElement();
                 }
+
+                #endregion
+
+                #region In game assets
 
                 foreach (var item in _allCubes)
                 {
@@ -1132,6 +1257,34 @@ td.right { text-align: right; }");
                     xmlWriter.WriteElementFormat("time", "{0}", item.Time);
                     xmlWriter.WriteEndElement();
                 }
+
+                #endregion
+
+                #region Asteroid breakdown
+
+                foreach (var asteroid in _untouchedOreByAsteroid)
+                {
+                    xmlWriter.WriteStartElement("asteroids");
+                    xmlWriter.WriteAttributeString("name", asteroid.Filename);
+
+                    foreach (var item in asteroid.UntouchedOreList)
+                    {
+                        xmlWriter.WriteStartElement("untouched");
+                        xmlWriter.WriteElementFormat("orename", "{0}", item.MaterialName);
+                        xmlWriter.WriteElementFormat("volume", "{0:0.000}", item.Volume);
+                        xmlWriter.WriteEndElement();
+                    }
+
+                    xmlWriter.WriteEndElement();
+                }
+
+                #endregion
+
+                #region Ship breakdown
+
+                // TODO:
+
+                #endregion
 
                 xmlWriter.WriteEndElement();
             }
@@ -1223,6 +1376,53 @@ td.right { text-align: right; }");
                 File.WriteAllText(reportFile, model.CreateXmlReport());
 
             Environment.Exit(0);
+        }
+
+        #endregion
+
+        #region helper classes
+
+        public class AsteroidContent
+        {
+            public string Filename { get; set; }
+            public Vector3 Position { get; set; }
+            public long Empty { get; set; }
+            public List<VoxelMaterialAssetModel> UntouchedOreList { get; set; }
+        }
+
+        public class OreContent
+        {
+            private string _name;
+
+            public string Name
+            {
+                get { return _name; }
+
+                set
+                {
+                    if (value != _name)
+                    {
+                        _name = value;
+                        FriendlyName = SpaceEngineersApi.GetResourceName(Name);
+                    }
+                }
+            }
+
+            public string FriendlyName { get; set; }
+            public decimal Amount { get; set; }
+            public double Mass { get; set; }
+            public double Volume { get; set; }
+            public string TextureFile { get; set; }
+        }
+
+        public class ShipContent
+        {
+            public string Name { get; set; }
+            public decimal Amount { get; set; }
+            public double Mass { get; set; }
+            public double Volume { get; set; }
+            public TimeSpan Time { get; set; }
+            public string TextureFile { get; set; }
         }
 
         #endregion

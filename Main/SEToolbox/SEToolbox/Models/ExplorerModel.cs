@@ -404,7 +404,7 @@
         {
             IsBusy = true;
 
-            var tempFilename = TempfileUtil.NewFilename() + ".xml";
+            var tempFilename = TempfileUtil.NewFilename(".xml");
             SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(ActiveWorld.SectorData, tempFilename);
 
             IsBusy = false;
@@ -996,6 +996,24 @@
                         existingGroup.Blocks.Add(block + offset);
                     }
                 }
+
+                // TODO: Merge Bones.
+                //if (model2.CubeGrid.Skeleton != null)
+                //{
+                //    if (model1.CubeGrid.Skeleton == null)
+                //        model1.CubeGrid.Skeleton = new List<BoneInfo>();
+
+                //        for (var i = model2.CubeGrid.Skeleton.Count - 1; i >= 0; i--)
+                //        //foreach (var bone in model2.CubeGrid.Skeleton)
+                //        {
+                //            var bone = model2.CubeGrid.Skeleton[i];
+                //            model1.CubeGrid.Skeleton.Insert(0, new BoneInfo()
+                //            {
+                //                BonePosition = bone.BonePosition + offset,
+                //                BoneOffset = bone.BoneOffset
+                //            });
+                //        }
+                //}
 
                 // TODO: Merge ConveyorLines
                 // need to fix the rotation of ConveyorLines first.

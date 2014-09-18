@@ -47,7 +47,6 @@
                     <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=error24}" VerticalAlignment="Center"/>
                     <TextBlock Text="Invalid file specified" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
-
             </Grid>
             <Grid Grid.Row="1">
                 <Border BorderBrush="Black" BorderThickness="1">
@@ -143,7 +142,7 @@
                                 </TextBox>
                             </Grid>
                         </GroupBox>
-                        
+
                         <GroupBox Header="Scale" MinWidth="120">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -287,13 +286,13 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <Label Content="Distance:" Grid.Row="2" />
                             <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" ToolTip="Distance in front of Player in Meters." />
                         </Grid>
 
                     </Grid>
-                   
+
                 </TabItem>
                 <TabItem Header="Materials">
                     <Grid>
@@ -381,6 +380,39 @@
                                 </Grid>
                             </Border>
                         </Grid>-->
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Processing">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" Content="Beep when finished:"/>
+                            <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding BeepWhenFinished}"/>
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="Run in low priority:"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding RunInLowPrioity}"/>
+
+                            <Label Grid.Row="2" Grid.Column="0" Content="Save when finsihed:"/>
+                            <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding SaveWhenFinsihed}"/>
+                        </Grid>
                     </Grid>
                 </TabItem>
             </TabControl>

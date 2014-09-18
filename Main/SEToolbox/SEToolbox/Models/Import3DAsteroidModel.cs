@@ -42,6 +42,11 @@
         private double _rotateYaw;
         private double _rotatePitch;
         private double _rotateRoll;
+        private bool _beepWhenFinished;
+        private bool _saveWhenFinsihed;
+        private bool _shutdownWhenFinished;
+        private bool _runInLowPrioity;
+        // TODO: pause
 
         #endregion
 
@@ -64,6 +69,9 @@
             TraceType = TraceType.Odd;
             TraceCount = TraceCount.Trace5;
             TraceDirection = TraceDirection.X;
+
+            BeepWhenFinished = true;
+            RunInLowPrioity = true;
         }
 
         #endregion
@@ -472,6 +480,62 @@
                 {
                     _rotateRoll = value;
                     RaisePropertyChanged(() => RotateRoll);
+                }
+            }
+        }
+
+        public bool BeepWhenFinished
+        {
+            get { return _beepWhenFinished; }
+
+            set
+            {
+                if (value != _beepWhenFinished)
+                {
+                    _beepWhenFinished = value;
+                    RaisePropertyChanged(() => BeepWhenFinished);
+                }
+            }
+        }
+
+        public bool SaveWhenFinsihed
+        {
+            get { return _saveWhenFinsihed; }
+
+            set
+            {
+                if (value != _saveWhenFinsihed)
+                {
+                    _saveWhenFinsihed = value;
+                    RaisePropertyChanged(() => SaveWhenFinsihed);
+                }
+            }
+        }
+
+        public bool ShutdownWhenFinished
+        {
+            get { return _shutdownWhenFinished; }
+
+            set
+            {
+                if (value != _shutdownWhenFinished)
+                {
+                    _shutdownWhenFinished = value;
+                    RaisePropertyChanged(() => ShutdownWhenFinished);
+                }
+            }
+        }
+
+        public bool RunInLowPrioity
+        {
+            get { return _runInLowPrioity; }
+
+            set
+            {
+                if (value != _runInLowPrioity)
+                {
+                    _runInLowPrioity = value;
+                    RaisePropertyChanged(() => RunInLowPrioity);
                 }
             }
         }

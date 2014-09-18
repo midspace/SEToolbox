@@ -258,5 +258,11 @@
 
             return null;
         }
+
+        public static SerializableVector3UByte Transform(this SerializableVector3UByte value, Quaternion rotation)
+        {
+            var vector = Vector3I.Transform(new Vector3I(value.X - 127, value.Y - 127, value.Z - 127), rotation);
+            return new SerializableVector3UByte((byte)(vector.X + 127), (byte)(vector.Y + 127), (byte)(vector.Z + 127));
+        }
     }
 }
