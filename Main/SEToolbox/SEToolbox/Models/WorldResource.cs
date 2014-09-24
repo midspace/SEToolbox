@@ -1,6 +1,8 @@
 ﻿namespace SEToolbox.Models
 {
     using System;
+    using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Xml;
@@ -25,6 +27,7 @@
         private MyObjectBuilder_Sector _sectorData;
         private bool _compressedSectorFormat;
         private readonly SpaceEngineersResources _resources;
+        private Version _version;
 
         /// <summary>
         /// Populated from LastLoadedTimes
@@ -180,6 +183,32 @@
                     _lastLoadTime = value;
                     RaisePropertyChanged(() => LastLoadTime);
                 }
+            }
+        }
+
+        public Version Version
+        {
+            get
+            {
+                if (_version == null)
+                {
+                    var str = _checkpoint.AppVersion.ToString(CultureInfo.InvariantCulture);
+                    if (str == "0")
+                        _version = new Version();
+                    else
+                    {
+                        try
+                        {
+                            str = str.Substring(0, str.Length - 6) + "." + str.Substring(str.Length - 6, 3) + "." + str.Substring(str.Length - 3);
+                            _version = new Version(str);
+                        }
+                        catch
+                        {
+                            _version = new Version();
+                        }
+                    }
+                }
+                return _version;
             }
         }
 
