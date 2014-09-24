@@ -42,6 +42,7 @@
                         <GridViewColumn DisplayMemberBinding="{Binding LastLoadTime}" Header="Loaded"/>
                         <GridViewColumn DisplayMemberBinding="{Binding LastSaveTime}" Header="Saved"/>
                         <GridViewColumn DisplayMemberBinding="{Binding WorkshopId}" Header="Workshop"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Version}" Header="Version"/>
                     </GridView>
                 </ListView.View>
                 <ListView.GroupStyle>

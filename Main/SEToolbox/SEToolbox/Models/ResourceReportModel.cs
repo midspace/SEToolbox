@@ -83,6 +83,8 @@
         /// </summary>
         private List<ComponentItemModel> _allItems;
 
+        private List<ShipContent> _allShips;
+
         #endregion
 
         #region ctor
@@ -290,6 +292,7 @@
             var accumulateItems = new SortedDictionary<string, ComponentItemModel>();
             var accumulateComponents = new SortedDictionary<string, ComponentItemModel>();
             var accumulateCubes = new SortedDictionary<string, ComponentItemModel>();
+            var accumulateShips = new List<ShipContent>();
 
             ResetProgress(0, _entities.Count);
 
@@ -357,7 +360,7 @@
                         accumulateAsteroidOres.Add(new AsteroidContent()
                         {
                             Filename = Path.GetFileName(filename),
-                            Position =  asteroid.PositionAndOrientation.Value.Position,
+                            Position = asteroid.PositionAndOrientation.Value.Position,
                             UntouchedOreList = ores.Select(kvp => new VoxelMaterialAssetModel { MaterialName = SpaceEngineersApi.GetResourceName(kvp.Key), Volume = Math.Round((double)kvp.Value / 255, 7), Percent = kvp.Value / (double)oreSum }).ToList()
                         });
                     }
@@ -395,6 +398,14 @@
                 {
                     var ship = entity as StructureCubeGridModel;
                     var isNpc = ship.CubeGrid.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Autopilot != null);
+
+                    var shipContent = new ShipContent()
+                    {
+                        DisplayName = ship.DisplayName,
+                        Position = ship.PositionAndOrientation.Value.Position,
+                        EntityId = ship.EntityId,
+                        BlockCount = ship.BlockCount
+                    };
 
                     foreach (MyObjectBuilder_CubeBlock block in ship.CubeGrid.CubeBlocks)
                     {
@@ -564,6 +575,8 @@
 
                         #endregion
                     }
+
+                    accumulateShips.Add(shipContent);
                 }
             }
 
@@ -586,6 +599,7 @@
             _allCubes = accumulateCubes.Values.ToList();
             _allComponents = accumulateComponents.Values.ToList();
             _allItems = accumulateItems.Values.ToList();
+            _allShips = accumulateShips;
 
             #endregion
 
@@ -1136,7 +1150,20 @@ td.right { text-align: right; }");
 
                 #region Ship breakdown
 
-                // TODO:
+                writer.BeginTable("1", "3", "0", new[] { "Ship", "EntityId", "Position", "Block Count" });
+                foreach (var ship in _allShips)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                    writer.RenderElement(HtmlTextWriterTag.Td, ship.DisplayName);
+                    writer.RenderElement(HtmlTextWriterTag.Td, ship.EntityId);
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0},{1},{2}", ship.Position.X, ship.Position.Y, ship.Position.Z);
+                    writer.RenderElement(HtmlTextWriterTag.Td, ship.BlockCount);
+
+                    // TODO: more detail.
+
+                    writer.RenderEndTag(); // Tr
+                }
+                writer.EndTable();
 
                 #endregion
 
@@ -1417,12 +1444,14 @@ td.right { text-align: right; }");
 
         public class ShipContent
         {
-            public string Name { get; set; }
-            public decimal Amount { get; set; }
-            public double Mass { get; set; }
-            public double Volume { get; set; }
-            public TimeSpan Time { get; set; }
-            public string TextureFile { get; set; }
+            public string DisplayName { get; set; }
+            public Vector3 Position { get; set; }
+            public long EntityId { get; set; }
+            public int BlockCount { get; set; }
+            //public decimal Amount { get; set; }
+            //public double Mass { get; set; }
+            //public double Volume { get; set; }
+            //public TimeSpan Time { get; set; }
         }
 
         #endregion
