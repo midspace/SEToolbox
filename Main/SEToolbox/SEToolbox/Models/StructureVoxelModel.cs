@@ -50,8 +50,21 @@
         {
             if (voxelPath != null)
             {
-                VoxelFilepath = Path.Combine(voxelPath, VoxelMap.Filename);
-                ReadVoxelDetails(VoxelFilepath);
+                VoxelFilepath = Path.Combine(voxelPath, VoxelMap.Name + MyVoxelMap.V2FileExtension);
+                var previewFile = VoxelFilepath;
+
+                if (!File.Exists(VoxelFilepath))
+                {
+                    var oldFilepath = Path.Combine(voxelPath, VoxelMap.Name + MyVoxelMap.V1FileExtension);
+                    if (File.Exists(oldFilepath))
+                    {
+                        SourceVoxelFilepath = oldFilepath;
+                        previewFile = oldFilepath;
+                        SpaceEngineersCore.ManageDeleteVoxelList.Add(oldFilepath);
+                    }
+                }
+
+                ReadVoxelDetails(previewFile);
             }
 
             var materialList = SpaceEngineersCore.Resources.GetMaterialList().Select(m => m.Id.SubtypeName).OrderBy(s => s).ToList();
@@ -75,19 +88,19 @@
         }
 
         [XmlIgnore]
-        public string Filename
+        public string Name
         {
             get
             {
-                return VoxelMap.Filename;
+                return VoxelMap.Name;
             }
 
             set
             {
-                if (value != VoxelMap.Filename)
+                if (value != VoxelMap.Name)
                 {
-                    VoxelMap.Filename = value;
-                    RaisePropertyChanged(() => Filename);
+                    VoxelMap.Name = value;
+                    RaisePropertyChanged(() => Name);
                 }
             }
         }
@@ -279,7 +292,7 @@
         public override void UpdateGeneralFromEntityBase()
         {
             ClassType = ClassType.Voxel;
-            DisplayName = Path.GetFileNameWithoutExtension(VoxelMap.Filename);
+            DisplayName = Path.GetFileNameWithoutExtension(VoxelMap.Name);
         }
 
         public override void InitializeAsync()

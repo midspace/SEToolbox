@@ -359,7 +359,7 @@
                         var oreSum = ores.Values.ToList().Sum();
                         accumulateAsteroidOres.Add(new AsteroidContent()
                         {
-                            Filename = Path.GetFileName(filename),
+                            Name = Path.GetFileNameWithoutExtension(filename),
                             Position = asteroid.PositionAndOrientation.Value.Position,
                             UntouchedOreList = ores.Select(kvp => new VoxelMaterialAssetModel { MaterialName = SpaceEngineersApi.GetResourceName(kvp.Key), Volume = Math.Round((double)kvp.Value / 255, 7), Percent = kvp.Value / (double)oreSum }).ToList()
                         });
@@ -895,7 +895,7 @@
             {
                 foreach (var item in asteroid.UntouchedOreList)
                 {
-                    bld.AppendFormat("{0}\t{1}\t{2:#,##0.000}\r\n", asteroid.Filename, item.MaterialName, item.Volume);
+                    bld.AppendFormat("{0}\t{1}\t{2:#,##0.000}\r\n", asteroid.Name, item.MaterialName, item.Volume);
                 }
             }
 
@@ -1129,7 +1129,7 @@ td.right { text-align: right; }");
                         if (inx == 0)
                         {
                             writer.AddAttribute(HtmlTextWriterAttribute.Rowspan, asteroid.UntouchedOreList.Count.ToString(CultureInfo.InvariantCulture));
-                            writer.RenderElement(HtmlTextWriterTag.Td, asteroid.Filename);
+                            writer.RenderElement(HtmlTextWriterTag.Td, asteroid.Name);
 
                             writer.AddAttribute(HtmlTextWriterAttribute.Rowspan, asteroid.UntouchedOreList.Count.ToString(CultureInfo.InvariantCulture));
                             writer.RenderElement(HtmlTextWriterTag.Td, "{0},{1},{2}", asteroid.Position.X, asteroid.Position.Y, asteroid.Position.Z);
@@ -1292,7 +1292,7 @@ td.right { text-align: right; }");
                 foreach (var asteroid in _untouchedOreByAsteroid)
                 {
                     xmlWriter.WriteStartElement("asteroids");
-                    xmlWriter.WriteAttributeString("name", asteroid.Filename);
+                    xmlWriter.WriteAttributeString("name", asteroid.Name);
 
                     foreach (var item in asteroid.UntouchedOreList)
                     {
@@ -1411,7 +1411,7 @@ td.right { text-align: right; }");
 
         public class AsteroidContent
         {
-            public string Filename { get; set; }
+            public string Name { get; set; }
             public Vector3 Position { get; set; }
             public long Empty { get; set; }
             public List<VoxelMaterialAssetModel> UntouchedOreList { get; set; }

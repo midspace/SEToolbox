@@ -16,6 +16,7 @@
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
 
@@ -38,8 +39,6 @@
         ///// </summary>
         private ObservableCollection<IStructureBase> _structures;
 
-        private readonly List<string> _manageDeleteVoxelList;
-
         private bool _showProgress;
 
         private double _progress;
@@ -61,7 +60,6 @@
         public ExplorerModel()
         {
             Structures = new ObservableCollection<IStructureBase>();
-            _manageDeleteVoxelList = new List<string>();
             _timer = new Stopwatch();
             SetActiveStatus();
         }
@@ -379,14 +377,24 @@
                             FileSystem.DeleteFile(voxel.VoxelFilepath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                         }
 
-                        File.Copy(voxel.SourceVoxelFilepath, voxel.VoxelFilepath);
+                        if (Path.GetExtension(voxel.SourceVoxelFilepath).Equals(MyVoxelMap.V1FileExtension, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            // Convert between formats.
+                            var voxelmap = new MyVoxelMap();
+                            voxelmap.Load(voxel.SourceVoxelFilepath, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+                            voxelmap.Save(voxel.VoxelFilepath);
+                        }
+                        else
+                        {
+                            File.Copy(voxel.SourceVoxelFilepath, voxel.VoxelFilepath);
+                        }
                         voxel.SourceVoxelFilepath = null;
                     }
                 }
             }
 
             // Manages the removal old voxels files.
-            foreach (var file in _manageDeleteVoxelList)
+            foreach (var file in SpaceEngineersCore.ManageDeleteVoxelList)
             {
                 var filename = Path.Combine(ActiveWorld.Savepath, file);
                 if (File.Exists(filename))
@@ -394,7 +402,7 @@
                     FileSystem.DeleteFile(filename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 }
             }
-            _manageDeleteVoxelList.Clear();
+            SpaceEngineersCore.ManageDeleteVoxelList.Clear();
 
             IsModified = false;
             IsBusy = false;
@@ -417,7 +425,7 @@
         private void LoadSectorDetail()
         {
             Structures.Clear();
-            _manageDeleteVoxelList.Clear();
+            SpaceEngineersCore.ManageDeleteVoxelList.Clear();
             ThePlayerCharacter = null;
             _customColors = null;
 
@@ -603,7 +611,7 @@
                 {
                     if (entity is MyObjectBuilder_VoxelMap)
                     {
-                        _manageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).Filename);
+                        SpaceEngineersCore.ManageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).Name + MyVoxelMap.V2FileExtension);
                     }
 
                     ActiveWorld.SectorData.SectorObjects.Remove(entity);
@@ -642,14 +650,14 @@
 
         public bool ContainsVoxelFilename(string filename, MyObjectBuilder_EntityBase[] additionalList)
         {
-            bool contains = Structures.Any(s => s is StructureVoxelModel && Path.GetFileNameWithoutExtension(((StructureVoxelModel)s).Filename).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper()) || _manageDeleteVoxelList.Any(f => Path.GetFileNameWithoutExtension(f).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper());
+            bool contains = Structures.Any(s => s is StructureVoxelModel && Path.GetFileNameWithoutExtension(((StructureVoxelModel)s).Name).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper()) || SpaceEngineersCore.ManageDeleteVoxelList.Any(f => Path.GetFileNameWithoutExtension(f).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper());
 
             if (contains || additionalList == null)
             {
                 return contains;
             }
 
-            contains |= additionalList.Any(s => s is MyObjectBuilder_VoxelMap && Path.GetFileNameWithoutExtension(((MyObjectBuilder_VoxelMap)s).Filename).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper());
+            contains |= additionalList.Any(s => s is MyObjectBuilder_VoxelMap && Path.GetFileNameWithoutExtension(((MyObjectBuilder_VoxelMap)s).Name).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper());
 
             return contains;
         }
@@ -691,9 +699,9 @@
                 {
                     var asteroid = item as StructureVoxelModel;
 
-                    if (ContainsVoxelFilename(asteroid.Filename, null))
+                    if (ContainsVoxelFilename(asteroid.Name, null))
                     {
-                        asteroid.Filename = CreateUniqueVoxelFilename(asteroid.Filename, null);
+                        asteroid.Name = CreateUniqueVoxelFilename(asteroid.Name, null);
                     }
 
                     var entity = (StructureVoxelModel)AddEntity(asteroid.VoxelMap);

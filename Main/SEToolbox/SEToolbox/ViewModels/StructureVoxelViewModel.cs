@@ -82,10 +82,10 @@
             get { return base.DataModel as StructureVoxelModel; }
         }
 
-        public string Filename
+        public string Name
         {
-            get { return DataModel.Filename; }
-            set { DataModel.Filename = value; }
+            get { return DataModel.Name; }
+            set { DataModel.Name = value; }
         }
 
         public BindableSize3DIModel Size
@@ -163,7 +163,7 @@
             }
 
             var detail = string.Format(Properties.Resources.VoxelDetail,
-                Filename,
+                Name,
                 Size.Width, Size.Height, Size.Depth,
                 ContentSize.Width, ContentSize.Height, ContentSize.Depth,
                 Center.X, Center.Y, Center.Z,
@@ -317,7 +317,7 @@
             var tempfilename = TempfileUtil.NewFilename();
             asteroid.Save(tempfilename);
 
-            var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Filename);
+            var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Name);
             var posOrient = DataModel.PositionAndOrientation.HasValue ? DataModel.PositionAndOrientation.Value : new MyPositionAndOrientation();
             posOrient.Position.y += height;
 
@@ -363,7 +363,7 @@
             var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
             asteroid.Save(tempfilename);
 
-            var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Filename);
+            var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Name);
             var posOrient = DataModel.PositionAndOrientation.HasValue ? DataModel.PositionAndOrientation.Value : new MyPositionAndOrientation();
             posOrient.Position.y += height;
 
