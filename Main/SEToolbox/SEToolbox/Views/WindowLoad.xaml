@@ -38,7 +38,13 @@
                                        ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding SessionName}" Header="Name"/>
+                        <controls:SortableGridViewColumn SortBinding="{Binding SessionName}" Header="Name" Width="240">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SessionName}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </controls:SortableGridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding LastLoadTime}" Header="Loaded"/>
                         <GridViewColumn DisplayMemberBinding="{Binding LastSaveTime}" Header="Saved"/>
                         <GridViewColumn DisplayMemberBinding="{Binding WorkshopId}" Header="Workshop"/>

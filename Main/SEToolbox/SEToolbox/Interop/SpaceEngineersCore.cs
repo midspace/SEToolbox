@@ -13,7 +13,8 @@
 
         public static SpaceEngineersCore Default = new SpaceEngineersCore();
         private WorldResource _worldResource;
-        private SpaceEngineersResources _stockDefinitions;
+        private readonly SpaceEngineersResources _stockDefinitions;
+        private readonly List<string> _manageDeleteVoxelList;
 
         #endregion
 
@@ -24,6 +25,7 @@
             Sandbox.Common.Localization.MyTextsWrapper.Init();
             _stockDefinitions = new SpaceEngineersResources();
             _stockDefinitions.LoadDefinitions();
+            _manageDeleteVoxelList = new List<string>();
         }
 
         #endregion
@@ -75,6 +77,11 @@
         {
             get { return Default._worldResource; }
             set { Default._worldResource = value; }
+        }
+
+        public static List<string> ManageDeleteVoxelList
+        {
+            get { return Default._manageDeleteVoxelList; }
         }
 
         #endregion

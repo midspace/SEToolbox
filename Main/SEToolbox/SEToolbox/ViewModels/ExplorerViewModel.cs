@@ -19,6 +19,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
@@ -1310,7 +1311,7 @@
                     var saveFileDialog = _saveFileDialogFactory();
                     saveFileDialog.Filter = Res.DialogExportVoxelFilter;
                     saveFileDialog.Title = Res.DialogExportVoxelTitle;
-                    saveFileDialog.FileName = structure.Filename;
+                    saveFileDialog.FileName = structure.Name + MyVoxelMap.V2FileExtension;
                     saveFileDialog.OverwritePrompt = true;
 
                     if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
