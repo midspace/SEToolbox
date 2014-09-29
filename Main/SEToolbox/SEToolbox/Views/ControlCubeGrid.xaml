@@ -298,6 +298,11 @@
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
+                            <MenuItem Command="{Binding SetOwnerCommand}" Header="Owner" Style="{StaticResource ToolBarTopMenuitem}">
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=users_back}"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </Menu>
                         <Grid Grid.Row="2">
                             <Grid.RowDefinitions>
@@ -358,8 +363,20 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
-                                        <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding OwnerName}" Width="175"/>
+                                        <GridViewColumn Header="Name" Width="175">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Owner" Width="80">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding OwnerName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>
@@ -428,7 +445,13 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Cubes" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
+                                        <GridViewColumn Header="Cubes" Width="175">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                         <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -464,7 +487,13 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Components" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
+                                        <GridViewColumn Header="Components" Width="175">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                         <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -507,7 +536,13 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Ingots" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
+                                        <GridViewColumn Header="Ingots" Width="175">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                         <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -550,7 +585,13 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Ore" DisplayMemberBinding="{Binding FriendlyName}" Width="175"/>
+                                        <GridViewColumn Header="Ore" Width="175">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                         <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>

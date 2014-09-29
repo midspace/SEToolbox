@@ -237,6 +237,11 @@
             get { return new DelegateCommand(FrameworkCubesExecuted, FrameworkCubesCanExecute); }
         }
 
+        public ICommand SetOwnerCommand
+        {
+            get { return new DelegateCommand(SetOwnerExecuted, SetOwnerCanExecute); }
+        }
+
         #endregion
 
         #region Properties
@@ -920,9 +925,7 @@
             colorDialog.BrushColor = SelectedCubeItem.Color as System.Windows.Media.SolidColorBrush;
             colorDialog.CustomColors = MainViewModel.CreativeModeColors;
 
-            var result = _dialogService.ShowColorDialog(OwnerViewModel, colorDialog);
-
-            if (result == System.Windows.Forms.DialogResult.OK)
+            if (_dialogService.ShowColorDialog(OwnerViewModel, colorDialog) == System.Windows.Forms.DialogResult.OK)
             {
                 MainViewModel.IsBusy = true;
                 MainViewModel.ResetProgress(0, Selections.Count);
@@ -961,6 +964,34 @@
                 {
                     MainViewModel.Progress++;
                     cube.UpdateBuildPercent(model.BuildPercent.Value / 100);
+                }
+
+                MainViewModel.ClearProgress();
+                MainViewModel.IsModified = true;
+                MainViewModel.IsBusy = false;
+            }
+        }
+
+        public bool SetOwnerCanExecute()
+        {
+            return SelectedCubeItem != null;
+        }
+
+        public void SetOwnerExecuted()
+        {
+            var model = new ChangeOwnerModel();
+            model.Load(SelectedCubeItem.Owner);
+            var loadVm = new ChangeOwnerViewModel(this, model);
+            var result = _dialogService.ShowDialog<WindowChangeOwner>(this, loadVm);
+            if (result == true)
+            {
+                MainViewModel.IsBusy = true;
+                MainViewModel.ResetProgress(0, Selections.Count);
+
+                foreach (var cube in Selections)
+                {
+                    MainViewModel.Progress++;
+                    cube.ChangeOwner(model.SelectedPlayer.PlayerId);
                 }
 
                 MainViewModel.ClearProgress();

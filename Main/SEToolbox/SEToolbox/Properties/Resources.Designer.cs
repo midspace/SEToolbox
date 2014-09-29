@@ -1564,6 +1564,16 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap users_back {
+            get {
+                object obj = ResourceManager.GetObject("users_back", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filename:	{0}
         ///Bounding Size:	{1} × {2} × {3} blocks
         ///Size:	{4} m × {5} m × {6} m
