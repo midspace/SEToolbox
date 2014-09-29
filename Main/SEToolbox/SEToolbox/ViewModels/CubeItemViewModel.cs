@@ -130,6 +130,12 @@
             set { _dataModel.OwnerName = value; }
         }
 
+        public long Owner
+        {
+            get { return _dataModel.Owner; }
+            set { _dataModel.Owner = value; }
+        }
+
         public string ColorText
         {
             get { return _dataModel.ColorText; }
@@ -199,6 +205,11 @@
         public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition)
         {
             return _dataModel.CreateCube(typeId, subTypeId, definition);
+        }
+
+        public bool ChangeOwner(long newOwnerId)
+        {
+            return _dataModel.ChangeOwner(newOwnerId);
         }
 
         #endregion

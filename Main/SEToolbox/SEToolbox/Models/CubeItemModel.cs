@@ -331,6 +331,27 @@
             return newCube;
         }
 
+        public bool ChangeOwner(long newOwnerId)
+        {
+            // There appear to be quite a few exceptions, blocks that inherit from MyObjectBuilder_TerminalBlock but SE doesn't allow setting of Owner.
+            if (Cube is MyObjectBuilder_InteriorLight
+                || Cube is MyObjectBuilder_ReflectorLight
+                || Cube is MyObjectBuilder_LandingGear
+                || (Cube is MyObjectBuilder_Cockpit && SubtypeId == "PassengerSeatLarge")
+                || Cube is MyObjectBuilder_Thrust)
+                return false;
+                
+            if (Cube is MyObjectBuilder_TerminalBlock)
+            {
+                this.Owner = newOwnerId;
+                var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayers.FirstOrDefault(p => p.PlayerId == Owner);
+                OwnerName = player.Name;
+                return true;
+            }
+
+            return false;
+        }
+
         private void SetProperties(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition)
         {
             Cube = cube;
