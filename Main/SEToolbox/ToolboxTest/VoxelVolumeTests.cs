@@ -28,7 +28,7 @@
 
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(5, 5, 5);
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), 0, 0, 0);
             var traceType = SEToolbox.Interop.Asteroids.TraceType.Odd;
             var traceCount = SEToolbox.Interop.Asteroids.TraceCount.Trace5;
             var traceDirection = SEToolbox.Interop.Asteroids.TraceDirection.XYZ;
@@ -72,7 +72,7 @@
 
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(5, 5, 5);
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), 0, 0, 0);
             var traceType = SEToolbox.Interop.Asteroids.TraceType.Even;
             var traceCount = SEToolbox.Interop.Asteroids.TraceCount.Trace5;
             var traceDirection = SEToolbox.Interop.Asteroids.TraceDirection.XYZ;
@@ -115,7 +115,7 @@
 
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(50, 50, 50);
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), 0, 0, 0);
             var traceType = SEToolbox.Interop.Asteroids.TraceType.Odd;
             var traceCount = SEToolbox.Interop.Asteroids.TraceCount.Trace5;
             var traceDirection = SEToolbox.Interop.Asteroids.TraceDirection.XYZ;
@@ -172,7 +172,7 @@
             // Basic test...
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(5, 5, 5);
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
+            var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), 0, 0, 0);
             var traceType = SEToolbox.Interop.Asteroids.TraceType.Odd;
             var traceCount = SEToolbox.Interop.Asteroids.TraceCount.Trace5;
             var traceDirection = SEToolbox.Interop.Asteroids.TraceDirection.XYZ;

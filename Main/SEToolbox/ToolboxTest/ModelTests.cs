@@ -51,7 +51,7 @@
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var cockpitModelPath = Path.Combine(contentPath, @"Models\Characters\Animations\cockpit.mwm");
+            var cockpitModelPath = Path.Combine(contentPath, @"Models\Characters\Animations\cockpit1_large.mwm");
             Assert.IsTrue(File.Exists(cockpitModelPath), "Filepath should exist on developer machine");
 
             var modelData = MyModel.LoadCustomModelData(cockpitModelPath);
