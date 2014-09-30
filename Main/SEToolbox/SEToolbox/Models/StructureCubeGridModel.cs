@@ -31,7 +31,7 @@
         private Point3D _max;
 
         [NonSerialized]
-        private Vector3D _scale;
+        private System.Windows.Media.Media3D.Vector3D _scale;
 
         [NonSerialized]
         private Size3D _size;
@@ -196,7 +196,7 @@
             }
         }
 
-        public Vector3D Scale
+        public System.Windows.Media.Media3D.Vector3D Scale
         {
             get
             {

@@ -353,7 +353,7 @@
 
             var vector = new BindableVector3DModel(_dataModel.CharacterPosition.Forward).Vector3D;
             vector.Normalize();
-            vector = Vector3D.Multiply(vector, distance);
+            vector = System.Windows.Media.Media3D.Vector3D.Multiply(vector, distance);
             Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(_dataModel.CharacterPosition.Position).Point3D, vector));
             //Forward = new BindableVector3DModel(_dataModel.CharacterPosition.Forward);
             //Up = new BindableVector3DModel(_dataModel.CharacterPosition.Up);

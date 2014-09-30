@@ -411,7 +411,7 @@
                 if (!_originalBounds.IsEmpty && _originalBounds.SizeX != 0 && _originalBounds.SizeY != 0 && _originalBounds.SizeZ != 0)
                 {
                     Model = model;
-                    var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
+                    var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
                     var bounds = _originalBounds;
                     if (rotateTransform != null)
                     {
@@ -431,7 +431,7 @@
         {
             if (IsValidModel)
             {
-                var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
+                var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
                 var bounds = _originalBounds;
                 if (rotateTransform != null)
                 {
@@ -479,7 +479,7 @@
             }
 
             var scale = new ScaleTransform3D(multiplier, multiplier, multiplier);
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
+            var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
             SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
 
             var model = MeshHelper.Load(Filename, ignoreErrors: true);
