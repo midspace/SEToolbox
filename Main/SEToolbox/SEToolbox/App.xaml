@@ -141,6 +141,12 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
+        <ObjectDataProvider x:Key="VoxelMergeTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="support:VoxelMergeType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
         <Style x:Key="{x:Type Image}" TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="Image.IsEnabled" Value="False">

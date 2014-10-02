@@ -1593,6 +1593,42 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subtract Left from Right.
+        /// </summary>
+        public static string VoxelMergeType_SubtractLeftFromRight {
+            get {
+                return ResourceManager.GetString("VoxelMergeType_SubtractLeftFromRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtract Right from Left.
+        /// </summary>
+        public static string VoxelMergeType_SubtractRightFromLeft {
+            get {
+                return ResourceManager.GetString("VoxelMergeType_SubtractRightFromLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Union Left to Right.
+        /// </summary>
+        public static string VoxelMergeType_UnionLeftToRight {
+            get {
+                return ResourceManager.GetString("VoxelMergeType_UnionLeftToRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Union Right to Left.
+        /// </summary>
+        public static string VoxelMergeType_UnionRightToLeft {
+            get {
+                return ResourceManager.GetString("VoxelMergeType_UnionRightToLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap warning32 {

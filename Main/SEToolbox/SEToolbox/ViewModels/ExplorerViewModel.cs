@@ -275,6 +275,11 @@
             get { return new DelegateCommand(JoinShipPartsExecuted, JoinShipPartsCanExecute); }
         }
 
+        public ICommand VoxelMergeCommand
+        {
+            get { return new DelegateCommand(VoxelMergeExecuted, VoxelMergeCanExecute); }
+        }
+
         public ICommand RepairShipsCommand
         {
             get { return new DelegateCommand(RepairShipsExecuted, RepairShipsCanExecute); }
@@ -965,6 +970,31 @@
             IsBusy = true;
             MergeShipPartModels(Selections[0], Selections[1]);
             IsBusy = false;
+        }
+
+        public bool VoxelMergeCanExecute()
+        {
+              return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+                  ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel) ||
+                  (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel));
+        }
+
+        public void VoxelMergeExecuted()
+        {
+            var model = new VoxelMergeModel();
+            model.Load(Selections);
+            var loadVm = new VoxelMergeViewModel(this, model);
+            var result = _dialogService.ShowDialog<WindowVoxelMerge>(this, loadVm);
+            if (result == true)
+            {
+                IsBusy = true;
+                var newEntity = loadVm.BuildEntity();
+                var structure = _dataModel.AddEntity(newEntity);
+                ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                if (_preSelectedStructure != null)
+                    SelectedStructure = _preSelectedStructure;
+                IsBusy = false;
+            }
         }
 
         public bool RepairShipsCanExecute()

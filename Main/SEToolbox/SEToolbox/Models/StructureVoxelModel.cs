@@ -50,12 +50,12 @@
         {
             if (voxelPath != null)
             {
-                VoxelFilepath = Path.Combine(voxelPath, VoxelMap.Name + MyVoxelMap.V2FileExtension);
+                VoxelFilepath = Path.Combine(voxelPath, Name + MyVoxelMap.V2FileExtension);
                 var previewFile = VoxelFilepath;
 
                 if (!File.Exists(VoxelFilepath))
                 {
-                    var oldFilepath = Path.Combine(voxelPath, VoxelMap.Name + MyVoxelMap.V1FileExtension);
+                    var oldFilepath = Path.Combine(voxelPath, Name + MyVoxelMap.V1FileExtension);
                     if (File.Exists(oldFilepath))
                     {
                         SourceVoxelFilepath = oldFilepath;
@@ -81,25 +81,19 @@
         [XmlIgnore]
         public MyObjectBuilder_VoxelMap VoxelMap
         {
-            get
-            {
-                return EntityBase as MyObjectBuilder_VoxelMap;
-            }
+            get { return EntityBase as MyObjectBuilder_VoxelMap; }
         }
 
         [XmlIgnore]
         public string Name
         {
-            get
-            {
-                return VoxelMap.Name;
-            }
+            get { return VoxelMap.StorageName; }
 
             set
             {
-                if (value != VoxelMap.Name)
+                if (value != VoxelMap.StorageName)
                 {
-                    VoxelMap.Name = value;
+                    VoxelMap.StorageName = value;
                     RaisePropertyChanged(() => Name);
                 }
             }
@@ -110,10 +104,7 @@
         /// </summary>
         public string SourceVoxelFilepath
         {
-            get
-            {
-                return _sourceVoxelFilepath;
-            }
+            get { return _sourceVoxelFilepath; }
 
             set
             {
@@ -131,10 +122,7 @@
         /// </summary>
         public string VoxelFilepath
         {
-            get
-            {
-                return _voxelFilepath;
-            }
+            get { return _voxelFilepath; }
 
             set
             {
@@ -149,10 +137,7 @@
         [XmlIgnore]
         public Vector3I Size
         {
-            get
-            {
-                return _size;
-            }
+            get { return _size; }
 
             set
             {
@@ -167,10 +152,7 @@
         [XmlIgnore]
         public Vector3I ContentSize
         {
-            get
-            {
-                return _contentSize;
-            }
+            get { return _contentSize; }
 
             set
             {
@@ -185,10 +167,7 @@
         [XmlIgnore]
         public long VoxCells
         {
-            get
-            {
-                return _voxCells;
-            }
+            get { return _voxCells; }
 
             set
             {
@@ -204,10 +183,7 @@
         [XmlIgnore]
         public double Volume
         {
-            get
-            {
-                return (double)_voxCells / 255;
-            }
+            get { return (double)_voxCells / 255; }
         }
 
         /// <summary>
@@ -292,7 +268,7 @@
         public override void UpdateGeneralFromEntityBase()
         {
             ClassType = ClassType.Voxel;
-            DisplayName = Path.GetFileNameWithoutExtension(VoxelMap.Name);
+            DisplayName = Name;
         }
 
         public override void InitializeAsync()
