@@ -170,11 +170,17 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=first_aid}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding JoinShipPartsCommand}" Header="Merge into 1 Ship" ToolTip="Joins 2 foriegn parts to form a new ship">
+                    <MenuItem Command="{Binding JoinShipPartsCommand}" Header="Merge 2 Ships into 1" ToolTip="Joins 2 foriegn parts to form a new ship">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=components}"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <Separator/>
+                    <!--<MenuItem Command="{Binding VoxelMergeCommand}" Header="Merge 2 Asteroids into 1" ToolTip="Merge 2 asteroids to create a new asteroid">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>-->
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
                 <MenuItem Header="_World" Style="{StaticResource ToolBarTopMenuitem}">

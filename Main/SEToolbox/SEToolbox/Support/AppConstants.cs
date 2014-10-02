@@ -77,6 +77,14 @@
         CustomAdminRequired
     };
 
+    public enum VoxelMergeType
+    {
+        UnionLeftToRight,
+        UnionRightToLeft,
+        SubtractLeftFromRight,
+        SubtractRightFromLeft,
+    }
+
     /// <summary>
     /// These represent generic orientations for any cube.
     /// </summary>
