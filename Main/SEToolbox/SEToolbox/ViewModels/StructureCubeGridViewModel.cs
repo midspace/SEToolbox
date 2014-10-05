@@ -82,6 +82,16 @@
             get { return new DelegateCommand(RepairObjectExecuted, RepairObjectCanExecute); }
         }
 
+        public ICommand ResetLinearVelocityCommand
+        {
+            get { return new DelegateCommand(ResetLinearVelocityExecuted, ResetLinearVelocityCanExecute); }
+        }
+
+        public ICommand ResetRotationVelocityCommand
+        {
+            get { return new DelegateCommand(ResetRotationVelocityExecuted, ResetRotationVelocityCanExecute); }
+        }
+
         public ICommand ResetVelocityCommand
         {
             get { return new DelegateCommand(ResetVelocityExecuted, ResetVelocityCanExecute); }
@@ -350,6 +360,11 @@
             get { return DataModel.LinearVelocity; }
         }
 
+        public double AngularVelocity
+        {
+            get { return DataModel.AngularVelocity; }
+        }
+
         public TimeSpan TimeToProduce
         {
             get { return DataModel.TimeToProduce; }
@@ -436,9 +451,31 @@
             MainViewModel.IsModified = true;
         }
 
+        public bool ResetLinearVelocityCanExecute()
+        {
+            return DataModel.LinearVelocity != 0f;
+        }
+
+        public void ResetLinearVelocityExecuted()
+        {
+            DataModel.ResetLinearVelocity();
+            MainViewModel.IsModified = true;
+        }
+
+        public bool ResetRotationVelocityCanExecute()
+        {
+            return DataModel.AngularVelocity != 0f;
+        }
+
+        public void ResetRotationVelocityExecuted()
+        {
+            DataModel.ResetRotationVelocity();
+            MainViewModel.IsModified = true;
+        }
+
         public bool ResetVelocityCanExecute()
         {
-            return DataModel.LinearVelocity != 0f || DataModel.AngularSpeed != 0f;
+            return DataModel.LinearVelocity != 0f || DataModel.AngularVelocity != 0f;
         }
 
         public void ResetVelocityExecuted()
@@ -449,7 +486,7 @@
 
         public bool ReverseVelocityCanExecute()
         {
-            return DataModel.LinearVelocity != 0f || DataModel.AngularSpeed != 0f;
+            return DataModel.LinearVelocity != 0f || DataModel.AngularVelocity != 0f;
         }
 
         public void ReverseVelocityExecuted()

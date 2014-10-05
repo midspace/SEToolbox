@@ -1,7 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
     using System.Collections.ObjectModel;
-
     using SEToolbox.Interfaces;
     using SEToolbox.Support;
 
@@ -9,8 +8,8 @@
     {
         #region Fields
 
-        private IStructureViewBase _selectionLeft;
-        private IStructureViewBase _selectionRight;
+        private IStructureBase _selectionLeft;
+        private IStructureBase _selectionRight;
         private string _sourceFile;
         private bool _isValidMerge;
         private VoxelMergeType _voxelMergeType;
@@ -41,7 +40,7 @@
             }
         }
 
-        public IStructureViewBase SelectionLeft
+        public IStructureBase SelectionLeft
         {
             get { return _selectionLeft; }
 
@@ -55,7 +54,7 @@
             }
         }
 
-        public IStructureViewBase SelectionRight
+        public IStructureBase SelectionRight
         {
             get { return _selectionRight; }
 
@@ -118,15 +117,15 @@
 
         #region methods
 
-        public void Load(ObservableCollection<IStructureViewBase> selections)
+        public void Load(IStructureBase selection1, IStructureBase selection2)
         {
-            SelectionLeft = selections[0];
-            SelectionRight = selections[1];
+            SelectionLeft = selection1;
+            SelectionRight = selection2;
 
-            // TODO: validate that asteroids overlap.
+            var modelLeft = (StructureVoxelModel)SelectionLeft;
+            var modelRight = (StructureVoxelModel)SelectionRight;
 
-            //var voxelLeft = (StructureVoxelViewModel) SelectionLeft;
-            IsValidMerge = true;
+            IsValidMerge = modelLeft.AABB.Intersects(modelRight.AABB);
         }
 
         #endregion

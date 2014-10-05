@@ -282,7 +282,7 @@
         }
 
         /// This is not to be taken as an accurate representation.
-        public double AngularSpeed
+        public double AngularVelocity
         {
             get
             {
@@ -801,6 +801,18 @@
 
             RaisePropertyChanged(() => IsDamaged);
             RaisePropertyChanged(() => DamageCount);
+        }
+
+        public void ResetLinearVelocity()
+        {
+            CubeGrid.LinearVelocity = new Vector3(0, 0, 0);
+            RaisePropertyChanged(() => LinearVelocity);
+        }
+
+        public void ResetRotationVelocity()
+        {
+            CubeGrid.AngularVelocity = new Vector3(0, 0, 0);
+            RaisePropertyChanged(() => AngularVelocity);
         }
 
         public void ResetVelocity()

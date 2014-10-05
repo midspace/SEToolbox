@@ -53,13 +53,6 @@ namespace SEToolbox.Interop.Asteroids
 
         public Vector3I Size { get; private set; }
 
-        public Vector3I ContentSize { get { return new Vector3I(_boundingContent.Size()) + 1; } }
-
-        /// <summary>
-        /// The center cell in the asteroid.
-        /// </summary>
-        public Vector3 ContentCenter { get { return _boundingContent.Center; } }
-
         // TODO: WeightedCenter.  Center of mass, as opposed to center by dimension.
         // public Vector3 WeightedCenter { get; private set; }
 
@@ -134,13 +127,12 @@ namespace SEToolbox.Interop.Asteroids
 
         #region Preview
 
-        public static void GetPreview(string filename, out Vector3I size, out Vector3I contentSize, out Vector3 center, out long voxCells)
+        public static void GetPreview(string filename, out Vector3I size, out BoundingBox contentBounds, out long voxCells)
         {
             var map = new MyVoxelMap();
             map.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
             size = map.Size;
-            contentSize = map.ContentSize;
-            center = map.ContentCenter;
+            contentBounds = map.BoundingContent;
             voxCells = map.SumVoxelCells();
         }
 
@@ -724,7 +716,7 @@ namespace SEToolbox.Interop.Asteroids
 
             var oldMaterial = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z].GetMaterial(ref voxelCoordInCell);
             materialName = SpaceEngineersCore.Resources.GetMaterialName(oldMaterial);
-            content = GetVoxelContent(ref voxelCoordInCell);
+            content = GetVoxelContent(ref voxelCoord);
         }
 
         #endregion

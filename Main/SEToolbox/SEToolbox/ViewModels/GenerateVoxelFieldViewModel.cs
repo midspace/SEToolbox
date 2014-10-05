@@ -296,7 +296,7 @@
                 var z = radius * Math.Cos(latitude) * Math.Sin(longitude);
                 var y = radius * Math.Sin(latitude);
 
-                var position = _dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.ContentCenter;
+                var position = _dataModel.CharacterPosition.Position + new Vector3((float)x, (float)y, (float)z) - asteroid.BoundingContent.Center;
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)
                 {
                     EntityId = SpaceEngineersApi.GenerateEntityId(),

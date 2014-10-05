@@ -78,6 +78,18 @@
                     <MenuItem Header="Slice quarter (to copy)" Command="{Binding SliceQuarterCommand}" ToolTip="Removes a quarter from the direction of the sun" />
                     <MenuItem Header="Slice half (to copy)" Command="{Binding SliceHalfCommand}"  ToolTip="Removes a half from the direction of the sun"  />
                 </MenuItem>
+
+                <MenuItem Header="Rotate">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=replace2}" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="Rotate asteroid backward-down around X axis (+90 Pitch)" Command="{Binding RotateAsteroidPitchPositiveCommand}"/>
+                    <MenuItem Header="Rotate asteroid forward-down around X axis (-90 Pitch)" Command="{Binding RotateAsteroidPitchNegativeCommand}"/>
+                    <MenuItem Header="Rotate asteroid anti-clockwise around Y axis (+90 Yaw)" Command="{Binding RotateAsteroidYawPositiveCommand}"/>
+                    <MenuItem Header="Rotate asteroid clockwise around Y axis (-90 Yaw)" Command="{Binding RotateAsteroidYawNegativeCommand}"/>
+                    <MenuItem Header="Rotate asteroid left-down around Z axis (+90 Roll)" Command="{Binding RotateAsteroidRollPositiveCommand}"/>
+                    <MenuItem Header="Rotate asteroid right-down around Z axis (-90 Roll)" Command="{Binding RotateAsteroidRollNegativeCommand}"/>
+                </MenuItem>
                 <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Copy text detail to Clipboard" Command="{Binding CopyDetailCommand}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />

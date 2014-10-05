@@ -34,6 +34,9 @@
         private Vector3 _center;
 
         [NonSerialized]
+        private BoundingBox _aabb;
+
+        [NonSerialized]
         private double _playerDistance;
 
         [NonSerialized]
@@ -71,10 +74,7 @@
         [XmlIgnore]
         public virtual MyObjectBuilder_EntityBase EntityBase
         {
-            get
-            {
-                return _entityBase;
-            }
+            get { return _entityBase; }
             set
             {
                 if (value != _entityBase)
@@ -89,10 +89,7 @@
         [XmlIgnore]
         public long EntityId
         {
-            get
-            {
-                return _entityBase.EntityId;
-            }
+            get { return _entityBase.EntityId; }
 
             set
             {
@@ -107,10 +104,7 @@
         [XmlIgnore]
         public MyPositionAndOrientation? PositionAndOrientation
         {
-            get
-            {
-                return _entityBase.PositionAndOrientation;
-            }
+            get { return _entityBase.PositionAndOrientation; }
 
             set
             {
@@ -126,10 +120,7 @@
         [XmlIgnore]
         public float PositionX
         {
-            get
-            {
-                return _entityBase.PositionAndOrientation.Value.Position.X;
-            }
+            get { return _entityBase.PositionAndOrientation.Value.Position.X; }
 
             set
             {
@@ -146,10 +137,7 @@
         [XmlIgnore]
         public float PositionY
         {
-            get
-            {
-                return _entityBase.PositionAndOrientation.Value.Position.Y;
-            }
+            get { return _entityBase.PositionAndOrientation.Value.Position.Y; }
 
             set
             {
@@ -166,10 +154,7 @@
         [XmlIgnore]
         public float PositionZ
         {
-            get
-            {
-                return _entityBase.PositionAndOrientation.Value.Position.Z;
-            }
+            get { return _entityBase.PositionAndOrientation.Value.Position.Z; }
 
             set
             {
@@ -186,10 +171,7 @@
         [XmlIgnore]
         public ClassType ClassType
         {
-            get
-            {
-                return _classType;
-            }
+            get { return _classType; }
 
             set
             {
@@ -204,10 +186,7 @@
         [XmlIgnore]
         public virtual string DisplayName
         {
-            get
-            {
-                return _name;
-            }
+            get { return _name; }
 
             set
             {
@@ -222,10 +201,7 @@
         [XmlIgnore]
         public string Description
         {
-            get
-            {
-                return _description;
-            }
+            get { return _description; }
 
             set
             {
@@ -240,10 +216,7 @@
         [XmlIgnore]
         public double PlayerDistance
         {
-            get
-            {
-                return _playerDistance;
-            }
+            get { return _playerDistance; }
 
             set
             {
@@ -258,10 +231,7 @@
         [XmlIgnore]
         public double Mass
         {
-            get
-            {
-                return _mass;
-            }
+            get { return _mass; }
 
             set
             {
@@ -276,10 +246,7 @@
         [XmlIgnore]
         public virtual int BlockCount
         {
-            get
-            {
-                return _blockCount;
-            }
+            get { return _blockCount; }
 
             set
             {
@@ -297,10 +264,7 @@
         [XmlIgnore]
         public Vector3 Center
         {
-            get
-            {
-                return _center;
-            }
+            get { return _center; }
 
             set
             {
@@ -308,6 +272,24 @@
                 {
                     _center = value;
                     RaisePropertyChanged(() => Center);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Bounding box.
+        /// </summary>
+        [XmlIgnore]
+        public BoundingBox AABB
+        {
+            get { return _aabb; }
+
+            set
+            {
+                if (value != _aabb)
+                {
+                    _aabb = value;
+                    RaisePropertyChanged(() => AABB);
                 }
             }
         }

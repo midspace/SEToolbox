@@ -100,7 +100,7 @@
 
         public bool ResetVelocityCanExecute()
         {
-            return DataModel.LinearVelocity != 0f || DataModel.AngularSpeed != 0f;
+            return DataModel.LinearVelocity != 0f || DataModel.AngularVelocity != 0f;
         }
 
         public void ResetVelocityExecuted()
@@ -111,7 +111,7 @@
 
         public bool ReverseVelocityCanExecute()
         {
-            return DataModel.LinearVelocity != 0f || DataModel.AngularSpeed != 0f;
+            return DataModel.LinearVelocity != 0f || DataModel.AngularVelocity != 0f;
         }
 
         public void ReverseVelocityExecuted()

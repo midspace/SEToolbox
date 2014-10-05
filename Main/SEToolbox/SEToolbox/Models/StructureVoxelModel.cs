@@ -13,6 +13,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using VRageMath;
+    using SEToolbox.Support;
 
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
@@ -25,8 +26,7 @@
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
-        private Vector3 _voxelCenter;
-        private Vector3I _contentSize;
+        private BoundingBox _contentBounds;
         private long _voxCells;
 
         [NonSerialized]
@@ -152,14 +152,24 @@
         [XmlIgnore]
         public Vector3I ContentSize
         {
-            get { return _contentSize; }
+            get { return _contentBounds.SizeInt() + 1; } // Content size
+        }
+
+        /// <summary>
+        /// Represents the Cell content, not the Cell boundary.
+        /// So Min and Max values are both inclusive.
+        /// </summary>
+        [XmlIgnore]
+        public BoundingBox ContentBounds
+        {
+            get { return _contentBounds; }
 
             set
             {
-                if (value != _contentSize)
+                if (value != _contentBounds)
                 {
-                    _contentSize = value;
-                    RaisePropertyChanged(() => ContentSize);
+                    _contentBounds = value;
+                    RaisePropertyChanged(() => ContentBounds);
                 }
             }
         }
@@ -317,19 +327,63 @@
         {
             if (filename != null && File.Exists(filename))
             {
-                MyVoxelMap.GetPreview(filename, out _size, out _contentSize, out _voxelCenter, out _voxCells);
+                MyVoxelMap.GetPreview(filename, out _size, out _contentBounds, out _voxCells);
                 RaisePropertyChanged(() => Size);
                 RaisePropertyChanged(() => ContentSize);
+                RaisePropertyChanged(() => ContentBounds);
                 RaisePropertyChanged(() => VoxCells);
                 RaisePropertyChanged(() => Volume);
-                Center = new Vector3(_voxelCenter.X + 0.5f + PositionX, _voxelCenter.Y + 0.5f + PositionY, _voxelCenter.Z + 0.5f + PositionZ);
+                Center = new Vector3(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+                AABB = new BoundingBox(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3(Size));
             }
         }
 
         public override void RecalcPosition(Vector3 playerPosition)
         {
             base.RecalcPosition(playerPosition);
-            Center = new Vector3(_voxelCenter.X + 0.5f + PositionX, _voxelCenter.Y + 0.5f + PositionY, _voxelCenter.Z + 0.5f + PositionZ);
+            Center = new Vector3(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+            AABB = new BoundingBox(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3(Size));
+        }
+
+        public void RotateAsteroid(VRageMath.Quaternion quaternion)
+        {
+            var sourceFile = SourceVoxelFilepath ?? VoxelFilepath;
+
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+
+            var newAsteroid = new MyVoxelMap();
+            var transSize = Vector3I.Transform(asteroid.Size, quaternion);
+            var newSize = Vector3I.Abs(transSize);
+            newAsteroid.Init(Vector3.Zero, newSize, SpaceEngineersCore.Resources.GetDefaultMaterialName());
+
+            Vector3I coords;
+            for (coords.Z = 0; coords.Z < asteroid.Size.Z; coords.Z++)
+            {
+                for (coords.Y = 0; coords.Y < asteroid.Size.Y; coords.Y++)
+                {
+                    for (coords.X = 0; coords.X < asteroid.Size.Z; coords.X++)
+                    {
+                        byte volume = 0xff;
+                        string cellMaterial;
+
+                        asteroid.GetVoxelMaterialContent(ref coords, out cellMaterial, out volume);
+
+                        var newCoord = Vector3I.Transform(coords, quaternion);
+                        // readjust the points, as rotation occurs arround 0,0,0.
+                        newCoord.X = newCoord.X < 0 ? newCoord.X - transSize.X : newCoord.X;
+                        newCoord.Y = newCoord.Y < 0 ? newCoord.Y - transSize.Y : newCoord.Y;
+                        newCoord.Z = newCoord.Z < 0 ? newCoord.Z - transSize.Z : newCoord.Z;
+                        newAsteroid.SetVoxelContent(volume, ref newCoord);
+                        newAsteroid.SetVoxelMaterialAndIndestructibleContent(cellMaterial, 0xff, ref newCoord);
+                    }
+                }
+            }
+            
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
+            newAsteroid.Save(tempfilename);
+
+            SourceVoxelFilepath = tempfilename;
         }
 
         #endregion
