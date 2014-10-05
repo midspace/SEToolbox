@@ -63,6 +63,12 @@
             return new Vector3(vector.X, vector.Y, vector.Z);
         }
 
+        public static Vector3I SizeInt(this BoundingBox box)
+        {
+            var size = box.Size();
+            return new Vector3I((int)size.X, (int)size.Y, (int)size.Z);
+        }
+
         public static System.Windows.Media.Media3D.Vector3D ToVector3D(this SerializableVector3 vector)
         {
             return new System.Windows.Media.Media3D.Vector3D(vector.X, vector.Y, vector.Z);
@@ -245,11 +251,11 @@
                 new [] {5,1,2},
                 new [] {5,2,6}};
 
-            System.Windows.Media.Media3D.Point3D intersection;
-            int norm;
-
             foreach (var triangle in tariangles)
             {
+                System.Windows.Media.Media3D.Point3D intersection;
+                int norm;
+
                 if (MeshHelper.RayIntersetTriangleRound(corners[triangle[0]].ToPoint3D(), corners[triangle[1]].ToPoint3D(), corners[triangle[2]].ToPoint3D(), position.ToPoint3D(), rayTo.ToPoint3D(), out intersection, out norm))
                 {
                     return intersection.ToVector3();

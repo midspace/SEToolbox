@@ -73,6 +73,36 @@
             get { return new DelegateCommand(SliceHalfExecuted, SliceHalfCanExecute); }
         }
 
+        public ICommand RotateAsteroidYawPositiveCommand
+        {
+            get { return new DelegateCommand(RotateAsteroidYawPositiveExecuted, RotateAsteroidYawPositiveCanExecute); }
+        }
+
+        public ICommand RotateAsteroidYawNegativeCommand
+        {
+            get { return new DelegateCommand(RotateAsteroidYawNegativeExecuted, RotateAsteroidYawNegativeCanExecute); }
+        }
+
+        public ICommand RotateAsteroidPitchPositiveCommand
+        {
+            get { return new DelegateCommand(RotateAsteroidPitchPositiveExecuted, RotateAsteroidPitchPositiveCanExecute); }
+        }
+
+        public ICommand RotateAsteroidPitchNegativeCommand
+        {
+            get { return new DelegateCommand(RotateAsteroidPitchNegativeExecuted, RotateAsteroidPitchNegativeCanExecute); }
+        }
+
+        public ICommand RotateAsteroidRollPositiveCommand
+        {
+            get { return new DelegateCommand(RotateAsteroidRollPositiveExecuted, RotateAsteroidRollPositiveCanExecute); }
+        }
+
+        public ICommand RotateAsteroidRollNegativeCommand
+        {
+            get { return new DelegateCommand(RotateAsteroidRollNegativeExecuted, RotateAsteroidRollNegativeCanExecute); }
+        }
+
         #endregion
 
         #region Properties
@@ -97,7 +127,6 @@
         public BindableSize3DIModel ContentSize
         {
             get { return new BindableSize3DIModel(DataModel.ContentSize); }
-            set { DataModel.ContentSize = value.ToVector3I(); }
         }
 
         public BindableVector3DModel Center
@@ -194,7 +223,7 @@
             // TODO: regenerate the materials inside of the asteroid randomly.
 
 
-            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
             DataModel.SourceVoxelFilepath = tempfilename;
 
@@ -220,7 +249,7 @@
 
             asteroid.ForceShellMaterial(materialName, 2);
 
-            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
             DataModel.SourceVoxelFilepath = tempfilename;
 
@@ -247,7 +276,7 @@
             asteroid.ForceBaseMaterial(materialName, materialName);
             asteroid.ForceVoxelFaceMaterial(SpaceEngineersCore.Resources.GetDefaultMaterialName());
 
-            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
             DataModel.SourceVoxelFilepath = tempfilename;
 
@@ -284,7 +313,7 @@
             else
                 asteroid.ReplaceMaterial(SelectedMaterialAsset.MaterialName, materialName);
 
-            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
             DataModel.SourceVoxelFilepath = tempfilename;
 
@@ -309,12 +338,12 @@
             var asteroid = new MyVoxelMap();
             asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
-            var height = asteroid.ContentSize.Y;
+            var height = asteroid.BoundingContent.Size().Y + 1;
 
             // remove the Top half.
-            asteroid.RemoveMaterial((int)Math.Round(asteroid.ContentCenter.X, 0), asteroid.Size.X, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, 0, (int)Math.Round(asteroid.ContentCenter.Z, 0));
+            asteroid.RemoveMaterial((int)Math.Round(asteroid.BoundingContent.Center.X, 0), asteroid.Size.X, (int)Math.Round(asteroid.BoundingContent.Center.Y, 0), asteroid.Size.Y, 0, (int)Math.Round(asteroid.BoundingContent.Center.Z, 0));
 
-            var tempfilename = TempfileUtil.NewFilename();
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
 
             var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Name);
@@ -355,12 +384,12 @@
             var asteroid = new MyVoxelMap();
             asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
-            var height = asteroid.ContentSize.Y;
+            var height = asteroid.BoundingContent.Size().Y + 1;
 
             // remove the Top half.
-            asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, null, null);
+            asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.BoundingContent.Center.Y, 0), asteroid.Size.Y, null, null);
 
-            var tempfilename = TempfileUtil.NewFilename(Path.GetExtension(DataModel.VoxelFilepath));
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
 
             var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Name);
@@ -383,6 +412,112 @@
 
             var structure = MainViewModel.AddEntity(newEntity);
             ((StructureVoxelModel)structure).SourceVoxelFilepath = tempfilename; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool RotateAsteroidYawPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateAsteroidPitchPositiveExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            // +90 around X
+            MaterialAssets = null;
+            DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(0, VRageMath.MathHelper.PiOver2, 0));
+            DataModel.InitializeAsync();
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool RotateAsteroidPitchNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateAsteroidPitchNegativeExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            // -90 around X
+            DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(0, -VRageMath.MathHelper.PiOver2, 0));
+            MainViewModel.IsModified = true;
+            //IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool RotateAsteroidRollPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateAsteroidYawPositiveExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            // +90 around Y
+            DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(VRageMath.MathHelper.PiOver2, 0, 0));
+            MainViewModel.IsModified = true;
+            //IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool RotateAsteroidYawNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateAsteroidYawNegativeExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            // -90 around Y
+            DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(-VRageMath.MathHelper.PiOver2, 0, 0));
+            MainViewModel.IsModified = true;
+            //IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool RotateAsteroidPitchPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateAsteroidRollPositiveExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            // +90 around Z
+            DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, VRageMath.MathHelper.PiOver2));
+            MainViewModel.IsModified = true;
+            //IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool RotateAsteroidRollNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateAsteroidRollNegativeExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            // -90 around Z
+            DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2));
+            MainViewModel.IsModified = true;
+            //IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
 
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;

@@ -78,7 +78,7 @@
 
         /// This is not to be taken as an accurate representation.
         [XmlIgnore]
-        public double AngularSpeed
+        public double AngularVelocity
         {
             get
             {

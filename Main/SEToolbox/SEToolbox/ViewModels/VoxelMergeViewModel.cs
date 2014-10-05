@@ -12,6 +12,7 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
+    using VRageMath;
 
     public class VoxelMergeViewModel : BaseViewModel
     {
@@ -82,15 +83,15 @@
 
         public MyObjectBuilder_VoxelMap NewEntity { get; set; }
 
-        public StructureVoxelViewModel SelectionLeft
+        public StructureVoxelModel SelectionLeft
         {
-            get { return (StructureVoxelViewModel)_dataModel.SelectionLeft; }
+            get { return (StructureVoxelModel)_dataModel.SelectionLeft; }
             set { _dataModel.SelectionLeft = value; }
         }
 
-        public StructureVoxelViewModel SelectionRight
+        public StructureVoxelModel SelectionRight
         {
-            get { return (StructureVoxelViewModel)_dataModel.SelectionRight; }
+            get { return (StructureVoxelModel)_dataModel.SelectionRight; }
             set { _dataModel.SelectionRight = value; }
         }
 
@@ -138,6 +139,20 @@
 
             //SelectionLeft.DataModel.
             //NewEntity =
+
+            var modelLeft = (StructureVoxelModel)SelectionLeft;
+            var modelRight = (StructureVoxelModel)SelectionRight;
+
+            // TODO: Realign both asteroids grids.
+            //Vector3  modelLeft.AABB.Min
+
+
+            // TODO: calculate smallest allowable size for contents of both.
+            //var min = modelLeft.AABB.Min + modelLeft.ContentBounds.Min;
+            //modelRight.AABB + modelRight.ContentBounds;
+            //Vector3.Min(
+            //Vector3.Max(
+
 
             return null;
         }

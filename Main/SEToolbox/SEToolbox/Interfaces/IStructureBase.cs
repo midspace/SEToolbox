@@ -26,6 +26,8 @@
 
         Vector3 Center { get; set; }
 
+        BoundingBox AABB { get; set; }
+
         string SerializedEntity { get; set; }
 
         void UpdateGeneralFromEntityBase();
