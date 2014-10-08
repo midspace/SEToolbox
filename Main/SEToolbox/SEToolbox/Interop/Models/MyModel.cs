@@ -14,40 +14,6 @@
 
     public static class MyModel
     {
-        #region constants
-
-        internal const string TagDebug = "Debug";
-        internal const string TagVertices = "Vertices";
-        internal const string TagNormals = "Normals";
-        internal const string TagTexcoords0 = "TexCoords0";
-        internal const string TagBinormals = "Binormals";
-        internal const string TagTangents = "Tangents";
-        internal const string TagTexcoords1 = "TexCoords1";
-        internal const string TagRescaleToLengthInMeters = "RescaleToLengthInMeters";
-        internal const string TagLengthInMeters = "LengthInMeters";
-        internal const string TagCentered = "Centered";
-        internal const string TagUseChannelTextures = "UseChannelTextures";
-        internal const string TagSpecularShininess = "SpecularShininess";
-        internal const string TagSpecularPower = "SpecularPower";
-        internal const string TagBoundingBox = "BoundingBox";
-        internal const string TagBoundingSphere = "BoundingSphere";
-        internal const string TagRescaleFactor = "RescaleFactor";
-        internal const string TagSwapWindingOrder = "SwapWindingOrder";
-        internal const string TagDummies = "Dummies";
-        internal const string TagMeshParts = "MeshParts";
-        internal const string TagModelBvh = "ModelBvh";
-        internal const string TagModelInfo = "ModelInfo";
-        internal const string TagBlendIndicies = "BlendIndices";
-        internal const string TagBlendWeights = "BlendWeights";
-        internal const string TagAnimations = "Animations";
-        internal const string TagBones = "Bones";
-        internal const string TagBoneMapping = "BoneMapping";
-        internal const string TagHavokCollisionGeometry = "HavokCollisionGeometry";
-        internal const string TagPatternScale = "PatternScale";
-        internal const string TagLods = "LODs";
-
-        #endregion
-
         #region LoadModelData
 
         public static Dictionary<string, object> LoadModelData(string filename)
@@ -126,21 +92,6 @@
             writer.Write(bone.Name);
             writer.Write(bone.Parent);
             WriteMatrix(writer, ref bone.Transform);
-        }
-
-        private static void WriteLodDescriptor(this BinaryWriter writer, ref MyLODDescriptor lod)
-        {
-            writer.Write(lod.Distance);
-            writer.Write(lod.Model);
-
-            if (lod.RenderQuality == null)
-            {
-                writer.Write((byte)0);
-            }
-            else
-            {
-                writer.Write(lod.RenderQuality);
-            }
         }
 
         /// <summary>
@@ -712,8 +663,7 @@
 
             foreach (var lodVal in lodArray)
             {
-                var lod = lodVal;
-                WriteLodDescriptor(writer, ref lod);
+                lodVal.Write(writer);
             }
 
             return true;
@@ -1276,124 +1226,124 @@
 
                 switch (tagName)
                 {
-                    case TagDebug:
+                    case MyImporterConstants.TAG_DEBUG:
                         data.Add(tagName, ReadArrayOfString(reader));
                         break;
 
-                    case TagDummies:
+                    case MyImporterConstants.TAG_DUMMIES:
                         data.Add(tagName, ReadDummies(reader));
                         break;
 
-                    case TagVertices:
+                    case MyImporterConstants.TAG_VERTICES:
                         data.Add(tagName, ReadArrayOfHalfVector4(reader));
                         break;
 
-                    case TagNormals:
+                    case MyImporterConstants.TAG_NORMALS:
                         data.Add(tagName, ReadArrayOfByte4(reader));
                         break;
 
-                    case TagTexcoords0:
+                    case MyImporterConstants.TAG_TEXCOORDS0:
                         data.Add(tagName, ReadArrayOfHalfVector2(reader));
                         break;
 
-                    case TagBinormals:
+                    case MyImporterConstants.TAG_BINORMALS:
                         data.Add(tagName, ReadArrayOfByte4(reader));
                         break;
 
-                    case TagTangents:
+                    case MyImporterConstants.TAG_TANGENTS:
                         data.Add(tagName, ReadArrayOfByte4(reader));
                         break;
 
-                    case TagTexcoords1:
+                    case MyImporterConstants.TAG_TEXCOORDS1:
                         data.Add(tagName, ReadArrayOfHalfVector2(reader));
                         break;
 
-                    case TagRescaleToLengthInMeters:
+                    case MyImporterConstants.TAG_RESCALE_TO_LENGTH_IN_METERS:
                         data.Add(tagName, reader.ReadBoolean());
                         break;
 
-                    case TagLengthInMeters:
+                    case MyImporterConstants.TAG_LENGTH_IN_METERS:
                         data.Add(tagName, reader.ReadSingle());
                         break;
 
-                    case TagRescaleFactor:
+                    case MyImporterConstants.TAG_RESCALE_FACTOR:
                         data.Add(tagName, reader.ReadSingle());
                         break;
 
-                    case TagCentered:
+                    case MyImporterConstants.TAG_CENTERED:
                         data.Add(tagName, reader.ReadBoolean());
                         break;
 
-                    case TagUseChannelTextures:
+                    case MyImporterConstants.TAG_USE_CHANNEL_TEXTURES:
                         data.Add(tagName, reader.ReadBoolean());
                         break;
 
-                    case TagSpecularShininess:
+                    case MyImporterConstants.TAG_SPECULAR_SHININESS:
                         data.Add(tagName, reader.ReadSingle());
                         break;
 
-                    case TagSpecularPower:
+                    case MyImporterConstants.TAG_SPECULAR_POWER:
                         data.Add(tagName, reader.ReadSingle());
                         break;
 
-                    case TagBoundingBox:
+                    case MyImporterConstants.TAG_BOUNDING_BOX:
                         data.Add(tagName, ReadBoundingBox(reader));
                         break;
 
-                    case TagBoundingSphere:
+                    case MyImporterConstants.TAG_BOUNDING_SPHERE:
                         data.Add(tagName, ReadBoundingSphere(reader));
                         break;
 
-                    case TagSwapWindingOrder:
+                    case MyImporterConstants.TAG_SWAP_WINDING_ORDER:
                         data.Add(tagName, reader.ReadBoolean());
                         break;
 
-                    case TagMeshParts:
+                    case MyImporterConstants.TAG_MESH_PARTS:
                         data.Add(tagName, ReadMeshParts(reader));
                         break;
 
-                    case TagModelBvh:
+                    case MyImporterConstants.TAG_MODEL_BVH:
                         var bvh = new GImpactQuantizedBvh();
                         bvh.Load(ReadArrayOfBytes(reader));
                         data.Add(tagName, bvh);
                         break;
 
-                    case TagModelInfo:
+                    case MyImporterConstants.TAG_MODEL_INFO:
                         var tri = reader.ReadInt32();
                         var vert = reader.ReadInt32();
                         var bb = ReadVector3(reader);
                         data.Add(tagName, new MyModelInfo(tri, vert, bb));
                         break;
 
-                    case TagBlendIndicies:
+                    case MyImporterConstants.TAG_BLENDINDICES:
                         data.Add(tagName, ReadArrayOfVector4(reader));
                         break;
 
-                    case TagBlendWeights:
+                    case MyImporterConstants.TAG_BLENDWEIGHTS:
                         data.Add(tagName, ReadArrayOfVector4(reader));
                         break;
 
-                    case TagAnimations:
+                    case MyImporterConstants.TAG_ANIMATIONS:
                         data.Add(tagName, ReadModelAnimations(reader));
                         break;
 
-                    case TagBones:
+                    case MyImporterConstants.TAG_BONES:
                         data.Add(tagName, ReadMyModelBoneArray(reader));
                         break;
 
-                    case TagBoneMapping:
+                    case MyImporterConstants.TAG_BONE_MAPPING:
                         data.Add(tagName, ReadArrayOfVector3I(reader));
                         break;
 
-                    case TagHavokCollisionGeometry:
+                    case MyImporterConstants.TAG_HAVOK_COLLISION_GEOMETRY:
                         data.Add(tagName, ReadArrayOfBytes(reader));
                         break;
 
-                    case TagPatternScale:
+                    case MyImporterConstants.TAG_PATTERN_SCALE:
                         data.Add(tagName, reader.ReadSingle());
                         break;
 
-                    case TagLods:
+                    case MyImporterConstants.TAG_LODS:
                         data.Add(tagName, ReadMyLodDescriptorArray(reader));
                         break;
 
