@@ -59,17 +59,17 @@
 
             foreach (var kvp in tagData)
             {
-                if (kvp.Key == MyModel.TagDummies) dummies = (Dictionary<string, VRage.Common.Import.MyModelDummy>)kvp.Value;
-                if (kvp.Key == MyModel.TagVertices) vertices = (VRageMath.PackedVector.HalfVector4[])kvp.Value;
-                if (kvp.Key == MyModel.TagMeshParts) meshParts = (List<VRage.Common.Import.MyMeshPartInfo>)kvp.Value;
-                //if (kvp.Key == MyModel.TagModelInfo) modelInfo = (VRage.Common.Import.MyModelInfo)kvp.Value;
-                //if (kvp.Key == MyModel.TagSpecularShininess) specularShininess = (float)kvp.Value;
-                if (kvp.Key == MyModel.TagSpecularPower) specularPower = (float)kvp.Value;
-                if (kvp.Key == MyModel.TagNormals) normals = (VRageMath.PackedVector.Byte4[])kvp.Value;
-                if (kvp.Key == MyModel.TagTexcoords0) texCoords0 = (VRageMath.PackedVector.HalfVector2[])kvp.Value;
-                //if (kvp.Key == MyModel.TagBinormals) binormals = (VRageMath.PackedVector.Byte4[])kvp.Value;
-                //if (kvp.Key == MyModel.TagTangents) tangents = (VRageMath.PackedVector.Byte4[])kvp.Value;
-                //if (kvp.Key == MyModel.TagTexCoords1) texCoords1 = (VRageMath.PackedVector.HalfVector2[])kvp.Value;
+                if (kvp.Key == MyImporterConstants.TAG_DUMMIES) dummies = (Dictionary<string, VRage.Common.Import.MyModelDummy>)kvp.Value;
+                if (kvp.Key == MyImporterConstants.TAG_VERTICES) vertices = (VRageMath.PackedVector.HalfVector4[])kvp.Value;
+                if (kvp.Key == MyImporterConstants.TAG_MESH_PARTS) meshParts = (List<VRage.Common.Import.MyMeshPartInfo>)kvp.Value;
+                //if (kvp.Key == MyImporterConstants.TAG_MODEL_INFO) modelInfo = (VRage.Common.Import.MyModelInfo)kvp.Value;
+                //if (kvp.Key == MyImporterConstants.TAG_SPECULAR_SHININESS) specularShininess = (float)kvp.Value;
+                if (kvp.Key == MyImporterConstants.TAG_SPECULAR_POWER) specularPower = (float)kvp.Value;
+                if (kvp.Key == MyImporterConstants.TAG_NORMALS) normals = (VRageMath.PackedVector.Byte4[])kvp.Value;
+                if (kvp.Key == MyImporterConstants.TAG_TEXCOORDS0) texCoords0 = (VRageMath.PackedVector.HalfVector2[])kvp.Value;
+                //if (kvp.Key == MyImporterConstants.TAG_BINORMALS) binormals = (VRageMath.PackedVector.Byte4[])kvp.Value;
+                //if (kvp.Key == MyImporterConstants.TAG_TANGENTS) tangents = (VRageMath.PackedVector.Byte4[])kvp.Value;
+                //if (kvp.Key == MyImporterConstants.TAG_TEXCOORDS1) texCoords1 = (VRageMath.PackedVector.HalfVector2[])kvp.Value;
             }
 
             foreach (var meshPart in meshParts)
@@ -148,6 +148,10 @@
                 var specularTextureFile = Path.Combine(Path.Combine(contentPath, directoryName), textureName + C_POSTFIX_NORMAL_SPECULAR + textureExt);
 
                 #endregion
+
+
+                // Jan.Nekvapil:
+                // HSV in color mask isnt absolute value, as you can see ingame in Color Picker, Hue is absolute and Saturation with Value are just offsets to texture values.
 
                 var ambient = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
                 var diffuseColor = meshPart.m_MaterialDesc.DiffuseColor.ToSandboxMediaColor();
