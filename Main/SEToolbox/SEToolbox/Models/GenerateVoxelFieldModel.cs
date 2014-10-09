@@ -17,13 +17,16 @@
 
         #region Fields
 
-        private static int _minimumRange;
-        private static int _maximumRange;
-        private MyPositionAndOrientation _characterPosition;
+        private static int _minimumRange = 400;
+        private static int _maximumRange = 800;
         private ObservableCollection<GenerateVoxelDetailModel> _stockVoxelFileList;
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
         private ObservableCollection<AsteroidByteFillProperties> _voxelCollection;
         private readonly List<int> _percentList;
+        private static bool _positionSet;
+        private static float _centerPositionX;
+        private static float _centerPositionY;
+        private static float _centerPositionZ;
 
         #endregion
 
@@ -48,10 +51,7 @@
 
         public ObservableCollection<AsteroidByteFillProperties> VoxelCollection
         {
-            get
-            {
-                return _voxelCollection;
-            }
+            get{return _voxelCollection;}
 
             set
             {
@@ -65,10 +65,7 @@
 
         public int MinimumRange
         {
-            get
-            {
-                return _minimumRange;
-            }
+            get{return _minimumRange;}
 
             set
             {
@@ -82,10 +79,7 @@
 
         public int MaximumRange
         {
-            get
-            {
-                return _maximumRange;
-            }
+            get{return _maximumRange;}
 
             set
             {
@@ -97,27 +91,9 @@
             }
         }
 
-        public MyPositionAndOrientation CharacterPosition
-        {
-            get
-            {
-                return _characterPosition;
-            }
-
-            set
-            {
-                //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
-                _characterPosition = value;
-                RaisePropertyChanged(() => CharacterPosition);
-            }
-        }
-
         public ObservableCollection<GenerateVoxelDetailModel> StockVoxelFileList
         {
-            get
-            {
-                return _stockVoxelFileList;
-            }
+            get{return _stockVoxelFileList;}
 
             set
             {
@@ -131,21 +107,57 @@
 
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
         {
-            get
-            {
-                return _materialsCollection;
-            }
+            get{return _materialsCollection;}
         }
 
         public List<int> PercentList
         {
-            get
-            {
-                return _percentList;
-            }
+            get{return _percentList;}
         }
 
         public MaterialSelectionModel BaseMaterial { get; set; }
+
+        public float CenterPositionX
+        {
+            get { return _centerPositionX; }
+
+            set
+            {
+                if (value != _centerPositionX)
+                {
+                    _centerPositionX = value;
+                    RaisePropertyChanged(() => CenterPositionX);
+                }
+            }
+        }
+
+        public float CenterPositionY
+        {
+            get { return _centerPositionY; }
+
+            set
+            {
+                if (value != _centerPositionY)
+                {
+                    _centerPositionY = value;
+                    RaisePropertyChanged(() => CenterPositionY);
+                }
+            }
+        }
+
+        public float CenterPositionZ
+        {
+            get { return _centerPositionZ; }
+
+            set
+            {
+                if (value != _centerPositionZ)
+                {
+                    _centerPositionZ = value;
+                    RaisePropertyChanged(() => CenterPositionZ);
+                }
+            }
+        }
 
         #endregion
 
@@ -153,7 +165,14 @@
 
         public void Load(MyPositionAndOrientation characterPosition)
         {
-            CharacterPosition = characterPosition;
+            if (!_positionSet)
+            {
+                // only set the position first time opened and cache.
+                CenterPositionX = characterPosition.Position.X;
+                CenterPositionY = characterPosition.Position.Y;
+                CenterPositionZ = characterPosition.Position.Z;
+                _positionSet = true;
+            }
 
             MaterialsCollection.Clear();
             foreach (var material in SpaceEngineersCore.Resources.GetMaterialList())
@@ -206,9 +225,6 @@
             {
                 PercentList.Add(i);
             }
-
-            MinimumRange = 400;
-            MaximumRange = 800;
         }
 
         public void Unload()
