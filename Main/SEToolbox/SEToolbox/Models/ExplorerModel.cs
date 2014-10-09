@@ -611,7 +611,7 @@
                 {
                     if (entity is MyObjectBuilder_VoxelMap)
                     {
-                        SpaceEngineersCore.ManageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).Name + MyVoxelMap.V2FileExtension);
+                        SpaceEngineersCore.ManageDeleteVoxelList.Add(((MyObjectBuilder_VoxelMap)entity).StorageName + MyVoxelMap.V2FileExtension);
                     }
 
                     ActiveWorld.SectorData.SectorObjects.Remove(entity);
@@ -657,7 +657,7 @@
                 return contains;
             }
 
-            contains |= additionalList.Any(s => s is MyObjectBuilder_VoxelMap && Path.GetFileNameWithoutExtension(((MyObjectBuilder_VoxelMap)s).Name).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper());
+            contains |= additionalList.Any(s => s is MyObjectBuilder_VoxelMap && Path.GetFileNameWithoutExtension(((MyObjectBuilder_VoxelMap)s).StorageName).ToUpper() == Path.GetFileNameWithoutExtension(filename).ToUpper());
 
             return contains;
         }

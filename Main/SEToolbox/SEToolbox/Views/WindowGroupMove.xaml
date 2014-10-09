@@ -8,7 +8,7 @@
         Title="Group Move" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
-        FocusManager.FocusedElement="{Binding ElementName=uxStartBox}">
+        FocusManager.FocusedElement="{Binding ElementName=UxStartBox}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
@@ -39,7 +39,7 @@
                     </Grid.ColumnDefinitions>
                     <RadioButton Grid.Column="0" Content="Offset Position:" VerticalAlignment="Center" IsChecked="{Binding IsGlobalOffsetPosition}" Margin="0,0,4,0"/>
                     <Grid Grid.Column="1">
-                        <TextBox ToolTip="X" x:Name="uxStartBox">
+                        <TextBox ToolTip="X" x:Name="UxStartBox">
                             <TextBox.Text>
                                 <Binding Path="GlobalOffsetPositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
