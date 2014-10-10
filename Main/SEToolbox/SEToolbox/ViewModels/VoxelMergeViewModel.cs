@@ -161,7 +161,7 @@
             var minLeft = modelLeft.AABB.Min + modelLeft.ContentBounds.Min - offsetPosLeft;
             var minRight = modelRight.AABB.Min + modelRight.ContentBounds.Min - offsetPosRight;
             var min = Vector3.Min(minLeft, minRight) - paddCells;
-            var max = Vector3.Max(modelLeft.AABB.Max + modelLeft.ContentBounds.Max - offsetPosLeft, modelRight.AABB.Max + modelRight.ContentBounds.Max - offsetPosRight) + paddCells;
+            var max = Vector3.Max(modelLeft.AABB.Min + modelLeft.ContentBounds.Max - offsetPosLeft, modelRight.AABB.Min + modelRight.ContentBounds.Max - offsetPosRight) + paddCells;
             var posOffset = new Vector3(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
             var size = (max - min).RoundToVector3I();
             var asteroidSize = new Vector3I(size.X.RoundUpToNearest(64), size.Y.RoundUpToNearest(64), size.Z.RoundUpToNearest(64));
