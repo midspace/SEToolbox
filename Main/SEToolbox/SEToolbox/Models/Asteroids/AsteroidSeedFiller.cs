@@ -1,10 +1,11 @@
 ﻿namespace SEToolbox.Models.Asteroids
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
 
     public class AsteroidSeedFiller : IMyVoxelFiller
     {
@@ -32,6 +33,18 @@
             // Random Asteroid.
             var d = RandomUtil.GetDouble(1, 100);
             var islarge = false;
+
+            if (largeVoxelFileList.Count == 0 && smallVoxelFileList.Count == 0)
+            {
+                // no asteroids?  You are so screwed.
+                throw new Exception("No valid asteroids found. Re-validate your game cache.");
+            }
+
+            if (largeVoxelFileList.Count == 0) // empty last list? Force to small list.
+                d = 1;
+            if (smallVoxelFileList.Count == 0) // empty small list? Force to large list.
+                d = 100;
+
             if (d > 70)
             {
                 idx = RandomUtil.GetInt(largeVoxelFileList.Count);

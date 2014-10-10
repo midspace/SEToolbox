@@ -673,6 +673,10 @@
             var filepartname = Path.GetFileNameWithoutExtension(originalFile).ToLower();
             var extension = Path.GetExtension(originalFile).ToLower();
             var index = 0;
+
+            if (!ContainsVoxelFilename(originalFile, additionalList))
+                return originalFile;
+
             var filename = string.Format("{0}{1}{2}", filepartname, index, extension);
 
             while (ContainsVoxelFilename(filename, additionalList))

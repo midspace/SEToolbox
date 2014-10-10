@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.Models
 {
-    using System.Collections.ObjectModel;
     using SEToolbox.Interfaces;
     using SEToolbox.Support;
 
@@ -14,6 +13,7 @@
         private bool _isValidMerge;
         private VoxelMergeType _voxelMergeType;
         private bool _isBusy;
+        private string _mergeFileName;
 
         #endregion
 
@@ -109,6 +109,20 @@
                 {
                     _voxelMergeType = value;
                     RaisePropertyChanged(() => VoxelMergeType);
+                }
+            }
+        }
+
+        public string MergeFileName
+        {
+            get { return _mergeFileName; }
+
+            set
+            {
+                if (value != _mergeFileName)
+                {
+                    _mergeFileName = value;
+                    RaisePropertyChanged(() => MergeFileName);
                 }
             }
         }

@@ -26,7 +26,7 @@
         {
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(loadFile, defaultMaterial);
-            voxelMap.RemoveMaterial(stripMaterial, replaceFillMaterial);
+            voxelMap.RemoveContent(stripMaterial, replaceFillMaterial);
             voxelMap.Save(saveFile);
         }
 

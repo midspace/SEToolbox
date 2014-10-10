@@ -176,11 +176,11 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <!--<MenuItem Command="{Binding VoxelMergeCommand}" Header="Merge 2 Asteroids into 1" ToolTip="Merge 2 asteroids to create a new asteroid">
+                    <MenuItem Command="{Binding VoxelMergeCommand}" Header="Merge 2 Asteroids into 1" ToolTip="Merge 2 asteroids to create a new asteroid">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}"/>
                         </MenuItem.Icon>
-                    </MenuItem>-->
+                    </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
                 <MenuItem Header="_World" Style="{StaticResource ToolBarTopMenuitem}">

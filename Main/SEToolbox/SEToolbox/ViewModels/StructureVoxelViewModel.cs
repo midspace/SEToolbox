@@ -307,7 +307,7 @@
 
             if (string.IsNullOrEmpty(materialName))
             {
-                asteroid.RemoveMaterial(SelectedMaterialAsset.MaterialName, null);
+                asteroid.RemoveContent(SelectedMaterialAsset.MaterialName, null);
                 DataModel.VoxCells = asteroid.SumVoxelCells();
             }
             else
