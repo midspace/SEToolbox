@@ -949,9 +949,47 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
-        #region RemoveMaterial
+        #region RemoveContent
 
-        public void RemoveMaterial(string materialName, string replaceFillMaterial)
+        public void RemoveContent()
+        {
+            Vector3I cellCoord;
+
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
+            {
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
+                {
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
+                    {
+                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+
+                        if (voxelCell == null)
+                        {
+                            var newCell = new MyVoxelContentCell();
+                            _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+                            newCell.SetToEmpty();
+                        }
+                        else if (voxelCell.CellType == MyVoxelCellType.MIXED)
+                        {
+                            // A mixed cell.
+                            Vector3I voxelCoordInCell;
+                            for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                            {
+                                for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                {
+                                    for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                    {
+                                        voxelCell.SetVoxelContent(0x00, ref voxelCoordInCell);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void RemoveContent(string materialName, string replaceFillMaterial)
         {
             var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             var replaceMaterialIndex = materialIndex;

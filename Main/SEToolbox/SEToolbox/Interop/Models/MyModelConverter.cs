@@ -116,110 +116,133 @@
                 // Flip the indicides so the textures are on the Outside, not the inside.
                 for (var i = 0; i < meshPart.m_indices.Count; i += 3)
                 {
-                    meshGeometery.TriangleIndices.Add(meshPart.m_indices[i + 2]);
-                    meshGeometery.TriangleIndices.Add(meshPart.m_indices[i + 1]);
-                    meshGeometery.TriangleIndices.Add(meshPart.m_indices[i + 0]);
+                    try
+                    {
+                        meshGeometery.TriangleIndices.Add(meshPart.m_indices[i + 2]);
+                        meshGeometery.TriangleIndices.Add(meshPart.m_indices[i + 1]);
+                        meshGeometery.TriangleIndices.Add(meshPart.m_indices[i + 0]);
+                    }
+                    catch
+                    {
+                        break;
+                    }
                 }
 
                 #endregion
 
-                #region filenames
 
-                var directoryName = Path.GetDirectoryName(meshPart.m_MaterialDesc.DiffuseTextureName);
-                var textureName = Path.GetFileNameWithoutExtension(meshPart.m_MaterialDesc.DiffuseTextureName);
-                var textureExt = Path.GetExtension(meshPart.m_MaterialDesc.DiffuseTextureName);
-
-                if (textureName.LastIndexOf(C_POSTFIX_DIFFUSE) == (textureName.Length - 2))
+                if (meshPart.m_MaterialDesc != null)
                 {
-                    textureName = textureName.Substring(0, textureName.Length - 2);
-                }
+                    #region filenames
 
-                if (textureName.LastIndexOf(C_POSTFIX_DIFFUSE_EMISSIVE) == (textureName.Length - 3))
-                {
-                    textureName = textureName.Substring(0, textureName.Length - 3);
-                }
+                    var directoryName = Path.GetDirectoryName(meshPart.m_MaterialDesc.DiffuseTextureName);
+                    var textureName = Path.GetFileNameWithoutExtension(meshPart.m_MaterialDesc.DiffuseTextureName);
+                    var textureExt = Path.GetExtension(meshPart.m_MaterialDesc.DiffuseTextureName);
 
-                if (textureName.LastIndexOf(C_POSTFIX_MASK_EMISSIVE) == (textureName.Length - 3))
-                {
-                    textureName = textureName.Substring(0, textureName.Length - 3);
-                }
-                var maskTextureFile = Path.Combine(Path.Combine(contentPath, directoryName), textureName + C_POSTFIX_MASK_EMISSIVE + textureExt);
-                var diffuseTextureFile = Path.Combine(Path.Combine(contentPath, directoryName), textureName + C_POSTFIX_DIFFUSE_EMISSIVE + textureExt);
-                var specularTextureFile = Path.Combine(Path.Combine(contentPath, directoryName), textureName + C_POSTFIX_NORMAL_SPECULAR + textureExt);
+                    if (textureName.LastIndexOf(C_POSTFIX_DIFFUSE) == (textureName.Length - 2))
+                    {
+                        textureName = textureName.Substring(0, textureName.Length - 2);
+                    }
 
-                #endregion
+                    if (textureName.LastIndexOf(C_POSTFIX_DIFFUSE_EMISSIVE) == (textureName.Length - 3))
+                    {
+                        textureName = textureName.Substring(0, textureName.Length - 3);
+                    }
+
+                    if (textureName.LastIndexOf(C_POSTFIX_MASK_EMISSIVE) == (textureName.Length - 3))
+                    {
+                        textureName = textureName.Substring(0, textureName.Length - 3);
+                    }
+                    var maskTextureFile = Path.Combine(Path.Combine(contentPath, directoryName), textureName + C_POSTFIX_MASK_EMISSIVE + textureExt);
+                    var diffuseTextureFile = Path.Combine(Path.Combine(contentPath, directoryName), textureName + C_POSTFIX_DIFFUSE_EMISSIVE + textureExt);
+                    var specularTextureFile = Path.Combine(Path.Combine(contentPath, directoryName), textureName + C_POSTFIX_NORMAL_SPECULAR + textureExt);
+
+                    #endregion
+
+                    // Jan.Nekvapil:
+                    // HSV in color mask isnt absolute value, as you can see ingame in Color Picker, Hue is absolute and Saturation with Value are just offsets to texture values.
+
+                    var ambient = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
+                    var diffuseColor = meshPart.m_MaterialDesc.DiffuseColor.ToSandboxMediaColor();
+                    var specular = meshPart.m_MaterialDesc.SpecularColor.ToSandboxMediaColor();
+                    var diffuseBrush = new SolidColorBrush(diffuseColor);
+                    var colorBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0xFF, 0x00));
+
+                    // method in memory source
+                    //var defaultImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(Path.Combine(contentPath, meshPart.m_MaterialDesc.DiffuseTextureName));
+                    //var defaultImageBrush = defaultImage == null ? null : new ImageBrush(defaultImage) { ViewportUnits = BrushMappingMode.Absolute };
+
+                    // method file
+                    //var imageBitmap = SEToolbox.ImageLibrary.ImageTextureUtil.CreateBitmap(textureFile);
+                    //var tempFile = Path.Combine(@"C:\temp", Path.GetFileNameWithoutExtension(textureFile) + ".png");
+                    //ImageTextureUtil.WriteImage(imageBitmap, tempFile);
+                    //var imageBrush = new ImageBrush(new BitmapImage(new Uri(tempFile, UriKind.Absolute)));
+
+                    //MaterialGroup myBackMatGroup = new MaterialGroup();
+                    //myBackMatGroup.Children.Add(new DiffuseMaterial() { AmbientColor = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF), Brush = diffuseImageBrush, Color = diffuseColor });
+                    //myBackMatGroup.Children.Add(new SpecularMaterial() { Brush = maskImageBrush, Color = specular, SpecularPower = specularPower });
+                    //geomentryModel.BackMaterial = myBackMatGroup;
+
+                    MaterialGroup myMatGroup = new MaterialGroup();
+                    if (File.Exists(maskTextureFile))
+                    {
+                        var cubeColor = Color.FromArgb(255, 159, 68, 68);
+
+                        //var diffuseTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(maskTextureFile, false);
+                        //var diffuseImageBrush = diffuseTextureImage == null ? null : new ImageBrush(diffuseTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
+                        //myMatGroup.Children.Add(new DiffuseMaterial() { Brush = diffuseImageBrush, Color = diffuseColor, AmbientColor = ambient });
+
+                        myMatGroup.Children.Add(new DiffuseMaterial() { Brush = new SolidColorBrush(cubeColor), Color = cubeColor, AmbientColor = ambient });
+
+                        var maskTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(maskTextureFile, false, new MaskPixelEffect());
+                        var maskImageBrush = maskTextureImage == null ? null : new ImageBrush(maskTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
+
+                        myMatGroup.Children.Add(new DiffuseMaterial() { Brush = maskImageBrush, Color = diffuseColor, AmbientColor = ambient });
+                        //myMatGroup.Children.Add(new EmissiveMaterial() { Brush = maskImageBrush, Color = diffuseColor });
+                        //myMatGroup.Children.Add(new SpecularMaterial() { Brush = specularImageBrush, Color = specular, SpecularPower = specularPower });
 
 
-                // Jan.Nekvapil:
-                // HSV in color mask isnt absolute value, as you can see ingame in Color Picker, Hue is absolute and Saturation with Value are just offsets to texture values.
+                        var emissiveTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(maskTextureFile, false, new EmissivePixelEffect(0));
+                        var emissiveImageBrush = emissiveTextureImage == null ? null : new ImageBrush(emissiveTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
+                        myMatGroup.Children.Add(new EmissiveMaterial() { Brush = emissiveImageBrush, Color = diffuseColor });
+                    }
+                    else
+                    {
+                        var diffuseTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(diffuseTextureFile, true);
+                        var diffuseImageBrush = diffuseTextureImage == null ? null : new ImageBrush(diffuseTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
+                        myMatGroup.Children.Add(new DiffuseMaterial() { Brush = diffuseImageBrush, Color = diffuseColor, AmbientColor = ambient });
 
-                var ambient = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
-                var diffuseColor = meshPart.m_MaterialDesc.DiffuseColor.ToSandboxMediaColor();
-                var specular = meshPart.m_MaterialDesc.SpecularColor.ToSandboxMediaColor();
-                var diffuseBrush = new SolidColorBrush(diffuseColor);
-                var colorBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0xFF, 0x00));
+                        var emissiveTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(diffuseTextureFile, false, new EmissivePixelEffect(0));
+                        var emissiveImageBrush = emissiveTextureImage == null ? null : new ImageBrush(emissiveTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
+                        //myMatGroup.Children.Add(new EmissiveMaterial() { Brush = emissiveImageBrush, Color = diffuseColor });
+                        myMatGroup.Children.Add(new EmissiveMaterial() { Brush = emissiveImageBrush, Color = Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF) });
+                    }
 
-                // method in memory source
-                //var defaultImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(Path.Combine(contentPath, meshPart.m_MaterialDesc.DiffuseTextureName));
-                //var defaultImageBrush = defaultImage == null ? null : new ImageBrush(defaultImage) { ViewportUnits = BrushMappingMode.Absolute };
+                    if (File.Exists(specularTextureFile))
+                    {
 
-                // method file
-                //var imageBitmap = SEToolbox.ImageLibrary.ImageTextureUtil.CreateBitmap(textureFile);
-                //var tempFile = Path.Combine(@"C:\temp", Path.GetFileNameWithoutExtension(textureFile) + ".png");
-                //ImageTextureUtil.WriteImage(imageBitmap, tempFile);
-                //var imageBrush = new ImageBrush(new BitmapImage(new Uri(tempFile, UriKind.Absolute)));
+                        //new NormalMaterial() Normal maps?
 
-                //MaterialGroup myBackMatGroup = new MaterialGroup();
-                //myBackMatGroup.Children.Add(new DiffuseMaterial() { AmbientColor = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF), Brush = diffuseImageBrush, Color = diffuseColor });
-                //myBackMatGroup.Children.Add(new SpecularMaterial() { Brush = maskImageBrush, Color = specular, SpecularPower = specularPower });
-                //geomentryModel.BackMaterial = myBackMatGroup;
+                        var specularTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(specularTextureFile);
+                        var specularImageBrush = specularTextureImage == null ? null : new ImageBrush(specularTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
+                        myMatGroup.Children.Add(new SpecularMaterial() { Brush = specularImageBrush, SpecularPower = specularPower });
+                    }
 
-                MaterialGroup myMatGroup = new MaterialGroup();
-                if (File.Exists(maskTextureFile))
-                {
-                    var cubeColor = Color.FromArgb(255, 159, 68, 68);
-
-                    //var diffuseTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(maskTextureFile, false);
-                    //var diffuseImageBrush = diffuseTextureImage == null ? null : new ImageBrush(diffuseTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
-                    //myMatGroup.Children.Add(new DiffuseMaterial() { Brush = diffuseImageBrush, Color = diffuseColor, AmbientColor = ambient });
-
-                    myMatGroup.Children.Add(new DiffuseMaterial() { Brush = new SolidColorBrush(cubeColor), Color = cubeColor, AmbientColor = ambient });
-
-                    var maskTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(maskTextureFile, false, new MaskPixelEffect());
-                    var maskImageBrush = maskTextureImage == null ? null : new ImageBrush(maskTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
-
-                    myMatGroup.Children.Add(new DiffuseMaterial() { Brush = maskImageBrush, Color = diffuseColor, AmbientColor = ambient });
-                    //myMatGroup.Children.Add(new EmissiveMaterial() { Brush = maskImageBrush, Color = diffuseColor });
-                    //myMatGroup.Children.Add(new SpecularMaterial() { Brush = specularImageBrush, Color = specular, SpecularPower = specularPower });
-
-
-                    var emissiveTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(maskTextureFile, false, new EmissivePixelEffect(0));
-                    var emissiveImageBrush = emissiveTextureImage == null ? null : new ImageBrush(emissiveTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
-                    myMatGroup.Children.Add(new EmissiveMaterial() { Brush = emissiveImageBrush, Color = diffuseColor });
+                    geomentryModel.Material = myMatGroup;
                 }
                 else
                 {
-                    var diffuseTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(diffuseTextureFile, true);
-                    var diffuseImageBrush = diffuseTextureImage == null ? null : new ImageBrush(diffuseTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
-                    myMatGroup.Children.Add(new DiffuseMaterial() { Brush = diffuseImageBrush, Color = diffuseColor, AmbientColor = ambient });
-
-                    var emissiveTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(diffuseTextureFile, false, new EmissivePixelEffect(0));
-                    var emissiveImageBrush = emissiveTextureImage == null ? null : new ImageBrush(emissiveTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
-                    //myMatGroup.Children.Add(new EmissiveMaterial() { Brush = emissiveImageBrush, Color = diffuseColor });
-                    myMatGroup.Children.Add(new EmissiveMaterial() { Brush = emissiveImageBrush, Color = Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF) });
+                    // No material assigned.
+                    MaterialGroup myMatGroup = new MaterialGroup();
+                    var cubeColor = Color.FromArgb(255, 159, 68, 68);
+                    var ambient = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
+                    var diffuseColor = Color.FromArgb(255, 159, 68, 68);
+                    var colorBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0xFF, 0x00));
+                 
+                    myMatGroup.Children.Add(new DiffuseMaterial() { Brush = new SolidColorBrush(cubeColor), Color = cubeColor, AmbientColor = ambient });
+                    myMatGroup.Children.Add(new DiffuseMaterial() { Brush = colorBrush, Color = diffuseColor, AmbientColor = ambient });
+                    geomentryModel.Material = myMatGroup;
                 }
-
-                if (File.Exists(specularTextureFile))
-                {
-
-                    //new NormalMaterial() Normal maps?
-
-                    var specularTextureImage = SEToolbox.ImageLibrary.ImageTextureUtil.CreateImage(specularTextureFile);
-                    var specularImageBrush = specularTextureImage == null ? null : new ImageBrush(specularTextureImage) { ViewportUnits = BrushMappingMode.Absolute };
-                    myMatGroup.Children.Add(new SpecularMaterial() { Brush = specularImageBrush, SpecularPower = specularPower });
-                }
-
-                geomentryModel.Material = myMatGroup;
 
 
                 foreach (var dummy in dummies)
