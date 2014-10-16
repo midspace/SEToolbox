@@ -668,7 +668,7 @@
         /// <param name="originalFile"></param>
         /// <param name="additionalList"></param>
         /// <returns></returns>
-        public string CreateUniqueVoxelFilename(string originalFile, MyObjectBuilder_EntityBase[] additionalList)
+        public string CreateUniqueVoxelStorageName(string originalFile, MyObjectBuilder_EntityBase[] additionalList)
         {
             var filepartname = Path.GetFileNameWithoutExtension(originalFile).ToLower();
             var extension = Path.GetExtension(originalFile).ToLower();
@@ -705,7 +705,7 @@
 
                     if (ContainsVoxelFilename(asteroid.Name, null))
                     {
-                        asteroid.Name = CreateUniqueVoxelFilename(asteroid.Name, null);
+                        asteroid.Name = CreateUniqueVoxelStorageName(asteroid.Name, null);
                     }
 
                     var entity = (StructureVoxelModel)AddEntity(asteroid.VoxelMap);

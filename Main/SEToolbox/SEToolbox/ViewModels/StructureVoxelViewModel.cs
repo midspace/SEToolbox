@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Text;
     using System.Windows;
     using System.Windows.Input;
@@ -14,6 +15,7 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using System.IO;
+    using VRageMath;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -71,6 +73,16 @@
         public ICommand SliceHalfCommand
         {
             get { return new DelegateCommand(SliceHalfExecuted, SliceHalfCanExecute); }
+        }
+
+        public ICommand ExtractStationIntersectLooseCommand
+        {
+            get { return new DelegateCommand(ExtractStationIntersectLooseExecuted, ExtractStationIntersectLooseCanExecute); }
+        }
+
+        public ICommand ExtractStationIntersectTightCommand
+        {
+            get { return new DelegateCommand(ExtractStationIntersectTightExecuted, ExtractStationIntersectTightCanExecute); }
         }
 
         public ICommand RotateAsteroidYawPositiveCommand
@@ -346,7 +358,7 @@
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
 
-            var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Name);
+            var newFilename = MainViewModel.CreateUniqueVoxelStorageName(DataModel.Name);
             var posOrient = DataModel.PositionAndOrientation.HasValue ? DataModel.PositionAndOrientation.Value : new MyPositionAndOrientation();
             posOrient.Position.y += height;
 
@@ -392,7 +404,7 @@
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
 
-            var newFilename = MainViewModel.CreateUniqueVoxelFilename(DataModel.Name);
+            var newFilename = MainViewModel.CreateUniqueVoxelStorageName(DataModel.Name);
             var posOrient = DataModel.PositionAndOrientation.HasValue ? DataModel.PositionAndOrientation.Value : new MyPositionAndOrientation();
             posOrient.Position.y += height;
 
@@ -413,6 +425,36 @@
             var structure = MainViewModel.AddEntity(newEntity);
             ((StructureVoxelModel)structure).SourceVoxelFilepath = tempfilename; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
 
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool ExtractStationIntersectLooseCanExecute()
+        {
+            return true;
+        }
+
+        public void ExtractStationIntersectLooseExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            ExtractStationIntersect(false);
+            MainViewModel.IsModified = true;
+            DataModel.InitializeAsync();
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool ExtractStationIntersectTightCanExecute()
+        {
+            return true;
+        }
+
+        public void ExtractStationIntersectTightExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            ExtractStationIntersect(true);
+            MainViewModel.IsModified = true;
+            DataModel.InitializeAsync();
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
         }
@@ -444,9 +486,7 @@
             // -90 around X
             DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(0, -VRageMath.MathHelper.PiOver2, 0));
             MainViewModel.IsModified = true;
-            //IsSubsSystemNotReady = true;
             DataModel.InitializeAsync();
-
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
         }
@@ -462,9 +502,7 @@
             // +90 around Y
             DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(VRageMath.MathHelper.PiOver2, 0, 0));
             MainViewModel.IsModified = true;
-            //IsSubsSystemNotReady = true;
             DataModel.InitializeAsync();
-
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
         }
@@ -480,9 +518,7 @@
             // -90 around Y
             DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(-VRageMath.MathHelper.PiOver2, 0, 0));
             MainViewModel.IsModified = true;
-            //IsSubsSystemNotReady = true;
             DataModel.InitializeAsync();
-
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
         }
@@ -498,9 +534,7 @@
             // +90 around Z
             DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, VRageMath.MathHelper.PiOver2));
             MainViewModel.IsModified = true;
-            //IsSubsSystemNotReady = true;
             DataModel.InitializeAsync();
-
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
         }
@@ -516,11 +550,52 @@
             // -90 around Z
             DataModel.RotateAsteroid(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2));
             MainViewModel.IsModified = true;
-            //IsSubsSystemNotReady = true;
             DataModel.InitializeAsync();
-
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
+        }
+
+        private void ExtractStationIntersect(bool tightIntersection)
+        {
+            // Make a shortlist of station Entities in the bounding box of the asteroid.
+            var stations = MainViewModel.GetIntersectingEntities(DataModel.ContentBounds).Where(e => e.ClassType == ClassType.Station).Cast<StructureCubeGridModel>().ToList();
+
+            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+
+            Vector3I coords;
+            for (coords.Z = 0; coords.Z < asteroid.Size.Z; coords.Z++)
+            {
+                for (coords.Y = 0; coords.Y < asteroid.Size.Y; coords.Y++)
+                {
+                    for (coords.X = 0; coords.X < asteroid.Size.Z; coords.X++)
+                    {
+                        byte volume;
+                        string cellMaterial;
+                        asteroid.GetVoxelMaterialContent(ref coords, out cellMaterial, out volume);
+
+                        if (volume > 0)
+                        {
+                            var occupiedByGrid = false;
+
+                            // TODO: Search through station entities cubes for intersection with this voxel cell.
+                            foreach (var station in stations)
+                            {
+                                //station.CubeGrid.CubeBlocks    
+                            }
+
+                            if (!occupiedByGrid)
+                                asteroid.SetVoxelContent(volume, ref coords);
+                        }
+                    }
+                }
+            }
+
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
+            asteroid.Save(tempfilename);
+            // replaces the existing asteroid file, as it is still the same size and dimentions.
+            DataModel.SourceVoxelFilepath = tempfilename;
         }
 
         #endregion

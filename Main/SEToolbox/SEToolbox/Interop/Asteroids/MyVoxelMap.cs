@@ -16,7 +16,7 @@ namespace SEToolbox.Interop.Asteroids
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
-
+    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Support;
     using VRageMath;
 
@@ -541,6 +541,50 @@ namespace SEToolbox.Interop.Asteroids
         #endregion
 
         #region methods
+
+        #region MergeVoxelMaterials
+
+        //  Merges specified materials (from file) into our actual voxel map - overwriting materials only.
+        //  We are using a regular voxel map to define areas where we want to set a specified material. Empty voxels are ignored and 
+        //  only mixed/full voxels are used to tell us that that voxel will contain new material - 'materialToSet'.
+        //  If we are seting indestructible material, voxel content values from merged voxel map will be used to define indestructible content.
+        //  Parameter 'voxelPosition' - place where we will place merged voxel map withing actual voxel map. It's in voxel coords.
+        //  IMPORTANT: THIS METHOD WILL WORK ONLY IF WE PLACE THE MAP THAT WE TRY TO MERGE FROM IN VOXEL COORDINATES THAT ARE MULTIPLY OF DATA CELL SIZE
+        //  This method is used to load small material areas, overwriting actual material only if value from file is 1. Zeros are ignored (it's empty space).
+        //  This method is quite fast, even on large maps - 512x512x512, so we can do more overwrites.
+        //  Parameter 'materialToSet' tells us what material to set at places which are full in file. Empty are ignored - so stay as they were before this method was called.
+        //  IMPORTANT: THIS MERGE MATERIAL CAN BE CALLED ONLY AFTER ALL VOXEL CONTENTS ARE LOADED. THAT'S BECAUSE WE NEED TO KNOW THEM FOR MIN CONTENT / INDESTRUCTIBLE CONTENT.
+        //  Voxel map we are trying to merge into existing voxel map can be bigger or outside of area of existing voxel map. This method will just ignore those parts.
+        public void MergeVoxelMaterials(MyMwcVoxelFilesEnum voxelFile, Vector3I voxelPosition, string materialToSet)
+        {
+            var filename = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), voxelFile + V2FileExtension);
+            var dataStore = new MyVoxelMap();
+            dataStore.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
+
+            var cellsCountX = dataStore.Size.X / dataStore._cellSize.X;
+            var cellsCountY = dataStore.Size.Y / dataStore._cellSize.Y;
+            var cellsCountZ = dataStore.Size.Z / dataStore._cellSize.Z;
+
+            //  This method will work only if we place the map that we try to merge from in voxel coordinates that are multiply of data cell size
+            Debug.Assert((voxelPosition.X & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
+            Debug.Assert((voxelPosition.Y & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
+            Debug.Assert((voxelPosition.Z & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
+            Vector3I cellFullForVoxelPosition = dataStore.GetDataCellCoordinate(ref voxelPosition);
+
+            Vector3I cellCoord;
+            for (cellCoord.X = 0; cellCoord.X < cellsCountX; cellCoord.X++)
+            {
+                for (cellCoord.Y = 0; cellCoord.Y < cellsCountY; cellCoord.Y++)
+                {
+                    for (cellCoord.Z = 0; cellCoord.Z < cellsCountZ; cellCoord.Z++)
+                    {
+                        // TODO:
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region SetVoxelContent
 

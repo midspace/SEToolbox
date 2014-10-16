@@ -466,7 +466,7 @@
         private bool BuildEntity()
         {
             var filenamepart = Path.GetFileNameWithoutExtension(Filename);
-            var filename = MainViewModel.CreateUniqueVoxelFilename(filenamepart + MyVoxelMap.V2FileExtension);
+            var filename = MainViewModel.CreateUniqueVoxelStorageName(filenamepart + MyVoxelMap.V2FileExtension);
 
             double multiplier;
             if (IsMultipleScale)
