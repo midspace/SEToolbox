@@ -299,7 +299,7 @@
                 asteroid.Save(tempfilename);
 
                 // automatically number all files, and check for duplicate filenames.
-                var filename = MainViewModel.CreateUniqueVoxelFilename(voxelDesign.VoxelFile.Name + MyVoxelMap.V2FileExtension, entities.ToArray());
+                var filename = MainViewModel.CreateUniqueVoxelStorageName(voxelDesign.VoxelFile.Name + MyVoxelMap.V2FileExtension, entities.ToArray());
 
                 var radius = RandomUtil.GetDouble(MinimumRange, MaximumRange);
                 var longitude = RandomUtil.GetDouble(0, 2 * Math.PI);

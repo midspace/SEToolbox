@@ -172,7 +172,7 @@
             newAsteroid.RemoveContent();
             if (string.IsNullOrEmpty(MergeFileName))
                 MergeFileName = "merge";
-            var filename = MainViewModel.CreateUniqueVoxelFilename(MergeFileName);
+            var filename = MainViewModel.CreateUniqueVoxelStorageName(MergeFileName);
 
             // merge.
             switch (VoxelMergeType)

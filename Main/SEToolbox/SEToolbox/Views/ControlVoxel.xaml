@@ -75,11 +75,14 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Slice">
-                    <MenuItem Header="Slice quarter (to copy)" Command="{Binding SliceQuarterCommand}" ToolTip="Removes a quarter from the direction of the sun" />
-                    <MenuItem Header="Slice half (to copy)" Command="{Binding SliceHalfCommand}"  ToolTip="Removes a half from the direction of the sun"  />
+                    <MenuItem Header="Slice quarter (to copy)" Command="{Binding SliceQuarterCommand}" ToolTip="Removes a quarter from the direction of the sun." />
+                    <MenuItem Header="Slice half (to copy)" Command="{Binding SliceHalfCommand}"  ToolTip="Removes a half from the direction of the sun."  />
                 </MenuItem>
-
-                <MenuItem Header="Rotate">
+                <!--<MenuItem Header="Extract" Style="{StaticResource ToolBarTopMenuitem}">
+                    <MenuItem Header="Station intersection loose" Command="{Binding ExtractStationIntersectLooseCommand}" ToolTip="Any asteroid cell that intersects a station cube gets removed. This will lead to small narrow gaps between the asteroid and station surfaces." />
+                    <MenuItem Header="Station intersection tight" Command="{Binding ExtractStationIntersectTightCommand}" ToolTip="Any asteroid cell that is completely enclosed by any number of station cubes get removed. This results in the asteroid overlapping the faces of the station, leaving no gaps." />
+                </MenuItem>-->
+                <MenuItem Header="Rotate" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=replace2}" />
                     </MenuItem.Icon>

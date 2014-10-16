@@ -345,7 +345,7 @@
             }
 
             // automatically number all files, and check for duplicate filenames.
-            Filename = MainViewModel.CreateUniqueVoxelFilename(originalFile);
+            Filename = MainViewModel.CreateUniqueVoxelStorageName(originalFile);
 
             // Figure out where the Character is facing, and plant the new constrcut right in front.
             // Calculate the hypotenuse, as it will be the safest distance to place in front.

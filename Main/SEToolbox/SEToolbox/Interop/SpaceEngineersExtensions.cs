@@ -99,6 +99,11 @@
             return new Vector3((float)point.X, (float)point.Y, (float)point.Z);
         }
 
+        internal static Vector3 ToVector3(this System.Windows.Media.Media3D.Size3D size3D)
+        {
+            return new Vector3((float)size3D.X, (float)size3D.Y, (float)size3D.Z);
+        }
+
         internal static Quaternion ToQuaternion(this SerializableBlockOrientation blockOrientation)
         {
             var matrix = Matrix.CreateFromDir(Base6Directions.GetVector(blockOrientation.Forward), Base6Directions.GetVector(blockOrientation.Up));
@@ -107,7 +112,12 @@
 
         internal static Quaternion ToQuaternion(this MyPositionAndOrientation positionOrientation)
         {
-            return Quaternion.CreateFromRotationMatrix(positionOrientation.GetMatrix());
+            return Quaternion.CreateFromForwardUp(positionOrientation.Forward, positionOrientation.Up);
+        }
+
+        internal static Matrix ToMatrix(this MyPositionAndOrientation positionOrientation)
+        {
+            return Matrix.CreateFromQuaternion(Quaternion.CreateFromForwardUp(positionOrientation.Forward, positionOrientation.Up));
         }
 
         internal static Matrix ToMatrix(this Quaternion quaternion)

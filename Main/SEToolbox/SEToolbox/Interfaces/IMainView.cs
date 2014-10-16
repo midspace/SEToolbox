@@ -1,8 +1,10 @@
 ﻿namespace SEToolbox.Interfaces
 {
     using System.Collections.Generic;
+
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
+    using VRageMath;
 
     public interface IMainView
     {
@@ -14,9 +16,11 @@
 
         void OptimizeModel(params IStructureViewBase[] viewModels);
 
-        string CreateUniqueVoxelFilename(string originalFile, MyObjectBuilder_EntityBase[] additionalList);
+        string CreateUniqueVoxelStorageName(string originalFile, MyObjectBuilder_EntityBase[] additionalList);
 
-        string CreateUniqueVoxelFilename(string originalFile);
+        string CreateUniqueVoxelStorageName(string originalFile);
+
+        List<IStructureBase> GetIntersectingEntities(BoundingBox box);
 
         StructureCharacterModel ThePlayerCharacter { get; }
 

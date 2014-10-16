@@ -110,6 +110,11 @@
             get { return new DelegateCommand(SaveExecuted, SaveCanExecute); }
         }
 
+        public ICommand SaveAsCommand
+        {
+            get { return new DelegateCommand(SaveAsExecuted, SaveAsCanExecute); }
+        }
+
         public ICommand ClearCommand
         {
             get { return new DelegateCommand(ClearExecuted, ClearCanExecute); }
@@ -538,6 +543,27 @@
             }
         }
 
+        public bool SaveAsCanExecute()
+        {
+            return _dataModel.ActiveWorld != null &&
+                _dataModel.ActiveWorld.SaveType != SaveWorldType.Custom &&
+                ((_dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && _dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
+                || (_dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || _dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired
+                    && ToolboxUpdater.IsRuningElevated()));
+        }
+
+        public void SaveAsExecuted()
+        {
+            if (_dataModel != null)
+            {
+                // TODO: dialog for save name.
+                // TODO: create new directory.
+                // TODO: copy all files across from old to new.
+                // TODO: update _dataModel.ActiveWorld. paths.
+                //_dataModel.SaveCheckPointAndSandBox();
+            }
+        }
+
         public bool ClearCanExecute()
         {
             return _dataModel.ActiveWorld != null;
@@ -620,10 +646,14 @@
             {
                 IsBusy = true;
                 var newEntity = loadVm.BuildEntity();
-                _selectNewStructure = true;
-                _dataModel.CollisionCorrectEntity(newEntity);
-                _dataModel.AddEntity(newEntity);
-                _selectNewStructure = false;
+                // make sure resultant object has cubes.
+                if (newEntity.CubeBlocks.Count != 0)
+                {
+                    _selectNewStructure = true;
+                    _dataModel.CollisionCorrectEntity(newEntity);
+                    _dataModel.AddEntity(newEntity);
+                    _selectNewStructure = false;
+                }
                 IsBusy = false;
             }
         }
@@ -1285,14 +1315,19 @@
         }
 
         /// <inheritdoc />
-        public string CreateUniqueVoxelFilename(string originalFile)
+        public string CreateUniqueVoxelStorageName(string originalFile)
         {
-            return _dataModel.CreateUniqueVoxelFilename(originalFile, null);
+            return _dataModel.CreateUniqueVoxelStorageName(originalFile, null);
         }
 
-        public string CreateUniqueVoxelFilename(string originalFile, MyObjectBuilder_EntityBase[] additionalList)
+        public string CreateUniqueVoxelStorageName(string originalFile, MyObjectBuilder_EntityBase[] additionalList)
         {
-            return _dataModel.CreateUniqueVoxelFilename(originalFile, additionalList);
+            return _dataModel.CreateUniqueVoxelStorageName(originalFile, additionalList);
+        }
+
+        public List<IStructureBase> GetIntersectingEntities(BoundingBox box)
+        {
+            return _dataModel.Structures.Where(item => item.AABB.Intersects(box)).ToList();
         }
 
         public void ImportSandboxObjectFromFile()

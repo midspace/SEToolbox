@@ -523,7 +523,7 @@
         private MyObjectBuilder_VoxelMap BuildAsteroidEntity()
         {
             var filenamepart = Path.GetFileNameWithoutExtension(Filename);
-            var filename = MainViewModel.CreateUniqueVoxelFilename(filenamepart + MyVoxelMap.V2FileExtension);
+            var filename = MainViewModel.CreateUniqueVoxelStorageName(filenamepart + MyVoxelMap.V2FileExtension);
             Position = Position.RoundOff(1.0);
             Forward = Forward.RoundToAxis();
             Up = Up.RoundToAxis();
