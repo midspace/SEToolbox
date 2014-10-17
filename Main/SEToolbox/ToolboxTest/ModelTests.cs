@@ -28,8 +28,8 @@
             var thrusterModelPath = Path.Combine(contentPath, largeThruster.Model);
             Assert.IsTrue(File.Exists(thrusterModelPath), "Filepath should exist on developer machine");
 
-            var modelData2 = MyModel.LoadModelData(thrusterModelPath);
-            var modelData = MyModel.LoadCustomModelData(thrusterModelPath);
+            var modelData = MyModel.LoadModelData(thrusterModelPath);
+            //var modelData = MyModel.LoadCustomModelData(thrusterModelPath);
 
             var testFilePath = @".\TestOutput\Thruster.mwm";
             MyModel.SaveModelData(testFilePath, modelData);

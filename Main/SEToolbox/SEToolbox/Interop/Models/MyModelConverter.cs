@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Interop.Models
 {
+    using System.Linq;
     using SEToolbox.ImageLibrary.Effects;
     using SEToolbox.Interop;
     using SEToolbox.Support;
@@ -135,9 +136,11 @@
                 {
                     #region filenames
 
-                    var directoryName = Path.GetDirectoryName(meshPart.m_MaterialDesc.DiffuseTextureName);
-                    var textureName = Path.GetFileNameWithoutExtension(meshPart.m_MaterialDesc.DiffuseTextureName);
-                    var textureExt = Path.GetExtension(meshPart.m_MaterialDesc.DiffuseTextureName);
+                    var diffuseTextureName = meshPart.m_MaterialDesc.Textures.FirstOrDefault().Value;
+
+                    var directoryName = Path.GetDirectoryName(diffuseTextureName);
+                    var textureName = Path.GetFileNameWithoutExtension(diffuseTextureName);
+                    var textureExt = Path.GetExtension(diffuseTextureName);
 
                     if (textureName.LastIndexOf(C_POSTFIX_DIFFUSE) == (textureName.Length - 2))
                     {

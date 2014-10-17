@@ -334,7 +334,7 @@
                 RaisePropertyChanged(() => VoxCells);
                 RaisePropertyChanged(() => Volume);
                 Center = new Vector3(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
-                AABB = new BoundingBox(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3(Size));
+                WorldAABB = new BoundingBox(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3(Size));
             }
         }
 
@@ -342,7 +342,7 @@
         {
             base.RecalcPosition(playerPosition);
             Center = new Vector3(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
-            AABB = new BoundingBox(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3(Size));
+            WorldAABB = new BoundingBox(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3(Size));
         }
 
         public void RotateAsteroid(VRageMath.Quaternion quaternion)

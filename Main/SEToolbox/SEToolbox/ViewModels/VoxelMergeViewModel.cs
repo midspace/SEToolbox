@@ -151,17 +151,17 @@
             var filenameRight = modelRight.SourceVoxelFilepath ?? modelRight.VoxelFilepath;
 
             // Realign both asteroids to a common grid, so voxels can be lined up.
-            Vector3I roundedPosLeft = modelLeft.AABB.Min.RoundToVector3I();
-            Vector3 offsetPosLeft = modelLeft.AABB.Min - roundedPosLeft; // Use for everything.
-            Vector3I roundedPosRight = (modelRight.AABB.Min - offsetPosLeft).RoundToVector3I();
-            Vector3 offsetPosRight = modelRight.AABB.Min - roundedPosRight; // Use for everything.
+            Vector3I roundedPosLeft = modelLeft.WorldAABB.Min.RoundToVector3I();
+            Vector3 offsetPosLeft = modelLeft.WorldAABB.Min - roundedPosLeft; // Use for everything.
+            Vector3I roundedPosRight = (modelRight.WorldAABB.Min - offsetPosLeft).RoundToVector3I();
+            Vector3 offsetPosRight = modelRight.WorldAABB.Min - roundedPosRight; // Use for everything.
 
             // calculate smallest allowable size for contents of both.
             const int paddCells = 3;
-            var minLeft = modelLeft.AABB.Min + modelLeft.ContentBounds.Min - offsetPosLeft;
-            var minRight = modelRight.AABB.Min + modelRight.ContentBounds.Min - offsetPosRight;
+            var minLeft = modelLeft.WorldAABB.Min + modelLeft.ContentBounds.Min - offsetPosLeft;
+            var minRight = modelRight.WorldAABB.Min + modelRight.ContentBounds.Min - offsetPosRight;
             var min = Vector3.Min(minLeft, minRight) - paddCells;
-            var max = Vector3.Max(modelLeft.AABB.Min + modelLeft.ContentBounds.Max - offsetPosLeft, modelRight.AABB.Min + modelRight.ContentBounds.Max - offsetPosRight) + paddCells;
+            var max = Vector3.Max(modelLeft.WorldAABB.Min + modelLeft.ContentBounds.Max - offsetPosLeft, modelRight.WorldAABB.Min + modelRight.ContentBounds.Max - offsetPosRight) + paddCells;
             var posOffset = new Vector3(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
             var size = (max - min).RoundToVector3I();
             var asteroidSize = new Vector3I(size.X.RoundUpToNearest(64), size.Y.RoundUpToNearest(64), size.Z.RoundUpToNearest(64));

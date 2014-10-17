@@ -1327,7 +1327,7 @@
 
         public List<IStructureBase> GetIntersectingEntities(BoundingBox box)
         {
-            return _dataModel.Structures.Where(item => item.AABB.Intersects(box)).ToList();
+            return _dataModel.Structures.Where(item => item.WorldAABB.Intersects(box)).ToList();
         }
 
         public void ImportSandboxObjectFromFile()
