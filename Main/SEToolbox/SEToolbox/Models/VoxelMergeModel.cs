@@ -139,7 +139,7 @@
             var modelLeft = (StructureVoxelModel)SelectionLeft;
             var modelRight = (StructureVoxelModel)SelectionRight;
 
-            IsValidMerge = modelLeft.AABB.Intersects(modelRight.AABB);
+            IsValidMerge = modelLeft.WorldAABB.Intersects(modelRight.WorldAABB);
         }
 
         #endregion

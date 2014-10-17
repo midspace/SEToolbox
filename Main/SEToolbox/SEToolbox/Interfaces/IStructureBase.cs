@@ -26,7 +26,7 @@
 
         Vector3 Center { get; set; }
 
-        BoundingBox AABB { get; set; }
+        BoundingBox WorldAABB { get; set; }
 
         string SerializedEntity { get; set; }
 

@@ -395,8 +395,8 @@
                         const int z = 0;
                         var color = palatteImage.GetPixel(x, y);
 
-                        // Specifically ignore anything with "Transparent" Alpha.
-                        if (color.A == 0xFF)
+                        // Specifically ignore anything with less than half "Transparent" Alpha.
+                        if (color.A > 0x7F)
                         {
                             // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
                             var armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Block");

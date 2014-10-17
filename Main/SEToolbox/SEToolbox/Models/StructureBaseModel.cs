@@ -34,7 +34,7 @@
         private Vector3 _center;
 
         [NonSerialized]
-        private BoundingBox _aabb;
+        private BoundingBox _worldAabb;
 
         [NonSerialized]
         private double _playerDistance;
@@ -280,16 +280,16 @@
         /// Bounding box.
         /// </summary>
         [XmlIgnore]
-        public BoundingBox AABB
+        public BoundingBox WorldAABB
         {
-            get { return _aabb; }
+            get { return _worldAabb; }
 
             set
             {
-                if (value != _aabb)
+                if (value != _worldAabb)
                 {
-                    _aabb = value;
-                    RaisePropertyChanged(() => AABB);
+                    _worldAabb = value;
+                    RaisePropertyChanged(() => WorldAABB);
                 }
             }
         }

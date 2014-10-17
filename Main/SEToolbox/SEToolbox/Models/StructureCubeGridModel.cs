@@ -601,7 +601,7 @@
 
             var localBb = new BoundingBox(min.ToVector3() * (float)scaleMultiplyer, (max.ToVector3() + 1) * (float)scaleMultiplyer);
             var aabbR = localBb.Transform(CubeGrid.PositionAndOrientation.Value.ToMatrix());
-            AABB = new BoundingBox(aabbR.Min + CubeGrid.PositionAndOrientation.Value.Position, aabbR.Max + CubeGrid.PositionAndOrientation.Value.Position);
+            WorldAABB = new BoundingBox(aabbR.Min + CubeGrid.PositionAndOrientation.Value.Position, aabbR.Max + CubeGrid.PositionAndOrientation.Value.Position);
 
             DisplayName = CubeGrid.DisplayName;
 

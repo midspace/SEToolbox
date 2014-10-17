@@ -22,7 +22,7 @@
 
         public BindableSize3DModel(Rect3D size)
         {
-            _size = new Size3D(size.SizeX, size.SizeY, size.SizeZ);
+            _size = size.IsEmpty ? new Size3D() : new Size3D(size.SizeX, size.SizeY, size.SizeZ);
         }
 
         public BindableSize3DModel(Size3D size)

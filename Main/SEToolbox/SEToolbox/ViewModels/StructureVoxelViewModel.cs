@@ -577,12 +577,21 @@
 
                         if (volume > 0)
                         {
+                            // TODO: get worldAABB of cell.
+
                             var occupiedByGrid = false;
 
                             // TODO: Search through station entities cubes for intersection with this voxel cell.
                             foreach (var station in stations)
                             {
-                                //station.CubeGrid.CubeBlocks    
+                                foreach (var block in station.CubeGrid.CubeBlocks)
+                                {
+                                    //station.PositionAndOrientation
+                                    //block.Min
+                                    //block.max
+                                    // TODO: find worldAABB of block.
+                                }
+                                
                             }
 
                             if (!occupiedByGrid)
