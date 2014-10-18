@@ -59,6 +59,24 @@
         }
 
         [XmlIgnore]
+        public float Integrity
+        {
+            get
+            {
+                return Meteor.Integrity;
+            }
+
+            set
+            {
+                if (value != Meteor.Integrity)
+                {
+                    Meteor.Integrity = value;
+                    RaisePropertyChanged(() => Integrity);
+                }
+            }
+        }
+
+        [XmlIgnore]
         public double? Volume
         {
             get
@@ -114,22 +132,27 @@
         public override void UpdateGeneralFromEntityBase()
         {
             ClassType = ClassType.Meteor;
-            var compMass = SpaceEngineersApi.GetItemMass(Meteor.Item.Content.TypeId, Meteor.Item.Content.SubtypeName);
-            var compVolume = SpaceEngineersApi.GetItemVolume(Meteor.Item.Content.TypeId, Meteor.Item.Content.SubtypeName);
+            float compMass = 1;
+            float compVolume = 1;
+            double amount = 1;
 
-            if (Meteor.Item.Content is MyObjectBuilder_Ore)
+            if (Meteor.Item != null && Meteor.Item.Content is MyObjectBuilder_Ore)
             {
+                compMass = SpaceEngineersApi.GetItemMass(Meteor.Item.Content.TypeId, Meteor.Item.Content.SubtypeName);
+                compVolume = SpaceEngineersApi.GetItemVolume(Meteor.Item.Content.TypeId, Meteor.Item.Content.SubtypeName);
+                amount = (double)Meteor.Item.Amount;
+
                 DisplayName = string.Format("{0} Ore", Meteor.Item.Content.SubtypeName);
-                Volume = compVolume * (double)Meteor.Item.Amount;
-                Mass = compMass * (double)Meteor.Item.Amount;
+                Volume = compVolume * amount;
+                Mass = compMass * amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
             else
             {
-                DisplayName = Meteor.Item.Content.SubtypeName;
-                Description = string.Format("x {0}", Meteor.Item.Amount);
-                Volume = compVolume * (double)Meteor.Item.Amount;
-                Mass = compMass * (double)Meteor.Item.Amount;
+                DisplayName = "Meteor";
+                Description = string.Format("x {0}", amount);
+                Volume = compVolume * amount;
+                Mass = compMass * amount;
             }
         }
 

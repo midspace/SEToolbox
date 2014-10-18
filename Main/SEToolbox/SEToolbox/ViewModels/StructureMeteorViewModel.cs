@@ -46,52 +46,34 @@
 
         protected new StructureMeteorModel DataModel
         {
-            get
-            {
-                return base.DataModel as StructureMeteorModel;
-            }
+            get { return base.DataModel as StructureMeteorModel; }
         }
 
         public MyObjectBuilder_InventoryItem Item
         {
-            get
-            {
-                return DataModel.Item;
-            }
-
-            set
-            {
-                DataModel.Item = value;
-            }
+            get { return DataModel.Item; }
+            set { DataModel.Item = value; }
         }
 
         public string SubTypeName
         {
-            get
-            {
-                return DataModel.Item.Content.SubtypeName;
-            }
+            get { return DataModel.Item.Content.SubtypeName; }
         }
 
         public double? Volume
         {
-            get
-            {
-                return DataModel.Volume;
-            }
-
-            set
-            {
-                DataModel.Volume = value;
-            }
+            get { return DataModel.Volume; }
+            set { DataModel.Volume = value; }
         }
 
         public double LinearVelocity
         {
-            get
-            {
-                return DataModel.LinearVelocity;
-            }
+            get { return DataModel.LinearVelocity; }
+        }
+
+        public float Integrity
+        {
+            get { return DataModel.Integrity; }
         }
 
         #endregion
