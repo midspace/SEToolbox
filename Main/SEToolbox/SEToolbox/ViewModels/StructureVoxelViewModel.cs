@@ -577,7 +577,9 @@
 
                         if (volume > 0)
                         {
-                            // TODO: get worldAABB of cell.
+                            // Get worldAABB of cell.
+                            var point = this.PositionAndOrientation.Value.Position.ToVector3() + coords;
+                            var bb = new BoundingBox(point, point + 1);
 
                             var occupiedByGrid = false;
 
