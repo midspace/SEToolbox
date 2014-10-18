@@ -20,17 +20,25 @@
         private ImportImageClassType _classType;
         private ImportArmorType _armorType;
         private MyPositionAndOrientation _characterPosition;
+        private int _alphaLevel;
+        private System.Windows.Media.Color _keyColor;
+        private bool _isAlphaLevel;
+        private bool _isKeyColor;
 
         #endregion
-        
+
+        public ImportImageModel()
+        {
+            AlphaLevel = 127;
+            KeyColor = System.Windows.Media.Color.FromArgb(0, 255, 0, 255);
+            IsAlphaLevel = true;
+        }
+
         #region Properties
 
         public string Filename
         {
-            get
-            {
-                return _filename;
-            }
+            get { return _filename; }
 
             set
             {
@@ -44,10 +52,7 @@
 
         public bool IsValidImage
         {
-            get
-            {
-                return _isValidImage;
-            }
+            get { return _isValidImage; }
 
             set
             {
@@ -61,10 +66,7 @@
 
         public Size OriginalImageSize
         {
-            get
-            {
-                return _originalImageSize;
-            }
+            get { return _originalImageSize; }
 
             set
             {
@@ -78,10 +80,7 @@
 
         public BindableSizeModel NewImageSize
         {
-            get
-            {
-                return _newImageSize;
-            }
+            get { return _newImageSize; }
 
             set
             {
@@ -95,10 +94,7 @@
 
         public BindablePoint3DModel Position
         {
-            get
-            {
-                return _position;
-            }
+            get { return _position; }
 
             set
             {
@@ -112,10 +108,7 @@
 
         public BindableVector3DModel Forward
         {
-            get
-            {
-                return _forward;
-            }
+            get { return _forward; }
 
             set
             {
@@ -129,10 +122,7 @@
 
         public BindableVector3DModel Up
         {
-            get
-            {
-                return _up;
-            }
+            get { return _up; }
 
             set
             {
@@ -146,10 +136,7 @@
 
         public ImportImageClassType ClassType
         {
-            get
-            {
-                return _classType;
-            }
+            get { return _classType; }
 
             set
             {
@@ -163,10 +150,7 @@
 
         public ImportArmorType ArmorType
         {
-            get
-            {
-                return _armorType;
-            }
+            get { return _armorType; }
 
             set
             {
@@ -178,19 +162,71 @@
             }
         }
 
-
         public MyPositionAndOrientation CharacterPosition
         {
-            get
-            {
-                return _characterPosition;
-            }
+            get { return _characterPosition; }
 
             set
             {
                 //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
                 _characterPosition = value;
                 RaisePropertyChanged(() => CharacterPosition);
+            }
+        }
+
+        public int AlphaLevel
+        {
+            get { return _alphaLevel; }
+
+            set
+            {
+                if (value != _alphaLevel)
+                {
+                    _alphaLevel = value;
+                    RaisePropertyChanged(() => AlphaLevel);
+                }
+            }
+        }
+
+        public System.Windows.Media.Color KeyColor
+        {
+            get { return _keyColor; }
+
+            set
+            {
+                if (_keyColor != value)
+                {
+                    _keyColor = value;
+                    RaisePropertyChanged(() => KeyColor);
+                }
+            }
+        }
+
+        public bool IsAlphaLevel
+        {
+            get { return _isAlphaLevel; }
+
+            set
+            {
+                if (value != _isAlphaLevel)
+                {
+                    _isAlphaLevel = value;
+                    RaisePropertyChanged(() => IsAlphaLevel);
+                }
+            }
+        }
+
+        public bool IsKeyColor
+        {
+            get { return _isKeyColor; }
+
+            set
+            {
+                if (value != _isKeyColor)
+                {
+                    _isKeyColor = value;
+                    RaisePropertyChanged(() => IsKeyColor);
+                }
             }
         }
 

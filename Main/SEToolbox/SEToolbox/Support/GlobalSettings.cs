@@ -135,7 +135,7 @@
             IgnoreUpdateVersion = null;
         }
 
-        public static Version GetAppVersion(bool ignoreRevision = false)
+        public static Version GetAppVersion(bool ignoreBuildRevision = false)
         {
             var assemblyVersion = Assembly.GetExecutingAssembly()
               .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
@@ -144,8 +144,8 @@
 
             var version = assemblyVersion == null ? new Version() : new Version(assemblyVersion.Version);
 
-            if (ignoreRevision)
-                return new Version(version.Major, version.Minor, version.Build);
+            if (ignoreBuildRevision)
+                return new Version(version.Major, version.Minor, 0, 0);
             else
                 return version;
         }

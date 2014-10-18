@@ -5,7 +5,7 @@
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Image" Height="380" Width="550" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="Import Image" Height="415" Width="550" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -20,8 +20,12 @@
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
     </Window.Cursor>
     <Grid>
-        <StackPanel Margin="8">
-            <Grid Margin="0,0,0,8" Height="270">
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Margin="0,0,0,8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -97,6 +101,38 @@
                     </GroupBox>
                 </StackPanel>
                 <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <GroupBox Header="Transparency">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <RadioButton Content="Alpha Level" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsAlphaLevel}"/>
+                            <TextBox Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" ToolTip="The alpha mask above this number to generate a block.">
+                                <TextBox.Text>
+                                    <Binding Path="AlphaLevel" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleI Min="0" Max="255"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <RadioButton Grid.Row="1" Content="Key Color" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsKeyColor}"/>
+                            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Padding="0" Command="{Binding ChangeKeyColorCommand}">
+                                <Border Width="16" Height="16" BorderBrush="Black" BorderThickness="1">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{Binding KeyColor, Mode=OneWay}"/>
+                                    </Border.Background>
+                                </Border>
+                            </Button>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+                <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <GroupBox Header="Position" MinWidth="120">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -142,19 +178,19 @@
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8" HorizontalAlignment="Right">
                     <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Image Width="200" Height="120" Stretch="None" ToolTip="Original Image" Source="{Binding Path=Filename, Converter={StaticResource NullImageConverter}}" />
+                        <Image Width="250" Height="150" Stretch="None" ToolTip="Original Image" Source="{Binding Path=Filename, Converter={StaticResource NullImageConverter}}" />
                     </Border>
                     <TextBlock Text="\/" VerticalAlignment="Center" HorizontalAlignment="Center" />
                     <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Image Width="200" Height="120" Stretch="None" ToolTip="Preview" Source="{Binding NewImage}" />
+                        <Image Width="250" Height="150" Stretch="None" ToolTip="Preview" Source="{Binding NewImage}" />
                     </Border>
                 </StackPanel>
             </Grid>
-            <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
                 <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
                 <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
             </StackPanel>
-        </StackPanel>
+        </Grid>
         <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

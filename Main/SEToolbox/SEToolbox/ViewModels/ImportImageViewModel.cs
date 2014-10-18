@@ -26,6 +26,7 @@
         private readonly IDialogService _dialogService;
         private readonly Func<IOpenFileDialog> _openFileDialogFactory;
         private readonly ImportImageModel _dataModel;
+        private readonly Func<IColorDialog> _colorDialogFactory;
 
         private bool? _closeResult;
         private Image _sourceImage;
@@ -37,25 +38,27 @@
         #region Constructors
 
         public ImportImageViewModel(BaseViewModel parentViewModel, ImportImageModel dataModel)
-            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
+            : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>, ServiceLocator.Resolve<IColorDialog>)
         {
         }
 
-        public ImportImageViewModel(BaseViewModel parentViewModel, ImportImageModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory)
+        public ImportImageViewModel(BaseViewModel parentViewModel, ImportImageModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory, Func<IColorDialog> colorDialogFactory)
             : base(parentViewModel)
         {
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
+            Contract.Requires(colorDialogFactory != null);
 
             _dialogService = dialogService;
             _openFileDialogFactory = openFileDialogFactory;
+            _colorDialogFactory = colorDialogFactory;
             _dataModel = dataModel;
             _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
 
-        #region Properties
+        #region Command Properties
 
         public ICommand BrowseImageCommand
         {
@@ -76,6 +79,15 @@
         {
             get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
+
+        public ICommand ChangeKeyColorCommand
+        {
+            get { return new DelegateCommand(ChangeKeyColorExecuted, ChangeKeyColorCanExecute); }
+        }
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets or sets the DialogResult of the View.  If True or False is passed, this initiates the Close().
@@ -105,14 +117,12 @@
         public bool IsValidImage
         {
             get { return _dataModel.IsValidImage; }
-
             set { _dataModel.IsValidImage = value; }
         }
 
         public Size OriginalImageSize
         {
             get { return _dataModel.OriginalImageSize; }
-
             set { _dataModel.OriginalImageSize = value; }
         }
 
@@ -192,6 +202,30 @@
             }
         }
 
+        public int AlphaLevel
+        {
+            get { return _dataModel.AlphaLevel; }
+            set { _dataModel.AlphaLevel = value; }
+        }
+
+        public System.Windows.Media.Color KeyColor
+        {
+            get { return _dataModel.KeyColor; }
+            set { _dataModel.KeyColor = value; }
+        }
+
+        public bool IsAlphaLevel
+        {
+            get { return _dataModel.IsAlphaLevel; }
+            set { _dataModel.IsAlphaLevel = value; }
+        }
+
+        public bool IsKeyColor
+        {
+            get { return _dataModel.IsKeyColor; }
+            set { _dataModel.IsKeyColor = value; }
+        }
+
         #endregion
 
         #region methods
@@ -252,6 +286,26 @@
         public void CancelExecuted()
         {
             CloseResult = false;
+        }
+
+        public bool ChangeKeyColorCanExecute()
+        {
+            return true;
+        }
+
+        public void ChangeKeyColorExecuted()
+        {
+            var colorDialog = _colorDialogFactory();
+            colorDialog.FullOpen = true;
+            colorDialog.MediaColor = KeyColor;
+            colorDialog.CustomColors = MainViewModel.CreativeModeColors;
+
+            if (_dialogService.ShowColorDialog(OwnerViewModel, colorDialog) == System.Windows.Forms.DialogResult.OK)
+            {
+                KeyColor = colorDialog.MediaColor.Value;
+            }
+
+            MainViewModel.CreativeModeColors = colorDialog.CustomColors;
         }
 
         #endregion
@@ -396,19 +450,22 @@
                         var color = palatteImage.GetPixel(x, y);
 
                         // Specifically ignore anything with less than half "Transparent" Alpha.
-                        if (color.A > 0x7F)
-                        {
-                            // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
-                            var armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Block");
+                        if (IsAlphaLevel && color.A < AlphaLevel)
+                            continue;
 
-                            MyObjectBuilder_CubeBlock newCube;
-                            entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
-                            newCube.SubtypeName = armor.ToString();
-                            newCube.EntityId = 0;
-                            newCube.BlockOrientation = Modelling.GetCubeOrientation(CubeType.Cube);
-                            newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
-                            newCube.ColorMaskHSV = color.ToSandboxHsvColor();
-                        }
+                        if (IsKeyColor && color.R == KeyColor.R && color.G == KeyColor.G && color.B == KeyColor.B)
+                            continue;
+
+                        // Parse the string through the Enumeration to check that the 'subtypeid' is still valid in the game engine.
+                        var armor = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Block");
+
+                        MyObjectBuilder_CubeBlock newCube;
+                        entity.CubeBlocks.Add(newCube = new MyObjectBuilder_CubeBlock());
+                        newCube.SubtypeName = armor.ToString();
+                        newCube.EntityId = 0;
+                        newCube.BlockOrientation = Modelling.GetCubeOrientation(CubeType.Cube);
+                        newCube.Min = new VRageMath.Vector3I(palatteImage.Width - x - 1, palatteImage.Height - y - 1, z);
+                        newCube.ColorMaskHSV = color.ToSandboxHsvColor();
                     }
                 }
             }
