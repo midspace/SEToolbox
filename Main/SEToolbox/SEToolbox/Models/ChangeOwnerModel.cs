@@ -66,11 +66,11 @@
         public void Load(long initalOwner)
         {
             PlayerList.Clear();
-            PlayerList.Add(new OwnerModel() { Name = "{None}", PlayerId = 0, SteamId = 0 });
+            PlayerList.Add(new OwnerModel() { Name = "{None}", PlayerId = 0 });
 
-            foreach (var item in SpaceEngineersCore.WorldResource.Checkpoint.AllPlayers.OrderBy(p => p.Name))
+            foreach (var item in SpaceEngineersCore.WorldResource.Checkpoint.Identities.OrderBy(p => p.DisplayName))
             {
-                PlayerList.Add(new OwnerModel() { Name = item.Name, PlayerId = item.PlayerId, SteamId = item.SteamId, IsDead = item.IsDead, Model = item.Model });
+                PlayerList.Add(new OwnerModel() { Name = item.DisplayName, PlayerId = item.PlayerId, Model = item.Model });
             }
 
             SelectedPlayer = PlayerList.FirstOrDefault(p => p.PlayerId == initalOwner);

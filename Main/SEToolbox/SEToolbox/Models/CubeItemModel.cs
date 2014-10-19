@@ -344,8 +344,8 @@
             if (Cube is MyObjectBuilder_TerminalBlock)
             {
                 this.Owner = newOwnerId;
-                var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayers.FirstOrDefault(p => p.PlayerId == Owner);
-                OwnerName = player.Name;
+                var player = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
+                OwnerName = player == null ? null : player.DisplayName;
                 return true;
             }
 
@@ -368,8 +368,8 @@
             CubeSize = definition.CubeSize;
             FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayName);
 
-            var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayers.FirstOrDefault(p => p.PlayerId == Owner);
-            OwnerName = player.Name;
+            var player = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
+            OwnerName = player == null ? null : player.DisplayName;
 
             TypeId = definition.Id.TypeId;
             SubtypeId = definition.Id.SubtypeId;

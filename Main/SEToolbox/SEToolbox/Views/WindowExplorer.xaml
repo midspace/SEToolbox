@@ -123,7 +123,12 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Export without owner and MedBay" Command="{Binding ExportBasicSandboxObjectCommand}" ToolTip="Export ships and stations to an .xml file, to store, allowing import into other worlds.">
+                    <MenuItem Header="Export without owner and MedBay" Command="{Binding ExportBasicSandboxObjectCommand}" ToolTip="Export ships and stations to an .sbc file, to store, allowing import into other worlds.">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Export as prefab" Command="{Binding ExportPrefabObjectCommand}" ToolTip="Export all ships and stations to a single an prefab .sbc file.">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                         </MenuItem.Icon>

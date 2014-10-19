@@ -359,14 +359,15 @@
                             saveAfterScan = true;
                         }
 
-                        if (item.Value.PlayerId == 0)
-                        {
-                            item.Value.PlayerId = SpaceEngineersApi.GenerateEntityId();
-                            world.Checkpoint.AllPlayers.Add(new MyObjectBuilder_Checkpoint.PlayerItem(item.Value.PlayerId, "Repair", false, item.Value.SteamID, null));
-                            statusNormal = false;
-                            str.AppendLine("! Fixed corrupt or missing Player defitinion.");
-                            saveAfterScan = true;
-                        }
+                        // AllPlayers is obsolete.
+                        //if (item.Value.PlayerId == 0)
+                        //{
+                        //    item.Value.PlayerId = SpaceEngineersApi.GenerateEntityId();
+                        //    world.Checkpoint.AllPlayers.Add(new MyObjectBuilder_Checkpoint.PlayerItem(item.Value.PlayerId, "Repair", false, item.Value.SteamID, null));
+                        //    statusNormal = false;
+                        //    str.AppendLine("! Fixed corrupt or missing Player defitinion.");
+                        //    saveAfterScan = true;
+                        //}
                     }
                 }
 
