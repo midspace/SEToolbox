@@ -27,6 +27,8 @@
     using VRageMath;
     using WPFLocalizeExtension.Engine;
     using Res = SEToolbox.Properties.Resources;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Microsoft.Xml.Serialization.GeneratedAssembly;
 
     public class ExplorerViewModel : BaseViewModel, IDropable, IMainView
     {
@@ -188,6 +190,11 @@
         public ICommand ExportBasicSandboxObjectCommand
         {
             get { return new DelegateCommand(ExportBasicSandboxObjectExecuted, ExportBasicSandboxObjectCanExecute); }
+        }
+
+        public ICommand ExportPrefabObjectCommand
+        {
+            get { return new DelegateCommand(ExportPrefabObjectExecuted, ExportPrefabObjectCanExecute); }
         }
 
         public ICommand CreateFloatingItemCommand
@@ -811,6 +818,16 @@
         public void ExportBasicSandboxObjectExecuted()
         {
             ExportSandboxObjectToFile(true, Selections.ToArray());
+        }
+
+        public bool ExportPrefabObjectCanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void ExportPrefabObjectExecuted()
+        {
+            ExportPrefabObjectToFile(true, Selections.ToArray());
         }
 
         public bool CreateFloatingItemCanExecute()
@@ -1463,6 +1480,62 @@
                     // Need to use the specific serializer when exporting to generate the correct XML, so Unknown should never be export.
                     _dialogService.ShowMessageBox(this, "Cannot export Unknown currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
+            }
+        }
+
+
+        public void ExportPrefabObjectToFile(bool blankOwnerAndMedBays, params IStructureViewBase[] viewModels)
+        {
+            var saveFileDialog = _saveFileDialogFactory();
+            saveFileDialog.Filter = Res.DialogExportPrefabObjectFilter;
+            saveFileDialog.Title = Res.DialogExportSandboxObjectTitle;
+            saveFileDialog.FileName = "export prefab.sbc";
+            saveFileDialog.OverwritePrompt = true;
+
+            if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+            {
+                var definition = new MyObjectBuilder_Definitions();
+                definition.Prefabs = new MyObjectBuilder_PrefabDefinition[1];
+                MyObjectBuilder_PrefabDefinition prefab;
+                prefab = new MyObjectBuilder_PrefabDefinition();
+                prefab.Id.TypeId = new MyObjectBuilderType(typeof(MyObjectBuilder_PrefabDefinition));
+                prefab.Id.SubtypeId = Path.GetFileNameWithoutExtension(saveFileDialog.FileName);
+
+                var grids = new List<MyObjectBuilder_CubeGrid>();
+
+                foreach (var viewModel in viewModels)
+                {
+                    if (viewModel is StructureCubeGridViewModel)
+                    {
+                        var cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
+
+                        if (blankOwnerAndMedBays)
+                        {
+                            // Call to ToArray() to force Linq to update the value.
+
+                            // Clear Medical room SteamId.
+                            cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
+
+                            // Clear Owners.
+                            cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
+                        }
+
+                        // Remove any pilots.
+                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.Cockpit).Select(c =>
+                        {
+                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
+                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
+                            return c;
+                        }).ToArray();
+
+                        grids.Add(cloneEntity);
+                    }
+                }
+
+                prefab.CubeGrids = grids.ToArray();
+                definition.Prefabs[0] = prefab;
+
+                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>(definition, saveFileDialog.FileName);
             }
         }
 

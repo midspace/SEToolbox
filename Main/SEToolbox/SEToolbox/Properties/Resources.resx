@@ -675,4 +675,10 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="VoxelMergeType_UnionRightToLeft" xml:space="preserve">
     <value>Union Right to Left</value>
   </data>
+  <data name="DialogExportPrefabObjectFilter" xml:space="preserve">
+    <value>Sandbox Prefab files (*.sbc)|*.sbc</value>
+  </data>
+  <data name="DialogExportPrefabObjectTitle" xml:space="preserve">
+    <value>Specify filename to export to</value>
+  </data>
 </root>

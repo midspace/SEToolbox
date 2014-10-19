@@ -6,13 +6,9 @@
 
         private string _name;
 
-        private bool _isDead;
-
         private string _model;
 
         private long _playerId;
-
-        private ulong _steamId;
 
         #endregion
 
@@ -28,20 +24,6 @@
                 {
                     _name = value;
                     RaisePropertyChanged(() => Name);
-                }
-            }
-        }
-
-        public bool IsDead
-        {
-            get { return _isDead; }
-
-            set
-            {
-                if (value != _isDead)
-                {
-                    _isDead = value;
-                    RaisePropertyChanged(() => IsDead);
                 }
             }
         }
@@ -70,20 +52,6 @@
                 {
                     _playerId = value;
                     RaisePropertyChanged(() => PlayerId);
-                }
-            }
-        }
-
-        public ulong SteamId
-        {
-            get { return _steamId; }
-
-            set
-            {
-                if (value != _steamId)
-                {
-                    _steamId = value;
-                    RaisePropertyChanged(() => SteamId);
                 }
             }
         }
