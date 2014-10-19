@@ -420,8 +420,6 @@
                         {
                             foreach (var item in block.ConstructionStockpile.Items)
                             {
-                                var cd = (MyObjectBuilder_ComponentDefinition)SpaceEngineersApi.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName);
-
                                 if (isNpc)
                                 {
                                     TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, item.Amount, contentPath, accumulateNpcOres, null, null);
@@ -431,7 +429,22 @@
                                     TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, item.Amount, contentPath, accumulateUsedOres, null, null);
                                 }
 
-                                float componentMass = cd.Mass * item.Amount;
+                                var def = SpaceEngineersApi.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName);
+                                float componentMass = 0;
+                                var cd = def as MyObjectBuilder_ComponentDefinition;
+                                if (cd != null)
+                                {
+                                    componentMass = cd.Mass * item.Amount;
+                                }
+                                else
+                                {
+                                    var pd = def as MyObjectBuilder_PhysicalItemDefinition;
+                                    if (pd != null)
+                                    {
+                                        componentMass = pd.Mass * item.Amount;
+                                    }
+                                }
+                                
                                 cubeMass += componentMass;
                             }
                         }
