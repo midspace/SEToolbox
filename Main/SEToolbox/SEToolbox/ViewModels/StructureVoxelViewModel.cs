@@ -7,6 +7,7 @@
     using System.Text;
     using System.Windows;
     using System.Windows.Input;
+
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
@@ -14,7 +15,6 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
-    using System.IO;
     using VRageMath;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
@@ -586,8 +586,28 @@
                             // TODO: Search through station entities cubes for intersection with this voxel cell.
                             foreach (var station in stations)
                             {
-                                foreach (var block in station.CubeGrid.CubeBlocks)
+                                var quaternion = station.PositionAndOrientation.Value.ToQuaternion();
+
+                                foreach (var cube in station.CubeGrid.CubeBlocks)
                                 {
+                                    var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, station.CubeGrid.GridSizeEnum, cube.SubtypeName);
+
+                                    Vector3 min;
+                                    Vector3 max;
+
+                                    if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
+                                    {
+                                        // rotate position around origin.
+                                        min = Vector3I.Transform(cube.Min.ToVector3I(), quaternion);
+                                    }
+                                    else
+                                    {
+                                        var orientSize = definition.Size.Add(-1).Transform(cube.BlockOrientation).Abs();
+                                        min = Vector3I.Transform(cube.Min.ToVector3I(), quaternion);
+                                        var blockMax = new Vector3I(cube.Min.X + orientSize.X, cube.Min.Y + orientSize.Y, cube.Min.Z + orientSize.Z);
+                                        max = Vector3I.Transform(blockMax, quaternion);
+                                    }
+
                                     //station.PositionAndOrientation
                                     //block.Min
                                     //block.max

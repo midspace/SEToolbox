@@ -1,8 +1,10 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.IO;
+    using System.Linq.Expressions;
     using System.Windows.Forms;
     using System.Windows.Input;
 
@@ -12,7 +14,7 @@
     using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
 
-    public class FindApplicationViewModel : BaseViewModel
+    public class FindApplicationViewModel : INotifyPropertyChanged
     {
         #region Fields
 
@@ -31,7 +33,6 @@
         }
 
         public FindApplicationViewModel(FindApplicationModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory)
-            : base(null)
         {
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
@@ -166,6 +167,37 @@
         {
             CloseResult = false;
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
+        //[Obsolete("Use RaisePropertyChanged(() => PropertyName) instead.")]
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public void RaisePropertyChanged(params Expression<Func<object>>[] expression)
+        {
+            PropertyChanged.Raise(expression);
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
     }

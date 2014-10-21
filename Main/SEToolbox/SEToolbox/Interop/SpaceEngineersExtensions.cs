@@ -38,7 +38,7 @@
             return newVector;
         }
 
-        internal static double LinearVector(this Vector3 vector)
+        public static double LinearVector(this Vector3 vector)
         {
             return Math.Sqrt(Math.Pow(vector.X, 2) + Math.Pow(vector.Y, 2) + Math.Pow(vector.Z, 2));
         }
@@ -84,7 +84,7 @@
             return new System.Windows.Media.Media3D.Point3D(vector.X, vector.Y, vector.Z);
         }
 
-        internal static System.Windows.Media.Media3D.Point3D ToPoint3D(this SerializableVector3 point)
+        public static System.Windows.Media.Media3D.Point3D ToPoint3D(this SerializableVector3 point)
         {
             return new System.Windows.Media.Media3D.Point3D(point.X, point.Y, point.Z);
         }
@@ -94,33 +94,33 @@
             return new System.Windows.Point(vector.X, vector.Y);
         }
 
-        internal static Vector3 ToVector3(this System.Windows.Media.Media3D.Point3D point)
+        public static Vector3 ToVector3(this System.Windows.Media.Media3D.Point3D point)
         {
             return new Vector3((float)point.X, (float)point.Y, (float)point.Z);
         }
 
-        internal static Vector3 ToVector3(this System.Windows.Media.Media3D.Size3D size3D)
+        public static Vector3 ToVector3(this System.Windows.Media.Media3D.Size3D size3D)
         {
             return new Vector3((float)size3D.X, (float)size3D.Y, (float)size3D.Z);
         }
 
-        internal static Quaternion ToQuaternion(this SerializableBlockOrientation blockOrientation)
+        public static Quaternion ToQuaternion(this SerializableBlockOrientation blockOrientation)
         {
             var matrix = Matrix.CreateFromDir(Base6Directions.GetVector(blockOrientation.Forward), Base6Directions.GetVector(blockOrientation.Up));
             return Quaternion.CreateFromRotationMatrix(matrix);
         }
 
-        internal static Quaternion ToQuaternion(this MyPositionAndOrientation positionOrientation)
+        public static Quaternion ToQuaternion(this MyPositionAndOrientation positionOrientation)
         {
             return Quaternion.CreateFromForwardUp(positionOrientation.Forward, positionOrientation.Up);
         }
 
-        internal static Matrix ToMatrix(this MyPositionAndOrientation positionOrientation)
+        public static Matrix ToMatrix(this MyPositionAndOrientation positionOrientation)
         {
             return Matrix.CreateFromQuaternion(Quaternion.CreateFromForwardUp(positionOrientation.Forward, positionOrientation.Up));
         }
 
-        internal static Matrix ToMatrix(this Quaternion quaternion)
+        public static Matrix ToMatrix(this Quaternion quaternion)
         {
             return Matrix.CreateFromQuaternion(quaternion);
         }
