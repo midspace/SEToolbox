@@ -362,7 +362,7 @@
             {
                 for (coords.Y = 0; coords.Y < asteroid.Size.Y; coords.Y++)
                 {
-                    for (coords.X = 0; coords.X < asteroid.Size.Z; coords.X++)
+                    for (coords.X = 0; coords.X < asteroid.Size.X; coords.X++)
                     {
                         byte volume = 0xff;
                         string cellMaterial;
