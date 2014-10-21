@@ -51,6 +51,7 @@
                 };
                 var faViewModel = new FindApplicationViewModel(faModel);
                 var faWindow = new WindowFindApplication(faViewModel);
+
                 if (faWindow.ShowDialog() == true)
                 {
                     filePath = faModel.GameBinPath;

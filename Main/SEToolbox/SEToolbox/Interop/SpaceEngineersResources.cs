@@ -142,7 +142,7 @@
             // Deal with duplicate entries. Must use the last one found and overwrite all others.
             definitions.AmmoMagazines = definitions.AmmoMagazines.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.Animations = definitions.Animations.Where(c => !c.Id.TypeId.IsNull).GroupBy(a => a.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Blueprints = definitions.Blueprints.Where(c => !c.Result.Id.TypeId.IsNull).GroupBy(c => c.Result.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.Blueprints = definitions.Blueprints.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.Characters = definitions.Characters.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
             definitions.Components = definitions.Components.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             // definitions.Configuration is not an array.

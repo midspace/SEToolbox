@@ -253,7 +253,7 @@
         public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderType typeId, decimal amount, Dictionary<string, BlueprintRequirement> requirements, out TimeSpan timeTaken)
         {
             var time = new TimeSpan();
-            var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.Id.TypeId == typeId);
+            var bp = SpaceEngineersApi.GetBlueprint(typeId, subType);
             if (bp != null)
             {
                 foreach (var item in bp.Prerequisites)
@@ -311,6 +311,16 @@
             }
 
             return null;
+        }
+
+        public static MyObjectBuilder_BlueprintDefinition GetBlueprint(MyObjectBuilderType resultTypeId, string resultSubTypeId)
+        {
+            var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result != null && b.Result.Id.TypeId == resultTypeId && b.Result.SubtypeId == resultSubTypeId);
+            if (bp != null)
+                return bp;
+
+            var bpList = SpaceEngineersCore.Resources.Definitions.Blueprints.Where(b => b.Results != null && b.Results.Any(r => r.Id.TypeId == resultTypeId && r.SubtypeId == resultSubTypeId));
+            return bpList.FirstOrDefault();
         }
 
         public static float GetItemMass(MyObjectBuilderType typeId, string subTypeId)

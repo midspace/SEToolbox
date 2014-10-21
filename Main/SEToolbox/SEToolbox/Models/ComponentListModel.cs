@@ -197,8 +197,7 @@
 
             foreach (var componentDefinition in SpaceEngineersCore.Resources.Definitions.Components)
             {
-                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == componentDefinition.Id.SubtypeId && b.Result.Id.TypeId == componentDefinition.Id.TypeId);
-
+                var bp = SpaceEngineersApi.GetBlueprint(componentDefinition.Id.TypeId, componentDefinition.Id.SubtypeId);
                 ComponentAssets.Add(new ComponentItemModel
                 {
                     Name = componentDefinition.DisplayName,
@@ -214,7 +213,7 @@
 
             foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.PhysicalItems)
             {
-                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeId);
                 ItemAssets.Add(new ComponentItemModel
                 {
                     Name = physicalItemDefinition.DisplayName,
@@ -230,7 +229,7 @@
 
             foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.AmmoMagazines)
             {
-                var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == physicalItemDefinition.Id.SubtypeId && b.Result.Id.TypeId == physicalItemDefinition.Id.TypeId);
+                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeId);
                 ItemAssets.Add(new ComponentItemModel
                 {
                     Name = physicalItemDefinition.DisplayName,

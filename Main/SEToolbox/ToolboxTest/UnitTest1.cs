@@ -2,16 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Serializer;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using VRageMath;
+    using Color = System.Drawing.Color;
 
     [TestClass]
     public class UnitTest1
@@ -226,6 +228,40 @@
             VRageMath.Vector3? p = box.IntersectsRayAt(point, vector * 1000);
 
             Assert.AreEqual(new VRageMath.Vector3(4.917649f, 3.51513839f, 6f), p.Value, "Should Equal");
+        }
+
+        [TestMethod]
+        public void CubeRotate()
+        {
+            var positionOrientation = new MyPositionAndOrientation(new Vector3(), Vector3.Forward, Vector3.Up);
+            var gridSizeEnum = MyCubeSize.Large;
+
+            var cube = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(typeof(MyObjectBuilder_CubeBlock), "LargeBlockArmorBlock");
+            //var cube = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(typeof(MyObjectBuilder_Thrust), "LargeBlockLargeThrust");
+            cube.Min = new SerializableVector3I(10, 10, 10);
+            cube.BlockOrientation = new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Up);
+            cube.BuildPercent = 1;
+            
+
+            var quaternion = positionOrientation.ToQuaternion();
+            var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, gridSizeEnum, cube.SubtypeName);
+
+
+            //if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
+            //{
+            //    // rotate position around origin.
+            //    min = Vector3I.Transform(cube.Min.ToVector3I(), quaternion);
+            //}
+            //else
+            //{
+            var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
+            var min = cube.Min.ToVector3() * gridSizeEnum.ToLength();
+            var max = (cube.Min + orientSize) * gridSizeEnum.ToLength();
+            var p1 = Vector3.Transform(min, quaternion);
+            var p2 = Vector3.Transform(max, quaternion);
+            //}
+
+
         }
     }
 }
