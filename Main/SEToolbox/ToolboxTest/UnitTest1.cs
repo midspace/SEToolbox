@@ -233,7 +233,7 @@
         [TestMethod]
         public void CubeRotate()
         {
-            var positionOrientation = new MyPositionAndOrientation(new Vector3(), Vector3.Forward, Vector3.Up);
+            var positionOrientation = new MyPositionAndOrientation(new Vector3(10, 10, 10), Vector3.Backward, Vector3.Up);
             var gridSizeEnum = MyCubeSize.Large;
 
             var cube = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(typeof(MyObjectBuilder_CubeBlock), "LargeBlockArmorBlock");
@@ -241,27 +241,17 @@
             cube.Min = new SerializableVector3I(10, 10, 10);
             cube.BlockOrientation = new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Up);
             cube.BuildPercent = 1;
-            
 
             var quaternion = positionOrientation.ToQuaternion();
             var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, gridSizeEnum, cube.SubtypeName);
 
 
-            //if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
-            //{
-            //    // rotate position around origin.
-            //    min = Vector3I.Transform(cube.Min.ToVector3I(), quaternion);
-            //}
-            //else
-            //{
             var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
             var min = cube.Min.ToVector3() * gridSizeEnum.ToLength();
             var max = (cube.Min + orientSize) * gridSizeEnum.ToLength();
-            var p1 = Vector3.Transform(min, quaternion);
-            var p2 = Vector3.Transform(max, quaternion);
-            //}
-
-
+            var p1 = Vector3.Transform(min, quaternion) + positionOrientation.Position;
+            var p2 = Vector3.Transform(max, quaternion) + positionOrientation.Position;
+            var nb = new BoundingBox(p1, p2);
         }
     }
 }
