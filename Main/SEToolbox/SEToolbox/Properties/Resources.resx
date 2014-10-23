@@ -663,22 +663,28 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="users_back" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\users_back.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="VoxelMergeType_SubtractLeftFromRight" xml:space="preserve">
-    <value>Subtract Left from Right</value>
+  <data name="VoxelMergeType_SubtractVolumeLeftFromRight" xml:space="preserve">
+    <value>Subtract Volume Left from Right</value>
   </data>
-  <data name="VoxelMergeType_SubtractRightFromLeft" xml:space="preserve">
-    <value>Subtract Right from Left</value>
+  <data name="VoxelMergeType_SubtractVolumeRightFromLeft" xml:space="preserve">
+    <value>Subtract Volume Right from Left</value>
   </data>
-  <data name="VoxelMergeType_UnionLeftToRight" xml:space="preserve">
-    <value>Union Left to Right</value>
+  <data name="VoxelMergeType_UnionVolumeLeftToRight" xml:space="preserve">
+    <value>Union Volume Left to Right</value>
   </data>
-  <data name="VoxelMergeType_UnionRightToLeft" xml:space="preserve">
-    <value>Union Right to Left</value>
+  <data name="VoxelMergeType_UnionVolumeRightToLeft" xml:space="preserve">
+    <value>Union Volume Right to Left</value>
   </data>
   <data name="DialogExportPrefabObjectFilter" xml:space="preserve">
     <value>Sandbox Prefab files (*.sbc)|*.sbc</value>
   </data>
   <data name="DialogExportPrefabObjectTitle" xml:space="preserve">
     <value>Specify filename to export to</value>
+  </data>
+  <data name="VoxelMergeType_UnionMaterialLeftToRight" xml:space="preserve">
+    <value>Union Material Left to Right</value>
+  </data>
+  <data name="VoxelMergeType_UnionMaterialRightToLeft" xml:space="preserve">
+    <value>Union Material Right to Left</value>
   </data>
 </root>

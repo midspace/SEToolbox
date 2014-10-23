@@ -9,7 +9,7 @@
         Title="Asteroid Merge" Height="380" Width="460" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
-        FocusManager.FocusedElement="{Binding ElementName=uxStartBox}">
+        FocusManager.FocusedElement="{Binding ElementName=UxStartBox}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
@@ -33,18 +33,19 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
+                        <RowDefinition Height="4"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Text="Action:" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource VoxelMergeTypeEnum}}" SelectedValue="{Binding VoxelMergeType}">
+                    <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource VoxelMergeTypeEnum}}" SelectedValue="{Binding VoxelMergeType}" Name="UxStartBox">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="New Filename:" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Text="{Binding MergeFileName}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="New Filename:" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Text="{Binding MergeFileName}"/>
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
@@ -70,8 +71,6 @@
                         </RadialGradientBrush.GradientStops>
                     </RadialGradientBrush>
                     <SolidColorBrush x:Key="BackColor" Color="#FF000000" />
-
-
                 </Grid.Resources>
                 <Grid.Style>
                     <Style>
@@ -84,13 +83,13 @@
                     </Style>
                 </Grid.Style>
 
-                <!--union left to right-->
+                <!--union volume left to right-->
                 <Canvas Background="{StaticResource BackColor}" Width="400" Height="240">
                     <Canvas.Style>
                         <Style>
                             <Setter Property="Canvas.Visibility" Value="Hidden"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.UnionLeftToRight}">
+                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.UnionVolumeLeftToRight}">
                                     <Setter Property="Canvas.Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -100,18 +99,18 @@
                     <Ellipse Width="240" Height="240" StrokeThickness="0" Margin="150 0 0 0" Fill="{StaticResource EdgeRight}"/>
                     <Ellipse Width="200" Height="200" Fill="{StaticResource FillLeft}" StrokeThickness="0" Margin="30 20 0 0" />
                     <Ellipse Width="200" Height="200" Fill="{StaticResource FillRight}" StrokeThickness="0" Margin="170 20 0 0" />
-                    <Path Stroke="{StaticResource Border}" StrokeThickness="4" Data="M 200,51 A 98,98 40 1 0 200,189" />
                     <Path Stroke="{StaticResource BorderDash}" StrokeThickness="4" StrokeDashArray="4 0 2" Data="M 200,51 A 98,98 40 0 1 200,189" />
+                    <Path Stroke="{StaticResource Border}" StrokeThickness="4" Data="M 200,51 A 98,98 40 1 0 200,189" />
                     <Ellipse Stroke="{StaticResource Border}" StrokeThickness="4" Margin="170 20 0 0" Width="200" Height="200"/>
                 </Canvas>
-                
-                <!--union right to left-->
+
+                <!--union volume right to left-->
                 <Canvas Background="{StaticResource BackColor}" Width="400" Height="240">
                     <Canvas.Style>
                         <Style>
                             <Setter Property="Canvas.Visibility" Value="Hidden"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.UnionRightToLeft}">
+                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.UnionVolumeRightToLeft}">
                                     <Setter Property="Canvas.Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -121,18 +120,58 @@
                     <Ellipse Width="240" Height="240" StrokeThickness="0" Margin="10 0 0 0" Fill="{StaticResource EdgeLeft}"/>
                     <Ellipse Width="200" Height="200" Fill="{StaticResource FillRight}" StrokeThickness="0" Margin="170 20 0 0" />
                     <Ellipse Width="200" Height="200" Fill="{StaticResource FillLeft}" StrokeThickness="0" Margin="30 20 0 0" />
-                    <Ellipse Stroke="{StaticResource Border}" StrokeThickness="4" Margin="30 20 0 0" Width="200" Height="200" />
-                    <Path Stroke="{StaticResource Border}" StrokeThickness="4" Data="M 200,189 A 98,98 40 1 0 200,51" />
                     <Path Stroke="{StaticResource BorderDash}" StrokeThickness="4" StrokeDashArray="4 0 2" Data="M 200,189 A 98,98 40 0 1 200,51" />
+                    <Path Stroke="{StaticResource Border}" StrokeThickness="4" Data="M 200,189 A 98,98 40 1 0 200,51" />
+                    <Ellipse Stroke="{StaticResource Border}" StrokeThickness="4" Margin="30 20 0 0" Width="200" Height="200" />
                 </Canvas>
-                
-                <!--subtract right from left-->
+
+                <!--union material right to left-->
                 <Canvas Background="{StaticResource BackColor}" Width="400" Height="240">
                     <Canvas.Style>
                         <Style>
                             <Setter Property="Canvas.Visibility" Value="Hidden"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.SubtractRightFromLeft}">
+                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.UnionMaterialRightToLeft}">
+                                    <Setter Property="Canvas.Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Canvas.Style>
+                    <Ellipse Width="240" Height="240" StrokeThickness="0" Margin="10 0 0 0" Fill="{StaticResource EdgeLeft}"/>
+                    <Ellipse Width="200" Height="200" Fill="{StaticResource BackColor}" StrokeThickness="0" Margin="170 20 0 0" />
+                    <Ellipse Width="200" Height="200" Fill="{StaticResource FillLeft}" StrokeThickness="0" Margin="30 20 0 0" />
+                    <Path StrokeThickness="0" Fill="{StaticResource FillRight}" Data="M 200,49 A 98,98 40 0 1 200,189 M 200,189 A 98,98 40 0 1 200,49" />
+                    <Path Stroke="{StaticResource BorderDash}" StrokeThickness="4" StrokeDashArray="4 0 2" Data="M 200,189 A 98,98 40 1 0 200,51" />
+                    <Ellipse Stroke="{StaticResource Border}" StrokeThickness="4" Margin="30 20 0 0" Width="200" Height="200" />
+                </Canvas>
+
+                <!--union material left to right-->
+                <Canvas Background="{StaticResource BackColor}" Width="400" Height="240">
+                    <Canvas.Style>
+                        <Style>
+                            <Setter Property="Canvas.Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.UnionMaterialLeftToRight}">
+                                    <Setter Property="Canvas.Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Canvas.Style>
+                    <Ellipse Width="240" Height="240" StrokeThickness="0" Margin="150 0 0 0" Fill="{StaticResource EdgeRight}"/>
+                    <Ellipse Width="200" Height="200" Fill="{StaticResource BackColor}" StrokeThickness="0" Margin="30 20 0 0" />
+                    <Ellipse Width="200" Height="200" Fill="{StaticResource FillRight}" StrokeThickness="0" Margin="170 20 0 0" />
+                    <Path StrokeThickness="0" Fill="{StaticResource FillLeft}" Data="M 200,49 A 98,98 40 0 1 200,189 M 200,189 A 98,98 40 0 1 200,49" />
+                    <Path Stroke="{StaticResource BorderDash}" StrokeDashArray="4 0 2" StrokeThickness="4" Data="M 200,51 A 98,98 40 1 0 200,189" />
+                    <Ellipse Stroke="{StaticResource Border}" StrokeThickness="4" Margin="170 20 0 0" Width="200" Height="200"/>
+                </Canvas>
+
+                <!--subtract volume right from left-->
+                <Canvas Background="{StaticResource BackColor}" Width="400" Height="240">
+                    <Canvas.Style>
+                        <Style>
+                            <Setter Property="Canvas.Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.SubtractVolumeRightFromLeft}">
                                     <Setter Property="Canvas.Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -146,14 +185,14 @@
                     <Path Stroke="{StaticResource Border}" StrokeThickness="4" Data="M 200,189 A 98,98 40 0 1 200,51" />
                     <Path Stroke="{StaticResource BorderDash}" StrokeThickness="4" StrokeDashArray="4 0 2" Data="M 200,51 A 98,98 40 0 1 200,189" />
                 </Canvas>
-                
-                <!--subtract left from right-->
+
+                <!--subtract volume left from right-->
                 <Canvas Background="{StaticResource BackColor}" Width="400" Height="240">
                     <Canvas.Style>
                         <Style>
                             <Setter Property="Canvas.Visibility" Value="Hidden"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.SubtractLeftFromRight}">
+                                <DataTrigger Binding="{Binding VoxelMergeType}" Value="{x:Static support:VoxelMergeType.SubtractVolumeLeftFromRight}">
                                     <Setter Property="Canvas.Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>

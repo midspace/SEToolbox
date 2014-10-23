@@ -14,6 +14,7 @@
     using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
 
+    // Do not inherit from BaseViewModel, as this implments part of Keen's assemblies, which we do not want for this VM.
     public class FindApplicationViewModel : INotifyPropertyChanged
     {
         #region Fields

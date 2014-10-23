@@ -601,11 +601,11 @@
                                     var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
                                     var min = cube.Min.ToVector3() * station.CubeGrid.GridSizeEnum.ToLength();
                                     var max = (cube.Min + orientSize) * station.CubeGrid.GridSizeEnum.ToLength();
-                                    var p1 = Vector3.Transform(min, quaternion) + station.PositionAndOrientation.Value.Position;
-                                    var p2 = Vector3.Transform(max, quaternion) + station.PositionAndOrientation.Value.Position;
+                                    var p1 = Vector3.Transform(min, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
+                                    var p2 = Vector3.Transform(max, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
                                     var nb = new BoundingBox(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
 
-                                    // TODO: offset it wrong.
+                                    // TODO: offset is wrong.
 
                                     // find worldAABB of block.
                                     if (bb.Intersects(nb))

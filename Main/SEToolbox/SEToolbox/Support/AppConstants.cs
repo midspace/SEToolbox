@@ -79,10 +79,14 @@
 
     public enum VoxelMergeType
     {
-        UnionLeftToRight,
-        UnionRightToLeft,
-        SubtractLeftFromRight,
-        SubtractRightFromLeft,
+        UnionVolumeLeftToRight,
+        UnionVolumeRightToLeft,
+
+        UnionMaterialLeftToRight,
+        UnionMaterialRightToLeft,
+
+        SubtractVolumeLeftFromRight,
+        SubtractVolumeRightFromLeft,
     }
 
     /// <summary>

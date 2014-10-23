@@ -350,6 +350,12 @@
             get { return new BindableSize3DModel(DataModel.Size); }
         }
 
+        public BindableVector3DModel Center
+        {
+            get { return new BindableVector3DModel(DataModel.Center); }
+            set { DataModel.Center = value.ToVector3(); }
+        }
+
         public bool IsPiloted
         {
             get { return DataModel.IsPiloted; }

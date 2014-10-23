@@ -599,9 +599,11 @@
             Size = new Size3D(scale.X * scaleMultiplyer, scale.Y * scaleMultiplyer, scale.Z * scaleMultiplyer);
             Mass = totalMass;
 
-            var localBb = new BoundingBox(min.ToVector3() * (float)scaleMultiplyer, (max.ToVector3() + 1) * (float)scaleMultiplyer);
-            var aabbR = localBb.Transform(CubeGrid.PositionAndOrientation.Value.ToMatrix());
-            WorldAABB = new BoundingBox(aabbR.Min + CubeGrid.PositionAndOrientation.Value.Position, aabbR.Max + CubeGrid.PositionAndOrientation.Value.Position);
+            var quaternion = CubeGrid.PositionAndOrientation.Value.ToQuaternion();
+            var p1 = Vector3.Transform(min.ToVector3() * CubeGrid.GridSizeEnum.ToLength(), quaternion) + CubeGrid.PositionAndOrientation.Value.Position - (CubeGrid.GridSizeEnum.ToLength() / 2);
+            var p2 = Vector3.Transform((min.ToVector3() + Scale.ToVector3()) * CubeGrid.GridSizeEnum.ToLength(), quaternion) + CubeGrid.PositionAndOrientation.Value.Position - (CubeGrid.GridSizeEnum.ToLength() / 2);
+            WorldAABB = new BoundingBox(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
+            Center = WorldAABB.Center;
 
             DisplayName = CubeGrid.DisplayName;
 
