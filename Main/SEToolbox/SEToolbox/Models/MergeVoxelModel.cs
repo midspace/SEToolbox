@@ -3,7 +3,7 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Support;
 
-    public class VoxelMergeModel : BaseModel
+    public class MergeVoxelModel : BaseModel
     {
         #region Fields
 

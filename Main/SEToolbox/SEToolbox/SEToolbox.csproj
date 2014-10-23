@@ -172,7 +172,7 @@
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
     <Compile Include="Models\ChangeOwnerModel.cs" />
-    <Compile Include="Models\VoxelMergeModel.cs" />
+    <Compile Include="Models\MergeVoxelModel.cs" />
     <Compile Include="Models\OwnerModel.cs" />
     <Compile Include="Models\ProgressCancelModel.cs" />
     <Compile Include="Models\Import3DAsteroidModel.cs" />
@@ -291,7 +291,7 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
     <Compile Include="ViewModels\ChangeOwnerViewModel.cs" />
-    <Compile Include="ViewModels\VoxelMergeViewModel.cs" />
+    <Compile Include="ViewModels\MergeVoxelViewModel.cs" />
     <Compile Include="ViewModels\ProgressCancelViewModel.cs" />
     <Compile Include="ViewModels\Import3DAsteroidViewModel.cs" />
     <Compile Include="ViewModels\CubeItemViewModel.cs" />

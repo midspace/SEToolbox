@@ -104,6 +104,11 @@
             return new Vector3((float)size3D.X, (float)size3D.Y, (float)size3D.Z);
         }
 
+        public static Vector3 ToVector3(this System.Windows.Media.Media3D.Vector3D size3D)
+        {
+            return new Vector3((float)size3D.X, (float)size3D.Y, (float)size3D.Z);
+        }
+
         public static Quaternion ToQuaternion(this SerializableBlockOrientation blockOrientation)
         {
             var matrix = Matrix.CreateFromDir(Base6Directions.GetVector(blockOrientation.Forward), Base6Directions.GetVector(blockOrientation.Up));

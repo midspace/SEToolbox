@@ -1028,9 +1028,9 @@
 
         public void VoxelMergeExecuted()
         {
-            var model = new VoxelMergeModel();
+            var model = new MergeVoxelModel();
             model.Load(Selections[0].DataModel, Selections[1].DataModel);
-            var loadVm = new VoxelMergeViewModel(this, model);
+            var loadVm = new MergeVoxelViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowVoxelMerge>(this, loadVm);
             if (result == true)
             {
