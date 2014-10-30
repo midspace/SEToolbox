@@ -24,9 +24,9 @@
         private bool _isStockVoxel;
         private bool _isFileVoxel;
         private bool _isSphere;
-        private string _stockVoxel;
+        private GenerateVoxelDetailModel _stockVoxel;
         private MaterialSelectionModel _stockMaterial;
-        private List<string> _stockVoxelFileList;
+        private List<GenerateVoxelDetailModel> _voxelFileList;
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
         private int _sphereRadius;
         private int _sphereShellRadius;
@@ -37,7 +37,7 @@
 
         public ImportVoxelModel()
         {
-            _stockVoxelFileList = new List<string>();
+            _voxelFileList = new List<GenerateVoxelDetailModel>();
             _materialsCollection = new ObservableCollection<MaterialSelectionModel>
             {
                 new MaterialSelectionModel {Value = null, DisplayName = "No change"}
@@ -198,7 +198,7 @@
             }
         }
 
-        public string StockVoxel
+        public GenerateVoxelDetailModel StockVoxel
         {
             get { return _stockVoxel; }
 
@@ -217,16 +217,16 @@
             }
         }
 
-        public List<string> StockVoxelFileList
+        public List<GenerateVoxelDetailModel> VoxelFileList
         {
-            get { return _stockVoxelFileList; }
+            get { return _voxelFileList; }
 
             set
             {
-                if (value != _stockVoxelFileList)
+                if (value != _voxelFileList)
                 {
-                    _stockVoxelFileList = value;
-                    RaisePropertyChanged(() => StockVoxelFileList);
+                    _voxelFileList = value;
+                    RaisePropertyChanged(() => VoxelFileList);
                 }
             }
         }
@@ -287,12 +287,27 @@
             CharacterPosition = characterPosition;
             var filesV1 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V1FileExtension);
             var filesV2 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V2FileExtension);
-            var files = filesV1.Concat(filesV2).OrderBy(s => s);
+            var files = filesV1.Concat(filesV2);
+
+            if (!string.IsNullOrEmpty(GlobalSettings.Default.CustomVoxelPath) && Directory.Exists(GlobalSettings.Default.CustomVoxelPath))
+            {
+                files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V1FileExtension));
+                files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V2FileExtension));
+            }
 
             foreach (var file in files)
             {
-                StockVoxelFileList.Add(Path.GetFileName(file));
+                var voxel = new GenerateVoxelDetailModel
+                {
+                    Name = Path.GetFileNameWithoutExtension(file),
+                    SourceFilename = file,
+                    FileSize = new FileInfo(file).Length,
+                    Size = MyVoxelMap.LoadVoxelSize(file)
+                };
+                VoxelFileList.Add(voxel);
             }
+
+            VoxelFileList = VoxelFileList.OrderBy(s => s.Name).ToList();
         }
 
         #endregion

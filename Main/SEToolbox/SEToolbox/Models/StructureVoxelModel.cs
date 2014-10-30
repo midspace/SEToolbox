@@ -12,22 +12,22 @@
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
-    using VRageMath;
     using SEToolbox.Support;
+    using VRageMath;
 
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
     {
         #region fields
 
-        [NonSerialized]
-        private static readonly object Locker = new object();
-
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
         private BoundingBox _contentBounds;
         private long _voxCells;
+
+        [NonSerialized]
+        private BackgroundWorker _asyncWorker;
 
         [NonSerialized]
         private VoxelMaterialAssetModel _selectedMaterialAsset;
@@ -40,6 +40,9 @@
 
         [NonSerialized]
         private List<VoxelMaterialAssetModel> _editMaterialList;
+
+        [NonSerialized]
+        private bool _isLoadingAsync;
 
         #endregion
 
@@ -283,44 +286,54 @@
 
         public override void InitializeAsync()
         {
-            var worker = new BackgroundWorker();
-
-            worker.DoWork += delegate(object s, DoWorkEventArgs workArgs)
+            _asyncWorker = new BackgroundWorker { WorkerSupportsCancellation = true};
+            _asyncWorker.DoWork += delegate
             {
-                lock (Locker)
+                if (!_isLoadingAsync && (MaterialAssets == null || MaterialAssets.Count == 0))
                 {
-                    if (MaterialAssets == null || MaterialAssets.Count == 0)
+                    _isLoadingAsync = true;
+
+                    IsBusy = true;
+                    var filename = SourceVoxelFilepath;
+                    if (string.IsNullOrEmpty(filename))
+                        filename = VoxelFilepath;
+
+                    Dictionary<string, long> details;
+                    try
                     {
-                        IsBusy = true;
-                        var filename = SourceVoxelFilepath;
-                        if (string.IsNullOrEmpty(filename))
-                            filename = VoxelFilepath;
-
-                        Dictionary<string, long> details;
-                        try
-                        {
-                            details = MyVoxelMap.GetMaterialAssetDetails(filename);
-                        }
-                        catch
-                        {
-                            IsBusy = false;
-                            return;
-                        }
-                        var sum = details.Values.ToList().Sum();
-                        var list = new List<VoxelMaterialAssetModel>();
-
-                        foreach (var kvp in details)
-                        {
-                            list.Add(new VoxelMaterialAssetModel { MaterialName = kvp.Key, Volume = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
-                        }
-
-                        MaterialAssets = list;
-                        IsBusy = false;
+                        details = MyVoxelMap.GetMaterialAssetDetails(filename);
                     }
+                    catch
+                    {
+                        IsBusy = false;
+                        return;
+                    }
+                    var sum = details.Values.ToList().Sum();
+                    var list = new List<VoxelMaterialAssetModel>();
+
+                    foreach (var kvp in details)
+                    {
+                        list.Add(new VoxelMaterialAssetModel { MaterialName = kvp.Key, Volume = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
+                    }
+
+                    MaterialAssets = list;
+                    IsBusy = false;
+
+                    _isLoadingAsync = false;
                 }
             };
 
-            worker.RunWorkerAsync();
+            _asyncWorker.RunWorkerAsync();
+        }
+
+        public override void CancelAsync()
+        {
+            if (_asyncWorker != null && _asyncWorker.IsBusy && _asyncWorker.WorkerSupportsCancellation)
+            {
+                _asyncWorker.CancelAsync();
+
+                // TODO: kill file access to the Zip reader?
+            }
         }
 
         private void ReadVoxelDetails(string filename)

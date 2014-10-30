@@ -289,6 +289,25 @@
             }
         }
 
+        /// <summary>
+        /// Reads only the specified number of bytes to an array.
+        /// </summary>
+        /// <param name="sourceFilename"></param>
+        /// <param name="numberBytes"></param>
+        /// <returns></returns>
+        public static byte[] GZipUncompress(string sourceFilename, int numberBytes)
+        {
+            using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open))
+            {
+                using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
+                {
+                    var arr = new byte[numberBytes];
+                    zip.Read(arr, 0, numberBytes);
+                    return arr;
+                }
+            }
+        }
+
         public static void GZipCompress(string sourceFilename, string destinationFilename)
         {
             // Low memory, fast compress.

@@ -139,9 +139,9 @@
             }
         }
 
-        public ObservableCollection<GenerateVoxelDetailModel> StockVoxelFileList
+        public ObservableCollection<GenerateVoxelDetailModel> VoxelFileList
         {
-            get { return _dataModel.StockVoxelFileList; }
+            get { return _dataModel.VoxelFileList; }
         }
 
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
@@ -196,7 +196,7 @@
         public void AddRandomRowExecuted()
         {
             var filler = new AsteroidByteFiller();
-            var randomModel = (AsteroidByteFillProperties)filler.CreateRandom(VoxelCollection.Count + 1, _dataModel.BaseMaterial, MaterialsCollection, StockVoxelFileList);
+            var randomModel = (AsteroidByteFillProperties)filler.CreateRandom(VoxelCollection.Count + 1, _dataModel.BaseMaterial, MaterialsCollection, VoxelFileList);
 
             if (SelectedRow != null)
             {

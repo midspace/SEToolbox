@@ -112,7 +112,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <RadioButton Content="Alpha Level" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsAlphaLevel}"/>
-                            <TextBox Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" ToolTip="The alpha mask above this number to generate a block.">
+                            <TextBox Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" ToolTip="An alpha mask above this number will generate a block.">
                                 <TextBox.Text>
                                     <Binding Path="AlphaLevel" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                                         <Binding.ValidationRules>
@@ -121,8 +121,8 @@
                                     </Binding>
                                 </TextBox.Text>
                             </TextBox>
-                            <RadioButton Grid.Row="1" Content="Key Color" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsKeyColor}"/>
-                            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Padding="0" Command="{Binding ChangeKeyColorCommand}">
+                            <RadioButton Grid.Row="1" Grid.Column="0" Content="Key Color" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsKeyColor}"/>
+                            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Padding="0" Command="{Binding ChangeKeyColorCommand}" ToolTip="Change Key color">
                                 <Border Width="16" Height="16" BorderBrush="Black" BorderThickness="1">
                                     <Border.Background>
                                         <SolidColorBrush Color="{Binding KeyColor, Mode=OneWay}"/>

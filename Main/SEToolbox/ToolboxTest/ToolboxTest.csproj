@@ -112,10 +112,13 @@
     <None Include="TestAssets\algos.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestAssets\Arabian_Border_7.vox">
+    <None Include="TestAssets\Arabian_Border_7.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\asteroid0moon4.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestAssets\asteroid0moon4.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\buddha-fixed-bottom.stl">
@@ -127,10 +130,10 @@
     <None Include="TestAssets\cornell_box.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestAssets\cube_52x52x52.vox">
+    <None Include="TestAssets\cube_52x52x52.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestAssets\DeformedSphereWithHoles_64x128x64.vox">
+    <None Include="TestAssets\DeformedSphereWithHoles_64x128x64.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\LibertyStatue.obj">
@@ -142,7 +145,7 @@
     <None Include="TestAssets\SANDBOX_0_0_0_.sbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestAssets\small2_asteroids.vox">
+    <None Include="TestAssets\small2_asteroids.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\Sphere_Gold.3ds">
@@ -157,10 +160,10 @@
     <None Include="TestAssets\test.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestAssets\test_cube2x2x2.vox">
+    <None Include="TestAssets\test_cube2x2x2.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestAssets\test_cube_mixed_2x2x2.vox">
+    <None Include="TestAssets\test_cube_mixed_2x2x2.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\TwoSpheres.3ds">

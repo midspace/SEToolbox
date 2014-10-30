@@ -4,21 +4,20 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
-    using System.Windows.Media.Media3D;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Models.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
-    using SEToolbox.Models.Asteroids;
 
     [TestClass]
     public class VoxelTests
     {
         [TestMethod]
-        public void VoxelCompression()
+        public void VoxelCompressionV1()
         {
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
             const string fileExtracted = @".\TestOutput\asteroid0moon4.vox.bin";
@@ -51,8 +50,8 @@
             var materials = SpaceEngineersCore.Resources.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
-            const string fileNew = @".\TestOutput\asteroid0moon4_save.vox";
+            const string fileOriginal = @".\TestAssets\asteroid0moon4.vx2";
+            const string fileNew = @".\TestOutput\asteroid0moon4_save.vx2";
 
             var voxelMap = new MyVoxelMap();
 
@@ -62,8 +61,8 @@
             var lengthOriginal = new FileInfo(fileOriginal).Length;
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(9428, lengthOriginal, "File size must match.");
-            Assert.AreEqual(9428, lengthNew, "File size must match.");
+            Assert.AreEqual(9431, lengthOriginal, "File size must match.");
+            Assert.AreEqual(9431, lengthNew, "File size must match.");
         }
 
         [TestMethod]
@@ -73,7 +72,7 @@
             var materials = SpaceEngineersCore.Resources.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            const string fileOriginal = @".\TestAssets\DeformedSphereWithHoles_64x128x64.vox";
+            const string fileOriginal = @".\TestAssets\DeformedSphereWithHoles_64x128x64.vx2";
 
             var voxelMap = new MyVoxelMap();
 
@@ -119,16 +118,16 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
-            const string fileNew = @".\TestOutput\asteroid0moon4_gold.vox";
+            const string fileOriginal = @".\TestAssets\asteroid0moon4.vx2";
+            const string fileNew = @".\TestOutput\asteroid0moon4_gold.vx2";
 
             MyVoxelBuilder.ConvertAsteroid(fileOriginal, fileNew, stoneMaterial.Id.SubtypeId, goldMaterial.Id.SubtypeId);
 
             var lengthOriginal = new FileInfo(fileOriginal).Length;
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(9428, lengthOriginal, "Original file size must match.");
-            Assert.AreNotEqual(9428, lengthNew, "New file size must match.");
+            Assert.AreEqual(9431, lengthOriginal, "Original file size must match.");
+            Assert.AreNotEqual(9431, lengthNew, "New file size must match.");
         }
 
         [TestMethod]
@@ -141,7 +140,7 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
+            const string fileOriginal = @".\TestAssets\asteroid0moon4.vx2";
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Id.SubtypeId);
@@ -170,7 +169,7 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileOriginal = @".\TestAssets\test_cube2x2x2.vox";
+            const string fileOriginal = @".\TestAssets\test_cube2x2x2.vx2";
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Id.SubtypeId);
@@ -200,7 +199,7 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileOriginal = @".\TestAssets\test_cube_mixed_2x2x2.vox";
+            const string fileOriginal = @".\TestAssets\test_cube_mixed_2x2x2.vx2";
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Id.SubtypeId);
@@ -229,8 +228,8 @@
             var uraniumMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Uraninite_01"));
             Assert.IsNotNull(uraniumMaterial, "Uranium material should exist.");
 
-            const string fileOriginal = @".\TestAssets\Arabian_Border_7.vox";
-            const string fileNewVoxel = @".\TestOutput\Arabian_Border_7_mixed.vox";
+            const string fileOriginal = @".\TestAssets\Arabian_Border_7.vx2";
+            const string fileNewVoxel = @".\TestOutput\Arabian_Border_7_mixed.vx2";
 
             var voxelMap = new MyVoxelMap();
             voxelMap.Load(fileOriginal, materials[0].Id.SubtypeId);
@@ -283,7 +282,7 @@
             var materials = SpaceEngineersCore.Resources.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            var files = new[] { @".\TestAssets\Arabian_Border_7.vox", @".\TestAssets\cube_52x52x52.vox" };
+            var files = new[] { @".\TestAssets\Arabian_Border_7.vx2", @".\TestAssets\cube_52x52x52.vx2" };
 
             foreach (var fileOriginal in files)
             {
@@ -291,7 +290,7 @@
                 {
                     var fileNewVoxel =
                         Path.Combine(Path.GetDirectoryName(Path.GetFullPath(fileOriginal)),
-                            Path.GetFileNameWithoutExtension(fileOriginal) + "_" + material.Id.SubtypeId + ".vox").ToLower();
+                            Path.GetFileNameWithoutExtension(fileOriginal) + "_" + material.Id.SubtypeId + ".vx2").ToLower();
 
                     var voxelMap = new MyVoxelMap();
                     voxelMap.Load(fileOriginal, materials[0].Id.SubtypeId);
@@ -340,14 +339,14 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold.vox";
+            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold.vx2";
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, 8, 8, 8, goldMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, false, 0);
             voxelMap.Save(fileNew);
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(7360, lengthNew, "New file size must match.");
+            Assert.AreEqual(7365, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -376,14 +375,14 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold.vox";
+            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold.vx2";
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidCube(true, 8, 8, 8, goldMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, false, 0);
             voxelMap.Save(fileNew);
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(7360, lengthNew, "New file size must match.");
+            Assert.AreEqual(7365, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -412,14 +411,14 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestOutput\test_sphere_solid_7_gold.vox";
+            const string fileNew = @".\TestOutput\test_sphere_solid_7_gold.vx2";
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(false, 4, goldMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, false, 0);
             voxelMap.Save(fileNew);
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(7559, lengthNew, "New file size must match.");
+            Assert.AreEqual(7564, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -448,7 +447,7 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestOutput\test_sphere_solid_499_gold.vox";
+            const string fileNew = @".\TestOutput\test_sphere_solid_499_gold.vx2";
 
             var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, 250, goldMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, false, 0);
             voxelMap.Save(fileNew);
@@ -458,7 +457,7 @@
             var voxCells = voxelMap.SumVoxelCells();
             Assert.AreEqual(16589770849, voxCells, "Voxel cells must match.");
 
-            Assert.AreEqual(1213009, lengthNew, "New file size must match.");
+            Assert.AreEqual(1213016, lengthNew, "New file size must match.");
 
             Assert.AreEqual(512, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(512, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -481,7 +480,7 @@
             var materials = SpaceEngineersCore.Resources.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            const string fileNew = @".\TestOutput\test_spike_wall.vox";
+            const string fileNew = @".\TestOutput\test_spike_wall.vx2";
 
             var size = new Vector3I(1024, 1024, 64);
 
@@ -508,7 +507,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(52171, lengthNew, "New file size must match.");
+            Assert.AreEqual(52179, lengthNew, "New file size must match.");
 
             Assert.AreEqual(1024, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(1024, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -531,7 +530,7 @@
             var materials = SpaceEngineersCore.Resources.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            var fileNew = @".\TestOutput\test_spike_cube256.vox";
+            var fileNew = @".\TestOutput\test_spike_cube256.vx2";
 
             var length = 256;
             var min = 4;
@@ -579,7 +578,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(23465, lengthNew, "New file size must match.");
+            Assert.AreEqual(23475, lengthNew, "New file size must match.");
 
             Assert.AreEqual(256, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(256, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -630,7 +629,7 @@
         {
             SpaceEngineersCore.LoadDefinitions();
 
-            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps"), "*.vox");
+            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps"), "*.vx2");
 
             foreach (var filename in files)
             {
@@ -641,7 +640,7 @@
                 Assert.IsTrue(voxelMap.Size.Y > 0, "Voxel Size must be greater than zero.");
                 Assert.IsTrue(voxelMap.Size.Z > 0, "Voxel Size must be greater than zero.");
 
-                Debug.WriteLine(string.Format("Filename:\t{0}.vox", Path.GetFileName(filename)));
+                Debug.WriteLine(string.Format("Filename:\t{0}.vx2", Path.GetFileName(filename)));
                 Debug.WriteLine(string.Format("Bounding Size:\t{0} × {1} × {2} blocks", voxelMap.Size.X, voxelMap.Size.Y, voxelMap.Size.Z));
                 Debug.WriteLine(string.Format("Size:\t{0} m × {1} m × {2} m", voxelMap.BoundingContent.SizeInt().X + 1, voxelMap.BoundingContent.SizeInt().Y + 1, voxelMap.BoundingContent.SizeInt().Z + 1));
                 Debug.WriteLine(string.Format("Volume:\t{0:##,###.00} m³", (double)voxelMap.SumVoxelCells() / 255));
@@ -712,9 +711,21 @@
 
             // Strip the original material.
             //voxelMap.RemoveMaterial(stoneMaterial.Id.SubtypeId, null);
-            //const string fileNew = @".\TestOutput\randomSeedMaterialCube.vox";
+            //const string fileNew = @".\TestOutput\randomSeedMaterialCube.vx2";
             //voxelMap.Save(fileNew);
             //var lengthNew = new FileInfo(fileNew).Length;
+        }
+
+        [TestMethod]
+        public void FetchVoxelDetailPreview()
+        {
+            const string fileOriginal = @".\TestAssets\DeformedSphereWithHoles_64x128x64.vx2";
+            
+            var size = MyVoxelMap.LoadVoxelSize(fileOriginal);
+
+            Assert.AreEqual(64, size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(128, size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(64, size.Z, "Voxel Bounding size must match.");
         }
     }
 }
