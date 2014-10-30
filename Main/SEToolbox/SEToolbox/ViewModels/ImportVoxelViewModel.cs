@@ -165,15 +165,15 @@
             set { _dataModel.IsSphere = value; }
         }
 
-        public string StockVoxel
+        public GenerateVoxelDetailModel StockVoxel
         {
             get { return _dataModel.StockVoxel; }
             set { _dataModel.StockVoxel = value; }
         }
 
-        public List<string> StockVoxelFileList
+        public List<GenerateVoxelDetailModel> VoxelFileList
         {
-            get { return _dataModel.StockVoxelFileList; }
+            get { return _dataModel.VoxelFileList; }
         }
 
         public ObservableCollection<MaterialSelectionModel> MaterialsCollection
@@ -286,7 +286,7 @@
             string originalFile = null;
             if (IsStockVoxel)
             {
-                var stockfile = Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps", StockVoxel);
+                var stockfile = StockVoxel.SourceFilename;
 
                 if (StockMaterial == null || StockMaterial.Value == null)
                 {
@@ -305,7 +305,7 @@
                     SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
                     asteroid.Save(SourceFile);
 
-                    originalFile = StockVoxel;
+                    originalFile = StockVoxel.SourceFilename;
                     asteroidCenter = asteroid.BoundingContent.Center;
                     asteroidSize = asteroid.BoundingContent.SizeInt() + 1; // Content size
                 }

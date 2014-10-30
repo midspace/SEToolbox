@@ -19,7 +19,7 @@
 
         private static int _minimumRange = 400;
         private static int _maximumRange = 800;
-        private ObservableCollection<GenerateVoxelDetailModel> _stockVoxelFileList;
+        private ObservableCollection<GenerateVoxelDetailModel> _voxelFileList;
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
         private ObservableCollection<AsteroidByteFillProperties> _voxelCollection;
         private readonly List<int> _percentList;
@@ -34,7 +34,7 @@
 
         public GenerateVoxelFieldModel()
         {
-            _stockVoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>();
+            _voxelFileList = new ObservableCollection<GenerateVoxelDetailModel>();
             _materialsCollection = new ObservableCollection<MaterialSelectionModel>();
             _voxelCollection = new ObservableCollection<AsteroidByteFillProperties>();
             _percentList = new List<int>();
@@ -91,16 +91,16 @@
             }
         }
 
-        public ObservableCollection<GenerateVoxelDetailModel> StockVoxelFileList
+        public ObservableCollection<GenerateVoxelDetailModel> VoxelFileList
         {
-            get{return _stockVoxelFileList;}
+            get{return _voxelFileList;}
 
             set
             {
-                if (value != _stockVoxelFileList)
+                if (value != _voxelFileList)
                 {
-                    _stockVoxelFileList = value;
-                    RaisePropertyChanged(() => StockVoxelFileList);
+                    _voxelFileList = value;
+                    RaisePropertyChanged(() => VoxelFileList);
                 }
             }
         }
@@ -184,19 +184,28 @@
 
             var filesV1 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V1FileExtension);
             var filesV2 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V2FileExtension);
-            var files = filesV1.Concat(filesV2).OrderBy(s => s);
+            var files = filesV1.Concat(filesV2);
 
-            StockVoxelFileList.Clear();
+            if (!string.IsNullOrEmpty(GlobalSettings.Default.CustomVoxelPath) && Directory.Exists(GlobalSettings.Default.CustomVoxelPath))
+            {
+                files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V1FileExtension));
+                files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V2FileExtension));
+            }
+
+            var list = new List<GenerateVoxelDetailModel>();
             foreach (var file in files)
             {
                 var voxel = new GenerateVoxelDetailModel
                 {
                     Name = Path.GetFileNameWithoutExtension(file),
                     SourceFilename = file,
-                    FileSize = new FileInfo(file).Length
+                    FileSize = new FileInfo(file).Length,
+                    Size = MyVoxelMap.LoadVoxelSize(file)
                 };
-                StockVoxelFileList.Add(voxel);
+                list.Add(voxel);
             }
+
+            VoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>(list.OrderBy(s => s.Name));
 
             // Set up a default start.
             if (VoxelStore.Count == 0)
@@ -208,7 +217,7 @@
                 foreach (var item in VoxelStore)
                 {
                     var v1 = (AsteroidByteFillProperties)item.Clone();
-                    v1.VoxelFile = StockVoxelFileList.FirstOrDefault(v => v.Name == v1.VoxelFile.Name);
+                    v1.VoxelFile = VoxelFileList.FirstOrDefault(v => v.Name == v1.VoxelFile.Name);
                     v1.MainMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.MainMaterial.DisplayName);
                     v1.SecondMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.SecondMaterial.DisplayName);
                     v1.ThirdMaterial = MaterialsCollection.FirstOrDefault(v => v.DisplayName == v1.ThirdMaterial.DisplayName);
@@ -238,7 +247,7 @@
             return new AsteroidByteFillProperties
             {
                 Index = index,
-                VoxelFile = StockVoxelFileList[0],
+                VoxelFile = VoxelFileList[0],
                 MainMaterial = MaterialsCollection[0],
                 SecondMaterial = MaterialsCollection[0],
                 ThirdMaterial = MaterialsCollection[0],

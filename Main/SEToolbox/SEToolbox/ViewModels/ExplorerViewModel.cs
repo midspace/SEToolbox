@@ -1253,6 +1253,7 @@
 
                 if (canDelete)
                 {
+                    viewModel.DataModel.CancelAsync();
                     _dataModel.Structures.Remove(viewModel.DataModel);
                 }
             }

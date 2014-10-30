@@ -375,6 +375,11 @@
             // to be overridden.
         }
 
+        public virtual void CancelAsync()
+        {
+            // to be overridden.
+        }
+
         public virtual void RecalcPosition(Vector3 playerPosition)
         {
             PlayerDistance = (playerPosition - PositionAndOrientation.Value.Position.ToVector3()).Length();

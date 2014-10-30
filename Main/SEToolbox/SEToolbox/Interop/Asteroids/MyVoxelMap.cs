@@ -347,6 +347,47 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
+        #region LoadHeaderDetail
+
+        /// <summary>
+        /// Loads the header details only for .vx2 files, without having to decompress the entire file.
+        /// </summary>
+        /// <param name="filename"></param>
+        public static Vector3I LoadVoxelSize(string filename)
+        {
+            var version = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 2 : 1;
+            byte[] buffer;
+
+            try
+            {
+                if (version == 2)
+                    buffer = ZipTools.GZipUncompress(filename, 32);
+                else
+                    // TODO:
+                    return Vector3I.Zero;
+                //Uncompress(filename, tempfilename);
+
+                // only 29 bytes are required for the header, but I'll leave it for 32 for a bit of extra leeway.
+                using (var reader = new BinaryReader(new MemoryStream(buffer)))
+                {
+                    reader.ReadString();
+                    var fileVersion = reader.ReadByte();
+
+                    var sizeX = reader.ReadInt32();
+                    var sizeY = reader.ReadInt32();
+                    var sizeZ = reader.ReadInt32();
+
+                    return new Vector3I(sizeX, sizeY, sizeZ);
+                }
+            }
+            catch
+            {
+                return Vector3I.Zero;
+            }
+        }
+
+        #endregion
+
         #region Save
 
         /// <summary>

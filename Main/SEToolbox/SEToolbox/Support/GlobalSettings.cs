@@ -76,6 +76,11 @@
         /// </summary>
         public string IgnoreUpdateVersion { get; set; }
 
+        /// <summary>
+        /// Custom user specified path for Asteroids.
+        /// </summary>
+        public string CustomVoxelPath { get; set; }
+
         #endregion
 
         #region methods
@@ -94,6 +99,7 @@
             UpdateValue(key, "WindowHeight", WindowHeight);
             UpdateValue(key, "AlwaysCheckForUpdates", AlwaysCheckForUpdates);
             UpdateValue(key, "IgnoreUpdateVersion", IgnoreUpdateVersion);
+            UpdateValue(key, "CustomVoxelPath", CustomVoxelPath);
         }
 
         public void Load()
@@ -116,6 +122,7 @@
             WindowHeight = ReadValue<double?>(key, "WindowHeight", null);
             AlwaysCheckForUpdates = ReadValue<bool?>(key, "AlwaysCheckForUpdates", null);
             IgnoreUpdateVersion = ReadValue<string>(key, "IgnoreUpdateVersion", null);
+            CustomVoxelPath = ReadValue<string>(key, "CustomVoxelPath", null);
         }
 
         /// <summary>
@@ -133,6 +140,7 @@
             WindowWidth = null;
             AlwaysCheckForUpdates = null;
             IgnoreUpdateVersion = null;
+            CustomVoxelPath = null;
         }
 
         public static Version GetAppVersion(bool ignoreBuildRevision = false)
@@ -146,8 +154,8 @@
 
             if (ignoreBuildRevision)
                 return new Version(version.Major, version.Minor, 0, 0);
-            else
-                return version;
+            
+            return version;
         }
 
         #endregion

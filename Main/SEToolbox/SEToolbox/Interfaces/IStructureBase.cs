@@ -35,6 +35,8 @@
         bool IsBusy { get; set; }
 
         void InitializeAsync();
+        
+        void CancelAsync();
 
         float PositionX { get; set; }
 
