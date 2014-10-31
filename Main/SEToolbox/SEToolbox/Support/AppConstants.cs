@@ -157,4 +157,12 @@
             //{"zh", "flag_china"},
         };
     }
+
+
+    // TODO: Temporary enum, before creating a proper registrable fill types.
+    public enum AsteroidFillType
+    {
+        None,
+        ByteFiller
+    }
 }

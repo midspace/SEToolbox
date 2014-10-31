@@ -294,9 +294,7 @@
                     _isLoadingAsync = true;
 
                     IsBusy = true;
-                    var filename = SourceVoxelFilepath;
-                    if (string.IsNullOrEmpty(filename))
-                        filename = VoxelFilepath;
+                    var filename = SourceVoxelFilepath ?? VoxelFilepath;
 
                     Dictionary<string, long> details;
                     try
@@ -306,6 +304,7 @@
                     catch
                     {
                         IsBusy = false;
+                        _isLoadingAsync = false;
                         return;
                     }
                     var sum = details.Values.ToList().Sum();

@@ -101,6 +101,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crazy mix fill.
+        /// </summary>
+        public static string AsteroidFillType_ByteFiller {
+            get {
+                return ResourceManager.GetString("AsteroidFillType_ByteFiller", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No change.
+        /// </summary>
+        public static string AsteroidFillType_None {
+            get {
+                return ResourceManager.GetString("AsteroidFillType_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap battery {

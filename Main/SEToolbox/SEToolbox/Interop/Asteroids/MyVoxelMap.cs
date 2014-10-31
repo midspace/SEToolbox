@@ -16,6 +16,7 @@ namespace SEToolbox.Interop.Asteroids
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
+
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Support;
     using VRageMath;
@@ -207,7 +208,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             if (string.IsNullOrEmpty(defaultMaterial))
                 defaultMaterial = SpaceEngineersCore.Resources.GetDefaultMaterialName();
-           
+
             Load(filename, defaultMaterial, true);
         }
 
@@ -347,31 +348,25 @@ namespace SEToolbox.Interop.Asteroids
 
         #endregion
 
-        #region LoadHeaderDetail
+        #region LoadVoxelSize
 
         /// <summary>
-        /// Loads the header details only for .vx2 files, without having to decompress the entire file.
+        /// Loads the header details only for voxel files, without having to decompress the entire file.
         /// </summary>
         /// <param name="filename"></param>
         public static Vector3I LoadVoxelSize(string filename)
         {
             var version = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 2 : 1;
-            byte[] buffer;
 
             try
             {
-                if (version == 2)
-                    buffer = ZipTools.GZipUncompress(filename, 32);
-                else
-                    // TODO:
-                    return Vector3I.Zero;
-                //Uncompress(filename, tempfilename);
-
                 // only 29 bytes are required for the header, but I'll leave it for 32 for a bit of extra leeway.
+                var buffer = version == 2 ? ZipTools.GZipUncompress(filename, 32) : Uncompress(filename, 32);
+
                 using (var reader = new BinaryReader(new MemoryStream(buffer)))
                 {
                     reader.ReadString();
-                    var fileVersion = reader.ReadByte();
+                    reader.ReadByte(); // fileVersion
 
                     var sizeX = reader.ReadInt32();
                     var sizeY = reader.ReadInt32();
@@ -575,6 +570,23 @@ namespace SEToolbox.Interop.Asteroids
 
                         Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
                     }
+                }
+            }
+        }
+
+        public static byte[] Uncompress(string sourceFilename, int numberBytes)
+        {
+            using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read))
+            {
+                var reader = new BinaryReader(compressedByteStream);
+                // message Length.
+                reader.ReadInt32();
+
+                using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
+                {
+                    var arr = new byte[numberBytes];
+                    zip.Read(arr, 0, numberBytes);
+                    return arr;
                 }
             }
         }

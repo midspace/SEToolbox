@@ -40,7 +40,7 @@
 
         #endregion
 
-        #region Properties
+        #region command Properties
 
         public ICommand ClearRowsCommand
         {
@@ -71,6 +71,10 @@
         {
             get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
+
+        #endregion
+
+        #region properties
 
         /// <summary>
         /// Gets or sets the DialogResult of the View.  If True or False is passed, this initiates the Close().
@@ -170,6 +174,12 @@
         {
             get { return _dataModel.CenterPositionZ; }
             set { _dataModel.CenterPositionZ = value; }
+        }
+
+        public AsteroidFillType AsteroidFillType
+        {
+            get { return _dataModel.AsteroidFillType; }
+            set { _dataModel.AsteroidFillType = value; }
         }
 
         #endregion
@@ -289,11 +299,15 @@
                     continue;
 
                 var asteroid = new MyVoxelMap();
-
                 asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value, false);
 
-                var filler = new AsteroidByteFiller();
-                filler.FillAsteroid(asteroid, voxelDesign);
+                switch (AsteroidFillType)
+                {
+                    case AsteroidFillType.ByteFiller:
+                        var filler = new AsteroidByteFiller();
+                        filler.FillAsteroid(asteroid, voxelDesign);
+                        break;
+                }
 
                 var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
                 asteroid.Save(tempfilename);
