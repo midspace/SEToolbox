@@ -147,6 +147,12 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
+        <ObjectDataProvider x:Key="AsteroidFillTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="support:AsteroidFillType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
         <Style x:Key="{x:Type Image}" TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="Image.IsEnabled" Value="False">

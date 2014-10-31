@@ -33,7 +33,23 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <RadioButton Margin="0,0,4,0" Content="Stock" VerticalAlignment="Center" Name="uxInitialElement" IsChecked="{Binding IsStockVoxel}" />
-                <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding VoxelFileList}" SelectedValue="{Binding StockVoxel}" DisplayMemberPath="Name" />
+                <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding VoxelFileList}" SelectedValue="{Binding StockVoxel}" IsTextSearchEnabled="True">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} [{1}×{2}×{3}]">
+                                        <Binding Path="Name" Mode="OneWay"/>
+                                        <Binding Path="SizeX" Mode="OneWay"/>
+                                        <Binding Path="SizeY" Mode="OneWay"/>
+                                        <Binding Path="SizeZ" Mode="OneWay"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
                 <RadioButton Grid.Row="1" Grid.Column="0" Content="File" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
                     <TextBox Width="178" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="Must be valid Space Engineers Asteroid file."/>

@@ -27,10 +27,7 @@
 
         public int Index
         {
-            get
-            {
-                return _index;
-            }
+            get { return _index; }
 
             set
             {
@@ -44,10 +41,7 @@
 
         public int TotalPercent
         {
-            get
-            {
-                return _totalPercent;
-            }
+            get { return _totalPercent; }
 
             set
             {
@@ -61,10 +55,7 @@
 
         public GenerateVoxelDetailModel VoxelFile
         {
-            get
-            {
-                return _voxelFile;
-            }
+            get { return _voxelFile; }
 
             set
             {
@@ -78,10 +69,7 @@
 
         public MaterialSelectionModel MainMaterial
         {
-            get
-            {
-                return _mainMaterial;
-            }
+            get { return _mainMaterial; }
 
             set
             {
@@ -95,10 +83,7 @@
 
         public MaterialSelectionModel SecondMaterial
         {
-            get
-            {
-                return _secondMaterial;
-            }
+            get { return _secondMaterial; }
 
             set
             {
@@ -112,10 +97,7 @@
 
         public int SecondPercent
         {
-            get
-            {
-                return _secondPercent;
-            }
+            get { return _secondPercent; }
 
             set
             {
@@ -130,10 +112,7 @@
 
         public MaterialSelectionModel ThirdMaterial
         {
-            get
-            {
-                return _thirdMaterial;
-            }
+            get { return _thirdMaterial; }
 
             set
             {
@@ -147,10 +126,7 @@
 
         public int ThirdPercent
         {
-            get
-            {
-                return _thirdPercent;
-            }
+            get { return _thirdPercent; }
 
             set
             {
@@ -165,10 +141,7 @@
 
         public MaterialSelectionModel FourthMaterial
         {
-            get
-            {
-                return _fourthMaterial;
-            }
+            get { return _fourthMaterial; }
 
             set
             {
@@ -182,10 +155,7 @@
 
         public int FourthPercent
         {
-            get
-            {
-                return _fourthPercent;
-            }
+            get { return _fourthPercent; }
 
             set
             {
@@ -200,10 +170,7 @@
 
         public MaterialSelectionModel FifthMaterial
         {
-            get
-            {
-                return _fifthMaterial;
-            }
+            get { return _fifthMaterial; }
 
             set
             {
@@ -217,10 +184,7 @@
 
         public int FifthPercent
         {
-            get
-            {
-                return _fifthPercent;
-            }
+            get { return _fifthPercent; }
 
             set
             {
@@ -235,10 +199,7 @@
 
         public MaterialSelectionModel SixthMaterial
         {
-            get
-            {
-                return _sixthMaterial;
-            }
+            get { return _sixthMaterial; }
 
             set
             {
@@ -252,10 +213,7 @@
 
         public int SixthPercent
         {
-            get
-            {
-                return _sixthPercent;
-            }
+            get { return _sixthPercent; }
 
             set
             {
@@ -270,10 +228,7 @@
 
         public MaterialSelectionModel SeventhMaterial
         {
-            get
-            {
-                return _seventhMaterial;
-            }
+            get { return _seventhMaterial; }
 
             set
             {
@@ -287,10 +242,7 @@
 
         public int SeventhPercent
         {
-            get
-            {
-                return _seventhPercent;
-            }
+            get { return _seventhPercent; }
 
             set
             {

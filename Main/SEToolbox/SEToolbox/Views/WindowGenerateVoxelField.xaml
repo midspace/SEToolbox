@@ -7,9 +7,10 @@
         ResizeMode="CanResize"  ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow" 
         Title="Generate Asteroid Field" Height="380" Width="600" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         MinHeight="150" MinWidth="250"
-        commands:DialogCloser.DialogResult="{Binding CloseResult}" FocusManager.FocusedElement="{Binding ElementName=UxStartBox}">
+        commands:DialogCloser.DialogResult="{Binding CloseResult}" FocusManager.FocusedElement="{Binding ElementName=UxInitialElement}">
     <Window.Resources>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
     </Window.Resources>
     <Window.Cursor>
         <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
@@ -17,6 +18,7 @@
     <Grid>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="8">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -36,7 +38,7 @@
                 </Grid.ColumnDefinitions>
                 <Label Content="Center:" Grid.Column="0"/>
                 <Grid Grid.Column="1" Width="80">
-                    <TextBox ToolTip="X" x:Name="UxStartBox">
+                    <TextBox ToolTip="X" x:Name="UxInitialElement">
                         <TextBox.Text>
                             <Binding Path="CenterPositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                         </TextBox.Text>
@@ -81,13 +83,23 @@
                     </TextBox.Text>
                 </TextBox>
             </Grid>
-            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 8" HorizontalAlignment="Left">
-                <Button Content="_Clear" Margin="0,0,0,0" Width="50" Command="{Binding ClearRowsCommand}"/>
-                <Button Content="Add _Random" Margin="8,0,0,0" Width="80" Command="{Binding AddRandomRowCommand}"/>
-                <Button Content="_Add" Margin="8,0,0,0" Width="50" Command="{Binding AddRowCommand}"/>
-                <Button Content="_Delete" Margin="8,0,0,0" Width="50" Command="{Binding DeleteRowCommand}"/>
-            </StackPanel>
-            <controls:MyDataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
+
+            <Grid Grid.Row="1" Margin="0 0 0 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Fill type:"/>
+                <ComboBox Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource AsteroidFillTypeEnum}}" SelectedValue="{Binding AsteroidFillType}" ToolTip="">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+
+            <controls:MyDataGrid Grid.Row="3" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Index}" IsReadOnly="True" />
                     
@@ -106,6 +118,7 @@
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
+
                     <DataGridComboBoxColumn Header="Material" SelectedValueBinding="{Binding MainMaterial}" DisplayMemberPath="DisplayName">
                         <DataGridComboBoxColumn.ElementStyle>
                             <Style TargetType="ComboBox">
@@ -271,7 +284,13 @@
 
                 </DataGrid.Columns>
             </controls:MyDataGrid>
-            <StackPanel Grid.Row="3" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 8 0 0">
+            <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0 8" HorizontalAlignment="Left">
+                <Button Content="_Clear" Margin="0,0,0,0" Width="50" Command="{Binding ClearRowsCommand}"/>
+                <Button Content="Add _Random" Margin="8,0,0,0" Width="80" Command="{Binding AddRandomRowCommand}"/>
+                <Button Content="_Add" Margin="8,0,0,0" Width="50" Command="{Binding AddRowCommand}"/>
+                <Button Content="_Delete" Margin="8,0,0,0" Width="50" Command="{Binding DeleteRowCommand}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 8 0 0">
                 <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
                 <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
             </StackPanel>

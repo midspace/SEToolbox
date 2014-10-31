@@ -8,7 +8,7 @@
         Title="Create Item" Height="260" Width="320" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
-        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
+        FocusManager.FocusedElement="{Binding ElementName=UxInitialElement}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
@@ -37,7 +37,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Item:" VerticalAlignment="Center"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" Name="uxInitialElement"  VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding StockItemList}" SelectedValue="{Binding StockItem}" IsTextSearchEnabled="True">
+                <ComboBox Grid.Row="0" Grid.Column="1" Name="UxInitialElement" VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding StockItemList}" SelectedValue="{Binding StockItem}" IsTextSearchEnabled="True">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

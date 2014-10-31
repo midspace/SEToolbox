@@ -16,10 +16,7 @@
 
         public int Index
         {
-            get
-            {
-                return _index;
-            }
+            get { return _index; }
 
             set
             {
@@ -33,10 +30,7 @@
 
         public GenerateVoxelDetailModel VoxelFile
         {
-            get
-            {
-                return _voxelFile;
-            }
+            get { return _voxelFile; }
 
             set
             {
@@ -50,10 +44,7 @@
 
         public MaterialSelectionModel MainMaterial
         {
-            get
-            {
-                return _mainMaterial;
-            }
+            get { return _mainMaterial; }
 
             set
             {
@@ -67,10 +58,7 @@
 
         public MaterialSelectionModel FirstMaterial
         {
-            get
-            {
-                return _firstMaterial;
-            }
+            get { return _firstMaterial; }
 
             set
             {
@@ -85,36 +73,19 @@
 
         public int FirstVeins
         {
-            get
-            {
-                return _firstVeins;
-            }
-
-            set
-            {
-                _firstVeins = value;
-            }
+            get { return _firstVeins; }
+            set { _firstVeins = value; }
         }
 
         public int FirstRadius
         {
-            get
-            {
-                return _firstRadius;
-            }
-
-            set
-            {
-                _firstRadius = value;
-            }
+            get { return _firstRadius; }
+            set { _firstRadius = value; }
         }
 
         public MaterialSelectionModel SecondMaterial
         {
-            get
-            {
-                return _secondMaterial;
-            }
+            get { return _secondMaterial; }
 
             set
             {
@@ -128,36 +99,19 @@
 
         public int SecondVeins
         {
-            get
-            {
-                return _secondVeins;
-            }
-
-            set
-            {
-                _secondVeins = value;
-            }
+            get { return _secondVeins; }
+            set { _secondVeins = value; }
         }
 
         public int SecondRadius
         {
-            get
-            {
-                return _secondRadius;
-            }
-
-            set
-            {
-                _secondRadius = value;
-            }
+            get { return _secondRadius; }
+            set { _secondRadius = value; }
         }
 
         public MaterialSelectionModel ThirdMaterial
         {
-            get
-            {
-                return _thirdMaterial;
-            }
+            get { return _thirdMaterial; }
 
             set
             {
@@ -171,36 +125,19 @@
 
         public int ThirdVeins
         {
-            get
-            {
-                return _thirdVeins;
-            }
-
-            set
-            {
-                _thirdVeins = value;
-            }
+            get { return _thirdVeins; }
+            set { _thirdVeins = value; }
         }
 
         public int ThirdRadius
         {
-            get
-            {
-                return _thirdRadius;
-            }
-
-            set
-            {
-                _thirdRadius = value;
-            }
+            get { return _thirdRadius; }
+            set { _thirdRadius = value; }
         }
 
         public MaterialSelectionModel FourthMaterial
         {
-            get
-            {
-                return _fourthMaterial;
-            }
+            get { return _fourthMaterial; }
 
             set
             {
@@ -214,37 +151,19 @@
 
         public int FourthVeins
         {
-            get
-            {
-                return _fourthVeins;
-            }
-
-            set
-            {
-                _fourthVeins = value;
-            }
+            get { return _fourthVeins; }
+            set { _fourthVeins = value; }
         }
 
         public int FourthRadius
         {
-            get
-            {
-                return _fourthRadius;
-            }
-
-            set
-            {
-                _fourthRadius = value;
-            }
+            get { return _fourthRadius; }
+            set { _fourthRadius = value; }
         }
 
         public MaterialSelectionModel FifthMaterial
         {
-            get
-            {
-                return _fifthMaterial;
-            }
-
+            get { return _fifthMaterial; }
             set
             {
                 if (value != _fifthMaterial)
@@ -257,37 +176,19 @@
 
         public int FifthVeins
         {
-            get
-            {
-                return _fifthVeins;
-            }
-
-            set
-            {
-                _fifthVeins = value;
-            }
+            get { return _fifthVeins; }
+            set { _fifthVeins = value; }
         }
 
         public int FifthRadius
         {
-            get
-            {
-                return _fifthRadius;
-            }
-
-            set
-            {
-                _fifthRadius = value;
-            }
+            get { return _fifthRadius; }
+            set { _fifthRadius = value; }
         }
 
         public MaterialSelectionModel SixthMaterial
         {
-            get
-            {
-                return _sixthMaterial;
-            }
-
+            get { return _sixthMaterial; }
             set
             {
                 if (value != _sixthMaterial)
@@ -300,36 +201,19 @@
 
         public int SixthVeins
         {
-            get
-            {
-                return _sixthVeins;
-            }
-
-            set
-            {
-                _sixthVeins = value;
-            }
+            get { return _sixthVeins; }
+            set { _sixthVeins = value; }
         }
 
         public int SixthRadius
         {
-            get
-            {
-                return _sixthRadius;
-            }
-
-            set
-            {
-                _sixthRadius = value;
-            }
+            get { return _sixthRadius; }
+            set { _sixthRadius = value; }
         }
 
         public MaterialSelectionModel SeventhMaterial
         {
-            get
-            {
-                return _seventhMaterial;
-            }
+            get { return _seventhMaterial; }
 
             set
             {
@@ -344,28 +228,14 @@
 
         public int SeventhVeins
         {
-            get
-            {
-                return _seventhVeins;
-            }
-
-            set
-            {
-                _seventhVeins = value;
-            }
+            get { return _seventhVeins; }
+            set { _seventhVeins = value; }
         }
 
         public int SeventhRadius
         {
-            get
-            {
-                return _seventhRadius;
-            }
-
-            set
-            {
-                _seventhRadius = value;
-            }
+            get { return _seventhRadius; }
+            set { _seventhRadius = value; }
         }
 
         #endregion

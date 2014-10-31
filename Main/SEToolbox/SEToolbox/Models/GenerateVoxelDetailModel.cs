@@ -17,10 +17,7 @@
 
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get { return _name; }
 
             set
             {
@@ -34,10 +31,7 @@
 
         public string SourceFilename
         {
-            get
-            {
-                return _sourceFilename;
-            }
+            get { return _sourceFilename; }
 
             set
             {
@@ -51,10 +45,7 @@
 
         public string VoxelFilename
         {
-            get
-            {
-                return _voxelFilename;
-            }
+            get { return _voxelFilename; }
 
             set
             {
@@ -68,10 +59,7 @@
 
         public Vector3I Size
         {
-            get
-            {
-                return _size;
-            }
+            get { return _size; }
 
             set
             {
@@ -83,8 +71,29 @@
             }
         }
 
+        public int SizeX
+        {
+            get { return _size.X; }
+        }
+
+        public int SizeY
+        {
+            get { return _size.Y; }
+        }
+
+        public int SizeZ
+        {
+            get { return _size.Z; }
+        }
+
         public long FileSize { get; set; }
 
         #endregion
+
+        // To allow text searching in ComboBox.
+        public override string ToString()
+        {
+            return _name;
+        }
     }
 }

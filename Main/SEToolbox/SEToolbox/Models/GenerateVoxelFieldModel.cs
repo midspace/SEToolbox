@@ -23,10 +23,11 @@
         private readonly ObservableCollection<MaterialSelectionModel> _materialsCollection;
         private ObservableCollection<AsteroidByteFillProperties> _voxelCollection;
         private readonly List<int> _percentList;
-        private static bool _positionSet;
+        private static bool _isInitialValueSet;
         private static float _centerPositionX;
         private static float _centerPositionY;
         private static float _centerPositionZ;
+        private static AsteroidFillType _asteroidFillType;
 
         #endregion
 
@@ -159,19 +160,34 @@
             }
         }
 
+        public AsteroidFillType AsteroidFillType
+        {
+            get { return _asteroidFillType; }
+
+            set
+            {
+                if (value != _asteroidFillType)
+                {
+                    _asteroidFillType = value;
+                    RaisePropertyChanged(() => AsteroidFillType);
+                }
+            }
+        }
+
         #endregion
 
         #region methods
 
         public void Load(MyPositionAndOrientation characterPosition)
         {
-            if (!_positionSet)
+            if (!_isInitialValueSet)
             {
                 // only set the position first time opened and cache.
                 CenterPositionX = characterPosition.Position.X;
                 CenterPositionY = characterPosition.Position.Y;
                 CenterPositionZ = characterPosition.Position.Z;
-                _positionSet = true;
+                AsteroidFillType = AsteroidFillType.ByteFiller;
+                _isInitialValueSet = true;
             }
 
             MaterialsCollection.Clear();
@@ -192,18 +208,13 @@
                 files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V2FileExtension));
             }
 
-            var list = new List<GenerateVoxelDetailModel>();
-            foreach (var file in files)
+            var list = files.Select(file => new GenerateVoxelDetailModel
             {
-                var voxel = new GenerateVoxelDetailModel
-                {
-                    Name = Path.GetFileNameWithoutExtension(file),
-                    SourceFilename = file,
-                    FileSize = new FileInfo(file).Length,
-                    Size = MyVoxelMap.LoadVoxelSize(file)
-                };
-                list.Add(voxel);
-            }
+                Name = Path.GetFileNameWithoutExtension(file),
+                SourceFilename = file,
+                FileSize = new FileInfo(file).Length,
+                Size = MyVoxelMap.LoadVoxelSize(file)
+            });
 
             VoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>(list.OrderBy(s => s.Name));
 

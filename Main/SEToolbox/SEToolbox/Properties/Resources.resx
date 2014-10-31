@@ -687,4 +687,10 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="VoxelMergeType_UnionMaterialRightToLeft" xml:space="preserve">
     <value>Union Material Right to Left</value>
   </data>
+  <data name="AsteroidFillType_ByteFiller" xml:space="preserve">
+    <value>Crazy mix fill</value>
+  </data>
+  <data name="AsteroidFillType_None" xml:space="preserve">
+    <value>No change</value>
+  </data>
 </root>
