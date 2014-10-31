@@ -298,19 +298,26 @@
                 if (string.IsNullOrEmpty(voxelDesign.VoxelFile.SourceFilename) || !MyVoxelMap.IsVoxelMapFile(voxelDesign.VoxelFile.SourceFilename))
                     continue;
 
+
                 var asteroid = new MyVoxelMap();
-                asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value, false);
+                string tempSourcefilename = null;
 
                 switch (AsteroidFillType)
                 {
+                    case Support.AsteroidFillType.None:
+                        asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value, false);
+                        tempSourcefilename = voxelDesign.VoxelFile.SourceFilename;
+                        break;
+
                     case AsteroidFillType.ByteFiller:
+                        asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value, false);
                         var filler = new AsteroidByteFiller();
                         filler.FillAsteroid(asteroid, voxelDesign);
+                        tempSourcefilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
+                        asteroid.Save(tempSourcefilename);
                         break;
                 }
 
-                var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
-                asteroid.Save(tempfilename);
 
                 // automatically number all files, and check for duplicate filenames.
                 var filename = MainViewModel.CreateUniqueVoxelStorageName(voxelDesign.VoxelFile.Name + MyVoxelMap.V2FileExtension, entities.ToArray());
@@ -344,7 +351,7 @@
                 };
 
                 entities.Add(entity);
-                sourceFiles.Add(tempfilename);
+                sourceFiles.Add(tempSourcefilename);
             }
 
             sourceVoxelFiles = sourceFiles.ToArray();
