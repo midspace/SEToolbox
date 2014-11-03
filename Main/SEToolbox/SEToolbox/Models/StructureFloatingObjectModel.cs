@@ -19,7 +19,7 @@
         private double? _volume;
 
         [NonSerialized]
-        private double? _units;
+        private decimal? _units;
 
         #endregion
 
@@ -80,7 +80,7 @@
         }
 
         [XmlIgnore]
-        public double? Units
+        public decimal? Units
         {
             get
             {
@@ -123,6 +123,7 @@
             if (FloatingObject.Item.Content is MyObjectBuilder_Ore)
             {
                 DisplayName = friendlyName;
+                Units = (decimal)FloatingObject.Item.Amount;
                 Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
                 Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
@@ -130,6 +131,7 @@
             else if (FloatingObject.Item.Content is MyObjectBuilder_Ingot)
             {
                 DisplayName = friendlyName;
+                Units = (decimal)FloatingObject.Item.Amount;
                 Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
                 Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
@@ -138,7 +140,7 @@
             {
                 DisplayName = friendlyName;
                 Description = string.Format("x {0}", FloatingObject.Item.Amount);
-                Units = (Double)FloatingObject.Item.Amount;
+                Units = (decimal)FloatingObject.Item.Amount;
                 Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
                 Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
             }
@@ -146,7 +148,7 @@
             {
                 DisplayName = friendlyName;
                 Description = string.Format("x {0}", FloatingObject.Item.Amount);
-                Units = (Double)FloatingObject.Item.Amount;
+                Units = (decimal)FloatingObject.Item.Amount;
                 Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
                 Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
             }
