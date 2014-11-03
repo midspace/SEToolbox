@@ -532,6 +532,7 @@
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                StorageName = Path.GetFileNameWithoutExtension(filename)
             };
 
             double multiplier;

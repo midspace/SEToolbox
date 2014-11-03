@@ -365,8 +365,17 @@ namespace SEToolbox.Interop.Asteroids
 
                 using (var reader = new BinaryReader(new MemoryStream(buffer)))
                 {
-                    reader.ReadString();
-                    reader.ReadByte(); // fileVersion
+                    switch (version)
+                    {
+                        case 2:
+                            // cell tag header
+                            reader.ReadString();
+                            reader.ReadByte();// fileVersion
+                            break;
+                        default:
+                            reader.ReadInt32();// fileVersion
+                            break;
+                    }
 
                     var sizeX = reader.ReadInt32();
                     var sizeY = reader.ReadInt32();
