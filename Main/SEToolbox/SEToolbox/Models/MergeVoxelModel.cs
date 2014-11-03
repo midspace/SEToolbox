@@ -14,6 +14,7 @@
         private VoxelMergeType _voxelMergeType;
         private bool _isBusy;
         private string _mergeFileName;
+        private bool _removeOriginalAsteroids;
 
         #endregion
 
@@ -123,6 +124,20 @@
                 {
                     _mergeFileName = value;
                     RaisePropertyChanged(() => MergeFileName);
+                }
+            }
+        }
+
+        public bool RemoveOriginalAsteroids
+        {
+            get { return _removeOriginalAsteroids; }
+
+            set
+            {
+                if (value != _removeOriginalAsteroids)
+                {
+                    _removeOriginalAsteroids = value;
+                    RaisePropertyChanged(() => RemoveOriginalAsteroids);
                 }
             }
         }

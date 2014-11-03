@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Asteroid Merge" Height="380" Width="460" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="Asteroid Merge" Height="400" Width="460" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=UxStartBox}">
@@ -35,6 +35,8 @@
                         <RowDefinition/>
                         <RowDefinition Height="4"/>
                         <RowDefinition/>
+                        <RowDefinition Height="4"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Text="Action:" VerticalAlignment="Center" Margin="0,0,4,0"/>
                     <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource VoxelMergeTypeEnum}}" SelectedValue="{Binding VoxelMergeType}" Name="UxStartBox">
@@ -46,6 +48,7 @@
                     </ComboBox>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="New Filename:" VerticalAlignment="Center" Margin="0,0,4,0"/>
                     <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Text="{Binding MergeFileName}"/>
+                    <CheckBox Grid.Row="4" Grid.Column="1" Content="Remove original asteroids" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding RemoveOriginalAsteroids}" />
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
