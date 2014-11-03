@@ -558,8 +558,8 @@
         private bool ExtractStationIntersect(bool tightIntersection)
         {
             // Make a shortlist of station Entities in the bounding box of the asteroid.
-            var bounds = new BoundingBox(DataModel.ContentBounds.Min + DataModel.PositionAndOrientation.Value.Position, DataModel.ContentBounds.Max + DataModel.PositionAndOrientation.Value.Position);
-            var stations = MainViewModel.GetIntersectingEntities(bounds).Where(e => e.ClassType == ClassType.Station).Cast<StructureCubeGridModel>().ToList();
+            var asteroidWorldAABB = new BoundingBox(DataModel.ContentBounds.Min + DataModel.PositionAndOrientation.Value.Position, DataModel.ContentBounds.Max + DataModel.PositionAndOrientation.Value.Position);
+            var stations = MainViewModel.GetIntersectingEntities(asteroidWorldAABB).Where(e => e.ClassType == ClassType.Station).Cast<StructureCubeGridModel>().ToList();
 
             if (stations.Count == 0)
                 return false;
@@ -569,61 +569,54 @@
             var asteroid = new MyVoxelMap();
             asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
-            // TODO: need progressbar.
+            var total = stations.Sum(s => s.CubeGrid.CubeBlocks.Count);
+            MainViewModel.ResetProgress(0, total);
 
-            Vector3I coords;
-            for (coords.Z = 0; coords.Z < asteroid.Size.Z; coords.Z++)
+            // Search through station entities cubes for intersection with this voxel.
+            foreach (var station in stations)
             {
-                for (coords.Y = 0; coords.Y < asteroid.Size.Y; coords.Y++)
+                var quaternion = station.PositionAndOrientation.Value.ToQuaternion();
+
+                foreach (var cube in station.CubeGrid.CubeBlocks)
                 {
-                    for (coords.X = 0; coords.X < asteroid.Size.X; coords.X++)
+                    MainViewModel.IncrementProgress();
+
+                    var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, station.CubeGrid.GridSizeEnum, cube.SubtypeName);
+
+                    var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
+                    var min = cube.Min.ToVector3() * station.CubeGrid.GridSizeEnum.ToLength();
+                    var max = (cube.Min + orientSize) * station.CubeGrid.GridSizeEnum.ToLength();
+                    var p1 = Vector3.Transform(min, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
+                    var p2 = Vector3.Transform(max, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
+                    var cubeWorldAABB = new BoundingBox(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
+
+                    // find worldAABB of block.
+                    if (asteroidWorldAABB.Intersects(cubeWorldAABB))
                     {
-                        byte volume;
-                        string cellMaterial;
-                        asteroid.GetVoxelMaterialContent(ref coords, out cellMaterial, out volume);
+                        var pointMin = new Vector3I(cubeWorldAABB.Min - DataModel.PositionAndOrientation.Value.Position);
+                        var pointMax = new Vector3I(cubeWorldAABB.Max - DataModel.PositionAndOrientation.Value.Position);
 
-                        if (volume > 0)
+                        Vector3I coords;
+                        for (coords.Z = pointMin.Z; coords.Z <= pointMax.Z; coords.Z++)
                         {
-                            // Get worldAABB of cell.
-                            var point = this.PositionAndOrientation.Value.Position.ToVector3() + coords;
-                            var bb = new BoundingBox(point, point + 1);
-
-                            var occupiedByGrid = false;
-
-                            // Search through station entities cubes for intersection with this voxel cell.
-                            foreach (var station in stations)
+                            for (coords.Y = pointMin.Y; coords.Y <= pointMax.Y; coords.Y++)
                             {
-                                var quaternion = station.PositionAndOrientation.Value.ToQuaternion();
-
-                                foreach (var cube in station.CubeGrid.CubeBlocks)
+                                for (coords.X = pointMin.X; coords.X <= pointMax.X; coords.X++)
                                 {
-                                    var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, station.CubeGrid.GridSizeEnum, cube.SubtypeName);
-
-                                    var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
-                                    var min = cube.Min.ToVector3() * station.CubeGrid.GridSizeEnum.ToLength();
-                                    var max = (cube.Min + orientSize) * station.CubeGrid.GridSizeEnum.ToLength();
-                                    var p1 = Vector3.Transform(min, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
-                                    var p2 = Vector3.Transform(max, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
-                                    var nb = new BoundingBox(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
-
-                                    // TODO: offset is wrong.
-
-                                    // find worldAABB of block.
-                                    if (bb.Intersects(nb))
+                                    if (coords.X >= 0 && coords.Y >= 0 && coords.Z >= 0 && coords.X < asteroid.Size.X && coords.Y < asteroid.Size.Y && coords.Z < asteroid.Size.Z)
                                     {
-                                        occupiedByGrid = true;
-                                        modified = true;
-                                        break;
+                                        asteroid.SetVoxelContent(0, ref coords);
                                     }
                                 }
                             }
-
-                            if (occupiedByGrid)
-                                asteroid.SetVoxelContent(0, ref coords);
                         }
+                    
+                        modified = true;
                     }
                 }
             }
+
+            MainViewModel.ClearProgress();
 
             if (modified)
             {
