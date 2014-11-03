@@ -297,6 +297,11 @@
             get { return new DelegateCommand(RepairShipsExecuted, RepairShipsCanExecute); }
         }
 
+        public ICommand ResetVelocityCommand
+        {
+            get { return new DelegateCommand(ResetVelocityExecuted, ResetVelocityCanExecute); }
+        }
+
         #endregion
 
         #region Properties
@@ -1056,6 +1061,18 @@
             IsBusy = false;
         }
 
+        public bool ResetVelocityCanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void ResetVelocityExecuted()
+        {
+            IsBusy = true;
+            StopShips(Selections);
+            IsBusy = false;
+        }
+
         #endregion
 
         #region Test command methods
@@ -1328,6 +1345,19 @@
                     || structure.DataModel.ClassType == ClassType.Station)
                 {
                     ((StructureCubeGridViewModel)structure).RepairObjectExecuted();
+                }
+            }
+        }
+
+        private void StopShips(IEnumerable<IStructureViewBase> structures)
+        {
+            foreach (var structure in structures)
+            {
+                if (structure.DataModel.ClassType == ClassType.SmallShip
+                    || structure.DataModel.ClassType == ClassType.LargeShip
+                    || structure.DataModel.ClassType == ClassType.Station)
+                {
+                    ((StructureCubeGridViewModel)structure).ResetVelocityExecuted();
                 }
             }
         }
