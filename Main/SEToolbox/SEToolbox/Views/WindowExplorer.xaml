@@ -170,6 +170,11 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="Reset all Speed" Command="{Binding ResetVelocityCommand}" ToolTip="Set Linear and Rotation Velocity to zero (0).">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Command="{Binding RejoinShipCommand}" Header="Rejoin Ship" ToolTip="Rejoins 2 parts from a broken ship back togeather">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=first_aid}"/>
