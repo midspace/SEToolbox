@@ -65,15 +65,23 @@
     </Directory>
 
     <!-- UI -->
-    <UIRef Id="WixUI_InstallDir" />
     <!--<UIRef Id="WixUI_CustomInstallDir" />-->
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_Common" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+    </UI>
 
-    <UIRef Id="WixUI_ErrorProgressText" />
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER"/>
     <Property Id="ARPPRODUCTICON" Value="APPLICATIONICON" />
     <Property Id="APPLICATIONFOLDER">
       <RegistrySearch Id='SEToolboxRegistry' Type='raw' Root='HKLM' Key='Software\MidSpace\SEToolbox' Name='InstallDir' />
     </Property>
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Application when finished" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+    <Property Id="WixShellExecTarget" Value="[#file184705D6F44643D48E157FDD3FBF37D7]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
 
     <!-- All Files, except the .config -->
     <ComponentGroup Id="ProductComponents" Directory="APPLICATIONFOLDER">
@@ -166,8 +174,6 @@
   </Product>
 
   <Fragment>
-
-
     <UI Id="WixUI_CustomInstallDir">
       <!--<Dialog Id="ProductServerDlg" Width="370" Height="270" Title="!(loc.ProductServerDlg_Title)">
         <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
@@ -245,8 +251,5 @@
 
       <Property Id="ARPNOMODIFY" Value="1" />
     </UI>
-
-    <UIRef Id="WixUI_Common" />
-
   </Fragment>
 </Wix>
