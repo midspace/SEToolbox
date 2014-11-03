@@ -40,7 +40,7 @@
             set { DataModel.Volume = value; }
         }
 
-        public double? Units
+        public decimal? Units
         {
             get { return DataModel.Units; }
             set { DataModel.Units = value; }
