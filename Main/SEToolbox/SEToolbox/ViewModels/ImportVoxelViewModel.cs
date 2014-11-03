@@ -334,7 +334,7 @@
                 else
                     material = SpaceEngineersCore.Resources.GetDefaultMaterialName();
 
-                originalFile = string.Format("sphere_{0}_{1}_{2}_{3}", material.ToLowerInvariant(), SphereRadius, SphereShellRadius, MyVoxelMap.V2FileExtension);
+                originalFile = string.Format("sphere_{0}_{1}_{2}{3}", material.ToLowerInvariant(), SphereRadius, SphereShellRadius, MyVoxelMap.V2FileExtension);
 
                 var asteroid = MyVoxelBuilder.BuildAsteroidSphere(SphereRadius > 32, SphereRadius, material, material, SphereShellRadius != 0, SphereShellRadius);
                 // TODO: progress bar.
@@ -364,7 +364,7 @@
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                Filename = Filename,
+                StorageName = Path.GetFileNameWithoutExtension(Filename),
                 PositionAndOrientation = new MyPositionAndOrientation
                 {
                     Position = Position.ToVector3() - asteroidCenter,

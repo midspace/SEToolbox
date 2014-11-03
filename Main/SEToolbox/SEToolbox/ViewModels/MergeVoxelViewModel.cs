@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using System.IO;
     using System.Windows.Input;
 
     using Sandbox.Common.ObjectBuilders;
@@ -228,7 +229,7 @@
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                Filename = filename,
+                StorageName = Path.GetFileNameWithoutExtension(filename),
                 PositionAndOrientation = new MyPositionAndOrientation
                 {
                     Position = position,

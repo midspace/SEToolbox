@@ -717,14 +717,26 @@
         }
 
         [TestMethod]
-        public void FetchVoxelDetailPreview()
+        public void FetchVoxelV2DetailPreview()
         {
             const string fileOriginal = @".\TestAssets\DeformedSphereWithHoles_64x128x64.vx2";
-            
+
             var size = MyVoxelMap.LoadVoxelSize(fileOriginal);
 
             Assert.AreEqual(64, size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(128, size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(64, size.Z, "Voxel Bounding size must match.");
+        }
+
+        [TestMethod]
+        public void FetchVoxelV1DetailPreview()
+        {
+            const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
+            
+            var size = MyVoxelMap.LoadVoxelSize(fileOriginal);
+
+            Assert.AreEqual(64, size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(64, size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(64, size.Z, "Voxel Bounding size must match.");
         }
     }

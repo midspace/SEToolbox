@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
     using System.Windows.Input;
 
@@ -341,7 +342,7 @@
                 {
                     EntityId = SpaceEngineersApi.GenerateEntityId(),
                     PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                    Filename = filename,
+                    StorageName = Path.GetFileNameWithoutExtension(filename),
                     PositionAndOrientation = new MyPositionAndOrientation
                     {
                         Position = position,
