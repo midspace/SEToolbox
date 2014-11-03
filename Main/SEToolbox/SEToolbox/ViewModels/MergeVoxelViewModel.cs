@@ -113,6 +113,12 @@
             set { _dataModel.MergeFileName = value; }
         }
 
+        public bool RemoveOriginalAsteroids
+        {
+            get { return _dataModel.RemoveOriginalAsteroids; }
+            set { _dataModel.RemoveOriginalAsteroids = value; }
+        }
+
         #endregion
 
         #region methods

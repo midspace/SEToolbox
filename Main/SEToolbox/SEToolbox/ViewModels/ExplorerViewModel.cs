@@ -1026,15 +1026,17 @@
 
         public bool VoxelMergeCanExecute()
         {
-              return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
-                  ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel) ||
-                  (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel));
+            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+                ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel) ||
+                (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel));
         }
 
         public void VoxelMergeExecuted()
         {
             var model = new MergeVoxelModel();
-            model.Load(Selections[0].DataModel, Selections[1].DataModel);
+            var item1 = Selections[0];
+            var item2 = Selections[1];
+            model.Load(item1.DataModel, item2.DataModel);
             var loadVm = new MergeVoxelViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowVoxelMerge>(this, loadVm);
             if (result == true)
@@ -1045,6 +1047,12 @@
                 ((StructureVoxelModel)structure).SourceVoxelFilepath = loadVm.SourceFile; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
                 if (_preSelectedStructure != null)
                     SelectedStructure = _preSelectedStructure;
+
+                if (loadVm.RemoveOriginalAsteroids)
+                {
+                    DeleteModel(item1, item2);
+                }
+
                 IsBusy = false;
             }
         }
@@ -1668,67 +1676,32 @@
 
         public bool ShowProgress
         {
-            get
-            {
-                return _dataModel.ShowProgress;
-            }
-
-            set
-            {
-                _dataModel.ShowProgress = value;
-            }
+            get { return _dataModel.ShowProgress; }
+            set { _dataModel.ShowProgress = value; }
         }
 
         public double Progress
         {
-            get
-            {
-                return _dataModel.Progress;
-            }
-
-            set
-            {
-                _dataModel.Progress = value;
-            }
+            get { return _dataModel.Progress; }
+            set { _dataModel.Progress = value; }
         }
 
         public TaskbarItemProgressState ProgressState
         {
-            get
-            {
-                return _dataModel.ProgressState;
-            }
-
-            set
-            {
-                _dataModel.ProgressState = value;
-            }
+            get { return _dataModel.ProgressState; }
+            set { _dataModel.ProgressState = value; }
         }
 
         public double ProgressValue
         {
-            get
-            {
-                return _dataModel.ProgressValue;
-            }
-
-            set
-            {
-                _dataModel.ProgressValue = value;
-            }
+            get { return _dataModel.ProgressValue; }
+            set { _dataModel.ProgressValue = value; }
         }
 
         public double MaximumProgress
         {
-            get
-            {
-                return _dataModel.MaximumProgress;
-            }
-
-            set
-            {
-                _dataModel.MaximumProgress = value;
-            }
+            get { return _dataModel.MaximumProgress; }
+            set { _dataModel.MaximumProgress = value; }
         }
 
         public void ResetProgress(double initial, double maximumProgress)
@@ -1756,15 +1729,8 @@
         /// </summary>
         public int[] CreativeModeColors
         {
-            get
-            {
-                return _dataModel.CreativeModeColors;
-            }
-
-            set
-            {
-                _dataModel.CreativeModeColors = value;
-            }
+            get { return _dataModel.CreativeModeColors; }
+            set { _dataModel.CreativeModeColors = value; }
         }
 
         #endregion

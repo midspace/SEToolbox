@@ -90,10 +90,7 @@
         /// </summary>
         public bool? CloseResult
         {
-            get
-            {
-                return _closeResult;
-            }
+            get { return _closeResult; }
 
             set
             {
@@ -107,15 +104,8 @@
         /// </summary>
         public bool IsActive
         {
-            get
-            {
-                return _dataModel.IsActive;
-            }
-
-            set
-            {
-                _dataModel.IsActive = value;
-            }
+            get { return _dataModel.IsActive; }
+            set { _dataModel.IsActive = value; }
         }
 
         /// <summary>
@@ -123,80 +113,38 @@
         /// </summary>
         public bool IsBusy
         {
-            get
-            {
-                return _dataModel.IsBusy;
-            }
-
-            set
-            {
-                _dataModel.IsBusy = value;
-            }
+            get { return _dataModel.IsBusy; }
+            set { _dataModel.IsBusy = value; }
         }
 
         public bool IsReportReady
         {
-            get
-            {
-                return _dataModel.IsReportReady;
-            }
-
-            set
-            {
-                _dataModel.IsReportReady = value;
-            }
+            get { return _dataModel.IsReportReady; }
+            set { _dataModel.IsReportReady = value; }
         }
 
         public string ReportHtml
         {
-            get
-            {
-                return _dataModel.ReportHtml;
-            }
-
-            set
-            {
-                _dataModel.ReportHtml = value;
-            }
+            get { return _dataModel.ReportHtml; }
+            set { _dataModel.ReportHtml = value; }
         }
 
         public bool ShowProgress
         {
-            get
-            {
-                return _dataModel.ShowProgress;
-            }
-
-            set
-            {
-                _dataModel.ShowProgress = value;
-            }
+            get { return _dataModel.ShowProgress; }
+            set { _dataModel.ShowProgress = value; }
         }
 
         public double Progress
         {
-            get
-            {
-                return _dataModel.Progress;
-            }
-
-            set
-            {
-                _dataModel.Progress = value;
-            }
+            get { return _dataModel.Progress; }
+            set { _dataModel.Progress = value; }
         }
 
         public double MaximumProgress
         {
-            get
-            {
-                return _dataModel.MaximumProgress;
-            }
-
-            set
-            {
-                _dataModel.MaximumProgress = value;
-            }
+            get { return _dataModel.MaximumProgress; }
+            set { _dataModel.MaximumProgress = value; }
         }
 
         #endregion
