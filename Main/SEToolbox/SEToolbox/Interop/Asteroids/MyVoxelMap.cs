@@ -16,7 +16,8 @@ namespace SEToolbox.Interop.Asteroids
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
-
+    using System.Runtime.InteropServices;
+    using System.Linq;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Support;
     using VRageMath;
@@ -215,9 +216,9 @@ namespace SEToolbox.Interop.Asteroids
         public void Load(string filename, string defaultMaterial, bool loadMaterial)
         {
             var tempfilename = TempfileUtil.NewFilename();
-            var version = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 2 : 1;
+            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
 
-            if (version == 2)
+            if (initialVersion == 1)
                 ZipTools.GZipUncompress(filename, tempfilename);
             else
                 Uncompress(filename, tempfilename);
@@ -226,18 +227,18 @@ namespace SEToolbox.Interop.Asteroids
             {
                 using (var reader = new BinaryReader(ms))
                 {
-                    LoadUncompressed(version, Vector3.Zero, reader, defaultMaterial, loadMaterial);
+                    LoadUncompressed(initialVersion, Vector3.Zero, reader, defaultMaterial, loadMaterial);
                 }
             }
 
             File.Delete(tempfilename);
         }
 
-        public void LoadUncompressed(int version, Vector3 position, BinaryReader reader, string defaultMaterial, bool loadMaterial)
+        public void LoadUncompressed(int initialVersion, Vector3 position, BinaryReader reader, string defaultMaterial, bool loadMaterial)
         {
-            switch (version)
+            switch (initialVersion)
             {
-                case 2:
+                case 1:
                     // cell tag header
                     reader.ReadString();
                     FileVersion = reader.ReadByte();
@@ -258,6 +259,19 @@ namespace SEToolbox.Interop.Asteroids
             _cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
 
             InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
+
+            switch (FileVersion)
+            {
+                case 0:
+                case 1: LoadUncompressedV1(reader, loadMaterial); break;
+                case 2: LoadUncompressedV2(reader, loadMaterial); break;
+                default: throw new Exception("Voxel format not implmented");
+            }
+           
+        }
+
+        private void LoadUncompressedV1(BinaryReader reader, bool loadMaterial)
+        {
             var cellsCount = Size / _cellSize;
 
             for (var x = 0; x < cellsCount.X; x++)
@@ -323,22 +337,116 @@ namespace SEToolbox.Interop.Asteroids
                         }
                         else
                         {
-                            //Vector3I voxelCoordInCell;
-                            for (var voxelCoordInCellX = 0; voxelCoordInCellX < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCellX++)
+                            Vector3I voxelCoordInCell;
+                            for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
                             {
-                                for (var voxelCoordInCellY = 0; voxelCoordInCellY < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCellY++)
+                                for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
                                 {
-                                    for (var voxelCoordInCellZ = 0; voxelCoordInCellZ < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCellZ++)
+                                    for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
                                     {
                                         indestructibleContent = reader.ReadByte();
                                         var materialName = reader.ReadString();
                                         materialCount = reader.ReadByte();
-                                        var coord = new Vector3I(voxelCoordInCellX, voxelCoordInCellY, voxelCoordInCellZ);
-                                        matCell.SetMaterialAndIndestructibleContent(SpaceEngineersCore.Resources.GetMaterialIndex(materialName), indestructibleContent, ref coord);
+                                        matCell.SetMaterialAndIndestructibleContent(SpaceEngineersCore.Resources.GetMaterialIndex(materialName), indestructibleContent, ref voxelCoordInCell);
                                     }
                                 }
                             }
 
+                            matCell.CalcAverageCellMaterial();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void LoadUncompressedV2(BinaryReader reader, bool loadMaterial)
+        {
+            var materialIndexDict = new Dictionary<byte, byte>();
+            var materialBaseCount = reader.ReadByte();
+            for (byte i = 0; i < materialBaseCount; i++)
+            {
+                var idx = reader.ReadByte();
+                var materialName = reader.ReadString();
+                var resourceIdx = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
+                materialIndexDict.Add(idx, resourceIdx);
+            }
+
+            var cellsCount = Size / _cellSize;
+
+            for (var x = 0; x < cellsCount.X; x++)
+            {
+                for (var y = 0; y < cellsCount.Y; y++)
+                {
+                    for (var z = 0; z < cellsCount.Z; z++)
+                    {
+                        var cellType = (MyVoxelCellType)reader.ReadByte();
+
+                        //  Cell's are FULL by default, therefore we don't need to change them
+                        if (cellType != MyVoxelCellType.FULL)
+                        {
+                            var cellCoord = new Vector3I(x, y, z);
+                            var newCell = new MyVoxelContentCell();
+                            _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+
+                            if (cellType == MyVoxelCellType.EMPTY)
+                            {
+                                newCell.SetToEmpty();
+                            }
+                            else if (cellType == MyVoxelCellType.MIXED)
+                            {
+                                BoundingBox box;
+                                newCell.SetAllVoxelContents(reader.ReadBytes(_cellSize.X * _cellSize.Y * _cellSize.Z), out box);
+                                _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
+                                _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
+                            }
+                            // ignore else condition
+                        }
+                        else
+                        {
+                            _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                        }
+                    }
+                }
+            }
+
+            if (reader.PeekChar() == -1 || !loadMaterial)
+            {
+                return;
+            }
+
+            // Read materials.
+            const byte indestructibleContent = 0xff;
+            for (var x = 0; x < cellsCount.X; x++)
+            {
+                for (var y = 0; y < cellsCount.Y; y++)
+                {
+                    for (var z = 0; z < cellsCount.Z; z++)
+                    {
+                        var matCell = _voxelMaterialCells[x][y][z];
+
+                        var materialCount = reader.ReadByte();
+
+                        if (materialCount == (byte)MyVoxelCellType.FULL)
+                        {
+                            var materialIndex = reader.ReadByte();
+                            matCell.Reset(materialIndexDict[materialIndex], indestructibleContent);
+                        }
+                        else
+                        {
+                            Vector3I voxelCoordInCell;
+                            for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                            {
+                                for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                {
+                                    for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                    {
+                                        var materialIndex = reader.ReadByte();
+                                        materialCount = reader.ReadByte();
+                                        matCell.SetMaterialAndIndestructibleContent(materialIndexDict[materialIndex], indestructibleContent, ref voxelCoordInCell);
+                                    }
+                                }
+                            }
                             matCell.CalcAverageCellMaterial();
                         }
                     }
@@ -356,18 +464,18 @@ namespace SEToolbox.Interop.Asteroids
         /// <param name="filename"></param>
         public static Vector3I LoadVoxelSize(string filename)
         {
-            var version = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 2 : 1;
+            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
 
             try
             {
                 // only 29 bytes are required for the header, but I'll leave it for 32 for a bit of extra leeway.
-                var buffer = version == 2 ? ZipTools.GZipUncompress(filename, 32) : Uncompress(filename, 32);
+                var buffer = initialVersion == 1 ? ZipTools.GZipUncompress(filename, 32) : Uncompress(filename, 32);
 
                 using (var reader = new BinaryReader(new MemoryStream(buffer)))
                 {
-                    switch (version)
+                    switch (initialVersion)
                     {
-                        case 2:
+                        case 1:
                             // cell tag header
                             reader.ReadString();
                             reader.ReadByte();// fileVersion
@@ -402,17 +510,17 @@ namespace SEToolbox.Interop.Asteroids
         {
             Debug.Write("Saving binary.");
 
-            var version = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 2 : 1;
+            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
 
             var tempfilename = TempfileUtil.NewFilename();
             using (var ms = new FileStream(tempfilename, FileMode.Create))
             {
-                Save(version, new BinaryWriter(ms), true);
+                Save(initialVersion, new BinaryWriter(ms), true);
             }
 
             Debug.Write("Compressing.");
 
-            if (version == 2)
+            if (initialVersion == 1)
                 ZipTools.GZipCompress(tempfilename, filename);
             else
                 Compress(tempfilename, filename);
@@ -421,22 +529,27 @@ namespace SEToolbox.Interop.Asteroids
             Debug.Write("Done.");
         }
 
-        public void Save(int version, BinaryWriter writer, bool saveMaterialContent)
+        public void Save(int initialVersion, BinaryWriter writer, bool saveMaterialContent)
         {
-            switch (version)
+            switch (initialVersion)
             {
-                case 2:
+                case 1:
                     writer.Write(TagCell);
 
                     //  Version of a VOX file
                     writer.Write((byte)MyVoxelConstants.VOXEL_FILE_ACTUAL_VERSION);
+                    SaveV2(writer, saveMaterialContent);
                     break;
                 default:
                     //  Version of a VOX file
-                    writer.Write(MyVoxelConstants.VOXEL_FILE_ACTUAL_VERSION);
+                    writer.Write(MyVoxelConstants.VOXEL_LEGACY_FILE_ACTUAL_VERSION);
+                    SaveV1(writer, saveMaterialContent);
                     break;
             }
+        }
 
+        private void SaveV1(BinaryWriter writer, bool saveMaterialContent)
+        {
             //  Size of this voxel map (in voxels)
             writer.Write(Size.X);
             writer.Write(Size.Y);
@@ -522,6 +635,107 @@ namespace SEToolbox.Interop.Asteroids
                                         {
                                             writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
                                             writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), VoxelMaterial));
+                                            writer.Write((byte)0x0);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SaveV2(BinaryWriter writer, bool saveMaterialContent)
+        {
+            //  Size of this voxel map (in voxels)
+            writer.Write(Size.X);
+            writer.Write(Size.Y);
+            writer.Write(Size.Z);
+
+            //  Size of data cell in voxels, doesn't have to be same as current size specified by our constants.
+            writer.Write(MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS);
+            writer.Write(MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS);
+            writer.Write(MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS);
+
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            writer.Write((byte)materials.Count);
+            for (byte idx = 0; idx < materials.Count; idx++)
+            {
+                writer.Write(idx);
+                writer.Write(materials[idx].Id.SubtypeId);
+            }
+
+            Vector3I cellCoord;
+            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
+            {
+                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
+                {
+                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
+                    {
+                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+
+                        if (voxelCell == null)
+                        {
+                            //  Voxel wasn't found in cell dictionary, so cell must be full
+                            writer.Write((byte)MyVoxelCellType.FULL);
+                        }
+                        else
+                        {
+                            //  Cell type
+                            writer.Write((byte)voxelCell.CellType);
+
+                            //  If we are here, cell is empty or mixed. If empty, we don't need to save each individual voxel.
+                            //  But if it is mixed, we will do it here.
+                            if (voxelCell.CellType == MyVoxelCellType.MIXED)
+                            {
+                                Vector3I voxelCoordInCell;
+                                for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                                {
+                                    for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                    {
+                                        for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                        {
+                                            writer.Write(voxelCell.GetVoxelContent(ref voxelCoordInCell));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (saveMaterialContent)
+            {
+                // Save material cells
+                for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
+                {
+                    for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
+                    {
+                        for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
+                        {
+                            var matCell = _voxelMaterialCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+                            var voxelCoordInCell = new Vector3I(0, 0, 0);
+                            var isWholeMaterial = matCell.IsSingleMaterialForWholeCell;
+                            writer.Write((byte)(isWholeMaterial ? 0x01 : 0x00));
+                            if (isWholeMaterial)
+                            {
+                                //writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
+                                //writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), VoxelMaterial));
+                                writer.Write(matCell.GetMaterial(ref voxelCoordInCell));
+                            }
+                            else
+                            {
+                                for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+                                {
+                                    for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+                                    {
+                                        for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+                                        {
+                                            //writer.Write(matCell.GetIndestructibleContent(ref voxelCoordInCell));
+                                            //writer.Write(SpaceEngineersCore.Resources.GetMaterialName(matCell.GetMaterial(ref voxelCoordInCell), VoxelMaterial));
+                                            writer.Write(matCell.GetMaterial(ref voxelCoordInCell));
                                             writer.Write((byte)0x0);
                                         }
                                     }
