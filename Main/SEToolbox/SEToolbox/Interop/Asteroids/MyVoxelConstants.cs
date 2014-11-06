@@ -15,7 +15,9 @@ namespace SEToolbox.Interop.Asteroids
     class MyVoxelConstants
     {
         //  This is the version of actually supported voxel file
-        public const int VOXEL_FILE_ACTUAL_VERSION = 1;
+        public const int VOXEL_FILE_ACTUAL_VERSION = 2;
+
+        public const int VOXEL_LEGACY_FILE_ACTUAL_VERSION = 1;
 
         //  Value of voxel's content if voxel is empty
         public const byte VOXEL_CONTENT_EMPTY = 0;

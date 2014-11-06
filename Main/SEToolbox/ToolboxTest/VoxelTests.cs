@@ -44,14 +44,14 @@
         }
 
         [TestMethod]
-        public void VoxelLoadSave()
+        public void VoxelLoadSaveVox()
         {
             SpaceEngineersCore.LoadDefinitions();
             var materials = SpaceEngineersCore.Resources.GetMaterialList();
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
 
-            const string fileOriginal = @".\TestAssets\asteroid0moon4.vx2";
-            const string fileNew = @".\TestOutput\asteroid0moon4_save.vx2";
+            const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
+            const string fileNew = @".\TestOutput\asteroid0moon4_save.vox";
 
             var voxelMap = new MyVoxelMap();
 
@@ -61,8 +61,135 @@
             var lengthOriginal = new FileInfo(fileOriginal).Length;
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(9431, lengthOriginal, "File size must match.");
-            Assert.AreEqual(9431, lengthNew, "File size must match.");
+            Assert.AreEqual(9428, lengthOriginal, "File size must match.");
+            Assert.AreEqual(9428, lengthNew, "File size must match.");
+        }
+
+        [TestMethod]
+        public void VoxelLoadSaveVx2V1()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            const string fileOriginal = @".\TestAssets\AsteroidV1Format.vx2";
+            const string fileNew = @".\TestOutput\AsteroidV1Format_save.vx2";
+
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(fileOriginal, materials[0].Id.SubtypeId);
+        
+            IList<byte> materialAssets;
+            Dictionary<byte, long> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
+            Assert.AreEqual(594485, materialAssets.Count, "Asset count should be equal.");
+
+            var asset0 = materialAssets.Where(c => c == 0).ToList();
+            Assert.AreEqual(0, asset0.Count, "asset0 count should be equal.");
+
+            var asset1 = materialAssets.Where(c => c == 1).ToList();
+            Assert.AreEqual(0, asset1.Count, "asset1 Asset count should be equal.");
+
+            var asset2 = materialAssets.Where(c => c == 2).ToList();
+            Assert.AreEqual(0, asset2.Count, "asset2 Asset count should be equal.");
+
+            var asset3 = materialAssets.Where(c => c == 3).ToList();
+            Assert.AreEqual(251145, asset3.Count, "asset3 Asset count should be equal.");
+
+            var asset4 = materialAssets.Where(c => c == 4).ToList();
+            Assert.AreEqual(0, asset4.Count, "asset4 Asset count should be equal.");
+
+            var asset5 = materialAssets.Where(c => c == 5).ToList();
+            Assert.AreEqual(0, asset5.Count, "asset5 Asset count should be equal.");
+
+            var asset6 = materialAssets.Where(c => c == 6).ToList();
+            Assert.AreEqual(217283, asset6.Count, "asset6 Asset count should be equal.");
+
+            var asset7 = materialAssets.Where(c => c == 7).ToList();
+            Assert.AreEqual(237, asset7.Count, "asset7 Asset count should be equal.");
+
+            var asset8 = materialAssets.Where(c => c == 8).ToList();
+            Assert.AreEqual(9608, asset8.Count, "asset8 Asset count should be equal.");
+
+            var asset9 = materialAssets.Where(c => c == 9).ToList();
+            Assert.AreEqual(40801, asset9.Count, "asset9 Asset count should be equal.");
+
+            var asset10 = materialAssets.Where(c => c == 10).ToList();
+            Assert.AreEqual(152, asset10.Count, "asset10 Asset count should be equal.");
+
+            var assetNameCount = voxelMap.CountAssets(materialAssets);
+            Assert.IsTrue(assetNameCount.Count > 0, "Contains assets.");
+
+            voxelMap.Save(fileNew);
+
+            var lengthOriginal = new FileInfo(fileOriginal).Length;
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(88299, lengthOriginal, "File size must match.");
+            Assert.AreEqual(72296, lengthNew, "File size must match.");
+        }
+
+        [TestMethod]
+        public void VoxelLoadSaveVx2V2()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            const string fileOriginal = @".\TestAssets\AsteroidV2Format.vx2";
+            const string fileNew = @".\TestOutput\AsteroidV2Format_save.vx2";
+
+            var voxelMap = new MyVoxelMap();
+
+            voxelMap.Load(fileOriginal, materials[0].Id.SubtypeId);
+
+            IList<byte> materialAssets;
+            Dictionary<byte, long> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
+            Assert.AreEqual(594485, materialAssets.Count, "Asset count should be equal.");
+
+            var asset0 = materialAssets.Where(c => c == 0).ToList();
+            Assert.AreEqual(0, asset0.Count, "asset0 count should be equal.");
+
+            var asset1 = materialAssets.Where(c => c == 1).ToList();
+            Assert.AreEqual(0, asset1.Count, "asset1 Asset count should be equal.");
+
+            var asset2 = materialAssets.Where(c => c == 2).ToList();
+            Assert.AreEqual(0, asset2.Count, "asset2 Asset count should be equal.");
+
+            var asset3 = materialAssets.Where(c => c == 3).ToList();
+            Assert.AreEqual(251145, asset3.Count, "asset3 Asset count should be equal.");
+
+            var asset4 = materialAssets.Where(c => c == 4).ToList();
+            Assert.AreEqual(0, asset4.Count, "asset4 Asset count should be equal.");
+
+            var asset5 = materialAssets.Where(c => c == 5).ToList();
+            Assert.AreEqual(0, asset5.Count, "asset5 Asset count should be equal.");
+
+            var asset6 = materialAssets.Where(c => c == 6).ToList();
+            Assert.AreEqual(217283, asset6.Count, "asset6 Asset count should be equal.");
+
+            var asset7 = materialAssets.Where(c => c == 7).ToList();
+            Assert.AreEqual(237, asset7.Count, "asset7 Asset count should be equal.");
+
+            var asset8 = materialAssets.Where(c => c == 8).ToList();
+            Assert.AreEqual(9608, asset8.Count, "asset8 Asset count should be equal.");
+
+            var asset9 = materialAssets.Where(c => c == 9).ToList();
+            Assert.AreEqual(40801, asset9.Count, "asset9 Asset count should be equal.");
+
+            var asset10 = materialAssets.Where(c => c == 10).ToList();
+            Assert.AreEqual(152, asset10.Count, "asset10 Asset count should be equal.");
+
+            var assetNameCount = voxelMap.CountAssets(materialAssets);
+            Assert.IsTrue(assetNameCount.Count > 0, "Contains assets.");
+
+            voxelMap.Save(fileNew);
+
+            var lengthOriginal = new FileInfo(fileOriginal).Length;
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(72296, lengthOriginal, "File size must match.");
+            Assert.AreEqual(72296, lengthNew, "File size must match.");
         }
 
         [TestMethod]
@@ -346,7 +473,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(7365, lengthNew, "New file size must match.");
+            Assert.AreEqual(2085, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -382,7 +509,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(7365, lengthNew, "New file size must match.");
+            Assert.AreEqual(2085, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -418,7 +545,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(7564, lengthNew, "New file size must match.");
+            Assert.AreEqual(2278, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -457,7 +584,7 @@
             var voxCells = voxelMap.SumVoxelCells();
             Assert.AreEqual(16589770849, voxCells, "Voxel cells must match.");
 
-            Assert.AreEqual(1213016, lengthNew, "New file size must match.");
+            Assert.AreEqual(785439, lengthNew, "New file size must match.");
 
             Assert.AreEqual(512, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(512, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -507,7 +634,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(52179, lengthNew, "New file size must match.");
+            Assert.AreEqual(49809, lengthNew, "New file size must match.");
 
             Assert.AreEqual(1024, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(1024, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -578,7 +705,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(23475, lengthNew, "New file size must match.");
+            Assert.AreEqual(22542, lengthNew, "New file size must match.");
 
             Assert.AreEqual(256, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(256, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -738,6 +865,34 @@
             Assert.AreEqual(64, size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(64, size.Z, "Voxel Bounding size must match.");
+        }
+
+        [TestMethod]
+        public void VoxelMaterialAssets_FilledVolume()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            const string fileNew = @".\TestOutput\test_filledvolume.vx2";
+            const int length = 64;
+            var size = new Vector3I(length, length, length);
+        
+            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            {
+                e.Volume = 0xFF;
+            };
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[06].Id.SubtypeId, null, action);
+            voxelMap.Save(fileNew);
+
+            var lengthNew = new FileInfo(fileNew).Length;
+
+            Assert.AreEqual(163, lengthNew, "New file size must match.");
+
+            Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
         }
     }
 }

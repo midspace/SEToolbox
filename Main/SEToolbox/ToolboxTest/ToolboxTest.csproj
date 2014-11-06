@@ -121,6 +121,12 @@
     <None Include="TestAssets\asteroid0moon4.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestAssets\AsteroidV2Format.vx2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestAssets\AsteroidV1Format.vx2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestAssets\buddha-fixed-bottom.stl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
