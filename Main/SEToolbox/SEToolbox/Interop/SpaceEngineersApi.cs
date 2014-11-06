@@ -415,7 +415,7 @@
             {
                 try
                 {
-                    return Sandbox.Common.Localization.MyTextsWrapper.GetFormatString(myText);
+                    return Sandbox.Common.Localization.MyTextsWrapper.GetString(myText);
                 }
                 catch
                 {
