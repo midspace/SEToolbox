@@ -192,6 +192,37 @@
             Assert.AreEqual(72296, lengthNew, "File size must match.");
         }
 
+
+        [TestMethod]
+        public void VoxelLoadStock()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+            var redShipCrashedAsteroidPath = Path.Combine(contentPath, "VoxelMaps", "RedShipCrashedAsteroid.vx2");
+
+            var voxelMap = new MyVoxelMap();
+            voxelMap.Load(redShipCrashedAsteroidPath, materials[0].Id.SubtypeId);
+
+            Assert.AreEqual(1, voxelMap.FileVersion, "FileVersion should be equal.");
+
+            IList<byte> materialAssets;
+            Dictionary<byte, long> materialVoxelCells;
+            voxelMap.CalculateMaterialCellAssets(out materialAssets, out materialVoxelCells);
+            Assert.AreEqual(563742, materialAssets.Count, "Asset count should be equal.");
+
+            var asset0 = materialAssets.Where(c => c == 0).ToList();
+            Assert.AreEqual(563742, asset0.Count, "asset0 count should be equal.");
+
+            var assetNameCount = voxelMap.CountAssets(materialAssets);
+            Assert.IsTrue(assetNameCount.Count > 0, "Contains assets.");
+
+            var lengthOriginal = new FileInfo(redShipCrashedAsteroidPath).Length;
+            Assert.AreEqual(51819, lengthOriginal, "File size must match.");
+        }
+
         [TestMethod]
         public void VoxelDetails()
         {

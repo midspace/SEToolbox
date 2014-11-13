@@ -351,6 +351,9 @@
     <Compile Include="Views\ControlInventory.xaml.cs">
       <DependentUpon>ControlInventory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WindowOptions.xaml.cs">
+      <DependentUpon>WindowOptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WindowVoxelMerge.xaml.cs">
       <DependentUpon>WindowVoxelMerge.xaml</DependentUpon>
     </Compile>
@@ -457,6 +460,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlInventory.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowOptions.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
