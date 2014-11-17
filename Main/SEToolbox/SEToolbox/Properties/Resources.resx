@@ -693,4 +693,7 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="AsteroidFillType_None" xml:space="preserve">
     <value>No change</value>
   </data>
+  <data name="DialogLocationCustomVoxelFolder" xml:space="preserve">
+    <value>Specify location of Custom Asteroids</value>
+  </data>
 </root>

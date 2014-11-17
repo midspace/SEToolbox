@@ -173,6 +173,7 @@
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
     <Compile Include="Models\ChangeOwnerModel.cs" />
+    <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\MergeVoxelModel.cs" />
     <Compile Include="Models\OwnerModel.cs" />
     <Compile Include="Models\ProgressCancelModel.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
     <Compile Include="ViewModels\ChangeOwnerViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\MergeVoxelViewModel.cs" />
     <Compile Include="ViewModels\ProgressCancelViewModel.cs" />
     <Compile Include="ViewModels\Import3DAsteroidViewModel.cs" />
@@ -351,8 +353,8 @@
     <Compile Include="Views\ControlInventory.xaml.cs">
       <DependentUpon>ControlInventory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WindowOptions.xaml.cs">
-      <DependentUpon>WindowOptions.xaml</DependentUpon>
+    <Compile Include="Views\WindowSettings.xaml.cs">
+      <DependentUpon>WindowSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowVoxelMerge.xaml.cs">
       <DependentUpon>WindowVoxelMerge.xaml</DependentUpon>
@@ -463,7 +465,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\WindowOptions.xaml">
+    <Page Include="Views\WindowSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
