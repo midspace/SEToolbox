@@ -253,5 +253,36 @@
             var p2 = Vector3.Transform(max, quaternion) + positionOrientation.Position;
             var nb = new BoundingBox(p1, p2);
         }
+
+        /// <summary>
+        /// This test is critical for rotation a station. For some reason, 
+        /// if the rotation is not exactly 1, or 0, then there is an issue placing cubes on the station.
+        /// </summary>
+        [TestMethod]
+        public void Rotation()
+        {
+            var positionAndOrientation = new MyPositionAndOrientation(
+                    new SerializableVector3(10.0f, -10.0f, -2.5f),
+                    new SerializableVector3(0.0f, 0.0f, -1.0f),
+                    new SerializableVector3(0.0f, 1.0f, 0.0f));
+
+            // -90 around Z
+            var quaternion = VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2);
+
+            var o = positionAndOrientation.ToQuaternion() * quaternion;
+            o.Normalize();
+            var p = new MyPositionAndOrientation(o.ToMatrix());
+
+
+            var fwd = new SerializableVector3(0.0f, 0.0f, -1.0f);
+            var up = new SerializableVector3(1.0f, 0.0f, 0.0f);
+
+            Assert.AreEqual(fwd.X, p.Forward.X, "Forward.X Should Equal");
+            Assert.AreEqual(fwd.Y, p.Forward.Y, "Forward.Y Should Equal");
+            Assert.AreEqual(fwd.Z, p.Forward.Z, "Forward.Z Should Equal");
+            Assert.AreEqual(up.X, p.Up.X, "Up.X Should Equal");
+            Assert.AreEqual(up.Y, p.Up.Y, "Up.Y Should Equal");
+            Assert.AreEqual(up.Z, p.Up.Z, "Up.Z Should Equal");
+        }
     }
 }

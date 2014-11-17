@@ -142,6 +142,36 @@
             get { return new DelegateCommand(ReorientStationExecuted, ReorientStationCanExecute); }
         }
 
+        public ICommand RotateStructureYawPositiveCommand
+        {
+            get { return new DelegateCommand(RotateStructureYawPositiveExecuted, RotateStructureYawPositiveCanExecute); }
+        }
+
+        public ICommand RotateStructureYawNegativeCommand
+        {
+            get { return new DelegateCommand(RotateStructureYawNegativeExecuted, RotateStructureYawNegativeCanExecute); }
+        }
+
+        public ICommand RotateStructurePitchPositiveCommand
+        {
+            get { return new DelegateCommand(RotateStructurePitchPositiveExecuted, RotateStructurePitchPositiveCanExecute); }
+        }
+
+        public ICommand RotateStructurePitchNegativeCommand
+        {
+            get { return new DelegateCommand(RotateStructurePitchNegativeExecuted, RotateStructurePitchNegativeCanExecute); }
+        }
+
+        public ICommand RotateStructureRollPositiveCommand
+        {
+            get { return new DelegateCommand(RotateStructureRollPositiveExecuted, RotateStructureRollPositiveCanExecute); }
+        }
+
+        public ICommand RotateStructureRollNegativeCommand
+        {
+            get { return new DelegateCommand(RotateStructureRollNegativeExecuted, RotateStructureRollNegativeCanExecute); }
+        }
+
         public ICommand RotateCubesYawPositiveCommand
         {
             get { return new DelegateCommand(RotateCubesYawPositiveExecuted, RotateCubesYawPositiveCanExecute); }
@@ -592,6 +622,90 @@
         {
             DataModel.ReorientStation();
             MainViewModel.IsModified = true;
+        }
+
+        public bool RotateStructureYawPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateStructurePitchPositiveExecuted()
+        {
+            // +90 around X
+            DataModel.RotateStructure(VRageMath.Quaternion.CreateFromYawPitchRoll(0, VRageMath.MathHelper.PiOver2, 0));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+        }
+
+        public bool RotateStructurePitchNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateStructurePitchNegativeExecuted()
+        {
+            // -90 around X
+            DataModel.RotateStructure(VRageMath.Quaternion.CreateFromYawPitchRoll(0, -VRageMath.MathHelper.PiOver2, 0));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+        }
+
+        public bool RotateStructureRollPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateStructureYawPositiveExecuted()
+        {
+            // +90 around Y
+            DataModel.RotateStructure(VRageMath.Quaternion.CreateFromYawPitchRoll(VRageMath.MathHelper.PiOver2, 0, 0));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+        }
+
+        public bool RotateStructureYawNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateStructureYawNegativeExecuted()
+        {
+            // -90 around Y
+            DataModel.RotateStructure(VRageMath.Quaternion.CreateFromYawPitchRoll(-VRageMath.MathHelper.PiOver2, 0, 0));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+        }
+
+        public bool RotateStructurePitchPositiveCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateStructureRollPositiveExecuted()
+        {
+            // +90 around Z
+            DataModel.RotateStructure(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, VRageMath.MathHelper.PiOver2));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
+        }
+
+        public bool RotateStructureRollNegativeCanExecute()
+        {
+            return true;
+        }
+
+        public void RotateStructureRollNegativeExecuted()
+        {
+            // -90 around Z
+            DataModel.RotateStructure(VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2));
+            MainViewModel.IsModified = true;
+            IsSubsSystemNotReady = true;
+            DataModel.InitializeAsync();
         }
 
         public bool RotateCubesYawPositiveCanExecute()
