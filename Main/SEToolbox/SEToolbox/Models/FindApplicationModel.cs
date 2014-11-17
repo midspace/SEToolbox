@@ -9,11 +9,8 @@
         #region Fields
 
         private string _gameApplicationPath;
-
         private string _gameBinPath;
-
         private bool _isValidApplication;
-
         private bool _isWrongApplication;
 
         #endregion
@@ -22,10 +19,7 @@
 
         public string GameApplicationPath
         {
-            get
-            {
-                return _gameApplicationPath;
-            }
+            get { return _gameApplicationPath; }
 
             set
             {
@@ -40,10 +34,7 @@
 
         public string GameBinPath
         {
-            get
-            {
-                return _gameBinPath;
-            }
+            get { return _gameBinPath; }
 
             set
             {
@@ -57,10 +48,7 @@
 
         public bool IsValidApplication
         {
-            get
-            {
-                return _isValidApplication;
-            }
+            get { return _isValidApplication; }
 
             set
             {
@@ -74,10 +62,7 @@
 
         public bool IsWrongApplication
         {
-            get
-            {
-                return _isWrongApplication;
-            }
+            get { return _isWrongApplication; }
 
             set
             {

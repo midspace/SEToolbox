@@ -185,7 +185,7 @@
 
         #endregion
 
-        #region methods
+        #region command methods
 
         public bool ClearRowsCanExecute()
         {

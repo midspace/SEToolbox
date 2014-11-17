@@ -237,6 +237,11 @@
             get { return new DelegateCommand(Test6Executed, Test6CanExecute); }
         }
 
+        public ICommand OpenSettingsCommand
+        {
+            get { return new DelegateCommand(OpenSettingsExecuted, OpenSettingsCanExecute); }
+        }
+
         public ICommand OpenUpdatesLinkCommand
         {
             get { return new DelegateCommand(OpenUpdatesLinkExecuted, OpenUpdatesLinkCanExecute); }
@@ -897,6 +902,43 @@
                 _selectNewStructure = false;
                 IsBusy = false;
                 ClearProgress();
+            }
+        }
+
+        public bool OpenSettingsCanExecute()
+        {
+            return true;
+        }
+
+        public void OpenSettingsExecuted()
+        {
+            var model = new SettingsModel();
+            model.Load(GlobalSettings.Default.SEBinPath, GlobalSettings.Default.CustomVoxelPath, GlobalSettings.Default.AlwaysCheckForUpdates);
+            var loadVm = new SettingsViewModel(this, model);
+            if (_dialogService.ShowDialog<WindowSettings>(this, loadVm) == true)
+            {
+                var reloadMods = GlobalSettings.Default.SEBinPath != model.SEBinPath;
+                GlobalSettings.Default.SEBinPath = model.SEBinPath;
+                GlobalSettings.Default.CustomVoxelPath = model.CustomVoxelPath;
+                GlobalSettings.Default.AlwaysCheckForUpdates = model.AlwaysCheckForUpdates;
+                GlobalSettings.Default.Save();
+
+                if (reloadMods)
+                {
+                    IsBusy = true;
+
+                    if (ActiveWorld == null)
+                    {
+                        SpaceEngineersCore.Resources.LoadDefinitions();
+                    }
+                    else
+                    {
+                        // Reload the Mods.
+                        ActiveWorld.LoadDefinitionsAndMods();
+                    }
+
+                    IsBusy = false;
+                }
             }
         }
 

@@ -120,7 +120,7 @@
             WindowLeft = ReadValue<double?>(key, "WindowLeft", null);
             WindowWidth = ReadValue<double?>(key, "WindowWidth", null);
             WindowHeight = ReadValue<double?>(key, "WindowHeight", null);
-            AlwaysCheckForUpdates = ReadValue<bool?>(key, "AlwaysCheckForUpdates", null);
+            AlwaysCheckForUpdates = ReadValue<bool?>(key, "AlwaysCheckForUpdates", true);
             IgnoreUpdateVersion = ReadValue<string>(key, "IgnoreUpdateVersion", null);
             CustomVoxelPath = ReadValue<string>(key, "CustomVoxelPath", null);
         }
@@ -138,7 +138,7 @@
             WindowLeft = null;
             WindowHeight = null;
             WindowWidth = null;
-            AlwaysCheckForUpdates = null;
+            AlwaysCheckForUpdates = true;
             IgnoreUpdateVersion = null;
             CustomVoxelPath = null;
         }

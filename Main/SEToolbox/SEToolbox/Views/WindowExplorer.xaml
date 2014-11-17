@@ -225,7 +225,7 @@
                     </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem HorizontalAlignment="Right" Header="O_ptions" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem HorizontalAlignment="Right" Header="_Options" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=help}"/>
                     </MenuItem.Icon>
@@ -242,13 +242,14 @@
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
+                    <MenuItem Command="{Binding OpenSettingsCommand}" Header="_Settings"/>
                     <Separator/>
                     <MenuItem Command="{Binding OpenDocumentationLinkCommand}" Header="_Documentation">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=book_open2}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding OpenSupportLinkCommand}" Header="_Support">
+                    <MenuItem Command="{Binding OpenSupportLinkCommand}" Header="Su_pport">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=message_edit}"/>
                         </MenuItem.Icon>

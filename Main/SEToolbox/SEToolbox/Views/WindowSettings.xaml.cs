@@ -3,11 +3,11 @@
     using System.Windows;
 
     /// <summary>
-    /// Interaction logic for WindowOptions.xaml
+    /// Interaction logic for WindowSettings.xaml
     /// </summary>
-    public partial class WindowOptions : Window
+    public partial class WindowSettings : Window
     {
-        public WindowOptions()
+        public WindowSettings()
         {
             this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(System.Threading.Thread.CurrentThread.CurrentCulture.IetfLanguageTag);
             InitializeComponent();
