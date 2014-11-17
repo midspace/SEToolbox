@@ -921,6 +921,23 @@
             CubeGrid.PositionAndOrientation = pos;
         }
 
+        public void RotateStructure(VRageMath.Quaternion quaternion)
+        {
+            // Rotate the ship/station in specified direction.
+            var o = CubeGrid.PositionAndOrientation.Value.ToQuaternion() * quaternion;
+            o.Normalize();
+            var p = new MyPositionAndOrientation(o.ToMatrix());
+
+            CubeGrid.PositionAndOrientation = new MyPositionAndOrientation
+            {
+                Position = CubeGrid.PositionAndOrientation.Value.Position,
+                Forward = p.Forward,
+                Up = p.Up
+            };
+
+            UpdateGeneralFromEntityBase();
+        }
+
         public void RotateCubes(VRageMath.Quaternion quaternion)
         {
             foreach (var cube in CubeGrid.CubeBlocks)

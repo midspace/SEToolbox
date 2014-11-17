@@ -121,6 +121,13 @@
                                 </MenuItem.Icon>
                                 <MenuItem Header="Reorient Station to Axis" Command="{Binding ReorientStationCommand}" ToolTip="Reorients to the accepted single orientation for a Station, and corrects the position to match standard Space Engineers block locations." />
                                 <Separator/>
+                                <!--<MenuItem Header="Rotate structure backward-down around X axis (+90 Pitch)" Command="{Binding RotateStructurePitchPositiveCommand}"/>
+                                <MenuItem Header="Rotate structure forward-down around X axis (-90 Pitch)" Command="{Binding RotateStructurePitchNegativeCommand}"/>
+                                <MenuItem Header="Rotate structure anti-clockwise around Y axis (+90 Yaw)" Command="{Binding RotateStructureYawPositiveCommand}"/>
+                                <MenuItem Header="Rotate structure clockwise around Y axis (-90 Yaw)" Command="{Binding RotateStructureYawNegativeCommand}"/>
+                                <MenuItem Header="Rotate structure left-down around Z axis (+90 Roll)" Command="{Binding RotateStructureRollPositiveCommand}"/>
+                                <MenuItem Header="Rotate structure right-down around Z axis (-90 Roll)" Command="{Binding RotateStructureRollNegativeCommand}"/>
+                                <Separator/>-->
                                 <MenuItem Header="Rotate cubes backward-down around X axis (+90 Pitch)" Command="{Binding RotateCubesPitchPositiveCommand}"/>
                                 <MenuItem Header="Rotate cubes forward-down around X axis (-90 Pitch)" Command="{Binding RotateCubesPitchNegativeCommand}"/>
                                 <MenuItem Header="Rotate cubes anti-clockwise around Y axis (+90 Yaw)" Command="{Binding RotateCubesYawPositiveCommand}"/>
