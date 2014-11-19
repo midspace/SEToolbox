@@ -184,6 +184,7 @@
                 {
                     Name = cubeDefinition.DisplayName,
                     TypeId = cubeDefinition.Id.TypeId,
+                    TypeIdString = cubeDefinition.Id.TypeIdString,
                     SubtypeId = cubeDefinition.Id.SubtypeId,
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon)),
                     Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
@@ -202,6 +203,7 @@
                 {
                     Name = componentDefinition.DisplayName,
                     TypeId = componentDefinition.Id.TypeId,
+                    TypeIdString = componentDefinition.Id.TypeIdString,
                     SubtypeId = componentDefinition.Id.SubtypeId,
                     Mass = componentDefinition.Mass,
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icon, Path.Combine(contentPath, componentDefinition.Icon)),
@@ -218,6 +220,7 @@
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
+                    TypeIdString = physicalItemDefinition.Id.TypeIdString,
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
@@ -234,6 +237,7 @@
                 {
                     Name = physicalItemDefinition.DisplayName,
                     TypeId = physicalItemDefinition.Id.TypeId,
+                    TypeIdString = physicalItemDefinition.Id.TypeIdString,
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,

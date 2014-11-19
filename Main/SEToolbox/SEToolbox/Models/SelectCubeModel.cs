@@ -81,6 +81,7 @@
                 {
                     Name = cubeDefinition.DisplayName,
                     TypeId = cubeDefinition.Id.TypeId,
+                    TypeIdString = cubeDefinition.Id.TypeIdString,
                     SubtypeId = cubeDefinition.Id.SubtypeId,
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon)),
                     Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
@@ -90,7 +91,7 @@
                     Size = new BindableSize3DIModel(cubeDefinition.Size),
                 };
 
-                list.Add(c.FriendlyName + c.SubtypeId, c);
+                list.Add(c.FriendlyName + c.TypeIdString + c.SubtypeId, c);
             }
 
             foreach (var kvp in list)

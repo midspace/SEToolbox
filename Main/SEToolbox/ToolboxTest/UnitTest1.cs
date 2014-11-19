@@ -267,11 +267,36 @@
                     new SerializableVector3(0.0f, 1.0f, 0.0f));
 
             // -90 around Z
-            var quaternion = VRageMath.Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2);
-
+            var quaternion = Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2);
             var o = positionAndOrientation.ToQuaternion() * quaternion;
-            o.Normalize();
-            var p = new MyPositionAndOrientation(o.ToMatrix());
+            var on = Quaternion.Normalize(o);
+            var p = new MyPositionAndOrientation(on.ToMatrix());
+
+            var quaternion2 = QuaternionD.CreateFromYawPitchRoll(0, 0, -Math.PI / 2);
+            var o2 = positionAndOrientation.ToQuaternionD() * quaternion2;
+            var on2 = QuaternionD.Normalize(o2);
+            var p2 = new MyPositionAndOrientation(on2.ToMatrixD());
+
+            var quaternion3 = new System.Windows.Media.Media3D.Quaternion(new System.Windows.Media.Media3D.Vector3D(0, 0, 1), -90d);
+            var x3 = positionAndOrientation.ToQuaternionD();
+            var o3 = new System.Windows.Media.Media3D.Quaternion(x3.X, x3.Y, x3.Z, x3.W)*quaternion3;
+            var on3 = o3;
+            on3.Normalize();
+
+
+            double num = on3.X * on3.X;
+            double num3 = on3.Z * on3.Z;
+            double num4 = on3.X * on3.Y;
+            double num5 = on3.Z * on3.W;
+            double num8 = on3.Y * on3.Z;
+            double num9 = on3.X * on3.W;
+            var M21 = (2.0d * (num4 - num5));
+            var M22 = (1.0d - 2.0d * (num3 + num));
+            var M23 = (2.0d * (num8 + num9));
+
+            var up3 = new Vector3D(M21, M22, M23);
+
+            
 
 
             var fwd = new SerializableVector3(0.0f, 0.0f, -1.0f);
