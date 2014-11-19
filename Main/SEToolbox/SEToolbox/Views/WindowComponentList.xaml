@@ -46,7 +46,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </controls:SortableGridViewColumn>
                                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}"/>
-                                    <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeId}"/>
+                                    <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeIdString}"/>
                                     <GridViewColumn Header="Sub Type Id" DisplayMemberBinding="{Binding SubtypeId}"/>
                                     <GridViewColumn Header="Cube Size" DisplayMemberBinding="{Binding CubeSize}" Width="85"/>
                                     <controls:SortableGridViewColumn Header="Accessible" Width="80" DisplayMemberBinding="{Binding Accessible, Converter={StaticResource EnumToResouceConverter}}" />
@@ -116,7 +116,7 @@
                                 </controls:SortableGridViewColumn>
                                 <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}"/>
                                 <!--<GridViewColumn Header="Internal Name" DisplayMemberBinding="{Binding Name}"/>-->
-                                <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeId}"/>
+                                <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeIdString}"/>
                                 <GridViewColumn Header="Sub Type Id" DisplayMemberBinding="{Binding SubtypeId}"/>
                                 <controls:SortableGridViewColumn Header="Accessible" Width="80" DisplayMemberBinding="{Binding Accessible, Converter={StaticResource EnumToResouceConverter}}" />
                                 <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
@@ -158,7 +158,7 @@
                                 </controls:SortableGridViewColumn>
                                 <GridViewColumn Header="Name" DisplayMemberBinding="{Binding FriendlyName}"/>
                                 <!--<GridViewColumn Header="Internal Name" DisplayMemberBinding="{Binding Name}"/>-->
-                                <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeId}"/>
+                                <GridViewColumn Header="Type Id" DisplayMemberBinding="{Binding TypeIdString}"/>
                                 <GridViewColumn Header="Sub Type Id" DisplayMemberBinding="{Binding SubtypeId}"/>
                                 <controls:SortableGridViewColumn Header="Accessible" Width="80" DisplayMemberBinding="{Binding Accessible, Converter={StaticResource EnumToResouceConverter}}" />
                                 <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">

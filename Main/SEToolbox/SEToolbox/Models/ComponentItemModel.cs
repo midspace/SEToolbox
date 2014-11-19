@@ -33,6 +33,8 @@
 
         public MyObjectBuilderType TypeId { get; set; }
 
+        public string TypeIdString { get; set; }
+
         public string SubtypeId { get; set; }
 
         public double Mass { get; set; }

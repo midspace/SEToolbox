@@ -138,6 +138,7 @@
     </Compile>
     <Compile Include="Interfaces\IMainView.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelRayTracerConsts.cs" />
+    <Compile Include="Interop\QuaternionD.cs" />
     <Compile Include="Interop\SpaceEngineersResources.cs" />
     <Compile Include="Interop\SpaceEngineersRepair.cs" />
     <Compile Include="Models\Asteroids\AsteroidByteFiller.cs" />

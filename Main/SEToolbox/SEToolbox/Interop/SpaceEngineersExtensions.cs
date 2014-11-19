@@ -120,6 +120,11 @@
             return Quaternion.CreateFromForwardUp(positionOrientation.Forward, positionOrientation.Up);
         }
 
+        public static QuaternionD ToQuaternionD(this MyPositionAndOrientation positionOrientation)
+        {
+            return QuaternionD.CreateFromForwardUp(positionOrientation.Forward, positionOrientation.Up);
+        }
+
         public static Matrix ToMatrix(this MyPositionAndOrientation positionOrientation)
         {
             return Matrix.CreateFromQuaternion(Quaternion.CreateFromForwardUp(positionOrientation.Forward, positionOrientation.Up));
