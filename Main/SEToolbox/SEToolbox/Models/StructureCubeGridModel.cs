@@ -1292,9 +1292,19 @@
                 var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
                 newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
 
-                if (block is MyObjectBuilder_MotorStator)
+                if (block is MyObjectBuilder_MotorBase)
                 {
-                    ((MyObjectBuilder_MotorStator)newBlock).RotorEntityId = ((MyObjectBuilder_MotorStator)block).RotorEntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+                    ((MyObjectBuilder_MotorBase)newBlock).RotorEntityId = ((MyObjectBuilder_MotorBase)block).RotorEntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+                }
+
+                if (block is MyObjectBuilder_PistonBase)
+                {
+                    ((MyObjectBuilder_PistonBase)newBlock).TopBlockId = ((MyObjectBuilder_PistonBase)block).TopBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+                }
+
+                if (block is MyObjectBuilder_PistonTop)
+                {
+                    ((MyObjectBuilder_PistonTop)newBlock).PistonBlockId = ((MyObjectBuilder_PistonTop)block).PistonBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
                 }
 
                 newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);

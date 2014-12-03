@@ -153,8 +153,8 @@
 
 #if DEBUG
             // This will make it hairy for testing the AppDomain stuff.
-#warning Force the local debugger to load the Types allowing inspection.
-            var settings0 = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_SessionSettings();
+            //#warning Force the local debugger to load the Types allowing inspection.
+            //var settings0 = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_SessionSettings();
 #endif
 
             return true;

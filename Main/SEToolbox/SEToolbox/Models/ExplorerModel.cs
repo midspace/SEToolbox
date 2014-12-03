@@ -750,15 +750,38 @@
             {
                 cubeGrid.EntityId = MergeId(cubeGrid.EntityId, ref idReplacementTable);
 
-                if (cubeGrid is MyObjectBuilder_Cockpit)
+                var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
+                if (cockpit != null)
                 {
-                    ((MyObjectBuilder_Cockpit)cubeGrid).Pilot = null;  // remove any pilots.
+                    cockpit.Pilot = null;  // remove any pilots.
                 }
 
-                if (cubeGrid is MyObjectBuilder_MotorStator)
+                var motorBase = cubeGrid as MyObjectBuilder_MotorBase;
+                if (motorBase != null)
                 {
                     // reattach motor/rotor to correct entity.
-                    ((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId = MergeId(((MyObjectBuilder_MotorStator)cubeGrid).RotorEntityId, ref idReplacementTable);
+                    motorBase.RotorEntityId = MergeId(motorBase.RotorEntityId, ref idReplacementTable);
+                }
+
+                var pistonBase = cubeGrid as MyObjectBuilder_PistonBase;
+                if (pistonBase != null)
+                {
+                    // reattach PistonBase (and ExtendedPistonBase) to correct entity.
+                    pistonBase.TopBlockId = MergeId(pistonBase.TopBlockId, ref idReplacementTable);
+                }
+
+                var pistonTop = cubeGrid as MyObjectBuilder_PistonTop;
+                if (pistonTop != null)
+                {
+                    // reattach PistonTop to correct entity.
+                    pistonTop.PistonBlockId = MergeId(pistonTop.PistonBlockId, ref idReplacementTable);
+                }
+
+                var shipConnector = cubeGrid as MyObjectBuilder_ShipConnector;
+                if (shipConnector != null)
+                {
+                    // reattach ShipConnector to correct entity.
+                    shipConnector.ConnectedEntityId = MergeId(shipConnector.ConnectedEntityId, ref idReplacementTable);
                 }
             }
 

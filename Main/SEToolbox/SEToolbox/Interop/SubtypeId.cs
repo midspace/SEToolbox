@@ -172,6 +172,8 @@
         LargeBlockInteriorWall,
         LargeInteriorPillar,
         LargeBlockLandingGear,
+        LargeProjector,
+        SmallProjector,
         LargeRefinery,
         Blast_Furnace,        // 'Blast Furnace'
         Big_Arc_Furnace,        // 'Big Arc Furnace'

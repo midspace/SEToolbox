@@ -34,42 +34,55 @@ namespace SEToolbox.Interop
 		}
 		else
 		{
-			var filename = Path.Combine(appPath, @"Content\Data\CubeBlocks.sbc");
-
-			XmlDocument xDoc = new XmlDocument();
-			xDoc.Load(filename);
-
-			var nav = xDoc.CreateNavigator();
-
-			var definitions = nav.Select("Definitions/CubeBlocks/Definition");
-			while (definitions.MoveNext())
+			try
 			{
-				var fullName = definitions.Current.SelectSingleNode("Id/SubtypeId").Value;
-				var name = fullName.Replace(" ", "_");
-				var originalName = fullName != name ? fullName : "";
+				var filename = Path.Combine(appPath, @"Content\Data\CubeBlocks.sbc");
 
-				if (definitions.Current.SelectSingleNode("Variants") != null)
-				{
-					Write(string.Format("        {0},\r\n", name));
+				XmlDocument xDoc = new XmlDocument();
+				xDoc.Load(filename);
 
-					var variants = definitions.Current.Select("Variants/Variant");
-					while (variants.MoveNext())
-					{
-						var variant = variants.Current.SelectSingleNode("@Color").Value;
-						Write(string.Format("        {0}{1},\r\n", name, variant));
-					}
-				}
-				else
+				var nav = xDoc.CreateNavigator();
+
+				var list = new List<string>();
+
+				var definitions = nav.Select("Definitions/CubeBlocks/Definition");
+				while (definitions.MoveNext())
 				{
-					if (!string.IsNullOrEmpty(originalName))
-					{
-						Write(string.Format("        {0},        // '{1}'\r\n", name, originalName));
-					}
-					else if (!string.IsNullOrEmpty(name))
+					var fullName = definitions.Current.SelectSingleNode("Id/SubtypeId").Value;
+					var name = fullName.Replace(" ", "_");
+					var originalName = fullName != name ? fullName : "";
+
+					if (list.Contains(name))
+						continue;
+
+					if (definitions.Current.SelectSingleNode("Variants") != null)
 					{
 						Write(string.Format("        {0},\r\n", name));
+
+						var variants = definitions.Current.Select("Variants/Variant");
+						while (variants.MoveNext())
+						{
+							var variant = variants.Current.SelectSingleNode("@Color").Value;
+							Write(string.Format("        {0}{1},\r\n", name, variant));
+						}
+					}
+					else
+					{
+						if (!string.IsNullOrEmpty(originalName))
+						{
+							Write(string.Format("        {0},        // '{1}'\r\n", name, originalName));
+						}
+						else if (!string.IsNullOrEmpty(name))
+						{
+							Write(string.Format("        {0},\r\n", name));
+						}
+						list.Add(name);
 					}
 				}
+			}
+			catch (Exception ex)
+			{
+				Write(string.Format("#warning An exception occured during transformation. {0}\r\n\r\n", ex.Message.Replace("\r\n", "")));
 			}
 		}
 
