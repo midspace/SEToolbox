@@ -696,4 +696,7 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="DialogLocationCustomVoxelFolder" xml:space="preserve">
     <value>Specify location of Custom Asteroids</value>
   </data>
+  <data name="ExceptionState_CorruptModFile" xml:space="preserve">
+    <value>The Space Engineers mod file '{0}' could not be loaded, because it is corrupt.</value>
+  </data>
 </root>

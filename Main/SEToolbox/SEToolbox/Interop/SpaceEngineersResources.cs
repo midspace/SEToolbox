@@ -497,8 +497,18 @@
                 if (_contentDataPaths[key.ToLower()].ZipFilePath != null)
                 {
                     var tempContentFile = TempfileUtil.NewFilename(Path.GetExtension(defaultValue));
-                    ZipTools.ExtractZipFileToFile(_contentDataPaths[key.ToLower()].ZipFilePath, null, _contentDataPaths[key.ToLower()].ReferencePath, tempContentFile);
-                    return tempContentFile;
+                    try
+                    {
+                        ZipTools.ExtractZipFileToFile(_contentDataPaths[key.ToLower()].ZipFilePath, null, _contentDataPaths[key.ToLower()].ReferencePath, tempContentFile);
+                        return tempContentFile;
+                    }
+                    catch (Exception ex)
+                    {
+                        // ignore errors, keep on trucking just like SE.
+                        // write event log warning of any files not loaded.
+                        DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptModFile, _contentDataPaths[key.ToLower()].ZipFilePath), ex);
+                        return defaultValue;
+                    }
                 }
             }
 
