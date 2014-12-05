@@ -436,8 +436,8 @@
         public void SaveCheckPointAndSector(bool backupFile)
         {
             LastSaveTime = DateTime.Now;
-            Checkpoint.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
-            SectorData.AppVersion = Sandbox.Common.MyFinalBuildConstants.APP_VERSION;
+            Checkpoint.AppVersion = SpaceEngineersConsts.GetSEVersionInt();
+            SectorData.AppVersion = SpaceEngineersConsts.GetSEVersionInt();
             SaveCheckPoint(backupFile);
             SaveSector(backupFile);
         }

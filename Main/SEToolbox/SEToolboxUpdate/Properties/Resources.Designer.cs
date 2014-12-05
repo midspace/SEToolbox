@@ -106,7 +106,7 @@ namespace SEToolboxUpdate.Properties {
         /// <summary>
         ///   Looks up a localized string similar to An error occuring whilst attempting to updating the base files.
         ///You may attempt to run SEToolbox but you risk corrupting any Space Engineers world when you save.
-        ///If is recommended you close the application now, then download and install the latest version of SEToolbox as soon as possible.
+        ///It is recommended you close the application now, then download and install the latest version of SEToolbox as soon as possible.
         ///
         ///If with to continue and attempt to run SEToolbox as it is, then press Yes to continue..
         /// </summary>
