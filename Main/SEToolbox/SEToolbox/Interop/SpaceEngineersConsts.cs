@@ -85,5 +85,18 @@
                 return new Version();
             }
         }
+
+        public static int GetSEVersionInt()
+        {
+            try
+            {
+                // Use of Sandbox.Common.MyFinalBuildConstants.APP_VERSION causes the Compiler to hard code in the value from the assembly at the time of compile.
+                return Int32.Parse(Sandbox.Common.MyFinalBuildConstants.APP_VERSION_STRING.ToString().Replace("_", ""));
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }
