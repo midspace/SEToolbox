@@ -159,19 +159,19 @@
             get { return _dataModel.PercentList; }
         }
 
-        public float CenterPositionX
+        public double CenterPositionX
         {
             get { return _dataModel.CenterPositionX; }
             set { _dataModel.CenterPositionX = value; }
         }
 
-        public float CenterPositionY
+        public double CenterPositionY
         {
             get { return _dataModel.CenterPositionY; }
             set { _dataModel.CenterPositionY = value; }
         }
 
-        public float CenterPositionZ
+        public double CenterPositionZ
         {
             get { return _dataModel.CenterPositionZ; }
             set { _dataModel.CenterPositionZ = value; }
@@ -336,8 +336,8 @@
                 var z = radius * Math.Cos(latitude) * Math.Sin(longitude);
                 var y = radius * Math.Sin(latitude);
 
-                var center = new Vector3(CenterPositionX, CenterPositionY, CenterPositionZ);
-                var position = center + new Vector3((float)x, (float)y, (float)z) - asteroid.BoundingContent.Center;
+                var center = new Vector3D(CenterPositionX, CenterPositionY, CenterPositionZ);
+                var position = center + new Vector3D(x, y, z) - asteroid.BoundingContent.Center;
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)
                 {
                     EntityId = SpaceEngineersApi.GenerateEntityId(),

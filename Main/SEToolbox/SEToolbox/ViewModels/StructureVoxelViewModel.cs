@@ -220,7 +220,7 @@
 
         public bool ReseedCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void ReseedExecuted()
@@ -249,7 +249,7 @@
 
         public bool ReplaceSurfaceCanExecute(string materialName)
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void ReplaceSurfaceExecuted(string materialName)
@@ -275,7 +275,7 @@
 
         public bool ReplaceAllCanExecute(string materialName)
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void ReplaceAllExecuted(string materialName)
@@ -302,12 +302,12 @@
 
         public bool ReplaceSelectedMenuCanExecute(string materialName)
         {
-            return SelectedMaterialAsset != null;
+            return DataModel.IsValid && SelectedMaterialAsset != null;
         }
 
         public bool ReplaceSelectedCanExecute(string materialName)
         {
-            return SelectedMaterialAsset != null;
+            return DataModel.IsValid && SelectedMaterialAsset != null;
         }
 
         public void ReplaceSelectedExecuted(string materialName)
@@ -340,7 +340,7 @@
 
         public bool SliceQuarterCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void SliceQuarterExecuted()
@@ -364,10 +364,11 @@
             posOrient.Position.y += height;
 
             // genreate a new Asteroid entry.
-            var newEntity = new MyObjectBuilder_VoxelMap(posOrient.Position, newFilename)
+            var newEntity = new MyObjectBuilder_VoxelMap
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Filename = newFilename,
                 StorageName = Path.GetFileNameWithoutExtension(newFilename),
                 PositionAndOrientation = new MyPositionAndOrientation
                 {
@@ -386,7 +387,7 @@
 
         public bool SliceHalfCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void SliceHalfExecuted()
@@ -410,10 +411,11 @@
             posOrient.Position.y += height;
 
             // genreate a new Asteroid entry.
-            var newEntity = new MyObjectBuilder_VoxelMap(posOrient.Position, newFilename)
+            var newEntity = new MyObjectBuilder_VoxelMap
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Filename = newFilename,
                 StorageName = Path.GetFileNameWithoutExtension(newFilename),
                 PositionAndOrientation = new MyPositionAndOrientation
                 {
@@ -432,7 +434,7 @@
 
         public bool ExtractStationIntersectLooseCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void ExtractStationIntersectLooseExecuted()
@@ -449,7 +451,7 @@
 
         public bool ExtractStationIntersectTightCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void ExtractStationIntersectTightExecuted()
@@ -466,7 +468,7 @@
 
         public bool RotateAsteroidYawPositiveCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void RotateAsteroidPitchPositiveExecuted()
@@ -482,7 +484,7 @@
 
         public bool RotateAsteroidPitchNegativeCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void RotateAsteroidPitchNegativeExecuted()
@@ -497,7 +499,7 @@
 
         public bool RotateAsteroidRollPositiveCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void RotateAsteroidYawPositiveExecuted()
@@ -512,7 +514,7 @@
 
         public bool RotateAsteroidYawNegativeCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void RotateAsteroidYawNegativeExecuted()
@@ -527,7 +529,7 @@
 
         public bool RotateAsteroidPitchPositiveCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void RotateAsteroidRollPositiveExecuted()
@@ -542,7 +544,7 @@
 
         public bool RotateAsteroidRollNegativeCanExecute()
         {
-            return true;
+            return DataModel.IsValid;
         }
 
         public void RotateAsteroidRollNegativeExecuted()
@@ -558,7 +560,7 @@
         private bool ExtractStationIntersect(bool tightIntersection)
         {
             // Make a shortlist of station Entities in the bounding box of the asteroid.
-            var asteroidWorldAABB = new BoundingBox(DataModel.ContentBounds.Min + DataModel.PositionAndOrientation.Value.Position, DataModel.ContentBounds.Max + DataModel.PositionAndOrientation.Value.Position);
+            var asteroidWorldAABB = new BoundingBoxD(DataModel.ContentBounds.Min + DataModel.PositionAndOrientation.Value.Position, DataModel.ContentBounds.Max + DataModel.PositionAndOrientation.Value.Position);
             var stations = MainViewModel.GetIntersectingEntities(asteroidWorldAABB).Where(e => e.ClassType == ClassType.Station).Cast<StructureCubeGridModel>().ToList();
 
             if (stations.Count == 0)
@@ -586,9 +588,9 @@
                     var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
                     var min = cube.Min.ToVector3() * station.CubeGrid.GridSizeEnum.ToLength();
                     var max = (cube.Min + orientSize) * station.CubeGrid.GridSizeEnum.ToLength();
-                    var p1 = Vector3.Transform(min, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
-                    var p2 = Vector3.Transform(max, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
-                    var cubeWorldAABB = new BoundingBox(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
+                    var p1 = Vector3D.Transform(min, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
+                    var p2 = Vector3D.Transform(max, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
+                    var cubeWorldAABB = new BoundingBoxD(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
 
                     // find worldAABB of block.
                     if (asteroidWorldAABB.Intersects(cubeWorldAABB))

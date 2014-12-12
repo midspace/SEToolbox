@@ -367,10 +367,10 @@
 
         #region GetBoundingBox
 
-        public static BoundingBox GetBoundingBox(MyObjectBuilder_CubeGrid entity)
+        public static BoundingBoxD GetBoundingBox(MyObjectBuilder_CubeGrid entity)
         {
-            var min = new Vector3(int.MaxValue, int.MaxValue, int.MaxValue);
-            var max = new Vector3(int.MinValue, int.MinValue, int.MinValue);
+            var min = new Vector3D(int.MaxValue, int.MaxValue, int.MaxValue);
+            var max = new Vector3D(int.MinValue, int.MinValue, int.MinValue);
 
             foreach (var block in entity.CubeBlocks)
             {
@@ -385,10 +385,10 @@
             // scale box to GridSize
             var size = max - min;
             var len = entity.GridSizeEnum.ToLength();
-            size = new Vector3(size.X * len, size.Y * len, size.Z * len);
+            size = new Vector3D(size.X * len, size.Y * len, size.Z * len);
 
             // translate box according to min/max, but reset origin.
-            var bb = new BoundingBox(new Vector3(0, 0, 0), size);
+            var bb = new BoundingBoxD(Vector3D.Zero, size);
 
             // TODO: translate for rotation.
             //bb. ????

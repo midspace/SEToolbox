@@ -208,12 +208,12 @@
         [TestMethod]
         public void BoundingBoxIntersectKeen()
         {
-            var point = new VRageMath.Vector3(5f, 3.5f, 4f);
-            var vector = new VRageMath.Vector3(-0.03598167f, 0.0110336f, 0.9992915f);
-            var box = new VRageMath.BoundingBox(new VRageMath.Vector3(3f, 3f, 2f), new VRageMath.Vector3(7f, 4f, 6f));
-            var ray = new VRageMath.Ray(point, vector);
+            var point = new VRageMath.Vector3D(5d, 3.5d, 4d);
+            var vector = new VRageMath.Vector3D(-0.03598167d, 0.0110336d, 0.9992915d);
+            var box = new VRageMath.BoundingBoxD(new VRageMath.Vector3D(3d, 3d, 2d), new VRageMath.Vector3D(7d, 4d, 6d));
+            var ray = new VRageMath.RayD(point, vector);
 
-            float? f = box.Intersects(ray);
+            double? f = box.Intersects(ray);
 
             Assert.AreEqual(0, f, "Should Equal");
         }
@@ -221,19 +221,19 @@
         [TestMethod]
         public void BoundingBoxIntersectCustom()
         {
-            var point = new VRageMath.Vector3(5f, 3.5f, 4f);
-            var vector = new VRageMath.Vector3(-0.03598167f, 0.0110336f, 0.9992915f);
-            var box = new VRageMath.BoundingBox(new VRageMath.Vector3(3f, 3f, 2f), new VRageMath.Vector3(7f, 4f, 6f));
+            var point = new VRageMath.Vector3D(5d, 3.5d, 4d);
+            var vector = new VRageMath.Vector3D(-0.03598167d, 0.0110336d, 0.9992915d);
+            var box = new VRageMath.BoundingBoxD(new VRageMath.Vector3D(3d, 3d, 2d), new VRageMath.Vector3D(7d, 4d, 6d));
 
-            VRageMath.Vector3? p = box.IntersectsRayAt(point, vector * 1000);
+            VRageMath.Vector3D? p = box.IntersectsRayAt(point, vector * 1000);
 
-            Assert.AreEqual(new VRageMath.Vector3(4.917649f, 3.51513839f, 6f), p.Value, "Should Equal");
+            Assert.AreEqual(new VRageMath.Vector3D(4.9176489098920966d, 3.5151384795308953d, 6.00000000000319d), p.Value, "Should Equal");
         }
 
         [TestMethod]
         public void CubeRotate()
         {
-            var positionOrientation = new MyPositionAndOrientation(new Vector3(10, 10, 10), Vector3.Backward, Vector3.Up);
+            var positionOrientation = new MyPositionAndOrientation(new Vector3D(10, 10, 10), Vector3.Backward, Vector3.Up);
             var gridSizeEnum = MyCubeSize.Large;
 
             var cube = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(typeof(MyObjectBuilder_CubeBlock), "LargeBlockArmorBlock");
@@ -242,16 +242,16 @@
             cube.BlockOrientation = new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Up);
             cube.BuildPercent = 1;
 
-            var quaternion = positionOrientation.ToQuaternion();
+            var quaternion = positionOrientation.ToQuaternionD();
             var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, gridSizeEnum, cube.SubtypeName);
 
 
             var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
-            var min = cube.Min.ToVector3() * gridSizeEnum.ToLength();
-            var max = (cube.Min + orientSize) * gridSizeEnum.ToLength();
-            var p1 = Vector3.Transform(min, quaternion) + positionOrientation.Position;
-            var p2 = Vector3.Transform(max, quaternion) + positionOrientation.Position;
-            var nb = new BoundingBox(p1, p2);
+            var min = cube.Min.ToVector3D() * gridSizeEnum.ToLength();
+            var max = (cube.Min + orientSize).ToVector3D() * gridSizeEnum.ToLength();
+            var p1 = min.Transform(quaternion) + positionOrientation.Position;
+            var p2 = max.Transform(quaternion) + positionOrientation.Position;
+            var nb = new BoundingBoxD(p1, p2);
         }
 
         /// <summary>
@@ -262,7 +262,7 @@
         public void Rotation()
         {
             var positionAndOrientation = new MyPositionAndOrientation(
-                    new SerializableVector3(10.0f, -10.0f, -2.5f),
+                    new SerializableVector3D(10.0d, -10.0d, -2.5d),
                     new SerializableVector3(0.0f, 0.0f, -1.0f),
                     new SerializableVector3(0.0f, 1.0f, 0.0f));
 

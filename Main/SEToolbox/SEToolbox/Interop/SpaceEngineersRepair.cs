@@ -183,7 +183,7 @@
                                 character = new MyObjectBuilder_Character();
                                 character.EntityId = SpaceEngineersApi.GenerateEntityId();
                                 character.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
-                                character.PositionAndOrientation = new MyPositionAndOrientation(VRageMath.Vector3.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
+                                character.PositionAndOrientation = new MyPositionAndOrientation(VRageMath.Vector3D.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
                                 character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Name;
                                 character.ColorMaskHSV = new Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3(0, -1, 1); // White
                                 character.Battery = new MyObjectBuilder_Battery { CurrentCapacity = 0.5f };

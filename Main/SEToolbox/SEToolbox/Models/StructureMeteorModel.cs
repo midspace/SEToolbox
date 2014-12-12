@@ -170,7 +170,7 @@
             RaisePropertyChanged(() => LinearVelocity);
         }
 
-        public void MaxVelocityAtPlayer(Vector3 playerPosition)
+        public void MaxVelocityAtPlayer(Vector3D playerPosition)
         {
             var v = playerPosition - Meteor.PositionAndOrientation.Value.Position;
             v.Normalize();

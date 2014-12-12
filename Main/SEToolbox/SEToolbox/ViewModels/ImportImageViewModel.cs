@@ -425,7 +425,7 @@
             entity.PositionAndOrientation = new MyPositionAndOrientation
             {
                 // TODO: reposition based scale.
-                Position = Position.ToVector3(),
+                Position = Position.ToVector3D(),
                 Forward = Forward.ToVector3(),
                 Up = Up.ToVector3()
             };

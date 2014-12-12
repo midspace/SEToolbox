@@ -23,7 +23,7 @@
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
-        private BoundingBox _contentBounds;
+        private BoundingBoxD _contentBounds;
         private long _voxCells;
 
         [NonSerialized]
@@ -163,7 +163,7 @@
         /// So Min and Max values are both inclusive.
         /// </summary>
         [XmlIgnore]
-        public BoundingBox ContentBounds
+        public BoundingBoxD ContentBounds
         {
             get { return _contentBounds; }
 
@@ -339,22 +339,23 @@
         {
             if (filename != null && File.Exists(filename))
             {
-                MyVoxelMap.GetPreview(filename, out _size, out _contentBounds, out _voxCells);
+                MyVoxelMap.GetPreview(filename, out _size, out _contentBounds, out _voxCells, out _isValid);
                 RaisePropertyChanged(() => Size);
                 RaisePropertyChanged(() => ContentSize);
                 RaisePropertyChanged(() => ContentBounds);
                 RaisePropertyChanged(() => VoxCells);
                 RaisePropertyChanged(() => Volume);
-                Center = new Vector3(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
-                WorldAABB = new BoundingBox(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3(Size));
+                RaisePropertyChanged(() => IsValid);
+                Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+                WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
             }
         }
 
-        public override void RecalcPosition(Vector3 playerPosition)
+        public override void RecalcPosition(Vector3D playerPosition)
         {
             base.RecalcPosition(playerPosition);
-            Center = new Vector3(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
-            WorldAABB = new BoundingBox(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3(Size));
+            Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+            WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }
 
         public void RotateAsteroid(VRageMath.Quaternion quaternion)
@@ -367,7 +368,7 @@
             var newAsteroid = new MyVoxelMap();
             var transSize = Vector3I.Transform(asteroid.Size, quaternion);
             var newSize = Vector3I.Abs(transSize);
-            newAsteroid.Init(Vector3.Zero, newSize, SpaceEngineersCore.Resources.GetDefaultMaterialName());
+            newAsteroid.Init(Vector3D.Zero, newSize, SpaceEngineersCore.Resources.GetDefaultMaterialName());
 
             Vector3I coords;
             for (coords.Z = 0; coords.Z < asteroid.Size.Z; coords.Z++)

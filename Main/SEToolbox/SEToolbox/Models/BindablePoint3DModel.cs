@@ -50,6 +50,14 @@
             Z = vector.Z;
         }
 
+        public BindablePoint3DModel(VRageMath.Vector3D vector)
+            : this()
+        {
+            X = vector.X;
+            Y = vector.Y;
+            Z = vector.Z;
+        }
+
         #endregion
 
         #region Properties
@@ -129,6 +137,11 @@
         public VRageMath.Vector3 ToVector3()
         {
             return new VRageMath.Vector3(ToFloat(X), ToFloat(Y), ToFloat(Z));
+        }
+
+        public VRageMath.Vector3D ToVector3D()
+        {
+            return new VRageMath.Vector3D(X, Y, Z);
         }
 
         private float ToFloat(double value)

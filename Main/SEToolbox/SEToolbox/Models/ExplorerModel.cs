@@ -479,7 +479,7 @@
         {
             if (ActiveWorld.SectorData != null)
             {
-                var position = ThePlayerCharacter != null && ThePlayerCharacter.PositionAndOrientation.HasValue ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
+                var position = ThePlayerCharacter != null && ThePlayerCharacter.PositionAndOrientation.HasValue ? (Vector3D)ThePlayerCharacter.PositionAndOrientation.Value.Position : Vector3D.Zero;
                 foreach (var structure in Structures)
                 {
                     structure.RecalcPosition(position);
@@ -575,7 +575,7 @@
             //var cubeGrid = entity as MyObjectBuilder_CubeGrid;
             //if (cubeGrid != null)
             //{
-            //    BoundingBox bb = SpaceEngineersAPI.GetBoundingBox(cubeGrid);
+            //    BoundingBoxD bb = SpaceEngineersAPI.GetBoundingBox(cubeGrid);
             //    foreach (var sectorObject in SectorData.SectorObjects)
             //    {
             //        if (sectorObject is MyObjectBuilder_CubeGrid)
@@ -594,8 +594,8 @@
             {
                 ActiveWorld.SectorData.SectorObjects.Add(entity);
                 var structure = StructureBaseModel.Create(entity, ActiveWorld.Savepath);
-                var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
-                structure.PlayerDistance = (position - structure.PositionAndOrientation.Value.Position.ToVector3()).Length();
+                var position = ThePlayerCharacter != null ? (Vector3D)ThePlayerCharacter.PositionAndOrientation.Value.Position : Vector3D.Zero;
+                structure.PlayerDistance = (position - structure.PositionAndOrientation.Value.Position).Length();
                 Structures.Add(structure);
                 IsModified = true;
                 return structure;
@@ -863,7 +863,7 @@
                 //            PersistentFlags = block.PersistentFlags,
                 //            Min = new Vector3I(block.Min.X, block.Min.Y, block.Min.Z + 1 + i),
                 //            Max = new Vector3I(block.Max.X, block.Max.Y, block.Max.Z + 1 + i),
-                //            Orientation = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up))
+                //            Orientation = Quaternion.CreateFromRotationMatrix(MatrixD.CreateLookAt(Vector3D.Zero, Vector3.Forward, Vector3.Up))
                 //        };
 
                 //        newBlocks.Add(newBlock);
@@ -879,7 +879,7 @@
                 //        PersistentFlags = block.PersistentFlags,
                 //        Min = new Vector3I(block.Min.X, block.Min.Y, block.Min.Z + 3),
                 //        Max = new Vector3I(block.Max.X, block.Max.Y, block.Max.Z + 3),
-                //        Orientation = Quaternion.CreateFromRotationMatrix(Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up))
+                //        Orientation = Quaternion.CreateFromRotationMatrix(MatrixD.CreateLookAt(Vector3D.Zero, Vector3.Forward, Vector3.Up))
                 //    };
 
                 //    newBlocks.Add(newBlock);
@@ -900,8 +900,8 @@
                 //        Intensity = 1.5f,
                 //        PositionAndOrientation = new MyPositionAndOrientation()
                 //        {
-                //            Position = new Vector3(),
-                //            //Position = new Vector3(-7.5f, -10, 27.5f),
+                //            Position = new Vector3D(),
+                //            //Position = new Vector3D(-7.5f, -10, 27.5f),
                 //            Forward = new Vector3(0,-1,0),
                 //            Up = new Vector3(1,0,0)
                 //        }
@@ -969,8 +969,8 @@
             // The cubes in ship2 have be reoriended in reverse, so effectly there is no visual difference in ship2, except now all the cubes are aligned to the same X,Y,Z axis as ship1.
 
             // find two cubes, one from each ship that are closest to each other to use as the reference.
-            var pos1 = model1.PositionAndOrientation.Value.Position.ToVector3();
-            var pos2 = model2.PositionAndOrientation.Value.Position.ToVector3();
+            var pos1 = (Vector3D)model1.PositionAndOrientation.Value.Position;
+            var pos2 = (Vector3D)model2.PositionAndOrientation.Value.Position;
             var orient1 = model1.PositionAndOrientation.Value.ToQuaternion();
             var orient2 = model2.PositionAndOrientation.Value.ToQuaternion();
             var multi1 = model1.GridSize.ToLength();

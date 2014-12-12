@@ -173,7 +173,7 @@
             }
         }
 
-        public float PositionX
+        public double PositionX
         {
             get
             {
@@ -188,7 +188,7 @@
             }
         }
 
-        public float PositionY
+        public double PositionY
         {
             get
             {
@@ -203,7 +203,7 @@
             }
         }
 
-        public float PositionZ
+        public double PositionZ
         {
             get
             {

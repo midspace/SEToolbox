@@ -131,6 +131,11 @@
             return new VRageMath.Vector3(ToFloat(X), ToFloat(Y), ToFloat(Z));
         }
 
+        public VRageMath.Vector3D ToVector3D()
+        {
+            return new VRageMath.Vector3D(X, Y, Z);
+        }
+
         private float ToFloat(double value)
         {
             float result = (float)value;

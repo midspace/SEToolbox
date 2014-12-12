@@ -31,10 +31,10 @@
         private string _description;
 
         [NonSerialized]
-        private Vector3 _center;
+        private Vector3D _center;
 
         [NonSerialized]
-        private BoundingBox _worldAabb;
+        private BoundingBoxD _worldAabb;
 
         [NonSerialized]
         private double _playerDistance;
@@ -47,6 +47,9 @@
 
         [NonSerialized]
         private bool _isBusy;
+
+        [NonSerialized]
+        internal bool _isValid;
 
         private string _serializedEntity;
 
@@ -118,7 +121,7 @@
         }
 
         [XmlIgnore]
-        public float PositionX
+        public double PositionX
         {
             get { return _entityBase.PositionAndOrientation.Value.Position.X; }
 
@@ -135,7 +138,7 @@
         }
 
         [XmlIgnore]
-        public float PositionY
+        public double PositionY
         {
             get { return _entityBase.PositionAndOrientation.Value.Position.Y; }
 
@@ -152,7 +155,7 @@
         }
 
         [XmlIgnore]
-        public float PositionZ
+        public double PositionZ
         {
             get { return _entityBase.PositionAndOrientation.Value.Position.Z; }
 
@@ -262,7 +265,7 @@
         /// Center of the object in space.
         /// </summary>
         [XmlIgnore]
-        public Vector3 Center
+        public Vector3D Center
         {
             get { return _center; }
 
@@ -280,7 +283,7 @@
         /// Bounding box.
         /// </summary>
         [XmlIgnore]
-        public BoundingBox WorldAABB
+        public BoundingBoxD WorldAABB
         {
             get { return _worldAabb; }
 
@@ -326,6 +329,21 @@
                     {
                         System.Windows.Forms.Application.DoEvents();
                     }
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public bool IsValid
+        {
+            get { return _isValid; }
+
+            set
+            {
+                if (value != _isValid)
+                {
+                    _isValid = value;
+                    RaisePropertyChanged(() => IsValid);
                 }
             }
         }
@@ -380,9 +398,9 @@
             // to be overridden.
         }
 
-        public virtual void RecalcPosition(Vector3 playerPosition)
+        public virtual void RecalcPosition(Vector3D playerPosition)
         {
-            PlayerDistance = (playerPosition - PositionAndOrientation.Value.Position.ToVector3()).Length();
+            PlayerDistance = (playerPosition - PositionAndOrientation.Value.Position).Length();
         }
 
         #endregion

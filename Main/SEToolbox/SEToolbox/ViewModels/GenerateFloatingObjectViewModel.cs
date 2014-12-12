@@ -336,7 +336,7 @@
 
             entity.PositionAndOrientation = new MyPositionAndOrientation
             {
-                Position = Point3D.Add(_dataModel.CharacterPosition.Position.ToPoint3D(), vector).ToVector3(),
+                Position = Point3D.Add(_dataModel.CharacterPosition.Position.ToPoint3D(), vector).ToVector3D(),
                 Forward = _dataModel.CharacterPosition.Forward,
                 Up = _dataModel.CharacterPosition.Up
             };
