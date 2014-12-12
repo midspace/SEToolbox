@@ -84,7 +84,7 @@ namespace SEToolbox.Interop.Asteroids
             this.CheckCellType();
         }
 
-        public void SetAllVoxelContents(byte[] buffer, out BoundingBox bounding)
+        public void SetAllVoxelContents(byte[] buffer, out BoundingBoxD bounding)
         {
             // quantize the buffer and compute sum
             this._voxelContentSum = 0;
@@ -94,7 +94,7 @@ namespace SEToolbox.Interop.Asteroids
                 this._voxelContentSum += buffer[i];
             }
 
-            bounding = new BoundingBox(Vector3I.MaxValue, Vector3I.MinValue);
+            bounding = new BoundingBoxD(Vector3I.MaxValue, Vector3I.MinValue);
 
             // mixed-->empty/full: deallocate
             // empty/full-->mixed: allocate

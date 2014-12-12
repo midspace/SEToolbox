@@ -599,10 +599,12 @@
             Size = new Size3D(scale.X * scaleMultiplyer, scale.Y * scaleMultiplyer, scale.Z * scaleMultiplyer);
             Mass = totalMass;
 
-            var quaternion = CubeGrid.PositionAndOrientation.Value.ToQuaternion();
-            var p1 = Vector3.Transform(min.ToVector3() * CubeGrid.GridSizeEnum.ToLength(), quaternion) + CubeGrid.PositionAndOrientation.Value.Position - (CubeGrid.GridSizeEnum.ToLength() / 2);
-            var p2 = Vector3.Transform((min.ToVector3() + Scale.ToVector3()) * CubeGrid.GridSizeEnum.ToLength(), quaternion) + CubeGrid.PositionAndOrientation.Value.Position - (CubeGrid.GridSizeEnum.ToLength() / 2);
-            WorldAABB = new BoundingBox(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
+            var quaternion = CubeGrid.PositionAndOrientation.Value.ToQuaternionD();
+            var p1 = (min.ToVector3D() * CubeGrid.GridSizeEnum.ToLength()).Transform(quaternion) + CubeGrid.PositionAndOrientation.Value.Position - (CubeGrid.GridSizeEnum.ToLength() / 2);
+            var p2 = ((min.ToVector3D() + Scale.ToVector3D()) * CubeGrid.GridSizeEnum.ToLength()).Transform(quaternion) + CubeGrid.PositionAndOrientation.Value.Position - (CubeGrid.GridSizeEnum.ToLength() / 2);
+            //var p1 = VRageMath.Vector3D.Transform(min.ToVector3D() * CubeGrid.GridSizeEnum.ToLength(), quaternion) + CubeGrid.PositionAndOrientation.Value.Position - (CubeGrid.GridSizeEnum.ToLength() / 2);
+            //var p2 = VRageMath.Vector3D.Transform((min.ToVector3D() + Scale.ToVector3D()) * CubeGrid.GridSizeEnum.ToLength(), quaternion) + CubeGrid.PositionAndOrientation.Value.Position - (CubeGrid.GridSizeEnum.ToLength() / 2);
+            WorldAABB = new BoundingBoxD(VRageMath.Vector3D.Min(p1, p2), VRageMath.Vector3D.Max(p1, p2));
             Center = WorldAABB.Center;
 
             DisplayName = CubeGrid.DisplayName;
@@ -841,13 +843,13 @@
             RaisePropertyChanged(() => LinearVelocity);
         }
 
-        public void MaxVelocityAtPlayer(Vector3 playerPosition)
+        public void MaxVelocityAtPlayer(VRageMath.Vector3D playerPosition)
         {
             var v = playerPosition - CubeGrid.PositionAndOrientation.Value.Position;
             v.Normalize();
             v = Vector3.Multiply(v, SpaceEngineersConsts.MaxShipVelocity);
 
-            CubeGrid.LinearVelocity = v;
+            CubeGrid.LinearVelocity = (Vector3)v;
             CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
             RaisePropertyChanged(() => LinearVelocity);
         }

@@ -1429,7 +1429,7 @@ td.right { text-align: right; }");
         public class AsteroidContent
         {
             public string Name { get; set; }
-            public Vector3 Position { get; set; }
+            public Vector3D Position { get; set; }
             public long Empty { get; set; }
             public List<VoxelMaterialAssetModel> UntouchedOreList { get; set; }
         }
@@ -1462,7 +1462,7 @@ td.right { text-align: right; }");
         public class ShipContent
         {
             public string DisplayName { get; set; }
-            public Vector3 Position { get; set; }
+            public Vector3D Position { get; set; }
             public long EntityId { get; set; }
             public int BlockCount { get; set; }
             //public decimal Amount { get; set; }

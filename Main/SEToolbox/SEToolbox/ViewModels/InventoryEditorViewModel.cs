@@ -121,7 +121,7 @@
         public void AddItemExecuted()
         {
             var model = new GenerateFloatingObjectModel();
-            var position = new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             var settings = SpaceEngineersCore.WorldResource.Checkpoint.Settings;
 
             model.Load(position, settings.MaxFloatingObjects);

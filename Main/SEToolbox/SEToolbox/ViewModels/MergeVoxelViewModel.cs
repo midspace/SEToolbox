@@ -149,54 +149,54 @@
         {
             // Realign both asteroids to a common grid, so voxels can be lined up.
             Vector3I roundedPosLeft = SelectionLeft.WorldAABB.Min.RoundToVector3I();
-            Vector3 offsetPosLeft = SelectionLeft.WorldAABB.Min - roundedPosLeft; // Use for everything.
+            Vector3D offsetPosLeft = SelectionLeft.WorldAABB.Min - (Vector3D)roundedPosLeft; // Use for everything.
             Vector3I roundedPosRight = (SelectionRight.WorldAABB.Min - offsetPosLeft).RoundToVector3I();
-            Vector3 offsetPosRight = SelectionRight.WorldAABB.Min - roundedPosRight; // Use for everything.
+            Vector3D offsetPosRight = SelectionRight.WorldAABB.Min - (Vector3D)roundedPosRight; // Use for everything.
 
             // calculate smallest allowable size for contents of both.
             const int paddCells = 3;
 
             var minLeft = SelectionLeft.WorldAABB.Min + SelectionLeft.ContentBounds.Min - offsetPosLeft;
             var minRight = SelectionRight.WorldAABB.Min + SelectionRight.ContentBounds.Min - offsetPosRight;
-            var min = Vector3.Zero;
-            var posOffset = Vector3.Zero;
+            var min = Vector3D.Zero;
+            var posOffset = Vector3D.Zero;
             var asteroidSize = Vector3I.Zero;
 
             switch (VoxelMergeType)
             {
                 case VoxelMergeType.UnionVolumeLeftToRight:
                 case VoxelMergeType.UnionVolumeRightToLeft:
-                    min = Vector3.Min(minLeft, minRight) - paddCells;
-                    var max = Vector3.Max(SelectionLeft.WorldAABB.Min + SelectionLeft.ContentBounds.Max - offsetPosLeft, SelectionRight.WorldAABB.Min + SelectionRight.ContentBounds.Max - offsetPosRight) + paddCells;
-                    posOffset = new Vector3(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
+                    min = Vector3D.Min(minLeft, minRight) - paddCells;
+                    var max = Vector3D.Max(SelectionLeft.WorldAABB.Min + SelectionLeft.ContentBounds.Max - offsetPosLeft, SelectionRight.WorldAABB.Min + SelectionRight.ContentBounds.Max - offsetPosRight) + paddCells;
+                    posOffset = new Vector3D(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
                     var size = (max - min).RoundToVector3I();
                     asteroidSize = new Vector3I(size.X.RoundUpToNearest(64), size.Y.RoundUpToNearest(64), size.Z.RoundUpToNearest(64));
                     break;
                 case VoxelMergeType.UnionMaterialLeftToRight:
                     min = SelectionRight.WorldAABB.Min - offsetPosRight;
-                    posOffset = new Vector3(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
+                    posOffset = new Vector3D(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
                     asteroidSize = SelectionRight.Size;
                     break;
                 case VoxelMergeType.UnionMaterialRightToLeft:
                     min = SelectionLeft.WorldAABB.Min - offsetPosLeft;
-                    posOffset = new Vector3(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
+                    posOffset = new Vector3D(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
                     asteroidSize = SelectionLeft.Size;
                     break;
                 case VoxelMergeType.SubtractVolumeLeftFromRight:
                     min = SelectionRight.WorldAABB.Min - offsetPosRight;
-                    posOffset = new Vector3(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
+                    posOffset = new Vector3D(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
                     asteroidSize = SelectionRight.Size;
                     break;
                 case VoxelMergeType.SubtractVolumeRightFromLeft:
                     min = SelectionLeft.WorldAABB.Min - offsetPosLeft;
-                    posOffset = new Vector3(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
+                    posOffset = new Vector3D(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
                     asteroidSize = SelectionLeft.Size;
                     break;
             }
 
             // Prepare new asteroid.
             var newAsteroid = new MyVoxelMap();
-            newAsteroid.Init(Vector3.Zero, asteroidSize, SpaceEngineersCore.Resources.GetDefaultMaterialName());
+            newAsteroid.Init(Vector3D.Zero, asteroidSize, SpaceEngineersCore.Resources.GetDefaultMaterialName());
             newAsteroid.RemoveContent();
             if (string.IsNullOrEmpty(MergeFileName))
                 MergeFileName = "merge";
@@ -249,7 +249,7 @@
 
         #region MergeAsteroidVolumeInto
 
-        private void MergeAsteroidVolumeInto(ref MyVoxelMap newAsteroid, Vector3 min, StructureVoxelModel modelPrimary, StructureVoxelModel modelSecondary, Vector3 minPrimary, Vector3 minSecondary)
+        private void MergeAsteroidVolumeInto(ref MyVoxelMap newAsteroid, Vector3D min, StructureVoxelModel modelPrimary, StructureVoxelModel modelSecondary, Vector3D minPrimary, Vector3D minSecondary)
         {
             var filenameSecondary = modelSecondary.SourceVoxelFilepath ?? modelSecondary.VoxelFilepath;
             var filenamePrimary = modelPrimary.SourceVoxelFilepath ?? modelPrimary.VoxelFilepath;
@@ -268,7 +268,7 @@
                         string cellMaterial;
                         asteroid.GetVoxelMaterialContent(ref coords, out cellMaterial, out volume);
 
-                        var newCoord = ((minSecondary - min) + (coords - modelSecondary.ContentBounds.Min)).RoundToVector3I();
+                        var newCoord = ((minSecondary - min) + ((Vector3D)coords - modelSecondary.ContentBounds.Min)).RoundToVector3I();
                         newAsteroid.SetVoxelContent(volume, ref newCoord);
                         newAsteroid.SetVoxelMaterialAndIndestructibleContent(cellMaterial, 0xff, ref newCoord);
                     }
@@ -292,7 +292,7 @@
                             byte existingVolume;
                             string existingCellMaterial;
 
-                            var newCoord = ((minPrimary - min) + (coords - modelPrimary.ContentBounds.Min)).RoundToVector3I();
+                            var newCoord = ((minPrimary - min) + ((Vector3D)coords - modelPrimary.ContentBounds.Min)).RoundToVector3I();
                             newAsteroid.GetVoxelMaterialContent(ref newCoord, out existingCellMaterial, out existingVolume);
 
                             if (volume > existingVolume)
@@ -311,7 +311,7 @@
 
         #region SubtractAsteroidVolumeFrom
 
-        private void SubtractAsteroidVolumeFrom(ref MyVoxelMap newAsteroid, Vector3 min, StructureVoxelModel modelPrimary, StructureVoxelModel modelSecondary, Vector3 minPrimary, Vector3 minSecondary)
+        private void SubtractAsteroidVolumeFrom(ref MyVoxelMap newAsteroid, Vector3D min, StructureVoxelModel modelPrimary, StructureVoxelModel modelSecondary, Vector3D minPrimary, Vector3D minSecondary)
         {
             var filenameSecondary = modelSecondary.SourceVoxelFilepath ?? modelSecondary.VoxelFilepath;
             var filenamePrimary = modelPrimary.SourceVoxelFilepath ?? modelPrimary.VoxelFilepath;
@@ -330,7 +330,7 @@
                         string cellMaterial;
                         asteroid.GetVoxelMaterialContent(ref coords, out cellMaterial, out volume);
 
-                        var newCoord = ((minPrimary - min) + (coords - modelPrimary.ContentBounds.Min)).RoundToVector3I();
+                        var newCoord = ((minPrimary - min) + ((Vector3D)coords - modelPrimary.ContentBounds.Min)).RoundToVector3I();
                         newAsteroid.SetVoxelContent(volume, ref newCoord);
                         newAsteroid.SetVoxelMaterialAndIndestructibleContent(cellMaterial, 0xff, ref newCoord);
                     }
@@ -345,7 +345,7 @@
                 {
                     for (coords.X = (int)modelSecondary.ContentBounds.Min.X; coords.X <= modelSecondary.ContentBounds.Max.X; coords.X++)
                     {
-                        var newCoord = ((minSecondary - min) + (coords - modelSecondary.ContentBounds.Min)).RoundToVector3I();
+                        var newCoord = ((minSecondary - min) + ((Vector3D)coords - modelSecondary.ContentBounds.Min)).RoundToVector3I();
                         if (Vector3I.BoxContains(Vector3I.Zero, modelPrimary.Size - 1, newCoord))
                         {
                             byte volume;
@@ -395,7 +395,7 @@
                         string cellMaterial;
                         asteroid.GetVoxelMaterialContent(ref coords, out cellMaterial, out volume);
 
-                        var newCoord = ((minPrimary - min) + (coords - modelPrimary.ContentBounds.Min)).RoundToVector3I();
+                        var newCoord = ((minPrimary - min) + ((Vector3D)coords - modelPrimary.ContentBounds.Min)).RoundToVector3I();
                         newAsteroid.SetVoxelContent(volume, ref newCoord);
                         newAsteroid.SetVoxelMaterialAndIndestructibleContent(cellMaterial, 0xff, ref newCoord);
                     }
@@ -410,7 +410,7 @@
                 {
                     for (coords.X = (int)modelSecondary.ContentBounds.Min.X; coords.X <= modelSecondary.ContentBounds.Max.X; coords.X++)
                     {
-                        var newCoord = ((minSecondary - min) + (coords - modelSecondary.ContentBounds.Min)).RoundToVector3I();
+                        var newCoord = ((minSecondary - min) + ((Vector3D)coords - modelSecondary.ContentBounds.Min)).RoundToVector3I();
                         if (Vector3I.BoxContains(Vector3I.Zero, modelPrimary.Size - 1, newCoord))
                         {
                             byte volume;

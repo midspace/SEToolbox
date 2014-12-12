@@ -8,6 +8,7 @@
     using SEToolbox.Support;
     using VRage;
     using VRageMath;
+    using System.IO;
 
     /// <summary>
     /// Contains Extension methods specifically for Keen classes and structures.
@@ -53,9 +54,19 @@
             return new Vector3I((int)Math.Round(vector.X, 0, MidpointRounding.ToEven), (int)Math.Round(vector.Y, 0, MidpointRounding.ToEven), (int)Math.Round(vector.Z, 0, MidpointRounding.ToEven));
         }
 
+        public static Vector3I RoundToVector3I(this Vector3D vector)
+        {
+            return new Vector3I((int)Math.Round(vector.X, 0, MidpointRounding.ToEven), (int)Math.Round(vector.Y, 0, MidpointRounding.ToEven), (int)Math.Round(vector.Z, 0, MidpointRounding.ToEven));
+        }
+
         public static Vector3 ToVector3(this SerializableVector3I vector)
         {
             return new Vector3(vector.X, vector.Y, vector.Z);
+        }
+
+        public static Vector3D ToVector3D(this SerializableVector3I vector)
+        {
+            return new Vector3D(vector.X, vector.Y, vector.Z);
         }
 
         public static Vector3 ToVector3(this SerializableVector3 vector)
@@ -64,6 +75,12 @@
         }
 
         public static Vector3I SizeInt(this BoundingBox box)
+        {
+            var size = box.Size();
+            return new Vector3I((int)size.X, (int)size.Y, (int)size.Z);
+        }
+
+        public static Vector3I SizeInt(this BoundingBoxD box)
         {
             var size = box.Size();
             return new Vector3I((int)size.X, (int)size.Y, (int)size.Z);
@@ -79,12 +96,17 @@
             return new System.Windows.Media.Media3D.Vector3D(vector.X, vector.Y, vector.Z);
         }
 
-        public static System.Windows.Media.Media3D.Point3D ToPoint3D(this Vector3 vector)
+        public static System.Windows.Media.Media3D.Point3D ToPoint3D(this Vector3D vector)
         {
             return new System.Windows.Media.Media3D.Point3D(vector.X, vector.Y, vector.Z);
         }
 
         public static System.Windows.Media.Media3D.Point3D ToPoint3D(this SerializableVector3 point)
+        {
+            return new System.Windows.Media.Media3D.Point3D(point.X, point.Y, point.Z);
+        }
+
+        public static System.Windows.Media.Media3D.Point3D ToPoint3D(this SerializableVector3D point)
         {
             return new System.Windows.Media.Media3D.Point3D(point.X, point.Y, point.Z);
         }
@@ -99,14 +121,29 @@
             return new Vector3((float)point.X, (float)point.Y, (float)point.Z);
         }
 
+        public static Vector3D ToVector3D(this System.Windows.Media.Media3D.Point3D point)
+        {
+            return new Vector3D(point.X, point.Y, point.Z);
+        }
+
         public static Vector3 ToVector3(this System.Windows.Media.Media3D.Size3D size3D)
         {
             return new Vector3((float)size3D.X, (float)size3D.Y, (float)size3D.Z);
         }
 
+        public static Vector3D ToVector3D(this System.Windows.Media.Media3D.Size3D size3D)
+        {
+            return new Vector3D(size3D.X, size3D.Y, size3D.Z);
+        }
+
         public static Vector3 ToVector3(this System.Windows.Media.Media3D.Vector3D size3D)
         {
             return new Vector3((float)size3D.X, (float)size3D.Y, (float)size3D.Z);
+        }
+
+        public static Vector3D ToVector3D(this System.Windows.Media.Media3D.Vector3D size3D)
+        {
+            return new Vector3D(size3D.X, size3D.Y, size3D.Z);
         }
 
         public static Quaternion ToQuaternion(this SerializableBlockOrientation blockOrientation)
@@ -122,7 +159,7 @@
 
         public static QuaternionD ToQuaternionD(this MyPositionAndOrientation positionOrientation)
         {
-            return QuaternionD.CreateFromForwardUp(positionOrientation.Forward, positionOrientation.Up);
+            return QuaternionD.CreateFromForwardUp(new Vector3D(positionOrientation.Forward), new Vector3D(positionOrientation.Up));
         }
 
         public static Matrix ToMatrix(this MyPositionAndOrientation positionOrientation)
@@ -139,6 +176,12 @@
         {
             var matrix = Matrix.CreateFromDir(Base6Directions.GetVector(orientation.Forward), Base6Directions.GetVector(orientation.Up));
             return Vector3.Transform(vector, matrix);
+        }
+
+        public static Vector3D Transform(this Vector3D vector, SerializableBlockOrientation orientation)
+        {
+            var matrix = MatrixD.CreateFromDir(Base6Directions.GetVector(orientation.Forward), Base6Directions.GetVector(orientation.Up));
+            return Vector3D.Transform(vector, matrix);
         }
 
         public static Vector3I Transform(this SerializableVector3I size, SerializableBlockOrientation orientation)
@@ -158,9 +201,50 @@
             return new Vector3I(Math.Abs(size.X), Math.Abs(size.Y), Math.Abs(size.Z));
         }
 
+        public static Vector3D ToVector3D(this Vector3I vector)
+        {
+            return new Vector3D(vector.X, vector.Y, vector.Z);
+        }
+
         public static SerializableVector3 RoundOff(this SerializableVector3 vector, float roundTo)
         {
             return new SerializableVector3((float)Math.Round(vector.X / roundTo, 0, MidpointRounding.ToEven) * roundTo, (float)Math.Round(vector.Y / roundTo, 0, MidpointRounding.ToEven) * roundTo, (float)Math.Round(vector.Z / roundTo, 0, MidpointRounding.ToEven) * roundTo);
+        }
+
+        public static SerializableVector3D RoundOff(this SerializableVector3D vector, float roundTo)
+        {
+            return new SerializableVector3D(Math.Round(vector.X / roundTo, 0, MidpointRounding.ToEven) * roundTo, Math.Round(vector.Y / roundTo, 0, MidpointRounding.ToEven) * roundTo, Math.Round(vector.Z / roundTo, 0, MidpointRounding.ToEven) * roundTo);
+        }
+
+        public static MatrixD ToMatrixD(this QuaternionD value)
+        {
+            double num = value.X * value.X;
+            double num2 = value.Y * value.Y;
+            double num3 = value.Z * value.Z;
+            double num4 = value.X * value.Y;
+            double num5 = value.Z * value.W;
+            double num6 = value.Z * value.X;
+            double num7 = value.Y * value.W;
+            double num8 = value.Y * value.Z;
+            double num9 = value.X * value.W;
+            MatrixD result;
+            result.M11 = (1.0d - 2.0d * (num2 + num3));
+            result.M12 = (2.0d * (num4 + num5));
+            result.M13 = (2.0d * (num6 - num7));
+            result.M14 = 0d;
+            result.M21 = (2.0d * (num4 - num5));
+            result.M22 = (1.0d - 2.0d * (num3 + num));
+            result.M23 = (2.0d * (num8 + num9));
+            result.M24 = 0d;
+            result.M31 = (2.0d * (num6 + num7));
+            result.M32 = (2.0d * (num8 - num9));
+            result.M33 = (1.0d - 2.0d * (num2 + num));
+            result.M34 = 0d;
+            result.M41 = 0d;
+            result.M42 = 0d;
+            result.M43 = 0d;
+            result.M44 = 1d;
+            return result;
         }
 
         public static SerializableVector3 RoundToAxis(this SerializableVector3 vector)
@@ -254,7 +338,7 @@
             return MyFixedPoint.DeserializeString(value.ToString(CultureInfo.InvariantCulture));
         }
 
-        public static Vector3? IntersectsRayAt(this BoundingBox boundingBox, Vector3 position, Vector3 rayTo)
+        public static Vector3D? IntersectsRayAt(this BoundingBoxD boundingBox, Vector3D position, Vector3D rayTo)
         {
             var corners = boundingBox.GetCorners();
             var tariangles = new int[][] {
@@ -278,7 +362,7 @@
 
                 if (MeshHelper.RayIntersetTriangleRound(corners[triangle[0]].ToPoint3D(), corners[triangle[1]].ToPoint3D(), corners[triangle[2]].ToPoint3D(), position.ToPoint3D(), rayTo.ToPoint3D(), out intersection, out norm))
                 {
-                    return intersection.ToVector3();
+                    return intersection.ToVector3D();
                 }
             }
 
@@ -290,5 +374,47 @@
             var vector = Vector3I.Transform(new Vector3I(value.X - 127, value.Y - 127, value.Z - 127), rotation);
             return new SerializableVector3UByte((byte)(vector.X + 127), (byte)(vector.Y + 127), (byte)(vector.Z + 127));
         }
+
+        public static Vector3D Transform(this Vector3D value, QuaternionD rotation)
+        {
+            double num = (double)(rotation.X + rotation.X);
+            double num2 = (double)(rotation.Y + rotation.Y);
+            double num3 = (double)(rotation.Z + rotation.Z);
+            double num4 = (double)rotation.W * num;
+            double num5 = (double)rotation.W * num2;
+            double num6 = (double)rotation.W * num3;
+            double num7 = (double)rotation.X * num;
+            double num8 = (double)rotation.X * num2;
+            double num9 = (double)rotation.X * num3;
+            double num10 = (double)rotation.Y * num2;
+            double num11 = (double)rotation.Y * num3;
+            double num12 = (double)rotation.Z * num3;
+            double x = value.X * (1.0 - num10 - num12) + value.Y * (num8 - num6) + value.Z * (num9 + num5);
+            double y = value.X * (num8 + num6) + value.Y * (1.0 - num7 - num12) + value.Z * (num11 - num4);
+            double z = value.X * (num9 - num5) + value.Y * (num11 + num4) + value.Z * (1.0 - num7 - num10);
+            Vector3D result;
+            result.X = x;
+            result.Y = y;
+            result.Z = z;
+            return result;
+        }
+
+        public static int Read7BitEncodedInt(this BinaryReader reader)
+        {
+            int num = 0;
+            int num2 = 0;
+            while (num2 != 35)
+            {
+                byte b = reader.ReadByte();
+                num |= (int)(b & 127) << num2;
+                num2 += 7;
+                if ((b & 128) == 0)
+                {
+                    return num;
+                }
+            }
+            return -1;
+        }
+
     }
 }

@@ -8,11 +8,11 @@
 
         private IStructureViewBase _item;
 
-        private float _newPositionX;
+        private double _newPositionX;
 
-        private float _newtPositionY;
+        private double _newtPositionY;
 
-        private float _newPositionZ;
+        private double _newPositionZ;
 
         private double _playerDistance;
 
@@ -37,7 +37,7 @@
             }
         }
 
-        public float PositionX
+        public double PositionX
         {
             get
             {
@@ -54,7 +54,7 @@
             }
         }
 
-        public float PositionY
+        public double PositionY
         {
             get
             {
@@ -71,7 +71,7 @@
             }
         }
 
-        public float PositionZ
+        public double PositionZ
         {
             get
             {

@@ -220,7 +220,7 @@
 
         #region methods
 
-        public void Load(ObservableCollection<IStructureViewBase> selections, Vector3 playerPosition)
+        public void Load(ObservableCollection<IStructureViewBase> selections, Vector3D playerPosition)
         {
             Selections = new ObservableCollection<GroupMoveItemModel>();
             _playerPosition = playerPosition;
@@ -263,7 +263,7 @@
                     selection.PositionZ = SinglePositionZ;
                 }
 
-                selection.PlayerDistance = (_playerPosition - new Vector3(selection.PositionX, selection.PositionY, selection.PositionZ)).Length();
+                selection.PlayerDistance = (_playerPosition - new Vector3D(selection.PositionX, selection.PositionY, selection.PositionZ)).Length();
             }
         }
 

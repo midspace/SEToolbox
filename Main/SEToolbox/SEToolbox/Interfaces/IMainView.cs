@@ -20,7 +20,7 @@
 
         string CreateUniqueVoxelStorageName(string originalFile);
 
-        List<IStructureBase> GetIntersectingEntities(BoundingBox box);
+        List<IStructureBase> GetIntersectingEntities(BoundingBoxD box);
 
         StructureCharacterModel ThePlayerCharacter { get; }
 

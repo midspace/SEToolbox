@@ -24,9 +24,9 @@
         private ObservableCollection<AsteroidByteFillProperties> _voxelCollection;
         private readonly List<int> _percentList;
         private static bool _isInitialValueSet;
-        private static float _centerPositionX;
-        private static float _centerPositionY;
-        private static float _centerPositionZ;
+        private static double _centerPositionX;
+        private static double _centerPositionY;
+        private static double _centerPositionZ;
         private static AsteroidFillType _asteroidFillType;
 
         #endregion
@@ -118,7 +118,7 @@
 
         public MaterialSelectionModel BaseMaterial { get; set; }
 
-        public float CenterPositionX
+        public double CenterPositionX
         {
             get { return _centerPositionX; }
 
@@ -132,7 +132,7 @@
             }
         }
 
-        public float CenterPositionY
+        public double CenterPositionY
         {
             get { return _centerPositionY; }
 
@@ -146,7 +146,7 @@
             }
         }
 
-        public float CenterPositionZ
+        public double CenterPositionZ
         {
             get { return _centerPositionZ; }
 

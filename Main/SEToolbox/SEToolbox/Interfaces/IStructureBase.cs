@@ -24,9 +24,9 @@
 
         int BlockCount { get; set; }
 
-        Vector3 Center { get; set; }
+        Vector3D Center { get; set; }
 
-        BoundingBox WorldAABB { get; set; }
+        BoundingBoxD WorldAABB { get; set; }
 
         string SerializedEntity { get; set; }
 
@@ -34,16 +34,18 @@
 
         bool IsBusy { get; set; }
 
+        bool IsValid { get; set; }
+
         void InitializeAsync();
         
         void CancelAsync();
 
-        float PositionX { get; set; }
+        double PositionX { get; set; }
 
-        float PositionY { get; set; }
+        double PositionY { get; set; }
 
-        float PositionZ { get; set; }
+        double PositionZ { get; set; }
 
-        void RecalcPosition(Vector3 playerPosition);
+        void RecalcPosition(Vector3D playerPosition);
     }
 }

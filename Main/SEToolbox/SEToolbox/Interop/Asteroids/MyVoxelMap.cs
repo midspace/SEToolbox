@@ -20,6 +20,7 @@ namespace SEToolbox.Interop.Asteroids
     using System.Linq;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Support;
+    using SEToolbox.Interop;
     using VRageMath;
 
     public class MyVoxelMap
@@ -43,9 +44,9 @@ namespace SEToolbox.Interop.Asteroids
 
         private Vector3I _sizeMinusOne;
 
-        private Vector3 _positionLeftBottomCorner;
+        private Vector3D _positionLeftBottomCorner;
 
-        private BoundingBox _boundingContent;
+        private BoundingBoxD _boundingContent;
 
         #endregion
 
@@ -58,27 +59,30 @@ namespace SEToolbox.Interop.Asteroids
         // TODO: WeightedCenter.  Center of mass, as opposed to center by dimension.
         // public Vector3 WeightedCenter { get; private set; }
 
-        public BoundingBox BoundingContent { get { return _boundingContent; } }
+        public BoundingBoxD BoundingContent { get { return _boundingContent; } }
 
         public byte VoxelMaterial { get; private set; }
+
+        public bool IsValid { get; private set; }
 
         #endregion
 
         #region Init
 
         // Creates full voxel map, does not initialize base !!! Use only for importing voxel maps from models !!!
-        public void Init(Vector3 position, Vector3I size, string material)
+        public void Init(Vector3D position, Vector3I size, string material)
         {
             InitVoxelMap(position, size, material);
         }
 
-        private void InitVoxelMap(Vector3 position, Vector3I size, string materialName)
+        private void InitVoxelMap(Vector3D position, Vector3I size, string materialName)
         {
+            IsValid = true;
             Size = size;
             _sizeMinusOne = new Vector3I(Size.X - 1, Size.Y - 1, Size.Z - 1);
             VoxelMaterial = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             _positionLeftBottomCorner = position;
-            _boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
+            _boundingContent = new BoundingBoxD(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
 
             // If you need larged voxel maps, enlarge this constant.
             Debug.Assert(Size.X <= MyVoxelConstants.MAX_VOXEL_MAP_SIZE_IN_VOXELS);
@@ -129,13 +133,14 @@ namespace SEToolbox.Interop.Asteroids
 
         #region Preview
 
-        public static void GetPreview(string filename, out Vector3I size, out BoundingBox contentBounds, out long voxCells)
+        public static void GetPreview(string filename, out Vector3I size, out BoundingBoxD contentBounds, out long voxCells, out bool isValid)
         {
             var map = new MyVoxelMap();
             map.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
             size = map.Size;
             contentBounds = map.BoundingContent;
             voxCells = map.SumVoxelCells();
+            isValid = map.IsValid;
         }
 
         #endregion
@@ -144,6 +149,9 @@ namespace SEToolbox.Interop.Asteroids
         {
             var map = new MyVoxelMap();
             map.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+
+            if (!map.IsValid)
+                return new Dictionary<string, long>();
 
             IList<byte> materialAssetList;
             Dictionary<byte, long> materialVoxelCells;
@@ -223,51 +231,89 @@ namespace SEToolbox.Interop.Asteroids
             else
                 Uncompress(filename, tempfilename);
 
+            
             using (var ms = new FileStream(tempfilename, FileMode.Open))
             {
                 using (var reader = new BinaryReader(ms))
                 {
-                    LoadUncompressed(initialVersion, Vector3.Zero, reader, defaultMaterial, loadMaterial);
+                    LoadUncompressed(initialVersion, Vector3D.Zero, reader, defaultMaterial, loadMaterial);
                 }
             }
 
             File.Delete(tempfilename);
         }
 
-        public void LoadUncompressed(int initialVersion, Vector3 position, BinaryReader reader, string defaultMaterial, bool loadMaterial)
+        public void LoadUncompressed(int initialVersion, Vector3D position, BinaryReader reader, string defaultMaterial, bool loadMaterial)
         {
+            string voxelType = "Cell";
+            int materialBaseCount = 0;
             switch (initialVersion)
             {
                 case 1:
                     // cell tag header
-                    reader.ReadString();
-                    FileVersion = reader.ReadByte();
+                    voxelType = reader.ReadString();
+                    FileVersion = reader.Read7BitEncodedInt();
                     break;
                 default:
                     FileVersion = reader.ReadInt32();
                     break;
             }
 
-            var sizeX = reader.ReadInt32();
-            var sizeY = reader.ReadInt32();
-            var sizeZ = reader.ReadInt32();
+            if (voxelType == "Cell")
+            {
+                var sizeX = reader.ReadInt32();
+                var sizeY = reader.ReadInt32();
+                var sizeZ = reader.ReadInt32();
 
-            var cellSizeX = reader.ReadInt32();
-            var cellSizeY = reader.ReadInt32();
-            var cellSizeZ = reader.ReadInt32();
+                var cellSizeX = reader.ReadInt32();
+                var cellSizeY = reader.ReadInt32();
+                var cellSizeZ = reader.ReadInt32();
 
-            _cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
+                _cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
 
-            InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
+                InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
+                if (FileVersion == 2)
+                    materialBaseCount = reader.ReadByte();
+            }
+            else
+            {
+                //voxelType == "Octree"
+                // Don't know how to read this format.
+                var a1 = reader.ReadByte(); // no idea 
+                var a2 = reader.ReadByte();
+                var a3 = reader.ReadByte();
+                var a4 = reader.ReadByte();
+                var a5 = reader.ReadByte();
+                var a6 = reader.ReadByte();
+                var a7 = reader.ReadByte();
+
+                var sizeX = reader.ReadInt32();
+                var sizeY = reader.ReadInt32();
+                var sizeZ = reader.ReadInt32();
+
+                var c1 = reader.ReadByte(); // no idea 
+                var c2 = reader.ReadByte();
+                var c3 = reader.ReadByte();
+                var c4 = reader.ReadByte();
+                var c5 = reader.ReadByte();
+                
+                _cellSize = new Vector3I(8, 8, 8);
+
+                InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
+                materialBaseCount = reader.ReadInt32();
+
+                //FileVersion = 2;
+                IsValid = false;
+                return;
+            }
 
             switch (FileVersion)
             {
                 case 0:
                 case 1: LoadUncompressedV1(reader, loadMaterial); break;
-                case 2: LoadUncompressedV2(reader, loadMaterial); break;
+                case 2: LoadUncompressedV2(reader, loadMaterial, materialBaseCount); break;
                 default: throw new Exception("Voxel format not implmented");
             }
-           
         }
 
         private void LoadUncompressedV1(BinaryReader reader, bool loadMaterial)
@@ -296,17 +342,17 @@ namespace SEToolbox.Interop.Asteroids
                             }
                             else if (cellType == MyVoxelCellType.MIXED)
                             {
-                                BoundingBox box;
+                                BoundingBoxD box;
                                 newCell.SetAllVoxelContents(reader.ReadBytes(_cellSize.X * _cellSize.Y * _cellSize.Z), out box);
-                                _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
-                                _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
+                                _boundingContent.Min = Vector3D.Min(_boundingContent.Min, new Vector3D((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
+                                _boundingContent.Max = Vector3D.Max(_boundingContent.Max, new Vector3D((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
                             }
                             // ignore else condition
                         }
                         else
                         {
-                            _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
-                            _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                            _boundingContent.Min = Vector3D.Min(_boundingContent.Min, new Vector3D(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            _boundingContent.Max = Vector3D.Max(_boundingContent.Max, new Vector3D((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
                         }
                     }
                 }
@@ -359,10 +405,9 @@ namespace SEToolbox.Interop.Asteroids
             }
         }
 
-        private void LoadUncompressedV2(BinaryReader reader, bool loadMaterial)
+        private void LoadUncompressedV2(BinaryReader reader, bool loadMaterial, int materialBaseCount)
         {
             var materialIndexDict = new Dictionary<byte, byte>();
-            var materialBaseCount = reader.ReadByte();
             for (byte i = 0; i < materialBaseCount; i++)
             {
                 var idx = reader.ReadByte();
@@ -394,17 +439,17 @@ namespace SEToolbox.Interop.Asteroids
                             }
                             else if (cellType == MyVoxelCellType.MIXED)
                             {
-                                BoundingBox box;
+                                BoundingBoxD box;
                                 newCell.SetAllVoxelContents(reader.ReadBytes(_cellSize.X * _cellSize.Y * _cellSize.Z), out box);
-                                _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
-                                _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
+                                _boundingContent.Min = Vector3D.Min(_boundingContent.Min, new Vector3D((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Min.Z));
+                                _boundingContent.Max = Vector3D.Max(_boundingContent.Max, new Vector3D((x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.X, (y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Y, (z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + box.Max.Z));
                             }
                             // ignore else condition
                         }
                         else
                         {
-                            _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
-                            _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                            _boundingContent.Min = Vector3D.Min(_boundingContent.Min, new Vector3D(x << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            _boundingContent.Max = Vector3D.Max(_boundingContent.Max, new Vector3D((x + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
                         }
                     }
                 }
@@ -820,45 +865,47 @@ namespace SEToolbox.Interop.Asteroids
 
         #region MergeVoxelMaterials
 
-        //  Merges specified materials (from file) into our actual voxel map - overwriting materials only.
-        //  We are using a regular voxel map to define areas where we want to set a specified material. Empty voxels are ignored and 
-        //  only mixed/full voxels are used to tell us that that voxel will contain new material - 'materialToSet'.
-        //  If we are seting indestructible material, voxel content values from merged voxel map will be used to define indestructible content.
-        //  Parameter 'voxelPosition' - place where we will place merged voxel map withing actual voxel map. It's in voxel coords.
-        //  IMPORTANT: THIS METHOD WILL WORK ONLY IF WE PLACE THE MAP THAT WE TRY TO MERGE FROM IN VOXEL COORDINATES THAT ARE MULTIPLY OF DATA CELL SIZE
-        //  This method is used to load small material areas, overwriting actual material only if value from file is 1. Zeros are ignored (it's empty space).
-        //  This method is quite fast, even on large maps - 512x512x512, so we can do more overwrites.
-        //  Parameter 'materialToSet' tells us what material to set at places which are full in file. Empty are ignored - so stay as they were before this method was called.
-        //  IMPORTANT: THIS MERGE MATERIAL CAN BE CALLED ONLY AFTER ALL VOXEL CONTENTS ARE LOADED. THAT'S BECAUSE WE NEED TO KNOW THEM FOR MIN CONTENT / INDESTRUCTIBLE CONTENT.
-        //  Voxel map we are trying to merge into existing voxel map can be bigger or outside of area of existing voxel map. This method will just ignore those parts.
-        public void MergeVoxelMaterials(MyMwcVoxelFilesEnum voxelFile, Vector3I voxelPosition, string materialToSet)
-        {
-            var filename = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), voxelFile + V2FileExtension);
-            var dataStore = new MyVoxelMap();
-            dataStore.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
+        // MyMwcVoxelFilesEnum is obsoleted in SE version 01.60.xx.
 
-            var cellsCountX = dataStore.Size.X / dataStore._cellSize.X;
-            var cellsCountY = dataStore.Size.Y / dataStore._cellSize.Y;
-            var cellsCountZ = dataStore.Size.Z / dataStore._cellSize.Z;
+        ////  Merges specified materials (from file) into our actual voxel map - overwriting materials only.
+        ////  We are using a regular voxel map to define areas where we want to set a specified material. Empty voxels are ignored and 
+        ////  only mixed/full voxels are used to tell us that that voxel will contain new material - 'materialToSet'.
+        ////  If we are seting indestructible material, voxel content values from merged voxel map will be used to define indestructible content.
+        ////  Parameter 'voxelPosition' - place where we will place merged voxel map withing actual voxel map. It's in voxel coords.
+        ////  IMPORTANT: THIS METHOD WILL WORK ONLY IF WE PLACE THE MAP THAT WE TRY TO MERGE FROM IN VOXEL COORDINATES THAT ARE MULTIPLY OF DATA CELL SIZE
+        ////  This method is used to load small material areas, overwriting actual material only if value from file is 1. Zeros are ignored (it's empty space).
+        ////  This method is quite fast, even on large maps - 512x512x512, so we can do more overwrites.
+        ////  Parameter 'materialToSet' tells us what material to set at places which are full in file. Empty are ignored - so stay as they were before this method was called.
+        ////  IMPORTANT: THIS MERGE MATERIAL CAN BE CALLED ONLY AFTER ALL VOXEL CONTENTS ARE LOADED. THAT'S BECAUSE WE NEED TO KNOW THEM FOR MIN CONTENT / INDESTRUCTIBLE CONTENT.
+        ////  Voxel map we are trying to merge into existing voxel map can be bigger or outside of area of existing voxel map. This method will just ignore those parts.
+        //public void MergeVoxelMaterials(MyMwcVoxelFilesEnum voxelFile, Vector3I voxelPosition, string materialToSet)
+        //{
+        //    var filename = Path.Combine(ToolboxUpdater.GetApplicationFilePath(), voxelFile + V2FileExtension);
+        //    var dataStore = new MyVoxelMap();
+        //    dataStore.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
 
-            //  This method will work only if we place the map that we try to merge from in voxel coordinates that are multiply of data cell size
-            Debug.Assert((voxelPosition.X & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
-            Debug.Assert((voxelPosition.Y & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
-            Debug.Assert((voxelPosition.Z & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
-            Vector3I cellFullForVoxelPosition = dataStore.GetDataCellCoordinate(ref voxelPosition);
+        //    var cellsCountX = dataStore.Size.X / dataStore._cellSize.X;
+        //    var cellsCountY = dataStore.Size.Y / dataStore._cellSize.Y;
+        //    var cellsCountZ = dataStore.Size.Z / dataStore._cellSize.Z;
 
-            Vector3I cellCoord;
-            for (cellCoord.X = 0; cellCoord.X < cellsCountX; cellCoord.X++)
-            {
-                for (cellCoord.Y = 0; cellCoord.Y < cellsCountY; cellCoord.Y++)
-                {
-                    for (cellCoord.Z = 0; cellCoord.Z < cellsCountZ; cellCoord.Z++)
-                    {
-                        // TODO:
-                    }
-                }
-            }
-        }
+        //    //  This method will work only if we place the map that we try to merge from in voxel coordinates that are multiply of data cell size
+        //    Debug.Assert((voxelPosition.X & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
+        //    Debug.Assert((voxelPosition.Y & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
+        //    Debug.Assert((voxelPosition.Z & MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_MASK) == 0);
+        //    Vector3I cellFullForVoxelPosition = dataStore.GetDataCellCoordinate(ref voxelPosition);
+
+        //    Vector3I cellCoord;
+        //    for (cellCoord.X = 0; cellCoord.X < cellsCountX; cellCoord.X++)
+        //    {
+        //        for (cellCoord.Y = 0; cellCoord.Y < cellsCountY; cellCoord.Y++)
+        //        {
+        //            for (cellCoord.Z = 0; cellCoord.Z < cellsCountZ; cellCoord.Z++)
+        //            {
+        //                // TODO:
+        //            }
+        //        }
+        //    }
+        //}
 
         #endregion
 
@@ -1518,6 +1565,9 @@ namespace SEToolbox.Interop.Asteroids
         {
             long sum = 0;
 
+            if (!IsValid)
+                return sum;
+
             for (var x = 0; x < _voxelContentCells.Length; x++)
             {
                 for (var y = 0; y < _voxelContentCells[x].Length; y++)
@@ -1767,7 +1817,7 @@ namespace SEToolbox.Interop.Asteroids
 
         public void UpdateContentBounds()
         {
-            _boundingContent = new BoundingBox(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
+            _boundingContent = new BoundingBoxD(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
             Vector3I cellCoord;
 
             for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
@@ -1780,8 +1830,8 @@ namespace SEToolbox.Interop.Asteroids
 
                         if (voxelCell == null)
                         {
-                            _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3(cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
-                            _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((cellCoord.X + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
+                            _boundingContent.Min = Vector3D.Min(_boundingContent.Min, new Vector3D(cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS, cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS));
+                            _boundingContent.Max = Vector3D.Max(_boundingContent.Max, new Vector3D((cellCoord.X + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Y + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1, (cellCoord.Z + 1 << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) - 1));
                         }
                         //  Cell's are FULL by default, therefore we don't need to change them
                         else if (voxelCell.CellType == MyVoxelCellType.MIXED)
@@ -1797,8 +1847,8 @@ namespace SEToolbox.Interop.Asteroids
                                         var content = voxelCell.GetVoxelContent(ref voxelCoordInCell);
                                         if (content > 0)
                                         {
-                                            _boundingContent.Min = Vector3.Min(_boundingContent.Min, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
-                                            _boundingContent.Max = Vector3.Max(_boundingContent.Max, new Vector3((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
+                                            _boundingContent.Min = Vector3D.Min(_boundingContent.Min, new Vector3D((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
+                                            _boundingContent.Max = Vector3D.Max(_boundingContent.Max, new Vector3D((cellCoord.X << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.X, (cellCoord.Y << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Y, (cellCoord.Z << MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS_BITS) + voxelCoordInCell.Z));
                                         }
 
                                     }

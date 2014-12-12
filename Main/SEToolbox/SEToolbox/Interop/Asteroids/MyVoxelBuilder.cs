@@ -199,7 +199,7 @@
         {
             var voxelMap = new MyVoxelMap();
             var actualSize = new Vector3I(size.X.RoundUpToNearest(64), size.Y.RoundUpToNearest(64), size.Z.RoundUpToNearest(64));
-            voxelMap.Init(Vector3.Zero, actualSize, material);
+            voxelMap.Init(VRageMath.Vector3D.Zero, actualSize, material);
 
             ProcessAsteroid(voxelMap, multiThread, material, func, false);
 

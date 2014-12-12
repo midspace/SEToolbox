@@ -545,7 +545,7 @@
                 voxelMap.ForceShellMaterial(OutsideStockMaterial.Value, (byte)OutsideMaterialDepth);
                 voxelMap.Save(SourceFile);
 
-                var position = new Vector3();
+                var position = VRageMath.Vector3D.Zero;
                 var forward = Vector3.Forward;
                 var up = Vector3.Up;
 
@@ -556,18 +556,18 @@
                 else if (IsInfrontofPlayer)
                 {
                     // Figure out where the Character is facing, and plant the new construct centered in front of the Character, but "BuildDistance" units out in front.
-                    var lookVector = _dataModel.CharacterPosition.Forward.ToVector3();
+                    var lookVector = (VRageMath.Vector3D)_dataModel.CharacterPosition.Forward.ToVector3();
                     lookVector.Normalize();
-                    VRageMath.Vector3? boundingIntersectPoint = voxelMap.BoundingContent.IntersectsRayAt(voxelMap.BoundingContent.Center, -lookVector * 5000);
+                    VRageMath.Vector3D? boundingIntersectPoint = voxelMap.BoundingContent.IntersectsRayAt(voxelMap.BoundingContent.Center, -lookVector * 5000d);
 
                     if (!boundingIntersectPoint.HasValue)
                     {
                         boundingIntersectPoint = voxelMap.BoundingContent.Center;
                     }
 
-                    var distance = VRageMath.Vector3.Distance(boundingIntersectPoint.Value, voxelMap.BoundingContent.Center) + (float)BuildDistance;
-                    var vector = lookVector * distance;
-                    position = Vector3.Add(_dataModel.CharacterPosition.Position, vector) - voxelMap.BoundingContent.Center;
+                    var distance = VRageMath.Vector3D.Distance(boundingIntersectPoint.Value, voxelMap.BoundingContent.Center) + (float)BuildDistance;
+                    VRageMath.Vector3D vector = lookVector * distance;
+                    position = VRageMath.Vector3D.Add(_dataModel.CharacterPosition.Position, vector) - voxelMap.BoundingContent.Center;
                 }
 
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)

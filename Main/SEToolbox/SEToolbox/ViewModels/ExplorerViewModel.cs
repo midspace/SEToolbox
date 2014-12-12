@@ -629,7 +629,7 @@
         public void ImportVoxelExecuted()
         {
             var model = new ImportVoxelModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new ImportVoxelViewModel(this, model);
 
@@ -654,7 +654,7 @@
         public void ImportImageExecuted()
         {
             var model = new ImportImageModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new ImportImageViewModel(this, model);
 
@@ -683,7 +683,7 @@
         public void ImportModelExecuted()
         {
             var model = new Import3DModelModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new Import3DModelViewModel(this, model);
 
@@ -717,7 +717,7 @@
         public void ImportAsteroidModelExecuted()
         {
             var model = new Import3DAsteroidModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new Import3DAsteroidViewModel(this, model);
 
@@ -848,7 +848,7 @@
         public void CreateFloatingItemExecuted()
         {
             var model = new GenerateFloatingObjectModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position, _dataModel.ActiveWorld.Checkpoint.MaxFloatingObjects);
             var loadVm = new GenerateFloatingObjectViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowGenerateFloatingObject>(this, loadVm);
@@ -877,7 +877,7 @@
         public void GenerateVoxelFieldExecuted()
         {
             var model = new GenerateVoxelFieldModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new GenerateVoxelFieldViewModel(this, model);
 
@@ -1025,7 +1025,7 @@
         public void GroupMoveExecuted()
         {
             var model = new GroupMoveModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value.Position.ToVector3() : Vector3.Zero;
+            var position = ThePlayerCharacter != null ? (Vector3D)ThePlayerCharacter.PositionAndOrientation.Value.Position : Vector3D.Zero;
             model.Load(Selections, position);
             var loadVm = new GroupMoveViewModel(this, model);
 
@@ -1069,8 +1069,8 @@
         public bool VoxelMergeCanExecute()
         {
             return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
-                ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel) ||
-                (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel));
+                ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel && Selections[0].DataModel.IsValid) ||
+                (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel && Selections[0].DataModel.IsValid));
         }
 
         public void VoxelMergeExecuted()
@@ -1135,7 +1135,7 @@
         public void Test1Executed()
         {
             var model = new Import3DModelModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new Import3DModelViewModel(this, model);
 
@@ -1172,7 +1172,7 @@
         public void Test3Executed()
         {
             var model = new Import3DModelModel();
-            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            var position = ThePlayerCharacter != null ? ThePlayerCharacter.PositionAndOrientation.Value : new MyPositionAndOrientation(Vector3D.Zero, Vector3.Forward, Vector3.Up);
             model.Load(position);
             var loadVm = new Import3DModelViewModel(this, model);
 
@@ -1423,7 +1423,7 @@
             return _dataModel.CreateUniqueVoxelStorageName(originalFile, additionalList);
         }
 
-        public List<IStructureBase> GetIntersectingEntities(BoundingBox box)
+        public List<IStructureBase> GetIntersectingEntities(BoundingBoxD box)
         {
             return _dataModel.Structures.Where(item => item.WorldAABB.Intersects(box)).ToList();
         }

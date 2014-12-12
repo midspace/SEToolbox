@@ -110,7 +110,7 @@ namespace SEToolbox.Interop.Asteroids
             }
         }
 
-        public void SetAddVoxelContents(byte[] contents, ref BoundingBox bounding)
+        public void SetAddVoxelContents(byte[] contents, ref BoundingBoxD bounding)
         {
             unchecked
             {
@@ -128,8 +128,8 @@ namespace SEToolbox.Interop.Asteroids
                         var x = adr / XStep;
                         var y = (adr % XStep) / YStep;
                         var z = (adr % XStep) % YStep;
-                        bounding.Min = Vector3.Min(bounding.Min, new Vector3(x, y, z));
-                        bounding.Max = Vector3.Max(bounding.Max, new Vector3(x, y, z));
+                        bounding.Min = Vector3D.Min(bounding.Min, new Vector3D(x, y, z));
+                        bounding.Max = Vector3D.Max(bounding.Max, new Vector3D(x, y, z));
                     }
 
                     this._packed[byteadr] |= (byte)c;

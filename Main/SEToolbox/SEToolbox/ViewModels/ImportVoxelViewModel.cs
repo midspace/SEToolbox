@@ -280,7 +280,7 @@
 
         public MyObjectBuilder_EntityBase BuildEntity()
         {
-            var asteroidCenter = new Vector3();
+            var asteroidCenter = new VRageMath.Vector3D();
             var asteroidSize = new Vector3I();
 
             string originalFile = null;
@@ -360,14 +360,15 @@
             Forward = new BindableVector3DModel(Vector3.Forward);  // Asteroids currently don't have any orientation.
             Up = new BindableVector3DModel(Vector3.Up);
 
-            var entity = new MyObjectBuilder_VoxelMap(Position.ToVector3() - asteroidCenter, Filename)
+            var entity = new MyObjectBuilder_VoxelMap
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                Filename = Filename,
                 StorageName = Path.GetFileNameWithoutExtension(Filename),
                 PositionAndOrientation = new MyPositionAndOrientation
                 {
-                    Position = Position.ToVector3() - asteroidCenter,
+                    Position = Position.ToVector3D() - asteroidCenter,
                     Forward = Forward.ToVector3(),
                     Up = Up.ToVector3()
                 }
