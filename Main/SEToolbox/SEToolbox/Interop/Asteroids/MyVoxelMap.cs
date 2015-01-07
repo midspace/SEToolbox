@@ -22,6 +22,7 @@ namespace SEToolbox.Interop.Asteroids
     using SEToolbox.Support;
     using SEToolbox.Interop;
     using VRageMath;
+    using Res = SEToolbox.Properties.Resources;
 
     public class MyVoxelMap
     {
@@ -135,12 +136,23 @@ namespace SEToolbox.Interop.Asteroids
 
         public static void GetPreview(string filename, out Vector3I size, out BoundingBoxD contentBounds, out long voxCells, out bool isValid)
         {
-            var map = new MyVoxelMap();
-            map.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
-            size = map.Size;
-            contentBounds = map.BoundingContent;
-            voxCells = map.SumVoxelCells();
-            isValid = map.IsValid;
+            try
+            {
+                var map = new MyVoxelMap();
+                map.Load(filename, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
+                size = map.Size;
+                contentBounds = map.BoundingContent;
+                voxCells = map.SumVoxelCells();
+                isValid = map.IsValid;
+            }
+            catch (Exception ex)
+            {
+                size = Vector3I.Zero;
+                contentBounds = new BoundingBoxD();
+                voxCells = 0;
+                isValid = false;
+                DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptAsteroidFile, filename), ex);
+            }
         }
 
         #endregion
@@ -231,7 +243,6 @@ namespace SEToolbox.Interop.Asteroids
             else
                 Uncompress(filename, tempfilename);
 
-            
             using (var ms = new FileStream(tempfilename, FileMode.Open))
             {
                 using (var reader = new BinaryReader(ms))

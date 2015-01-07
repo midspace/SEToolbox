@@ -698,6 +698,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Space Engineers asteroid file &apos;{0}&apos; could not be loaded, either because it is corrupt, or it is newer than expected..
+        /// </summary>
+        public static string ExceptionState_CorruptAsteroidFile {
+            get {
+                return ResourceManager.GetString("ExceptionState_CorruptAsteroidFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Space Engineers content file &apos;{0}&apos; could not be loaded, either because it is corrupt, or it is newer than expected..
         /// </summary>
         public static string ExceptionState_CorruptContentFile {
