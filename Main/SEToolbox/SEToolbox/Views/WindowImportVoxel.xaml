@@ -61,11 +61,11 @@
                 <RadioButton Grid.Row="2" Grid.Column="0" Content="Sphere" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsSphere}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" >
                     <Grid Width="100">
-                        <TextBox ToolTip="Radius (M) (1 to 500).  Spheres of less than 202m Radius may not work with rare materials." VerticalAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBox ToolTip="Radius (M) (1 to 3000)." VerticalAlignment="Center" VerticalContentAlignment="Center">
                             <TextBox.Text>
                                 <Binding Path="SphereRadius" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
-                                        <converters:RangeRuleI Min="1" Max="500"/>
+                                        <converters:RangeRuleI Min="1" Max="3000"/>
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>

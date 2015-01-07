@@ -167,7 +167,7 @@
 
                     var ambient = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
                     var diffuseColor = meshPart.m_MaterialDesc.DiffuseColor.ToSandboxMediaColor();
-                    var specular = meshPart.m_MaterialDesc.SpecularColor.ToSandboxMediaColor();
+                    //var specular = meshPart.m_MaterialDesc.SpecularColor.ToSandboxMediaColor();
                     var diffuseBrush = new SolidColorBrush(diffuseColor);
                     var colorBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0xFF, 0x00));
 

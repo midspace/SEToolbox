@@ -699,4 +699,7 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="ExceptionState_CorruptModFile" xml:space="preserve">
     <value>The Space Engineers mod file '{0}' could not be loaded, because it is corrupt.</value>
   </data>
+  <data name="ExceptionState_CorruptAsteroidFile" xml:space="preserve">
+    <value>The Space Engineers asteroid file '{0}' could not be loaded, either because it is corrupt, or it is newer than expected.</value>
+  </data>
 </root>

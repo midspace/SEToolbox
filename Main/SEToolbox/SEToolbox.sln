@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", 
 		References\log4net.dll = References\log4net.dll
 		References\Sandbox.Common.dll = References\Sandbox.Common.dll
 		References\Sandbox.Common.XmlSerializers.dll = References\Sandbox.Common.XmlSerializers.dll
+		References\Sandbox.Game.dll = References\Sandbox.Game.dll
 		References\System.Windows.Interactivity.dll = References\System.Windows.Interactivity.dll
 		References\VRage.Common.dll = References\VRage.Common.dll
 		References\VRage.Library.dll = References\VRage.Library.dll

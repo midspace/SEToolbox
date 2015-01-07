@@ -217,7 +217,7 @@
         {
             return (IsValidVoxelFile && IsFileVoxel) 
                 || (IsStockVoxel && StockVoxel != null)
-                || (IsSphere && SphereRadius > 0 && SphereRadius <= 500);
+                || (IsSphere && SphereRadius > 0);
         }
 
         public void CreateExecuted()

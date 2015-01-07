@@ -141,6 +141,7 @@
     <Compile Include="Interop\QuaternionD.cs" />
     <Compile Include="Interop\SpaceEngineersResources.cs" />
     <Compile Include="Interop\SpaceEngineersRepair.cs" />
+    <Compile Include="Interop\VoxelMapLoader.cs" />
     <Compile Include="Models\Asteroids\AsteroidByteFiller.cs" />
     <Compile Include="Models\Asteroids\AsteroidSeedFiller.cs" />
     <Compile Include="Models\Asteroids\AsteroidSeedFillProperties.cs" />
