@@ -783,9 +783,55 @@
                     // reattach ShipConnector to correct entity.
                     shipConnector.ConnectedEntityId = MergeId(shipConnector.ConnectedEntityId, ref idReplacementTable);
                 }
+
+                var buttonPanel = cubeGrid as MyObjectBuilder_ButtonPanel;
+                if (buttonPanel != null)
+                {
+                    // reattach Button Panels to correct entity.
+                    RenumberToolbar(buttonPanel.Toolbar, ref idReplacementTable);
+                }
+
+                var timerBlock = cubeGrid as MyObjectBuilder_TimerBlock;
+                if (timerBlock != null)
+                {
+                    // reattach Timer actions to correct entity.
+                    RenumberToolbar(timerBlock.Toolbar, ref idReplacementTable);
+                }
+
+                var sensorBlock = cubeGrid as MyObjectBuilder_SensorBlock;
+                if (sensorBlock != null)
+                {
+                    // reattach Sensor actions to correct entity.
+                    RenumberToolbar(sensorBlock.Toolbar, ref idReplacementTable);
+                }
+
+                var shipController = cubeGrid as MyObjectBuilder_ShipController;
+                if (shipController != null)
+                {
+                    // reattach Ship Controller actions to correct entity.
+                    RenumberToolbar(shipController.Toolbar, ref idReplacementTable);
+                }
             }
 
             AddEntity(cubeGridObject);
+        }
+
+        private void RenumberToolbar(MyObjectBuilder_Toolbar toolbar, ref Dictionary<Int64, Int64> idReplacementTable)
+        {
+            foreach (var item in toolbar.Slots)
+            {
+                var terminalGroup = item.Data as MyObjectBuilder_ToolbarItemTerminalGroup;
+                if (terminalGroup != null)
+                {
+                    terminalGroup.GridEntityId = MergeId(terminalGroup.GridEntityId, ref idReplacementTable);
+                    terminalGroup.BlockEntityId = MergeId(terminalGroup.BlockEntityId, ref idReplacementTable);
+                }
+                var terminalBlock = item.Data as MyObjectBuilder_ToolbarItemTerminalBlock;
+                if (terminalBlock != null)
+                {
+                    terminalBlock.BlockEntityId = MergeId(terminalBlock.BlockEntityId, ref idReplacementTable);
+                }
+            }
         }
 
         private static Int64 MergeId(long currentId, ref Dictionary<Int64, Int64> idReplacementTable)
