@@ -823,7 +823,8 @@
                 var terminalGroup = item.Data as MyObjectBuilder_ToolbarItemTerminalGroup;
                 if (terminalGroup != null)
                 {
-                    terminalGroup.GridEntityId = MergeId(terminalGroup.GridEntityId, ref idReplacementTable);
+                    // GridEntityId does not require remapping. accoring to IL on ToolbarItemTerminalGroup.
+                    //terminalGroup.GridEntityId = MergeId(terminalGroup.GridEntityId, ref idReplacementTable);
                     terminalGroup.BlockEntityId = MergeId(terminalGroup.BlockEntityId, ref idReplacementTable);
                 }
                 var terminalBlock = item.Data as MyObjectBuilder_ToolbarItemTerminalBlock;
