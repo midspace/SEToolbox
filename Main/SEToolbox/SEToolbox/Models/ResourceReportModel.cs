@@ -769,7 +769,11 @@
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
                 var bp = SpaceEngineersApi.GetBlueprint(tallyTypeId, tallySubTypeId);
-                var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
+                var timeToMake = new TimeSpan();
+                
+                // mod provides no blueprint for component.
+                if (bp != null)
+                    timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
 
@@ -803,6 +807,7 @@
                 }
 
                 #endregion
+              
             }
             //else if (typeId == SpaceEngineersConsts.CubeBlock)
             else // if (tallyItem is MyObjectBuilder_EntityBase)
