@@ -22,7 +22,7 @@
 
         public SpaceEngineersCore()
         {
-            Sandbox.Common.Localization.MyTextsWrapper.Init();
+            SpaceEngineersApi.LoadLocalization();
             _stockDefinitions = new SpaceEngineersResources();
             _stockDefinitions.LoadDefinitions();
             _manageDeleteVoxelList = new List<string>();

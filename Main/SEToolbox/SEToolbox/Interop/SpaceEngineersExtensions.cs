@@ -312,7 +312,6 @@
             switch (cubeSize)
             {
                 case MyCubeSize.Large: return SpaceEngineersCore.Resources.Definitions.Configuration.CubeSizes.Large;
-                case MyCubeSize.Medium: return SpaceEngineersCore.Resources.Definitions.Configuration.CubeSizes.Medium;
                 case MyCubeSize.Small: return SpaceEngineersCore.Resources.Definitions.Configuration.CubeSizes.Small;
             }
             return 0f;
