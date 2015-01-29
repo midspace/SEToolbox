@@ -989,7 +989,7 @@
             LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfoByIetfLanguageTag(code);
             Thread.CurrentThread.CurrentUICulture = LocalizeDictionary.Instance.Culture;
 
-            Sandbox.Common.Localization.MyTextsWrapper.Init();
+            SpaceEngineersApi.LoadLocalization();
             UpdateLanguages();
 
             // Causes all bindings to update.

@@ -14,6 +14,8 @@
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
     using VRageMath;
+    using VRage.Common;
+    using VRage.Common.Utils;
 
     /// <summary>
     /// Helper api for accessing and interacting with Space Engineers content.
@@ -275,7 +277,12 @@
                         });
                     }
 
-                    var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount;
+
+                    decimal timeMassMultiplyer = 1;
+                    if (typeId == typeof(MyObjectBuilder_Ore) || typeId == typeof(MyObjectBuilder_Ingot))
+                        timeMassMultiplyer = decimal.Parse(bp.Result.Amount);
+
+                    var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount / timeMassMultiplyer;
                     var ts = new TimeSpan((long)ticks);
                     time += ts;
                 }
@@ -402,6 +409,25 @@
 
         #endregion
 
+        #region LoadLocalization
+
+        public static void LoadLocalization()
+        {
+            var languageTag = System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag;
+
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+            var localizationPath = Path.Combine(contentPath, @"Data\Localization");
+
+            var codes = languageTag.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+            var maincode = codes.Length > 0 ? codes[0] : null;
+            var subcode = codes.Length > 1 ? codes[1] : null;
+
+            MyTexts.Clear();
+            MyTexts.LoadTexts(localizationPath, typeof(MyTexts).Name, maincode, subcode);
+        } 
+
+        #endregion
+
         #region GetResourceName
 
         public static string GetResourceName(string value)
@@ -409,21 +435,8 @@
             if (value == null)
                 return null;
 
-            Sandbox.Common.Localization.MyTextsWrapperEnum myText;
-
-            if (Enum.TryParse(value, out myText))
-            {
-                try
-                {
-                    return Sandbox.Common.Localization.MyTextsWrapper.GetString(myText);
-                }
-                catch
-                {
-                    return value;
-                }
-            }
-
-            return value;
+            var stringId = MyStringId.GetOrCompute(value);
+            return MyTexts.GetString(stringId);
         }
 
         #endregion
