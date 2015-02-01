@@ -280,7 +280,7 @@
 
                     decimal timeMassMultiplyer = 1;
                     if (typeId == typeof(MyObjectBuilder_Ore) || typeId == typeof(MyObjectBuilder_Ingot))
-                        timeMassMultiplyer = decimal.Parse(bp.Result.Amount);
+                        timeMassMultiplyer = decimal.Parse(bp.Result.Amount, CultureInfo.InvariantCulture);
 
                     var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount / timeMassMultiplyer;
                     var ts = new TimeSpan((long)ticks);
