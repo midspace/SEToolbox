@@ -423,7 +423,7 @@
             var subcode = codes.Length > 1 ? codes[1] : null;
 
             MyTexts.Clear();
-            MyTexts.LoadTexts(localizationPath, typeof(MyTexts).Name, maincode, subcode);
+            MyTexts.LoadTexts(localizationPath, maincode, subcode);
         } 
 
         #endregion
