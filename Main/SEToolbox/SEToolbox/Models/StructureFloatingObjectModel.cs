@@ -118,22 +118,22 @@
             ClassType = ClassType.FloatingObject;
 
             var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(FloatingObject.Item.Content.TypeId, FloatingObject.Item.Content.SubtypeName);
-            var friendlyName = SpaceEngineersApi.GetResourceName(cd.DisplayName);
+            var friendlyName = cd != null ? SpaceEngineersApi.GetResourceName(cd.DisplayName) : FloatingObject.Item.Content.SubtypeName;
 
             if (FloatingObject.Item.Content is MyObjectBuilder_Ore)
             {
                 DisplayName = friendlyName;
                 Units = (decimal)FloatingObject.Item.Amount;
-                Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
-                Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
+                Volume = cd == null ? 0 : cd.Volume.Value * (Double)FloatingObject.Item.Amount;
+                Mass = cd == null ? 0 : cd.Mass * (Double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
             else if (FloatingObject.Item.Content is MyObjectBuilder_Ingot)
             {
                 DisplayName = friendlyName;
                 Units = (decimal)FloatingObject.Item.Amount;
-                Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
-                Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
+                Volume = cd == null ? 0 : cd.Volume.Value * (Double)FloatingObject.Item.Amount;
+                Mass = cd == null ? 0 : cd.Mass * (Double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
             else if (FloatingObject.Item.Content is MyObjectBuilder_EntityBase)
@@ -141,16 +141,16 @@
                 DisplayName = friendlyName;
                 Description = string.Format("x {0}", FloatingObject.Item.Amount);
                 Units = (decimal)FloatingObject.Item.Amount;
-                Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
-                Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
+                Volume = cd == null ? 0 : cd.Volume.Value * (Double)FloatingObject.Item.Amount;
+                Mass = cd == null ? 0 : cd.Mass * (Double)FloatingObject.Item.Amount;
             }
             else
             {
                 DisplayName = friendlyName;
                 Description = string.Format("x {0}", FloatingObject.Item.Amount);
                 Units = (decimal)FloatingObject.Item.Amount;
-                Volume = cd.Volume.Value * (Double)FloatingObject.Item.Amount;
-                Mass = cd.Mass * (Double)FloatingObject.Item.Amount;
+                Volume = cd == null ? 0 : cd.Volume.Value * (Double)FloatingObject.Item.Amount;
+                Mass = cd == null ? 0 : cd.Mass * (Double)FloatingObject.Item.Amount;
             }
         }
 
