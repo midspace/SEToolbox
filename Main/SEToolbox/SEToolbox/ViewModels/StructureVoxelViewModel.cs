@@ -351,7 +351,7 @@
             var asteroid = new MyVoxelMap();
             asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
-            var height = asteroid.BoundingContent.Size().Y + 1;
+            var height = asteroid.BoundingContent.Size.Y + 1;
 
             // remove the Top half.
             asteroid.RemoveMaterial((int)Math.Round(asteroid.BoundingContent.Center.X, 0), asteroid.Size.X, (int)Math.Round(asteroid.BoundingContent.Center.Y, 0), asteroid.Size.Y, 0, (int)Math.Round(asteroid.BoundingContent.Center.Z, 0));
@@ -398,7 +398,7 @@
             var asteroid = new MyVoxelMap();
             asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
 
-            var height = asteroid.BoundingContent.Size().Y + 1;
+            var height = asteroid.BoundingContent.Size.Y + 1;
 
             // remove the Top half.
             asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.BoundingContent.Center.Y, 0), asteroid.Size.Y, null, null);

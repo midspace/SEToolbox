@@ -76,13 +76,13 @@
 
         public static Vector3I SizeInt(this BoundingBox box)
         {
-            var size = box.Size();
+            var size = box.Size;
             return new Vector3I((int)size.X, (int)size.Y, (int)size.Z);
         }
 
         public static Vector3I SizeInt(this BoundingBoxD box)
         {
-            var size = box.Size();
+            var size = box.Size;
             return new Vector3I((int)size.X, (int)size.Y, (int)size.Z);
         }
 

@@ -584,7 +584,7 @@
                     Up = up
                 };
 
-                IsValidEntity = voxelMap.BoundingContent.Size().Volume() > 0f;
+                IsValidEntity = voxelMap.BoundingContent.Size.Volume > 0f;
 
                 NewEntity = entity;
 
