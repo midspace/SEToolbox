@@ -198,23 +198,26 @@
 
             BaseMaterial = MaterialsCollection.FirstOrDefault(m => m.IsRare == false) ?? MaterialsCollection.FirstOrDefault();
 
-            var filesV1 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V1FileExtension);
-            var filesV2 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V2FileExtension);
-            var files = filesV1.Concat(filesV2);
+            var vms = SpaceEngineersCore.Resources.Definitions.VoxelMapStorages;
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+            var list = new List<GenerateVoxelDetailModel>();
 
-            if (!string.IsNullOrEmpty(GlobalSettings.Default.CustomVoxelPath) && Directory.Exists(GlobalSettings.Default.CustomVoxelPath))
+            foreach (var voxelMap in vms)
             {
-                files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V1FileExtension));
-                files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V2FileExtension));
+                var fileName = SpaceEngineersCore.GetDataPathOrDefault(voxelMap.StorageFile, Path.Combine(contentPath, voxelMap.StorageFile));
+
+                if (!File.Exists(fileName))
+                    continue;
+
+                var voxel = new GenerateVoxelDetailModel
+                {
+                    Name = Path.GetFileNameWithoutExtension(voxelMap.StorageFile),
+                    SourceFilename = fileName,
+                    FileSize = new FileInfo(fileName).Length,
+                    Size = MyVoxelMap.LoadVoxelSize(fileName)
+                };
+                list.Add(voxel);
             }
-
-            var list = files.Select(file => new GenerateVoxelDetailModel
-            {
-                Name = Path.GetFileNameWithoutExtension(file),
-                SourceFilename = file,
-                FileSize = new FileInfo(file).Length,
-                Size = MyVoxelMap.LoadVoxelSize(file)
-            });
 
             VoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>(list.OrderBy(s => s.Name));
 

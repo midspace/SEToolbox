@@ -137,6 +137,7 @@
             if (definitions.PhysicalItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "PhysicalItems.sbc");
             if (definitions.SpawnGroups == null) throw new ToolboxException(ExceptionState.MissingContentFile, "SpawnGroups.sbc");
             if (definitions.TransparentMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "TransparentMaterials.sbc");
+            if (definitions.VoxelMapStorages == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMapStorages.sbc");
             if (definitions.VoxelMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
 
             // Deal with duplicate entries. Must use the last one found and overwrite all others.
@@ -154,6 +155,7 @@
             definitions.PhysicalItems = definitions.PhysicalItems.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.SpawnGroups = definitions.SpawnGroups.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.TransparentMaterials = definitions.TransparentMaterials.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.VoxelMapStorages = definitions.VoxelMapStorages.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.VoxelMaterials = definitions.VoxelMaterials.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
         }
 
@@ -280,6 +282,7 @@
 
             var icons = new List<string>(); // .dds .png
             var models = new List<string>(); // .mwm
+            var storages = new List<string>(); // .vx2
 
             if (definitions.AmmoMagazines != null)
             {
@@ -327,6 +330,11 @@
                 icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.DiffuseY)).Select(vm => vm.DiffuseY));
                 icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.NormalXZ)).Select(vm => vm.NormalXZ));
                 icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.NormalY)).Select(vm => vm.NormalY));
+            }
+
+            if (definitions.VoxelMapStorages != null)
+            {
+                storages.AddRange(definitions.VoxelMapStorages.Select(voxelMap => voxelMap.StorageFile));
             }
 
             if (modContentPath != null)
@@ -463,6 +471,42 @@
 
 
             // AddAsteroidPrefab.PrefabFile is an Enumeration currently, so it might be useless to consider tracking it for mods.
+            foreach (var storage in storages.Where(s => !string.IsNullOrEmpty(s)).Select(s => s).Distinct())
+            {
+                if (modContentPath != null)
+                {
+                    var contentFile = Path.Combine(modContentPath, storage);
+
+                    // if the content exists, add/update it.
+                    if (File.Exists(contentFile))
+                    {
+                        contentData.Update(storage.ToLower(), new ContentDataPath(ContentPathType.Texture, storage, contentFile, null));
+                    }
+                    else if (!contentData.ContainsKey(storage.ToLower()))
+                    {
+                        // doesn't exist in this mod, assume it's stock storage and add/update it anyhow.
+                        contentFile = Path.Combine(stockContentPath, storage);
+                        contentData.Update(storage.ToLower(), new ContentDataPath(ContentPathType.Texture, storage, contentFile, null));
+                    }
+                }
+                else if (zipModFile != null)
+                {
+                    var contentFile = zipFiles.FirstOrDefault(f => f.Equals(storage, StringComparison.InvariantCultureIgnoreCase));
+
+                    // if the content exists, add/update it.
+                    if (contentFile != null)
+                    {
+                        contentData.Update(storage.ToLower(), new ContentDataPath(ContentPathType.Texture, storage, null, zipModFile));
+                    }
+                    else if (!contentData.ContainsKey(storage.ToLower()))
+                    {
+                        // doesn't exist in this mod, assume it's stock storage and add/update it anyhow.
+                        contentFile = Path.Combine(stockContentPath, storage);
+                        contentData.Update(storage.ToLower(), new ContentDataPath(ContentPathType.Texture, storage, contentFile, null));
+                    }
+                }
+            }
+
             //var voxelMaps = new List<string>(); // .vox ; .vx2
             // Find: "VoxelMaps\*.vox;*.vx2"
             //voxelMaps.AddRange(definitions.Scenarios.Where(s => s.WorldGeneratorOperations != null).SelectMany(s => s.WorldGeneratorOperations).

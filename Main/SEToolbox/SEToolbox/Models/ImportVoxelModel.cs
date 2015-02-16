@@ -285,24 +285,23 @@
         public void Load(MyPositionAndOrientation characterPosition)
         {
             CharacterPosition = characterPosition;
-            var filesV1 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V1FileExtension);
-            var filesV2 = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"VoxelMaps"), "*" + MyVoxelMap.V2FileExtension);
-            var files = filesV1.Concat(filesV2);
 
-            if (!string.IsNullOrEmpty(GlobalSettings.Default.CustomVoxelPath) && Directory.Exists(GlobalSettings.Default.CustomVoxelPath))
-            {
-                files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V1FileExtension));
-                files = files.Concat(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V2FileExtension));
-            }
+            var vms = SpaceEngineersCore.Resources.Definitions.VoxelMapStorages;
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            foreach (var file in files)
+            foreach (var voxelMap in vms)
             {
+                var fileName = SpaceEngineersCore.GetDataPathOrDefault(voxelMap.StorageFile, Path.Combine(contentPath, voxelMap.StorageFile));
+
+                if (!File.Exists(fileName))
+                    continue;
+
                 var voxel = new GenerateVoxelDetailModel
                 {
-                    Name = Path.GetFileNameWithoutExtension(file),
-                    SourceFilename = file,
-                    FileSize = new FileInfo(file).Length,
-                    Size = MyVoxelMap.LoadVoxelSize(file)
+                    Name = Path.GetFileNameWithoutExtension(voxelMap.StorageFile),
+                    SourceFilename = fileName,
+                    FileSize = new FileInfo(fileName).Length,
+                    Size = MyVoxelMap.LoadVoxelSize(fileName)
                 };
                 VoxelFileList.Add(voxel);
             }
