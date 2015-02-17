@@ -306,6 +306,23 @@
                 VoxelFileList.Add(voxel);
             }
 
+            // Custom voxel files directory.
+            List<string> files = new List<string>();
+            if (!string.IsNullOrEmpty(GlobalSettings.Default.CustomVoxelPath) && Directory.Exists(GlobalSettings.Default.CustomVoxelPath))
+            {
+                files.AddRange(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V1FileExtension));
+                files.AddRange(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V2FileExtension));
+            }
+
+            VoxelFileList.AddRange(files.Select(file => new GenerateVoxelDetailModel
+            {
+                Name = Path.GetFileNameWithoutExtension(file),
+                SourceFilename = file,
+                FileSize = new FileInfo(file).Length,
+                Size = MyVoxelMap.LoadVoxelSize(file)
+            }));
+
+
             VoxelFileList = VoxelFileList.OrderBy(s => s.Name).ToList();
         }
 
