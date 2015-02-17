@@ -198,6 +198,7 @@
 
             BaseMaterial = MaterialsCollection.FirstOrDefault(m => m.IsRare == false) ?? MaterialsCollection.FirstOrDefault();
 
+            // Voxel Map Storage, includes stock and mod asteroids.
             var vms = SpaceEngineersCore.Resources.Definitions.VoxelMapStorages;
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             var list = new List<GenerateVoxelDetailModel>();
@@ -218,6 +219,22 @@
                 };
                 list.Add(voxel);
             }
+
+            // Custom voxel files directory.
+            List<string> files = new List<string>();
+            if (!string.IsNullOrEmpty(GlobalSettings.Default.CustomVoxelPath) && Directory.Exists(GlobalSettings.Default.CustomVoxelPath))
+	        {
+ 	            files.AddRange(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V1FileExtension));
+                files.AddRange(Directory.GetFiles(GlobalSettings.Default.CustomVoxelPath, "*" + MyVoxelMap.V2FileExtension));
+ 	        }
+
+            list.AddRange(files.Select(file => new GenerateVoxelDetailModel
+            {
+ 	            Name = Path.GetFileNameWithoutExtension(file),
+ 	            SourceFilename = file,
+ 	            FileSize = new FileInfo(file).Length,
+ 	            Size = MyVoxelMap.LoadVoxelSize(file)
+ 	        }));
 
             VoxelFileList = new ObservableCollection<GenerateVoxelDetailModel>(list.OrderBy(s => s.Name));
 
