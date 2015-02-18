@@ -811,6 +811,7 @@
             foreach (var cube in CubeGrid.CubeBlocks)
             {
                 cube.IntegrityPercent = cube.BuildPercent;
+                // No need to set bones for individual blocks like rounded armor, as this is taken from the definition within the game itself.
             }
 
             RaisePropertyChanged(() => IsDamaged);

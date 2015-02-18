@@ -248,16 +248,6 @@
                 return Assembly.LoadFrom(assemblyPath);
             }
 
-            if (ToolboxUpdater.CoreSpaceEngineersResources.Any(f => string.Equals(f, filename, StringComparison.InvariantCultureIgnoreCase)))
-            {
-                var assemblyPath = Path.Combine(_tempBinPath, match.Groups["culture"].Value, filename);
-
-                // Load the resource assembly from the specified path.
-                // Return the loaded assembly.
-                if (File.Exists(assemblyPath))
-                    return Assembly.LoadFrom(assemblyPath);
-            }
-
             return null;
         }
 

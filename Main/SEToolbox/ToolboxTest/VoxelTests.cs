@@ -925,5 +925,60 @@
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
         }
+
+        [TestMethod]
+        public void VoxelRebuild1()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
+
+            var fileNew = @".\TestOutput\test_spike_cube1024.vx2";
+
+            var length = 1024;
+            var min = 4;
+            var max = length - 4;
+
+            var size = new Vector3I(length, length, length);
+
+            var buildparams = new int[][]
+            {
+                new[] { min, 0 }, 
+                new[] { min + 1, 1 }, 
+                new[] { max, 0 }, 
+                new[] { max - 1, -1 }
+            };
+
+            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            {
+                e.Volume = 0x00;
+
+                if (e.CoordinatePoint.X > 0 && e.CoordinatePoint.Y > 0 && e.CoordinatePoint.Z > 0
+                  && e.CoordinatePoint.X < size.X - 1 && e.CoordinatePoint.Y < size.Y - 1 && e.CoordinatePoint.Z < size.Z - 1
+                && e.CoordinatePoint.X >= min && e.CoordinatePoint.Y >= min && e.CoordinatePoint.Z >= min
+                    && e.CoordinatePoint.X <= max && e.CoordinatePoint.Y <= max && e.CoordinatePoint.Z <= max)
+                {
+                    foreach (int[] t in buildparams)
+                    {
+                        if (e.CoordinatePoint.X == t[0] && ((e.CoordinatePoint.Z + t[1]) % 2 == 0) && ((e.CoordinatePoint.Y + t[1]) % 2 == 0))
+                        {
+                            e.Volume = 0x92;
+                        }
+                        if (e.CoordinatePoint.Y == t[0] && ((e.CoordinatePoint.X + t[1]) % 2 == 0) && ((e.CoordinatePoint.Z + t[1]) % 2 == 0))
+                        {
+                            e.Volume = 0x92;
+                        }
+                        if (e.CoordinatePoint.Z == t[0] && ((e.CoordinatePoint.X + t[1]) % 2 == 0) && ((e.CoordinatePoint.Y + t[1]) % 2 == 0))
+                        {
+                            e.Volume = 0x92;
+                        }
+                    }
+                }
+            };
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Id.SubtypeId, null, action);
+            voxelMap.Save(fileNew);
+        }
+
     }
 }
