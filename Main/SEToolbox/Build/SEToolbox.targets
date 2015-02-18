@@ -12,6 +12,7 @@
     <ItemGroup>
       <EditorFiles Include="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/*"
       Exclude="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Sandbox.Common.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Sandbox.Game.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/VRage.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/*.vshost.*"/>
     </ItemGroup>

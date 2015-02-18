@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mid-Space Productions")]
 [assembly: AssemblyProduct("SEToolbox")]
-[assembly: AssemblyCopyright("Copyright © MidSpace 2013-2014")]
+[assembly: AssemblyCopyright("Copyright © MidSpace 2013-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

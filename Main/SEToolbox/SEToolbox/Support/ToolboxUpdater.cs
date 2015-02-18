@@ -15,13 +15,10 @@
         internal static readonly string[] CoreSpaceEngineersFiles = {
             "Sandbox.Common.dll",
             "Sandbox.Common.XmlSerializers.dll",
+            "Sandbox.Game.dll",
             "VRage.Common.dll",
             "VRage.Library.dll",
             "VRage.Math.dll"
-        };
-
-        internal static readonly string[] CoreSpaceEngineersResources = {
-            "Sandbox.Common.resources.dll"
         };
 
         #region GetApplicationFilePath
