@@ -14,6 +14,8 @@
     using VRageMath;
     using System.Reflection;
     using System.Text.RegularExpressions;
+    using Sandbox.Definitions;
+    using VRage.Collections;
 
     [TestClass]
     public class TypeLoaderTests
@@ -48,6 +50,11 @@
 
                 Sandbox.Definitions.MyDefinitionManager.Static.LoadData(new List<Sandbox.Common.ObjectBuilders.MyObjectBuilder_Checkpoint.ModItem>());
                 var materials = Sandbox.Definitions.MyDefinitionManager.Static.GetVoxelMaterialDefinitions();
+
+                DictionaryValuesReader<string, MyVoxelMaterialDefinition>;
+                var dict = materials as Dictionary<string, MyVoxelMaterialDefinition>;
+                
+
                 //var matx = Sandbox.Definitions.MyDefinitionManager.Static.m_definitions.m_voxelMaterialsByName;
                 var xz = Sandbox.Definitions.MyDefinitionManager.Static.GetDefaultVoxelMaterialDefinition();
 
