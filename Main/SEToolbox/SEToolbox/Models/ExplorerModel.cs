@@ -818,6 +818,8 @@
 
         private void RenumberToolbar(MyObjectBuilder_Toolbar toolbar, ref Dictionary<Int64, Int64> idReplacementTable)
         {
+            if (toolbar == null)
+                return;
             foreach (var item in toolbar.Slots)
             {
                 var terminalGroup = item.Data as MyObjectBuilder_ToolbarItemTerminalGroup;
