@@ -344,8 +344,12 @@
             if (Cube is MyObjectBuilder_TerminalBlock)
             {
                 this.Owner = newOwnerId;
-                var player = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
-                OwnerName = player == null ? null : player.DisplayName;
+                
+                
+                var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
+                var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
+                var dead = player.Value == null ? " (dead)" : "";
+                OwnerName = identity == null ? null : identity.DisplayName + dead;
                 return true;
             }
 
@@ -368,9 +372,10 @@
             CubeSize = definition.CubeSize;
             FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayName);
 
-            var player = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
-            OwnerName = player == null ? null : player.DisplayName;
-
+            var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
+            var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
+            var dead = player.Value == null ? " (dead)" : "";
+            OwnerName = identity == null ? null : identity.DisplayName + dead;
             TypeId = definition.Id.TypeId;
             SubtypeId = definition.Id.SubtypeId;
 
