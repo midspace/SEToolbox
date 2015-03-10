@@ -10,6 +10,8 @@
 
         private long _playerId;
 
+        private bool _isPlayer;
+
         #endregion
 
         #region Properties
@@ -23,7 +25,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    RaisePropertyChanged(() => Name);
+                    RaisePropertyChanged(() => Name, () => DisplayName);
                 }
             }
         }
@@ -53,6 +55,31 @@
                     _playerId = value;
                     RaisePropertyChanged(() => PlayerId);
                 }
+            }
+        }
+
+        public bool IsPlayer
+        {
+            get { return _isPlayer; }
+
+            set
+            {
+                if (value != _isPlayer)
+                {
+                    _isPlayer = value;
+                    RaisePropertyChanged(() => IsPlayer, () => DisplayName);
+                }
+            }
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                if (_isPlayer)
+                    return _name;
+                else
+                    return string.Format("{0} (dead)", _name);
             }
         }
 

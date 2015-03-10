@@ -68,9 +68,10 @@
             PlayerList.Clear();
             PlayerList.Add(new OwnerModel() { Name = "{None}", PlayerId = 0 });
 
-            foreach (var item in SpaceEngineersCore.WorldResource.Checkpoint.Identities.OrderBy(p => p.DisplayName))
+            foreach (var identity in SpaceEngineersCore.WorldResource.Checkpoint.Identities.OrderBy(p => p.DisplayName))
             {
-                PlayerList.Add(new OwnerModel() { Name = item.DisplayName, PlayerId = item.PlayerId, Model = item.Model });
+                var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == identity.PlayerId);
+                PlayerList.Add(new OwnerModel() { Name = identity.DisplayName, PlayerId = identity.PlayerId, Model = identity.Model, IsPlayer = player.Value != null });
             }
 
             SelectedPlayer = PlayerList.FirstOrDefault(p => p.PlayerId == initalOwner);

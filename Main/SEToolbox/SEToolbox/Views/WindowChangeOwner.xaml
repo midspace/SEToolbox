@@ -28,7 +28,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Player:" VerticalAlignment="Top"/>
-                <ListBox Grid.Row="0" Grid.Column="1" Name="UxInitialElement" HorizontalAlignment="Stretch" ItemsSource="{Binding PlayerList}" SelectedValue="{Binding SelectedPlayer}" IsTextSearchEnabled="True" DisplayMemberPath="Name"/>
+                <ListBox Grid.Row="0" Grid.Column="1" Name="UxInitialElement" HorizontalAlignment="Stretch" ItemsSource="{Binding PlayerList}" SelectedValue="{Binding SelectedPlayer}" IsTextSearchEnabled="True" DisplayMemberPath="DisplayName"/>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
                 <Button Width="90" Command="{Binding ChangeCommand}" Content="Change" IsDefault="True"/>
