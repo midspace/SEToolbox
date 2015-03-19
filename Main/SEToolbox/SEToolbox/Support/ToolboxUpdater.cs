@@ -16,7 +16,8 @@
             "Sandbox.Common.dll",
             "Sandbox.Common.XmlSerializers.dll",
             "Sandbox.Game.dll",
-            "VRage.Common.dll",
+            "VRage.dll",
+            "VRage.Data.dll",
             "VRage.Library.dll",
             "VRage.Math.dll"
         };

@@ -980,5 +980,12 @@
             voxelMap.Save(fileNew);
         }
 
+
+        [TestMethod]
+        public void LoadLoader()
+        {
+            VoxelMapLoader.Load(@"D:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content\VoxelMaps\Arabian_Border_7.vx2");
+        }
+
     }
 }

@@ -38,9 +38,9 @@
             currentDomain.TypeResolve += currentDomain_TypeResolve;
             try
             {
-                VRage.Common.Utils.MyFileSystem.Reset();
-                VRage.Common.Utils.MyFileSystem.Init(@"C:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content", Environment.ExpandEnvironmentVariables(@"%AppData%\SpaceEngineers"));
-                VRage.Common.Utils.MyFileSystem.InitUserSpecific((string)null);
+                VRage.Library.Utils.MyFileSystem.Reset();
+                VRage.Library.Utils.MyFileSystem.Init(@"C:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content", Environment.ExpandEnvironmentVariables(@"%AppData%\SpaceEngineers"));
+                VRage.Library.Utils.MyFileSystem.InitUserSpecific((string)null);
 
                 // #########################
                 // MySandboxGame (obsfcated) has to be created in memory to be able to load Voxel Material Definitions.

@@ -7,8 +7,8 @@
     using System.Reflection;
 
     using BulletXNA.BulletCollision;
-    using VRage.Common.Animations;
-    using VRage.Common.Import;
+    using VRage.Animations;
+    using VRage.Import;
     using VRageMath;
     using VRageMath.PackedVector;
 
