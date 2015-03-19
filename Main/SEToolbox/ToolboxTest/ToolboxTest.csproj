@@ -60,9 +60,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
-    <Reference Include="VRage.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\VRage.Common.dll</HintPath>
+    <Reference Include="VRage">
+      <HintPath>..\References\VRage.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

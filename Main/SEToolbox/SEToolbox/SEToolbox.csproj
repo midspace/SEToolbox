@@ -87,9 +87,11 @@
     </Reference>
     <Reference Include="UIAutomationClient" />
     <Reference Include="UIAutomationTypes" />
-    <Reference Include="VRage.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\VRage.Common.dll</HintPath>
+    <Reference Include="VRage">
+      <HintPath>..\References\VRage.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Data">
+      <HintPath>..\References\VRage.Data.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

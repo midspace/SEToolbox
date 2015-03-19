@@ -14,8 +14,8 @@
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
     using VRageMath;
-    using VRage.Common;
-    using VRage.Common.Utils;
+    using VRage;
+    using VRage.Utils;
 
     /// <summary>
     /// Helper api for accessing and interacting with Space Engineers content.
