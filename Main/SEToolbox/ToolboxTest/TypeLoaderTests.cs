@@ -27,7 +27,9 @@
         {
             Type ivms = typeof(Sandbox.ModAPI.IMyVoxelMaps);
 
-            var assemblyFiles = Directory.GetFiles(GlobalSettings.Default.SEBinPath, "*.dll");
+            var binPath = @"D:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin";
+
+            var assemblyFiles = Directory.GetFiles(binPath /*GlobalSettings.Default.SEBinPath*/, "*.dll");
             _spaceEngineersAssemblies = assemblyFiles.Select(f => Path.GetFileName(f)).ToList();
 
             Type baseType = typeof(Sandbox.Definitions.MyDefinitionManager);

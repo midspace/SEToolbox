@@ -15,7 +15,7 @@
     using SEToolbox.Support;
     using VRageMath;
     using VRage;
-    using VRage.Utils;
+    using VRage.Library.Utils;
 
     /// <summary>
     /// Helper api for accessing and interacting with Space Engineers content.
