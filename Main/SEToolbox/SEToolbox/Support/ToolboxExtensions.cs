@@ -114,18 +114,24 @@
 
         public static Bitmap OptimizeImagePalette(string imageFilename)
         {
-            imageFilename = Path.GetFullPath(imageFilename);
-            var bmp = new Bitmap(imageFilename);
-            return OptimizeImagePalette(bmp);
+            return OptimizeImagePalette(imageFilename, null);
         }
 
-        public static Bitmap OptimizeImagePalette(Bitmap bmp)
+        public static Bitmap OptimizeImagePalette(string imageFilename, Dictionary<Color, Color> palette)
+        {
+            imageFilename = Path.GetFullPath(imageFilename);
+            var bmp = new Bitmap(imageFilename);
+            return OptimizeImagePalette(bmp, palette);
+        }
+
+        public static Bitmap OptimizeImagePalette(Bitmap bmp, Dictionary<Color, Color> palette)
         {
             Bitmap palatteImage;
 
             using (var image = new Bitmap(bmp))
             {
-                var palette = GetOptimizerPalatte();
+                if (palette == null)
+                    palette = GetOptimizerPalatte();
                 var paletteQuantizer = new PaletteReplacerQuantizer(palette);
                 palatteImage = paletteQuantizer.Quantize(image);
             }

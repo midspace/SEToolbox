@@ -148,7 +148,7 @@
                             <TextBox Grid.Column="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Grid.Row="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Label Content="X:" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
+                            <Label Content="Z:" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" Grid.Row="2" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </GroupBox>
@@ -169,7 +169,7 @@
                             <TextBox Grid.Column="1" MinWidth="80" Text="1234" />
                             <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" />
                             <TextBox Grid.Column="1" Grid.Row="1" MinWidth="80" Text="1234" />
-                            <Label Content="X:" Margin="0,0,4,0" Grid.Row="2" />
+                            <Label Content="Z:" Margin="0,0,4,0" Grid.Row="2" />
                             <TextBox Grid.Column="1" Grid.Row="2" MinWidth="80" Text="1234" />
                             <Label Content="W:" Margin="0,0,4,0" Grid.Row="3" />
                             <TextBox Grid.Column="1" Grid.Row="3" MinWidth="80" Text="1234" />-->
