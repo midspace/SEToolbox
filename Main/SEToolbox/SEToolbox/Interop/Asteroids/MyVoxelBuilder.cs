@@ -227,11 +227,12 @@
         /// <returns></returns>
         public static void ProcessAsteroid(MyVoxelMap voxelMap, bool multiThread, string material, Action<MyVoxelBuilderArgs> func, bool readWrite = true)
         {
-            var counterTotal = voxelMap.Size.X * voxelMap.Size.Y * voxelMap.Size.Z;
-            var counter = 0;
+            long counterTotal = (long)voxelMap.Size.X * (long)voxelMap.Size.Y * (long)voxelMap.Size.Z;
+            long counter = 0;
             decimal progress = 0;
             var timer = new Stopwatch();
             Debug.Write(string.Format("Building Asteroid : {0:000},", progress));
+            Console.Write(string.Format("Building Asteroid : {0:000},", progress));
             Exception threadException = null;
 
             timer.Start();
@@ -296,7 +297,7 @@
                 // TODO: re-write the multi thread processing to be more stable.
                 // But still try and max out the processors.
 
-                var threadCounter = counterTotal / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE;
+                long threadCounter = counterTotal / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE / MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE;
 
                 var baseCoords = new Vector3I(0, 0, 0);
                 for (baseCoords.X = 0; baseCoords.X < voxelMap.Size.X; baseCoords.X += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE)
@@ -349,7 +350,7 @@
 
                                 lock (Locker)
                                 {
-                                    counter += MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
+                                    counter += (long)MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
                                             MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE *
                                             MyVoxelConstants.VOXEL_DATA_CELLS_IN_RENDER_CELL_SIZE;
                                     var prog = Math.Floor(counter / (decimal)counterTotal * 100);
@@ -357,6 +358,8 @@
                                     {
                                         progress = prog;
                                         Debug.Write(string.Format("{0:000},", progress));
+                                        Console.Write(string.Format("{0:000},", progress));
+                                        GC.Collect();
                                     }
                                     threadCounter--;
                                 }
@@ -367,6 +370,8 @@
                         }
                     }
                 }
+
+                GC.Collect();
 
                 while (threadCounter > 0)
                 {
@@ -389,6 +394,7 @@
             var count = voxelMap.SumVoxelCells();
 
             Debug.WriteLine(" Done. | {0}  | VoxCells {1:#,##0}", timer.Elapsed, count);
+            Console.WriteLine(" Done. | {0}  | VoxCells {1:#,##0}", timer.Elapsed, count);
         }
 
         #endregion

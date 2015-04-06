@@ -559,15 +559,20 @@
             return defaultValue;
         }
 
+        private static object matindexLock = new object();
+
         public byte GetMaterialIndex(string materialName)
         {
-            if (MaterialIndex.ContainsKey(materialName))
-                return MaterialIndex[materialName];
+            lock (matindexLock)
+            {
+                if (MaterialIndex.ContainsKey(materialName))
+                    return MaterialIndex[materialName];
 
-            var material = _definitions.VoxelMaterials.FirstOrDefault(m => m.Id.SubtypeId == materialName);
-            var index = (byte)_definitions.VoxelMaterials.ToList().IndexOf(material);
-            MaterialIndex.Add(materialName, index);
-            return index;
+                var material = _definitions.VoxelMaterials.FirstOrDefault(m => m.Id.SubtypeId == materialName);
+                var index = (byte)_definitions.VoxelMaterials.ToList().IndexOf(material);
+                MaterialIndex.Add(materialName, index);
+                return index;
+            }
         }
 
         public IList<MyObjectBuilder_VoxelMaterialDefinition> GetMaterialList()
