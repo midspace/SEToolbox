@@ -233,7 +233,7 @@
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
                     TextureFile = physicalItemDefinition.Icon == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icon, Path.Combine(contentPath, physicalItemDefinition.Icon)),
                     Accessible = physicalItemDefinition.Public,
-                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture) / timeMassMultiplyer))) : (TimeSpan?)null,
+                    Time = bp != null && bp.Result != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture) / timeMassMultiplyer))) : (TimeSpan?)null,
                 });
             }
 

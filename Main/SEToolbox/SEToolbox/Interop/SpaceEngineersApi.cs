@@ -256,7 +256,7 @@
         {
             var time = new TimeSpan();
             var bp = SpaceEngineersApi.GetBlueprint(typeId, subType);
-            if (bp != null)
+            if (bp != null && bp.Result != null)
             {
                 foreach (var item in bp.Prerequisites)
                 {
