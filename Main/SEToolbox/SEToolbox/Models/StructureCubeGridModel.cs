@@ -862,17 +862,31 @@
             {
                 if (cube.SubtypeName.StartsWith("LargeBlockArmor"))
                 {
-                    cube.SubtypeName = cube.SubtypeName.Replace("LargeBlockArmor", "LargeHeavyBlockArmor");
-                    count++;
+                    var newSubTypeName = cube.SubtypeName.Replace("LargeBlockArmor", "LargeHeavyBlockArmor");
+                    if (SpaceEngineersCore.Resources.Definitions.CubeBlocks.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeId == newSubTypeName))
+                    {
+                        cube.SubtypeName = newSubTypeName;
+                        count++;
+                    }
                 }
                 else if (cube.SubtypeName.StartsWith("SmallBlockArmor"))
                 {
-                    cube.SubtypeName = cube.SubtypeName.Replace("SmallBlockArmor", "SmallHeavyBlockArmor");
-                    count++;
+                    var newSubTypeName = cube.SubtypeName.Replace("SmallBlockArmor", "SmallHeavyBlockArmor");
+                    if (SpaceEngineersCore.Resources.Definitions.CubeBlocks.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeId == newSubTypeName))
+                    {
+                        cube.SubtypeName = newSubTypeName;
+                        count++;
+                    }
                 }
             }
 
-            UpdateGeneralFromEntityBase();
+            if (count > 0)
+            {
+                IsSubsSystemNotReady = true;
+                IsConstructionNotReady = true;
+                UpdateGeneralFromEntityBase();
+                InitializeAsync();
+            }
             return count > 0;
         }
 
@@ -883,17 +897,31 @@
             {
                 if (cube.SubtypeName.StartsWith("LargeHeavyBlockArmor"))
                 {
-                    cube.SubtypeName = cube.SubtypeName.Replace("LargeHeavyBlockArmor", "LargeBlockArmor");
-                    count++;
+                    var newSubTypeName = cube.SubtypeName.Replace("LargeHeavyBlockArmor", "LargeBlockArmor");
+                    if (SpaceEngineersCore.Resources.Definitions.CubeBlocks.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeId == newSubTypeName))
+                    {
+                        cube.SubtypeName = newSubTypeName;
+                        count++;
+                    }
                 }
                 else if (cube.SubtypeName.StartsWith("SmallHeavyBlockArmor"))
                 {
-                    cube.SubtypeName = cube.SubtypeName.Replace("SmallHeavyBlockArmor", "SmallBlockArmor");
-                    count++;
+                    var newSubTypeName = cube.SubtypeName.Replace("SmallHeavyBlockArmor", "SmallBlockArmor");
+                    if (SpaceEngineersCore.Resources.Definitions.CubeBlocks.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeId == newSubTypeName))
+                    {
+                        cube.SubtypeName = newSubTypeName;
+                        count++;
+                    }
                 }
             }
 
-            UpdateGeneralFromEntityBase();
+            if (count > 0)
+            {
+                IsSubsSystemNotReady = true;
+                IsConstructionNotReady = true;
+                UpdateGeneralFromEntityBase();
+                InitializeAsync();
+            }
             return count > 0;
         }
 
