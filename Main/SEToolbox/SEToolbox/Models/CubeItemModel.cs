@@ -345,10 +345,13 @@
             {
                 this.Owner = newOwnerId;
                 
-                
                 var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
-                var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
-                var dead = player.Value == null ? " (dead)" : "";
+                var dead = " (dead)";
+                if (SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData != null)
+                {
+                    var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
+                    dead = player.Value == null ? " (dead)" : "";
+                }
                 OwnerName = identity == null ? null : identity.DisplayName + dead;
                 return true;
             }
@@ -373,8 +376,12 @@
             FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayName);
 
             var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
-            var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
-            var dead = player.Value == null ? " (dead)" : "";
+            var dead = " (dead)";
+            if (SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData != null)
+            {
+                var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
+                dead = player.Value == null ? " (dead)" : "";
+            }
             OwnerName = identity == null ? null : identity.DisplayName + dead;
             TypeId = definition.Id.TypeId;
             SubtypeId = definition.Id.SubtypeId;
