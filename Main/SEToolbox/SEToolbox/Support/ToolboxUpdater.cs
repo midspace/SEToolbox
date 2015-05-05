@@ -17,7 +17,6 @@
             "Sandbox.Common.XmlSerializers.dll",
             //"Sandbox.Game.dll",   // Need to fix Bin/Bin64 check first.
             "VRage.dll",
-            "VRage.Data.dll",
             "VRage.Library.dll",
             "VRage.Math.dll"
         };
