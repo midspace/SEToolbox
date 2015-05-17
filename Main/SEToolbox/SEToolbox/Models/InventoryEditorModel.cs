@@ -251,7 +251,7 @@
                 MassMultiplyer = massMultiplyer,
                 VolumeMultiplyer = volumeMultiplyer,
                 TextureFile = textureFile,
-                IsUnique = item.Content.TypeId == SpaceEngineersConsts.PhysicalGunObject,
+                IsUnique = item.Content.TypeId == SpaceEngineersConsts.PhysicalGunObject || item.Content.TypeId == SpaceEngineersConsts.OxygenContainerObject,
                 IsInteger = item.Content.TypeId == SpaceEngineersConsts.Component || item.Content.TypeId == SpaceEngineersConsts.AmmoMagazine,
                 IsDecimal = item.Content.TypeId == SpaceEngineersConsts.Ore || item.Content.TypeId == SpaceEngineersConsts.Ingot,
                 Exists = definition != null, // item no longer exists in Space Engineers definitions.

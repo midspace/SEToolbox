@@ -411,6 +411,21 @@
                     Mass = UniqueUnits * StockItem.Mass;
                     Volume = UniqueUnits * StockItem.Volume;
                 }
+                else if (StockItem.TypeId == SpaceEngineersConsts.OxygenContainerObject)
+                {
+                    IsUnique = true;
+                    IsInt = IsDecimal = false;
+                    Mass = UniqueUnits * StockItem.Mass;
+                    Volume = UniqueUnits * StockItem.Volume;
+                }
+                else
+                {
+                    // Assume any new objects are whole objects that cannot be stacked (for safety).
+                    IsUnique = true;
+                    IsInt = IsDecimal = false;
+                    Mass = UniqueUnits * StockItem.Mass;
+                    Volume = UniqueUnits * StockItem.Volume;
+                }
             }
         }
 
