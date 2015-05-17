@@ -39,6 +39,7 @@
 
         public static readonly MyObjectBuilderType AmmoMagazine;
         public static readonly MyObjectBuilderType PhysicalGunObject;
+        public static readonly MyObjectBuilderType OxygenContainerObject;
         public static readonly MyObjectBuilderType Ore;
         public static readonly MyObjectBuilderType Ingot;
         public static readonly MyObjectBuilderType Component;
@@ -61,6 +62,7 @@
             // Some hopefully generic items.
             AmmoMagazine = new MyObjectBuilderType(typeof(MyObjectBuilder_AmmoMagazine));
             PhysicalGunObject = new MyObjectBuilderType(typeof(MyObjectBuilder_PhysicalGunObject));
+            OxygenContainerObject = new MyObjectBuilderType(typeof(MyObjectBuilder_OxygenContainerObject));
             Ore = new MyObjectBuilderType(typeof(MyObjectBuilder_Ore));
             Ingot = new MyObjectBuilderType(typeof(MyObjectBuilder_Ingot));
             Component = new MyObjectBuilderType(typeof(MyObjectBuilder_Component));

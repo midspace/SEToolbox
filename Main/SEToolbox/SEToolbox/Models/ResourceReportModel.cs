@@ -727,7 +727,8 @@
                 #endregion
             }
             else if (tallyTypeId == SpaceEngineersConsts.AmmoMagazine ||
-                tallyTypeId == SpaceEngineersConsts.PhysicalGunObject)
+                tallyTypeId == SpaceEngineersConsts.PhysicalGunObject ||
+                tallyTypeId == SpaceEngineersConsts.OxygenContainerObject)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
