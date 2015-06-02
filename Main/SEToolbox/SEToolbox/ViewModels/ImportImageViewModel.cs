@@ -18,6 +18,7 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
+    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class ImportImageViewModel : BaseViewModel
     {
@@ -384,7 +385,7 @@
         {
             var entity = new MyObjectBuilder_CubeGrid
             {
-                EntityId = SpaceEngineersApi.GenerateEntityId(),
+                EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                 Skeleton = new System.Collections.Generic.List<BoneInfo>(),
                 LinearVelocity = new VRageMath.Vector3(0, 0, 0),

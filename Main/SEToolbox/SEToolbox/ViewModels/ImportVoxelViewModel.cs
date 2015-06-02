@@ -19,6 +19,7 @@
     using SEToolbox.Support;
     using VRageMath;
     using Res = SEToolbox.Properties.Resources;
+    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class ImportVoxelViewModel : BaseViewModel
     {
@@ -362,7 +363,7 @@
 
             var entity = new MyObjectBuilder_VoxelMap
             {
-                EntityId = SpaceEngineersApi.GenerateEntityId(),
+                EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                 Filename = Filename,
                 StorageName = Path.GetFileNameWithoutExtension(Filename),

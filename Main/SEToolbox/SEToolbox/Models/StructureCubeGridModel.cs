@@ -16,6 +16,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRageMath;
+    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     [Serializable]
     public class StructureCubeGridModel : StructureBaseModel
@@ -1321,21 +1322,21 @@
             foreach (var block in viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == "" || (Enum.TryParse<SubtypeId>(b.SubtypeName, out outVal) && !InvalidMirrorBlocks.Contains(outVal))))
             {
                 var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
-                newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+                newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
 
                 if (block is MyObjectBuilder_MotorBase)
                 {
-                    ((MyObjectBuilder_MotorBase)newBlock).RotorEntityId = ((MyObjectBuilder_MotorBase)block).RotorEntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+                    ((MyObjectBuilder_MotorBase)newBlock).RotorEntityId = ((MyObjectBuilder_MotorBase)block).RotorEntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                 }
 
                 if (block is MyObjectBuilder_PistonBase)
                 {
-                    ((MyObjectBuilder_PistonBase)newBlock).TopBlockId = ((MyObjectBuilder_PistonBase)block).TopBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+                    ((MyObjectBuilder_PistonBase)newBlock).TopBlockId = ((MyObjectBuilder_PistonBase)block).TopBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                 }
 
                 if (block is MyObjectBuilder_PistonTop)
                 {
-                    ((MyObjectBuilder_PistonTop)newBlock).PistonBlockId = ((MyObjectBuilder_PistonTop)block).PistonBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId();
+                    ((MyObjectBuilder_PistonTop)newBlock).PistonBlockId = ((MyObjectBuilder_PistonTop)block).PistonBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                 }
 
                 newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);

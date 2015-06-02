@@ -9,6 +9,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Support;
+    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public static class SpaceEngineersRepair
     {
@@ -145,13 +146,51 @@
             {
                 MyObjectBuilder_Character character;
 
+                saveAfterScan = false;
+
+                Dictionary<long, long> idReplacementTable = new Dictionary<long, long>();
+                if (repairWorld.Checkpoint.Identities != null)
+                {
+                    foreach(var identity in repairWorld.Checkpoint.Identities)
+                    {
+                        if (!SpaceEngineersApi.ValidateEntityType(IDType.IDENTITY, identity.IdentityId))
+                        {
+                            identity.IdentityId = MergeId(identity.IdentityId, IDType.IDENTITY, ref idReplacementTable);
+
+                            statusNormal = false;
+                            str.AppendLine("! Fixed player identity.");
+                            saveAfterScan = true;
+                        }
+                    }
+                }
+
+                if (repairWorld.Checkpoint.AllPlayersData != null)
+                {
+                    foreach (var player in repairWorld.Checkpoint.AllPlayersData.Dictionary)
+                    {
+                        if (!SpaceEngineersApi.ValidateEntityType(IDType.IDENTITY, player.Value.IdentityId))
+                        {
+                            player.Value.IdentityId = MergeId(player.Value.IdentityId, IDType.IDENTITY, ref idReplacementTable);
+
+                            statusNormal = false;
+                            str.AppendLine("! Fixed player identity.");
+                            saveAfterScan = true;
+                        }
+                    }
+                }
+
+                if (saveAfterScan)
+                {
+                    repairWorld.SaveCheckPointAndSector(true);
+                    str.AppendLine("* Saved changes.");
+                }
+
                 if (world.SaveType == SaveWorldType.Local)
                 {
                     var player = repairWorld.FindPlayerCharacter();
 
                     if (player == null)
                     {
-
                         statusNormal = false;
                         str.AppendLine("! No active Player in Save content.");
 
@@ -181,7 +220,7 @@
                             {
                                 str.AppendLine("! Could not find any Player Characters.");
                                 character = new MyObjectBuilder_Character();
-                                character.EntityId = SpaceEngineersApi.GenerateEntityId();
+                                character.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.IDENTITY);
                                 character.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
                                 character.PositionAndOrientation = new MyPositionAndOrientation(VRageMath.Vector3D.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
                                 character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Name;
@@ -203,7 +242,7 @@
                                 item.ItemId = 0;
                                 item.Content = new MyObjectBuilder_Welder();
                                 gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_Welder>();
-                                gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
+                                gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
@@ -212,7 +251,7 @@
                                 item.ItemId = 1;
                                 item.Content = new MyObjectBuilder_AngleGrinder();
                                 gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_AngleGrinder>();
-                                gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
+                                gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
@@ -221,7 +260,7 @@
                                 item.ItemId = 2;
                                 item.Content = new MyObjectBuilder_HandDrill();
                                 gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_HandDrill>();
-                                gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
+                                gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
@@ -230,7 +269,7 @@
                                 item.ItemId = 3;
                                 item.Content = new MyObjectBuilder_AutomaticRifle();
                                 gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_AutomaticRifle>();
-                                gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
+                                gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
                                 ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
 
@@ -320,9 +359,9 @@
                             {
                                 character = ((MyObjectBuilder_Cockpit)list[i]).Pilot;
 
-                                if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Name == character.CharacterModel))
+                                if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Model == character.CharacterModel))
                                 {
-                                    character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Name;
+                                    character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Model;
                                     statusNormal = false;
                                     str.AppendLine("! Fixed astronaut's CharacterModel.");
                                     saveAfterScan = true;
@@ -337,9 +376,9 @@
                     character = entity as MyObjectBuilder_Character;
                     if (character != null)
                     {
-                        if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Name == character.CharacterModel))
+                        if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Model == character.CharacterModel))
                         {
-                            character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Name;
+                            character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Model;
                             statusNormal = false;
                             str.AppendLine("! Fixed astronaut's CharacterModel.");
                             saveAfterScan = true;
@@ -384,6 +423,18 @@
             }
 
             return str.ToString();
+        }
+
+        private static Int64 MergeId(long currentId, IDType type, ref Dictionary<Int64, Int64> idReplacementTable)
+        {
+            if (currentId == 0)
+                return 0;
+
+            if (idReplacementTable.ContainsKey(currentId))
+                return idReplacementTable[currentId];
+
+            idReplacementTable[currentId] = SpaceEngineersApi.GenerateEntityId(type);
+            return idReplacementTable[currentId];
         }
     }
 }
