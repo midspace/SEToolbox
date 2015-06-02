@@ -19,6 +19,7 @@
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
+    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class ExplorerModel : BaseModel
     {
@@ -845,7 +846,7 @@
             if (idReplacementTable.ContainsKey(currentId))
                 return idReplacementTable[currentId];
 
-            idReplacementTable[currentId] = SpaceEngineersApi.GenerateEntityId();
+            idReplacementTable[currentId] = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
             return idReplacementTable[currentId];
         }
 

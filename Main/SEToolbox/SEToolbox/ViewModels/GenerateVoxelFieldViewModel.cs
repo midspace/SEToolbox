@@ -16,6 +16,7 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using VRageMath;
+    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class GenerateVoxelFieldViewModel : BaseViewModel
     {
@@ -340,7 +341,7 @@
                 var position = center + new Vector3D(x, y, z) - asteroid.BoundingContent.Center;
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)
                 {
-                    EntityId = SpaceEngineersApi.GenerateEntityId(),
+                    EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),
                     PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                     StorageName = Path.GetFileNameWithoutExtension(filename),
                     PositionAndOrientation = new MyPositionAndOrientation

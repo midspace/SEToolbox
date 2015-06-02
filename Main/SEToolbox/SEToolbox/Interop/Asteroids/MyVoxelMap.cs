@@ -23,6 +23,7 @@ namespace SEToolbox.Interop.Asteroids
     using SEToolbox.Interop;
     using VRageMath;
     using Res = SEToolbox.Properties.Resources;
+    using Sandbox.Engine.Voxels;
 
     public class MyVoxelMap
     {

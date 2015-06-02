@@ -15,7 +15,8 @@
     using SEToolbox.Support;
     using VRageMath;
     using VRage;
-    using VRage.Library.Utils;
+    using VRage.Utils;
+    using Sandbox.Game.Entities;
 
     /// <summary>
     /// Helper api for accessing and interacting with Space Engineers content.
@@ -224,12 +225,22 @@
 
         #region GenerateEntityId
 
-        public static long GenerateEntityId()
+        public static long GenerateEntityId(Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE type)
         {
-            // Not the offical SE way of generating IDs, but its fast and we don't have to worry about a random seed.
-            var buffer = Guid.NewGuid().ToByteArray();
-            return BitConverter.ToInt64(buffer, 0);
+            return MyEntityIdentifier.AllocateId(type);
         }
+
+        public static bool ValidateEntityType(Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE type, long id)
+        {
+            return MyEntityIdentifier.GetIdObjectType(id) == type;
+        }
+
+        //public static long GenerateEntityId()
+        //{
+        //    // Not the offical SE way of generating IDs, but its fast and we don't have to worry about a random seed.
+        //    var buffer = Guid.NewGuid().ToByteArray();
+        //    return BitConverter.ToInt64(buffer, 0);
+        //}
 
         #endregion
 

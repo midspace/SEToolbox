@@ -9,6 +9,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class GenerateFloatingObjectViewModel : BaseViewModel
     {
@@ -278,7 +279,7 @@
         {
             var entity = new MyObjectBuilder_FloatingObject
             {
-                EntityId = SpaceEngineersApi.GenerateEntityId(),
+                EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY),
                 PersistentFlags = MyPersistentEntityFlags2.Enabled | MyPersistentEntityFlags2.InScene,
                 Item = new MyObjectBuilder_InventoryItem { ItemId = 0 },
             };
@@ -346,7 +347,7 @@
             for (var i = 0; i < Multiplier; i++)
             {
                 var newEntity = (MyObjectBuilder_FloatingObject)entity.Clone();
-                newEntity.EntityId = SpaceEngineersApi.GenerateEntityId();
+                newEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                 //if (StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
                 //{
                 //    Only required for pre-generating the Entity id for a gun that has been handled.
