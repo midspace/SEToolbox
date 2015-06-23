@@ -9,7 +9,6 @@
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
 
-    using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -19,7 +18,9 @@
     using SEToolbox.Support;
     using VRageMath;
     using Res = SEToolbox.Properties.Resources;
-    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public class ImportVoxelViewModel : BaseViewModel
     {

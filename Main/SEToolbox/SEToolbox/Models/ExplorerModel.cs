@@ -19,7 +19,9 @@
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
-    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public class ExplorerModel : BaseModel
     {
@@ -309,7 +311,7 @@
                     _customColors = new List<int>();
                     foreach (Vector3 hsv in ActiveWorld.Checkpoint.CharacterToolbar.ColorMaskHSVList)
                     {
-                        var rgb = ((Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3)hsv).ToSandboxDrawingColor();
+                        var rgb = ((SerializableVector3)hsv).ToSandboxDrawingColor();
                         _customColors.Add(((rgb.B << 0x10) | (rgb.G << 8) | rgb.R) & 0xffffff);
                     }
                 }

@@ -8,9 +8,9 @@
 
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.Serializer;
     using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
+    using VRage.ObjectBuilders;
 
     /// <summary>
     /// Encapsulates the game definitions, either stock or loaded for a specific save game world.

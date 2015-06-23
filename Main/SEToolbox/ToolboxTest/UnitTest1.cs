@@ -8,12 +8,13 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Serializer;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRageMath;
     using Color = System.Drawing.Color;
+    using VRage;
+    using VRage.ObjectBuilders;
 
     [TestClass]
     public class UnitTest1

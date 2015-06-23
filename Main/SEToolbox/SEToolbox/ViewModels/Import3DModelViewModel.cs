@@ -18,7 +18,9 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using Res = SEToolbox.Properties.Resources;
-    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public class Import3DModelViewModel : BaseViewModel
     {

@@ -2,8 +2,8 @@
 {
     using System.Drawing;
 
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using VRage;
 
     public class ImportImageModel : BaseModel
     {

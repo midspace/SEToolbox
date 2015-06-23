@@ -9,7 +9,9 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Support;
-    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public static class SpaceEngineersRepair
     {
@@ -224,7 +226,7 @@
                                 character.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
                                 character.PositionAndOrientation = new MyPositionAndOrientation(VRageMath.Vector3D.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
                                 character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Name;
-                                character.ColorMaskHSV = new Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3(0, -1, 1); // White
+                                character.ColorMaskHSV = new SerializableVector3(0, -1, 1); // White
                                 character.Battery = new MyObjectBuilder_Battery { CurrentCapacity = 0.5f };
                                 character.LightEnabled = false;
                                 character.HeadAngle = new VRageMath.Vector2();

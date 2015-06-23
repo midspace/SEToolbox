@@ -191,7 +191,7 @@
 
   <Target Name="BeforeCompileConfiguration" Condition="'$(BuildBreak)'!='true'" DependsOnTargets="SetupSolutionList;ReadAssemblyVersion" />
 
-  <Target Name="AfterCompileConfiguration" Condition="'$(BuildBreak)'!='true'" DependsOnTargets="CopyBinaryFiles;WriteToDeploymentBinaries;PackageZipDeployment" />
+  <Target Name="AfterCompileConfiguration" Condition="'$(BuildBreak)'!='true'" DependsOnTargets="CopyBinaryFiles;PackageZipDeployment" />
 
   <Target Name="AfterCompile" DependsOnTargets="" />
 

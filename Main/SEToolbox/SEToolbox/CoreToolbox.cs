@@ -67,7 +67,7 @@
             GlobalSettings.Default.Save();
 
             var ignoreUpdates = args.Any(a => a.ToUpper() == "/X" || a.ToUpper() == "-X");
-            var oldDlls = args.Any(a => a.ToUpper() == "/OLDDLL" || a.ToUpper() == "-OLDDLL");
+            var oldDlls = true; // args.Any(a => a.ToUpper() == "/OLDDLL" || a.ToUpper() == "-OLDDLL");
             var altDlls = !oldDlls;
 
             // Go looking for any changes in the Dependant Space Engineers assemblies and immediately attempt to update.
@@ -89,67 +89,67 @@
 
             // Alternate experimental method for loading the Space Engineers API assemblies.
             // Copy them to temporary path, then load with reflection on demand through the AppDomain.
-            if (altDlls)
-            {
-                _tempBinPath = ToolboxUpdater.GetBinCachePath();
-                var searchPath = GlobalSettings.Default.SEBinPath;
+            //if (altDlls)
+            //{
+            //    _tempBinPath = ToolboxUpdater.GetBinCachePath();
+            //    var searchPath = GlobalSettings.Default.SEBinPath;
 
-                DirectoryInfo checkDir = null;
-                var counter = 0;
+            //    DirectoryInfo checkDir = null;
+            //    var counter = 0;
 
-                while (checkDir == null && counter < 10)
-                {
-                    if (Directory.Exists(_tempBinPath))
-                        break;
+            //    while (checkDir == null && counter < 10)
+            //    {
+            //        if (Directory.Exists(_tempBinPath))
+            //            break;
 
-                    checkDir = Directory.CreateDirectory(_tempBinPath);
+            //        checkDir = Directory.CreateDirectory(_tempBinPath);
 
-                    if (checkDir == null)
-                    {
-                        // wait a while, as the drive may be processing Windows Explorer which had a lock on the Directory after prior cleanup.
-                        System.Threading.Thread.Sleep(100);
-                    }
+            //        if (checkDir == null)
+            //        {
+            //            // wait a while, as the drive may be processing Windows Explorer which had a lock on the Directory after prior cleanup.
+            //            System.Threading.Thread.Sleep(100);
+            //        }
 
-                    counter++;
-                }
+            //        counter++;
+            //    }
 
-                foreach (var file in ToolboxUpdater.CoreSpaceEngineersFiles)
-                {
-                    var filename = Path.Combine(searchPath, file);
-                    var destFilename = Path.Combine(_tempBinPath, file);
+            //    foreach (var file in ToolboxUpdater.CoreSpaceEngineersFiles)
+            //    {
+            //        var filename = Path.Combine(searchPath, file);
+            //        var destFilename = Path.Combine(_tempBinPath, file);
 
-                    if (ToolboxUpdater.DoFilesDiffer(searchPath, _tempBinPath, file))
-                    {
-                        try
-                        {
-                            File.Copy(filename, destFilename, true);
-                        }
-                        catch { }
-                    }
-                }
+            //        if (ToolboxUpdater.DoFilesDiffer(searchPath, _tempBinPath, file))
+            //        {
+            //            try
+            //            {
+            //                File.Copy(filename, destFilename, true);
+            //            }
+            //            catch { }
+            //        }
+            //    }
 
-                // Copy directories which contain Space Engineers language resources.
-                var dirs = Directory.GetDirectories(searchPath);
+            //    // Copy directories which contain Space Engineers language resources.
+            //    var dirs = Directory.GetDirectories(searchPath);
 
-                foreach (var sourceDir in dirs)
-                {
-                    var dirName = Path.GetFileName(sourceDir);
-                    var destDir = Path.Combine(_tempBinPath, dirName);
-                    Directory.CreateDirectory(destDir);
+            //    foreach (var sourceDir in dirs)
+            //    {
+            //        var dirName = Path.GetFileName(sourceDir);
+            //        var destDir = Path.Combine(_tempBinPath, dirName);
+            //        Directory.CreateDirectory(destDir);
 
-                    foreach (string oldFile in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
-                    {
-                        try
-                        {
-                            File.Copy(oldFile, Path.Combine(destDir, Path.GetFileName(oldFile)), true);
-                        }
-                        catch { }
-                    }
-                }
+            //        foreach (string oldFile in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+            //        {
+            //            try
+            //            {
+            //                File.Copy(oldFile, Path.Combine(destDir, Path.GetFileName(oldFile)), true);
+            //            }
+            //            catch { }
+            //        }
+            //    }
 
-                AppDomain currentDomain = AppDomain.CurrentDomain;
-                currentDomain.AssemblyResolve += currentDomain_AssemblyResolve;
-            }
+            //    AppDomain currentDomain = AppDomain.CurrentDomain;
+            //    currentDomain.AssemblyResolve += currentDomain_AssemblyResolve;
+            //}
 
 #if DEBUG
             // This will make it hairy for testing the AppDomain stuff.

@@ -14,6 +14,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using Sandbox.Common.ObjectBuilders;
+    using VRage;
 
     public class ComponentListModel : BaseModel
     {
@@ -461,21 +462,21 @@ td.right { text-align: right; }");
         {
             var item = field.GetValue(objt);
 
-            if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3I))
+            if (field.FieldType == typeof(SerializableVector3I))
             {
-                var vector = (Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3I)item;
+                var vector = (SerializableVector3I)item;
                 return string.Format("{0}, {1}, {2}", vector.X, vector.Y, vector.Z);
             }
 
-            if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3))
+            if (field.FieldType == typeof(SerializableVector3))
             {
-                var vector = (Sandbox.Common.ObjectBuilders.VRageData.SerializableVector3)item;
+                var vector = (SerializableVector3)item;
                 return string.Format("{0}, {1}, {2}", vector.X, vector.Y, vector.Z);
             }
 
-            if (field.FieldType == typeof(Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds))
+            if (field.FieldType == typeof(SerializableBounds))
             {
-                var bounds = (Sandbox.Common.ObjectBuilders.VRageData.SerializableBounds)item;
+                var bounds = (SerializableBounds)item;
                 return string.Format("Default:{0}, Min:{1}, max:{2}", bounds.Default, bounds.Min, bounds.Max);
             }
 

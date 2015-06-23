@@ -29,6 +29,8 @@
     using Res = SEToolbox.Properties.Resources;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public class ExplorerViewModel : BaseViewModel, IDropable, IMainView
     {

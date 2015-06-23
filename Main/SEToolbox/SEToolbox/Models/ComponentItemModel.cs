@@ -5,6 +5,7 @@
 
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using VRage.ObjectBuilders;
 
     [Serializable]
     public class ComponentItemModel : BaseModel

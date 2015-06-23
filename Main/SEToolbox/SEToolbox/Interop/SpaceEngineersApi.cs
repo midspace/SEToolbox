@@ -16,7 +16,7 @@
     using VRageMath;
     using VRage;
     using VRage.Utils;
-    using Sandbox.Game.Entities;
+    using VRage.ObjectBuilders;
 
     /// <summary>
     /// Helper api for accessing and interacting with Space Engineers content.
@@ -225,12 +225,12 @@
 
         #region GenerateEntityId
 
-        public static long GenerateEntityId(Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE type)
+        public static long GenerateEntityId(VRage.MyEntityIdentifier.ID_OBJECT_TYPE type)
         {
             return MyEntityIdentifier.AllocateId(type);
         }
 
-        public static bool ValidateEntityType(Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE type, long id)
+        public static bool ValidateEntityType(VRage.MyEntityIdentifier.ID_OBJECT_TYPE type, long id)
         {
             return MyEntityIdentifier.GetIdObjectType(id) == type;
         }

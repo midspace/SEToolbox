@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.084.006.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.085.005.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -45,9 +45,11 @@
               <RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
 
               <RemoveFile Id="file61275B9FC2AE484BA7A2BDB7459A3647" Name="Sandbox.Common.dll" On="install"/>
-              <RemoveFile Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Name="Sandbox.Common.XmlSerializers.dll" On="install"/>
+              <RemoveFile Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Name="Sandbox.Common.XmlSerializers.dll" On="install"/><!-- may be obsolete. Remove in a couple of months. -->
               <RemoveFile Id="file9BC4F4C590AF4888B721F2301140EB5A" Name="Sandbox.Game.dll" On="install"/>
               <RemoveFile Id="fileEA4AE319577E449E9D1DF59BC1B6D3F0" Name="VRage.dll" On="install"/>
+              <RemoveFile Id="file0F16284F3E2D4C5CA5402B757C4951D1" Name="VRage.Game.dll" On="install"/>
+              <RemoveFile Id="fukeD6616ECAB0004D46AE4DBA393C53F0ED" Name="VRage.Game.XmlSerializers.dll" On="install"/>
               <RemoveFile Id="file3B25B4B8D8824BFBBC59FF95EB66E88F" Name="VRage.Library.dll" On="install"/>
               <RemoveFile Id="file97E0990BBDDF40A68ED535BF1D64AF8E" Name="VRage.Math.dll" On="install"/>
 
@@ -154,12 +156,12 @@
                   Description="!(loc.ShortcutDescription)"
                   Target="[APPLICATIONFOLDER]SEToolbox.exe"
                   WorkingDirectory="APPLICATIONFOLDER"/>
-        <Shortcut Id="ApplicationStartMenuShortcutOld"
+        <!--<Shortcut Id="ApplicationStartMenuShortcutOld"
                   Name="!(loc.OldDllShortcutName)"
                   Description="!(loc.OldDllShortcutDescription)"
                   Target="[APPLICATIONFOLDER]SEToolbox.exe"
                   Arguments="/OLDDLL"
-                  WorkingDirectory="APPLICATIONFOLDER"/>
+                  WorkingDirectory="APPLICATIONFOLDER"/>-->
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
         <RemoveFolder Id="RemoveProgramMenuDir" Directory='COMPANYPROGRAMFOLDER' On='uninstall' />
         <!-- Application registry -->

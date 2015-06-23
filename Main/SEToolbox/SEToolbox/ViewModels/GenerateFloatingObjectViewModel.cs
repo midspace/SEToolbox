@@ -9,7 +9,9 @@
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
-    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public class GenerateFloatingObjectViewModel : BaseViewModel
     {
