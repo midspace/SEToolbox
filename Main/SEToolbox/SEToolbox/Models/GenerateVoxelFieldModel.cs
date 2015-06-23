@@ -5,11 +5,11 @@
     using System.IO;
     using System.Linq;
 
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using SEToolbox.Models.Asteroids;
+    using VRage;
 
     public class GenerateVoxelFieldModel : BaseModel
     {

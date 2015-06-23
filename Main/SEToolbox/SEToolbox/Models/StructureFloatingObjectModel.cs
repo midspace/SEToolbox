@@ -7,6 +7,7 @@
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
+    using VRage.ObjectBuilders;
 
     [Serializable]
     public class StructureFloatingObjectModel : StructureBaseModel

@@ -8,12 +8,12 @@
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
 
-    using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
+    using VRage.ObjectBuilders;
 
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel

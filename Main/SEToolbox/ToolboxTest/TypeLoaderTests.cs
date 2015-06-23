@@ -16,11 +16,34 @@
     using System.Text.RegularExpressions;
     using Sandbox.Definitions;
     using VRage.Collections;
+    using VRage.FileSystem;
+    using Sandbox.Engine.Voxels;
 
     [TestClass]
     public class TypeLoaderTests
     {
         List<string> _spaceEngineersAssemblies;
+
+        //[TestMethod]
+        public void LoadOthe3r()
+        {
+            var filename = @"D:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content\VoxelMaps\Arabian_Border_7.vx2";
+
+            var storage = MyStorageBase.LoadFromFile(filename);
+
+            //byte[] buffer;
+
+            //using (var ms = new FileStream(filename, FileMode.Open))
+            //{
+            //    using (var reader = new BinaryReader(ms))
+            //    {
+            //        buffer = reader.ReadBytes((int)reader.BaseStream.Length);
+            //    }
+            //}
+
+            //var storage = MyStorageBase.Load(buffer);
+
+        }
 
         [TestMethod]
         public void FindType()
@@ -40,9 +63,9 @@
             currentDomain.TypeResolve += currentDomain_TypeResolve;
             try
             {
-                VRage.Library.Utils.MyFileSystem.Reset();
-                VRage.Library.Utils.MyFileSystem.Init(@"C:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content", Environment.ExpandEnvironmentVariables(@"%AppData%\SpaceEngineers"));
-                VRage.Library.Utils.MyFileSystem.InitUserSpecific((string)null);
+                MyFileSystem.Reset();
+                MyFileSystem.Init(@"C:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content", Environment.ExpandEnvironmentVariables(@"%AppData%\SpaceEngineers"));
+                MyFileSystem.InitUserSpecific((string)null);
 
                 // #########################
                 // MySandboxGame (obsfcated) has to be created in memory to be able to load Voxel Material Definitions.

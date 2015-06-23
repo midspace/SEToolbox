@@ -6,11 +6,12 @@
     using System.Diagnostics.Contracts;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.VRageData;
 
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public class CubeItemViewModel : BaseViewModel
     {

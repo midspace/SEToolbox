@@ -7,6 +7,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using VRageMath;
+    using VRage.ObjectBuilders;
 
     [Serializable]
     public class StructureMeteorModel : StructureBaseModel

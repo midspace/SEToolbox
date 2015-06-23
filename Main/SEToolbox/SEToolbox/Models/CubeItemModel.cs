@@ -6,9 +6,10 @@
 
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using VRageMath;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public class CubeItemModel : BaseModel
     {

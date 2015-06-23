@@ -3,9 +3,9 @@
     using System.Collections.ObjectModel;
     using System.Windows.Media.Media3D;
 
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
+    using VRage;
 
     public class Import3DAsteroidModel : BaseModel
     {

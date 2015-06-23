@@ -14,9 +14,11 @@
     {
         internal static readonly string[] CoreSpaceEngineersFiles = {
             "Sandbox.Common.dll",
-            "Sandbox.Common.XmlSerializers.dll",
+            //"Sandbox.Common.XmlSerializers.dll",  // No longer required. under 01.085.
             //"Sandbox.Game.dll",   // Need to fix Bin/Bin64 check first.
             "VRage.dll",
+            "VRage.Game.dll",
+            "VRage.Game.XmlSerializers.dll",
             "VRage.Library.dll",
             "VRage.Math.dll"
         };

@@ -1,7 +1,8 @@
 ﻿namespace SEToolbox.Interfaces
 {
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using VRage;
+    using VRage.ObjectBuilders;
     using VRageMath;
 
     public interface IStructureBase

@@ -12,6 +12,7 @@
     using SEToolbox.Support;
     using Brushes = System.Drawing.Brushes;
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;
+    using VRage.ObjectBuilders;
 
     [TestClass]
     public class TextureTests

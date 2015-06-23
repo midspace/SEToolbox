@@ -7,7 +7,6 @@
     using System.Linq;
     using System.Windows.Input;
 
-    using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
@@ -16,7 +15,9 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using VRageMath;
-    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     public class GenerateVoxelFieldViewModel : BaseViewModel
     {

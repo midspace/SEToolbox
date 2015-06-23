@@ -17,7 +17,9 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using VRageMath;
-    using IDType = Sandbox.Game.Entities.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using VRage;
+    using VRage.ObjectBuilders;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {

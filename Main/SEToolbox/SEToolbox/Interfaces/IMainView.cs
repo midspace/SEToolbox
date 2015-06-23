@@ -5,6 +5,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using VRageMath;
+    using VRage.ObjectBuilders;
 
     public interface IMainView
     {

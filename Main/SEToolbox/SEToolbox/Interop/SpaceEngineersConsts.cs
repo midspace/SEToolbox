@@ -3,6 +3,7 @@
     using Sandbox.Common.ObjectBuilders;
     using System;
     using Sandbox.Common.ObjectBuilders.Definitions;
+    using VRage.ObjectBuilders;
 
     public class SpaceEngineersConsts
     {

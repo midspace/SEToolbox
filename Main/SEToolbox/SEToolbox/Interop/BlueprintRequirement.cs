@@ -1,6 +1,6 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Sandbox.Common.ObjectBuilders.Definitions;
+    using VRage.ObjectBuilders;
 
     public class BlueprintRequirement
     {

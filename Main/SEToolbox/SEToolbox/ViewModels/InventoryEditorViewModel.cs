@@ -11,6 +11,7 @@
     using SEToolbox.Services;
     using SEToolbox.Views;
     using VRageMath;
+    using VRage;
 
     public class InventoryEditorViewModel : BaseViewModel
     {

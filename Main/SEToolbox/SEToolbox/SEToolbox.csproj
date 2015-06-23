@@ -63,12 +63,6 @@
     <Reference Include="Sandbox.Common">
       <HintPath>..\References\Sandbox.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Sandbox.Common.XmlSerializers">
-      <HintPath>..\References\Sandbox.Common.XmlSerializers.dll</HintPath>
-    </Reference>
-    <Reference Include="Sandbox.Game">
-      <HintPath>C:\Program Files\Reference Assemblies\SpaceEngineers\Sandbox.Game.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -89,6 +83,12 @@
     <Reference Include="UIAutomationTypes" />
     <Reference Include="VRage">
       <HintPath>..\References\VRage.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Game">
+      <HintPath>..\References\VRage.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Game.XmlSerializers">
+      <HintPath>..\References\VRage.Game.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

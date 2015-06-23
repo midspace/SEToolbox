@@ -3,13 +3,13 @@
     using System.IO;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRageMath;
+    using Sandbox.Common.ObjectBuilders.VRageData;
+    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders;
+    using VRage.ObjectBuilders;
 
     [TestClass]
     public class InteropTests

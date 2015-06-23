@@ -10,6 +10,8 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using VRageMath;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     [Serializable]
     public class StructureBaseModel : BaseModel, IStructureBase

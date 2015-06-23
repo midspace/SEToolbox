@@ -19,6 +19,7 @@
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
+    using VRage.ObjectBuilders;
 
     public class ResourceReportModel : BaseModel
     {

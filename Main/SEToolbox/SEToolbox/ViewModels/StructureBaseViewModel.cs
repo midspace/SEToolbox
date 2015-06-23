@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
+    using VRage;
 
     public abstract class StructureBaseViewModel<TModel> : DataBaseViewModel, IStructureViewBase where TModel : IStructureBase
     {

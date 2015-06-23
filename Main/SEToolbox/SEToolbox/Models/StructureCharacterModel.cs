@@ -6,8 +6,9 @@
     using System.Xml.Serialization;
 
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
+    using VRage.ObjectBuilders;
+    using VRage;
 
     [Serializable]
     public class StructureCharacterModel : StructureBaseModel

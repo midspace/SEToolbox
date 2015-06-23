@@ -5,10 +5,10 @@
     using System.IO;
     using System.Linq;
 
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
+    using VRage;
 
     public class ImportVoxelModel : BaseModel
     {

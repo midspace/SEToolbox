@@ -6,10 +6,10 @@
     using System.Linq;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Models;
     using SEToolbox.Support;
+    using Sandbox.Common.ObjectBuilders.Definitions;
 
     [TestClass]
     public class ModelTests

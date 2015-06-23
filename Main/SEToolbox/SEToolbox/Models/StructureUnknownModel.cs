@@ -3,8 +3,8 @@
     using System;
     using System.Runtime.Serialization;
 
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using VRage.ObjectBuilders;
 
     [Serializable]
     public class StructureUnknownModel : StructureBaseModel
