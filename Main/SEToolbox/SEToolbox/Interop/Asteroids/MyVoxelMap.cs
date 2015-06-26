@@ -73,10 +73,10 @@ namespace SEToolbox.Interop.Asteroids
         // Creates full voxel map, does not initialize base !!! Use only for importing voxel maps from models !!!
         public void Init(Vector3D position, Vector3I size, string material)
         {
-            InitVoxelMap(position, size, material);
+            InitVoxelMap(position, size, material, true);
         }
 
-        private void InitVoxelMap(Vector3D position, Vector3I size, string materialName)
+        private void InitVoxelMap(Vector3D position, Vector3I size, string materialName, bool defineMemory)
         {
             IsValid = true;
             Size = size;
@@ -84,6 +84,10 @@ namespace SEToolbox.Interop.Asteroids
             VoxelMaterial = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             _positionLeftBottomCorner = position;
             _boundingContent = new BoundingBoxD(new Vector3I(Size.X, Size.Y, Size.Z), new Vector3I(0, 0, 0));
+
+            // this is too big for the current SEToolbox code to cope with, and is probably a planet.
+            if (!defineMemory)
+                return;
 
             // If you need larged voxel maps, enlarge this constant.
             Debug.Assert(Size.X <= MyVoxelConstants.MAX_VOXEL_MAP_SIZE_IN_VOXELS);
@@ -282,7 +286,7 @@ namespace SEToolbox.Interop.Asteroids
 
                 _cellSize = new Vector3I(cellSizeX, cellSizeY, cellSizeZ);
 
-                InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
+                InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial, true);
                 if (FileVersion == 2)
                     materialBaseCount = reader.ReadByte();
             }
@@ -310,7 +314,7 @@ namespace SEToolbox.Interop.Asteroids
                 
                 _cellSize = new Vector3I(8, 8, 8);
 
-                InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial);
+                InitVoxelMap(position, new Vector3I(sizeX, sizeY, sizeZ), defaultMaterial, false);
                 materialBaseCount = reader.ReadInt32();
 
                 //FileVersion = 2;
