@@ -152,6 +152,24 @@
             }
         }
 
+        public bool Destructible
+        {
+            get
+            {
+                return CubeGrid.DestructibleBlocks;
+            }
+
+            set
+            {
+                if (value != CubeGrid.DestructibleBlocks)
+                {
+                    CubeGrid.DestructibleBlocks = value;
+                    RaisePropertyChanged(() => Destructible);
+                }
+            }
+        }
+
+
         public override string DisplayName
         {
             get

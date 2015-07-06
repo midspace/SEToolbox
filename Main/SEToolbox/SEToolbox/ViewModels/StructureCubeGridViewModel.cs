@@ -357,6 +357,17 @@
             }
         }
 
+        public bool Destructible
+        {
+            get { return DataModel.Destructible; }
+
+            set
+            {
+                DataModel.Destructible = value;
+                MainViewModel.IsModified = true;
+            }
+        }
+
         public Point3D Min
         {
             get { return DataModel.Min; }

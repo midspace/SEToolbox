@@ -162,6 +162,24 @@
         }
 
         [XmlIgnore]
+        public float OxygenLevel
+        {
+            get
+            {
+                return Character.OxygenLevel;
+            }
+
+            set
+            {
+                if (value != Character.OxygenLevel)
+                {
+                    Character.OxygenLevel = value;
+                    RaisePropertyChanged(() => OxygenLevel);
+                }
+            }
+        }
+
+        [XmlIgnore]
         public List<string> CharacterModels
         {
             get { return _characterModels; }

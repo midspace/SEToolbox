@@ -1031,7 +1031,7 @@
 
         public void CopyObjectGpsExecuted()
         {
-            var text = String.Format("GPS:{0}:{1:0.00}:{2:0.00}:{3:0.00}:", Selections[0].DataModel.DisplayName.Replace(":", "_").Replace("&", "_"), Selections[0].DataModel.PositionX, Selections[0].DataModel.PositionY, Selections[0].DataModel.PositionZ);
+            var text = String.Format(CultureInfo.InvariantCulture, "GPS:{0}:{1:0.00}:{2:0.00}:{3:0.00}:", Selections[0].DataModel.DisplayName.Replace(":", "_").Replace("&", "_"), Selections[0].DataModel.PositionX, Selections[0].DataModel.PositionY, Selections[0].DataModel.PositionZ);
             try
             {
                 Clipboard.Clear();
