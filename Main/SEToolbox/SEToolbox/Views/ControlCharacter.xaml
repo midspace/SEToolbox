@@ -60,6 +60,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Label Grid.Column="0" Grid.Row="2" Content="Suit Color:"/>
@@ -112,7 +113,26 @@
                             <Image Grid.Column="1" Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=battery}" />
                             <Slider Grid.Column="2" Value="{Binding BatteryCapacity}" Minimum="0" Maximum="1" SmallChange=".01" LargeChange=".1"/>
                         </Grid>
-                        <Button Grid.Column="0" Grid.Row="9" Content="Speed:" HorizontalAlignment="Left" Style="{StaticResource DropDownMenuButton}">
+                        <Label Grid.Column="0" Grid.Row="9" Content="Oxygen:"/>
+                        <Grid Grid.Row="9" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="OxygenLevel" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="1"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Grid.Column="1">O₂</Label>
+                            <Slider Grid.Column="2" Value="{Binding OxygenLevel}" Minimum="0" Maximum="1" SmallChange=".01" LargeChange=".1"/>
+                        </Grid>
+                        <Button Grid.Column="0" Grid.Row="10" Content="Speed:" HorizontalAlignment="Left" Style="{StaticResource DropDownMenuButton}">
                             <i:Interaction.Behaviors>
                                 <commands:ButtonDropDownMenuBehavior />
                             </i:Interaction.Behaviors>
@@ -131,15 +151,15 @@
                                 </ContextMenu>
                             </Button.ContextMenu>
                         </Button>
-                        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
+                        <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" />
 
-                        <Separator Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2"/>
-                        <Label Grid.Column="0" Grid.Row="11" Content="Pilot:"/>
-                        <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPilot}" />
-                        <Label Grid.Column="0" Grid.Row="12" Content="Player:"/>
-                        <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
-                        <Label Grid.Column="0" Grid.Row="13" Content="Distance:"/>
-                        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+                        <Separator Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2"/>
+                        <Label Grid.Column="0" Grid.Row="12" Content="Pilot:"/>
+                        <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPilot}" />
+                        <Label Grid.Column="0" Grid.Row="13" Content="Player:"/>
+                        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
+                        <Label Grid.Column="0" Grid.Row="14" Content="Distance:"/>
+                        <TextBlock Grid.Row="14" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
                     </Grid>
                 </DockPanel>
             </TabItem>

@@ -170,44 +170,30 @@
 
         public double LinearVelocity
         {
-            get
-            {
-                return DataModel.LinearVelocity;
-            }
+            get { return DataModel.LinearVelocity; }
         }
 
         public float BatteryCapacity
         {
-            get
-            {
-                return DataModel.BatteryCapacity * 100000;
-            }
-
-            set
-            {
-                DataModel.BatteryCapacity = value / 100000;
-            }
+            get { return DataModel.BatteryCapacity * 100000; }
+            set { DataModel.BatteryCapacity = value / 100000; }
         }
 
         public float? Health
         {
-            get
-            {
-                return DataModel.Health;
-            }
+            get { return DataModel.Health; }
+            set { DataModel.Health = value; }
+        }
 
-            set
-            {
-                DataModel.Health = value;
-            }
+        public float OxygenLevel
+        {
+            get { return DataModel.OxygenLevel; }
+            set { DataModel.OxygenLevel = value; }
         }
 
         public InventoryEditorViewModel Inventory
         {
-            get
-            {
-                return _inventory;
-            }
+            get { return _inventory; }
 
             set
             {
