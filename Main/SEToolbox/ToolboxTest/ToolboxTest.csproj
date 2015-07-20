@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -74,6 +74,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="$(SolutionDir)\global.targets" Condition="exists('$(SolutionDir)\global.targets')" />
   </ImportGroup>
@@ -92,33 +95,33 @@
     </Reference>
     <Reference Include="Sandbox.Common">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BinPathx86)\Sandbox.Common.dll</HintPath>
+      <HintPath>$(BinPath)\Sandbox.Common.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Game">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BinPathx86)\Sandbox.Game.dll</HintPath>
+      <HintPath>$(BinPath)\Sandbox.Game.dll</HintPath>
     </Reference>
     <Reference Include="SteamSDK">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BinPathx86)\SteamSDK.dll</HintPath>
+      <HintPath>$(BinPath)\SteamSDK.dll</HintPath>
     </Reference>
     <Reference Include="VRage">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BinPathx86)\VRage.dll</HintPath>
+      <HintPath>$(BinPath)\VRage.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Game">
-      <HintPath>$(BinPathx86)\VRage.Game.dll</HintPath>
+      <HintPath>$(BinPath)\VRage.Game.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Game.XmlSerializers">
-      <HintPath>$(BinPathx86)\VRage.Game.XmlSerializers.dll</HintPath>
+      <HintPath>$(BinPath)\VRage.Game.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Library">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BinPathx86)\VRage.Library.dll</HintPath>
+      <HintPath>$(BinPath)\VRage.Library.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Math">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BinPathx86)\VRage.Math.dll</HintPath>
+      <HintPath>$(BinPath)\VRage.Math.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>

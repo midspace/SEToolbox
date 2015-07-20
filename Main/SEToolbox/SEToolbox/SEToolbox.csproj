@@ -28,7 +28,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SEToolbox.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\SEToolbox.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -618,7 +618,6 @@
       <LastGenOutput>SubtypeId.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="SEToolbox.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="app.ico" />

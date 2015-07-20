@@ -2,15 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  
+
+  <!-- Copy this PropertyGroup into "user.targets" and modify the "MainPath" to indicate the path to SpaceEngineers in the Steam directory. -->
   <PropertyGroup>
-    <!-- Modify the line below to contain path to SpaceEngineers\Content in Steam directory -->
     <MainPath>c:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers</MainPath>
     <BinPathx86>$(MainPath)\Bin</BinPathx86>
     <BinPathx64>$(MainPath)\Bin64</BinPathx64>
     <BinPath>$(BinPathx64)</BinPath>
   </PropertyGroup>
-  
+
   <ImportGroup Label="PropertySheets">
     <Import Project="$(SolutionDir)\user.targets" Condition="exists('$(SolutionDir)\user.targets')" />
   </ImportGroup>
