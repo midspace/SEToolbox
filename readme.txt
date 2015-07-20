@@ -51,4 +51,9 @@ Resources:
 *	SharpZipLib
 	http://www.icsharpcode.net/OpenSource/SharpZipLib
 
+
+Local references:
+	Copy global.targets to user.targets, and modify the MainPath to indicate the 
+	path to SpaceEngineers in the Steam directory on your computer.
+
 ========--------~~~~~~~~
