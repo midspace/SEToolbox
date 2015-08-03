@@ -389,9 +389,12 @@
                     if (!character.IsPilot)
                     {
                         // Character inventory.
-                        foreach (var item in character.Character.Inventory.Items)
+                        if (character.Character.Inventory != null)
                         {
-                            TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
+                            foreach (var item in character.Character.Inventory.Items)
+                            {
+                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
+                            }
                         }
                     }
                 }
@@ -734,7 +737,7 @@
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
                 var bp = SpaceEngineersApi.GetBlueprint(tallyTypeId, tallySubTypeId);
-                var timeToMake = new TimeSpan((long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
+                var timeToMake = new TimeSpan(bp == null ? 0 : (long)(TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amountDecimal));
 
                 #region unused ore value
 

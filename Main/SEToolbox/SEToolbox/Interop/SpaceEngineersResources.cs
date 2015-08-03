@@ -135,9 +135,7 @@
             if (definitions.GlobalEvents == null) throw new ToolboxException(ExceptionState.MissingContentFile, "GlobalEvents.sbc");
             if (definitions.HandItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "HandItems.sbc");
             if (definitions.PhysicalItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "PhysicalItems.sbc");
-            if (definitions.SpawnGroups == null) throw new ToolboxException(ExceptionState.MissingContentFile, "SpawnGroups.sbc");
             if (definitions.TransparentMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "TransparentMaterials.sbc");
-            if (definitions.VoxelMapStorages == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMapStorages.sbc");
             if (definitions.VoxelMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
 
             // Deal with duplicate entries. Must use the last one found and overwrite all others.
@@ -153,9 +151,9 @@
             definitions.GlobalEvents = definitions.GlobalEvents.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.HandItems = definitions.HandItems.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.PhysicalItems = definitions.PhysicalItems.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.SpawnGroups = definitions.SpawnGroups.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.SpawnGroups = definitions.SpawnGroups == null ? null : definitions.SpawnGroups.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.TransparentMaterials = definitions.TransparentMaterials.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.VoxelMapStorages = definitions.VoxelMapStorages.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
+            definitions.VoxelMapStorages = definitions.VoxelMapStorages == null ? null : definitions.VoxelMapStorages.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
             definitions.VoxelMaterials = definitions.VoxelMaterials.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
         }
 
