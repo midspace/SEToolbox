@@ -754,7 +754,8 @@
                             SpaceEngineersApi.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.Id.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
                             var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId);
                             var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
-                            var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, Time = ingotTime, TextureFile = componentTexture };
+                            var volume = cd.Volume.HasValue ? (double)kvp.Value.Amount * cd.Volume.Value : 0d;
+                            var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = volume, Time = ingotTime, TextureFile = componentTexture };
                             ingotAssets.Add(ingotAsset);
                             timeTaken += ingotTime;
                         }
@@ -765,7 +766,8 @@
                             if (cd != null)
                             {
                                 var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
-                                var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = (double)kvp.Value.Amount * cd.Volume.Value, TextureFile = componentTexture };
+                                var volume = cd.Volume.HasValue ? (double)kvp.Value.Amount * cd.Volume.Value : 0d;
+                                var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = volume, TextureFile = componentTexture };
                                 oreAssets.Add(oreAsset);
                             }
                         }

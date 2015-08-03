@@ -4,6 +4,7 @@
     using System;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using VRage.ObjectBuilders;
+    using Support;
 
     public class SpaceEngineersConsts
     {
@@ -72,9 +73,14 @@
             Cockpit = new MyObjectBuilderType(typeof(MyObjectBuilder_Cockpit));
             Thrust = new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust));
 
-            BaseLocalPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineers\Saves", @"SpaceEngineers\Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
-            BaseDedicatedServerHostPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SpaceEngineersDedicated\Saves", @"SpaceEngineersDedicated\Mods"); // Followed by .\LastLoaded.sbl
-            BaseDedicatedServerServicePath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SpaceEngineersDedicated", ""); // Followed by .\%instancename%\Saves\LastLoaded.sbl  (.\%instancename%\Mods)
+
+            var basePath = "SpaceEngineers";
+            if (GlobalSettings.Default.SEBinPath.Contains("MedievalEngineers", StringComparison.InvariantCulture))
+                basePath = "MedievalEngineers";
+
+            BaseLocalPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + @"\Saves", basePath + @"\Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
+            BaseDedicatedServerHostPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + @"Dedicated\Saves", basePath + @"Dedicated\Mods"); // Followed by .\LastLoaded.sbl
+            BaseDedicatedServerServicePath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), basePath + @"Dedicated", ""); // Followed by .\%instancename%\Saves\LastLoaded.sbl  (.\%instancename%\Mods)
         }
 
         public static Version GetSEVersion()

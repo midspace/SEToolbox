@@ -361,7 +361,7 @@ Units:		{4:#,##0.####}</value>
     <value>Specify filename to export '{0}' to</value>
   </data>
   <data name="DialogLocateApplicationFilter" xml:space="preserve">
-    <value>Space Engineers Application|SpaceEngineers*.exe</value>
+    <value>Space Engineers Application|SpaceEngineers*.exe|Medieval Engineers Application|MedievalEngineers*.exe</value>
   </data>
   <data name="DialogLocateApplicationTitle" xml:space="preserve">
     <value>Specify location of Space Engineers Application</value>

@@ -26,21 +26,24 @@
             // Detection and correction of local settings of SE install location.
             var filePath = ToolboxUpdater.GetApplicationFilePath();
 
+            var validApps = new string[] {
+                "SpaceEngineers.exe",
+                "SpaceEngineersDedicated.exe",
+                "MedievalEngineers.exe",
+                "MedievalEngineersDedicated.exe"
+            };
+
             if (GlobalSettings.Default.PromptUser || !ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))
             {
                 if (Directory.Exists(filePath))
                 {
-                    var testPath = Path.Combine(filePath, "SpaceEngineers.exe");
-                    if (File.Exists(testPath))
+                    foreach(var validApp in validApps)
                     {
-                        filePath = testPath;
-                    }
-                    else
-                    {
-                        testPath = Path.Combine(filePath, "SpaceEngineersDedicated.exe");
+                        var testPath = Path.Combine(filePath, validApp);
                         if (File.Exists(testPath))
                         {
                             filePath = testPath;
+                            break;
                         }
                     }
                 }
