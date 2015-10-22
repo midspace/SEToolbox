@@ -149,6 +149,8 @@
 
         void ICommand.Execute(object parameter)
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             Execute();
         }
 
