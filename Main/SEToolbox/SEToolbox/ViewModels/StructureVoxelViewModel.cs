@@ -379,7 +379,6 @@
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                Filename = newFilename,
                 StorageName = Path.GetFileNameWithoutExtension(newFilename),
                 PositionAndOrientation = new MyPositionAndOrientation
                 {
@@ -426,7 +425,6 @@
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                Filename = newFilename,
                 StorageName = Path.GetFileNameWithoutExtension(newFilename),
                 PositionAndOrientation = new MyPositionAndOrientation
                 {

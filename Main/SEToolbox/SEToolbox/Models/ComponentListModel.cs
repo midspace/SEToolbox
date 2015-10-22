@@ -5,15 +5,16 @@
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Web.UI;
 
+    using Medieval.ObjectBuilders.Definitions;
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Converters;
     using SEToolbox.ImageLibrary;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    using Sandbox.Common.ObjectBuilders;
     using VRage;
 
     public class ComponentListModel : BaseModel
@@ -201,6 +202,15 @@
             foreach (var componentDefinition in SpaceEngineersCore.Resources.Definitions.Components)
             {
                 var bp = SpaceEngineersApi.GetBlueprint(componentDefinition.Id.TypeId, componentDefinition.Id.SubtypeId);
+                float amount = 0;
+                if (bp != null)
+                {
+                    if (bp.Result != null)
+                        amount = float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture);
+                    else if (bp.Results.Length > 0)
+                        amount = float.Parse(bp.Results[0].Amount, CultureInfo.InvariantCulture);
+                }
+
                 ComponentAssets.Add(new ComponentItemModel
                 {
                     Name = componentDefinition.DisplayName,
@@ -211,13 +221,21 @@
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icon, Path.Combine(contentPath, componentDefinition.Icon)),
                     Volume = componentDefinition.Volume.HasValue ? componentDefinition.Volume.Value : 0f,
                     Accessible = componentDefinition.Public,
-                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture)))) : (TimeSpan?)null,
+                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / amount))) : (TimeSpan?)null,
                 });
             }
 
             foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.PhysicalItems)
             {
                 var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeId);
+                float amount = 0;
+                if (bp != null)
+                {
+                    if (bp.Result != null)
+                        amount = float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture);
+                    else if (bp.Results.Length > 0)
+                        amount = float.Parse(bp.Results[0].Amount, CultureInfo.InvariantCulture);
+                }
 
                 float timeMassMultiplyer = 1f;
                 if (physicalItemDefinition.Id.TypeId == typeof(MyObjectBuilder_Ore)
@@ -234,7 +252,7 @@
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
                     TextureFile = physicalItemDefinition.Icon == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icon, Path.Combine(contentPath, physicalItemDefinition.Icon)),
                     Accessible = physicalItemDefinition.Public,
-                    Time = bp != null && bp.Result != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture) / timeMassMultiplyer))) : (TimeSpan?)null,
+                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / amount / timeMassMultiplyer))) : (TimeSpan?)null,
                 });
             }
 
@@ -255,13 +273,16 @@
                 });
             }
 
-            foreach (var voxelMaterialDefinition in SpaceEngineersCore.Resources.Definitions.VoxelMaterials)
+            foreach (MyObjectBuilder_VoxelMaterialDefinition voxelMaterialDefinition in SpaceEngineersCore.Resources.Definitions.VoxelMaterials)
             {
                 var texture = voxelMaterialDefinition.DiffuseXZ;
+                if (texture == null && voxelMaterialDefinition is MyObjectBuilder_Dx11VoxelMaterialDefinition)
+                    texture = ((MyObjectBuilder_Dx11VoxelMaterialDefinition)voxelMaterialDefinition).NormalGlossXZnY;
+
                 MaterialAssets.Add(new ComponentItemModel
                 {
                     Name = voxelMaterialDefinition.Id.SubtypeId,
-                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture)),
+                    TextureFile = texture == null ? null : SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture)),
                     IsRare = voxelMaterialDefinition.IsRare,
                     OreName = voxelMaterialDefinition.MinedOre,
                     MineOreRatio = voxelMaterialDefinition.MinedOreRatio,

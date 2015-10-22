@@ -366,7 +366,6 @@
             {
                 EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),
                 PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                Filename = Filename,
                 StorageName = Path.GetFileNameWithoutExtension(Filename),
                 PositionAndOrientation = new MyPositionAndOrientation
                 {

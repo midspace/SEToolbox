@@ -752,6 +752,7 @@
             foreach (var cubeGrid in cubeGridObject.CubeBlocks)
             {
                 cubeGrid.EntityId = MergeId(cubeGrid.EntityId, ref idReplacementTable);
+                //cubeGrid.MultiBlockId // ???
 
                 var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
                 if (cockpit != null)
@@ -760,10 +761,10 @@
                 }
 
                 var motorBase = cubeGrid as MyObjectBuilder_MotorBase;
-                if (motorBase != null)
+                if (motorBase != null && motorBase.RotorEntityId.HasValue)
                 {
                     // reattach motor/rotor to correct entity.
-                    motorBase.RotorEntityId = MergeId(motorBase.RotorEntityId, ref idReplacementTable);
+                    motorBase.RotorEntityId = MergeId(motorBase.RotorEntityId.Value, ref idReplacementTable);
                 }
 
                 var pistonBase = cubeGrid as MyObjectBuilder_PistonBase;
@@ -771,13 +772,6 @@
                 {
                     // reattach PistonBase (and ExtendedPistonBase) to correct entity.
                     pistonBase.TopBlockId = MergeId(pistonBase.TopBlockId, ref idReplacementTable);
-                }
-
-                var pistonTop = cubeGrid as MyObjectBuilder_PistonTop;
-                if (pistonTop != null)
-                {
-                    // reattach PistonTop to correct entity.
-                    pistonTop.PistonBlockId = MergeId(pistonTop.PistonBlockId, ref idReplacementTable);
                 }
 
                 var shipConnector = cubeGrid as MyObjectBuilder_ShipConnector;

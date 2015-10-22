@@ -1356,11 +1356,6 @@
                     ((MyObjectBuilder_PistonBase)newBlock).TopBlockId = ((MyObjectBuilder_PistonBase)block).TopBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                 }
 
-                if (block is MyObjectBuilder_PistonTop)
-                {
-                    ((MyObjectBuilder_PistonTop)newBlock).PistonBlockId = ((MyObjectBuilder_PistonTop)block).PistonBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
-                }
-
                 newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
                 var definition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, viewModel.GridSize, block.SubtypeName);
 
