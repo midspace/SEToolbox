@@ -485,20 +485,20 @@
                         ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="44">
+                                        <controls:SortableGridViewColumn Width="44" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Cubes" Width="175">
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="Cubes" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                        </controls:SortableGridViewColumn>
                                         <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -527,20 +527,20 @@
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="44">
+                                        <controls:SortableGridViewColumn Width="44" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Components" Width="175">
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="Components" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                        </controls:SortableGridViewColumn>
                                         <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -576,20 +576,20 @@
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="44">
+                                        <controls:SortableGridViewColumn Width="44" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Ingots" Width="175">
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="Ingots" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                        </controls:SortableGridViewColumn>
                                         <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -625,20 +625,20 @@
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="44">
+                                        <controls:SortableGridViewColumn Width="44" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Ore" Width="175">
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="Ore" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                        </controls:SortableGridViewColumn>
                                         <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>

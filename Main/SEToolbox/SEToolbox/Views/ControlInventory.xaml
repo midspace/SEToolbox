@@ -24,6 +24,7 @@
                 <Run Text="{Binding TotalVolume, StringFormat='{}{0:N}'}"/>
                 <Run Text="/"/>
                 <Run Text="{Binding MaxVolume, StringFormat='{}{0:N}'}"/>
+                <Run Text=" L"/>
             </TextBlock>
             <MenuItem Header="Add" Style="{StaticResource ToolBarTopMenuitem}" Command="{Binding AddItemCommand}">
                 <MenuItem.Icon>
