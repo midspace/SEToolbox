@@ -47,6 +47,8 @@
 
         double PositionZ { get; set; }
 
+        double LinearVelocity { get; set; }
+
         void RecalcPosition(Vector3D playerPosition);
     }
 }

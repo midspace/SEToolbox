@@ -173,6 +173,19 @@
             }
         }
 
+        public virtual double LinearVelocity
+        {
+            get
+            {
+                return DataModel.LinearVelocity;
+            }
+
+            set
+            {
+                DataModel.LinearVelocity = value;
+            }
+        }
+
         public double PositionX
         {
             get
