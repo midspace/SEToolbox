@@ -48,6 +48,9 @@
         private int _blockCount;
 
         [NonSerialized]
+        private double _linearVelocity;
+
+        [NonSerialized]
         private bool _isBusy;
 
         [NonSerialized]
@@ -259,6 +262,21 @@
                 {
                     _blockCount = value;
                     RaisePropertyChanged(() => BlockCount);
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public virtual double LinearVelocity
+        {
+            get { return _linearVelocity; }
+
+            set
+            {
+                if (value != _linearVelocity)
+                {
+                    _linearVelocity = value;
+                    RaisePropertyChanged(() => LinearVelocity);
                 }
             }
         }

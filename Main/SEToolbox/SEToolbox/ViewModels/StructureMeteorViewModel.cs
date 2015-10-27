@@ -66,7 +66,7 @@
             set { DataModel.Volume = value; }
         }
 
-        public double LinearVelocity
+        public override double LinearVelocity
         {
             get { return DataModel.LinearVelocity; }
         }

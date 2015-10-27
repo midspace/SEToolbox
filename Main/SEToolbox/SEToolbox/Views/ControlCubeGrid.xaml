@@ -466,6 +466,9 @@
                 <Grid>
                     <ScrollViewer>
                         <Grid>
+                            <i:Interaction.Behaviors>
+                                <commands:BubbleScrollBehavior />
+                            </i:Interaction.Behaviors>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>

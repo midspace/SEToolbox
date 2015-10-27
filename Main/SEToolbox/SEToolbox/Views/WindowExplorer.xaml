@@ -398,6 +398,13 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding Velocity}" Header="Velocity">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=LinearVelocity, StringFormat='{}{0:#,##0.00}'}" TextAlignment="Right" ToolTip="Speed of object m/s"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>

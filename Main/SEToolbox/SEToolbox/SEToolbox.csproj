@@ -271,6 +271,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\BrowserBehavior.cs" />
+    <Compile Include="Services\BubbleScrollBehavior.cs" />
     <Compile Include="Services\ColorDialog.cs">
       <SubType>Code</SubType>
     </Compile>

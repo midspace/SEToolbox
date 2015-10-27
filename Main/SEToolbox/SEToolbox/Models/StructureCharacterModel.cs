@@ -212,7 +212,7 @@
         }
 
         [XmlIgnore]
-        public double LinearVelocity
+        public override double LinearVelocity
         {
             get
             {

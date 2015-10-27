@@ -6,8 +6,8 @@
 
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
-    using VRageMath;
     using VRage.ObjectBuilders;
+    using VRageMath;
 
     [Serializable]
     public class StructureMeteorModel : StructureBaseModel
@@ -106,7 +106,7 @@
         }
 
         [XmlIgnore]
-        public double LinearVelocity
+        public override double LinearVelocity
         {
             get
             {
