@@ -294,6 +294,8 @@
 
         public void LoadDefinitionsAndMods()
         {
+            if (_resources == null || Checkpoint == null || Checkpoint.Mods == null)
+                return;
             _resources.LoadDefinitionsAndMods(DataPath.ModsPath, Checkpoint.Mods.ToArray());
         }
 
