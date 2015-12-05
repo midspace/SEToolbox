@@ -1,17 +1,13 @@
-﻿using Sandbox.Common.ObjectBuilders.ComponentSystem;
-
-namespace SEToolbox.Models
+﻿namespace SEToolbox.Models
 {
     using System.Collections.ObjectModel;
     using System.Linq;
-    using System.Reflection;
-
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
-    using VRageMath;
-    using VRage.ObjectBuilders;
     using VRage;
+    using VRage.ObjectBuilders;
+    using VRageMath;
 
     public class CubeItemModel : BaseModel
     {
@@ -343,11 +339,11 @@ namespace SEToolbox.Models
                 || (Cube is MyObjectBuilder_Cockpit && SubtypeId == "PassengerSeatLarge")
                 || Cube is MyObjectBuilder_Thrust)
                 return false;
-                
+
             if (Cube is MyObjectBuilder_TerminalBlock)
             {
                 this.Owner = newOwnerId;
-                
+
                 var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
                 var dead = " (dead)";
                 if (SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData != null)
@@ -392,23 +388,8 @@ namespace SEToolbox.Models
             if (Inventory == null)
                 Inventory = new ObservableCollection<InventoryEditorModel>();
 
-
-            if (cube.ComponentContainer != null)
-            {
-                var inventoryBase = cube.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyInventoryBase");
-
-                if (inventoryBase != null)
-                {
-                    var singleInventory = inventoryBase.Component as MyObjectBuilder_Inventory;
-                    if (singleInventory != null)
-                        ParseInventory(singleInventory, definition);
-
-                    var aggregate = inventoryBase.Component as MyObjectBuilder_InventoryAggregate;
-                    if (aggregate != null)
-                        foreach (var field in aggregate.Inventories)
-                            ParseInventory(field as MyObjectBuilder_Inventory, definition);
-                }
-            }
+            foreach (var item in cube.ComponentContainer.GetInventory(definition))
+                Inventory.Add(item);
 
             while (Inventory.Count < 2)
             {
@@ -416,28 +397,5 @@ namespace SEToolbox.Models
             }
         }
 
-        private void ParseInventory(MyObjectBuilder_Inventory inventory, MyObjectBuilder_CubeBlockDefinition definition)
-        {
-            if (inventory == null)
-                return;
-            var definitionType = definition.GetType();
-            var invSizeField = definitionType.GetField("InventorySize");
-            var inventoryMaxVolumeField = definitionType.GetField("InventoryMaxVolume");
-            float volumeMultiplier = 1f; // Unsure if there should be a default of 1 if there isn't a InventorySize defined.
-            if (invSizeField != null)
-            {
-                var invSize = (Vector3)invSizeField.GetValue(definition);
-                volumeMultiplier = invSize.X * invSize.Y * invSize.Z;
-            }
-            if (inventoryMaxVolumeField != null)
-            {
-                var maxSize = (float)inventoryMaxVolumeField.GetValue(definition);
-                volumeMultiplier = MathHelper.Min(volumeMultiplier, maxSize);
-            }
-
-            var settings = SpaceEngineersCore.WorldResource.Checkpoint.Settings;
-            var iem = new InventoryEditorModel(inventory, volumeMultiplier * 1000 * settings.InventorySizeMultiplier, null) { Name = inventory.InventoryFlags.ToString(), IsValid = true };
-            Inventory.Add(iem);
-        }
     }
 }

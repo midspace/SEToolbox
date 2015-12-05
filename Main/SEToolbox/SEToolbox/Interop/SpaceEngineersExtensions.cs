@@ -1,14 +1,18 @@
 ﻿namespace SEToolbox.Interop
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.Globalization;
-
+    using System.IO;
+    using System.Linq;
     using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Common.ObjectBuilders.ComponentSystem;
+    using Sandbox.Common.ObjectBuilders.Definitions;
     using Sandbox.Common.ObjectBuilders.VRageData;
+    using SEToolbox.Models;
     using SEToolbox.Support;
     using VRage;
     using VRageMath;
-    using System.IO;
 
     /// <summary>
     /// Contains Extension methods specifically for Keen classes and structures.
@@ -413,6 +417,97 @@
                 }
             }
             return -1;
+        }
+
+        //public static ObservableCollection<InventoryEditorModel> GetInventory(this MyObjectBuilder_EntityBase objectBuilderBase)
+        //{
+        //    var inventoryEditors = new ObservableCollection<InventoryEditorModel>();
+
+        //    if (objectBuilderBase.ComponentContainer != null)
+        //    {
+        //        var inventoryBase = objectBuilderBase.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyInventoryBase");
+
+        //        if (inventoryBase != null)
+        //        {
+        //            var singleInventory = inventoryBase.Component as MyObjectBuilder_Inventory;
+        //            if (singleInventory != null)
+        //            {
+        //                var iem = ParseInventory(singleInventory);
+        //                if (iem != null)
+        //                    inventoryEditors.Add(iem);
+        //            }
+
+        //            var aggregate = inventoryBase.Component as MyObjectBuilder_InventoryAggregate;
+        //            if (aggregate != null)
+        //                foreach (var field in aggregate.Inventories)
+        //                {
+        //                    var iem = ParseInventory(field as MyObjectBuilder_Inventory);
+        //                    if (iem != null)
+        //                        inventoryEditors.Add(iem);
+        //                }
+        //        }
+        //    }
+        //    return inventoryEditors;
+        //}
+
+        public static ObservableCollection<InventoryEditorModel> GetInventory(this MyObjectBuilder_ComponentContainer componentContainer, MyObjectBuilder_CubeBlockDefinition definition = null)
+        {
+            var inventoryEditors = new ObservableCollection<InventoryEditorModel>();
+
+            if (componentContainer != null)
+            {
+                var inventoryBase = componentContainer.Components.FirstOrDefault(e => e.TypeId == "MyInventoryBase");
+
+                if (inventoryBase != null)
+                {
+                    var singleInventory = inventoryBase.Component as MyObjectBuilder_Inventory;
+                    if (singleInventory != null)
+                    {
+                        var iem = ParseInventory(singleInventory, definition);
+                        if (iem != null)
+                            inventoryEditors.Add(iem);
+                    }
+
+                    var aggregate = inventoryBase.Component as MyObjectBuilder_InventoryAggregate;
+                    if (aggregate != null)
+                        foreach (var field in aggregate.Inventories)
+                        {
+                            var iem = ParseInventory(field as MyObjectBuilder_Inventory, definition);
+                            if (iem != null)
+                                inventoryEditors.Add(iem);
+                        }
+                }
+            }
+            return inventoryEditors;
+        }
+
+        private static InventoryEditorModel ParseInventory(MyObjectBuilder_Inventory inventory, MyObjectBuilder_CubeBlockDefinition definition = null)
+        {
+            if (inventory == null)
+                return null;
+            float volumeMultiplier = 1f; // Unsure if there should be a default of 1 if there isn't a InventorySize defined.
+
+            if (definition == null)
+                volumeMultiplier = 0.4f;
+            else
+            {
+                var definitionType = definition.GetType();
+                var invSizeField = definitionType.GetField("InventorySize");
+                var inventoryMaxVolumeField = definitionType.GetField("InventoryMaxVolume");
+                if (invSizeField != null)
+                {
+                    var invSize = (Vector3)invSizeField.GetValue(definition);
+                    volumeMultiplier = invSize.X * invSize.Y * invSize.Z;
+                }
+                if (inventoryMaxVolumeField != null)
+                {
+                    var maxSize = (float)inventoryMaxVolumeField.GetValue(definition);
+                    volumeMultiplier = MathHelper.Min(volumeMultiplier, maxSize);
+                }
+            }
+
+            var settings = SpaceEngineersCore.WorldResource.Checkpoint.Settings;
+            return new InventoryEditorModel(inventory, volumeMultiplier * 1000 * settings.InventorySizeMultiplier, null) { Name = inventory.InventoryFlags.ToString(), IsValid = true };
         }
 
     }

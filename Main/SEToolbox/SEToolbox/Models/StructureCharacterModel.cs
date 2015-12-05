@@ -4,11 +4,10 @@
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
-
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
-    using VRage.ObjectBuilders;
     using VRage;
+    using VRage.ObjectBuilders;
 
     [Serializable]
     public class StructureCharacterModel : StructureBaseModel
@@ -281,9 +280,14 @@
 
             if (Inventory == null)
             {
-                var settings = SpaceEngineersCore.WorldResource.Checkpoint.Settings;
-                Inventory = new InventoryEditorModel(Character.Inventory, 0.4f * 1000 * settings.InventorySizeMultiplier, Character);
-                Mass += Inventory.TotalMass;
+                var inventories = Character.ComponentContainer.GetInventory();
+                if (inventories.Count > 0)
+                {
+                    Inventory = inventories[0];
+                    Mass += Inventory.TotalMass;
+                }
+                else
+                    Inventory = null;
             }
         }
 
