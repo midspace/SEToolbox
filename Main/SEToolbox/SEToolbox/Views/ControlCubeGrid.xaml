@@ -439,9 +439,9 @@
                             <!-- TODO: May have to move all this to a dialog, as parsing and setting up the information takes time. -->
                             <TabControl Grid.Row="2">
                                 <!-- TODO: Create DataTemplate to properly show controls and inventories.  -->
-                                <TabItem Header="Controls">
-                                    <!-- TODO: Property Editor? -->
-                                </TabItem>
+                                <!--<TabItem Header="Controls">
+                                    --><!-- TODO: Property Editor? --><!--
+                                </TabItem>-->
                                 <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[0].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[0]}" />
                                 </TabItem>
@@ -450,11 +450,11 @@
                                 </TabItem>
                             </TabControl>
                             <StackPanel Grid.Row="2">
-                                <TextBlock Text="Preview" FontSize="20" Foreground="#80808080" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,-20,0" IsHitTestVisible="False">
+                                <!--<TextBlock Text="Preview" FontSize="20" Foreground="#80808080" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,-20,0" IsHitTestVisible="False">
                                     <TextBlock.RenderTransform>
                                         <RotateTransform Angle="45"/>
                                     </TextBlock.RenderTransform>
-                                </TextBlock>
+                                </TextBlock>-->
                             </StackPanel>
                         </Grid>
                     </Grid>
