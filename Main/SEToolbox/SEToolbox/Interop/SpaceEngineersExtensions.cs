@@ -6,12 +6,12 @@
     using System.IO;
     using System.Linq;
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.ComponentSystem;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Models;
     using SEToolbox.Support;
     using VRage;
+    using VRage.Game.ObjectBuilders.ComponentSystem;
     using VRageMath;
 
     /// <summary>
