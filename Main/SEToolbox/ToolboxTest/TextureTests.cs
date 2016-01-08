@@ -2,7 +2,6 @@
 {
     using System.Drawing;
     using System.IO;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
@@ -10,9 +9,9 @@
     using SEToolbox.ImageLibrary.Effects;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using VRage.ObjectBuilders;
     using Brushes = System.Drawing.Brushes;
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;
-    using VRage.ObjectBuilders;
 
     [TestClass]
     public class TextureTests
@@ -27,28 +26,28 @@
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var magnesiumOre = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Ore, "Magnesium");
+            var magnesiumOre = SpaceEngineersApi.GetDefinition(SpaceEngineersTypes.Ore, "Magnesium");
             var magnesiumOrePath = Path.Combine(contentPath, magnesiumOre.Icon);
             Assert.IsTrue(File.Exists(magnesiumOrePath), "Filepath should exist on developer machine");
             Assert.IsTrue(magnesiumOre is MyObjectBuilder_PhysicalItemDefinition, "Type should match");
             var magnesiumOreBmp = TexUtil.CreateBitmap(magnesiumOrePath);
             ImageTextureUtil.WriteImage(magnesiumOreBmp, @".\TestOutput\Magnesium_Ore.png");
 
-            var goldIngot = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Ingot, "Gold");
+            var goldIngot = SpaceEngineersApi.GetDefinition(SpaceEngineersTypes.Ingot, "Gold");
             var goldIngotPath = Path.Combine(contentPath, goldIngot.Icon);
             Assert.IsTrue(File.Exists(goldIngotPath), "Filepath should exist on developer machine");
             Assert.IsTrue(goldIngot is MyObjectBuilder_PhysicalItemDefinition, "Type should match");
             var goldIngotBmp = TexUtil.CreateBitmap(goldIngotPath);
             ImageTextureUtil.WriteImage(goldIngotBmp, @".\TestOutput\Gold_Ingot.png");
 
-            var ammoMagazine = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.AmmoMagazine, "NATO_5p56x45mm");
+            var ammoMagazine = SpaceEngineersApi.GetDefinition(SpaceEngineersTypes.AmmoMagazine, "NATO_5p56x45mm");
             var ammoMagazinePath = Path.Combine(contentPath, ammoMagazine.Icon);
             Assert.IsTrue(File.Exists(ammoMagazinePath), "Filepath should exist on developer machine");
             Assert.IsTrue(ammoMagazine is MyObjectBuilder_AmmoMagazineDefinition, "Type should match");
             var ammoMagazineBmp = TexUtil.CreateBitmap(ammoMagazinePath);
             ImageTextureUtil.WriteImage(ammoMagazineBmp, @".\TestOutput\NATO_5p56x45mm.png");
 
-            var steelPlate = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Component, "SteelPlate");
+            var steelPlate = SpaceEngineersApi.GetDefinition(SpaceEngineersTypes.Component, "SteelPlate");
             var steelPlatePath = Path.Combine(contentPath, steelPlate.Icon);
             Assert.IsTrue(File.Exists(steelPlatePath), "Filepath should exist on developer machine");
             Assert.IsTrue(steelPlate is MyObjectBuilder_ComponentDefinition, "Type should match");

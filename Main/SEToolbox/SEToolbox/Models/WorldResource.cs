@@ -1,14 +1,12 @@
 ﻿namespace SEToolbox.Models
 {
     using System;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Xml;
 
     using Microsoft.VisualBasic.FileIO;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
@@ -338,12 +336,12 @@
             if (_compressedCheckpointFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(Checkpoint, tempFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile(Checkpoint, tempFilename);
                 ZipTools.GZipCompress(tempFilename, checkpointFilename);
             }
             else
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(Checkpoint, checkpointFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile(Checkpoint, checkpointFilename);
             }
         }
 
@@ -366,12 +364,12 @@
             if (_compressedSectorFormat)
             {
                 var tempFilename = TempfileUtil.NewFilename();
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(SectorData, tempFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile(SectorData, tempFilename);
                 ZipTools.GZipCompress(tempFilename, sectorFilename);
             }
             else
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(SectorData, sectorFilename);
+                SpaceEngineersApi.WriteSpaceEngineersFile(SectorData, sectorFilename);
             }
         }
 

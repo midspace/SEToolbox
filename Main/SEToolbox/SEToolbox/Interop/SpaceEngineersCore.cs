@@ -1,8 +1,10 @@
 ﻿namespace SEToolbox.Interop
 {
     using System.Collections.Generic;
-
+    using System.IO;
+    using System.Reflection;
     using SEToolbox.Models;
+    using VRage.Plugins;
 
     /// <summary>
     /// core interop for loading up Space Engineers content.
@@ -22,6 +24,10 @@
 
         public SpaceEngineersCore()
         {
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            MyPlugins.RegisterGameObjectBuildersAssemblyFile(Path.Combine(path, "SpaceEngineers.ObjectBuilders.dll"));
+            MyPlugins.RegisterSandboxAssemblyFile(Path.Combine(path, "Sandbox.Common.dll"));
+
             SpaceEngineersApi.LoadLocalization();
             _stockDefinitions = new SpaceEngineersResources();
             _stockDefinitions.LoadDefinitions();

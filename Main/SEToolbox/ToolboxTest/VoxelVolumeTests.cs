@@ -5,14 +5,13 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Timers;
     using System.Windows.Media.Media3D;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRageMath;
-    using System.Timers;
 
     [TestClass]
     public class VoxelVolumeTests

@@ -4,12 +4,11 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Models;
     using SEToolbox.Support;
-    using Sandbox.Common.ObjectBuilders.Definitions;
 
     [TestClass]
     public class ModelTests
@@ -24,7 +23,7 @@
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var largeThruster = (MyObjectBuilder_CubeBlockDefinition)SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Thrust, "LargeBlockLargeThrust");
+            var largeThruster = (MyObjectBuilder_CubeBlockDefinition)SpaceEngineersApi.GetDefinition(SpaceEngineersTypes.Thrust, "LargeBlockLargeThrust");
             var thrusterModelPath = Path.Combine(contentPath, largeThruster.Model);
             Assert.IsTrue(File.Exists(thrusterModelPath), "Filepath should exist on developer machine");
 

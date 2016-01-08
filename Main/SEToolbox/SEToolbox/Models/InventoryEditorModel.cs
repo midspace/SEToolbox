@@ -251,9 +251,9 @@
                 MassMultiplyer = massMultiplyer,
                 VolumeMultiplyer = volumeMultiplyer,
                 TextureFile = textureFile,
-                IsUnique = item.Content.TypeId == SpaceEngineersConsts.PhysicalGunObject || item.Content.TypeId == SpaceEngineersConsts.OxygenContainerObject,
-                IsInteger = item.Content.TypeId == SpaceEngineersConsts.Component || item.Content.TypeId == SpaceEngineersConsts.AmmoMagazine,
-                IsDecimal = item.Content.TypeId == SpaceEngineersConsts.Ore || item.Content.TypeId == SpaceEngineersConsts.Ingot,
+                IsUnique = item.Content.TypeId == SpaceEngineersTypes.PhysicalGunObject || item.Content.TypeId == SpaceEngineersTypes.OxygenContainerObject,
+                IsInteger = item.Content.TypeId == SpaceEngineersTypes.Component || item.Content.TypeId == SpaceEngineersTypes.AmmoMagazine,
+                IsDecimal = item.Content.TypeId == SpaceEngineersTypes.Ore || item.Content.TypeId == SpaceEngineersTypes.Ingot,
                 Exists = definition != null, // item no longer exists in Space Engineers definitions.
             };
 
@@ -276,7 +276,7 @@
             var invItem = _inventory.Items[index];
 
             // Remove HandWeapon if item is HandWeapon.
-            if (_character != null && _character.HandWeapon != null && invItem.Content.TypeId == SpaceEngineersConsts.PhysicalGunObject)
+            if (_character != null && _character.HandWeapon != null && invItem.Content.TypeId == SpaceEngineersTypes.PhysicalGunObject)
             {
                 if (((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity != null &&
                     ((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity.EntityId == _character.HandWeapon.EntityId)

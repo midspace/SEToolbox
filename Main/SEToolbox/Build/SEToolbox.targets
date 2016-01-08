@@ -11,9 +11,15 @@
   <Target Name="CopyBinaryFiles">
     <ItemGroup>
       <EditorFiles Include="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/*"
-      Exclude="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Sandbox.Common.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Sandbox.Game.*;
+      Exclude="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Sandbox.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/VRage.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SpaceEngineers.ObjectBuilders.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/MedievalEngineers.ObjectBuilders.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/InfinarioSDK.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SteamSDK.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/System.Data.SQLite.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SharpDX.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/HavokWrapper.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/*.vshost.*"/>
     </ItemGroup>
 

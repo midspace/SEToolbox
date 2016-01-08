@@ -5,12 +5,11 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
-    using Res = SEToolbox.Properties.Resources;
     using VRage.ObjectBuilders;
+    using Res = SEToolbox.Properties.Resources;
 
     /// <summary>
     /// Encapsulates the game definitions, either stock or loaded for a specific save game world.
@@ -210,8 +209,7 @@
                 {
                     using (var stream = ZipTools.ExtractZipFileToSteam(zipModFile, null, filePath))
                     {
-                        bool isCompressed;
-                        stockTemp = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Definitions>(stream, out isCompressed);
+                        stockTemp = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Definitions>(stream);
                     }
                 }
                 catch (Exception ex)

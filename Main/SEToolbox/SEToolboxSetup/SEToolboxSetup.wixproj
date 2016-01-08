@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
+    <Content Include="License.rtf" />
     <Content Include="WixUIBannerBmp.bmp" />
     <Content Include="WixUIDialogBmp.bmp" />
   </ItemGroup>

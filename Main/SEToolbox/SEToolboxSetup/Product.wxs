@@ -2,10 +2,11 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.113.003.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.116.008.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="WixUIBannerBmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="WixUIDialogBmp.bmp" />
 
@@ -45,7 +46,7 @@
               <RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
 
               <RemoveFile Id="file61275B9FC2AE484BA7A2BDB7459A3647" Name="Sandbox.Common.dll" On="install"/>
-              <RemoveFile Id="file7EFAAE0C91A74E6D9BB6541C081E757C" Name="Sandbox.Common.XmlSerializers.dll" On="install"/><!-- may be obsolete. Remove in a couple of months. -->
+              <RemoveFile Id="fileA10D59ED71944ED7BD52C144A05A59A3" Name="SpaceEngineers.ObjectBuilders.dll" On="install"/>
               <RemoveFile Id="file9BC4F4C590AF4888B721F2301140EB5A" Name="Sandbox.Game.dll" On="install"/>
               <RemoveFile Id="fileEA4AE319577E449E9D1DF59BC1B6D3F0" Name="VRage.dll" On="install"/>
               <RemoveFile Id="file0F16284F3E2D4C5CA5402B757C4951D1" Name="VRage.Game.dll" On="install"/>

@@ -2,21 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.IO.Compression;
     using System.Linq;
     using System.Xml;
-
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
-    using VRageMath;
     using VRage;
-    using VRage.Utils;
     using VRage.ObjectBuilders;
+    using VRage.Utils;
+    using VRageMath;
 
     /// <summary>
     /// Helper api for accessing and interacting with Space Engineers content.
@@ -25,30 +21,7 @@
     {
         #region Serializers
 
-        public static T ReadSpaceEngineersFile<T, TS>(Stream stream)
-        where TS : XmlSerializer1
-        {
-            var settings = new XmlReaderSettings
-            {
-                IgnoreComments = true,
-                IgnoreWhitespace = true,
-            };
-
-            object obj;
-
-            using (var xmlReader = XmlReader.Create(stream, settings))
-            {
-                var serializer = (TS)Activator.CreateInstance(typeof(TS));
-                //serializer.UnknownAttribute += serializer_UnknownAttribute;
-                //serializer.UnknownElement += serializer_UnknownElement;
-                //serializer.UnknownNode += serializer_UnknownNode;
-                obj = serializer.Deserialize(xmlReader);
-            }
-
-            return (T)obj;
-        }
-
-        public static bool TryReadSpaceEngineersFile<T>(string filename, out T entity, out bool isCompressed)
+        public static bool TryReadSpaceEngineersFile<T>(string filename, out T entity, out bool isCompressed) where T : MyObjectBuilder_Base
         {
             try
             {
@@ -63,13 +36,20 @@
             }
         }
 
-        public static T ReadSpaceEngineersFile<T>(string filename)
+        public static T ReadSpaceEngineersFile<T>(string filename) where T : MyObjectBuilder_Base
         {
             bool isCompressed;
             return ReadSpaceEngineersFile<T>(filename, out isCompressed);
         }
 
-        public static T ReadSpaceEngineersFile<T>(string filename, out bool isCompressed, bool snapshot = false)
+        public static T ReadSpaceEngineersFile<T>(Stream stream) where T : MyObjectBuilder_Base
+        {
+            T outObject;
+            MyObjectBuilderSerializer.DeserializeXML<T>(stream, out outObject);
+            return outObject;
+        }
+
+        public static T ReadSpaceEngineersFile<T>(string filename, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
         {
             isCompressed = false;
 
@@ -89,134 +69,64 @@
                     var b1 = fileStream.ReadByte();
                     var b2 = fileStream.ReadByte();
                     isCompressed = (b1 == 0x1f && b2 == 0x8b);
-                    fileStream.Position = 0;
-
-                    if (isCompressed)
-                    {
-                        using (var outStream = new MemoryStream())
-                        {
-                            using (var zip = new GZipStream(fileStream, CompressionMode.Decompress))
-                            {
-                                zip.CopyTo(outStream);
-                                Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", fileStream.Length, outStream.Length);
-                            }
-                            outStream.Position = 0;
-                            return ReadSpaceEngineersFileRaw<T>(outStream);
-                        }
-                    }
-
-                    return ReadSpaceEngineersFileRaw<T>(fileStream);
                 }
+
+                T outObject;
+                MyObjectBuilderSerializer.DeserializeXML<T>(tempFilename, out outObject);
+                return outObject;
             }
 
             return default(T);
         }
 
-        public static T ReadSpaceEngineersFile<T>(Stream fileStream, out bool isCompressed)
+        public static T Deserialize<T>(string xml) where T : MyObjectBuilder_Base
         {
-            isCompressed = false;
-
-            if (fileStream != null)
+            T outObject;
+            using (var outStream = new MemoryStream())
             {
-                var b1 = fileStream.ReadByte();
-                var b2 = fileStream.ReadByte();
-                isCompressed = (b1 == 0x1f && b2 == 0x8b);
-                fileStream.Position = 0;
-
-                if (isCompressed)
+                using (StreamWriter sw = new StreamWriter(outStream))
                 {
-                    using (var outStream = new MemoryStream())
+                    sw.Write(xml);
+                }
+                outStream.Position = 0;
+
+                MyObjectBuilderSerializer.DeserializeXML(outStream, out outObject);
+            }
+            return outObject;
+        }
+
+        public static string Serialize<T>(MyObjectBuilder_Base item) where T : MyObjectBuilder_Base
+        {
+            using (var outStream = new MemoryStream())
+            {
+                if (MyObjectBuilderSerializer.SerializeXML(outStream, item))
+                {
+                    outStream.Position = 0;
+
+                    using (StreamReader sw = new StreamReader(outStream))
                     {
-                        using (var zip = new GZipStream(fileStream, CompressionMode.Decompress))
-                        {
-                            zip.CopyTo(outStream);
-                            Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", fileStream.Length, outStream.Length);
-                        }
-                        outStream.Position = 0;
-                        return ReadSpaceEngineersFileRaw<T>(outStream);
+                        return sw.ReadToEnd();
                     }
                 }
-
-                return ReadSpaceEngineersFileRaw<T>(fileStream);
             }
-
-            return default(T);
+            return null;
         }
 
-        public static T ReadSpaceEngineersFileRaw<T>(Stream stream)
+        public static bool WriteSpaceEngineersFile<T>(T myObject, string filename)
+            where T : MyObjectBuilder_Base
         {
-            var contract = new XmlSerializerContract();
-            object obj = default(T);
-
-            // Space Engineers is able to read partially corrupted xml files,
-            // which means Keen probably aren't using any XML reader settings in general. 
-            using (var xmlReader = XmlReader.Create(stream))
+            bool ret;
+            using (StreamWriter sw = new StreamWriter(filename))
             {
-                var serializer = contract.GetSerializer(typeof(T));
-                if (serializer != null)
-                    obj = serializer.Deserialize(xmlReader);
-            }
-
-            return (T)obj;
-        }
-
-        public static T Deserialize<T>(string xml)
-        {
-            using (var textReader = new StringReader(xml))
-            {
-                return (T)(new XmlSerializerContract().GetSerializer(typeof(T)).Deserialize(textReader));
-            }
-        }
-
-        public static string Serialize<T>(object item)
-        {
-            using (var textWriter = new StringWriter())
-            {
-                new XmlSerializerContract().GetSerializer(typeof(T)).Serialize(textWriter, item);
-                return textWriter.ToString();
-            }
-        }
-
-        public static bool WriteSpaceEngineersFile<T, TS>(T sector, string filename)
-            where TS : XmlSerializer1
-        {
-            // How they appear to be writing the files currently.
-            try
-            {
-                using (var xmlTextWriter = new XmlTextWriter(filename, null))
+                ret = MyObjectBuilderSerializer.SerializeXML(sw.BaseStream, myObject);
+                if (ret)
                 {
-                    xmlTextWriter.Formatting = Formatting.Indented;
-                    xmlTextWriter.Indentation = 2;
-                    var serializer = (TS)Activator.CreateInstance(typeof(TS));
-                    serializer.Serialize(xmlTextWriter, sector);
-
+                    var xmlTextWriter = new XmlTextWriter(sw.BaseStream, null);
+                    xmlTextWriter.WriteString("\r\n");
                     xmlTextWriter.WriteComment(string.Format(" Saved '{0:o}' with SEToolbox version '{1}' ", DateTime.Now, GlobalSettings.GetAppVersion()));
+                    xmlTextWriter.Flush();
                 }
             }
-            catch
-            {
-                return false;
-            }
-
-            //// How they should be doing it to support Unicode.
-            //var settingsDestination = new XmlWriterSettings()
-            //{
-            //    Indent = true, // Set indent to false to compress.
-            //    Encoding = new UTF8Encoding(false)   // codepage 65001 without signature. Removes the Byte Order Mark from the start of the file.
-            //};
-
-            //try
-            //{
-            //    using (var xmlWriter = XmlWriter.Create(filename, settingsDestination))
-            //    {
-            //        S serializer = (S)Activator.CreateInstance(typeof(S));
-            //        serializer.Serialize(xmlWriter, sector);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return false;
-            //}
 
             return true;
         }
@@ -435,7 +345,7 @@
 
             MyTexts.Clear();
             MyTexts.LoadTexts(localizationPath, maincode, subcode);
-        } 
+        }
 
         #endregion
 

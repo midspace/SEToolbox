@@ -132,6 +132,12 @@
     <Reference Include="Sandbox.Common">
       <HintPath>$(BinPath)\Sandbox.Common.dll</HintPath>
     </Reference>
+    <Reference Include="SpaceEngineers.ObjectBuilders">
+      <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.dll</HintPath>
+    </Reference>
+    <Reference Include="SpaceEngineers.ObjectBuilders.XmlSerializers">
+      <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.XmlSerializers.dll</HintPath>
+    </Reference>
     <Reference Include="VRage">
       <HintPath>$(BinPath)\VRage.dll</HintPath>
     </Reference>
@@ -146,6 +152,9 @@
     </Reference>
     <Reference Include="VRage.Math">
       <HintPath>$(BinPath)\VRage.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Sandbox.Game">
+      <HintPath>$(BinPath)\Sandbox.Game.dll</HintPath>
     </Reference>
     <ProjectReference Include="..\SEToolbox.Image.Library\SEToolbox.ImageLibrary.csproj">
       <Project>{e78476cb-bc3d-4265-806d-96f09229a449}</Project>
@@ -189,6 +198,7 @@
     <Compile Include="Interfaces\IMainView.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelRayTracerConsts.cs" />
     <Compile Include="Interop\QuaternionD.cs" />
+    <Compile Include="Interop\SpaceEngineersTypes.cs" />
     <Compile Include="Interop\SpaceEngineersResources.cs" />
     <Compile Include="Interop\SpaceEngineersRepair.cs" />
     <Compile Include="Interop\VoxelMapLoader.cs" />
