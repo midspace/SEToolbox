@@ -328,11 +328,11 @@
                         var ores = new Dictionary<string, long>();
                         foreach (var kvp in details)
                         {
-                            var bp = SpaceEngineersCore.Resources.Definitions.VoxelMaterials.FirstOrDefault(b => b.Id.SubtypeId == kvp.Key && b.Id.TypeId == SpaceEngineersConsts.VoxelMaterialDefinition);
+                            var bp = SpaceEngineersCore.Resources.Definitions.VoxelMaterials.FirstOrDefault(b => b.Id.SubtypeId == kvp.Key && b.Id.TypeId == SpaceEngineersTypes.VoxelMaterialDefinition);
 
                             if (bp != null && bp.CanBeHarvested)
                             {
-                                var cd = SpaceEngineersApi.GetDefinition(SpaceEngineersConsts.Ore, bp.MinedOre) as MyObjectBuilder_PhysicalItemDefinition;
+                                var cd = SpaceEngineersApi.GetDefinition(SpaceEngineersTypes.Ore, bp.MinedOre) as MyObjectBuilder_PhysicalItemDefinition;
 
                                 if (cd != null)
                                 {
@@ -372,7 +372,7 @@
                 {
                     var floating = (StructureFloatingObjectModel)entity;
 
-                    if (floating.FloatingObject.Item.Content.TypeId == SpaceEngineersConsts.Ore || floating.FloatingObject.Item.Content.TypeId == SpaceEngineersConsts.Ingot)
+                    if (floating.FloatingObject.Item.Content.TypeId == SpaceEngineersTypes.Ore || floating.FloatingObject.Item.Content.TypeId == SpaceEngineersTypes.Ingot)
                     {
                         TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, (decimal)floating.FloatingObject.Item.Amount, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                     }
@@ -539,7 +539,7 @@
                                         }
                                         else
                                         {
-                                            if (item.Content.TypeId == SpaceEngineersConsts.Ore || item.Content.TypeId == SpaceEngineersConsts.Ingot)
+                                            if (item.Content.TypeId == SpaceEngineersTypes.Ore || item.Content.TypeId == SpaceEngineersTypes.Ingot)
                                             {
                                                 TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                                             }
@@ -643,7 +643,7 @@
 
             var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
 
-            if (tallyTypeId == SpaceEngineersConsts.Ore)
+            if (tallyTypeId == SpaceEngineersTypes.Ore)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
@@ -683,7 +683,7 @@
 
                 #endregion
             }
-            else if (tallyTypeId == SpaceEngineersConsts.Ingot)
+            else if (tallyTypeId == SpaceEngineersTypes.Ingot)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
@@ -730,9 +730,9 @@
 
                 #endregion
             }
-            else if (tallyTypeId == SpaceEngineersConsts.AmmoMagazine ||
-                tallyTypeId == SpaceEngineersConsts.PhysicalGunObject ||
-                tallyTypeId == SpaceEngineersConsts.OxygenContainerObject)
+            else if (tallyTypeId == SpaceEngineersTypes.AmmoMagazine ||
+                tallyTypeId == SpaceEngineersTypes.PhysicalGunObject ||
+                tallyTypeId == SpaceEngineersTypes.OxygenContainerObject)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);
@@ -772,7 +772,7 @@
 
                 #endregion
             }
-            else if (tallyTypeId == SpaceEngineersConsts.Component)
+            else if (tallyTypeId == SpaceEngineersTypes.Component)
             {
                 var mass = Math.Round((double)amountDecimal * cd.Mass, 7);
                 var volume = Math.Round((double)amountDecimal * (cd.Volume.HasValue ? cd.Volume.Value : 0), 7);

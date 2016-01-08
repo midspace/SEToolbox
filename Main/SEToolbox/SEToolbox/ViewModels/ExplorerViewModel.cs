@@ -24,13 +24,12 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using SEToolbox.Views;
-    using VRageMath;
-    using WPFLocalizeExtension.Engine;
     using Res = SEToolbox.Properties.Resources;
     using Sandbox.Common.ObjectBuilders.Definitions;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
-    using VRage.ObjectBuilders;
     using VRage;
+    using VRage.ObjectBuilders;
+    using VRageMath;
+    using WPFLocalizeExtension.Engine;
 
     public class ExplorerViewModel : BaseViewModel, IDropable, IMainView
     {
@@ -1565,14 +1564,14 @@
                             // Call to ToArray() to force Linq to update the value.
 
                             // Clear Medical room SteamId.
-                            cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
+                            cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
 
                             // Clear Owners.
                             cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
                         }
 
                         // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.Cockpit).Select(c =>
+                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
                         {
                             ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
                             ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
@@ -1621,14 +1620,14 @@
                             // Call to ToArray() to force Linq to update the value.
 
                             // Clear Medical room SteamId.
-                            cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
+                            cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
 
                             // Clear Owners.
                             cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
                         }
 
                         // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersConsts.Cockpit).Select(c =>
+                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
                         {
                             ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
                             ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
@@ -1642,7 +1641,7 @@
                 prefab.CubeGrids = grids.ToArray();
                 definition.Prefabs[0] = prefab;
 
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Definitions, MyObjectBuilder_DefinitionsSerializer>(definition, saveFileDialog.FileName);
+                SpaceEngineersApi.WriteSpaceEngineersFile(definition, saveFileDialog.FileName);
             }
         }
 

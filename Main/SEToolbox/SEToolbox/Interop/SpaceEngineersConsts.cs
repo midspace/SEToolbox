@@ -1,10 +1,7 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Sandbox.Common.ObjectBuilders;
-    using System;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-    using VRage.ObjectBuilders;
     using Support;
+    using System;
 
     public class SpaceEngineersConsts
     {
@@ -39,17 +36,6 @@
 
         public const float PlayerMass = 100f;
 
-        public static readonly MyObjectBuilderType AmmoMagazine;
-        public static readonly MyObjectBuilderType PhysicalGunObject;
-        public static readonly MyObjectBuilderType OxygenContainerObject;
-        public static readonly MyObjectBuilderType Ore;
-        public static readonly MyObjectBuilderType Ingot;
-        public static readonly MyObjectBuilderType Component;
-        public static readonly MyObjectBuilderType VoxelMaterialDefinition;
-        public static readonly MyObjectBuilderType MedicalRoom;
-        public static readonly MyObjectBuilderType Cockpit;
-        public static readonly MyObjectBuilderType Thrust;
-
         /// <summary>
         /// The base path of the save files, minus the userid.
         /// </summary>
@@ -61,18 +47,7 @@
 
         static SpaceEngineersConsts()
         {
-            // Some hopefully generic items.
-            AmmoMagazine = new MyObjectBuilderType(typeof(MyObjectBuilder_AmmoMagazine));
-            PhysicalGunObject = new MyObjectBuilderType(typeof(MyObjectBuilder_PhysicalGunObject));
-            OxygenContainerObject = new MyObjectBuilderType(typeof(MyObjectBuilder_OxygenContainerObject));
-            Ore = new MyObjectBuilderType(typeof(MyObjectBuilder_Ore));
-            Ingot = new MyObjectBuilderType(typeof(MyObjectBuilder_Ingot));
-            Component = new MyObjectBuilderType(typeof(MyObjectBuilder_Component));
-            VoxelMaterialDefinition = new MyObjectBuilderType(typeof(MyObjectBuilder_VoxelMaterialDefinition));
-            MedicalRoom = new MyObjectBuilderType(typeof(MyObjectBuilder_MedicalRoom));
-            Cockpit = new MyObjectBuilderType(typeof(MyObjectBuilder_Cockpit));
-            Thrust = new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust));
-
+            // Don't access the ObjectBuilders from the static ctor, as it will cause issues with the Serializer type loader.
 
             var basePath = "SpaceEngineers";
             if (GlobalSettings.Default.SEBinPath.Contains("MedievalEngineers", StringComparison.InvariantCulture))

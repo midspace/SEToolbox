@@ -10,8 +10,8 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Views;
-    using VRageMath;
     using VRage;
+    using VRageMath;
 
     public class InventoryEditorViewModel : BaseViewModel
     {

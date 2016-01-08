@@ -7,7 +7,7 @@
     using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Windows;
-    
+
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Support;
@@ -37,7 +37,7 @@
             {
                 if (Directory.Exists(filePath))
                 {
-                    foreach(var validApp in validApps)
+                    foreach (var validApp in validApps)
                     {
                         var testPath = Path.Combine(filePath, validApp);
                         if (File.Exists(testPath))

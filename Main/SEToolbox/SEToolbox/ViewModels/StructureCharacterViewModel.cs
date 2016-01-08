@@ -33,6 +33,8 @@
             _dialogService = dialogService;
             _colorDialogFactory = colorDialogFactory;
 
+            if (dataModel.Inventory == null)
+                return;
             Inventory = new InventoryEditorViewModel(this, dataModel.Inventory);
 
             DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)

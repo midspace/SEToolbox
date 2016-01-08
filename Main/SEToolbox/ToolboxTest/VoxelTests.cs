@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.IO.Compression;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;

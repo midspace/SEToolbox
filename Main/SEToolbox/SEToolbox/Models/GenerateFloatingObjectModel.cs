@@ -372,8 +372,8 @@
             }
             else
             {
-                if (StockItem.TypeId == SpaceEngineersConsts.Ore ||
-                    StockItem.TypeId == SpaceEngineersConsts.Ingot)
+                if (StockItem.TypeId == SpaceEngineersTypes.Ore ||
+                    StockItem.TypeId == SpaceEngineersTypes.Ingot)
                 {
                     IsDecimal = true;
                     IsUnique = IsInt = false;
@@ -388,8 +388,8 @@
                         Volume = null;
                     }
                 }
-                else if (StockItem.TypeId == SpaceEngineersConsts.Component ||
-                    StockItem.TypeId == SpaceEngineersConsts.AmmoMagazine)
+                else if (StockItem.TypeId == SpaceEngineersTypes.Component ||
+                    StockItem.TypeId == SpaceEngineersTypes.AmmoMagazine)
                 {
                     IsInt = true;
                     IsUnique = IsDecimal = false;
@@ -404,14 +404,14 @@
                         Volume = null;
                     }
                 }
-                else if (StockItem.TypeId == SpaceEngineersConsts.PhysicalGunObject)
+                else if (StockItem.TypeId == SpaceEngineersTypes.PhysicalGunObject)
                 {
                     IsUnique = true;
                     IsInt = IsDecimal = false;
                     Mass = UniqueUnits * StockItem.Mass;
                     Volume = UniqueUnits * StockItem.Volume;
                 }
-                else if (StockItem.TypeId == SpaceEngineersConsts.OxygenContainerObject)
+                else if (StockItem.TypeId == SpaceEngineersTypes.OxygenContainerObject)
                 {
                     IsUnique = true;
                     IsInt = IsDecimal = false;

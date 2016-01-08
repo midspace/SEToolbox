@@ -81,6 +81,9 @@
     <Import Project="$(SolutionDir)\global.targets" Condition="exists('$(SolutionDir)\global.targets')" />
   </ImportGroup>
   <ItemGroup>
+    <Reference Include="SpaceEngineers.ObjectBuilders">
+      <HintPath>C:\Program Files\Reference Assemblies\SpaceEngineers\SpaceEngineers.ObjectBuilders.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

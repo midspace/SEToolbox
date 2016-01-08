@@ -10,7 +10,6 @@
     using System.Windows.Threading;
 
     using Microsoft.VisualBasic.FileIO;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using Sandbox.Common.ObjectBuilders.Voxels;
@@ -416,7 +415,7 @@
             IsBusy = true;
 
             var tempFilename = TempfileUtil.NewFilename(".xml");
-            SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector, MyObjectBuilder_SectorSerializer>(ActiveWorld.SectorData, tempFilename);
+            SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Sector>(ActiveWorld.SectorData, tempFilename);
 
             IsBusy = false;
             return tempFilename;
@@ -494,19 +493,19 @@
         {
             if (entity is MyObjectBuilder_CubeGrid)
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_CubeGrid, MyObjectBuilder_CubeGridSerializer>((MyObjectBuilder_CubeGrid)entity, filename);
+                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_CubeGrid)entity, filename);
             }
             else if (entity is MyObjectBuilder_Character)
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Character, MyObjectBuilder_CharacterSerializer>((MyObjectBuilder_Character)entity, filename);
+                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Character)entity, filename);
             }
             else if (entity is MyObjectBuilder_FloatingObject)
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_FloatingObject, MyObjectBuilder_FloatingObjectSerializer>((MyObjectBuilder_FloatingObject)entity, filename);
+                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_FloatingObject)entity, filename);
             }
             else if (entity is MyObjectBuilder_Meteor)
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile<MyObjectBuilder_Meteor, MyObjectBuilder_MeteorSerializer>((MyObjectBuilder_Meteor)entity, filename);
+                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Meteor)entity, filename);
             }
         }
 

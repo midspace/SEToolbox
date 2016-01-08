@@ -2,22 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
-    using System.IO.Compression;
     using System.Linq;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Models.Asteroids;
-    using SEToolbox.Support;
-    using VRageMath;
     using System.Reflection;
     using System.Text.RegularExpressions;
-    using Sandbox.Definitions;
-    using VRage.Collections;
-    using VRage.FileSystem;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sandbox.Engine.Voxels;
+    using SEToolbox.Support;
+    using VRage.FileSystem;
 
     [TestClass]
     public class TypeLoaderTests

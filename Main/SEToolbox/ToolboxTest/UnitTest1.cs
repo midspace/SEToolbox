@@ -4,17 +4,15 @@
     using System.Collections.Generic;
     using System.Drawing.Imaging;
     using System.IO;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    using VRageMath;
-    using Color = System.Drawing.Color;
     using VRage;
     using VRage.ObjectBuilders;
+    using VRageMath;
+    using Color = System.Drawing.Color;
 
     [TestClass]
     public class UnitTest1
@@ -93,7 +91,7 @@
             MyObjectBuilder_Checkpoint checkpoint;
             using (var stream = ZipTools.ExtractZipFileToSteam(filename, null, SpaceEngineersConsts.SandBoxCheckpointFilename))
             {
-                checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint, MyObjectBuilder_CheckpointSerializer>(stream);
+                checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(stream);
             }
 
             Assert.AreEqual("Quad Scissor Doors", checkpoint.SessionName, "Checkpoint SessionName must match!");
