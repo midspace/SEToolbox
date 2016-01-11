@@ -1,12 +1,12 @@
 ﻿namespace SEToolbox.Models
 {
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using System.Collections.ObjectModel;
     using System.Windows.Media.Media3D;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
+    using VRage;
 
-    public class Import3dModelModel : BaseModel
+    public class Import3DModelModel : BaseModel
     {
         #region Fields
 
@@ -14,49 +14,50 @@
         private Model3D _model;
         private bool _isValidModel;
 
-        private BindableSize3DModel originalModelSize;
-        private BindableSize3DIModel newModelSize;
-        private BindablePoint3DModel newModelScale;
-        private BindablePoint3DModel position;
-        private BindableVector3DModel forward;
-        private BindableVector3DModel up;
-        private ModelTraceVoxel traceType;
-        private ImportModelClassType classType;
-        private ImportArmorType armorType;
-        private MyPositionAndOrientation characterPosition;
-        private double multipleScale;
-        private double maxLengthScale;
-        private double buildDistance;
-        private bool isMultipleScale;
-        private bool isMaxLengthScale;
+        private BindableSize3DModel _originalModelSize;
+        private BindableSize3DIModel _newModelSize;
+        private BindablePoint3DModel _newModelScale;
+        private BindablePoint3DModel _position;
+        private BindableVector3DModel _forward;
+        private BindableVector3DModel _up;
+        private ModelTraceVoxel _traceType;
+        private ImportModelClassType _classType;
+        private ImportArmorType _armorType;
+        private MyPositionAndOrientation _characterPosition;
+        private double _multipleScale;
+        private double _maxLengthScale;
+        private double _buildDistance;
+        private bool _isMultipleScale;
+        private bool _isMaxLengthScale;
         private readonly ObservableCollection<MaterialSelectionModel> _outsideMaterialsCollection;
         private readonly ObservableCollection<MaterialSelectionModel> _insideMaterialsCollection;
         private MaterialSelectionModel _outsideStockMaterial;
         private MaterialSelectionModel _insideStockMaterial;
         private string _sourceFile;
+        private bool _fillObject;
 
         #endregion
 
         #region ctor
 
-        public Import3dModelModel()
+        public Import3DModelModel()
         {
-            this.TraceType = ModelTraceVoxel.ThinSmoothed;
+            TraceType = ModelTraceVoxel.ThinSmoothed;
 
             _outsideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>();
             _insideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>
             {
-                new MaterialSelectionModel() {Value = null, DisplayName = "Empty"}
+                new MaterialSelectionModel {Value = null, DisplayName = "Empty"}
             };
 
-            foreach (var material in SpaceEngineersApi.GetMaterialList())
+            foreach (var material in SpaceEngineersCore.Resources.GetMaterialList())
             {
-                _outsideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
-                _insideMaterialsCollection.Add(new MaterialSelectionModel() { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
+                _outsideMaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
+                _insideMaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
             }
 
-            this.InsideStockMaterial = this.InsideMaterialsCollection[0];
-            this.OutsideStockMaterial = this.OutsideMaterialsCollection[0];
+            InsideStockMaterial = InsideMaterialsCollection[0];
+            OutsideStockMaterial = OutsideMaterialsCollection[0];
         }
 
         #endregion
@@ -67,15 +68,15 @@
         {
             get
             {
-                return this._filename;
+                return _filename;
             }
 
             set
             {
-                if (value != this._filename)
+                if (value != _filename)
                 {
-                    this._filename = value;
-                    this.RaisePropertyChanged(() => Filename);
+                    _filename = value;
+                    RaisePropertyChanged(() => Filename);
                 }
             }
         }
@@ -84,15 +85,15 @@
         {
             get
             {
-                return this._model;
+                return _model;
             }
 
             set
             {
-                if (value != this._model)
+                if (value != _model)
                 {
-                    this._model = value;
-                    this.RaisePropertyChanged(() => Model);
+                    _model = value;
+                    RaisePropertyChanged(() => Model);
                 }
             }
         }
@@ -102,15 +103,15 @@
         {
             get
             {
-                return this._isValidModel;
+                return _isValidModel;
             }
 
             set
             {
-                if (value != this._isValidModel)
+                if (value != _isValidModel)
                 {
-                    this._isValidModel = value;
-                    this.RaisePropertyChanged(() => IsValidModel);
+                    _isValidModel = value;
+                    RaisePropertyChanged(() => IsValidModel);
                 }
             }
         }
@@ -119,15 +120,15 @@
         {
             get
             {
-                return this.originalModelSize;
+                return _originalModelSize;
             }
 
             set
             {
-                if (value != this.originalModelSize)
+                if (value != _originalModelSize)
                 {
-                    this.originalModelSize = value;
-                    this.RaisePropertyChanged(() => OriginalModelSize);
+                    _originalModelSize = value;
+                    RaisePropertyChanged(() => OriginalModelSize);
                 }
             }
         }
@@ -136,15 +137,15 @@
         {
             get
             {
-                return this.newModelSize;
+                return _newModelSize;
             }
 
             set
             {
-                if (value != this.newModelSize)
+                if (value != _newModelSize)
                 {
-                    this.newModelSize = value;
-                    this.RaisePropertyChanged(() => NewModelSize);
+                    _newModelSize = value;
+                    RaisePropertyChanged(() => NewModelSize);
                 }
             }
         }
@@ -153,15 +154,15 @@
         {
             get
             {
-                return this.newModelScale;
+                return _newModelScale;
             }
 
             set
             {
-                if (value != this.newModelScale)
+                if (value != _newModelScale)
                 {
-                    this.newModelScale = value;
-                    this.RaisePropertyChanged(() => NewModelScale);
+                    _newModelScale = value;
+                    RaisePropertyChanged(() => NewModelScale);
                 }
             }
         }
@@ -170,15 +171,15 @@
         {
             get
             {
-                return this.position;
+                return _position;
             }
 
             set
             {
-                if (value != this.position)
+                if (value != _position)
                 {
-                    this.position = value;
-                    this.RaisePropertyChanged(() => Position);
+                    _position = value;
+                    RaisePropertyChanged(() => Position);
                 }
             }
         }
@@ -187,15 +188,15 @@
         {
             get
             {
-                return this.forward;
+                return _forward;
             }
 
             set
             {
-                if (value != this.forward)
+                if (value != _forward)
                 {
-                    this.forward = value;
-                    this.RaisePropertyChanged(() => Forward);
+                    _forward = value;
+                    RaisePropertyChanged(() => Forward);
                 }
             }
         }
@@ -204,15 +205,15 @@
         {
             get
             {
-                return this.up;
+                return _up;
             }
 
             set
             {
-                if (value != this.up)
+                if (value != _up)
                 {
-                    this.up = value;
-                    this.RaisePropertyChanged(() => Up);
+                    _up = value;
+                    RaisePropertyChanged(() => Up);
                 }
             }
         }
@@ -221,15 +222,15 @@
         {
             get
             {
-                return this.traceType;
+                return _traceType;
             }
 
             set
             {
-                if (value != this.traceType)
+                if (value != _traceType)
                 {
-                    this.traceType = value;
-                    this.RaisePropertyChanged(() => TraceType);
+                    _traceType = value;
+                    RaisePropertyChanged(() => TraceType);
                 }
             }
         }
@@ -238,17 +239,17 @@
         {
             get
             {
-                return this.classType;
+                return _classType;
             }
 
             set
             {
-                if (value != this.classType)
+                if (value != _classType)
                 {
-                    this.classType = value;
-                    this.RaisePropertyChanged(() => ClassType);
-                    this.RaisePropertyChanged(() => IsAsteroid);
-                    this.RaisePropertyChanged(() => IsShip);
+                    _classType = value;
+                    RaisePropertyChanged(() => ClassType);
+                    RaisePropertyChanged(() => IsAsteroid);
+                    RaisePropertyChanged(() => IsShip);
                 }
             }
         }
@@ -257,7 +258,7 @@
         {
             get
             {
-                return this.classType == ImportModelClassType.Asteroid;
+                return _classType == ImportModelClassType.Asteroid;
             }
         }
 
@@ -265,7 +266,7 @@
         {
             get
             {
-                return this.classType != ImportModelClassType.Asteroid;
+                return _classType != ImportModelClassType.Asteroid;
             }
         }
 
@@ -273,15 +274,15 @@
         {
             get
             {
-                return this.armorType;
+                return _armorType;
             }
 
             set
             {
-                if (value != this.armorType)
+                if (value != _armorType)
                 {
-                    this.armorType = value;
-                    this.RaisePropertyChanged(() => ArmorType);
+                    _armorType = value;
+                    RaisePropertyChanged(() => ArmorType);
                 }
             }
         }
@@ -291,14 +292,14 @@
         {
             get
             {
-                return this.characterPosition;
+                return _characterPosition;
             }
 
             set
             {
-                //if (value != this.characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
-                this.characterPosition = value;
-                this.RaisePropertyChanged(() => CharacterPosition);
+                //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
+                _characterPosition = value;
+                RaisePropertyChanged(() => CharacterPosition);
             }
         }
 
@@ -306,15 +307,15 @@
         {
             get
             {
-                return this.multipleScale;
+                return _multipleScale;
             }
 
             set
             {
-                if (value != this.multipleScale)
+                if (value != _multipleScale)
                 {
-                    this.multipleScale = value;
-                    this.RaisePropertyChanged(() => MultipleScale);
+                    _multipleScale = value;
+                    RaisePropertyChanged(() => MultipleScale);
                 }
             }
         }
@@ -323,15 +324,15 @@
         {
             get
             {
-                return this.maxLengthScale;
+                return _maxLengthScale;
             }
 
             set
             {
-                if (value != this.maxLengthScale)
+                if (value != _maxLengthScale)
                 {
-                    this.maxLengthScale = value;
-                    this.RaisePropertyChanged(() => MaxLengthScale);
+                    _maxLengthScale = value;
+                    RaisePropertyChanged(() => MaxLengthScale);
                 }
             }
         }
@@ -340,15 +341,15 @@
         {
             get
             {
-                return this.buildDistance;
+                return _buildDistance;
             }
 
             set
             {
-                if (value != this.buildDistance)
+                if (value != _buildDistance)
                 {
-                    this.buildDistance = value;
-                    this.RaisePropertyChanged(() => BuildDistance);
+                    _buildDistance = value;
+                    RaisePropertyChanged(() => BuildDistance);
                 }
             }
         }
@@ -357,15 +358,15 @@
         {
             get
             {
-                return this.isMultipleScale;
+                return _isMultipleScale;
             }
 
             set
             {
-                if (value != this.isMultipleScale)
+                if (value != _isMultipleScale)
                 {
-                    this.isMultipleScale = value;
-                    this.RaisePropertyChanged(() => IsMultipleScale);
+                    _isMultipleScale = value;
+                    RaisePropertyChanged(() => IsMultipleScale);
                 }
             }
         }
@@ -374,15 +375,15 @@
         {
             get
             {
-                return this.isMaxLengthScale;
+                return _isMaxLengthScale;
             }
 
             set
             {
-                if (value != this.isMaxLengthScale)
+                if (value != _isMaxLengthScale)
                 {
-                    this.isMaxLengthScale = value;
-                    this.RaisePropertyChanged(() => IsMaxLengthScale);
+                    _isMaxLengthScale = value;
+                    RaisePropertyChanged(() => IsMaxLengthScale);
                 }
             }
         }
@@ -391,7 +392,7 @@
         {
             get
             {
-                return this._outsideMaterialsCollection;
+                return _outsideMaterialsCollection;
             }
         }
 
@@ -400,7 +401,7 @@
         {
             get
             {
-                return this._insideMaterialsCollection;
+                return _insideMaterialsCollection;
             }
         }
 
@@ -408,15 +409,15 @@
         {
             get
             {
-                return this._outsideStockMaterial;
+                return _outsideStockMaterial;
             }
 
             set
             {
-                if (value != this._outsideStockMaterial)
+                if (value != _outsideStockMaterial)
                 {
-                    this._outsideStockMaterial = value;
-                    this.RaisePropertyChanged(() => OutsideStockMaterial);
+                    _outsideStockMaterial = value;
+                    RaisePropertyChanged(() => OutsideStockMaterial);
                 }
             }
         }
@@ -425,15 +426,15 @@
         {
             get
             {
-                return this._insideStockMaterial;
+                return _insideStockMaterial;
             }
 
             set
             {
-                if (value != this._insideStockMaterial)
+                if (value != _insideStockMaterial)
                 {
-                    this._insideStockMaterial = value;
-                    this.RaisePropertyChanged(() => InsideStockMaterial);
+                    _insideStockMaterial = value;
+                    RaisePropertyChanged(() => InsideStockMaterial);
                 }
             }
         }
@@ -442,15 +443,32 @@
         {
             get
             {
-                return this._sourceFile;
+                return _sourceFile;
             }
 
             set
             {
-                if (value != this._sourceFile)
+                if (value != _sourceFile)
                 {
-                    this._sourceFile = value;
-                    this.RaisePropertyChanged(() => SourceFile);
+                    _sourceFile = value;
+                    RaisePropertyChanged(() => SourceFile);
+                }
+            }
+        }
+
+        public bool FillObject
+        {
+            get
+            {
+                return _fillObject;
+            }
+
+            set
+            {
+                if (value != _fillObject)
+                {
+                    _fillObject = value;
+                    RaisePropertyChanged(() => FillObject);
                 }
             }
         }
@@ -461,7 +479,7 @@
 
         public void Load(MyPositionAndOrientation characterPosition)
         {
-            this.CharacterPosition = characterPosition;
+            CharacterPosition = characterPosition;
         }
 
         #endregion

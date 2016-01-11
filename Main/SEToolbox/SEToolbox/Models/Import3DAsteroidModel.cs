@@ -2,7 +2,6 @@
 {
     using System.Collections.ObjectModel;
     using System.Windows.Media.Media3D;
-
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using VRage;

@@ -1,8 +1,13 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System.Linq;
-    using System.Windows.Media;
-    using Sandbox.Common.ObjectBuilders;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Windows.Forms;
+    using System.Windows.Input;
+    using System.Windows.Media.Media3D;
     using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -10,87 +15,72 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Windows.Forms;
-    using System.Windows.Input;
-    using System.Windows.Media.Media3D;
+    using SEToolbox.Views;
+    using VRage;
+    using VRage.ObjectBuilders;
     using VRageMath;
-    using Color = VRageMath.Color;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using Res = SEToolbox.Properties.Resources;
 
-    public class Import3dAsteroidViewModel : BaseViewModel
+    public class Import3DAsteroidViewModel : BaseViewModel
     {
         #region Fields
 
-        private static readonly object Locker = new object();
-
         private readonly IDialogService _dialogService;
         private readonly Func<IOpenFileDialog> _openFileDialogFactory;
-        private readonly Import3dAsteroidModel _dataModel;
+        private readonly Import3DAsteroidModel _dataModel;
 
         private bool? _closeResult;
         private bool _isBusy;
+        private Rect3D _originalBounds;
 
         #endregion
 
         #region Constructors
 
-        public Import3dAsteroidViewModel(BaseViewModel parentViewModel, Import3dAsteroidModel dataModel)
+        public Import3DAsteroidViewModel(BaseViewModel parentViewModel, Import3DAsteroidModel dataModel)
             : this(parentViewModel, dataModel, ServiceLocator.Resolve<IDialogService>(), ServiceLocator.Resolve<IOpenFileDialog>)
         {
         }
 
-        public Import3dAsteroidViewModel(BaseViewModel parentViewModel, Import3dAsteroidModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory)
+        public Import3DAsteroidViewModel(BaseViewModel parentViewModel, Import3DAsteroidModel dataModel, IDialogService dialogService, Func<IOpenFileDialog> openFileDialogFactory)
             : base(parentViewModel)
         {
             Contract.Requires(dialogService != null);
             Contract.Requires(openFileDialogFactory != null);
 
-            this._dialogService = dialogService;
-            this._openFileDialogFactory = openFileDialogFactory;
-            this._dataModel = dataModel;
-            this._dataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-            {
-                // Will bubble property change events from the Model to the ViewModel.
-                this.OnPropertyChanged(e.PropertyName);
-            };
+            _dialogService = dialogService;
+            _openFileDialogFactory = openFileDialogFactory;
+            _dataModel = dataModel;
+            // Will bubble property change events from the Model to the ViewModel.
+            _dataModel.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
 
-            this.IsMultipleScale = true;
-            this.MultipleScale = 1;
-            this.MaxLengthScale = 100;
+            IsMultipleScale = true;
+            MultipleScale = 1;
+            MaxLengthScale = 100;
+            OutsideMaterialDepth = 1;
+            IsInfrontofPlayer = true;
+            Position = new BindablePoint3DModel();
+            BuildDistance = 10;
         }
 
         #endregion
 
         #region command Properties
 
-        public ICommand Browse3dModelCommand
+        public ICommand Browse3DModelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(Browse3dModelExecuted), new Func<bool>(Browse3dModelCanExecute));
-            }
+            get { return new DelegateCommand(Browse3DModelExecuted, Browse3DModelCanExecute); }
         }
 
         public ICommand CreateCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CreateExecuted), new Func<bool>(CreateCanExecute));
-            }
+            get { return new DelegateCommand(CreateExecuted, CreateCanExecute); }
         }
 
         public ICommand CancelCommand
         {
-            get
-            {
-                return new DelegateCommand(new Action(CancelExecuted), new Func<bool>(CancelCanExecute));
-            }
+            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
         }
 
         #endregion
@@ -102,12 +92,12 @@
         /// </summary>
         public bool? CloseResult
         {
-            get { return this._closeResult; }
+            get { return _closeResult; }
 
             set
             {
-                this._closeResult = value;
-                this.RaisePropertyChanged(() => CloseResult);
+                _closeResult = value;
+                RaisePropertyChanged(() => CloseResult);
             }
         }
 
@@ -116,17 +106,17 @@
         /// </summary>
         public bool IsBusy
         {
-            get { return this._isBusy; }
+            get { return _isBusy; }
 
             set
             {
-                if (value != this._isBusy)
+                if (value != _isBusy)
                 {
-                    this._isBusy = value;
-                    this.RaisePropertyChanged(() => IsBusy);
-                    if (this._isBusy)
+                    _isBusy = value;
+                    RaisePropertyChanged(() => IsBusy);
+                    if (_isBusy)
                     {
-                        System.Windows.Forms.Application.DoEvents();
+                        Application.DoEvents();
                     }
                 }
             }
@@ -134,187 +124,258 @@
 
         public string Filename
         {
-            get { return this._dataModel.Filename; }
+            get { return _dataModel.Filename; }
 
             set
             {
-                this._dataModel.Filename = value;
-                this.FilenameChanged();
+                _dataModel.Filename = value;
+                FilenameChanged();
             }
         }
 
         public Model3D Model
         {
-            get { return this._dataModel.Model; }
-            set { this._dataModel.Model = value; }
+            get { return _dataModel.Model; }
+            set { _dataModel.Model = value; }
         }
 
         public bool IsValidModel
         {
-            get { return this._dataModel.IsValidModel; }
-            set { this._dataModel.IsValidModel = value; }
+            get { return _dataModel.IsValidModel; }
+            set
+            {
+                _dataModel.IsValidModel = value;
+                RaisePropertyChanged(() => IsWrongModel);
+            }
+        }
+
+        public bool IsValidEntity
+        {
+            get { return _dataModel.IsValidEntity; }
+            set { _dataModel.IsValidEntity = value; }
+        }
+
+        public bool IsWrongModel
+        {
+            get { return !_dataModel.IsValidModel; }
         }
 
         public BindableSize3DModel OriginalModelSize
         {
-            get { return this._dataModel.OriginalModelSize; }
-            set { this._dataModel.OriginalModelSize = value; }
+            get { return _dataModel.OriginalModelSize; }
+            set { _dataModel.OriginalModelSize = value; }
         }
 
         public BindableSize3DIModel NewModelSize
         {
-            get { return this._dataModel.NewModelSize; }
-
-            set
-            {
-                this._dataModel.NewModelSize = value;
-                this.ProcessModelScale();
-            }
+            get { return _dataModel.NewModelSize; }
+            set { _dataModel.NewModelSize = value; ProcessModelScale(); }
         }
 
         public BindablePoint3DModel NewModelScale
         {
-            get { return this._dataModel.NewModelScale; }
-            set { this._dataModel.NewModelScale = value; }
+            get { return _dataModel.NewModelScale; }
+            set { _dataModel.NewModelScale = value; }
         }
 
         public BindablePoint3DModel Position
         {
-            get { return this._dataModel.Position; }
-            set { this._dataModel.Position = value; }
+            get { return _dataModel.Position; }
+            set { _dataModel.Position = value; }
         }
 
         public BindableVector3DModel Forward
         {
-            get { return this._dataModel.Forward; }
-            set { this._dataModel.Forward = value; }
+            get { return _dataModel.Forward; }
+            set { _dataModel.Forward = value; }
         }
 
         public BindableVector3DModel Up
         {
-            get { return this._dataModel.Up; }
-            set { this._dataModel.Up = value; }
+            get { return _dataModel.Up; }
+            set { _dataModel.Up = value; }
         }
 
-        public SEToolbox.Interop.Asteroids.MyVoxelRayTracer.TraceType TraceType
+        public TraceType TraceType
         {
-            get { return this._dataModel.TraceType; }
-            set { this._dataModel.TraceType = value; }
+            get { return _dataModel.TraceType; }
+            set { _dataModel.TraceType = value; }
+        }
+
+        public TraceCount TraceCount
+        {
+            get { return _dataModel.TraceCount; }
+            set { _dataModel.TraceCount = value; }
+        }
+
+        public TraceDirection TraceDirection
+        {
+            get { return _dataModel.TraceDirection; }
+            set { _dataModel.TraceDirection = value; }
         }
 
         public double MultipleScale
         {
-            get { return this._dataModel.MultipleScale; }
-            set { this._dataModel.MultipleScale = value; this.ProcessModelScale(); }
+            get { return _dataModel.MultipleScale; }
+            set { _dataModel.MultipleScale = value; ProcessModelScale(); }
         }
 
         public double MaxLengthScale
         {
-            get { return this._dataModel.MaxLengthScale; }
-            set { this._dataModel.MaxLengthScale = value; this.ProcessModelScale(); }
+            get { return _dataModel.MaxLengthScale; }
+            set { _dataModel.MaxLengthScale = value; ProcessModelScale(); }
         }
 
         public double BuildDistance
         {
-            get { return this._dataModel.BuildDistance; }
-
-            set
-            {
-                this._dataModel.BuildDistance = value;
-                this.ProcessModelScale();
-            }
+            get { return _dataModel.BuildDistance; }
+            set { _dataModel.BuildDistance = value; ProcessModelScale(); }
         }
 
         public bool IsMultipleScale
         {
-            get { return this._dataModel.IsMultipleScale; }
-
-            set
-            {
-                this._dataModel.IsMultipleScale = value;
-                this.ProcessModelScale();
-            }
+            get { return _dataModel.IsMultipleScale; }
+            set { _dataModel.IsMultipleScale = value; ProcessModelScale(); }
         }
 
         public bool IsMaxLengthScale
         {
-            get { return this._dataModel.IsMaxLengthScale; }
+            get { return _dataModel.IsMaxLengthScale; }
+            set { _dataModel.IsMaxLengthScale = value; ProcessModelScale(); }
+        }
 
-            set
-            {
-                this._dataModel.IsMaxLengthScale = value;
-                this.ProcessModelScale();
-            }
+        public bool IsAbsolutePosition
+        {
+            get { return _dataModel.IsAbsolutePosition; }
+            set { _dataModel.IsAbsolutePosition = value; }
+        }
+
+        public bool IsInfrontofPlayer
+        {
+            get { return _dataModel.IsInfrontofPlayer; }
+            set { _dataModel.IsInfrontofPlayer = value; }
         }
 
         public ObservableCollection<MaterialSelectionModel> OutsideMaterialsCollection
         {
-            get { return this._dataModel.OutsideMaterialsCollection; }
+            get { return _dataModel.OutsideMaterialsCollection; }
         }
 
+        public int OutsideMaterialDepth
+        {
+            get { return _dataModel.OutsideMaterialDepth; }
+            set { _dataModel.OutsideMaterialDepth = value; }
+        }
 
         public ObservableCollection<MaterialSelectionModel> InsideMaterialsCollection
         {
-            get { return this._dataModel.InsideMaterialsCollection; }
+            get { return _dataModel.InsideMaterialsCollection; }
         }
 
         public MaterialSelectionModel OutsideStockMaterial
         {
-            get { return this._dataModel.OutsideStockMaterial; }
-            set { this._dataModel.OutsideStockMaterial = value; }
+            get { return _dataModel.OutsideStockMaterial; }
+            set { _dataModel.OutsideStockMaterial = value; }
         }
 
         public MaterialSelectionModel InsideStockMaterial
         {
-            get { return this._dataModel.InsideStockMaterial; }
-            set { this._dataModel.InsideStockMaterial = value; }
+            get { return _dataModel.InsideStockMaterial; }
+            set { _dataModel.InsideStockMaterial = value; }
         }
 
         public string SourceFile
         {
-            get { return this._dataModel.SourceFile; }
-            set { this._dataModel.SourceFile = value; }
+            get { return _dataModel.SourceFile; }
+            set { _dataModel.SourceFile = value; }
         }
+
+        public double RotatePitch
+        {
+            get { return _dataModel.RotatePitch; }
+            set { _dataModel.RotatePitch = value; ProcessModelScale(); }
+        }
+
+        public double RotateYaw
+        {
+            get { return _dataModel.RotateYaw; }
+            set { _dataModel.RotateYaw = value; ProcessModelScale(); }
+        }
+
+        public double RotateRoll
+        {
+            get { return _dataModel.RotateRoll; }
+            set { _dataModel.RotateRoll = value; ProcessModelScale(); }
+        }
+
+        public bool BeepWhenFinished
+        {
+            get { return _dataModel.BeepWhenFinished; }
+            set { _dataModel.BeepWhenFinished = value; }
+        }
+
+        public bool SaveWhenFinsihed
+        {
+            get { return _dataModel.SaveWhenFinsihed; }
+            set { _dataModel.SaveWhenFinsihed = value; }
+        }
+
+        public bool ShutdownWhenFinished
+        {
+            get { return _dataModel.ShutdownWhenFinished; }
+            set { _dataModel.ShutdownWhenFinished = value; }
+        }
+
+        public bool RunInLowPrioity
+        {
+            get { return _dataModel.RunInLowPrioity; }
+            set { _dataModel.RunInLowPrioity = value; }
+        }
+
+        public MyObjectBuilder_VoxelMap NewEntity { get; set; }
 
         #endregion
 
         #region command methods
 
-        public bool Browse3dModelCanExecute()
+        public bool Browse3DModelCanExecute()
         {
             return true;
         }
 
-        public void Browse3dModelExecuted()
+        public void Browse3DModelExecuted()
         {
-            this.IsValidModel = false;
+            IsValidModel = false;
+            IsValidEntity = false;
 
-            IOpenFileDialog openFileDialog = _openFileDialogFactory();
+            var openFileDialog = _openFileDialogFactory();
             openFileDialog.Filter = Res.DialogImportModelFilter;
             openFileDialog.Title = Res.DialogImportModelTitle;
 
             // Open the dialog
-            DialogResult result = _dialogService.ShowOpenFileDialog(this, openFileDialog);
-
-            if (result == DialogResult.OK)
+            if (_dialogService.ShowOpenFileDialog(this, openFileDialog) == DialogResult.OK)
             {
-                this.Filename = openFileDialog.FileName;
+                Filename = openFileDialog.FileName;
             }
         }
 
         private void FilenameChanged()
         {
-            this.ProcessFilename(this.Filename);
+            ProcessFilename(Filename);
         }
 
         public bool CreateCanExecute()
         {
-            return this.IsValidModel;
+            return IsValidModel;
         }
 
         public void CreateExecuted()
         {
-            this.CloseResult = true;
+            var ok = BuildEntity();
+
+            // do not close if cancelled.
+            if (ok)
+                CloseResult = true;
         }
 
         public bool CancelCanExecute()
@@ -324,7 +385,7 @@
 
         public void CancelExecuted()
         {
-            this.CloseResult = false;
+            CloseResult = false;
         }
 
         #endregion
@@ -333,195 +394,98 @@
 
         private void ProcessFilename(string filename)
         {
-            this.IsValidModel = false;
-            this.IsBusy = true;
+            IsValidModel = false;
+            IsValidEntity = false;
+            IsBusy = true;
 
-            this.OriginalModelSize = new BindableSize3DModel(0, 0, 0);
-            this.NewModelSize = new BindableSize3DIModel(0, 0, 0);
-            this.Position = new BindablePoint3DModel(0, 0, 0);
+            OriginalModelSize = new BindableSize3DModel(0, 0, 0);
+            NewModelSize = new BindableSize3DIModel(0, 0, 0);
+            Position = new BindablePoint3DModel(0, 0, 0);
 
             if (File.Exists(filename))
             {
                 // validate file is a real model.
                 // read model properties.
                 Model3D model;
-                var size = Modelling.PreviewModelVolmetic(filename, out model);
-                this.Model = model;
+                _originalBounds = Modelling.PreviewModelVolmetic(filename, out model);
 
-                if (size != null && size.Height != 0 && size.Width != 0 && size.Depth != 0)
+                if (!_originalBounds.IsEmpty && _originalBounds.SizeX != 0 && _originalBounds.SizeY != 0 && _originalBounds.SizeZ != 0)
                 {
-                    this.OriginalModelSize = size;
-                    this.BuildDistance = 10;
-                    this.IsValidModel = true;
-                    this.ProcessModelScale();
+                    Model = model;
+                    var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
+                    var bounds = _originalBounds;
+                    if (rotateTransform != null)
+                    {
+                        bounds = rotateTransform.TransformBounds(bounds);
+                    }
+
+                    OriginalModelSize = new BindableSize3DModel(bounds);
+                    IsValidModel = true;
+                    ProcessModelScale();
                 }
             }
 
-            this.IsBusy = false;
+            IsBusy = false;
         }
 
         private void ProcessModelScale()
         {
-            if (this.IsValidModel)
+            if (IsValidModel)
             {
-                if (this.IsMaxLengthScale)
+                var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
+                var bounds = _originalBounds;
+                if (rotateTransform != null)
                 {
-                    var factor = this.MaxLengthScale / Math.Max(Math.Max(this.OriginalModelSize.Height, this.OriginalModelSize.Width), this.OriginalModelSize.Depth);
-
-                    this.NewModelSize.Height = (int)(factor * this.OriginalModelSize.Height);
-                    this.NewModelSize.Width = (int)(factor * this.OriginalModelSize.Width);
-                    this.NewModelSize.Depth = (int)(factor * this.OriginalModelSize.Depth);
-                }
-                else if (this.IsMultipleScale)
-                {
-                    this.NewModelSize.Height = (int)(this.MultipleScale * this.OriginalModelSize.Height);
-                    this.NewModelSize.Width = (int)(this.MultipleScale * this.OriginalModelSize.Width);
-                    this.NewModelSize.Depth = (int)(this.MultipleScale * this.OriginalModelSize.Depth);
+                    bounds = rotateTransform.TransformBounds(bounds);
                 }
 
-                double vectorDistance = this.BuildDistance;
+                var newSize = new BindableSize3DModel(bounds);
 
-                vectorDistance += this.NewModelSize.Depth;
-                this.NewModelScale = new BindablePoint3DModel(this.NewModelSize.Width, this.NewModelSize.Height, this.NewModelSize.Depth);
+                if (IsMaxLengthScale)
+                {
+                    var factor = MaxLengthScale / Math.Max(Math.Max(newSize.Height, newSize.Width), newSize.Depth);
 
-                // Figure out where the Character is facing, and plant the new construct right in front, by "10" units, facing the Character.
-                var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
-                vector.Normalize();
-                vector = Vector3D.Multiply(vector, vectorDistance);
-                this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
-                this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward);
-                this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
+                    NewModelSize.Height = (int)(factor * newSize.Height);
+                    NewModelSize.Width = (int)(factor * newSize.Width);
+                    NewModelSize.Depth = (int)(factor * newSize.Depth);
+                }
+                else if (IsMultipleScale)
+                {
+                    NewModelSize.Height = (int)(MultipleScale * newSize.Height);
+                    NewModelSize.Width = (int)(MultipleScale * newSize.Width);
+                    NewModelSize.Depth = (int)(MultipleScale * newSize.Depth);
+                }
+
+                NewModelScale = new BindablePoint3DModel(NewModelSize.Width, NewModelSize.Height, NewModelSize.Depth);
             }
-        }
-
-        #endregion
-
-        #region BuildTestEntity
-
-        public MyObjectBuilder_CubeGrid BuildTestEntity()
-        {
-            var entity = new MyObjectBuilder_CubeGrid
-            {
-                EntityId = SpaceEngineersApi.GenerateEntityId(),
-                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-                Skeleton = new System.Collections.Generic.List<BoneInfo>(),
-                LinearVelocity = new VRageMath.Vector3(0, 0, 0),
-                AngularVelocity = new VRageMath.Vector3(0, 0, 0),
-                GridSizeEnum = MyCubeSize.Large
-            };
-
-            var blockPrefix = entity.GridSizeEnum.ToString();
-            var cornerBlockPrefix = entity.GridSizeEnum.ToString();
-
-            entity.IsStatic = false;
-            blockPrefix += "BlockArmor";        // HeavyBlockArmor|BlockArmor;
-            cornerBlockPrefix += "BlockArmor"; // HeavyBlockArmor|BlockArmor|RoundArmor_;
-
-            // Figure out where the Character is facing, and plant the new constrcut right in front, by "10" units, facing the Character.
-            var vector = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward).Vector3D;
-            vector.Normalize();
-            vector = Vector3D.Multiply(vector, 6);
-            this.Position = new BindablePoint3DModel(Point3D.Add(new BindablePoint3DModel(this._dataModel.CharacterPosition.Position).Point3D, vector));
-            this.Forward = new BindableVector3DModel(this._dataModel.CharacterPosition.Forward);
-            this.Up = new BindableVector3DModel(this._dataModel.CharacterPosition.Up);
-
-            entity.PositionAndOrientation = new MyPositionAndOrientation()
-            {
-                Position = this.Position.ToVector3(),
-                Forward = this.Forward.ToVector3(),
-                Up = this.Up.ToVector3()
-            };
-
-            // Large|BlockArmor|Corner
-            // Large|RoundArmor_|Corner
-            // Large|HeavyBlockArmor|Block,
-            // Small|BlockArmor|Slope,
-            // Small|HeavyBlockArmor|Corner,
-
-            var blockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), blockPrefix + "Block");
-            var slopeBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), cornerBlockPrefix + "Slope");
-            var cornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), cornerBlockPrefix + "Corner");
-            var inverseCornerBlockType = (SubtypeId)Enum.Parse(typeof(SubtypeId), cornerBlockPrefix + "CornerInv");
-
-            entity.CubeBlocks = new System.Collections.Generic.List<MyObjectBuilder_CubeBlock>();
-
-            var fixScale = 0;
-            if (this.IsMultipleScale && this.MultipleScale == 1)
-            {
-                fixScale = 0;
-            }
-            else
-            {
-                fixScale = Math.Max(Math.Max(this.NewModelSize.Height, this.NewModelSize.Width), this.NewModelSize.Depth);
-            }
-
-            //var smoothObject = true;
-
-            // Read in voxel and set main cube space.
-            //var ccubic = TestCreateSplayedDiagonalPlane();
-            //var ccubic = TestCreateSlopedDiagonalPlane();
-            //var ccubic = TestCreateStaggeredStar();
-            var ccubic = Modelling.TestCreateTrayShape();
-            //var ccubic = ReadModelVolmetic(@"..\..\..\..\..\..\building 3D\models\Rhino_corrected.obj", 10, null, ModelTraceVoxel.ThickSmoothedDown);
-
-            #region Read in voxel and set main cube space.
-
-            #endregion
-
-            //if (smoothObject)
-            //{
-            //    CalculateAddedInverseCorners(ccubic);
-            //    CalculateAddedSlopes(ccubic);
-            //    CalculateAddedCorners(ccubic);
-            //}
-
-            Modelling.BuildStructureFromCubic(entity, ccubic, blockType, slopeBlockType, cornerBlockType, inverseCornerBlockType);
-
-            return entity;
         }
 
         #endregion
 
         #region BuildEntity
 
-        public MyObjectBuilder_VoxelMap BuildEntity()
+        private bool BuildEntity()
         {
-            var filenamepart = Path.GetFileNameWithoutExtension(this.Filename);
-            var filename = this.MainViewModel.CreateUniqueVoxelFilename(filenamepart + ".vox");
-            this.Position = this.Position.RoundOff(1.0);
-            this.Forward = this.Forward.RoundToAxis();
-            this.Up = this.Up.RoundToAxis();
+            var filenamepart = Path.GetFileNameWithoutExtension(Filename);
+            var filename = MainViewModel.CreateUniqueVoxelStorageName(filenamepart + MyVoxelMap.V2FileExtension);
 
-            var entity = new MyObjectBuilder_VoxelMap(this.Position.ToVector3(), filename)
+            double multiplier;
+            if (IsMultipleScale)
             {
-                EntityId = SpaceEngineersApi.GenerateEntityId(),
-                PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
-            };
-
-            double multiplier = 1;
-            if (this.IsMultipleScale)
-            {
-                multiplier = this.MultipleScale;
+                multiplier = MultipleScale;
             }
             else
             {
-                multiplier = this.MaxLengthScale / Math.Max(Math.Max(this.OriginalModelSize.Height, this.OriginalModelSize.Width), this.OriginalModelSize.Depth);
+                multiplier = MaxLengthScale / Math.Max(Math.Max(OriginalModelSize.Height, OriginalModelSize.Width), OriginalModelSize.Depth);
             }
 
             var scale = new ScaleTransform3D(multiplier, multiplier, multiplier);
-            var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
-            this.SourceFile = TempfileUtil.NewFilename();
+            var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
+            SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
 
-            //var baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault(m => m.IsRare == false);
-            //if (baseMaterial == null)
-            //    baseMaterial = SpaceEngineersApi.GetMaterialList().FirstOrDefault();
+            var model = MeshHelper.Load(Filename, ignoreErrors: true);
 
-            //var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, this.Filename, this.SourceFile, this.OutsideStockMaterial.Value, baseMaterial.Name, this.InsideStockMaterial.Value != null, this.InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
-
-
-            var model = MeshHelper.Load(this.Filename, ignoreErrors: true);
-
-            var meshes = new List<SEToolbox.Interop.Asteroids.MyVoxelRayTracer.MyMeshModel>();
+            var meshes = new List<MyVoxelRayTracer.MyMeshModel>();
             var geometeries = new List<MeshGeometry3D>();
             foreach (var model3D in model.Children)
             {
@@ -531,23 +495,105 @@
                 if (geometry != null)
                     geometeries.Add(geometry);
             }
-            meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), this.OutsideStockMaterial.Value, this.OutsideStockMaterial.Value));
+            meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), InsideStockMaterial.Value, InsideStockMaterial.Value));
 
-            var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, this.SourceFile, scale, rotateTransform, this.TraceType, this.MainViewModel.ResetProgress, this.MainViewModel.IncrementProgress);
-            voxelMap.Save(this.SourceFile);
+            #region handle dialogs and process the conversion
 
-            this.MainViewModel.ClearProgress();
+            var doCancel = false;
 
-            entity.PositionAndOrientation = new MyPositionAndOrientation()
+            var progressModel = new ProgressCancelModel { Title = "Processing...", SubTitle = "Processing...", DialogText = "Time remaining: Calculating..." };
+            var progressVm = new ProgressCancelViewModel(this, progressModel);
+            progressVm.CloseRequested += delegate(object sender, EventArgs e)
             {
-                Position = this.Position.ToVector3(),
-                Forward = this.Forward.ToVector3(),
-                Up = this.Up.ToVector3()
+                doCancel = true;
             };
 
-            this.IsValidModel = voxelMap.ContentSize.X > 0 && voxelMap.ContentSize.Y > 0 && voxelMap.ContentSize.Z > 0;
+            var cancelFunc = (Func<bool>)delegate
+            {
+                return doCancel;
+            };
 
-            return entity;
+            var completedAction = (Action)delegate
+            {
+                progressVm.Close();
+            };
+
+            MyVoxelMap voxelMap = null;
+
+            var action = (Action)delegate
+            {
+                voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, TraceType, TraceCount, TraceDirection,
+                    progressModel.ResetProgress, progressModel.IncrementProgress, cancelFunc, completedAction);
+            };
+
+            if (RunInLowPrioity)
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.Idle;
+
+            _dialogService.ShowDialog<WindowProgressCancel>(this, progressVm, action);
+
+            if (RunInLowPrioity)
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal;
+
+            #endregion
+
+            if (doCancel || voxelMap == null)
+            {
+                IsValidEntity = false;
+                NewEntity = null;
+            }
+            else
+            {
+                voxelMap.ForceShellMaterial(OutsideStockMaterial.Value, (byte)OutsideMaterialDepth);
+                voxelMap.Save(SourceFile);
+
+                var position = VRageMath.Vector3D.Zero;
+                var forward = Vector3.Forward;
+                var up = Vector3.Up;
+
+                if (IsAbsolutePosition)
+                {
+                    position = Position.ToVector3();
+                }
+                else if (IsInfrontofPlayer)
+                {
+                    // Figure out where the Character is facing, and plant the new construct centered in front of the Character, but "BuildDistance" units out in front.
+                    var lookVector = (VRageMath.Vector3D)_dataModel.CharacterPosition.Forward.ToVector3();
+                    lookVector.Normalize();
+                    VRageMath.Vector3D? boundingIntersectPoint = voxelMap.BoundingContent.IntersectsRayAt(voxelMap.BoundingContent.Center, -lookVector * 5000d);
+
+                    if (!boundingIntersectPoint.HasValue)
+                    {
+                        boundingIntersectPoint = voxelMap.BoundingContent.Center;
+                    }
+
+                    var distance = VRageMath.Vector3D.Distance(boundingIntersectPoint.Value, voxelMap.BoundingContent.Center) + (float)BuildDistance;
+                    VRageMath.Vector3D vector = lookVector * distance;
+                    position = VRageMath.Vector3D.Add(_dataModel.CharacterPosition.Position, vector) - voxelMap.BoundingContent.Center;
+                }
+
+                var entity = new MyObjectBuilder_VoxelMap(position, filename)
+                {
+                    EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),
+                    PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
+                    StorageName = Path.GetFileNameWithoutExtension(filename)
+                };
+
+                entity.PositionAndOrientation = new MyPositionAndOrientation
+                {
+                    Position = position,
+                    Forward = forward,
+                    Up = up
+                };
+
+                IsValidEntity = voxelMap.BoundingContent.Size.Volume > 0f;
+
+                NewEntity = entity;
+
+                if (BeepWhenFinished)
+                    System.Media.SystemSounds.Asterisk.Play();
+            }
+
+            return !doCancel;
         }
 
         #endregion

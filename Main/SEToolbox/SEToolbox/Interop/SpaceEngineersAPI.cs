@@ -1,176 +1,132 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Microsoft.Xml.Serialization.GeneratedAssembly;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.Xml;
+    using VRage;
+    using VRage.ObjectBuilders;
+    using VRage.Utils;
     using VRageMath;
-    using Res = SEToolbox.Properties.Resources;
 
-    public static class SpaceEngineersAPI
+    /// <summary>
+    /// Helper api for accessing and interacting with Space Engineers content.
+    /// </summary>
+    public static class SpaceEngineersApi
     {
-        #region ctor
-
-        static SpaceEngineersAPI()
-        {
-            // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
-            ReadCubeBlockDefinitions();
-            Sandbox.Common.Localization.MyTextsWrapper.Init();
-        }
-
-        public static void Init()
-        {
-            // Placeholder to make sure ctor is called.
-        }
-
-        #endregion
-
         #region Serializers
 
-        public static T ReadSpaceEngineersFile<T, TS>(Stream stream)
-        where TS : XmlSerializer1
-        {
-            var settings = new XmlReaderSettings
-            {
-                IgnoreComments = true,
-                IgnoreWhitespace = true,
-            };
-
-            object obj = null;
-
-            using (var xmlReader = XmlReader.Create(stream, settings))
-            {
-
-                var serializer = (TS)Activator.CreateInstance(typeof(TS));
-                //serializer.UnknownAttribute += serializer_UnknownAttribute;
-                //serializer.UnknownElement += serializer_UnknownElement;
-                //serializer.UnknownNode += serializer_UnknownNode;
-                obj = serializer.Deserialize(xmlReader);
-            }
-
-            return (T)obj;
-        }
-
-        public static bool TryReadSpaceEngineersFile<T, TS>(string filename, out T entity)
-             where TS : XmlSerializer1
+        public static bool TryReadSpaceEngineersFile<T>(string filename, out T entity, out bool isCompressed) where T : MyObjectBuilder_Base
         {
             try
             {
-                entity = SpaceEngineersAPI.ReadSpaceEngineersFile<T, TS>(filename);
+                entity = ReadSpaceEngineersFile<T>(filename, out isCompressed);
                 return true;
             }
             catch
             {
                 entity = default(T);
+                isCompressed = false;
                 return false;
             }
         }
 
-        public static T ReadSpaceEngineersFile<T, TS>(string filename)
-        where TS : XmlSerializer1
+        public static T ReadSpaceEngineersFile<T>(string filename) where T : MyObjectBuilder_Base
         {
-            var settings = new XmlReaderSettings()
-            {
-                IgnoreComments = true,
-                // Space Engineers is able to read partially corrupted files,
-                // which means Keen probably aren't using any XML reader settings in general. 
-            };
+            bool isCompressed;
+            return ReadSpaceEngineersFile<T>(filename, out isCompressed);
+        }
 
-            object obj = null;
+        public static T ReadSpaceEngineersFile<T>(Stream stream) where T : MyObjectBuilder_Base
+        {
+            T outObject;
+            MyObjectBuilderSerializer.DeserializeXML<T>(stream, out outObject);
+            return outObject;
+        }
+
+        public static T ReadSpaceEngineersFile<T>(string filename, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
+        {
+            isCompressed = false;
 
             if (File.Exists(filename))
             {
-                using (var xmlReader = XmlReader.Create(filename, settings))
+                var tempFilename = filename;
+
+                if (snapshot)
                 {
-                    var serializer = (TS)Activator.CreateInstance(typeof(TS));
-                    obj = serializer.Deserialize(xmlReader);
+                    // Snapshot used for Report on Dedicated servers to prevent locking of the orginal file whilst reading it.
+                    tempFilename = TempfileUtil.NewFilename();
+                    File.Copy(filename, tempFilename);
+                }
+
+                using (var fileStream = new FileStream(tempFilename, FileMode.Open, FileAccess.Read))
+                {
+                    var b1 = fileStream.ReadByte();
+                    var b2 = fileStream.ReadByte();
+                    isCompressed = (b1 == 0x1f && b2 == 0x8b);
+                }
+
+                T outObject;
+                MyObjectBuilderSerializer.DeserializeXML<T>(tempFilename, out outObject);
+                return outObject;
+            }
+
+            return default(T);
+        }
+
+        public static T Deserialize<T>(string xml) where T : MyObjectBuilder_Base
+        {
+            T outObject;
+            using (var outStream = new MemoryStream())
+            {
+                using (StreamWriter sw = new StreamWriter(outStream))
+                {
+                    sw.Write(xml);
+                }
+                outStream.Position = 0;
+
+                MyObjectBuilderSerializer.DeserializeXML(outStream, out outObject);
+            }
+            return outObject;
+        }
+
+        public static string Serialize<T>(MyObjectBuilder_Base item) where T : MyObjectBuilder_Base
+        {
+            using (var outStream = new MemoryStream())
+            {
+                if (MyObjectBuilderSerializer.SerializeXML(outStream, item))
+                {
+                    outStream.Position = 0;
+
+                    using (StreamReader sw = new StreamReader(outStream))
+                    {
+                        return sw.ReadToEnd();
+                    }
                 }
             }
-
-            return (T)obj;
+            return null;
         }
 
-        public static T ReadSpaceEngineersFile<T>(string filename)
+        public static bool WriteSpaceEngineersFile<T>(T myObject, string filename)
+            where T : MyObjectBuilder_Base
         {
-            var contract = new XmlSerializerContract();
-            object obj = null;
-
-            if (File.Exists(filename))
+            bool ret;
+            using (StreamWriter sw = new StreamWriter(filename))
             {
-                // Space Engineers is able to read partially corrupted xml files,
-                // which means Keen probably aren't using any XML reader settings in general. 
-                using (var xmlReader = XmlReader.Create(filename))
+                ret = MyObjectBuilderSerializer.SerializeXML(sw.BaseStream, myObject);
+                if (ret)
                 {
-                    var serializer = contract.GetSerializer(typeof(T));
-                    if (serializer != null)
-                        obj = serializer.Deserialize(xmlReader);
+                    var xmlTextWriter = new XmlTextWriter(sw.BaseStream, null);
+                    xmlTextWriter.WriteString("\r\n");
+                    xmlTextWriter.WriteComment(string.Format(" Saved '{0:o}' with SEToolbox version '{1}' ", DateTime.Now, GlobalSettings.GetAppVersion()));
+                    xmlTextWriter.Flush();
                 }
             }
-
-            return (T)obj;
-        }
-
-        public static T Deserialize<T>(string xml)
-        {
-            using (var textReader = new StringReader(xml))
-            {
-                return (T)(new XmlSerializerContract().GetSerializer(typeof(T)).Deserialize(textReader));
-            }
-        }
-
-        public static string Serialize<T>(object item)
-        {
-            using (var textWriter = new StringWriter())
-            {
-                new XmlSerializerContract().GetSerializer(typeof(T)).Serialize(textWriter, item);
-                return textWriter.ToString();
-            }
-        }
-
-        public static bool WriteSpaceEngineersFile<T, TS>(T sector, string filename)
-            where TS : XmlSerializer1
-        {
-            // How they appear to be writing the files currently.
-            try
-            {
-                using (var xmlTextWriter = new XmlTextWriter(filename, null))
-                {
-                    xmlTextWriter.Formatting = Formatting.Indented;
-                    xmlTextWriter.Indentation = 2;
-                    var serializer = (TS)Activator.CreateInstance(typeof(TS));
-                    serializer.Serialize(xmlTextWriter, sector);
-                }
-            }
-            catch
-            {
-                return false;
-            }
-
-            //// How they should be doing it to support Unicode.
-            //var settingsDestination = new XmlWriterSettings()
-            //{
-            //    Indent = true, // Set indent to false to compress.
-            //    Encoding = new UTF8Encoding(false)   // codepage 65001 without signature. Removes the Byte Order Mark from the start of the file.
-            //};
-
-            //try
-            //{
-            //    using (var xmlWriter = XmlWriter.Create(filename, settingsDestination))
-            //    {
-            //        S serializer = (S)Activator.CreateInstance(typeof(S));
-            //        serializer.Serialize(xmlWriter, sector);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return false;
-            //}
 
             return true;
         }
@@ -179,165 +135,22 @@
 
         #region GenerateEntityId
 
-        public static long GenerateEntityId()
+        public static long GenerateEntityId(VRage.MyEntityIdentifier.ID_OBJECT_TYPE type)
         {
-            // Not the offical SE way of generating IDs, but its fast and we don't have to worry about a random seed.
-            var buffer = Guid.NewGuid().ToByteArray();
-            return BitConverter.ToInt64(buffer, 0);
+            return MyEntityIdentifier.AllocateId(type);
         }
 
-        #endregion
-
-        #region ReadCubeBlockDefinitions
-
-        private static MyObjectBuilder_Definitions _definitions;
-        private static Dictionary<string, byte> _materialIndex;
-
-        public static void ReadCubeBlockDefinitions()
+        public static bool ValidateEntityType(VRage.MyEntityIdentifier.ID_OBJECT_TYPE type, long id)
         {
-            // Single Player pathing.
-            _definitions = LoadDefinitions(ToolboxUpdater.GetApplicationContentPath(), null);
-
-            _materialIndex = new Dictionary<string, byte>();
+            return MyEntityIdentifier.GetIdObjectType(id) == type;
         }
 
-        /// <summary>
-        /// Load all the Space Engineers data definitions.
-        /// </summary>
-        /// <param name="contentPath">allows redirection of path when switching between single player or server.</param>
-        /// <returns></returns>
-        private static MyObjectBuilder_Definitions LoadDefinitions(string contentPath, string userModspath)
-        {
-            // TODO: Maintain a list of referenced files, prefabs, models, textures, etc., as they must also be found and mapped.
-            // ie.,  "Models\Characters\Custom\Awesome_astronaut_model" might live under "Mods\Awesome_astronaut\Models\Characters\Custom\Awesome_astronaut_model".
-
-            var definitions = LoadAllDefinitions(contentPath);
-
-            // AmmoMagazines/AmmoMagazine/Icon
-            // AmmoMagazines/AmmoMagazine/Model
-            // Characters/Character/Model
-            // Components/Component/Icon
-            // Components/Component/Model
-            // Configuration/BaseBlockPrefabs/SmallDynamic
-            // Configuration/BaseBlockPrefabs/LargeDynamic
-            // Configuration/BaseBlockPrefabs/LargeStatic
-            // CubeBlocks/Definition/Icon
-            // CubeBlocks/Definition/CubeDefinition/Sides/Side/Model
-            // CubeBlocks/Definition/BuildProgressModels/Model/File
-            // Environment/EnvironmentTexture
-            // HandItems/HandItem/FingersAnimation
-            // PhysicalItems/PhysicalItem/Icon
-            // PhysicalItems/PhysicalItem/Model
-            // Scenarios/ScenarioDefinition/Icon
-
-            // "Data\Prefabs\*.sbc"
-            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="SetupBasePrefab"/PrefabFile
-            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="AddShipPrefab"/PrefabFile
-            // Definitions/SpawnGroups/SpawnGroup/Prefabs/Prefab/File
-
-            // "Data\Prefabs\*.sbs"
-            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="AddObjectsPrefab"/PrefabFile
-            
-            // "VoxelMaps\*.vox"
-            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="AddAsteroidPrefab"/PrefabFile
-
-            if (!string.IsNullOrEmpty(userModspath))
-            {
-                // TODO: Read through the mod paths manually.
-                // Using the MyObjectBuilder_Base.DeserializeXML() with MyFSLocationEnum.ContentWithMods does not work in the expected manner.
-
-                var directories = Directory.GetDirectories(userModspath);
-                foreach (var modDirectory in directories)
-                {
-                    var modDefinitions = LoadAllDefinitions(modDirectory);
-                    MergeDefinitions(ref definitions, modDefinitions);
-                }
-            }
-
-            // Verify that content data was available, just in case the .sbc files didn't exist.
-            if (definitions.AmmoMagazines == null) throw new ToolboxException(ExceptionState.MissingContentFile, "AmmoMagazines.sbc");
-            if (definitions.Blueprints == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Blueprints.sbc");
-            if (definitions.Characters == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Characters.sbc");
-            if (definitions.Components == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Components.sbc");
-            if (definitions.ContainerTypes == null) throw new ToolboxException(ExceptionState.MissingContentFile, "ContainerTypes.sbc");
-            if (definitions.CubeBlocks == null) throw new ToolboxException(ExceptionState.MissingContentFile, "CubeBlocks.sbc");
-            if (definitions.GlobalEvents == null) throw new ToolboxException(ExceptionState.MissingContentFile, "GlobalEvents.sbc");
-            if (definitions.HandItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "HandItems.sbc");
-            if (definitions.PhysicalItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "PhysicalItems.sbc");
-            if (definitions.Scenarios == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Scenarios.sbc");
-            if (definitions.SpawnGroups == null) throw new ToolboxException(ExceptionState.MissingContentFile, "SpawnGroups.sbc");
-            if (definitions.TransparentMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "TransparentMaterials.sbc");
-            if (definitions.VoxelMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
-
-            // Deal with duplicate entries. Must use the last one found and overwrite all others.
-            definitions.AmmoMagazines = definitions.AmmoMagazines.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Blueprints = definitions.Blueprints.GroupBy(c => c.Result.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Characters = definitions.Characters.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
-            definitions.Components = definitions.Components.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            // definitions.Configuration is not an array.
-            definitions.ContainerTypes = definitions.ContainerTypes.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
-            definitions.CubeBlocks = definitions.CubeBlocks.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            // definitions.Environment is not an array.
-            definitions.GlobalEvents = definitions.GlobalEvents.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.HandItems = definitions.HandItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.PhysicalItems = definitions.PhysicalItems.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Scenarios = definitions.Scenarios.GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            // definitions.SpawnGroups don't appear to have a unique idetifier.
-            definitions.TransparentMaterials = definitions.TransparentMaterials.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
-            definitions.VoxelMaterials = definitions.VoxelMaterials.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
-
-            return definitions;
-        }
-
-        private static MyObjectBuilder_Definitions LoadAllDefinitions(string contentPath)
-        {
-            var files = Directory.GetFiles(Path.Combine(contentPath, "Data"), "*.sbc");
-            var definitions = new MyObjectBuilder_Definitions();
-
-            foreach (var filePath in files)
-            {
-                MyObjectBuilder_Definitions stockTemp = null;
-                try
-                {
-                    stockTemp = ReadSpaceEngineersFile<MyObjectBuilder_Definitions>(filePath);
-                }
-                catch (Exception ex)
-                {
-                    // ignore errors, keep on trucking just like SE.
-                    // write event log warning of any files not loaded.
-                    DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptContentFile, filePath), ex);
-                }
-
-                if (stockTemp == null) continue;
-
-                MergeDefinitions(ref definitions, stockTemp);
-            }
-
-            return definitions;
-        }
-
-        private static void MergeDefinitions(ref MyObjectBuilder_Definitions baseDefinitions, MyObjectBuilder_Definitions newDefinitions)
-        {
-            var fields = newDefinitions.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-            foreach (var field in fields)
-            {
-                var readValues = field.GetValue(newDefinitions);
-                if (readValues != null)
-                {
-                    var currentValues = field.GetValue(baseDefinitions);
-                    if (currentValues == null)
-                    {
-                        field.SetValue(baseDefinitions, readValues);
-                    }
-                    else
-                    {
-                        // Merge together multiple values from seperate files.
-                        var newArray = ArrayHelper.MergeGenericArrays(currentValues, readValues);
-                        field.SetValue(baseDefinitions, newArray);
-                    }
-                }
-            }
-        }
+        //public static long GenerateEntityId()
+        //{
+        //    // Not the offical SE way of generating IDs, but its fast and we don't have to worry about a random seed.
+        //    var buffer = Guid.NewGuid().ToByteArray();
+        //    return BitConverter.ToInt64(buffer, 0);
+        //}
 
         #endregion
 
@@ -353,39 +166,44 @@
             {
                 foreach (var component in cubeBlockDefinition.Components)
                 {
-                    mass += _definitions.Components.Where(c => c.Id.SubtypeId == component.Subtype).Sum(c => c.Mass) * component.Count;
+                    mass += SpaceEngineersCore.Resources.Definitions.Components.Where(c => c.Id.SubtypeId == component.Subtype).Sum(c => c.Mass) * component.Count;
                 }
             }
 
             return mass;
         }
 
-        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderType typeId, decimal amount, Dictionary<string, MyObjectBuilder_BlueprintDefinition.Item> requirements, out TimeSpan timeTaken)
+        public static void AccumulateCubeBlueprintRequirements(string subType, MyObjectBuilderType typeId, decimal amount, Dictionary<string, BlueprintRequirement> requirements, out TimeSpan timeTaken)
         {
-            TimeSpan time = new TimeSpan();
-            var bp = _definitions.Blueprints.FirstOrDefault(b => b.Result.SubtypeId == subType && b.Result.Id.TypeId == typeId);
-            if (bp != null)
+            var time = new TimeSpan();
+            var bp = SpaceEngineersApi.GetBlueprint(typeId, subType);
+            if (bp != null && bp.Result != null)
             {
                 foreach (var item in bp.Prerequisites)
                 {
                     if (requirements.ContainsKey(item.SubtypeId))
                     {
                         // append existing
-                        requirements[item.SubtypeId].Amount += (amount / bp.Result.Amount) * item.Amount;
+                        requirements[item.SubtypeId].Amount = ((amount / Convert.ToDecimal(bp.Result.Amount, CultureInfo.InvariantCulture)) * Convert.ToDecimal(item.Amount, CultureInfo.InvariantCulture)) + Convert.ToDecimal(requirements[item.SubtypeId].Amount, CultureInfo.InvariantCulture);
                     }
                     else
                     {
                         // add new
-                        requirements.Add(item.SubtypeId, new MyObjectBuilder_BlueprintDefinition.Item()
+                        requirements.Add(item.SubtypeId, new BlueprintRequirement
                         {
-                            Amount = (amount / bp.Result.Amount) * item.Amount,
+                            Amount = (amount / Convert.ToDecimal(bp.Result.Amount, CultureInfo.InvariantCulture)) * Convert.ToDecimal(item.Amount, CultureInfo.InvariantCulture),
                             TypeId = item.TypeId,
                             SubtypeId = item.SubtypeId,
                             Id = item.Id
                         });
                     }
 
-                    var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount;
+
+                    decimal timeMassMultiplyer = 1;
+                    if (typeId == typeof(MyObjectBuilder_Ore) || typeId == typeof(MyObjectBuilder_Ingot))
+                        timeMassMultiplyer = decimal.Parse(bp.Result.Amount, CultureInfo.InvariantCulture);
+
+                    var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount / timeMassMultiplyer;
                     var ts = new TimeSpan((long)ticks);
                     time += ts;
                 }
@@ -396,31 +214,41 @@
 
         public static MyObjectBuilder_DefinitionBase GetDefinition(MyObjectBuilderType typeId, string subTypeId)
         {
-            var cube = _definitions.CubeBlocks.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            var cube = SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
             if (cube != null)
             {
                 return cube;
             }
 
-            var item = _definitions.PhysicalItems.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
+            var item = SpaceEngineersCore.Resources.Definitions.PhysicalItems.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
             if (item != null)
             {
                 return item;
             }
 
-            var component = _definitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
+            var component = SpaceEngineersCore.Resources.Definitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
             if (component != null)
             {
                 return component;
             }
 
-            var magazine = _definitions.AmmoMagazines.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
+            var magazine = SpaceEngineersCore.Resources.Definitions.AmmoMagazines.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
             if (magazine != null)
             {
                 return magazine;
             }
 
             return null;
+        }
+
+        public static MyObjectBuilder_BlueprintDefinition GetBlueprint(MyObjectBuilderType resultTypeId, string resultSubTypeId)
+        {
+            var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result != null && b.Result.Id.TypeId == resultTypeId && b.Result.SubtypeId == resultSubTypeId);
+            if (bp != null)
+                return bp;
+
+            var bpList = SpaceEngineersCore.Resources.Definitions.Blueprints.Where(b => b.Results != null && b.Results.Any(r => r.Id.TypeId == resultTypeId && r.SubtypeId == resultSubTypeId));
+            return bpList.FirstOrDefault();
         }
 
         public static float GetItemMass(MyObjectBuilderType typeId, string subTypeId)
@@ -448,37 +276,6 @@
             return 0;
         }
 
-        public static IList<MyObjectBuilder_VoxelMaterialDefinition> GetMaterialList()
-        {
-            return _definitions.VoxelMaterials;
-        }
-
-        public static byte GetMaterialIndex(string materialName)
-        {
-            if (_materialIndex.ContainsKey(materialName))
-                return _materialIndex[materialName];
-            else
-            {
-                var material = _definitions.VoxelMaterials.FirstOrDefault(m => m.Name == materialName);
-                var index = (byte)_definitions.VoxelMaterials.ToList().IndexOf(material);
-                _materialIndex.Add(materialName, index);
-                return index;
-            }
-        }
-
-        public static string GetMaterialName(byte materialIndex, byte defaultMaterialIndex)
-        {
-            if (materialIndex <= _definitions.VoxelMaterials.Length)
-                return _definitions.VoxelMaterials[materialIndex].Name;
-            else
-                return _definitions.VoxelMaterials[defaultMaterialIndex].Name;
-        }
-
-        public static string GetMaterialName(byte materialIndex)
-        {
-            return _definitions.VoxelMaterials[materialIndex].Name;
-        }
-
         #endregion
 
         #region GetCubeDefinition
@@ -487,10 +284,10 @@
         {
             if (string.IsNullOrEmpty(subtypeId))
             {
-                return _definitions.CubeBlocks.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
+                return SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
             }
 
-            return _definitions.CubeBlocks.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
+            return SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
         }
 
@@ -498,10 +295,10 @@
 
         #region GetBoundingBox
 
-        public static BoundingBox GetBoundingBox(MyObjectBuilder_CubeGrid entity)
+        public static BoundingBoxD GetBoundingBox(MyObjectBuilder_CubeGrid entity)
         {
-            var min = new Vector3(int.MaxValue, int.MaxValue, int.MaxValue);
-            var max = new Vector3(int.MinValue, int.MinValue, int.MinValue);
+            var min = new Vector3D(int.MaxValue, int.MaxValue, int.MaxValue);
+            var max = new Vector3D(int.MinValue, int.MinValue, int.MinValue);
 
             foreach (var block in entity.CubeBlocks)
             {
@@ -516,10 +313,10 @@
             // scale box to GridSize
             var size = max - min;
             var len = entity.GridSizeEnum.ToLength();
-            size = new Vector3(size.X * len, size.Y * len, size.Z * len);
+            size = new Vector3D(size.X * len, size.Y * len, size.Z * len);
 
             // translate box according to min/max, but reset origin.
-            var bb = new BoundingBox(new Vector3(0, 0, 0), size);
+            var bb = new BoundingBoxD(Vector3D.Zero, size);
 
             // TODO: translate for rotation.
             //bb. ????
@@ -533,33 +330,34 @@
 
         #endregion
 
+        #region LoadLocalization
+
+        public static void LoadLocalization()
+        {
+            var languageTag = System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag;
+
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+            var localizationPath = Path.Combine(contentPath, @"Data\Localization");
+
+            var codes = languageTag.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+            var maincode = codes.Length > 0 ? codes[0] : null;
+            var subcode = codes.Length > 1 ? codes[1] : null;
+
+            MyTexts.Clear();
+            MyTexts.LoadTexts(localizationPath, maincode, subcode);
+        }
+
+        #endregion
+
+        #region GetResourceName
+
         public static string GetResourceName(string value)
         {
             if (value == null)
                 return null;
 
-            Sandbox.Common.Localization.MyTextsWrapperEnum myText;
-
-            if (Enum.TryParse<Sandbox.Common.Localization.MyTextsWrapperEnum>(value, out myText))
-            {
-                try
-                {
-                    return Sandbox.Common.Localization.MyTextsWrapper.GetFormatString(myText);
-                }
-                catch
-                {
-                    return value;
-                }
-            }
-
-            return value;
-        }
-
-        #region properties
-
-        public static MyObjectBuilder_Definitions Definitions
-        {
-            get { return _definitions; }
+            var stringId = MyStringId.GetOrCompute(value);
+            return MyTexts.GetString(stringId);
         }
 
         #endregion

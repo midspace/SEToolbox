@@ -188,7 +188,7 @@
         {
             get
             {
-                if (_version == null)
+                if (_version == null && _checkpoint != null)
                 {
                     var str = _checkpoint.AppVersion.ToString(CultureInfo.InvariantCulture);
                     if (str == "0")
