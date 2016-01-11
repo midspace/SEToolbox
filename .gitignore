@@ -234,4 +234,11 @@ FakesAssemblies/
 *.opt
 
 
+
+
+# Shader generated files.
+*.ps
+
+*.props
+*.vsprops
 user.targets

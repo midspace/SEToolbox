@@ -82,15 +82,14 @@
         public static T Deserialize<T>(string xml) where T : MyObjectBuilder_Base
         {
             T outObject;
-            using (var outStream = new MemoryStream())
+            using (var stream = new MemoryStream())
             {
-                using (StreamWriter sw = new StreamWriter(outStream))
-                {
-                    sw.Write(xml);
-                }
-                outStream.Position = 0;
+                StreamWriter sw = new StreamWriter(stream);
+                sw.Write(xml);
+                sw.Flush();
+                stream.Position = 0;
 
-                MyObjectBuilderSerializer.DeserializeXML(outStream, out outObject);
+                MyObjectBuilderSerializer.DeserializeXML(stream, out outObject);
             }
             return outObject;
         }
