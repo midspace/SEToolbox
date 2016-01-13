@@ -357,7 +357,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*" MinHeight="100"/>
                             </Grid.RowDefinitions>
-                            <controls:SortableListView Grid.Row="0" ItemsSource="{Binding CubeList, Mode=OneWay}"
+                            <controls:SortableListView Grid.Row="0" ItemsSource="{Binding CubeList, Mode=OneWay}" DefaultSortColumn="FriendlyName"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}" SelectedValue="{Binding SelectedCubeItem}">
                                 <ListView.View>
                                     <GridView>

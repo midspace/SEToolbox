@@ -7,6 +7,7 @@
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
+    using System.Windows.Media;
 
     using SEToolbox.Support;
 
@@ -26,6 +27,13 @@
 
         #endregion
 
+        public static readonly DependencyProperty DefaultSortColumnProperty = DependencyProperty.Register("DefaultSortColumn", typeof(string), typeof(SortableListView));
+        public string DefaultSortColumn
+        {
+            get { return (string)GetValue(DefaultSortColumnProperty); }
+            set { SetValue(DefaultSortColumnProperty, value); }
+        }
+
         #region ColumnHeaderArrowDownTemplate
 
         public static readonly DependencyProperty ColumnHeaderArrowDownTemplateProperty = DependencyProperty.Register("ColumnHeaderArrowDownTemplate", typeof(DataTemplate), typeof(SortableListView));
@@ -44,6 +52,16 @@
             // add the event handler to the GridViewColumnHeader. This strongly ties this ListView to a GridView.
             AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(GridViewColumnHeaderClickedHandler));
             AddHandler(ListView.MouseDoubleClickEvent, new RoutedEventHandler(MouseDoubleClickedHandler));
+        }
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+
+            if (!string.IsNullOrWhiteSpace(this.DefaultSortColumn))
+            {
+                Sort(this, new List<string>() { this.DefaultSortColumn }, ListSortDirection.Ascending);
+            }
         }
 
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
