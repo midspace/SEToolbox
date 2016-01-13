@@ -135,7 +135,6 @@
                                 <MenuItem Header="Rotate cubes left-down around Z axis (+90 Roll)" Command="{Binding RotateCubesRollPositiveCommand}"/>
                                 <MenuItem Header="Rotate cubes right-down around Z axis (-90 Roll)" Command="{Binding RotateCubesRollNegativeCommand}"/>
                             </MenuItem>
-                            <!--<MenuItem Header="Ladder to Passage" Command="{Binding ConvertLadderToPassageCommand}"/>-->
                         </MenuItem>
                         <MenuItem Header="Mirror">
                             <MenuItem Header="Using predefined X/Y/Z Symmetry Planes" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="Uses planes as defined on the ship/station within Space Engineers." />

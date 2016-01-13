@@ -217,11 +217,6 @@
             get { return new DelegateCommand(ConvertToRoundArmorExecuted, ConvertToRoundArmorCanExecute); }
         }
 
-        public ICommand ConvertLadderToPassageCommand
-        {
-            get { return new DelegateCommand(ConvertLadderToPassageExecuted, ConvertLadderToPassageCanExecute); }
-        }
-
         public ICommand MirrorStructureByPlaneCommand
         {
             get { return new DelegateCommand(MirrorStructureByPlaneExecuted, MirrorStructureByPlaneCanExecute); }
@@ -835,19 +830,6 @@
         public void ConvertToRoundArmorExecuted()
         {
             if (DataModel.ConvertToRoundArmor())
-            {
-                MainViewModel.IsModified = true;
-            }
-        }
-
-        public bool ConvertLadderToPassageCanExecute()
-        {
-            return DataModel.GridSize == MyCubeSize.Large;
-        }
-
-        public void ConvertLadderToPassageExecuted()
-        {
-            if (DataModel.ConvertLadderToPassage())
             {
                 MainViewModel.IsModified = true;
             }

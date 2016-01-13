@@ -1091,29 +1091,6 @@
             return count > 0;
         }
 
-        public bool ConvertLadderToPassage()
-        {
-            var list = CubeGrid.CubeBlocks.Where(c => c is MyObjectBuilder_Ladder).ToArray();
-
-            for (var i = 0; i < list.Length; i++)
-            {
-                var c = new MyObjectBuilder_Passage()
-                {
-                    EntityId = list[i].EntityId,
-                    BlockOrientation = list[i].BlockOrientation,
-                    BuildPercent = list[i].BuildPercent,
-                    ColorMaskHSV = list[i].ColorMaskHSV,
-                    IntegrityPercent = list[i].IntegrityPercent,
-                    Min = list[i].Min,
-                    SubtypeName = list[i].SubtypeName
-                };
-                CubeGrid.CubeBlocks.Remove(list[i]);
-                CubeGrid.CubeBlocks.Add(c);
-            }
-
-            return list.Length > 0;
-        }
-
         #region Mirror
 
         public bool MirrorModel(bool usePlane, bool oddMirror)

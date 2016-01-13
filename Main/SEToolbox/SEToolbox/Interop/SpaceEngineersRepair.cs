@@ -327,34 +327,7 @@
                     {
                         var cubeGrid = (MyObjectBuilder_CubeGrid)entity;
 
-                        var list = cubeGrid.CubeBlocks.Where(c => c is MyObjectBuilder_Ladder).ToArray();
-
-                        for (var i = 0; i < list.Length; i++)
-                        {
-                            var c = new MyObjectBuilder_Passage
-                            {
-                                EntityId = list[i].EntityId,
-                                BlockOrientation = list[i].BlockOrientation,
-                                BuildPercent = list[i].BuildPercent,
-                                ColorMaskHSV = list[i].ColorMaskHSV,
-                                IntegrityPercent = list[i].IntegrityPercent,
-                                Min = list[i].Min,
-                                SubtypeName = list[i].SubtypeName
-                            };
-                            cubeGrid.CubeBlocks.Remove(list[i]);
-                            cubeGrid.CubeBlocks.Add(c);
-                        }
-
-                        if (list.Length > 0)
-                        {
-                            // MyObjectBuilder_Ladder/MyObjectBuilder_Passage convert.
-                            statusNormal = false;
-                            str.AppendLine("! 'Ladder' no longer supported in game.");
-                            str.AppendLine(string.Format("! {0} 'Ladder' converted to 'Passage'.", list.Length));
-                            saveAfterScan = true;
-                        }
-
-                        list = cubeGrid.CubeBlocks.OfType<MyObjectBuilder_Cockpit>().ToArray();
+                        var list = cubeGrid.CubeBlocks.OfType<MyObjectBuilder_Cockpit>().ToArray();
                         for (var i = 0; i < list.Length; i++)
                         {
                             if (((MyObjectBuilder_Cockpit)list[i]).Pilot != null)
