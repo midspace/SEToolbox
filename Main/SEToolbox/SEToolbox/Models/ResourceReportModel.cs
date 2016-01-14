@@ -420,7 +420,7 @@
                         float cubeMass = 0;
 
                         // Unconstructed portion.
-                        if (block.ConstructionStockpile != null && block.ConstructionStockpile.Items.Count > 0)
+                        if (block.ConstructionStockpile != null && block.ConstructionStockpile.Items.Length > 0)
                         {
                             foreach (var item in block.ConstructionStockpile.Items)
                             {

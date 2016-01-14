@@ -23,7 +23,7 @@
                 //ts = a.GetExportedTypes();
                 //var ts = t2.Assembly.GetTypes();
 
-                var type = typeof(Sandbox.ModAPI.Interfaces.IMyStorage);
+                var type = typeof(VRage.ModAPI.IMyStorage);
                 var types = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
                     .Where(p => type.IsAssignableFrom(p));
