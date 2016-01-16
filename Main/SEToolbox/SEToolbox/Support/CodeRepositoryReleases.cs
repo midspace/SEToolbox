@@ -7,23 +7,26 @@
 
     using SEToolbox.Controls;
 
+    public enum CodeRepositoryType { CodePlex, GitHub }
+
     /// <summary>
-    /// Extracts the CodePlex website information to determine the version of the current release.
+    /// Extracts the GitHub website information to determine the version of the current release.
     /// </summary>
-    public class CodeplexReleases
+    public class CodeRepositoryReleases
     {
-        private const string UpdatesUrl = "http://setoolbox.codeplex.com/releases/";
+        /// <summary>
+        /// search for html in the form:  <h1 class="release-title"><a href="/midspace/SEToolbox/releases/tag/v1.117.002.1">SEToolbox 01.117.002 Release 1</a></h1>
+        /// </summary>
+        const string GitHubPattern = @"\<h1\s+class\s*=\s*\""release\-title\""\>\s*\<a\s+href\s*=\s*(?:""(?<url>[^""]|.*?)"")\s*\>\s*(?<title>(?:[^\<\>\""]*?))\s(?<version>[^\<\>\""]*)\<\/a\>";
 
-        #region properties
-
-        public string Link { get; set; }
-        public Version Version { get; set; }
-
-        #endregion
+        /// <summary>
+        /// search for html in the form:  <h1 class="page_title wordwrap">SEToolbox 01.025.021 Release 2</h1> 
+        /// </summary>
+        const string  CodePlexPattern = @"\<h1 class=\""(?:[^\""]*)\""\>(?<title>(?:[^\<\>\""]*?))\s(?<version>[^\<\>\""]*)\<\/h1\>";
 
         #region CheckForUpdates
 
-        public static CodeplexReleases CheckForUpdates()
+        public static ApplicationRelease CheckForUpdates(CodeRepositoryType repositoryType,  string updatesUrl)
         {
             if (GlobalSettings.Default.AlwaysCheckForUpdates.HasValue && !GlobalSettings.Default.AlwaysCheckForUpdates.Value)
                 return null;
@@ -55,16 +58,15 @@
                     // Error creating the Web Proxy specified in the 'system.net/defaultProxy' configuration section. 
                 }
                 webclient.Headers.Add(HttpRequestHeader.UserAgent, string.Format("Mozilla/5.0 ({0}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36", Environment.OSVersion)); // Crude useragent.
-                webclient.Headers.Add(HttpRequestHeader.Referer, string.Format("https://setoolbox.codeplex.com/updatecheck?current={0}", currentVersion));
 
                 try
                 {
-                    webContent = webclient.DownloadString(UpdatesUrl);
+                    webContent = webclient.DownloadString(updatesUrl);
                 }
                 catch
                 {
                     // Ignore any errors.
-                    // If it cannot connect, then there may be an intermittant connection issue, either with the internet, or codeplex (which has happened before).
+                    // If it cannot connect, then there may be an intermittant connection issue, either with the internet, or the website itself.
                     return null;
                 }
 
@@ -75,13 +77,18 @@
                 link = webclient.ResponseUri == null ? null : webclient.ResponseUri.AbsoluteUri;
             }
 
-            // search for html in the form:  <h1 class="page_title wordwrap">SEToolbox 01.025.021 Release 2</h1>
-            var match = Regex.Match(webContent, @"\<h1 class=\""(?:[^\""]*)\""\>(?<title>(?:[^\<\>\""]*?))\s(?<version>[^\<\>\""]*)\<\/h1\>");
+            string pattern = "";
+            if (repositoryType == CodeRepositoryType.CodePlex)
+                pattern = CodePlexPattern;
+            if (repositoryType == CodeRepositoryType.GitHub)
+                pattern = GitHubPattern;
+
+            var match = Regex.Match(webContent, pattern);
 
             if (!match.Success)
                 return null;
 
-            var item = new CodeplexReleases { Link = link, Version = GetVersion(match.Groups["version"].Value) };
+            var item = new ApplicationRelease { Link = link, Version = GetVersion(match.Groups["version"].Value) };
             Version ignoreVersion;
             Version.TryParse(GlobalSettings.Default.IgnoreUpdateVersion, out ignoreVersion);
             if (item.Version > currentVersion && item.Version != ignoreVersion)
@@ -112,5 +119,11 @@
         }
 
         #endregion
+    }
+
+    public class ApplicationRelease
+    {
+        public string Link { get; set; }
+        public Version Version { get; set; }
     }
 }

@@ -62,7 +62,7 @@
 
             log4net.Config.XmlConfigurator.Configure();
 
-            var update = CodeplexReleases.CheckForUpdates();
+            var update = CodeRepositoryReleases.CheckForUpdates(CodeRepositoryType.GitHub, AppConstants.UpdatesUrl);
             if (update != null)
             {
                 var dialogResult = MessageBox.Show(string.Format(Res.DialogNewVersionMessage, update.Version), Res.DialogNewVersionTitle, MessageBoxButton.YesNo, MessageBoxImage.Information);

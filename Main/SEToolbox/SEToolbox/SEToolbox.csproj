@@ -334,6 +334,7 @@
     <Compile Include="Interop\SpaceEngineersConsts.cs" />
     <Compile Include="Support\AppConstants.cs" />
     <Compile Include="Support\ArrayHelper.cs" />
+    <Compile Include="Support\CodeRepositoryReleases.cs" />
     <Compile Include="Support\DiagnosticsLogging4Net.cs" />
     <Compile Include="Support\ExceptionState.cs" />
     <Compile Include="Support\GlobalSettings.cs" />
@@ -343,7 +344,6 @@
     <Compile Include="Support\Modelling.cs" />
     <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\RandomUtil.cs" />
-    <Compile Include="Support\CodeplexReleases.cs" />
     <Compile Include="Support\Splasher.cs" />
     <Compile Include="Support\TempfileUtil.cs" />
     <Compile Include="Support\ToolboxExtensions.cs" />
