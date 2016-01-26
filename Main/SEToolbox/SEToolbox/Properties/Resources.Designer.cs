@@ -1354,6 +1354,16 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type:		{0}
+        ///Distance:		{1:#,##0.0} m.
+        /// </summary>
+        public static string ReplicableDetail {
+            get {
+                return ResourceManager.GetString("ReplicableDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string SaveWorldType_Custom {

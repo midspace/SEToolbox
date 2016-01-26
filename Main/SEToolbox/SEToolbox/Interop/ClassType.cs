@@ -10,6 +10,7 @@
         SmallShip,
         Meteor,
         Voxel,
+        Replicable
     };
 
     public enum ImportModelClassType

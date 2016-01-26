@@ -458,6 +458,9 @@
                             <DataTemplate DataType="{x:Type vm:StructureMeteorViewModel}">
                                 <views:ControlMeteor />
                             </DataTemplate>
+                            <DataTemplate DataType="{x:Type vm:StructureReplicableViewModel}">
+                                <views:ControlReplicable />
+                            </DataTemplate>
                             <DataTemplate DataType="{x:Type vm:StructureUnknownViewModel}">
                                 <views:ControlUnknown />
                             </DataTemplate>

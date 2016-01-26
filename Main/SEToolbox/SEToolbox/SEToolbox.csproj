@@ -252,6 +252,7 @@
     <Compile Include="Models\GroupMoveItemModel.cs" />
     <Compile Include="Models\GroupMoveModel.cs" />
     <Compile Include="Models\StructureMeteorModel.cs" />
+    <Compile Include="Models\StructureReplicableModel.cs" />
     <Compile Include="Models\StructureUnknownModel.cs" />
     <Compile Include="Models\OreAssetModel.cs" />
     <Compile Include="Models\CubeAssetModel.cs" />
@@ -369,6 +370,7 @@
     <Compile Include="ViewModels\GenerateFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\GroupMoveViewModel.cs" />
     <Compile Include="ViewModels\StructureMeteorViewModel.cs" />
+    <Compile Include="ViewModels\StructureReplicableViewModel.cs" />
     <Compile Include="ViewModels\StructureUnknownViewModel.cs" />
     <Compile Include="ViewModels\GenerateVoxelFieldViewModel.cs" />
     <Compile Include="ViewModels\DataBaseViewModel.cs" />
@@ -394,6 +396,9 @@
     </Compile>
     <Compile Include="Views\ControlSaveState.xaml.cs">
       <DependentUpon>ControlSaveState.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlReplicable.xaml.cs">
+      <DependentUpon>ControlReplicable.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControlVoxel.xaml.cs">
       <DependentUpon>ControlVoxel.xaml</DependentUpon>
@@ -499,6 +504,10 @@
     <Page Include="Views\ControlSaveState.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlReplicable.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlVoxel.xaml">
       <SubType>Designer</SubType>

@@ -730,6 +730,12 @@
                     var entity = AddEntity(meteor.Meteor);
                     entity.EntityId = MergeId(meteor.EntityId, ref idReplacementTable);
                 }
+                else if (item is StructureReplicableModel)
+                {
+                    var replicable = item as StructureReplicableModel;
+                    var entity = AddEntity(replicable.EntityBase);
+                    entity.EntityId = MergeId(replicable.EntityId, ref idReplacementTable);
+                }
                 else if (item is StructureUnknownModel)
                 {
                     var unknown = item as StructureUnknownModel;

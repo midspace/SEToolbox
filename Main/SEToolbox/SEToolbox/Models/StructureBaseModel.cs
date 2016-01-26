@@ -404,6 +404,11 @@
                 return new StructureMeteorModel(entityBase);
             }
 
+            if (entityBase is MyObjectBuilder_ReplicableEntity)
+            {
+                return new StructureReplicableModel(entityBase);
+            }
+
             return new StructureUnknownModel(entityBase);
             //throw new NotImplementedException(string.Format("A new object has not been catered for in the StructureBase, of type '{0}'.", entityBase.GetType()));
         }

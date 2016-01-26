@@ -1285,6 +1285,8 @@
                 item = new StructureFloatingObjectViewModel(this, structureBase as StructureFloatingObjectModel);
             else if (structureBase is StructureMeteorModel)
                 item = new StructureMeteorViewModel(this, structureBase as StructureMeteorModel);
+            else if (structureBase is StructureReplicableModel)
+                item = new StructureReplicableViewModel(this, structureBase as StructureReplicableModel);
             else if (structureBase is StructureUnknownModel)
                 item = new StructureUnknownViewModel(this, structureBase as StructureUnknownModel);
             else
@@ -1580,6 +1582,11 @@
 
                         _dataModel.SaveEntity(cloneEntity, saveFileDialog.FileName);
                     }
+                }
+                else if (viewModel is StructureReplicableViewModel)
+                {
+                    // Need to use the specific serializer when exporting to generate the correct XML, so Unknown should never be export.
+                    _dialogService.ShowMessageBox(this, "Cannot export Replicable currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
                 else if (viewModel is StructureUnknownViewModel)
                 {
