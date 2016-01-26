@@ -274,9 +274,20 @@
         public override void UpdateGeneralFromEntityBase()
         {
             ClassType = ClassType.Character;
-            Description = "Player";
-            DisplayName = Character.DisplayName;
-            Mass = SpaceEngineersConsts.PlayerMass;
+            string dead = Character.MovementState == MyCharacterMovementEnum.Died ? " | dead" : "";
+
+            if (string.IsNullOrEmpty(Character.DisplayName))
+            {
+                Description = "NPC";
+                DisplayName = Character.CharacterModel + dead;
+                Mass = SpaceEngineersConsts.PlayerMass; // no idea what a body weighs.
+            }
+            else
+            {
+                Description = "Player";
+                DisplayName = Character.DisplayName + dead;
+                Mass = SpaceEngineersConsts.PlayerMass;
+            }
 
             if (Inventory == null)
             {
