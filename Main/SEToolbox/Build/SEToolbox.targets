@@ -13,6 +13,7 @@
       <EditorFiles Include="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/*"
       Exclude="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Sandbox.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/VRage.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SpaceEngineers.Game.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SpaceEngineers.ObjectBuilders.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/MedievalEngineers.ObjectBuilders.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/InfinarioSDK.*;

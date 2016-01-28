@@ -35,7 +35,7 @@
         public override void UpdateGeneralFromEntityBase()
         {
             ClassType = ClassType.Replicable;
-            DisplayName = EntityBase.EntityDefinitionId?.SubtypeName;
+            DisplayName = EntityBase.EntityDefinitionId.HasValue ? EntityBase.EntityDefinitionId.Value.SubtypeName : null;
         }
 
         #endregion

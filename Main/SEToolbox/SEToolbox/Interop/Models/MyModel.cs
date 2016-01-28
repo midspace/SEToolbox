@@ -1143,20 +1143,20 @@
 
         private static ModelAnimations ReadModelAnimations(BinaryReader reader)
         {
-            var modelAnimations = new ModelAnimations { Clips = new List<AnimationClip>() };
+            var modelAnimations = new ModelAnimations { Clips = new List<MyAnimationClip>() };
             var animationCount = reader.ReadInt32();
 
             for (var i = 0; i < animationCount; i++)
             {
                 var clipName = reader.ReadString();
                 var duration = reader.ReadDouble();
-                var animationClip = new AnimationClip() { Name = clipName, Duration = duration };
+                var animationClip = new MyAnimationClip() { Name = clipName, Duration = duration };
 
                 var boneCount = reader.ReadInt32();
                 for (var j = 0; j < boneCount; j++)
                 {
                     var boneName = reader.ReadString();
-                    var bone = new AnimationClip.Bone() { Name = boneName };
+                    var bone = new MyAnimationClip.Bone() { Name = boneName };
                     var keyFrameCount = reader.ReadInt32();
 
                     for (var k = 0; k < keyFrameCount; k++)
@@ -1165,7 +1165,7 @@
                         var vector = ReadVector4(reader);
                         var rotation = new Quaternion(vector.X, vector.Y, vector.Z, vector.W);
                         var translation = ReadVector3(reader);
-                        bone.Keyframes.Add(new AnimationClip.Keyframe() { Time = time, Rotation = rotation, Translation = translation });
+                        bone.Keyframes.Add(new MyAnimationClip.Keyframe() { Time = time, Rotation = rotation, Translation = translation });
                     }
 
                     animationClip.Bones.Add(bone);

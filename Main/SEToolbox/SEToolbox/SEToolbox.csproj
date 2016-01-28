@@ -132,11 +132,14 @@
     <Reference Include="Sandbox.Common">
       <HintPath>$(BinPath)\Sandbox.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Sandbox.Game">
+      <HintPath>$(BinPath)\Sandbox.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="SpaceEngineers.Game">
+      <HintPath>$(BinPath)\SpaceEngineers.Game.dll</HintPath>
+    </Reference>
     <Reference Include="SpaceEngineers.ObjectBuilders">
       <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.dll</HintPath>
-    </Reference>
-    <Reference Include="SpaceEngineers.ObjectBuilders.XmlSerializers">
-      <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="VRage">
       <HintPath>$(BinPath)\VRage.dll</HintPath>
@@ -144,17 +147,11 @@
     <Reference Include="VRage.Game">
       <HintPath>$(BinPath)\VRage.Game.dll</HintPath>
     </Reference>
-    <Reference Include="VRage.Game.XmlSerializers">
-      <HintPath>$(BinPath)\VRage.Game.XmlSerializers.dll</HintPath>
-    </Reference>
     <Reference Include="VRage.Library">
       <HintPath>$(BinPath)\VRage.Library.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Math">
       <HintPath>$(BinPath)\VRage.Math.dll</HintPath>
-    </Reference>
-    <Reference Include="Sandbox.Game">
-      <HintPath>$(BinPath)\Sandbox.Game.dll</HintPath>
     </Reference>
     <ProjectReference Include="..\SEToolbox.Image.Library\SEToolbox.ImageLibrary.csproj">
       <Project>{e78476cb-bc3d-4265-806d-96f09229a449}</Project>

@@ -4,6 +4,7 @@
     using System.IO;
     using System.Reflection;
     using SEToolbox.Models;
+    using VRage.ObjectBuilders;
     using VRage.Plugins;
 
     /// <summary>
@@ -24,9 +25,15 @@
 
         public SpaceEngineersCore()
         {
+            //SpaceEngineersGame.SetupPerGameSettings(); // not required currently.
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            //MyPlugins.RegisterGameAssemblyFile(Path.Combine(path, "SpaceEngineers.Game.dll")); // not required currently.
             MyPlugins.RegisterGameObjectBuildersAssemblyFile(Path.Combine(path, "SpaceEngineers.ObjectBuilders.dll"));
             MyPlugins.RegisterSandboxAssemblyFile(Path.Combine(path, "Sandbox.Common.dll"));
+            //MyPlugins.RegisterSandboxGameAssemblyFile(Path.Combine(path, "Sandbox.Game.dll")); // not required currently.
+
+            MyObjectBuilderType.RegisterAssemblies();
+            MyObjectBuilderSerializer.RegisterAssembliesAndLoadSerializers();
 
             SpaceEngineersApi.LoadLocalization();
             _stockDefinitions = new SpaceEngineersResources();
