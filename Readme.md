@@ -23,6 +23,7 @@ For more details on the game, please vist the following links.
 
 Before asking any question please read the [documentation (FAQ)](https://github.com/midspace/SEToolbox/wiki) first as your question may have already been answered.
 
+
 ### Issues
 * Currently documented issues are [listed here](https://github.com/midspace/SEToolbox/wiki/Current-Issues).
 * Please submit any new issues here [here](https://github.com/midspace/SEToolbox/issues/new).
@@ -31,8 +32,13 @@ Before asking any question please read the [documentation (FAQ)](https://github.
 ### Contributing
 If you are interested in fixing issues and contributing directly to the code base, please see our document on [working with and developing SEToolbox](https://github.com/midspace/SEToolbox/wiki/Working-with-and-developing-SEToolbox).
 
----
+
+#### License
 
 This application contains code expressly licenced to it, and should not be used in any other application without the permission of Keen Software House.
 
 ---
+
+SEToolbox was started in 2013 soon after Space Engineers was released for Early Access, and has been worked on in my free time.
+There is no requirement for any individual to donate.
+[![](https://www.paypalobjects.com/en_AU/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5V7JL6CDGHCYL)
