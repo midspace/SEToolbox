@@ -225,7 +225,7 @@
                                 character.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.IDENTITY);
                                 character.PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene;
                                 character.PositionAndOrientation = new MyPositionAndOrientation(VRageMath.Vector3D.Zero, VRageMath.Vector3.Forward, VRageMath.Vector3.Up);
-                                character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Name;
+                                character.CharacterModel = Sandbox.Game.Entities.Character.MyCharacter.DefaultModel;
                                 character.ColorMaskHSV = new SerializableVector3(0, -1, 1); // White
                                 character.Battery = new MyObjectBuilder_Battery { CurrentCapacity = 0.5f };
                                 character.LightEnabled = false;
@@ -334,9 +334,9 @@
                             {
                                 character = ((MyObjectBuilder_Cockpit)list[i]).Pilot;
 
-                                if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Model == character.CharacterModel))
+                                if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Model == character.CharacterModel || c.Name == character.CharacterModel))
                                 {
-                                    character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Model;
+                                    character.CharacterModel = Sandbox.Game.Entities.Character.MyCharacter.DefaultModel;
                                     statusNormal = false;
                                     str.AppendLine("! Fixed astronaut's CharacterModel.");
                                     saveAfterScan = true;
@@ -351,9 +351,9 @@
                     character = entity as MyObjectBuilder_Character;
                     if (character != null)
                     {
-                        if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Model == character.CharacterModel))
+                        if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Model == character.CharacterModel || c.Name == character.CharacterModel))
                         {
-                            character.CharacterModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Model;
+                            character.CharacterModel = Sandbox.Game.Entities.Character.MyCharacter.DefaultModel;
                             statusNormal = false;
                             str.AppendLine("! Fixed astronaut's CharacterModel.");
                             saveAfterScan = true;
