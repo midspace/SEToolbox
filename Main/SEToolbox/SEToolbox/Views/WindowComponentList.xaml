@@ -34,7 +34,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition MinHeight="132" Height="132"/>
                         </Grid.RowDefinitions>
-                        <controls:SortableListView ItemsSource="{Binding CubeAssets}" SelectedValue="{Binding SelectedCubeAsset}"
+                        <controls:SortableListView ItemsSource="{Binding CubeAssets}" SelectedValue="{Binding SelectedCubeAsset}" DefaultSortColumn="FriendlyName"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                             <ListView.View>
                                 <GridView>
@@ -103,7 +103,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Components">
-                    <controls:SortableListView ItemsSource="{Binding ComponentAssets}"
+                    <controls:SortableListView ItemsSource="{Binding ComponentAssets}" DefaultSortColumn="FriendlyName"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                         <ListView.View>
                             <GridView>
@@ -145,7 +145,7 @@
                     </controls:SortableListView>
                 </TabItem>
                 <TabItem Header="Items">
-                    <controls:SortableListView ItemsSource="{Binding ItemAssets}"
+                    <controls:SortableListView ItemsSource="{Binding ItemAssets}" DefaultSortColumn="FriendlyName"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                         <ListView.View>
                             <GridView>
@@ -187,7 +187,7 @@
                     </controls:SortableListView>
                 </TabItem>
                 <TabItem Header="Asteroid Materials">
-                    <controls:SortableListView ItemsSource="{Binding MaterialAssets}"
+                    <controls:SortableListView ItemsSource="{Binding MaterialAssets}" DefaultSortColumn="Name"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                         <ListView.View>
                             <GridView>

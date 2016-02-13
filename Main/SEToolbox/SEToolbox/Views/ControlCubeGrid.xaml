@@ -356,7 +356,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*" MinHeight="100"/>
                             </Grid.RowDefinitions>
-                            <controls:SortableListView Grid.Row="0" ItemsSource="{Binding CubeList, Mode=OneWay}"
+                            <controls:SortableListView Grid.Row="0" ItemsSource="{Binding CubeList, Mode=OneWay}" DefaultSortColumn="FriendlyName"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}" SelectedValue="{Binding SelectedCubeItem}">
                                 <ListView.View>
                                     <GridView>
@@ -483,7 +483,7 @@
                             <TextBlock Grid.Row="0" Grid.Column="0" Margin="4 0 4 0" Text="Total time to produce:"/>
                             <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding TimeToProduce, StringFormat='{}{0:dd} days, {0:hh} hours, {0:mm\\:ss\\.ff}'}"/>
                             <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
-                            <controls:SortableListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding CubeAssets}"
+                            <controls:SortableListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding CubeAssets}" DefaultSortColumn="FriendlyName"
                         ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
@@ -525,7 +525,7 @@
                                     </GridView>
                                 </ListView.View>
                             </controls:SortableListView>
-                            <controls:SortableListView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ComponentAssets}"
+                            <controls:SortableListView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ComponentAssets}" DefaultSortColumn="FriendlyName"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
@@ -574,7 +574,7 @@
                                     </GridView>
                                 </ListView.View>
                             </controls:SortableListView>
-                            <controls:SortableListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding IngotAssets}"
+                            <controls:SortableListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding IngotAssets}" DefaultSortColumn="FriendlyName"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
@@ -623,7 +623,7 @@
                                     </GridView>
                                 </ListView.View>
                             </controls:SortableListView>
-                            <controls:SortableListView Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding OreAssets}"
+                            <controls:SortableListView Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding OreAssets}" DefaultSortColumn="FriendlyName"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>

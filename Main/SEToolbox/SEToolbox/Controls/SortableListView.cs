@@ -1,5 +1,7 @@
 ﻿namespace SEToolbox.Controls
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
@@ -12,8 +14,13 @@
 
     public class SortableListView : ListView
     {
-        ListSortDirection _lastDirection = ListSortDirection.Ascending;
-        GridViewColumnHeader _lastHeaderClicked;
+        #region fields
+
+        private ListSortDirection _lastDirection = ListSortDirection.Ascending;
+        private GridViewColumn _lastColumnClicked;
+        private List<string> _lastSortList;
+
+        #endregion
 
         #region ColumnHeaderArrowUpTemplate
 
@@ -37,6 +44,13 @@
 
         #endregion
 
+        public static readonly DependencyProperty DefaultSortColumnProperty = DependencyProperty.Register("DefaultSortColumn", typeof(string), typeof(SortableListView));
+        public string DefaultSortColumn
+        {
+            get { return (string)GetValue(DefaultSortColumnProperty); }
+            set { SetValue(DefaultSortColumnProperty, value); }
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -44,6 +58,91 @@
             // add the event handler to the GridViewColumnHeader. This strongly ties this ListView to a GridView.
             AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(GridViewColumnHeaderClickedHandler));
             AddHandler(ListView.MouseDoubleClickEvent, new RoutedEventHandler(MouseDoubleClickedHandler));
+        }
+
+        protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+        {
+            base.OnItemsSourceChanged(oldValue, newValue);
+
+            if (this.ItemsSource != null)
+            {
+                var dataView = CollectionViewSource.GetDefaultView(this.ItemsSource);
+                if (dataView.SortDescriptions.Count == 0 && _lastSortList != null && _lastSortList.Count > 0)
+                {
+                    foreach (var sortBy in _lastSortList)
+                    {
+                        var sd = new SortDescription(sortBy, _lastDirection);
+                        dataView.SortDescriptions.Add(sd);
+                    }
+                }
+
+                dataView.Refresh();
+            }
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+
+            if (DefaultSortColumn != null)
+            {
+                var grdiView = this.View as GridView;
+
+                if (grdiView == null)
+                    return;
+
+                GridViewColumn selectedColumn = null;
+
+                foreach (var column in grdiView.Columns)
+                {
+                    if (column is SortableGridViewColumn && ((SortableGridViewColumn)column).SortBinding is Binding)
+                    {
+                        var binding = (Binding)((SortableGridViewColumn)column).SortBinding;
+                        if (binding.Path.Path == DefaultSortColumn)
+                        {
+                            selectedColumn = column;
+                            break;
+                        }
+                    }
+                    else if (column is SortableGridViewColumn && ((SortableGridViewColumn)column).SortBinding is MultiBinding)
+                    {
+                        //var multiBinding = (MultiBinding)((SortableGridViewColumn)column).SortBinding;
+                        //header.AddRange(multiBinding.Bindings.OfType<Binding>().Select(binding => binding.Path.Path));
+                        // we're going to ignore MultBinding as an option for Default column sorting, as it's a bit more complex, unless we concatenate the field names.
+                        // There isn't an immediate need for it in SEToolbox.
+                    }
+                    else if (column.DisplayMemberBinding is Binding)
+                    {
+                        var binding = (Binding)column.DisplayMemberBinding;
+                        if (binding.Path.Path == DefaultSortColumn)
+                        {
+                            selectedColumn = column;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (column.Header.ToString() == DefaultSortColumn)
+                        {
+                            selectedColumn = column;
+                            break;
+                        }
+                    }
+                }
+
+                if (selectedColumn != null)
+                {
+                    var list = new List<string> { DefaultSortColumn };
+                    Sort(this, list, ListSortDirection.Ascending);
+
+                    if (ColumnHeaderArrowUpTemplate != null)
+                        selectedColumn.HeaderTemplate = ColumnHeaderArrowUpTemplate;
+
+                    _lastColumnClicked = selectedColumn;
+                    _lastDirection = ListSortDirection.Ascending;
+                    _lastSortList = list;
+                }
+            }
         }
 
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
@@ -59,7 +158,7 @@
                 {
                     ListSortDirection direction;
 
-                    if (headerClicked != _lastHeaderClicked)
+                    if (headerClicked.Column != _lastColumnClicked)
                     {
                         direction = ListSortDirection.Ascending;
                     }
@@ -113,13 +212,14 @@
                     }
 
                     // Remove arrow from previously sorted header 
-                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
+                    if (_lastColumnClicked != null && _lastColumnClicked != headerClicked.Column)
                     {
-                        _lastHeaderClicked.Column.HeaderTemplate = null;
+                        _lastColumnClicked.HeaderTemplate = null;
                     }
 
-                    _lastHeaderClicked = headerClicked;
+                    _lastColumnClicked = headerClicked.Column;
                     _lastDirection = direction;
+                    _lastSortList = header;
                 }
             }
         }
