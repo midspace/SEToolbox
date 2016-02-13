@@ -341,7 +341,7 @@
                 <Grid Grid.Column="0">
                     <TabControl>
                         <TabItem Header="Craft/Objects">
-                            <controls:SortableListView DisplayMemberPath="ClassType" SelectionMode="Extended" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
+                            <controls:SortableListView DisplayMemberPath="ClassType" SelectionMode="Extended" DefaultSortColumn="DisplayName"  ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.Resources>
                                     <commands:Behaviors x:Key="dragBehavior" x:Shared="False">
