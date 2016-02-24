@@ -9,6 +9,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Interop.Models;
     using SEToolbox.Support;
+    using VRage.Game;
 
     [TestClass]
     public class ModelTests

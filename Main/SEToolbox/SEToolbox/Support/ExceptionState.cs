@@ -2,13 +2,15 @@
 {
     using System;
     using System.Globalization;
+    using System.Runtime.Serialization;
     using SEToolbox.Converters;
 
+    [Serializable]
     public class ToolboxException : ArgumentException
     {
         private readonly string _friendlyMessage;
 
-        public ToolboxException(ExceptionState state, params string[] arguments)
+        public ToolboxException(ExceptionState state, params object[] arguments)
         {
             var converter = new EnumToResouceConverter();
             Arguments = arguments;
@@ -17,12 +19,14 @@
 
         public override string Message
         {
-            get
-            {
-                return _friendlyMessage;
-            }
+            get { return _friendlyMessage; }
         }
 
-        public string[] Arguments { get; private set; }
+        public object[] Arguments { get; private set; }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
     }
 }

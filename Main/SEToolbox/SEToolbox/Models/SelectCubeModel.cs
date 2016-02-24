@@ -9,6 +9,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using VRage.Game;
     using VRage.ObjectBuilders;
 
     public class SelectCubeModel : BaseModel

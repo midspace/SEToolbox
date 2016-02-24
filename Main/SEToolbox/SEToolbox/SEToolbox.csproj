@@ -220,7 +220,7 @@
     <Compile Include="Interop\Models\MyModel.cs" />
     <Compile Include="Interop\Models\MyModelConverter.cs" />
     <Compile Include="Interop\SpaceEngineersExtensions.cs" />
-    <Compile Include="Interop\Native.cs" />
+    <Compile Include="Interop\NativeMethods.cs" />
     <Compile Include="Interop\SpaceEngineersApi.cs" />
     <Compile Include="Interop\SpaceEngineersCore.cs" />
     <Compile Include="Interop\UserDataPath.cs" />

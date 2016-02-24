@@ -4,7 +4,7 @@
     using System.Diagnostics;
     using System.Timers;
 
-    public class ProgressCancelModel : BaseModel
+    public class ProgressCancelModel : BaseModel, IDisposable
     {
         #region Fields
 
@@ -31,6 +31,11 @@
         public ProgressCancelModel()
         {
             _progressTimer = new Stopwatch();
+        }
+
+        ~ProgressCancelModel()
+        {
+            Dispose(false);
         }
 
         #region Properties
@@ -182,6 +187,28 @@
 
             _elapsedTimer.Stop();
             Progress = 0;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_updateTimer != null)
+                {
+                    _updateTimer.Stop();
+                    _updateTimer.Dispose();
+                }
+                if (_progressTimer != null)
+                {
+                    _progressTimer.Stop();
+                }
+            }
         }
 
         #endregion

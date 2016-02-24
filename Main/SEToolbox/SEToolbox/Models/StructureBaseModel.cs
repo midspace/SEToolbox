@@ -6,12 +6,12 @@
     using System.Xml.Serialization;
 
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using VRageMath;
     using VRage.ObjectBuilders;
     using VRage;
+    using VRage.Game;
 
     [Serializable]
     public class StructureBaseModel : BaseModel, IStructureBase

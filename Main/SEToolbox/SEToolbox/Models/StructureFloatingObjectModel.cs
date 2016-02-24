@@ -7,6 +7,7 @@
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
+    using VRage.Game;
     using VRage.ObjectBuilders;
 
     [Serializable]
@@ -103,13 +104,13 @@
         #region methods
 
         [OnSerializing]
-        internal void OnSerializingMethod(StreamingContext context)
+        private void OnSerializingMethod(StreamingContext context)
         {
             SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_FloatingObject>(FloatingObject);
         }
 
         [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context)
+        private void OnDeserializedMethod(StreamingContext context)
         {
             EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_FloatingObject>(SerializedEntity);
         }

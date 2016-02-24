@@ -3,7 +3,6 @@
     using System.IO;
     using System.Windows.Input;
 
-    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
@@ -13,6 +12,7 @@
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using VRage.ObjectBuilders;
     using VRage;
+    using VRage.Game;
 
     public class MergeVoxelViewModel : BaseViewModel
     {

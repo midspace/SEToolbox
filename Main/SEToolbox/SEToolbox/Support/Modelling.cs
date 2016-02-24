@@ -7,9 +7,9 @@
     using System.Windows.Media.Media3D;
 
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Models;
+    using VRage.Game;
     using VRageMath;
 
     public static class Modelling

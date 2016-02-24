@@ -12,7 +12,6 @@
     using Microsoft.VisualBasic.FileIO;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
@@ -21,6 +20,7 @@
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using VRage.ObjectBuilders;
     using VRage;
+    using VRage.Game;
 
     public class ExplorerModel : BaseModel
     {

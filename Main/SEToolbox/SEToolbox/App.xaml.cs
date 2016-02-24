@@ -32,7 +32,7 @@
 
         private void OnStartup(Object sender, StartupEventArgs e)
         {
-            if ((Native.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) == KeyStates.Down)
+            if ((NativeMethods.GetKeyState(System.Windows.Forms.Keys.ShiftKey) & KeyStates.Down) == KeyStates.Down)
             {
                 // Reset User Settings when Shift is held down during start up.
                 GlobalSettings.Default.Reset();

@@ -9,7 +9,6 @@
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
 
-    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
@@ -21,6 +20,7 @@
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using VRage.ObjectBuilders;
     using VRage;
+    using VRage.Game;
 
     public class ImportVoxelViewModel : BaseViewModel
     {

@@ -8,6 +8,7 @@
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
+    using VRage.Game;
     using VRage.ObjectBuilders;
     using Res = SEToolbox.Properties.Resources;
 

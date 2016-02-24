@@ -73,8 +73,8 @@
             var item = this.AssociatedObject.GetHitControl<ListViewItem>((MouseEventArgs)e);
             if (item != null && item.IsEnabled && item.IsSelected)
             {
-                if ((Native.GetKeyState(Keys.ShiftKey) & KeyStates.Down) != KeyStates.Down
-                    && (Native.GetKeyState(Keys.ControlKey) & KeyStates.Down) != KeyStates.Down)
+                if ((NativeMethods.GetKeyState(Keys.ShiftKey) & KeyStates.Down) != KeyStates.Down
+                    && (NativeMethods.GetKeyState(Keys.ControlKey) & KeyStates.Down) != KeyStates.Down)
                 {
                     e.Handled = true;
                 }
@@ -86,8 +86,8 @@
             var item = this.AssociatedObject.GetHitControl<ListViewItem>((MouseEventArgs)e);
             if (item != null && item.IsEnabled && item.IsSelected && this._isMouseClicked && !this._wasDragging)
             {
-                if ((Native.GetKeyState(Keys.ShiftKey) & KeyStates.Down) != KeyStates.Down
-                    && (Native.GetKeyState(Keys.ControlKey) & KeyStates.Down) != KeyStates.Down)
+                if ((NativeMethods.GetKeyState(Keys.ShiftKey) & KeyStates.Down) != KeyStates.Down
+                    && (NativeMethods.GetKeyState(Keys.ControlKey) & KeyStates.Down) != KeyStates.Down)
                 {
                     var parent = ItemsControl.ItemsControlFromItemContainer(this.AssociatedObject) as ListBox;
                     parent.SelectedItems.Clear();

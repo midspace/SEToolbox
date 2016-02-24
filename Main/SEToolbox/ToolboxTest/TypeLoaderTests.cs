@@ -10,6 +10,7 @@
     using Sandbox.Engine.Voxels;
     using SEToolbox.Support;
     using VRage.FileSystem;
+    using VRage.Game;
 
     [TestClass]
     public class TypeLoaderTests
@@ -65,7 +66,7 @@
                 // So, this is a pointless waste of effort to try and use the in game code.
                 // #########################
 
-                Sandbox.Definitions.MyDefinitionManager.Static.LoadData(new List<Sandbox.Common.ObjectBuilders.MyObjectBuilder_Checkpoint.ModItem>());
+                Sandbox.Definitions.MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
                 var materials = Sandbox.Definitions.MyDefinitionManager.Static.GetVoxelMaterialDefinitions();
 
                 //DictionaryValuesReader<string, MyVoxelMaterialDefinition>;
@@ -94,7 +95,7 @@
                 byte[] buffer = File.ReadAllBytes(filename);
                 var storage = myVoxelMaps.CreateStorage(buffer);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

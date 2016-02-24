@@ -380,77 +380,71 @@
 
             using (var stream = File.OpenRead(filename))
             {
-                using (var reader = new BinaryReader(stream))
+                var reader = new BinaryReader(stream);
+                try
                 {
-                    try
-                    {
-                        var magicNumber = reader.ReadUInt32();
-                        if (magicNumber != 0x20534444)
-                        {
-                            fourCC = 0;
-                            return null;
-                        }
-
-                        var header = MarshalTo<DDS_HEADER>(reader.ReadBytes(DDS_HEADER.SizeInBytes));
-
-                        if (header.ddspf.dwFlags == (uint)PixelFormatFlags.FourCC && header.ddspf.dwFourCC == (uint)DDS_FOURCC.DX10)
-                        {
-                            var dx10Header = MarshalTo<DDS_HEADER_DXT10>(reader.ReadBytes(DDS_HEADER_DXT10.SizeInBytes));
-                        }
-
-                        fourCC = header.ddspf.dwFourCC;
-
-                        var slices = 1;
-                        if (((DDSCAPS2)header.dwCaps2 & DDSCAPS2.DDSCAPS2_CUBEMAP) != 0)
-                            slices = 6;
-
-                        var bytesPerPixel = header.dwPitchOrLinearSize / (header.dwWidth * header.dwHeight);
-
-                        var c = header.dwCaps2;
-                        var mipCount = (int)header.dwMipMapCount;
-                        if (mipCount == 0)
-                            mipCount = 1;
-
-
-                        for (var slice = 0; slice < slices; slice++)
-                        {
-                            var w = header.dwWidth == 0 ? 1 : header.dwWidth;
-                            var h = header.dwHeight == 0 ? 1 : header.dwHeight;
-
-                            for (var map = 0; map < mipCount; map++)
-                            {
-                                var size = (int)(bytesPerPixel * w * h);
-                                if (depthSlice == slice && ((width <= 0 && height <= 0) || (w == width && h == height)))
-                                {
-                                    width = (int)w;
-                                    height = (int)h;
-                                    return reader.ReadBytes(size);
-                                }
-                                else
-                                {
-                                    reader.BaseStream.Seek(size, SeekOrigin.Current);
-                                }
-
-                                w = w >> 1;
-                                h = h >> 1;
-                                if (w == 0) w = 1;
-                                if (h == 0) h = 1;
-                            }
-
-                            reader.BaseStream.Seek(27, SeekOrigin.Current);
-                        }
-
-                        return null;
-                    }
-                    catch
+                    var magicNumber = reader.ReadUInt32();
+                    if (magicNumber != 0x20534444)
                     {
                         fourCC = 0;
                         return null;
                     }
-                    finally
+
+                    var header = MarshalTo<DDS_HEADER>(reader.ReadBytes(DDS_HEADER.SizeInBytes));
+
+                    if (header.ddspf.dwFlags == (uint) PixelFormatFlags.FourCC && header.ddspf.dwFourCC == (uint) DDS_FOURCC.DX10)
                     {
-                        reader.Close();
+                        var dx10Header = MarshalTo<DDS_HEADER_DXT10>(reader.ReadBytes(DDS_HEADER_DXT10.SizeInBytes));
                     }
+
+                    fourCC = header.ddspf.dwFourCC;
+
+                    var slices = 1;
+                    if (((DDSCAPS2) header.dwCaps2 & DDSCAPS2.DDSCAPS2_CUBEMAP) != 0)
+                        slices = 6;
+
+                    var bytesPerPixel = header.dwPitchOrLinearSize/(header.dwWidth*header.dwHeight);
+
+                    var c = header.dwCaps2;
+                    var mipCount = (int) header.dwMipMapCount;
+                    if (mipCount == 0)
+                        mipCount = 1;
+
+
+                    for (var slice = 0; slice < slices; slice++)
+                    {
+                        var w = header.dwWidth == 0 ? 1 : header.dwWidth;
+                        var h = header.dwHeight == 0 ? 1 : header.dwHeight;
+
+                        for (var map = 0; map < mipCount; map++)
+                        {
+                            var size = (int) (bytesPerPixel*w*h);
+                            if (depthSlice == slice && ((width <= 0 && height <= 0) || (w == width && h == height)))
+                            {
+                                width = (int) w;
+                                height = (int) h;
+                                return reader.ReadBytes(size);
+                            }
+                            else
+                            {
+                                reader.BaseStream.Seek(size, SeekOrigin.Current);
+                            }
+
+                            w = w >> 1;
+                            h = h >> 1;
+                            if (w == 0) w = 1;
+                            if (h == 0) h = 1;
+                        }
+
+                        reader.BaseStream.Seek(27, SeekOrigin.Current);
+                    }
+
+                    return null;
+                }
+                catch
+                {
+                    fourCC = 0;
+                    return null;
                 }
             }
         }

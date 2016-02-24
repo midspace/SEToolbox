@@ -5,6 +5,7 @@
     using Sandbox.Common.ObjectBuilders;
 
     using SEToolbox.Interop;
+    using VRage.Game;
     using VRage.ObjectBuilders;
 
     [Serializable]
@@ -12,7 +13,9 @@
     {
         #region fields
 
+        [NonSerialized]
         private readonly MyObjectBuilder_InventoryItem _item;
+
         private string _name;
         private decimal _amount;
         private double _mass;

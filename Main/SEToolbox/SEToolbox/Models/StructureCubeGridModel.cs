@@ -12,13 +12,13 @@
 
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRageMath;
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using VRage.ObjectBuilders;
     using VRage;
+    using VRage.Game;
 
     [Serializable]
     public class StructureCubeGridModel : StructureBaseModel
@@ -517,13 +517,13 @@
         #region methods
 
         [OnSerializing]
-        internal void OnSerializingMethod(StreamingContext context)
+        private void OnSerializingMethod(StreamingContext context)
         {
             SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_CubeGrid>(CubeGrid);
         }
 
         [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context)
+        private void OnDeserializedMethod(StreamingContext context)
         {
             EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_CubeGrid>(SerializedEntity);
         }
@@ -644,7 +644,7 @@
             }
 
             if (string.IsNullOrEmpty(broadcastNames))
-                Description = string.Format("{0}×{1}×{2}", Scale.X, Scale.Y, Scale.Z, broadcastNames);
+                Description = string.Format("{0}×{1}×{2}", Scale.X, Scale.Y, Scale.Z);
             else
                 Description = string.Format("{3} {0}×{1}×{2}", Scale.X, Scale.Y, Scale.Z, broadcastNames);
 

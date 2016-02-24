@@ -34,16 +34,14 @@
 
             using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
-                using (var reader = new BinaryReader(stream))
+                var reader = new BinaryReader(stream);
+                try
                 {
-                    try
-                    {
-                        LoadTagData(reader, data);
-                    }
-                    catch
-                    {
-                        // Ignore errors
-                    }
+                    LoadTagData(reader, data);
+                }
+                catch
+                {
+                    // Ignore errors
                 }
             }
 
@@ -60,23 +58,21 @@
 
             using (var fileStream = new FileStream(filename, FileMode.Create))
             {
-                using (var writer = new BinaryWriter(fileStream))
+                var writer = new BinaryWriter(fileStream);
+                foreach (var kvp in data)
                 {
-                    foreach (var kvp in data)
-                    {
-                        var method = methods.FirstOrDefault(m => m.Name.Equals("ExportData") && m.GetParameters().Length > 2 && m.GetParameters()[2].ParameterType == kvp.Value.GetType());
+                    var method = methods.FirstOrDefault(m => m.Name.Equals("ExportData") && m.GetParameters().Length > 2 && m.GetParameters()[2].ParameterType == kvp.Value.GetType());
 
+                    if (method != null)
+                    {
+                        method.Invoke(null, new[] { writer, kvp.Key, kvp.Value });
+                    }
+                    else
+                    {
+                        method = methods.FirstOrDefault(m => m.Name.Equals("ExportData") && m.GetParameters().Length > 2 && m.GetParameters()[2].ParameterType == kvp.Value.GetType().MakeByRefType());
                         if (method != null)
                         {
                             method.Invoke(null, new[] { writer, kvp.Key, kvp.Value });
-                        }
-                        else
-                        {
-                            method = methods.FirstOrDefault(m => m.Name.Equals("ExportData") && m.GetParameters().Length > 2 && m.GetParameters()[2].ParameterType == kvp.Value.GetType().MakeByRefType());
-                            if (method != null)
-                            {
-                                method.Invoke(null, new[] { writer, kvp.Key, kvp.Value });
-                            }
                         }
                     }
                 }

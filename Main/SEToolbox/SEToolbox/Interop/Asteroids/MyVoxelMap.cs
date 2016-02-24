@@ -18,7 +18,6 @@ namespace SEToolbox.Interop.Asteroids
     using System.IO.Compression;
     using System.Runtime.InteropServices;
     using System.Linq;
-    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Support;
     using SEToolbox.Interop;
     using VRageMath;
@@ -204,10 +203,6 @@ namespace SEToolbox.Interop.Asteroids
                     {
                         return false;
                     }
-                    finally
-                    {
-                        stream.Close();
-                    }
                 }
             }
             if (extension != null && extension.Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase))
@@ -249,10 +244,8 @@ namespace SEToolbox.Interop.Asteroids
 
             using (var ms = new FileStream(tempfilename, FileMode.Open))
             {
-                using (var reader = new BinaryReader(ms))
-                {
-                    LoadUncompressed(initialVersion, Vector3D.Zero, reader, defaultMaterial, loadMaterial);
-                }
+                var reader = new BinaryReader(ms);
+                LoadUncompressed(initialVersion, Vector3D.Zero, reader, defaultMaterial, loadMaterial);
             }
 
             File.Delete(tempfilename);
@@ -819,17 +812,16 @@ namespace SEToolbox.Interop.Asteroids
                 if (File.Exists(destinationFilename))
                     File.Delete(destinationFilename);
 
-                using (var compressedByteStream = new FileStream(destinationFilename, FileMode.CreateNew))
+                var compressedByteStream = new FileStream(destinationFilename, FileMode.CreateNew);
+
+                compressedByteStream.Write(BitConverter.GetBytes(originalByteStream.Length), 0, 4);
+
+                using (var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true))
                 {
-                    compressedByteStream.Write(BitConverter.GetBytes(originalByteStream.Length), 0, 4);
-
-                    using (var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true))
-                    {
-                        originalByteStream.CopyTo(compressionStream);
-                    }
-
-                    Debug.WriteLine("Compressed from {0:#,###0} bytes to {1:#,###0} bytes.", originalByteStream.Length, compressedByteStream.Length);
+                    originalByteStream.CopyTo(compressionStream);
                 }
+
+                Debug.WriteLine("Compressed from {0:#,###0} bytes to {1:#,###0} bytes.", originalByteStream.Length, compressedByteStream.Length);
             }
         }
 
@@ -847,12 +839,10 @@ namespace SEToolbox.Interop.Asteroids
 
                 using (var outStream = new FileStream(destinationFilename, FileMode.CreateNew))
                 {
-                    using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
-                    {
-                        zip.CopyTo(outStream);
+                    var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress);
+                    zip.CopyTo(outStream);
 
-                        Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
-                    }
+                    Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
                 }
             }
         }
@@ -865,12 +855,10 @@ namespace SEToolbox.Interop.Asteroids
                 // message Length.
                 reader.ReadInt32();
 
-                using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
-                {
-                    var arr = new byte[numberBytes];
-                    zip.Read(arr, 0, numberBytes);
-                    return arr;
-                }
+                var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress, true);
+                var arr = new byte[numberBytes];
+                zip.Read(arr, 0, numberBytes);
+                return arr;
             }
         }
 

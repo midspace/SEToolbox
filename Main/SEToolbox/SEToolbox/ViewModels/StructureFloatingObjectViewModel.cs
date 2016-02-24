@@ -2,6 +2,7 @@
 {
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
+    using VRage.Game;
 
     public class StructureFloatingObjectViewModel : StructureBaseViewModel<StructureFloatingObjectModel>
     {

@@ -9,6 +9,7 @@
     using SEToolbox.ImageLibrary.Effects;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using VRage.Game;
     using VRage.ObjectBuilders;
     using Brushes = System.Drawing.Brushes;
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;

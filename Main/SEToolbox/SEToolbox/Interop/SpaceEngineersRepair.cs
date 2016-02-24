@@ -12,6 +12,7 @@
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using VRage.ObjectBuilders;
     using VRage;
+    using VRage.Game;
 
     public static class SpaceEngineersRepair
     {

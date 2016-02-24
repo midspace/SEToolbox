@@ -4,7 +4,7 @@
     using System.Windows.Forms;
     using System.Windows.Input;
 
-    internal static class Native
+    internal static class NativeMethods
     {
         [DllImport("user32.dll", EntryPoint = "GetKeyState", CharSet = CharSet.Auto, ExactSpelling = true)]
         private static extern short _GetKeyState(int keyCode);

@@ -12,6 +12,7 @@
     using SEToolbox.Services;
     using VRage.ObjectBuilders;
     using VRage;
+    using VRage.Game;
 
     public class CubeItemViewModel : BaseViewModel
     {

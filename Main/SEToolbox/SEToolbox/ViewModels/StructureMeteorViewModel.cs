@@ -6,6 +6,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using VRage.Game;
 
     public class StructureMeteorViewModel : StructureBaseViewModel<StructureMeteorModel>
     {

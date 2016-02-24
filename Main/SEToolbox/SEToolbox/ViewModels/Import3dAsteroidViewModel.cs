@@ -8,7 +8,6 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
-    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
@@ -17,6 +16,7 @@
     using SEToolbox.Support;
     using SEToolbox.Views;
     using VRage;
+    using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;

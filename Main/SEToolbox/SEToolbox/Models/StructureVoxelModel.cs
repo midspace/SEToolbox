@@ -8,10 +8,10 @@
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
 
-    using Sandbox.Common.ObjectBuilders.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
+    using VRage.Game;
     using VRageMath;
     using VRage.ObjectBuilders;
 
@@ -267,13 +267,16 @@
         #region methods
 
         [OnSerializing]
-        internal void OnSerializingMethod(StreamingContext context)
+        private void OnSerializingMethod(StreamingContext context)
         {
+            // TODO: split MyObjectBuilder_VoxelMap to  MyObjectBuilder_Planet
+
+
             SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_VoxelMap>(VoxelMap);
         }
 
         [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context)
+        private void OnDeserializedMethod(StreamingContext context)
         {
             EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_VoxelMap>(SerializedEntity);
         }

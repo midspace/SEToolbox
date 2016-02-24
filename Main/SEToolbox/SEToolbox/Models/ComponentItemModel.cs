@@ -5,6 +5,7 @@
 
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
+    using VRage.Game;
     using VRage.ObjectBuilders;
 
     [Serializable]

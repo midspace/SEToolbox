@@ -4,9 +4,9 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Common.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
 

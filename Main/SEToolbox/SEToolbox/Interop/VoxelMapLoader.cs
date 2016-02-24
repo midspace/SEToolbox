@@ -16,7 +16,7 @@
             //var t3 = typeof(Sandbox.ModAPI.Interfaces.IMyStorage);
 
             //var a = t2.Assembly;
-            Type[] ts;
+            //Type[] ts;
             try
             {
 
@@ -29,7 +29,7 @@
                     .Where(p => type.IsAssignableFrom(p));
                 var c = types.Count();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // The types required to load the current asteroid files are in the Sandbox.Game.dll.
                 // Trying to iterate through the types in the Sandbox.Game assembly, will practically cause it to load every other assembly in the game.

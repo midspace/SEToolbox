@@ -17,7 +17,7 @@
 
     public class CoreToolbox
     {
-        private string _tempBinPath;
+        //private string _tempBinPath;
 
         #region methods
 
@@ -156,8 +156,9 @@
 
 #if DEBUG
             // This will make it hairy for testing the AppDomain stuff.
-            //#warning Force the local debugger to load the Types allowing inspection.
-            //var settings0 = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_SessionSettings();
+            #warning Force the local debugger to load the Types allowing inspection.
+            var settings0 = new VRage.Game.MyObjectBuilder_SessionSettings();
+            var settings1 = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_InteriorLight();
 #endif
 
             return true;
@@ -230,29 +231,29 @@
             GlobalSettings.Default.Save();
         }
 
-        Assembly currentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            // Retrieve the list of referenced assemblies in an array of AssemblyName.
-            var filename = args.Name.Substring(0, args.Name.IndexOf(",", StringComparison.InvariantCulture)) + ".dll";
+        //Assembly currentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        //{
+        //    // Retrieve the list of referenced assemblies in an array of AssemblyName.
+        //    var filename = args.Name.Substring(0, args.Name.IndexOf(",", StringComparison.InvariantCulture)) + ".dll";
 
-            const string filter = @"^(?<assembly>(?:\w+(?:\.?\w+)+))\s*(?:,\s?Version=(?<version>\d+\.\d+\.\d+\.\d+))?(?:,\s?Culture=(?<culture>[\w-]+))?(?:,\s?PublicKeyToken=(?<token>\w+))?$";
-            var match = Regex.Match(args.Name, filter);
-            if (match.Success)
-            {
-                filename = match.Groups["assembly"].Value + ".dll";
-            }
+        //    const string filter = @"^(?<assembly>(?:\w+(?:\.?\w+)+))\s*(?:,\s?Version=(?<version>\d+\.\d+\.\d+\.\d+))?(?:,\s?Culture=(?<culture>[\w-]+))?(?:,\s?PublicKeyToken=(?<token>\w+))?$";
+        //    var match = Regex.Match(args.Name, filter);
+        //    if (match.Success)
+        //    {
+        //        filename = match.Groups["assembly"].Value + ".dll";
+        //    }
 
-            if (ToolboxUpdater.CoreSpaceEngineersFiles.Any(f => string.Equals(f, filename, StringComparison.InvariantCultureIgnoreCase)))
-            {
-                var assemblyPath = Path.Combine(_tempBinPath, filename);
+        //    if (ToolboxUpdater.CoreSpaceEngineersFiles.Any(f => string.Equals(f, filename, StringComparison.InvariantCultureIgnoreCase)))
+        //    {
+        //        var assemblyPath = Path.Combine(_tempBinPath, filename);
 
-                // Load the assembly from the specified path.
-                // Return the loaded assembly.
-                return Assembly.LoadFrom(assemblyPath);
-            }
+        //        // Load the assembly from the specified path.
+        //        // Return the loaded assembly.
+        //        return Assembly.LoadFrom(assemblyPath);
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         #endregion
     }

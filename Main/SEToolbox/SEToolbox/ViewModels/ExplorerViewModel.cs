@@ -27,6 +27,7 @@
     using Res = SEToolbox.Properties.Resources;
     using Sandbox.Common.ObjectBuilders.Definitions;
     using VRage;
+    using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
     using WPFLocalizeExtension.Engine;

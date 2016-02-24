@@ -10,6 +10,7 @@
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
     using VRage;
+    using VRage.Game;
     using VRage.ObjectBuilders;
     using VRage.Utils;
     using VRageMath;
@@ -102,10 +103,8 @@
                 {
                     outStream.Position = 0;
 
-                    using (StreamReader sw = new StreamReader(outStream))
-                    {
-                        return sw.ReadToEnd();
-                    }
+                    StreamReader sw = new StreamReader(outStream);
+                    return sw.ReadToEnd();
                 }
             }
             return null;

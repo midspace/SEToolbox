@@ -9,6 +9,7 @@
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using VRage.Game;
 
     [Serializable]
     public class InventoryEditorModel : BaseModel

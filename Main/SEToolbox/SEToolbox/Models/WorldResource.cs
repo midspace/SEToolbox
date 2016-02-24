@@ -10,6 +10,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using VRage.Game;
 
     public class WorldResource : BaseModel
     {
@@ -294,7 +295,12 @@
         {
             if (_resources == null || Checkpoint == null || Checkpoint.Mods == null)
                 return;
-            _resources.LoadDefinitionsAndMods(DataPath.ModsPath, Checkpoint.Mods.ToArray());
+
+            var modList = Checkpoint.Mods.ToArray();
+            for (int i = 0; i < modList.Length; i++)
+                modList[i].FriendlyName = modList[i].Name;
+
+            _resources.LoadDefinitionsAndMods(DataPath.ModsPath, modList);
         }
 
         public void LoadSector(bool snapshot = false)

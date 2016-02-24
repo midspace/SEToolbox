@@ -20,6 +20,7 @@
     using SEToolbox.Services;
     using SEToolbox.Support;
     using SEToolbox.Views;
+    using VRage.Game;
 
     public class StructureCubeGridViewModel : StructureBaseViewModel<StructureCubeGridModel>
     {

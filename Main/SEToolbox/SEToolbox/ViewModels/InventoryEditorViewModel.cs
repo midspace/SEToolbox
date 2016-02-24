@@ -11,6 +11,7 @@
     using SEToolbox.Services;
     using SEToolbox.Views;
     using VRage;
+    using VRage.Game;
     using VRageMath;
 
     public class InventoryEditorViewModel : BaseViewModel

@@ -18,6 +18,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
+    using VRage.Game;
     using VRageMath;
     using VRage.ObjectBuilders;
 

@@ -6,10 +6,10 @@
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.VRageData;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage;
+    using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
     using Color = System.Drawing.Color;

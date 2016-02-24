@@ -11,6 +11,7 @@
     using SEToolbox.Converters;
     using SEToolbox.Interop;
     using SEToolbox.Support;
+    using VRage.Game;
 
     public class SelectWorldModel : BaseModel
     {

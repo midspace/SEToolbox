@@ -7,6 +7,7 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using VRage;
+    using VRage.Game;
     using VRage.ObjectBuilders;
 
     [Serializable]
@@ -260,13 +261,13 @@
         #region methods
 
         [OnSerializing]
-        internal void OnSerializingMethod(StreamingContext context)
+        private void OnSerializingMethod(StreamingContext context)
         {
             SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_Character>(Character);
         }
 
         [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context)
+        private void OnDeserializedMethod(StreamingContext context)
         {
             EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_Character>(SerializedEntity);
         }

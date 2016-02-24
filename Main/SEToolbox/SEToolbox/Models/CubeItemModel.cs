@@ -6,6 +6,7 @@
     using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using VRage;
+    using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
 

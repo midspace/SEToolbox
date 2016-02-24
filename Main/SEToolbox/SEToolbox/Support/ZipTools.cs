@@ -279,12 +279,10 @@
 
                 using (var outStream = new FileStream(destinationFilename, FileMode.CreateNew))
                 {
-                    using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
-                    {
-                        zip.CopyTo(outStream);
+                    var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress, true);
+                    zip.CopyTo(outStream);
 
-                        Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
-                    }
+                    Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
                 }
             }
         }
@@ -299,12 +297,10 @@
         {
             using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open))
             {
-                using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
-                {
-                    var arr = new byte[numberBytes];
-                    zip.Read(arr, 0, numberBytes);
-                    return arr;
-                }
+                var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress, true);
+                var arr = new byte[numberBytes];
+                zip.Read(arr, 0, numberBytes);
+                return arr;
             }
         }
 
@@ -318,10 +314,8 @@
 
                 using (var compressedByteStream = new FileStream(destinationFilename, FileMode.CreateNew))
                 {
-                    using (var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true))
-                    {
-                        originalByteStream.CopyTo(compressionStream);
-                    }
+                    var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true);
+                    originalByteStream.CopyTo(compressionStream);
 
                     Debug.WriteLine("Compressed from {0:#,###0} bytes to {1:#,###0} bytes.", originalByteStream.Length, compressedByteStream.Length);
                 }
@@ -339,16 +333,9 @@
             {
                 using (var stream = File.OpenRead(filename))
                 {
-                    try
-                    {
-                        var b1 = stream.ReadByte();
-                        var b2 = stream.ReadByte();
-                        return (b1 == 0x1f && b2 == 0x8b);
-                    }
-                    finally
-                    {
-                        stream.Close();
-                    }
+                    var b1 = stream.ReadByte();
+                    var b2 = stream.ReadByte();
+                    return (b1 == 0x1f && b2 == 0x8b);
                 }
             }
             catch
