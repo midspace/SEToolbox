@@ -18,7 +18,8 @@
             "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",
             "MedievalEngineers.ObjectBuilders.dll",
             "MedievalEngineers.ObjectBuilders.XmlSerializers.dll",
-            //"Sandbox.Game.dll",   // Need to fix Bin/Bin64 check first.
+            "Sandbox.Game.dll",
+            "HavokWrapper.dll",
             "VRage.dll",
             "VRage.Game.dll",
             "VRage.Game.XmlSerializers.dll",
@@ -190,13 +191,7 @@
             if (buffer1.Length != buffer2.Length)
                 return true;
 
-            var ass1 = Assembly.Load(buffer1);
-            var guid1 = ass1.ManifestModule.ModuleVersionId;
-
-            var ass2 = Assembly.Load(buffer2);
-            var guid2 = ass2.ManifestModule.ModuleVersionId;
-
-            return guid1 != guid2;
+            return !buffer1.SequenceEqual(buffer2);
         }
 
         #endregion
