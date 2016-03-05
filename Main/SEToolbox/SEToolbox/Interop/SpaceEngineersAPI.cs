@@ -5,9 +5,9 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
+    using System.Resources;
     using System.Xml;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
     using VRage;
     using VRage.Game;
@@ -20,6 +20,13 @@
     /// </summary>
     public static class SpaceEngineersApi
     {
+        private static readonly ResourceManager CustomGameResourceManager;
+
+        static SpaceEngineersApi()
+        {
+            CustomGameResourceManager = new ResourceManager("SEToolbox.Properties.MyTexts", Assembly.GetExecutingAssembly());
+        }
+
         #region Serializers
 
         public static bool TryReadSpaceEngineersFile<T>(string filename, out T entity, out bool isCompressed) where T : MyObjectBuilder_Base
@@ -332,7 +339,8 @@
 
         public static void LoadLocalization()
         {
-            var languageTag = System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag;
+            var culture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+            var languageTag = culture.IetfLanguageTag;
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             var localizationPath = Path.Combine(contentPath, @"Data\Localization");
@@ -343,6 +351,9 @@
 
             MyTexts.Clear();
             MyTexts.LoadTexts(localizationPath, maincode, subcode);
+
+            GlobalSettings.Default.UseCustomResource = !MyTexts.Languages.Any(m => m.Value.FullCultureName.Equals(culture.IetfLanguageTag, StringComparison.InvariantCultureIgnoreCase)
+                || m.Value.CultureName.Equals(culture.Parent.IetfLanguageTag, StringComparison.InvariantCultureIgnoreCase));
         }
 
         #endregion
@@ -353,6 +364,14 @@
         {
             if (value == null)
                 return null;
+
+            // This will load a custom localized Satellite Resource that the game doesn't offically support.
+            if (GlobalSettings.Default.UseCustomResource)
+            {
+                string text = CustomGameResourceManager.GetString(value);
+                if (text != null)
+                    return text;
+            }
 
             var stringId = MyStringId.GetOrCompute(value);
             return MyTexts.GetString(stringId);

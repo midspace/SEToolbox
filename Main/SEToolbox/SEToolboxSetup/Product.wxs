@@ -58,6 +58,17 @@
                 <RegistryValue Id="SEToolboxRegInstallDir" Type="string" Name="InstallDir" Value="[APPLICATIONFOLDER]" />
               </RegistryKey>
             </Component>
+
+            <!-- ### Uncomment to package satellite resource in .MSI  --> 
+            <!--
+            <Directory Id='localeDirectoryZH' Name='zh'>
+              <Component Id='localeComponentZH' Guid='2598AD91-A20F-4D9B-A465-1C6D3E8CA941'>
+                <CreateFolder />
+                <File Id='localeFileZH' Name='SEToolbox.resources.dll' Source='$(var.SEToolbox.TargetDir)\zh\SEToolbox.resources.dll' DiskId='1' />
+              </Component>
+            </Directory>
+            -->
+
           </Directory>
         </Directory>
       </Directory>
@@ -174,6 +185,10 @@
       <ComponentRef Id="comp2EA1FC447B50410DA2CE55F182C0E00C" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="UninstallAppFolder"/>
+      <!-- ### Uncomment to package satellite resource in .MSI  -->
+      <!--
+      <ComponentRef Id="localeComponentZH" />
+      -->
     </Feature>
   </Product>
 

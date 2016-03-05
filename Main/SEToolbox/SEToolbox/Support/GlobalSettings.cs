@@ -56,6 +56,12 @@
         public string LanguageCode { get; set; }
 
         /// <summary>
+        /// Indicates that a SETooolbox resource is to be used first when trying to load localized resources from the game.
+        /// This setting does not get saved.
+        /// </summary>
+        public bool UseCustomResource;
+
+        /// <summary>
         /// Delimited ';' list of UNC paths to search for Save World data, with the 'LastLoaded.sbl' at its root.
         /// </summary>
         public string CustomUserSavePaths { get; set; }

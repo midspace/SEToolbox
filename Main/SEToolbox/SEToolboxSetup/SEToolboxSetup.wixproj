@@ -55,6 +55,7 @@
     <EmbeddedResource Include="Language1250.wxl" />
     <EmbeddedResource Include="Language1031.wxl" />
     <EmbeddedResource Include="Language1033.wxl" />
+    <EmbeddedResource Include="Language936.wxl" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />

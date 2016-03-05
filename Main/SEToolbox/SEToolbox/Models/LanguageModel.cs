@@ -15,10 +15,7 @@
 
         public string IetfLanguageTag
         {
-            get
-            {
-                return _ietfLanguageTag;
-            }
+            get { return _ietfLanguageTag; }
 
             set
             {
@@ -32,10 +29,7 @@
 
         public string ImageName
         {
-            get
-            {
-                return _imageName;
-            }
+            get { return _imageName; }
 
             set
             {

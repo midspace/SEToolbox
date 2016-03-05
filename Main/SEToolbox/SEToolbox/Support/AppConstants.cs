@@ -154,7 +154,7 @@
             {"sv", "flag_sweden"},
             {"tr-TR", "flag_turkey"},
             {"uk", "flag_ukraine"},
-            //{"zh", "flag_china"},
+            {"zh", "flag_china"},
         };
     }
 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
              mc:Ignorable="d" 
              d:DesignHeight="20" d:DesignWidth="150">
     <Grid>
@@ -24,7 +25,7 @@
             </Border.Background>
             <Grid Margin="4,0,4,0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Unsaved" ToolTip="Your content has been changed, and not yet saved." Foreground="Black" />
+                    <TextBlock Text="{lex:Loc SEToolbox:Resources:UnsavedCtlState}" ToolTip="{lex:Loc SEToolbox:Resources:UnsavedCtlStateTooltip}" Foreground="Black" />
                 </StackPanel>
             </Grid>
         </Border>

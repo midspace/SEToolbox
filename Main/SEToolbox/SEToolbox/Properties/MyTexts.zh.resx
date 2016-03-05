@@ -117,20 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Boolean_False" xml:space="preserve">
-    <value>无</value>
-    <comment>No</comment>
+  <data name="DisplayName_Item_StoneOre" xml:space="preserve">
+    <value>石頭</value>
   </data>
-  <data name="Boolean_True" xml:space="preserve">
-    <value>是的</value>
-    <comment>Yes</comment>
+  <data name="DisplayName_Item_IronIngot" xml:space="preserve">
+    <value>鑄鐵塊</value>
   </data>
-  <data name="DialogNewVersionTitle" xml:space="preserve">
-    <value>有新版本可用</value>
-    <comment>New version available</comment>
-  </data>
-  <data name="WindowMainTitle" xml:space="preserve">
-    <value>太空工程师 工具箱 - {0} ({1})</value>
-    <comment>SE Toolbox - {0} ({1})</comment>
+  <data name="DisplayName_Item_IronOre" xml:space="preserve">
+    <value>鐵礦</value>
   </data>
 </root>

@@ -709,4 +709,217 @@ Please update it before running SEToolbox {2} again.</value>
     <value>Type:		{0}
 Distance:		{1:#,##0.0} m</value>
   </data>
+  <data name="ExplorerCtlColCubes" xml:space="preserve">
+    <value>Cubes</value>
+  </data>
+  <data name="ExplorerCtlColCubesTooltip" xml:space="preserve">
+    <value>Number of cubes</value>
+  </data>
+  <data name="ExplorerCtlColDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="ExplorerCtlColDistance" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="ExplorerCtlColDistanceTooltip" xml:space="preserve">
+    <value>Distance to Player</value>
+  </data>
+  <data name="ExplorerCtlColMass" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="ExplorerCtlColMassTooltip" xml:space="preserve">
+    <value>Mass (Kg)</value>
+  </data>
+  <data name="ExplorerCtlColName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ExplorerCtlColType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ExplorerCtlColVelocity" xml:space="preserve">
+    <value>Velocity</value>
+  </data>
+  <data name="ExplorerCtlColVelocityTooltip" xml:space="preserve">
+    <value>Speed of object m/s</value>
+  </data>
+  <data name="ExplorerCtlTabObjects" xml:space="preserve">
+    <value>Craft/Objects</value>
+  </data>
+  <data name="MenuExplorerContextCopyGps" xml:space="preserve">
+    <value>Copy GPS</value>
+  </data>
+  <data name="MenuExplorerContextDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ExplorerMnuCreate" xml:space="preserve">
+    <value>_Create</value>
+  </data>
+  <data name="ExplorerMnuCreateAsteroidField" xml:space="preserve">
+    <value>Generate Asteroid Field</value>
+  </data>
+  <data name="ExplorerMnuCreateComponent" xml:space="preserve">
+    <value>Create Component/Item</value>
+  </data>
+  <data name="ExplorerMnuExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ExplorerMnuExportPrefab" xml:space="preserve">
+    <value>Export as prefab</value>
+  </data>
+  <data name="ExplorerMnuExportPrefabTooltip" xml:space="preserve">
+    <value>"Export all ships and stations to a single an prefab .sbc file.</value>
+  </data>
+  <data name="ExplorerMnuExportSandboxWithoutOwner" xml:space="preserve">
+    <value>Export without owner and MedBay</value>
+  </data>
+  <data name="ExplorerMnuExportSandboxWithoutOwnerTooltip" xml:space="preserve">
+    <value>Export ships and stations to an .sbc file, to store, allowing import into other worlds.</value>
+  </data>
+  <data name="ExplorerMnuExportSandboxWithOwner" xml:space="preserve">
+    <value>Export with owner and MedBay</value>
+  </data>
+  <data name="ExplorerMnuExportSandboxWithOwnerTooltip" xml:space="preserve">
+    <value>Export ships and stations to an .xml file, to store, allowing import into other worlds.</value>
+  </data>
+  <data name="ExplorerMnuFile" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="ExplorerMnuFileOpen" xml:space="preserve">
+    <value>_Open (Ctrl+O)</value>
+  </data>
+  <data name="ExplorerMnuFileReload" xml:space="preserve">
+    <value>_Reload (Ctrl+R)</value>
+  </data>
+  <data name="ExplorerMnuFileReloadTooltip" xml:space="preserve">
+    <value>Undo any changes, and reload world again.</value>
+  </data>
+  <data name="ExplorerMnuFileSave" xml:space="preserve">
+    <value>_Save (Ctrl+S)</value>
+  </data>
+  <data name="ExplorerMnuFileSaveAs" xml:space="preserve">
+    <value>Save _As (Ctrl+A)</value>
+  </data>
+  <data name="ExplorerMnuImport" xml:space="preserve">
+    <value>_Import</value>
+  </data>
+  <data name="ExplorerMnuImport3DAsteroid" xml:space="preserve">
+    <value>3D Model for Asteroid</value>
+  </data>
+  <data name="ExplorerMnuImport3DModel" xml:space="preserve">
+    <value>3D Model</value>
+  </data>
+  <data name="ExplorerMnuImportAsteroid" xml:space="preserve">
+    <value>Asteroid</value>
+  </data>
+  <data name="ExplorerMnuImportImage" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="ExplorerMnuImportImageTooltip" xml:space="preserve">
+    <value>Import a image into a flat array of armor, with color matched to each pixel in the image.</value>
+  </data>
+  <data name="ExplorerMnuImportSandbox" xml:space="preserve">
+    <value>Sandbox Content files</value>
+  </data>
+  <data name="ExplorerMnuImportSandboxTooltip" xml:space="preserve">
+    <value>Import previously exported ships and station .sbc files.</value>
+  </data>
+  <data name="ExplorerMnuOptions" xml:space="preserve">
+    <value>_Options</value>
+  </data>
+  <data name="ExplorerMnuOptionsAbout" xml:space="preserve">
+    <value>_About</value>
+  </data>
+  <data name="ExplorerMnuOptionsDocumentation" xml:space="preserve">
+    <value>_Documentation</value>
+  </data>
+  <data name="ExplorerMnuOptionsLanguages" xml:space="preserve">
+    <value>_Languages</value>
+  </data>
+  <data name="ExplorerMnuOptionsSettings" xml:space="preserve">
+    <value>_Settings</value>
+  </data>
+  <data name="ExplorerMnuOptionsSupport" xml:space="preserve">
+    <value>Su_pport</value>
+  </data>
+  <data name="ExplorerMnuOptionsUpdates" xml:space="preserve">
+    <value>Find _Updates</value>
+  </data>
+  <data name="ExplorerMnuSelection" xml:space="preserve">
+    <value>_Selection</value>
+  </data>
+  <data name="ExplorerMnuSelectionDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ExplorerMnuSelectionMergeAsteroid" xml:space="preserve">
+    <value>Merge 2 Asteroids into 1</value>
+  </data>
+  <data name="ExplorerMnuSelectionMergeAsteroidTooltip" xml:space="preserve">
+    <value>Merge 2 asteroids to create a new asteroid.</value>
+  </data>
+  <data name="ExplorerMnuSelectionMergeShip" xml:space="preserve">
+    <value>Merge 2 Ships into 1</value>
+  </data>
+  <data name="ExplorerMnuSelectionMergeShipTooltip" xml:space="preserve">
+    <value>Joins 2 foriegn parts to form a new ship.</value>
+  </data>
+  <data name="ExplorerMnuSelectionMove" xml:space="preserve">
+    <value>Group Move</value>
+  </data>
+  <data name="ExplorerMnuSelectionRejoinShip" xml:space="preserve">
+    <value>Rejoin Ship</value>
+  </data>
+  <data name="ExplorerMnuSelectionRejoinShipTooltip" xml:space="preserve">
+    <value>Rejoins 2 parts from a broken ship back togeather.</value>
+  </data>
+  <data name="ExplorerMnuSelectionRepair" xml:space="preserve">
+    <value>Repair</value>
+  </data>
+  <data name="ExplorerMnuSelectionResetSpeed" xml:space="preserve">
+    <value>Reset all Speed</value>
+  </data>
+  <data name="ExplorerMnuSelectionResetSpeedTooltip" xml:space="preserve">
+    <value>Set Linear and Rotation Velocity to zero (0).</value>
+  </data>
+  <data name="ExplorerMnuToolCopyGpsTooltip" xml:space="preserve">
+    <value>Copy GPS</value>
+  </data>
+  <data name="ExplorerMnuToolDeleteTooltip" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ExplorerMnuToolMoveTooltip" xml:space="preserve">
+    <value>Group Move</value>
+  </data>
+  <data name="ExplorerMnuToolOpenTooltip" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="ExplorerMnuToolRepairTooltip" xml:space="preserve">
+    <value>Repair</value>
+  </data>
+  <data name="ExplorerMnuToolSaveTooltip" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ExplorerMnuWorld" xml:space="preserve">
+    <value>_World</value>
+  </data>
+  <data name="ExplorerMnuWorldComponentList" xml:space="preserve">
+    <value>_Component List</value>
+  </data>
+  <data name="ExplorerMnuWorldOpenFolder" xml:space="preserve">
+    <value>Open _Folder</value>
+  </data>
+  <data name="ExplorerMnuWorldReportResource" xml:space="preserve">
+    <value>_Report all resources</value>
+  </data>
+  <data name="ExplorerMnuWorldViewRaw" xml:space="preserve">
+    <value>_View current Sandbox raw</value>
+  </data>
+  <data name="ExplorerMnuWorldViewSteam" xml:space="preserve">
+    <value>View _Steam Workshop</value>
+  </data>
+  <data name="UnsavedCtlState" xml:space="preserve">
+    <value>Unsaved</value>
+  </data>
+  <data name="UnsavedCtlStateTooltip" xml:space="preserve">
+    <value>Your content has been changed, and not yet saved.</value>
+  </data>
 </root>
