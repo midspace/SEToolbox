@@ -279,10 +279,12 @@
 
                 using (var outStream = new FileStream(destinationFilename, FileMode.CreateNew))
                 {
-                    var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress, true);
-                    zip.CopyTo(outStream);
-
-                    Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
+                    // GZipStream requires using. Do not optimize the stream.
+                    using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
+                    {
+                        zip.CopyTo(outStream);
+                        Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
+                    }
                 }
             }
         }
@@ -297,10 +299,13 @@
         {
             using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open))
             {
-                var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress, true);
-                var arr = new byte[numberBytes];
-                zip.Read(arr, 0, numberBytes);
-                return arr;
+                // GZipStream requires using. Do not optimize the stream.
+                using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
+                {
+                    var arr = new byte[numberBytes];
+                    zip.Read(arr, 0, numberBytes);
+                    return arr;
+                }
             }
         }
 
@@ -314,9 +319,11 @@
 
                 using (var compressedByteStream = new FileStream(destinationFilename, FileMode.CreateNew))
                 {
-                    var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true);
-                    originalByteStream.CopyTo(compressionStream);
-
+                    // GZipStream requires using. Do not optimize the stream.
+                    using (var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true))
+                    {
+                        originalByteStream.CopyTo(compressionStream);
+                    }
                     Debug.WriteLine("Compressed from {0:#,###0} bytes to {1:#,###0} bytes.", originalByteStream.Length, compressedByteStream.Length);
                 }
             }

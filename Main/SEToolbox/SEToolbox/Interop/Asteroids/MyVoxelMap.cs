@@ -812,16 +812,18 @@ namespace SEToolbox.Interop.Asteroids
                 if (File.Exists(destinationFilename))
                     File.Delete(destinationFilename);
 
-                var compressedByteStream = new FileStream(destinationFilename, FileMode.CreateNew);
-
-                compressedByteStream.Write(BitConverter.GetBytes(originalByteStream.Length), 0, 4);
-
-                using (var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true))
+                using (var compressedByteStream = new FileStream(destinationFilename, FileMode.CreateNew))
                 {
-                    originalByteStream.CopyTo(compressionStream);
-                }
+                    compressedByteStream.Write(BitConverter.GetBytes(originalByteStream.Length), 0, 4);
 
-                Debug.WriteLine("Compressed from {0:#,###0} bytes to {1:#,###0} bytes.", originalByteStream.Length, compressedByteStream.Length);
+                    // GZipStream requires using. Do not optimize the stream.
+                    using (var compressionStream = new GZipStream(compressedByteStream, CompressionMode.Compress, true))
+                    {
+                        originalByteStream.CopyTo(compressionStream);
+                    }
+
+                    Debug.WriteLine("Compressed from {0:#,###0} bytes to {1:#,###0} bytes.", originalByteStream.Length, compressedByteStream.Length);
+                }
             }
         }
 
@@ -839,8 +841,11 @@ namespace SEToolbox.Interop.Asteroids
 
                 using (var outStream = new FileStream(destinationFilename, FileMode.CreateNew))
                 {
-                    var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress);
-                    zip.CopyTo(outStream);
+                    // GZipStream requires using. Do not optimize the stream.
+                    using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
+                    {
+                        zip.CopyTo(outStream);
+                    }
 
                     Debug.WriteLine("Decompressed from {0:#,###0} bytes to {1:#,###0} bytes.", compressedByteStream.Length, outStream.Length);
                 }
@@ -855,10 +860,13 @@ namespace SEToolbox.Interop.Asteroids
                 // message Length.
                 reader.ReadInt32();
 
-                var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress, true);
-                var arr = new byte[numberBytes];
-                zip.Read(arr, 0, numberBytes);
-                return arr;
+                // GZipStream requires using. Do not optimize the stream.
+                using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
+                {
+                    var arr = new byte[numberBytes];
+                    zip.Read(arr, 0, numberBytes);
+                    return arr;
+                }
             }
         }
 
