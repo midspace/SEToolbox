@@ -54,182 +54,182 @@
                         <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
-                <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuFile}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="{lex:Loc WnExplorerMnuFile}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=document}"/>
                     </MenuItem.Icon>
-                    <MenuItem Command="{Binding OpenCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuFileOpen}">
+                    <MenuItem Command="{Binding OpenCommand}" Header="{lex:Loc WnExplorerMnuFileOpen}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding SaveCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuFileSave}">
+                    <MenuItem Command="{Binding SaveCommand}" Header="{lex:Loc WnExplorerMnuFileSave}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <!--<MenuItem Command="{Binding SaveAsCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuFileSaveAs}">
+                    <!--<MenuItem Command="{Binding SaveAsCommand}" Header="{lex:Loc WnExplorerMnuFileSaveAs}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
                         </MenuItem.Icon>
                     </MenuItem>-->
                     <Separator />
-                    <MenuItem Command="{Binding ReloadCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuFileReload}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuFileReloadToolip}">
+                    <MenuItem Command="{Binding ReloadCommand}" Header="{lex:Loc WnExplorerMnuFileReload}" ToolTip="{lex:Loc WnExplorerMnuFileReloadToolip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=refresh}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuImport}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="{lex:Loc WnExplorerMnuImport}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=import1}" />
                     </MenuItem.Icon>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuImportAsteroid}" Command="{Binding ImportVoxelCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuImportAsteroid}" Command="{Binding ImportVoxelCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuImport3DAsteroid}" Command="{Binding ImportAsteroidModelCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuImport3DAsteroid}" Command="{Binding ImportAsteroidModelCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=Asteroid_model}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuImportImage}" Command="{Binding ImportImageCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuImportImageTooltip}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuImportImage}" Command="{Binding ImportImageCommand}" ToolTip="{lex:Loc WnExplorerMnuImportImageTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=photo_scenery}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuImport3DModel}" Command="{Binding ImportModelCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuImport3DModel}" Command="{Binding ImportModelCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=icecube}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuImportSandbox}" Command="{Binding ImportSandboxObjectCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuImportSandboxTooltip}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuImportSandbox}" Command="{Binding ImportSandboxObjectCommand}" ToolTip="{lex:Loc WnExplorerMnuImportSandboxTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SECubes16}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuExport}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="{lex:Loc WnExplorerMnuExport}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                     </MenuItem.Icon>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuExportSandboxWithOwner}" Command="{Binding ExportSandboxObjectCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuExportSandboxWithOwnerTooltip}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuExportSandboxWithOwner}" Command="{Binding ExportSandboxObjectCommand}" ToolTip="{lex:Loc WnExplorerMnuExportSandboxWithOwnerTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuExportSandboxWithoutOwner}" Command="{Binding ExportBasicSandboxObjectCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuExportSandboxWithoutOwnerTooltip}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuExportSandboxWithoutOwner}" Command="{Binding ExportBasicSandboxObjectCommand}" ToolTip="{lex:Loc WnExplorerMnuExportSandboxWithoutOwnerTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuExportPrefab}" Command="{Binding ExportPrefabObjectCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuExportPrefabTooltip}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuExportPrefab}" Command="{Binding ExportPrefabObjectCommand}" ToolTip="{lex:Loc WnExplorerMnuExportPrefabTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuCreate}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="{lex:Loc WnExplorerMnuCreate}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=package_add}" />
                     </MenuItem.Icon>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuCreateComponent}" Command="{Binding CreateFloatingItemCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuCreateComponent}" Command="{Binding CreateFloatingItemCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=screwdriver}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuCreateAsteroidField}" Command="{Binding GenerateVoxelFieldCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuCreateAsteroidField}" Command="{Binding GenerateVoxelFieldCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuSelection}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="{lex:Loc WnExplorerMnuSelection}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=selection}" />
                     </MenuItem.Icon>
-                    <MenuItem Command="{Binding DeleteObjectCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionDelete}">
+                    <MenuItem Command="{Binding DeleteObjectCommand}" Header="{lex:Loc WnExplorerMnuSelectionDelete}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Command="{Binding GroupMoveCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionMove}">
+                    <MenuItem Command="{Binding GroupMoveCommand}" Header="{lex:Loc WnExplorerMnuSelectionMove}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Command="{Binding RepairShipsCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionRepair}">
+                    <MenuItem Command="{Binding RepairShipsCommand}" Header="{lex:Loc WnExplorerMnuSelectionRepair}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionResetSpeed}" Command="{Binding ResetVelocityCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionResetSpeedTooltip}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuSelectionResetSpeed}" Command="{Binding ResetVelocityCommand}" ToolTip="{lex:Loc WnExplorerMnuSelectionResetSpeedTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding RejoinShipCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionRejoinShip}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionRejoinShipTooltip}">
+                    <MenuItem Command="{Binding RejoinShipCommand}" Header="{lex:Loc WnExplorerMnuSelectionRejoinShip}" ToolTip="{lex:Loc WnExplorerMnuSelectionRejoinShipTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=first_aid}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding JoinShipPartsCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionMergeShip}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionMergeShipTooltip}">
+                    <MenuItem Command="{Binding JoinShipPartsCommand}" Header="{lex:Loc WnExplorerMnuSelectionMergeShip}" ToolTip="{lex:Loc WnExplorerMnuSelectionMergeShipTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=components}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Command="{Binding VoxelMergeCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionMergeAsteroid}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuSelectionMergeAsteroidTooltip}">
+                    <MenuItem Command="{Binding VoxelMergeCommand}" Header="{lex:Loc WnExplorerMnuSelectionMergeAsteroid}" ToolTip="{lex:Loc WnExplorerMnuSelectionMergeAsteroidTooltip}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=asteroid}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuWorld}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="{lex:Loc WnExplorerMnuWorld}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=SpaceEngineers16}" />
                     </MenuItem.Icon>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuWorldReportResource}" Command="{Binding WorldReportCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuWorldReportResource}" Command="{Binding WorldReportCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=document_pulse}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuWorldOpenFolder}" Command="{Binding OpenFolderCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuWorldOpenFolder}" Command="{Binding OpenFolderCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuWorldViewRaw}" Command="{Binding ViewSandboxCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuWorldViewRaw}" Command="{Binding ViewSandboxCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=document_view}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuWorldViewSteam}" Command="{Binding OpenWorkshopCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuWorldViewSteam}" Command="{Binding OpenWorkshopCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=workshop16}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="{lex:Loc SEToolbox:Resources:ExplorerMnuWorldComponentList}" Command="{Binding OpenComponentListCommand}">
+                    <MenuItem Header="{lex:Loc WnExplorerMnuWorldComponentList}" Command="{Binding OpenComponentListCommand}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=form_green_view}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
                 <Separator Style="{StaticResource DockPanelSeparator}" />
-                <MenuItem HorizontalAlignment="Right" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuOptions}" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem HorizontalAlignment="Right" Header="{lex:Loc WnExplorerMnuOptions}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=help}"/>
                     </MenuItem.Icon>
-                    <MenuItem Command="{Binding LanguageCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuOptionsLanguages}" ItemsSource="{Binding Languages}">
+                    <MenuItem Command="{Binding LanguageCommand}" Header="{lex:Loc WnExplorerMnuOptionsLanguages}" ItemsSource="{Binding Languages}">
                         <MenuItem.Resources>
                             <Image x:Shared="False" x:Key="MenuIcon" Width="16" Height="16" Source="{Binding ImageName, Converter={StaticResource ResouceToImageConverter}}"/>
                         </MenuItem.Resources>
@@ -242,25 +242,25 @@
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
-                    <MenuItem Command="{Binding OpenSettingsCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuOptionsSettings}"/>
+                    <MenuItem Command="{Binding OpenSettingsCommand}" Header="{lex:Loc WnExplorerMnuOptionsSettings}"/>
                     <Separator/>
-                    <MenuItem Command="{Binding OpenDocumentationLinkCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuOptionsDocumentation}">
+                    <MenuItem Command="{Binding OpenDocumentationLinkCommand}" Header="{lex:Loc WnExplorerMnuOptionsDocumentation}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=book_open2}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding OpenSupportLinkCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuOptionsSupport}">
+                    <MenuItem Command="{Binding OpenSupportLinkCommand}" Header="{lex:Loc WnExplorerMnuOptionsSupport}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=message_edit}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding OpenUpdatesLinkCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuOptionsUpdates}">
+                    <MenuItem Command="{Binding OpenUpdatesLinkCommand}" Header="{lex:Loc WnExplorerMnuOptionsUpdates}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=server_to_client}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Command="{Binding AboutCommand}" Header="{lex:Loc SEToolbox:Resources:ExplorerMnuOptionsAbout}">
+                    <MenuItem Command="{Binding AboutCommand}" Header="{lex:Loc WnExplorerMnuOptionsAbout}">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=about}"/>
                         </MenuItem.Icon>
@@ -269,25 +269,25 @@
             </Menu>
             <ToolBarPanel DockPanel.Dock="Top" >
                 <ToolBar>
-                    <Button Command="{Binding OpenCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuToolOpenTooltip}">
+                    <Button Command="{Binding OpenCommand}" ToolTip="{lex:Loc WnExplorerMnuToolOpenTooltip}">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}"/>
                     </Button>
-                    <Button Command="{Binding SaveCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuToolSaveTooltip}">
+                    <Button Command="{Binding SaveCommand}" ToolTip="{lex:Loc WnExplorerMnuToolSaveTooltip}">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=disk_blue}"/>
                     </Button>
                     <Separator />
-                    <Button Command="{Binding RepairShipsCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuToolRepairTooltip}">
+                    <Button Command="{Binding RepairShipsCommand}" ToolTip="{lex:Loc WnExplorerMnuToolRepairTooltip}">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}"/>
                     </Button>
-                    <Button Command="{Binding GroupMoveCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuToolMoveTooltip}">
+                    <Button Command="{Binding GroupMoveCommand}" ToolTip="{lex:Loc WnExplorerMnuToolMoveTooltip}">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=fit_to_size}"/>
                     </Button>
                     <Separator />
-                    <Button Command="{Binding CopyObjectGpsCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuToolCopyGpsTooltip}">
+                    <Button Command="{Binding CopyObjectGpsCommand}" ToolTip="{lex:Loc WnExplorerMnuToolCopyGpsTooltip}">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=target}"/>
                     </Button>
                     <Separator />
-                    <Button Command="{Binding DeleteObjectCommand}" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerMnuToolDeleteTooltip}">
+                    <Button Command="{Binding DeleteObjectCommand}" ToolTip="{lex:Loc WnExplorerMnuToolDeleteTooltip}">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
                     </Button>
                 </ToolBar>
@@ -340,7 +340,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <TabControl>
-                        <TabItem Header="{lex:Loc SEToolbox:Resources:ExplorerCtlTabObjects}">
+                        <TabItem Header="{lex:Loc WnExplorerTabObjects}">
                             <controls:SortableListView DisplayMemberPath="ClassType" SelectionMode="Extended" DefaultSortColumn="DisplayName" ItemsSource="{Binding Structures}" SelectedValue="{Binding SelectedStructure, Mode=TwoWay}"
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.Resources>
@@ -356,52 +356,52 @@
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
                                     <GridView>
-                                        <controls:SortableGridViewColumn SortBinding="{Binding ClassType}" Header="{lex:Loc SEToolbox:Resources:ExplorerCtlColType}" Width="70">
+                                        <controls:SortableGridViewColumn SortBinding="{Binding ClassType}" Header="{lex:Loc SEToolbox:Resources:WnExplorerColType}" Width="70">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding ClassType, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn SortBinding="{Binding DisplayName}" Header="{lex:Loc SEToolbox:Resources:ExplorerCtlColName}" Width="100">
+                                        <controls:SortableGridViewColumn SortBinding="{Binding DisplayName}" Header="{lex:Loc SEToolbox:Resources:WnExplorerColName}" Width="100">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding DisplayName}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn SortBinding="{Binding Description}" Header="{lex:Loc SEToolbox:Resources:ExplorerCtlColDescription}" Width="100">
+                                        <controls:SortableGridViewColumn SortBinding="{Binding Description}" Header="{lex:Loc SEToolbox:Resources:WnExplorerColDescription}" Width="100">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Description}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding PlayerDistance}" Header="{lex:Loc SEToolbox:Resources:ExplorerCtlColDistance}">
+                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding PlayerDistance}" Header="{lex:Loc SEToolbox:Resources:WnExplorerColDistance}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerCtlColDistanceTooltip}"/>
+                                                    <TextBlock Text="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right" ToolTip="{lex:Loc WnExplorerColDistanceTooltip}"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding Mass}" Header="{lex:Loc SEToolbox:Resources:ExplorerCtlColMass}">
+                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding Mass}" Header="{lex:Loc SEToolbox:Resources:WnExplorerColMass}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00}'}" TextAlignment="Right" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerCtlColMassTooltip}"/>
+                                                    <TextBlock Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00}'}" TextAlignment="Right" ToolTip="{lex:Loc WnExplorerColMassTooltip}"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding BlockCount}" Header="{lex:Loc SEToolbox:Resources:ExplorerCtlColCubes}">
+                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding BlockCount}" Header="{lex:Loc SEToolbox:Resources:WnExplorerColCubes}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Path=BlockCount, StringFormat='{}{0:#,##0}'}" TextAlignment="Right" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerCtlColCubesTooltip}"/>
+                                                    <TextBlock Text="{Binding Path=BlockCount, StringFormat='{}{0:#,##0}'}" TextAlignment="Right" ToolTip="{lex:Loc WnExplorerColCubesTooltip}"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding LinearVelocity}" Header="{lex:Loc SEToolbox:Resources:ExplorerCtlColVelocity}">
+                                        <controls:SortableGridViewColumn Width="70" SortBinding="{Binding LinearVelocity}" Header="{lex:Loc SEToolbox:Resources:WnExplorerColVelocity}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Path=LinearVelocity, StringFormat='{}{0:#,##0.000}'}" TextAlignment="Right" ToolTip="{lex:Loc SEToolbox:Resources:ExplorerCtlColVelocityTooltip}"/>
+                                                    <TextBlock Text="{Binding Path=LinearVelocity, StringFormat='{}{0:#,##0.000}'}" TextAlignment="Right" ToolTip="{lex:Loc WnExplorerColVelocityTooltip}"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
@@ -417,12 +417,12 @@
                                 </i:Interaction.Behaviors>
                                 <ListBox.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="{lex:Loc SEToolbox:Resources:MenuExplorerContextDelete}" Command="{Binding DeleteObjectCommand}">
+                                        <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextDelete}" Command="{Binding DeleteObjectCommand}">
                                             <MenuItem.Icon>
                                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" />
                                             </MenuItem.Icon>
                                         </MenuItem>
-                                        <MenuItem Header="{lex:Loc SEToolbox:Resources:MenuExplorerContextCopyGps}" Command="{Binding CopyObjectGpsCommand}">
+                                        <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextCopyGps}" Command="{Binding CopyObjectGpsCommand}">
                                             <MenuItem.Icon>
                                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=target}" />
                                             </MenuItem.Icon>

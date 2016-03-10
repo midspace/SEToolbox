@@ -25,7 +25,7 @@
             </Border.Background>
             <Grid Margin="4,0,4,0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{lex:Loc SEToolbox:Resources:UnsavedCtlState}" ToolTip="{lex:Loc SEToolbox:Resources:UnsavedCtlStateTooltip}" Foreground="Black" />
+                    <TextBlock Text="{lex:Loc CtlUnsavedStateTitle}" ToolTip="{lex:Loc CtlUnsavedStateTooltip}" Foreground="Black" />
                 </StackPanel>
             </Grid>
         </Border>

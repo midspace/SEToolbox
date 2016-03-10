@@ -933,7 +933,7 @@
                 }
             }
 
-            var detail = string.Format(Properties.Resources.CubeDetail,
+            var detail = string.Format(Properties.Resources.CtlCubeDetail,
                 DisplayName,
                 ClassType,
                 IsPiloted,

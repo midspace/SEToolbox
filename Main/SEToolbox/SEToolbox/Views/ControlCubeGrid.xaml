@@ -8,6 +8,9 @@
              xmlns:controls="clr-namespace:SEToolbox.Controls"
              xmlns:commands="clr-namespace:SEToolbox.Services"
              xmlns:views="clr-namespace:SEToolbox.Views"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600"
@@ -15,6 +18,7 @@
     <UserControl.Resources>
         <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:I18NFormatterConverter x:Key="I18NFormatter"  />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:DDSConverter x:Key="DDSConverter"/>
         <Style TargetType="ListViewItem">
@@ -32,94 +36,94 @@
                                 <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                             </ItemsPanelTemplate>
                         </Menu.ItemsPanel>
-                        <MenuItem Header="Repair" Command="{Binding RepairObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                        <MenuItem Header="{lex:Loc CtlCubeMnuRepair}" Command="{Binding RepairObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Speed" Style="{StaticResource ToolBarTopMenuitem}">
+                        <MenuItem Header="{lex:Loc CtlCubeMnuSpeed}" Style="{StaticResource ToolBarTopMenuitem}">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
                             </MenuItem.Icon>
-                            <MenuItem Header="Reset Linear Velocity" Command="{Binding ResetLinearVelocityCommand}" ToolTip="Set Linear Velocity to zero (0).">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuSpeedResetLinear}" Command="{Binding ResetLinearVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetLinearTooltip}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="Reset Rotation Velocity" Command="{Binding ResetRotationVelocityCommand}" ToolTip="Set Rotation Velocity to zero (0).">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuSpeedResetRotation}" Command="{Binding ResetRotationVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetRotationTooltip}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="Reset all Speed" Command="{Binding ResetVelocityCommand}" ToolTip="Set Linear and Rotation Velocity to zero (0).">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuSpeedReset}" Command="{Binding ResetVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetTooltip}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}" ToolTip="Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuSpeedReverse}" Command="{Binding ReverseVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedReverseTooltip}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="Sets the object velocity directly at the player at maximum speed.">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuSpeedMaxToPlayer}" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedMaxToPlayerTooltip}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_right2}" />
                                 </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>
-                        <MenuItem Header="Convert" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                        <MenuItem Header="{lex:Loc CtlCubeMnuConvert}" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
                             </MenuItem.Icon>
-                            <MenuItem Header="Armor">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmor}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=shield}" />
                                 </MenuItem.Icon>
-                                <MenuItem Header="To Heavy Armor" Command="{Binding ConvertToHeavyArmorCommand}" ToolTip="Convert any Light armor blocks to Heavy Armor blocks."/>
-                                <MenuItem Header="To Light Armor" Command="{Binding ConvertToLightArmorCommand}" ToolTip="Convert any Heavy armor block to Light armor blocks."/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorHeavy}" Command="{Binding ConvertToHeavyArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorHeavyTooltip}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorLight}" Command="{Binding ConvertToLightArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorLightTooltip}"/>
                                 <Separator/>
-                                <MenuItem Header="To Corner Armor" Command="{Binding ConvertToCornerArmorCommand}" ToolTip="Convert any Round armor edge blocks to Corner armor edge blocks."/>
-                                <MenuItem Header="To Round Armor" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="Convert any Corner armor edge blocks to Round armor edge blocks."/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorCorner}" Command="{Binding ConvertToCornerArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorCornerTooltip}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorRound}" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorRoundTooltip}"/>
                             </MenuItem>
-                            <MenuItem Header="Framework" Command="{Binding FrameworkCommand}">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework}" Command="{Binding FrameworkCommand}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
                                 </MenuItem.Icon>
-                                <MenuItem Header="To 0.5% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any constructed components are unconstructed.">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework0}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework0Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>0.005</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
-                                <MenuItem Header="To 25% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 25% constructed state.">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework25}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework25Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>0.25</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
-                                <MenuItem Header="To 50% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 50% constructed state.">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework50}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework50Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>0.50</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
-                                <MenuItem Header="To 75% Framework" Command="{Binding ConvertToFrameworkCommand}" ToolTip="All components are set to a 75% constructed state.">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework75}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework75Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>0.75</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
-                                <MenuItem Header="To 100% Complete Structure" Command="{Binding ConvertToFrameworkCommand}" ToolTip="Any unconstructed components are 100% constructed.">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework100}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework100Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>1.00</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
                             </MenuItem>
-                            <MenuItem Header="Station/Ship">
-                                <MenuItem Header="To Ship" Command="{Binding ConvertToShipCommand}" ToolTip="Change a Station into a Large Ship." />
-                                <MenuItem Header="To Station" Command="{Binding ConvertToStationCommand}" ToolTip="Change a Large Ship into a Station." />
+                            <MenuItem Header="{lex:Loc CtlCubeMnuConvertStationShip}">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertToShip}" Command="{Binding ConvertToShipCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertToShipTooltip}" />
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertToStation}" Command="{Binding ConvertToStationCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertToStationTooltip}" />
                             </MenuItem>
-                            <MenuItem Header="Rotate">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuConvertRotate}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=replace2}" />
                                 </MenuItem.Icon>
-                                <MenuItem Header="Reorient Station to Axis" Command="{Binding ReorientStationCommand}" ToolTip="Reorients to the accepted single orientation for a Station, and corrects the position to match standard Space Engineers block locations." />
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertRotateAxis}" Command="{Binding ReorientStationCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertRotateAxisTooltip}" />
                                 <Separator/>
                                 <!--<MenuItem Header="Rotate structure backward-down around X axis (+90 Pitch)" Command="{Binding RotateStructurePitchPositiveCommand}"/>
                                 <MenuItem Header="Rotate structure forward-down around X axis (-90 Pitch)" Command="{Binding RotateStructurePitchNegativeCommand}"/>
@@ -128,25 +132,25 @@
                                 <MenuItem Header="Rotate structure left-down around Z axis (+90 Roll)" Command="{Binding RotateStructureRollPositiveCommand}"/>
                                 <MenuItem Header="Rotate structure right-down around Z axis (-90 Roll)" Command="{Binding RotateStructureRollNegativeCommand}"/>
                                 <Separator/>-->
-                                <MenuItem Header="Rotate cubes backward-down around X axis (+90 Pitch)" Command="{Binding RotateCubesPitchPositiveCommand}"/>
-                                <MenuItem Header="Rotate cubes forward-down around X axis (-90 Pitch)" Command="{Binding RotateCubesPitchNegativeCommand}"/>
-                                <MenuItem Header="Rotate cubes anti-clockwise around Y axis (+90 Yaw)" Command="{Binding RotateCubesYawPositiveCommand}"/>
-                                <MenuItem Header="Rotate cubes clockwise around Y axis (-90 Yaw)" Command="{Binding RotateCubesYawNegativeCommand}"/>
-                                <MenuItem Header="Rotate cubes left-down around Z axis (+90 Roll)" Command="{Binding RotateCubesRollPositiveCommand}"/>
-                                <MenuItem Header="Rotate cubes right-down around Z axis (-90 Roll)" Command="{Binding RotateCubesRollNegativeCommand}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertRotateXpos}" Command="{Binding RotateCubesPitchPositiveCommand}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertRotateXneg}" Command="{Binding RotateCubesPitchNegativeCommand}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertRotateYpos}" Command="{Binding RotateCubesYawPositiveCommand}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertRotateYneg}" Command="{Binding RotateCubesYawNegativeCommand}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertRotateZpos}" Command="{Binding RotateCubesRollPositiveCommand}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertRotateZneg}" Command="{Binding RotateCubesRollNegativeCommand}"/>
                             </MenuItem>
                         </MenuItem>
-                        <MenuItem Header="Mirror">
-                            <MenuItem Header="Using predefined X/Y/Z Symmetry Planes" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="Uses planes as defined on the ship/station within Space Engineers." />
-                            <MenuItem Header="Find largest surface / odd [left&gt;|center|&lt;right]" Command="{Binding MirrorStructureGuessOddCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
-                            <MenuItem Header="Find largest surface / even [left&gt;|&lt;right]" Command="{Binding MirrorStructureGuessEvenCommand}" ToolTip="Finds the single largest surface on the edge, and mirrors from there."/>
+                        <MenuItem Header="{lex:Loc CtlCubeMnuMirror}">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuMirrorSymmetry}" Command="{Binding MirrorStructureByPlaneCommand}" ToolTip="{lex:Loc CtlCubeMnuMirrorSymmetryTooltip}" />
+                            <MenuItem Header="{lex:Loc CtlCubeMnuMirrorOdd}" Command="{Binding MirrorStructureGuessOddCommand}" ToolTip="{lex:Loc CtlCubeMnuMirrorOddTooltip}"/>
+                            <MenuItem Header="{lex:Loc CtlCubeMnuMirrorEven}" Command="{Binding MirrorStructureGuessEvenCommand}" ToolTip="{lex:Loc CtlCubeMnuMirrorEvenTooltip}"/>
                         </MenuItem>
-                        <MenuItem Header="Optimize" Command="{Binding OptimizeObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Only useful for enormous ships of more than 200,000 blocks. Reorganises order of cubes within the file, to speed up loading time.">
+                        <MenuItem Header="{lex:Loc CtlCubeMnuOptimize}" Command="{Binding OptimizeObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="{lex:Loc CtlCubeMnuOptimizeTooltip}">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=sort_descending}" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Copy text detail to Clipboard" Command="{Binding CopyDetailCommand}">
+                        <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="{lex:Loc CtlCubeMnuCopyDetail}" Command="{Binding CopyDetailCommand}">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />
                             </MenuItem.Icon>
@@ -177,22 +181,22 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Label Grid.Row="1" Grid.Column="0" Content="Name:"/>
+                        <Label Grid.Row="1" Grid.Column="0" Content="{lex:Loc CtlCubeTxtName}"/>
                         <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <Label Grid.Row="2" Grid.Column="0" Content="Dampeners:"/>
+                        <Label Grid.Row="2" Grid.Column="0" Content="{lex:Loc CtlCubeTxtDampeners}"/>
                         <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
-                        <Label Grid.Row="3" Grid.Column="0" Content="Destructible:"/>
+                        <Label Grid.Row="3" Grid.Column="0" Content="{lex:Loc CtlCubeTxtDestructible}"/>
                         <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Destructible, Mode=TwoWay}" />
-                        <Label Grid.Row="4" Grid.Column="0" Content="Position:"/>
+                        <Label Grid.Row="4" Grid.Column="0" Content="{lex:Loc CtlCubeTxtPosition}"/>
                         <views:ControlPosition Grid.Row="4" Grid.Column="1"/>
 
-                        <Button Grid.Column="0" Grid.Row="5" Margin="4 0 4 0" HorizontalAlignment="Left" Content="Damage:" Style="{StaticResource DropDownMenuButton}">
+                        <Button Grid.Column="0" Grid.Row="5" Margin="4 0 4 0" HorizontalAlignment="Left" Content="{lex:Loc CtlCubeTxtDamage}" Style="{StaticResource DropDownMenuButton}">
                             <i:Interaction.Behaviors>
                                 <commands:ButtonDropDownMenuBehavior />
                             </i:Interaction.Behaviors>
                             <Button.ContextMenu>
                                 <ContextMenu HorizontalAlignment="Right">
-                                    <MenuItem Header="Repair" Command="{Binding RepairObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuRepair}" Command="{Binding RepairObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" />
                                         </MenuItem.Icon>
@@ -203,33 +207,33 @@
 
                         <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding DamageCount}" />
 
-                        <Button Grid.Column="0" Grid.Row="6" Margin="4 0 4 0" HorizontalAlignment="Left" Content="Speed:" Style="{StaticResource DropDownMenuButton}">
+                        <Button Grid.Column="0" Grid.Row="6" Margin="4 0 4 0" HorizontalAlignment="Left" Content="{lex:Loc CtlCubeTxtSpeed}" Style="{StaticResource DropDownMenuButton}">
                             <i:Interaction.Behaviors>
                                 <commands:ButtonDropDownMenuBehavior />
                             </i:Interaction.Behaviors>
                             <Button.ContextMenu>
                                 <ContextMenu HorizontalAlignment="Right">
-                                    <MenuItem Header="Reset Linear Velocity" Command="{Binding ResetLinearVelocityCommand}" ToolTip="Set Linear Velocity to zero (0).">
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedResetLinear}" Command="{Binding ResetLinearVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetLinearTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Reset Rotation Velocity" Command="{Binding ResetRotationVelocityCommand}" ToolTip="Set Rotation Velocity to zero (0).">
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedResetRotation}" Command="{Binding ResetRotationVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetRotationTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Reset all Speed" Command="{Binding ResetVelocityCommand}" ToolTip="Set Linear and Rotation Velocity to zero (0).">
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedReset}" Command="{Binding ResetVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Reverse Speed" Command="{Binding ReverseVelocityCommand}" ToolTip="Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.">
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedReverse}" Command="{Binding ReverseVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedReverseTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Max Speed At Player" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="Sets the object velocity directly at the player at maximum speed.">
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedMaxToPlayer}" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedMaxToPlayerTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_right2}" />
                                         </MenuItem.Icon>
@@ -242,35 +246,44 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding LinearVelocity, StringFormat='{}{0:#,###0.000} m/s'}" ToolTip="Linear Velocity" />
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding AngularVelocity, StringFormat='{}{0:#,###0.000} m/s'}" ToolTip="Approximate Angular Velocity" Margin="8,0,0,0" />
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" ToolTip="{lex:Loc CtlCubeTxtLinearVelocityTooltip}">
+                                <Run Text="{Binding LinearVelocity, StringFormat='#,###0.000', Mode=OneWay}" />
+                                <Run Text="{lex:Loc GlobalSIVelocityMetresPerSecond}" />
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" ToolTip="{lex:Loc CtlCubeTxtAngularVelocityTooltip}" Margin="8,0,0,0">
+                                <Run Text="{Binding AngularVelocity, StringFormat='#,###0.000', Mode=OneWay}" />
+                                <Run Text="{lex:Loc GlobalSIVelocityMetresPerSecond}" />
+                            </TextBlock>
                         </Grid>
                         <Separator Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"/>
-                        <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="Piloted:"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtPiloted}"/>
                         <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPiloted}" />
-                        <TextBlock Grid.Row="9" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
-                        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
-                        <TextBlock Grid.Row="10" Grid.Column="0" Margin="4 0 4 0" Text="Scale:"/>
+                        <TextBlock Grid.Row="9" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtDistance}"/>
+                        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center">
+                            <Run Text="{Binding PlayerDistance, StringFormat='#,###0.0', Mode=OneWay}" />
+                            <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+                        </TextBlock>
+                        <TextBlock Grid.Row="10" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtScale}"/>
                         <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} × {1} × {2} blocks">
-                                    <Binding Path="Scale.X" />
-                                    <Binding Path="Scale.Y" />
-                                    <Binding Path="Scale.Z" />
+                                <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="CtlGridBlockSizeValue">
+                                    <Binding Path="Scale.X" Mode="OneWay" />
+                                    <Binding Path="Scale.Y" Mode="OneWay" />
+                                    <Binding Path="Scale.Z" Mode="OneWay" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                        <TextBlock Grid.Row="11" Grid.Column="0" Margin="4 0 4 0" Text="Size:"/>
+                        <TextBlock Grid.Row="11" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtSize}"/>
                         <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0}m × {1}m × {2}m">
+                                <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="CtlGridSizeValue">
                                     <Binding Path="Size.Width" />
                                     <Binding Path="Size.Height" />
                                     <Binding Path="Size.Depth" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                        <TextBlock Grid.Row="12" Grid.Column="0" Margin="4 0 4 0" Text="Center:"/>
+                        <TextBlock Grid.Row="12" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtCenter}"/>
                         <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0:#,##0.0000}, {1:#,##0.0000}, {2:#,##0.0000}">
@@ -280,16 +293,19 @@
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                        <TextBlock Grid.Row="13" Grid.Column="0" Margin="4 0 4 0" Text="Mass:"/>
-                        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Mass, StringFormat='{}{0:#,###0.00} Kg'}" />
-                        <TextBlock Grid.Row="14" Grid.Column="0" Margin="4 0 4 0" Text="Blocks:"/>
+                        <TextBlock Grid.Row="13" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtMass}"/>
+                        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center">
+                            <Run Text="{Binding Mass, StringFormat='#,###0.00', Mode=OneWay}" />
+                            <Run Text="{lex:Loc GlobalSIMassKilogram}" />
+                        </TextBlock>
+                        <TextBlock Grid.Row="14" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtBlocks}"/>
                         <TextBlock Grid.Row="14" Grid.Column="1" VerticalAlignment="Center" Text="{Binding BlockCount, StringFormat='{}{0:#,###0}'}" />
-                        <TextBlock Grid.Row="15" Grid.Column="0" Margin="4 0 4 0" Text="Cockpit Orientation:"/>
+                        <TextBlock Grid.Row="15" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtCockpitOrient}"/>
                         <TextBlock Grid.Row="15" Grid.Column="1" VerticalAlignment="Center" Text="{Binding CockpitOrientation}" />
                     </Grid>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Cubes">
+            <TabItem Header="{lex:Loc CtlCubeTabCubes}">
                 <Grid>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -304,47 +320,47 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Margin="4 0 4 0" Text="Filter:" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,4,0" Text="{Binding ComponentFilter, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enter the name of cube to filter by.">
+                            <TextBlock Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtFilter}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,4,0" Text="{Binding ComponentFilter, UpdateSourceTrigger=PropertyChanged}" ToolTip="{lex:Loc CtlCubeTxtFilterTooltip}">
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding FilterStartCommand}"/>
                                     <KeyBinding Key="Tab" Command="{Binding FilterTabStartCommand}"/>
                                     <KeyBinding Key="Escape" Command="{Binding FilterClearCommand}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
-                            <Button Grid.Column="2" ToolTip="Search (Enter)" Command="{Binding FilterStartCommand}" IsTabStop="False">
+                            <Button Grid.Column="2" ToolTip="{lex:Loc CtlCubeTxtFilterSearchTooltip}" Command="{Binding FilterStartCommand}" IsTabStop="False">
                                 <Button.Content>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=find}" />
                                 </Button.Content>
                             </Button>
-                            <Button Grid.Column="3" ToolTip="Clear Filter (Esc)" Command="{Binding FilterClearCommand}" IsTabStop="False">
+                            <Button Grid.Column="3" ToolTip="{lex:Loc CtlCubeTxtFilterClearTooltip}" Command="{Binding FilterClearCommand}" IsTabStop="False">
                                 <Button.Content>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_cross}" />
                                 </Button.Content>
                             </Button>
                         </Grid>
                         <Menu Grid.Row="1" Grid.ColumnSpan="2">
-                            <MenuItem Command="{Binding DeleteCubesCommand}" Header="Delete" Style="{StaticResource ToolBarTopMenuitem}">
+                            <MenuItem Command="{Binding DeleteCubesCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuDeleteCube}" Style="{StaticResource ToolBarTopMenuitem}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding ReplaceCubesCommand}" Header="Replace" Style="{StaticResource ToolBarTopMenuitem}">
+                            <MenuItem Command="{Binding ReplaceCubesCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuReplaceCube}" Style="{StaticResource ToolBarTopMenuitem}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=selection_replace}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding ColorCubesCommand}" Header="Color" Style="{StaticResource ToolBarTopMenuitem}">
+                            <MenuItem Command="{Binding ColorCubesCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuColorCube}" Style="{StaticResource ToolBarTopMenuitem}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=colors}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding FrameworkCubesCommand}" Header="Framework" Style="{StaticResource ToolBarTopMenuitem}">
+                            <MenuItem Command="{Binding FrameworkCubesCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuFrameworkCube}" Style="{StaticResource ToolBarTopMenuitem}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding SetOwnerCommand}" Header="Owner" Style="{StaticResource ToolBarTopMenuitem}">
+                            <MenuItem Command="{Binding SetOwnerCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuOwnerCube}" Style="{StaticResource ToolBarTopMenuitem}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=users_back}"/>
                                 </MenuItem.Icon>
@@ -360,14 +376,14 @@
                             ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}" SelectedValue="{Binding SelectedCubeItem}">
                                 <ListView.View>
                                     <GridView>
-                                        <controls:SortableGridViewColumn Width="30" Header="Icon" SortBinding="{Binding FriendlyName}">
+                                        <controls:SortableGridViewColumn Width="30" Header="{lex:Loc SEToolbox:Resources:CtlCubeColIcon}" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Width="30" Header="Color">
+                                        <controls:SortableGridViewColumn Width="30" Header="{lex:Loc SEToolbox:Resources:CtlCubeColColor}">
                                             <controls:SortableGridViewColumn.SortBinding>
                                                 <MultiBinding>
                                                     <Binding Path="ColorHue" />
@@ -377,46 +393,46 @@
                                             </controls:SortableGridViewColumn.SortBinding>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1"  ToolTip="{Binding ColorText}" />
+                                                    <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1" ToolTip="{Binding ColorText}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Build" Width="60" SortBinding="{Binding BuildPercent}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColBuild}" Width="60" SortBinding="{Binding BuildPercent}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=BuildPercent, StringFormat='P'}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="X" Width="40" SortBinding="{Binding Position.X}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColX}" Width="40" SortBinding="{Binding Position.X}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Position.X}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Y" Width="40" SortBinding="{Binding Position.Y}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColY}" Width="40" SortBinding="{Binding Position.Y}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Position.Y}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Z" Width="40" SortBinding="{Binding Position.Z}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColZ}" Width="40" SortBinding="{Binding Position.Z}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Position.Z}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Name" Width="175" SortBinding="{Binding FriendlyName}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColName}" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <GridViewColumn Header="Owner" Width="80">
+                                        <GridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColOwner}" Width="80">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding OwnerName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
@@ -461,7 +477,7 @@
                     <controls:BusyIndicator Visibility="{Binding IsSubsSystemNotReady, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Construction">
+            <TabItem Header="{lex:Loc CtlCubeTabConstruction}">
                 <Grid>
                     <ScrollViewer>
                         <Grid>
@@ -480,8 +496,14 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="4 0 4 0" Text="Total time to produce:"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding TimeToProduce, StringFormat='{}{0:dd} days, {0:hh} hours, {0:mm\\:ss\\.ff}'}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtTimeToProd}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="CtlGridTimeToProdValue">
+                                        <Binding Path="TimeToProduce"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
                             <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
                             <controls:SortableListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding CubeAssets}" DefaultSortColumn="FriendlyName"
                         ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
@@ -494,28 +516,31 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Cubes" Width="175" SortBinding="{Binding FriendlyName}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColCubes}" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColCubeCount}" Width="80" SortBinding="{Binding Count}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Count, StringFormat='{}{0:#,##0}'}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColCubeMass}" Width="100" SortBinding="{Binding Mass}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                                    <TextBlock TextAlignment="Right">
+                                                        <Run Text="{Binding Mass, StringFormat='#,###0.00', Mode=OneWay}" />
+                                                        <Run Text="{lex:Loc GlobalSIMassKilogram}" />
+                                                    </TextBlock>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Time" Width="90" SortBinding="{Binding Time}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColCubeTime}" Width="90" SortBinding="{Binding Time}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Time, StringFormat='{}{0:hh\\:mm\\:ss\\.ff}'}" />
@@ -536,7 +561,7 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Components" Width="175" SortBinding="{Binding FriendlyName}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColComponents}" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
@@ -550,21 +575,27 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColComponentMass}" Width="100" SortBinding="{Binding Mass}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                                    <TextBlock TextAlignment="Right">
+                                                        <Run Text="{Binding Mass, StringFormat='#,###0.00', Mode=OneWay}" />
+                                                        <Run Text="{lex:Loc GlobalSIMassKilogram}" />
+                                                    </TextBlock>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Volume" Width="90" SortBinding="{Binding Volume}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColComponentVolume}" Width="90" SortBinding="{Binding Volume}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
+                                                    <TextBlock TextAlignment="Right">
+                                                        <Run Text="{Binding Volume, StringFormat='#,###0.00', Mode=OneWay}" />
+                                                        <Run Text="{lex:Loc GlobalSIVolumeLitre}" />
+                                                    </TextBlock>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Time" Width="90" SortBinding="{Binding Time}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColComponentTime}" Width="90" SortBinding="{Binding Time}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Time, StringFormat='{}{0:hh\\:mm\\:ss\\.ff}'}" />
@@ -585,35 +616,41 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Ingots" Width="175" SortBinding="{Binding FriendlyName}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColIngots}" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColIngotAmount}" Width="80" SortBinding="{Binding Amount}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Amount, StringFormat='{}{0:#,##0.00}'}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColIngotMass}" Width="100" SortBinding="{Binding Mass}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                                    <TextBlock TextAlignment="Right">
+                                                        <Run Text="{Binding Mass, StringFormat='#,###0.00', Mode=OneWay}" />
+                                                        <Run Text="{lex:Loc GlobalSIMassKilogram}" />
+                                                    </TextBlock>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Volume" Width="90" SortBinding="{Binding Volume}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColIngotVolume}" Width="90" SortBinding="{Binding Volume}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
+                                                    <TextBlock TextAlignment="Right">
+                                                        <Run Text="{Binding Volume, StringFormat='#,###0.00', Mode=OneWay}" />
+                                                        <Run Text="{lex:Loc GlobalSIVolumeLitre}" />
+                                                    </TextBlock>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Time" Width="90" SortBinding="{Binding Time}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColIngotTime}" Width="90" SortBinding="{Binding Time}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Time, StringFormat='{}{0:hh\\:mm\\:ss\\.ff}'}" />
@@ -634,31 +671,37 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Ore" Width="175" SortBinding="{Binding FriendlyName}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColOre}" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding FriendlyName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Amount" Width="80" SortBinding="{Binding Amount}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColOreAmount}" Width="80" SortBinding="{Binding Amount}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Amount, StringFormat='{}{0:#,##0.00}'}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Mass" Width="100" SortBinding="{Binding Mass}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColOreMass}" Width="100" SortBinding="{Binding Mass}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Mass, StringFormat='{}{0:#,##0.00} Kg'}" />
+                                                    <TextBlock TextAlignment="Right">
+                                                        <Run Text="{Binding Mass, StringFormat='#,###0.00', Mode=OneWay}" />
+                                                        <Run Text="{lex:Loc GlobalSIMassKilogram}" />
+                                                    </TextBlock>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Volume" Width="90" SortBinding="{Binding Volume}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColOreVolume}" Width="90" SortBinding="{Binding Volume}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} L'}" />
+                                                    <TextBlock TextAlignment="Right">
+                                                        <Run Text="{Binding Volume, StringFormat='#,###0.00', Mode=OneWay}" />
+                                                        <Run Text="{lex:Loc GlobalSIVolumeLitre}" />
+                                                    </TextBlock>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>

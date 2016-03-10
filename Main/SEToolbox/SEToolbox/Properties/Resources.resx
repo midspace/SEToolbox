@@ -278,7 +278,7 @@ Position:	{13}, {14}, {15}
 Material	Mass	Percent
 {16}</value>
   </data>
-  <data name="CubeDetail" xml:space="preserve">
+  <data name="CtlCubeDetail" xml:space="preserve">
     <value>Name:	{0}
 Type:	{1}
 Piloted:	{2}
@@ -475,16 +475,16 @@ Would you like to download it now?</value>
   <data name="BtBrowseAppTip" xml:space="preserve">
     <value>Browse for Application</value>
   </data>
-  <data name="BtCancel" xml:space="preserve">
+  <data name="WnLocateAppBtnCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="BtContinue" xml:space="preserve">
+  <data name="WnLocateAppBtnContinue" xml:space="preserve">
     <value>Continue</value>
   </data>
-  <data name="WnLocateAppInvalidText" xml:space="preserve">
+  <data name="WnLocateAppTxtInvalid" xml:space="preserve">
     <value>Invalid location specified.</value>
   </data>
-  <data name="WnLocateAppPromptUser" xml:space="preserve">
+  <data name="WnLocateAppTxtPromptUser" xml:space="preserve">
     <value>The Space Engineers application could not be located.
 Please specify the location of the Space Engineers Application file.</value>
   </data>
@@ -709,217 +709,673 @@ Please update it before running SEToolbox {2} again.</value>
     <value>Type:		{0}
 Distance:		{1:#,##0.0} m</value>
   </data>
-  <data name="ExplorerCtlColCubes" xml:space="preserve">
+  <data name="WnExplorerColCubes" xml:space="preserve">
     <value>Cubes</value>
   </data>
-  <data name="ExplorerCtlColCubesTooltip" xml:space="preserve">
+  <data name="WnExplorerColCubesTooltip" xml:space="preserve">
     <value>Number of cubes</value>
   </data>
-  <data name="ExplorerCtlColDescription" xml:space="preserve">
+  <data name="WnExplorerColDescription" xml:space="preserve">
     <value>Description</value>
   </data>
-  <data name="ExplorerCtlColDistance" xml:space="preserve">
+  <data name="WnExplorerColDistance" xml:space="preserve">
     <value>Distance</value>
   </data>
-  <data name="ExplorerCtlColDistanceTooltip" xml:space="preserve">
+  <data name="WnExplorerColDistanceTooltip" xml:space="preserve">
     <value>Distance to Player</value>
   </data>
-  <data name="ExplorerCtlColMass" xml:space="preserve">
+  <data name="WnExplorerColMass" xml:space="preserve">
     <value>Mass</value>
   </data>
-  <data name="ExplorerCtlColMassTooltip" xml:space="preserve">
+  <data name="WnExplorerColMassTooltip" xml:space="preserve">
     <value>Mass (Kg)</value>
   </data>
-  <data name="ExplorerCtlColName" xml:space="preserve">
+  <data name="WnExplorerColName" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="ExplorerCtlColType" xml:space="preserve">
+  <data name="WnExplorerColType" xml:space="preserve">
     <value>Type</value>
   </data>
-  <data name="ExplorerCtlColVelocity" xml:space="preserve">
+  <data name="WnExplorerColVelocity" xml:space="preserve">
     <value>Velocity</value>
   </data>
-  <data name="ExplorerCtlColVelocityTooltip" xml:space="preserve">
+  <data name="WnExplorerColVelocityTooltip" xml:space="preserve">
     <value>Speed of object m/s</value>
   </data>
-  <data name="ExplorerCtlTabObjects" xml:space="preserve">
+  <data name="WnExplorerTabObjects" xml:space="preserve">
     <value>Craft/Objects</value>
   </data>
-  <data name="MenuExplorerContextCopyGps" xml:space="preserve">
+  <data name="WnExplorerContextCopyGps" xml:space="preserve">
     <value>Copy GPS</value>
   </data>
-  <data name="MenuExplorerContextDelete" xml:space="preserve">
+  <data name="WnExplorerContextDelete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="ExplorerMnuCreate" xml:space="preserve">
+  <data name="WnExplorerMnuCreate" xml:space="preserve">
     <value>_Create</value>
   </data>
-  <data name="ExplorerMnuCreateAsteroidField" xml:space="preserve">
+  <data name="WnExplorerMnuCreateAsteroidField" xml:space="preserve">
     <value>Generate Asteroid Field</value>
   </data>
-  <data name="ExplorerMnuCreateComponent" xml:space="preserve">
+  <data name="WnExplorerMnuCreateComponent" xml:space="preserve">
     <value>Create Component/Item</value>
   </data>
-  <data name="ExplorerMnuExport" xml:space="preserve">
+  <data name="WnExplorerMnuExport" xml:space="preserve">
     <value>Export</value>
   </data>
-  <data name="ExplorerMnuExportPrefab" xml:space="preserve">
+  <data name="WnExplorerMnuExportPrefab" xml:space="preserve">
     <value>Export as prefab</value>
   </data>
-  <data name="ExplorerMnuExportPrefabTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuExportPrefabTooltip" xml:space="preserve">
     <value>"Export all ships and stations to a single an prefab .sbc file.</value>
   </data>
-  <data name="ExplorerMnuExportSandboxWithoutOwner" xml:space="preserve">
+  <data name="WnExplorerMnuExportSandboxWithoutOwner" xml:space="preserve">
     <value>Export without owner and MedBay</value>
   </data>
-  <data name="ExplorerMnuExportSandboxWithoutOwnerTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuExportSandboxWithoutOwnerTooltip" xml:space="preserve">
     <value>Export ships and stations to an .sbc file, to store, allowing import into other worlds.</value>
   </data>
-  <data name="ExplorerMnuExportSandboxWithOwner" xml:space="preserve">
+  <data name="WnExplorerMnuExportSandboxWithOwner" xml:space="preserve">
     <value>Export with owner and MedBay</value>
   </data>
-  <data name="ExplorerMnuExportSandboxWithOwnerTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuExportSandboxWithOwnerTooltip" xml:space="preserve">
     <value>Export ships and stations to an .xml file, to store, allowing import into other worlds.</value>
   </data>
-  <data name="ExplorerMnuFile" xml:space="preserve">
+  <data name="WnExplorerMnuFile" xml:space="preserve">
     <value>_File</value>
   </data>
-  <data name="ExplorerMnuFileOpen" xml:space="preserve">
+  <data name="WnExplorerMnuFileOpen" xml:space="preserve">
     <value>_Open (Ctrl+O)</value>
   </data>
-  <data name="ExplorerMnuFileReload" xml:space="preserve">
+  <data name="WnExplorerMnuFileReload" xml:space="preserve">
     <value>_Reload (Ctrl+R)</value>
   </data>
-  <data name="ExplorerMnuFileReloadTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuFileReloadTooltip" xml:space="preserve">
     <value>Undo any changes, and reload world again.</value>
   </data>
-  <data name="ExplorerMnuFileSave" xml:space="preserve">
+  <data name="WnExplorerMnuFileSave" xml:space="preserve">
     <value>_Save (Ctrl+S)</value>
   </data>
-  <data name="ExplorerMnuFileSaveAs" xml:space="preserve">
+  <data name="WnExplorerMnuFileSaveAs" xml:space="preserve">
     <value>Save _As (Ctrl+A)</value>
   </data>
-  <data name="ExplorerMnuImport" xml:space="preserve">
+  <data name="WnExplorerMnuImport" xml:space="preserve">
     <value>_Import</value>
   </data>
-  <data name="ExplorerMnuImport3DAsteroid" xml:space="preserve">
+  <data name="WnExplorerMnuImport3DAsteroid" xml:space="preserve">
     <value>3D Model for Asteroid</value>
   </data>
-  <data name="ExplorerMnuImport3DModel" xml:space="preserve">
+  <data name="WnExplorerMnuImport3DModel" xml:space="preserve">
     <value>3D Model</value>
   </data>
-  <data name="ExplorerMnuImportAsteroid" xml:space="preserve">
+  <data name="WnExplorerMnuImportAsteroid" xml:space="preserve">
     <value>Asteroid</value>
   </data>
-  <data name="ExplorerMnuImportImage" xml:space="preserve">
+  <data name="WnExplorerMnuImportImage" xml:space="preserve">
     <value>Image</value>
   </data>
-  <data name="ExplorerMnuImportImageTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuImportImageTooltip" xml:space="preserve">
     <value>Import a image into a flat array of armor, with color matched to each pixel in the image.</value>
   </data>
-  <data name="ExplorerMnuImportSandbox" xml:space="preserve">
+  <data name="WnExplorerMnuImportSandbox" xml:space="preserve">
     <value>Sandbox Content files</value>
   </data>
-  <data name="ExplorerMnuImportSandboxTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuImportSandboxTooltip" xml:space="preserve">
     <value>Import previously exported ships and station .sbc files.</value>
   </data>
-  <data name="ExplorerMnuOptions" xml:space="preserve">
+  <data name="WnExplorerMnuOptions" xml:space="preserve">
     <value>_Options</value>
   </data>
-  <data name="ExplorerMnuOptionsAbout" xml:space="preserve">
+  <data name="WnExplorerMnuOptionsAbout" xml:space="preserve">
     <value>_About</value>
   </data>
-  <data name="ExplorerMnuOptionsDocumentation" xml:space="preserve">
+  <data name="WnExplorerMnuOptionsDocumentation" xml:space="preserve">
     <value>_Documentation</value>
   </data>
-  <data name="ExplorerMnuOptionsLanguages" xml:space="preserve">
+  <data name="WnExplorerMnuOptionsLanguages" xml:space="preserve">
     <value>_Languages</value>
   </data>
-  <data name="ExplorerMnuOptionsSettings" xml:space="preserve">
+  <data name="WnExplorerMnuOptionsSettings" xml:space="preserve">
     <value>_Settings</value>
   </data>
-  <data name="ExplorerMnuOptionsSupport" xml:space="preserve">
+  <data name="WnExplorerMnuOptionsSupport" xml:space="preserve">
     <value>Su_pport</value>
   </data>
-  <data name="ExplorerMnuOptionsUpdates" xml:space="preserve">
+  <data name="WnExplorerMnuOptionsUpdates" xml:space="preserve">
     <value>Find _Updates</value>
   </data>
-  <data name="ExplorerMnuSelection" xml:space="preserve">
+  <data name="WnExplorerMnuSelection" xml:space="preserve">
     <value>_Selection</value>
   </data>
-  <data name="ExplorerMnuSelectionDelete" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionDelete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="ExplorerMnuSelectionMergeAsteroid" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionMergeAsteroid" xml:space="preserve">
     <value>Merge 2 Asteroids into 1</value>
   </data>
-  <data name="ExplorerMnuSelectionMergeAsteroidTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionMergeAsteroidTooltip" xml:space="preserve">
     <value>Merge 2 asteroids to create a new asteroid.</value>
   </data>
-  <data name="ExplorerMnuSelectionMergeShip" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionMergeShip" xml:space="preserve">
     <value>Merge 2 Ships into 1</value>
   </data>
-  <data name="ExplorerMnuSelectionMergeShipTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionMergeShipTooltip" xml:space="preserve">
     <value>Joins 2 foriegn parts to form a new ship.</value>
   </data>
-  <data name="ExplorerMnuSelectionMove" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionMove" xml:space="preserve">
     <value>Group Move</value>
   </data>
-  <data name="ExplorerMnuSelectionRejoinShip" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionRejoinShip" xml:space="preserve">
     <value>Rejoin Ship</value>
   </data>
-  <data name="ExplorerMnuSelectionRejoinShipTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionRejoinShipTooltip" xml:space="preserve">
     <value>Rejoins 2 parts from a broken ship back togeather.</value>
   </data>
-  <data name="ExplorerMnuSelectionRepair" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionRepair" xml:space="preserve">
     <value>Repair</value>
   </data>
-  <data name="ExplorerMnuSelectionResetSpeed" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionResetSpeed" xml:space="preserve">
     <value>Reset all Speed</value>
   </data>
-  <data name="ExplorerMnuSelectionResetSpeedTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuSelectionResetSpeedTooltip" xml:space="preserve">
     <value>Set Linear and Rotation Velocity to zero (0).</value>
   </data>
-  <data name="ExplorerMnuToolCopyGpsTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuToolCopyGpsTooltip" xml:space="preserve">
     <value>Copy GPS</value>
   </data>
-  <data name="ExplorerMnuToolDeleteTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuToolDeleteTooltip" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="ExplorerMnuToolMoveTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuToolMoveTooltip" xml:space="preserve">
     <value>Group Move</value>
   </data>
-  <data name="ExplorerMnuToolOpenTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuToolOpenTooltip" xml:space="preserve">
     <value>Open</value>
   </data>
-  <data name="ExplorerMnuToolRepairTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuToolRepairTooltip" xml:space="preserve">
     <value>Repair</value>
   </data>
-  <data name="ExplorerMnuToolSaveTooltip" xml:space="preserve">
+  <data name="WnExplorerMnuToolSaveTooltip" xml:space="preserve">
     <value>Save</value>
   </data>
-  <data name="ExplorerMnuWorld" xml:space="preserve">
+  <data name="WnExplorerMnuWorld" xml:space="preserve">
     <value>_World</value>
   </data>
-  <data name="ExplorerMnuWorldComponentList" xml:space="preserve">
+  <data name="WnExplorerMnuWorldComponentList" xml:space="preserve">
     <value>_Component List</value>
   </data>
-  <data name="ExplorerMnuWorldOpenFolder" xml:space="preserve">
+  <data name="WnExplorerMnuWorldOpenFolder" xml:space="preserve">
     <value>Open _Folder</value>
   </data>
-  <data name="ExplorerMnuWorldReportResource" xml:space="preserve">
+  <data name="WnExplorerMnuWorldReportResource" xml:space="preserve">
     <value>_Report all resources</value>
   </data>
-  <data name="ExplorerMnuWorldViewRaw" xml:space="preserve">
+  <data name="WnExplorerMnuWorldViewRaw" xml:space="preserve">
     <value>_View current Sandbox raw</value>
   </data>
-  <data name="ExplorerMnuWorldViewSteam" xml:space="preserve">
+  <data name="WnExplorerMnuWorldViewSteam" xml:space="preserve">
     <value>View _Steam Workshop</value>
   </data>
-  <data name="UnsavedCtlState" xml:space="preserve">
+  <data name="CtlUnsavedStateTitle" xml:space="preserve">
     <value>Unsaved</value>
   </data>
-  <data name="UnsavedCtlStateTooltip" xml:space="preserve">
+  <data name="CtlUnsavedStateTitleTooltip" xml:space="preserve">
     <value>Your content has been changed, and not yet saved.</value>
+  </data>
+  <data name="WnAboutBtnClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WnAboutBtnHomePage" xml:space="preserve">
+    <value>Home Page</value>
+  </data>
+  <data name="WnAboutTxtCreatedBy" xml:space="preserve">
+    <value>Created by: </value>
+  </data>
+  <data name="WnAboutTxtDescription" xml:space="preserve">
+    <value>A toolbox utility for modifying and importing content in the Space Engineers Game.</value>
+  </data>
+  <data name="WnAboutTxtSubtitle" xml:space="preserve">
+    <value>Toolbox</value>
+  </data>
+  <data name="WnAboutTxtTitle" xml:space="preserve">
+    <value>Space Engineers</value>
+  </data>
+  <data name="WnAboutTxtVersion" xml:space="preserve">
+    <value>Version: </value>
+  </data>
+  <data name="WnLoadBtnBrowse" xml:space="preserve">
+    <value>_Browse</value>
+  </data>
+  <data name="WnLoadBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnLoadBtnOpen" xml:space="preserve">
+    <value>_Open</value>
+  </data>
+  <data name="WnLoadBtnRepair" xml:space="preserve">
+    <value>_Repair</value>
+  </data>
+  <data name="WnLoadBtnRepairTooltip" xml:space="preserve">
+    <value>This will attempt to repair the save content it it finds any issues.</value>
+  </data>
+  <data name="WnLoadColLoaded" xml:space="preserve">
+    <value>Loaded</value>
+  </data>
+  <data name="WnLoadColName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="WnLoadColSaved" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+  <data name="WnLoadColVersion" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="WnLoadColWorkshop" xml:space="preserve">
+    <value>Workshop</value>
+  </data>
+  <data name="WnLoadContextOpenFolder" xml:space="preserve">
+    <value>Open Folder</value>
+  </data>
+  <data name="WnLoadContextWorkshop" xml:space="preserve">
+    <value>View Workshop</value>
+  </data>
+  <data name="WnLoadTitle" xml:space="preserve">
+    <value>Select World</value>
+  </data>
+  <data name="WnLoadZoomInTooltip" xml:space="preserve">
+    <value>Click to Zoom in</value>
+  </data>
+  <data name="WnLoadZoomOutTooltip" xml:space="preserve">
+    <value>Click to Zoom out</value>
+  </data>
+  <data name="GlobalSIMassKilogram" xml:space="preserve">
+    <value>Kg</value>
+  </data>
+  <data name="GlobalSIVolumeLitre" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="WnGenFloatBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnGenFloatBtnCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="WnGenFloatTitle" xml:space="preserve">
+    <value>Create Item</value>
+  </data>
+  <data name="WnGenFloatTxtItem" xml:space="preserve">
+    <value>Item:</value>
+  </data>
+  <data name="WnGenFloatTxtMass" xml:space="preserve">
+    <value>Mass:</value>
+  </data>
+  <data name="WnGenFloatTxtMaxItems" xml:space="preserve">
+    <value>The Maximum number of floating objects in your Save World is defined as {0}.</value>
+  </data>
+  <data name="WnGenFloatTxtMultiplier" xml:space="preserve">
+    <value>Multiplier:</value>
+  </data>
+  <data name="WnGenFloatTxtUnit" xml:space="preserve">
+    <value>Units:</value>
+  </data>
+  <data name="WnGenFloatTxtVolume" xml:space="preserve">
+    <value>Volume:</value>
+  </data>
+  <data name="WnProgressBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnProgressBtnShutdown" xml:space="preserve">
+    <value>Shutdown when finished</value>
+  </data>
+  <data name="WnProgressTxtTimeRemain" xml:space="preserve">
+    <value>Time remaining:</value>
+  </data>
+  <data name="CtlCubeTabConstruction" xml:space="preserve">
+    <value>Construction</value>
+  </data>
+  <data name="CtlCubeTabCubes" xml:space="preserve">
+    <value>Cubes</value>
+  </data>
+  <data name="CtlCubeMnuConvert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmor" xml:space="preserve">
+    <value>Armor</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmorCorner" xml:space="preserve">
+    <value>To Corner Armor</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmorCornerTooltip" xml:space="preserve">
+    <value>Convert any Round armor edge blocks to Corner armor edge blocks.</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmorHeavy" xml:space="preserve">
+    <value>To Heavy Armor</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmorHeavyTooltip" xml:space="preserve">
+    <value>Convert any Light armor blocks to Heavy Armor blocks.</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmorLight" xml:space="preserve">
+    <value>To Light Armor</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmorLightTooltip" xml:space="preserve">
+    <value>Convert any Heavy armor block to Light armor blocks.</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmorRound" xml:space="preserve">
+    <value>To Round Armor</value>
+  </data>
+  <data name="CtlCubeMnuConvertArmorRoundTooltip" xml:space="preserve">
+    <value>Convert any Corner armor edge blocks to Round armor edge blocks.</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework" xml:space="preserve">
+    <value>Framework</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework0" xml:space="preserve">
+    <value>To 0.5% Framework</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework0Tooltip" xml:space="preserve">
+    <value>Any constructed components are unconstructed.</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework100" xml:space="preserve">
+    <value>To 100% Complete Structure</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework100Tooltip" xml:space="preserve">
+    <value>Any unconstructed components are 100% constructed.</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework25" xml:space="preserve">
+    <value>To 25% Framework</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework25Tooltip" xml:space="preserve">
+    <value>All components are set to a 25% constructed state.</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework50" xml:space="preserve">
+    <value>To 50% Framework</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework50Tooltip" xml:space="preserve">
+    <value>All components are set to a 50% constructed state.</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework75" xml:space="preserve">
+    <value>To 75% Framework</value>
+  </data>
+  <data name="CtlCubeMnuConvertFramework75Tooltip" xml:space="preserve">
+    <value>All components are set to a 75% constructed state.</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotate" xml:space="preserve">
+    <value>Rotate</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotateAxis" xml:space="preserve">
+    <value>Reorient Station to Axis</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotateAxisTooltip" xml:space="preserve">
+    <value>Reorients to the accepted single orientation for a Station, and corrects the position to match standard Space Engineers block locations.</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotateXneg" xml:space="preserve">
+    <value>Rotate cubes forward-down around X axis (-90 Pitch)</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotateXpos" xml:space="preserve">
+    <value>Rotate cubes backward-down around X axis (+90 Pitch)</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotateYneg" xml:space="preserve">
+    <value>Rotate cubes clockwise around Y axis (-90 Yaw)</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotateYpos" xml:space="preserve">
+    <value>Rotate cubes anti-clockwise around Y axis (+90 Yaw)</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotateZneg" xml:space="preserve">
+    <value>Rotate cubes right-down around Z axis (-90 Roll)</value>
+  </data>
+  <data name="CtlCubeMnuConvertRotateZpos" xml:space="preserve">
+    <value>Rotate cubes left-down around Z axis (+90 Roll)</value>
+  </data>
+  <data name="CtlCubeMnuConvertStationShip" xml:space="preserve">
+    <value>Station/Ship</value>
+  </data>
+  <data name="CtlCubeMnuConvertToShip" xml:space="preserve">
+    <value>To Ship</value>
+  </data>
+  <data name="CtlCubeMnuConvertToShipTooltip" xml:space="preserve">
+    <value>Change a Station into a Large Ship.</value>
+  </data>
+  <data name="CtlCubeMnuConvertToStation" xml:space="preserve">
+    <value>To Station</value>
+  </data>
+  <data name="CtlCubeMnuConvertToStationTooltip" xml:space="preserve">
+    <value>Change a Large Ship into a Station.</value>
+  </data>
+  <data name="CtlCubeMnuCopyDetail" xml:space="preserve">
+    <value>Copy text detail to Clipboard</value>
+  </data>
+  <data name="CtlCubeMnuMirror" xml:space="preserve">
+    <value>Mirror</value>
+  </data>
+  <data name="CtlCubeMnuMirrorEven" xml:space="preserve">
+    <value>Find largest surface / even [left&gt;|&lt;right]</value>
+  </data>
+  <data name="CtlCubeMnuMirrorEvenTooltip" xml:space="preserve">
+    <value>Finds the single largest surface on the edge, and mirrors from there.</value>
+  </data>
+  <data name="CtlCubeMnuMirrorOdd" xml:space="preserve">
+    <value>Find largest surface / odd [left&gt;|center|&lt;right]</value>
+  </data>
+  <data name="CtlCubeMnuMirrorOddTooltip" xml:space="preserve">
+    <value>Finds the single largest surface on the edge, and mirrors from there.</value>
+  </data>
+  <data name="CtlCubeMnuMirrorSymmetry" xml:space="preserve">
+    <value>Using predefined X/Y/Z Symmetry Planes</value>
+  </data>
+  <data name="CtlCubeMnuMirrorSymmetryTooltip" xml:space="preserve">
+    <value>Uses planes as defined on the ship/station within Space Engineers.</value>
+  </data>
+  <data name="CtlCubeMnuOptimize" xml:space="preserve">
+    <value>Optimize</value>
+  </data>
+  <data name="CtlCubeMnuOptimizeTooltip" xml:space="preserve">
+    <value>Only useful for enormous ships of more than 200,000 blocks. Reorganises order of cubes within the file, to speed up loading time.</value>
+  </data>
+  <data name="CtlCubeMnuRepair" xml:space="preserve">
+    <value>Repair</value>
+  </data>
+  <data name="CtlCubeMnuSpeed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="CtlCubeMnuSpeedMaxToPlayer" xml:space="preserve">
+    <value>Max Speed At Player</value>
+  </data>
+  <data name="CtlCubeMnuSpeedMaxToPlayerTooltip" xml:space="preserve">
+    <value>Sets the object velocity directly at the player at maximum speed.</value>
+  </data>
+  <data name="CtlCubeMnuSpeedReset" xml:space="preserve">
+    <value>Reset all Speed</value>
+  </data>
+  <data name="CtlCubeMnuSpeedResetLinear" xml:space="preserve">
+    <value>Reset Linear Velocity</value>
+  </data>
+  <data name="CtlCubeMnuSpeedResetLinearTooltip" xml:space="preserve">
+    <value>Set Linear Velocity to zero (0).</value>
+  </data>
+  <data name="CtlCubeMnuSpeedResetRotation" xml:space="preserve">
+    <value>Reset Rotation Velocity</value>
+  </data>
+  <data name="CtlCubeMnuSpeedResetRotationTooltip" xml:space="preserve">
+    <value>Set Rotation Velocity to zero (0).</value>
+  </data>
+  <data name="CtlCubeMnuSpeedResetTooltip" xml:space="preserve">
+    <value>Set Linear and Rotation Velocity to zero (0).</value>
+  </data>
+  <data name="CtlCubeMnuSpeedReverse" xml:space="preserve">
+    <value>Reverse Speed</value>
+  </data>
+  <data name="CtlCubeMnuSpeedReverseTooltip" xml:space="preserve">
+    <value>Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.</value>
+  </data>
+  <data name="CtlCubeTxtCenter" xml:space="preserve">
+    <value>Center:</value>
+  </data>
+  <data name="CtlCubeTxtDamage" xml:space="preserve">
+    <value>Damage:</value>
+  </data>
+  <data name="CtlCubeTxtDampeners" xml:space="preserve">
+    <value>Dampeners:</value>
+  </data>
+  <data name="CtlCubeTxtDestructible" xml:space="preserve">
+    <value>Destructible:</value>
+  </data>
+  <data name="CtlCubeTxtDistance" xml:space="preserve">
+    <value>Distance:</value>
+  </data>
+  <data name="CtlCubeTxtName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="CtlCubeTxtPiloted" xml:space="preserve">
+    <value>Piloted:</value>
+  </data>
+  <data name="CtlCubeTxtPosition" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CtlCubeTxtScale" xml:space="preserve">
+    <value>Scale:</value>
+  </data>
+  <data name="CtlCubeTxtSize" xml:space="preserve">
+    <value>Size:</value>
+  </data>
+  <data name="CtlCubeTxtSpeed" xml:space="preserve">
+    <value>Speed:</value>
+  </data>
+  <data name="GlobalSIDistanceKilometre" xml:space="preserve">
+    <value>Km</value>
+  </data>
+  <data name="GlobalSIDistanceMetre" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="GlobalSIVelocityMetresPerSecond" xml:space="preserve">
+    <value>m/s</value>
+  </data>
+  <data name="CtlCubeColBuild" xml:space="preserve">
+    <value>Build</value>
+  </data>
+  <data name="CtlCubeColColor" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="CtlCubeColComponentMass" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="CtlCubeColComponents" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="CtlCubeColComponentTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="CtlCubeColComponentVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="CtlCubeColCubeCount" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="CtlCubeColCubeMass" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="CtlCubeColCubes" xml:space="preserve">
+    <value>Cubes</value>
+  </data>
+  <data name="CtlCubeColCubeTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="CtlCubeColIcon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="CtlCubeColIngotAmount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="CtlCubeColIngotMass" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="CtlCubeColIngots" xml:space="preserve">
+    <value>Ingots</value>
+  </data>
+  <data name="CtlCubeColIngotTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="CtlCubeColIngotVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="CtlCubeColName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CtlCubeColOre" xml:space="preserve">
+    <value>Ore</value>
+  </data>
+  <data name="CtlCubeColOreAmount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="CtlCubeColOreMass" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="CtlCubeColOreVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="CtlCubeColOwner" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="CtlCubeColX" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="CtlCubeColY" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="CtlCubeColZ" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="CtlCubeMnuColorCube" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="CtlCubeMnuDeleteCube" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="CtlCubeMnuFrameworkCube" xml:space="preserve">
+    <value>Framework</value>
+  </data>
+  <data name="CtlCubeMnuOwnerCube" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="CtlCubeMnuReplaceCube" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="CtlCubeTxtAngularVelocityTooltip" xml:space="preserve">
+    <value>Approximate Angular Velocity</value>
+  </data>
+  <data name="CtlCubeTxtBlocks" xml:space="preserve">
+    <value>Blocks:</value>
+  </data>
+  <data name="CtlCubeTxtCockpitOrient" xml:space="preserve">
+    <value>Cockpit Orientation:</value>
+  </data>
+  <data name="CtlCubeTxtFilter" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="CtlCubeTxtFilterClearTooltip" xml:space="preserve">
+    <value>Clear Filter (Esc)</value>
+  </data>
+  <data name="CtlCubeTxtFilterSearchTooltip" xml:space="preserve">
+    <value>Search (Enter)</value>
+  </data>
+  <data name="CtlCubeTxtFilterTooltip" xml:space="preserve">
+    <value>Enter the name of cube to filter by.</value>
+  </data>
+  <data name="CtlCubeTxtLinearVelocityTooltip" xml:space="preserve">
+    <value>Linear Velocity</value>
+  </data>
+  <data name="CtlCubeTxtMass" xml:space="preserve">
+    <value>Mass:</value>
+  </data>
+  <data name="CtlCubeTxtTimeToProd" xml:space="preserve">
+    <value>Total time to produce:</value>
+  </data>
+  <data name="CtlGridBlockSizeValue" xml:space="preserve">
+    <value>{0} × {1} × {2} blocks</value>
+  </data>
+  <data name="CtlGridSizeValue" xml:space="preserve">
+    <value>{0}m × {1}m × {2}m</value>
+  </data>
+  <data name="CtlGridTimeToProdValue" xml:space="preserve">
+    <value>{0:dd} days, {0:hh} hours, {0:mm\:ss\.ff}</value>
   </data>
 </root>

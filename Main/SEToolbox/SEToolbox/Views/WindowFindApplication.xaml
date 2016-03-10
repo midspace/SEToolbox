@@ -35,7 +35,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="0,8,0,8" Text="{lex:Loc WnLocateAppPromptUser}"/>
+                <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="0,8,0,8" Text="{lex:Loc WnLocateAppTxtPromptUser}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <TextBox Width="280" Text="{Binding GameApplicationPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Name="uxInitialElement"/>
                     <Button ToolTip="{lex:Loc BtBrowseAppTip}" Command="{Binding BrowseApplicationCommand}" VerticalAlignment="Center">
@@ -48,12 +48,12 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,8,0,0" Visibility="{Binding IsWrongApplication, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=error24}" VerticalAlignment="Center"/>
-                    <TextBlock Text="{lex:Loc WnLocateAppInvalidText}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <TextBlock Text="{lex:Loc WnLocateAppTxtInvalid}" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
-                <Button Width="90" Command="{Binding ContinueCommand}" Content="{lex:Loc BtContinue}" IsDefault="True"/>
-                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc BtCancel}" IsCancel="True"/>
+                <Button Width="90" Command="{Binding ContinueCommand}" Content="{lex:Loc WnLocateAppBtnContinue}" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnLocateAppBtnCancel}" IsCancel="True"/>
             </StackPanel>
         </Grid>
     </Grid>

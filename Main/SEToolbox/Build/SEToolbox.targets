@@ -30,8 +30,11 @@
 
     <ItemGroup>
       <PreviousBinaries Include="$(BinariesRoot)\*.*"/>
+      <!-- Add additional languages here. -->
+      <DirsToClean Include="$(BinariesRoot)\zh" />
     </ItemGroup>
     <Delete Files="@(PreviousBinaries)" />
+    <RemoveDir Directories="@(DirsToClean)" />
 
     <Message Text="Copying from '$(EditorFiles)' to '$(BinariesRoot)'" />
     <!--         Copy the Control folder structure into the build output     -->

@@ -35,14 +35,14 @@
                     <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,8,0,8" Text="{Binding SubTitle}"/>
                 </StackPanel>
                 <TextBlock Grid.Row="1" Height="50" TextWrapping="Wrap" Margin="0,8,0,8">
-                    <Run Text="Time remaining:"/>
+                    <Run Text="{lex:Loc WnProgressTxtTimeRemain}"/>
                     <Run Text="{Binding EstimatedTimeLeft, StringFormat='hh\\:mm\\:ss'}"/>
                 </TextBlock>
                 <ProgressBar Grid.Row="2" Margin="0" Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" Height="20" />
             </Grid>
-            <!--<CheckBox Grid.Row="3" Content="Shutdown when finished" VerticalAlignment="Center" Margin="8,0" />-->
+            <!--<CheckBox Grid.Row="3" Content="{lex:Loc WnProgressBtnShutdown}" VerticalAlignment="Center" Margin="8,0" />-->
             <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
-                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc BtCancel}" IsCancel="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnProgressBtnCancel}" IsCancel="True"/>
             </StackPanel>
         </Grid>
     </Grid>

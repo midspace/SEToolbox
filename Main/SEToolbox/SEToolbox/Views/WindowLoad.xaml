@@ -5,8 +5,11 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow" Style="{StaticResource DefaultWindowStyle}"
-        Title="Select World" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="1200" MaxHeight="1024" Icon="/SEToolbox;component/app.ico" 
+        Title="{lex:Loc WnLoadTitle}" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="1200" MaxHeight="1024" Icon="/SEToolbox;component/app.ico" 
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">
@@ -38,17 +41,17 @@
                                        ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                 <ListView.View>
                     <GridView>
-                        <controls:SortableGridViewColumn SortBinding="{Binding SessionName}" Header="Name" Width="240">
+                        <controls:SortableGridViewColumn SortBinding="{Binding SessionName}" Header="{lex:Loc SEToolbox:Resources:WnLoadColName}" Width="240">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding SessionName}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </controls:SortableGridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding LastLoadTime}" Header="Loaded"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding LastSaveTime}" Header="Saved"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding WorkshopId}" Header="Workshop"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Version}" Header="Version"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding LastLoadTime}" Header="{lex:Loc SEToolbox:Resources:WnLoadColLoaded}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding LastSaveTime}" Header="{lex:Loc SEToolbox:Resources:WnLoadColSaved}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding WorkshopId}" Header="{lex:Loc SEToolbox:Resources:WnLoadColWorkshop}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Version}" Header="{lex:Loc SEToolbox:Resources:WnLoadColVersion}"/>
                     </GridView>
                 </ListView.View>
                 <ListView.GroupStyle>
@@ -84,12 +87,12 @@
                 </i:Interaction.Triggers>
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Open Folder" Command="{Binding OpenFolderCommand}">
+                        <MenuItem Header="{lex:Loc SEToolbox:Resources:WnLoadContextOpenFolder}" Command="{Binding OpenFolderCommand}">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="View Workshop" Command="{Binding OpenWorkshopCommand}">
+                        <MenuItem Header="{lex:Loc SEToolbox:Resources:WnLoadContextWorkshop}" Command="{Binding OpenWorkshopCommand}">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=workshop16}" />
                             </MenuItem.Icon>
@@ -100,7 +103,7 @@
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="4"/>
             <Grid Grid.Column="2" Margin="8,0,0,0">
                 <StackPanel VerticalAlignment="Top">
-                    <Image HorizontalAlignment="Stretch" Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" Cursor="Hand" ToolTip="Click to Zoom in">
+                    <Image HorizontalAlignment="Stretch" Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" Cursor="Hand" ToolTip="{lex:Loc WnLoadZoomInTooltip}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseUp">
                                 <commands:CommandAction Command="{Binding ZoomThumbnailCommand}"/>
@@ -109,14 +112,14 @@
                     </Image>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Button Width="90" Command="{Binding RepairCommand}" Content="_Repair"  Margin="0,0,0,32" ToolTip="This will attempt to repair the save content it it finds any issues." />
-                    <Button Width="90" Command="{Binding BrowseCommand}" Content="_Browse"  Margin="0,0,0,32" />
-                    <Button Width="90" Command="{Binding LoadCommand}" Content="_Open" IsDefault="True" Margin="0,0,0,8" />
-                    <Button Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                    <Button Width="90" Command="{Binding RepairCommand}" Content="{lex:Loc WnLoadBtnRepair}"  Margin="0,0,0,32" ToolTip="{lex:Loc WnLoadBtnRepairTooltip}" />
+                    <Button Width="90" Command="{Binding BrowseCommand}" Content="{lex:Loc WnLoadBtnBrowse}"  Margin="0,0,0,32" />
+                    <Button Width="90" Command="{Binding LoadCommand}" Content="{lex:Loc WnLoadBtnOpen}" IsDefault="True" Margin="0,0,0,8" />
+                    <Button Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnLoadBtnCancel}" IsCancel="True"/>
                 </StackPanel>
             </Grid>
         </Grid>
-        <Border Visibility="{Binding ZoomThumbnail, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Cursor="Hand" ToolTip="Click to Zoom out">
+        <Border Visibility="{Binding ZoomThumbnail, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Cursor="Hand" ToolTip="{lex:Loc WnLoadZoomOutTooltip}">
             <Image Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" IsHitTestVisible="False"/>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseUp">
