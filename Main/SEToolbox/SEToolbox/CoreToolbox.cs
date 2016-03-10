@@ -5,7 +5,6 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text.RegularExpressions;
     using System.Windows;
 
     using SEToolbox.Interop;
@@ -29,8 +28,8 @@
             var validApps = new string[] {
                 "SpaceEngineers.exe",
                 "SpaceEngineersDedicated.exe",
-                "MedievalEngineers.exe",
-                "MedievalEngineersDedicated.exe"
+                //"MedievalEngineers.exe",
+                //"MedievalEngineersDedicated.exe"
             };
 
             if (GlobalSettings.Default.PromptUser || !ToolboxUpdater.ValidateSpaceEngineersInstall(filePath))

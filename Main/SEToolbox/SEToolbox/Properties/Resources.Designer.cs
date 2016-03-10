@@ -1537,7 +1537,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Space Engineers Application|SpaceEngineers*.exe|Medieval Engineers Application|MedievalEngineers*.exe.
+        ///   Looks up a localized string similar to Space Engineers Application|SpaceEngineers*.exe.
         /// </summary>
         public static string DialogLocateApplicationFilter {
             get {

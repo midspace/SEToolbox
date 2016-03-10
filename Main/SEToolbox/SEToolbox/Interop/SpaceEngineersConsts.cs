@@ -50,8 +50,8 @@
             // Don't access the ObjectBuilders from the static ctor, as it will cause issues with the Serializer type loader.
 
             var basePath = "SpaceEngineers";
-            if (GlobalSettings.Default.SEBinPath.Contains("MedievalEngineers", StringComparison.InvariantCulture))
-                basePath = "MedievalEngineers";
+            //if (GlobalSettings.Default.SEBinPath.Contains("MedievalEngineers", StringComparison.InvariantCulture))
+            //    basePath = "MedievalEngineers";
 
             BaseLocalPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + @"\Saves", basePath + @"\Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
             BaseDedicatedServerHostPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + @"Dedicated\Saves", basePath + @"Dedicated\Mods"); // Followed by .\LastLoaded.sbl

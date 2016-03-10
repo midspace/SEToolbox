@@ -5,20 +5,15 @@
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Web.UI;
-
-    using Medieval.ObjectBuilders.Definitions;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Medieval.ObjectBuilders.Definitions; // DX11 voxel material
     using SEToolbox.Converters;
     using SEToolbox.ImageLibrary;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage;
     using VRage.Game;
-    using VRageMath;
 
     public class ComponentListModel : BaseModel
     {
