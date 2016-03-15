@@ -64,8 +64,8 @@
 
             int chunks, chunkSize;
             double multiplier = 1.0;
-            var rare = materialsCollection.Where(m => m.IsRare && m.MinedRatio >= 1).ToList();
-            var superRare = materialsCollection.Where(m => m.IsRare && m.MinedRatio < 1).ToList();
+            var rare = materialsCollection.Where(m => m.IsRare && m.MinedRatio >= 2).ToList();
+            var superRare = materialsCollection.Where(m => m.IsRare && m.MinedRatio < 2).ToList();
 
             if (islarge)
             {
