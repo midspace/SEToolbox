@@ -122,10 +122,6 @@
 
     internal class AppConstants
     {
-        public const string DocumentationUrl = "https://github.com/midspace/SEToolbox/wiki";
-        public const string SupportUrl = "https://github.com/midspace/SEToolbox/issues";
-        public const string UpdatesUrl = "https://github.com/midspace/SEToolbox/releases/latest";
-
         internal static Dictionary<string, string> SupportedLanguages = new Dictionary<string, string>()
         {
             {"en", "flag_great_britain"},

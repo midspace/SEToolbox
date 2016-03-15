@@ -15,6 +15,8 @@
 
         private string _name;
 
+        private string _oreName;
+
         #endregion
 
         #region Properties
@@ -29,6 +31,7 @@
                     _name = value;
                     FriendlyName = SpaceEngineersApi.GetResourceName(Name);
                     RaisePropertyChanged(() => Name);
+                    RaisePropertyChanged(() => FriendlyName);
                 }
             }
         }
@@ -57,7 +60,22 @@
 
         public bool IsRare { get; set; }
 
-        public string OreName { get; set; }
+        public string OreName
+        {
+            get { return _oreName; }
+            set
+            {
+                if (value != _oreName)
+                {
+                    _oreName = value;
+                    FriendlyOreName = SpaceEngineersApi.GetResourceName(OreName);
+                    RaisePropertyChanged(() => OreName);
+                    RaisePropertyChanged(() => FriendlyOreName);
+                }
+            }
+        }
+
+        public string FriendlyOreName { get; set; }
 
         public float MineOreRatio { get; set; }
 

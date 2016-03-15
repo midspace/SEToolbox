@@ -71,7 +71,7 @@
 
         public string HomepageUrl
         {
-            get { return AppConstants.SupportUrl; }
+            get { return SEToolbox.Properties.Resources.GlobalHomepageUrl; }
         }
 
         #endregion

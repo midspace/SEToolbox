@@ -2133,6 +2133,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/midspace/SEToolbox/wiki.
+        /// </summary>
+        public static string GlobalDocumentationUrl {
+            get {
+                return ResourceManager.GetString("GlobalDocumentationUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/midspace/SEToolbox.
+        /// </summary>
+        public static string GlobalHomepageUrl {
+            get {
+                return ResourceManager.GetString("GlobalHomepageUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Km.
         /// </summary>
         public static string GlobalSIDistanceKilometre {
@@ -2174,6 +2192,24 @@ namespace SEToolbox.Properties {
         public static string GlobalSIVolumeLitre {
             get {
                 return ResourceManager.GetString("GlobalSIVolumeLitre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/midspace/SEToolbox/issues.
+        /// </summary>
+        public static string GlobalSupportUrl {
+            get {
+                return ResourceManager.GetString("GlobalSupportUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/midspace/SEToolbox/releases/latest.
+        /// </summary>
+        public static string GlobalUpdatesUrl {
+            get {
+                return ResourceManager.GetString("GlobalUpdatesUrl", resourceCulture);
             }
         }
         
@@ -2870,6 +2906,321 @@ namespace SEToolbox.Properties {
         public static string WnAboutTxtVersion {
             get {
                 return ResourceManager.GetString("WnAboutTxtVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WnComponentsBtnClose {
+            get {
+                return ResourceManager.GetString("WnComponentsBtnClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Report.
+        /// </summary>
+        public static string WnComponentsBtnExport {
+            get {
+                return ResourceManager.GetString("WnComponentsBtnExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accessible.
+        /// </summary>
+        public static string WnComponentsColComponentAccessible {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentAccessible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build Time.
+        /// </summary>
+        public static string WnComponentsColComponentBuildTime {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentBuildTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mass.
+        /// </summary>
+        public static string WnComponentsColComponentMass {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentMass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string WnComponentsColComponentName {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Type Id.
+        /// </summary>
+        public static string WnComponentsColComponentSubType {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentSubType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type Id.
+        /// </summary>
+        public static string WnComponentsColComponentType {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volume.
+        /// </summary>
+        public static string WnComponentsColComponentVolume {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accessible.
+        /// </summary>
+        public static string WnComponentsColCubeAccessible {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeAccessible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build Time.
+        /// </summary>
+        public static string WnComponentsColCubeBuildTime {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeBuildTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size (W×H×D).
+        /// </summary>
+        public static string WnComponentsColCubeDimention {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeDimention", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mass (Kg).
+        /// </summary>
+        public static string WnComponentsColCubeMass {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeMass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string WnComponentsColCubeName {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cube Size.
+        /// </summary>
+        public static string WnComponentsColCubeSize {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Type Id.
+        /// </summary>
+        public static string WnComponentsColCubeSubType {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeSubType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type Id.
+        /// </summary>
+        public static string WnComponentsColCubeType {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accessible.
+        /// </summary>
+        public static string WnComponentsColItemAccessible {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemAccessible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build Time.
+        /// </summary>
+        public static string WnComponentsColItemBuildTime {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemBuildTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mass.
+        /// </summary>
+        public static string WnComponentsColItemMass {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemMass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string WnComponentsColItemName {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Type Id.
+        /// </summary>
+        public static string WnComponentsColItemSubType {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemSubType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type Id.
+        /// </summary>
+        public static string WnComponentsColItemType {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volume.
+        /// </summary>
+        public static string WnComponentsColItemVolume {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mined Ore Ratio.
+        /// </summary>
+        public static string WnComponentsColMaterialMineRate {
+            get {
+                return ResourceManager.GetString("WnComponentsColMaterialMineRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string WnComponentsColMaterialName {
+            get {
+                return ResourceManager.GetString("WnComponentsColMaterialName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ore Name.
+        /// </summary>
+        public static string WnComponentsColMaterialOreName {
+            get {
+                return ResourceManager.GetString("WnComponentsColMaterialOreName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rare.
+        /// </summary>
+        public static string WnComponentsColMaterialRare {
+            get {
+                return ResourceManager.GetString("WnComponentsColMaterialRare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property.
+        /// </summary>
+        public static string WnComponentsColProperty {
+            get {
+                return ResourceManager.GetString("WnComponentsColProperty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string WnComponentsColValue {
+            get {
+                return ResourceManager.GetString("WnComponentsColValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Components.
+        /// </summary>
+        public static string WnComponentsTabComponents {
+            get {
+                return ResourceManager.GetString("WnComponentsTabComponents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cubes.
+        /// </summary>
+        public static string WnComponentsTabCubes {
+            get {
+                return ResourceManager.GetString("WnComponentsTabCubes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        public static string WnComponentsTabItems {
+            get {
+                return ResourceManager.GetString("WnComponentsTabItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asteroid Materials.
+        /// </summary>
+        public static string WnComponentsTabMaterials {
+            get {
+                return ResourceManager.GetString("WnComponentsTabMaterials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete Component List.
+        /// </summary>
+        public static string WnComponentsTitle {
+            get {
+                return ResourceManager.GetString("WnComponentsTitle", resourceCulture);
             }
         }
         

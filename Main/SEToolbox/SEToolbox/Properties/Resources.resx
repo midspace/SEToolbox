@@ -1378,4 +1378,121 @@ Distance:		{1:#,##0.0} m</value>
   <data name="CtlGridTimeToProdValue" xml:space="preserve">
     <value>{0:dd} days, {0:hh} hours, {0:mm\:ss\.ff}</value>
   </data>
+  <data name="GlobalDocumentationUrl" xml:space="preserve">
+    <value>https://github.com/midspace/SEToolbox/wiki</value>
+  </data>
+  <data name="GlobalHomepageUrl" xml:space="preserve">
+    <value>https://github.com/midspace/SEToolbox</value>
+  </data>
+  <data name="GlobalSupportUrl" xml:space="preserve">
+    <value>https://github.com/midspace/SEToolbox/issues</value>
+  </data>
+  <data name="GlobalUpdatesUrl" xml:space="preserve">
+    <value>https://github.com/midspace/SEToolbox/releases/latest</value>
+  </data>
+  <data name="WnComponentsBtnClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WnComponentsBtnExport" xml:space="preserve">
+    <value>Export Report</value>
+  </data>
+  <data name="WnComponentsColComponentAccessible" xml:space="preserve">
+    <value>Accessible</value>
+  </data>
+  <data name="WnComponentsColComponentBuildTime" xml:space="preserve">
+    <value>Build Time</value>
+  </data>
+  <data name="WnComponentsColComponentMass" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="WnComponentsColComponentName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="WnComponentsColComponentSubType" xml:space="preserve">
+    <value>Sub Type Id</value>
+  </data>
+  <data name="WnComponentsColComponentType" xml:space="preserve">
+    <value>Type Id</value>
+  </data>
+  <data name="WnComponentsColComponentVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="WnComponentsColCubeAccessible" xml:space="preserve">
+    <value>Accessible</value>
+  </data>
+  <data name="WnComponentsColCubeBuildTime" xml:space="preserve">
+    <value>Build Time</value>
+  </data>
+  <data name="WnComponentsColCubeDimention" xml:space="preserve">
+    <value>Size (W×H×D)</value>
+  </data>
+  <data name="WnComponentsColCubeMass" xml:space="preserve">
+    <value>Mass (Kg)</value>
+  </data>
+  <data name="WnComponentsColCubeName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="WnComponentsColCubeSize" xml:space="preserve">
+    <value>Cube Size</value>
+  </data>
+  <data name="WnComponentsColCubeSubType" xml:space="preserve">
+    <value>Sub Type Id</value>
+  </data>
+  <data name="WnComponentsColCubeType" xml:space="preserve">
+    <value>Type Id</value>
+  </data>
+  <data name="WnComponentsColMaterialMineRate" xml:space="preserve">
+    <value>Mined Ore Ratio</value>
+  </data>
+  <data name="WnComponentsColMaterialName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="WnComponentsColMaterialOreName" xml:space="preserve">
+    <value>Ore Name</value>
+  </data>
+  <data name="WnComponentsColMaterialRare" xml:space="preserve">
+    <value>Rare</value>
+  </data>
+  <data name="WnComponentsColItemAccessible" xml:space="preserve">
+    <value>Accessible</value>
+  </data>
+  <data name="WnComponentsColItemBuildTime" xml:space="preserve">
+    <value>Build Time</value>
+  </data>
+  <data name="WnComponentsColItemMass" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="WnComponentsColItemName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="WnComponentsColItemSubType" xml:space="preserve">
+    <value>Sub Type Id</value>
+  </data>
+  <data name="WnComponentsColItemType" xml:space="preserve">
+    <value>Type Id</value>
+  </data>
+  <data name="WnComponentsColItemVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="WnComponentsColProperty" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="WnComponentsColValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="WnComponentsTabComponents" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="WnComponentsTabCubes" xml:space="preserve">
+    <value>Cubes</value>
+  </data>
+  <data name="WnComponentsTabItems" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="WnComponentsTabMaterials" xml:space="preserve">
+    <value>Asteroid Materials</value>
+  </data>
+  <data name="WnComponentsTitle" xml:space="preserve">
+    <value>Complete Component List</value>
+  </data>
 </root>

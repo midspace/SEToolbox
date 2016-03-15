@@ -956,7 +956,7 @@
 
         public void OpenUpdatesLinkExecuted()
         {
-            Process.Start(AppConstants.UpdatesUrl);
+            Process.Start(SEToolbox.Properties.Resources.GlobalUpdatesUrl);
         }
 
         public bool OpenDocumentationLinkCanExecute()
@@ -966,7 +966,7 @@
 
         public void OpenDocumentationLinkExecuted()
         {
-            Process.Start(AppConstants.DocumentationUrl);
+            Process.Start(SEToolbox.Properties.Resources.GlobalDocumentationUrl);
         }
 
         public bool OpenSupportLinkCanExecute()
@@ -976,7 +976,7 @@
 
         public void OpenSupportLinkExecuted()
         {
-            Process.Start(AppConstants.SupportUrl);
+            Process.Start(SEToolbox.Properties.Resources.GlobalSupportUrl);
         }
 
         public bool LanguageCanExecute()

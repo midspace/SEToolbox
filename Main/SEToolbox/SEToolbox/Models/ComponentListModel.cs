@@ -277,12 +277,15 @@
                 if (texture == null && voxelMaterialDefinition is MyObjectBuilder_Dx11VoxelMaterialDefinition)
                     texture = ((MyObjectBuilder_Dx11VoxelMaterialDefinition)voxelMaterialDefinition).NormalGlossXZnY;
 
+                var oreBp = SpaceEngineersApi.GetDefinition(typeof(MyObjectBuilder_Ore), voxelMaterialDefinition.MinedOre);
+                string oreName = oreBp == null ? voxelMaterialDefinition.MinedOre : oreBp.DisplayName;
+
                 MaterialAssets.Add(new ComponentItemModel
                 {
                     Name = voxelMaterialDefinition.Id.SubtypeId,
                     TextureFile = texture == null ? null : SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture)),
                     IsRare = voxelMaterialDefinition.IsRare,
-                    OreName = voxelMaterialDefinition.MinedOre,
+                    OreName = oreName,
                     MineOreRatio = voxelMaterialDefinition.MinedOreRatio,
                 });
             }
