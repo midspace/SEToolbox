@@ -41,7 +41,7 @@
         [TestMethod]
         public void FindType()
         {
-            Type ivms = typeof(Sandbox.ModAPI.IMyVoxelMaps);
+            Type ivms = typeof(VRage.Game.ModAPI.IMyVoxelMaps);
 
             var binPath = @"D:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin";
 
@@ -86,7 +86,7 @@
                 var types = ass.GetTypes();
              
                 var myVoxelMapsType = types.Where(p => ivms.IsAssignableFrom(p)).First();
-                var myVoxelMaps = Activator.CreateInstance(myVoxelMapsType) as Sandbox.ModAPI.IMyVoxelMaps;
+                var myVoxelMaps = Activator.CreateInstance(myVoxelMapsType) as VRage.Game.ModAPI.IMyVoxelMaps;
 
                 //5BCAC68007431E61367F5B2CF24E2D6F.5217D2CFAB7CCD6299A3F53DAEE1DEB1
                 //public static 6922E99EC72C10627AA239B8167BF7DC A109856086C45CF523B23AFCDDB82F43(byte[] 06D95B424FC4150954FF019440A547AE)

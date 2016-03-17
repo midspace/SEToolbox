@@ -62,7 +62,7 @@
         {
             try
             {
-                return new Version(Sandbox.Common.MyFinalBuildConstants.APP_VERSION_STRING.ToString().Replace("_", "."));
+                return new Version(VRage.Game.MyFinalBuildConstants.APP_VERSION_STRING.ToString().Replace("_", "."));
             }
             catch
             {
@@ -75,7 +75,7 @@
             try
             {
                 // Use of Sandbox.Common.MyFinalBuildConstants.APP_VERSION causes the Compiler to hard code in the value from the assembly at the time of compile.
-                return Int32.Parse(Sandbox.Common.MyFinalBuildConstants.APP_VERSION_STRING.ToString().Replace("_", ""));
+                return Int32.Parse(VRage.Game.MyFinalBuildConstants.APP_VERSION_STRING.ToString().Replace("_", ""));
             }
             catch
             {
