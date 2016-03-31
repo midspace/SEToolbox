@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.126.003.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.128.005.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -47,7 +47,9 @@
 
               <RemoveFile Id="file61275B9FC2AE484BA7A2BDB7459A3647" Name="Sandbox.Common.dll" On="install"/>
               <RemoveFile Id="fileA10D59ED71944ED7BD52C144A05A59A3" Name="SpaceEngineers.ObjectBuilders.dll" On="install"/>
+              <RemoveFile Id="fileAF60B61F742940E7B68F86C3410E730C" Name="SpaceEngineers.ObjectBuilders.XmlSerializers.dll" On="install"/>
               <RemoveFile Id="file9BC4F4C590AF4888B721F2301140EB5A" Name="Sandbox.Game.dll" On="install"/>
+              <RemoveFile Id="fileB618365481BD47F5A21AA2A60F2C9AA4" Name="HavokWrapper.dll" On="install"/>
               <RemoveFile Id="fileEA4AE319577E449E9D1DF59BC1B6D3F0" Name="VRage.dll" On="install"/>
               <RemoveFile Id="file0F16284F3E2D4C5CA5402B757C4951D1" Name="VRage.Game.dll" On="install"/>
               <RemoveFile Id="fukeD6616ECAB0004D46AE4DBA393C53F0ED" Name="VRage.Game.XmlSerializers.dll" On="install"/>

@@ -283,7 +283,7 @@
 
             if (definitions.AmmoMagazines != null)
             {
-                icons.AddRange(definitions.AmmoMagazines.Select(magazine => magazine.Icon));
+                icons.AddRange(definitions.AmmoMagazines.SelectMany(magazine => magazine.Icons ?? new string[0]));
                 models.AddRange(definitions.AmmoMagazines.Select(magazine => magazine.Model));
             }
 
@@ -294,13 +294,13 @@
 
             if (definitions.Components != null)
             {
-                icons.AddRange(definitions.Components.Select(component => component.Icon));
+                icons.AddRange(definitions.Components.SelectMany(component => component.Icons ?? new string[0]));
                 models.AddRange(definitions.Components.Select(component => component.Model));
             }
 
             if (definitions.CubeBlocks != null)
             {
-                icons.AddRange(definitions.CubeBlocks.Select(definition => definition.Icon));
+                icons.AddRange(definitions.CubeBlocks.SelectMany(definition => definition.Icons ?? new string[0]));
                 models.AddRange(definitions.CubeBlocks.Where(d => d.CubeDefinition != null && d.CubeDefinition.Sides != null).SelectMany(d => d.CubeDefinition.Sides).Select(side => side.Model));
                 models.AddRange(definitions.CubeBlocks.Where(d => d.BuildProgressModels != null).SelectMany(d => d.BuildProgressModels).Select(model => model.File));
             }
@@ -312,7 +312,7 @@
 
             if (definitions.PhysicalItems != null)
             {
-                icons.AddRange(definitions.PhysicalItems.Select(physicalItem => physicalItem.Icon));
+                icons.AddRange(definitions.PhysicalItems.SelectMany(physicalItem => physicalItem.Icons ?? new string[0]));
                 models.AddRange(definitions.PhysicalItems.Select(physicalItem => physicalItem.Model));
             }
 

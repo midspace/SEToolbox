@@ -517,7 +517,7 @@
                             }
 
                             blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds * block.BuildPercent));
-                            blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icon, Path.Combine(contentPath, cubeBlockDefinition.Icon));
+                            blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icons.First(), Path.Combine(contentPath, cubeBlockDefinition.Icons.First()));
                         }
 
                         if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
@@ -642,7 +642,7 @@
                 return;
             }
 
-            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icon, Path.Combine(contentPath, cd.Icon));
+            var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icons.First(), Path.Combine(contentPath, cd.Icons.First()));
 
             if (tallyTypeId == SpaceEngineersTypes.Ore)
             {

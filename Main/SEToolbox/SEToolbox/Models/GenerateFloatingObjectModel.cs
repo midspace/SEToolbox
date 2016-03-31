@@ -295,7 +295,7 @@
                     TypeId = componentDefinition.Id.TypeId,
                     SubtypeId = componentDefinition.Id.SubtypeId,
                     Mass = componentDefinition.Mass,
-                    TextureFile = componentDefinition.Icon == null ? null : SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icon, Path.Combine(contentPath, componentDefinition.Icon)),
+                    TextureFile = componentDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icons.First(), Path.Combine(contentPath, componentDefinition.Icons.First())),
                     Volume = componentDefinition.Volume.HasValue ? componentDefinition.Volume.Value : 0f,
                     Accessible = componentDefinition.Public,
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
@@ -315,7 +315,7 @@
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
-                    TextureFile = physicalItemDefinition.Icon == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icon, Path.Combine(contentPath, physicalItemDefinition.Icon)),
+                    TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = physicalItemDefinition.Public,
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
                 });
@@ -331,7 +331,7 @@
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
-                    TextureFile = physicalItemDefinition.Icon == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icon, Path.Combine(contentPath, physicalItemDefinition.Icon)),
+                    TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = !string.IsNullOrEmpty(physicalItemDefinition.Model),
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
                 });

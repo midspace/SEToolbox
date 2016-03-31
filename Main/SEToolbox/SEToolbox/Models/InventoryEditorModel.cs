@@ -3,6 +3,7 @@
     using System;
     using System.Collections.ObjectModel;
     using System.IO;
+    using System.Linq;
     using System.Xml.Serialization;
 
     using Sandbox.Common.ObjectBuilders;
@@ -240,7 +241,7 @@
                 name = definition.DisplayName;
                 massMultiplyer = definition.Mass;
                 volumeMultiplyer = definition.Volume.Value;
-                textureFile = SpaceEngineersCore.GetDataPathOrDefault(definition.Icon, Path.Combine(contentPath, definition.Icon));
+                textureFile = SpaceEngineersCore.GetDataPathOrDefault(definition.Icons.First(), Path.Combine(contentPath, definition.Icons.First()));
             }
 
             var newItem = new InventoryModel(item)

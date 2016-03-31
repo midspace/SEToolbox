@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Web.UI;
     using Medieval.ObjectBuilders.Definitions; // DX11 voxel material
@@ -187,7 +188,7 @@
                     TypeId = cubeDefinition.Id.TypeId,
                     TypeIdString = cubeDefinition.Id.TypeIdString,
                     SubtypeId = cubeDefinition.Id.SubtypeId,
-                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icon, Path.Combine(contentPath, cubeDefinition.Icon)),
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First())),
                     Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
                     Accessible = cubeDefinition.Public,
                     Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeId),
@@ -216,7 +217,7 @@
                     TypeIdString = componentDefinition.Id.TypeIdString,
                     SubtypeId = componentDefinition.Id.SubtypeId,
                     Mass = componentDefinition.Mass,
-                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icon, Path.Combine(contentPath, componentDefinition.Icon)),
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icons.First(), Path.Combine(contentPath, componentDefinition.Icons.First())),
                     Volume = componentDefinition.Volume.HasValue ? componentDefinition.Volume.Value : 0f,
                     Accessible = componentDefinition.Public,
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / amount))) : (TimeSpan?)null,
@@ -248,7 +249,7 @@
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
-                    TextureFile = physicalItemDefinition.Icon == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icon, Path.Combine(contentPath, physicalItemDefinition.Icon)),
+                    TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = physicalItemDefinition.Public,
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / amount / timeMassMultiplyer))) : (TimeSpan?)null,
                 });
@@ -265,7 +266,7 @@
                     SubtypeId = physicalItemDefinition.Id.SubtypeId,
                     Mass = physicalItemDefinition.Mass,
                     Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
-                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icon, Path.Combine(contentPath, physicalItemDefinition.Icon)),
+                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = !string.IsNullOrEmpty(physicalItemDefinition.Model),
                     Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture)))) : (TimeSpan?)null,
                 });
