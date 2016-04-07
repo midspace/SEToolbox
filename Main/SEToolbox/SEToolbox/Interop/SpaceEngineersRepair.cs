@@ -297,7 +297,7 @@
                         ?? repairWorld.FindPilotCharacter().Pilot;
 
                     var inventoryBase = character.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyInventoryBase");
-                    MyObjectBuilder_Inventory inventory = inventoryBase?.Component as MyObjectBuilder_Inventory;
+                    MyObjectBuilder_Inventory inventory = inventoryBase == null ? null : inventoryBase.Component as MyObjectBuilder_Inventory;
 
                     if (inventory != null)
                     {

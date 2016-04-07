@@ -123,7 +123,7 @@
             {
                 DisplayName = friendlyName;
                 Units = (decimal)FloatingObject.Item.Amount;
-                Volume = cd?.Volume == null ? 0 : cd.Volume.Value * (double)FloatingObject.Item.Amount;
+                Volume = (cd == null || cd.Volume == null) ? 0 : cd.Volume.Value * (double)FloatingObject.Item.Amount;
                 Mass = cd == null ? 0 : cd.Mass * (double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
@@ -131,7 +131,7 @@
             {
                 DisplayName = friendlyName;
                 Units = (decimal)FloatingObject.Item.Amount;
-                Volume = cd?.Volume == null ? 0 : cd.Volume.Value * (double)FloatingObject.Item.Amount;
+                Volume = (cd == null || cd.Volume == null) ? 0 : cd.Volume.Value * (double)FloatingObject.Item.Amount;
                 Mass = cd == null ? 0 : cd.Mass * (double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
@@ -140,7 +140,7 @@
                 DisplayName = friendlyName;
                 Description = string.Format("x {0}", FloatingObject.Item.Amount);
                 Units = (decimal)FloatingObject.Item.Amount;
-                Volume = cd?.Volume == null ? 0 : cd.Volume.Value * (double)FloatingObject.Item.Amount;
+                Volume = (cd == null || cd.Volume == null) ? 0 : cd.Volume.Value * (double)FloatingObject.Item.Amount;
                 Mass = cd == null ? 0 : cd.Mass * (double)FloatingObject.Item.Amount;
             }
         }
