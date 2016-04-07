@@ -5,9 +5,6 @@
     using System.IO;
     using System.Linq;
     using System.Xml.Serialization;
-
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage.Game;
@@ -222,7 +219,7 @@
 
         private InventoryModel CreateItem(MyObjectBuilder_InventoryItem item, string contentPath)
         {
-            var definition = SpaceEngineersApi.GetDefinition(item.Content.TypeId, item.Content.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
+            var definition = SpaceEngineersApi.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
 
             string name;
             string textureFile;
@@ -231,7 +228,7 @@
 
             if (definition == null)
             {
-                name = item.Content.SubtypeName + " " + item.Content.TypeId.ToString();
+                name = item.PhysicalContent.SubtypeName + " " + item.PhysicalContent.TypeId.ToString();
                 massMultiplyer = 1;
                 volumeMultiplyer = 1;
                 textureFile = null;
@@ -248,14 +245,14 @@
             {
                 Name = name,
                 Amount = (decimal)item.Amount,
-                SubtypeId = item.Content.SubtypeName,
-                TypeId = item.Content.TypeId,
+                SubtypeId = item.PhysicalContent.SubtypeName,
+                TypeId = item.PhysicalContent.TypeId,
                 MassMultiplyer = massMultiplyer,
                 VolumeMultiplyer = volumeMultiplyer,
                 TextureFile = textureFile,
-                IsUnique = item.Content.TypeId == SpaceEngineersTypes.PhysicalGunObject || item.Content.TypeId == SpaceEngineersTypes.OxygenContainerObject,
-                IsInteger = item.Content.TypeId == SpaceEngineersTypes.Component || item.Content.TypeId == SpaceEngineersTypes.AmmoMagazine,
-                IsDecimal = item.Content.TypeId == SpaceEngineersTypes.Ore || item.Content.TypeId == SpaceEngineersTypes.Ingot,
+                IsUnique = item.PhysicalContent.TypeId == SpaceEngineersTypes.PhysicalGunObject || item.PhysicalContent.TypeId == SpaceEngineersTypes.OxygenContainerObject,
+                IsInteger = item.PhysicalContent.TypeId == SpaceEngineersTypes.Component || item.PhysicalContent.TypeId == SpaceEngineersTypes.AmmoMagazine,
+                IsDecimal = item.PhysicalContent.TypeId == SpaceEngineersTypes.Ore || item.PhysicalContent.TypeId == SpaceEngineersTypes.Ingot,
                 Exists = definition != null, // item no longer exists in Space Engineers definitions.
             };
 
@@ -278,7 +275,7 @@
             var invItem = _inventory.Items[index];
 
             // Remove HandWeapon if item is HandWeapon.
-            if (_character != null && _character.HandWeapon != null && invItem.Content.TypeId == SpaceEngineersTypes.PhysicalGunObject)
+            if (_character != null && _character.HandWeapon != null && invItem.PhysicalContent.TypeId == SpaceEngineersTypes.PhysicalGunObject)
             {
                 if (((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity != null &&
                     ((MyObjectBuilder_PhysicalGunObject)invItem.PhysicalContent).GunEntity.EntityId == _character.HandWeapon.EntityId)

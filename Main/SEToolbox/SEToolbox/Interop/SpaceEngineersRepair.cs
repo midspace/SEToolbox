@@ -9,10 +9,8 @@
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Support;
-    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
-    using VRage.ObjectBuilders;
-    using VRage;
     using VRage.Game;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public static class SpaceEngineersRepair
     {
@@ -221,6 +219,8 @@
                             }
                             else
                             {
+                                // The game is sucessfully generating new characters now, so this code shouldn't be requried any more.
+                                /*
                                 str.AppendLine("! Could not find any Player Characters.");
                                 character = new MyObjectBuilder_Character();
                                 character.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.IDENTITY);
@@ -243,38 +243,34 @@
                                 character.Inventory.Items.Add(item = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_InventoryItem>());
                                 item.Amount = 1;
                                 item.ItemId = 0;
-                                item.Content = new MyObjectBuilder_Welder();
                                 gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_Welder>();
                                 gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
-                                ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
+                                item.PhysicalContent = new MyObjectBuilder_PhysicalGunObject {GunEntity = gunEntity};
 
                                 character.Inventory.Items.Add(item = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_InventoryItem>());
                                 item.Amount = 1;
                                 item.ItemId = 1;
-                                item.Content = new MyObjectBuilder_AngleGrinder();
                                 gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_AngleGrinder>();
                                 gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
-                                ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
+                                item.PhysicalContent = new MyObjectBuilder_PhysicalGunObject { GunEntity = gunEntity };
 
                                 character.Inventory.Items.Add(item = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_InventoryItem>());
                                 item.Amount = 1;
                                 item.ItemId = 2;
-                                item.Content = new MyObjectBuilder_HandDrill();
                                 gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_HandDrill>();
                                 gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
-                                ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
+                                item.PhysicalContent = new MyObjectBuilder_PhysicalGunObject { GunEntity = gunEntity };
 
                                 character.Inventory.Items.Add(item = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_InventoryItem>());
                                 item.Amount = 1;
                                 item.ItemId = 3;
-                                item.Content = new MyObjectBuilder_AutomaticRifle();
                                 gunEntity = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_AutomaticRifle>();
                                 gunEntity.EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                                 gunEntity.PersistentFlags = MyPersistentEntityFlags2.None;
-                                ((MyObjectBuilder_PhysicalGunObject)item.PhysicalContent).GunEntity = gunEntity;
+                                item.PhysicalContent = new MyObjectBuilder_PhysicalGunObject { GunEntity = gunEntity };
 
                                 repairWorld.Checkpoint.ControlledObject = character.EntityId;
                                 repairWorld.Checkpoint.CameraController = MyCameraControllerEnum.Entity;
@@ -285,6 +281,7 @@
                                 str.AppendLine("* Created new active Player.");
                                 repairWorld.SaveCheckPointAndSector(true);
                                 str.AppendLine("* Saved changes.");
+                                */
                             }
                         }
                     }
@@ -299,26 +296,31 @@
                     character = repairWorld.FindAstronautCharacter()
                         ?? repairWorld.FindPilotCharacter().Pilot;
 
-                    MyObjectBuilder_Inventory inventory = character.Inventory;
-                    requiredItems.ForEach(
-                        delegate(string subtypeName)
-                        {
-                            if (!inventory.Items.Any(i =>
-                                i.PhysicalContent != null &&
-                                i.PhysicalContent.SubtypeName == subtypeName))
+                    var inventoryBase = character.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyInventoryBase");
+                    MyObjectBuilder_Inventory inventory = inventoryBase?.Component as MyObjectBuilder_Inventory;
+
+                    if (inventory != null)
+                    {
+                        requiredItems.ForEach(
+                            delegate(string subtypeName)
                             {
-                                statusNormal = false;
-                                str.AppendLine("! Replaced astronaut's missing " + subtypeName + ".");
-                                saveAfterScan = true;
-                                inventory.Items.Add(new MyObjectBuilder_InventoryItem
+                                if (!inventory.Items.Any(i =>
+                                    i.PhysicalContent != null &&
+                                    i.PhysicalContent.SubtypeName == subtypeName))
                                 {
-                                    Amount = 1,
-                                    Content = new MyObjectBuilder_PhysicalGunObject { SubtypeName = subtypeName },
-                                    ItemId = inventory.nextItemId
-                                });
-                                inventory.nextItemId++;
-                            }
-                        });
+                                    statusNormal = false;
+                                    str.AppendLine("! Replaced astronaut's missing " + subtypeName + ".");
+                                    saveAfterScan = true;
+                                    inventory.Items.Add(new MyObjectBuilder_InventoryItem
+                                    {
+                                        Amount = 1,
+                                        PhysicalContent = new MyObjectBuilder_PhysicalGunObject {SubtypeName = subtypeName},
+                                        ItemId = inventory.nextItemId,
+                                    });
+                                    inventory.nextItemId++;
+                                }
+                            });
+                    }
                 }
 
                 // Scan through all items.

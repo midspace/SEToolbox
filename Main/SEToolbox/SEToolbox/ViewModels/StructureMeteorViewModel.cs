@@ -58,7 +58,7 @@
 
         public string SubTypeName
         {
-            get { return DataModel.Item.Content.SubtypeName; }
+            get { return DataModel.Item.PhysicalContent.SubtypeName; }
         }
 
         public double? Volume

@@ -10,17 +10,15 @@
     using System.Text;
     using System.Web.UI;
     using System.Xml;
-
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.ImageLibrary;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRage.Game;
-    using VRageMath;
     using VRage.ObjectBuilders;
+    using VRageMath;
 
     public class ResourceReportModel : BaseModel
     {
@@ -373,13 +371,13 @@
                 {
                     var floating = (StructureFloatingObjectModel)entity;
 
-                    if (floating.FloatingObject.Item.Content.TypeId == SpaceEngineersTypes.Ore || floating.FloatingObject.Item.Content.TypeId == SpaceEngineersTypes.Ingot)
+                    if (floating.FloatingObject.Item.PhysicalContent.TypeId == SpaceEngineersTypes.Ore || floating.FloatingObject.Item.PhysicalContent.TypeId == SpaceEngineersTypes.Ingot)
                     {
-                        TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, (decimal)floating.FloatingObject.Item.Amount, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
+                        TallyItems(floating.FloatingObject.Item.PhysicalContent.TypeId, floating.FloatingObject.Item.PhysicalContent.SubtypeName, (decimal)floating.FloatingObject.Item.Amount, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                     }
                     else
                     {
-                        TallyItems(floating.FloatingObject.Item.Content.TypeId, floating.FloatingObject.Item.Content.SubtypeName, (decimal)floating.FloatingObject.Item.Amount, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
+                        TallyItems(floating.FloatingObject.Item.PhysicalContent.TypeId, floating.FloatingObject.Item.PhysicalContent.SubtypeName, (decimal)floating.FloatingObject.Item.Amount, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
                     }
                 }
                 else if (entity is StructureCharacterModel)
@@ -394,7 +392,7 @@
                         {
                             foreach (var item in character.Character.Inventory.Items)
                             {
-                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
+                                TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, (decimal)item.Amount, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
                             }
                         }
                     }
@@ -536,17 +534,17 @@
                                     {
                                         if (isNpc)
                                         {
-                                            TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulateNpcOres, accumulateItems, accumulateComponents);
+                                            TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, (decimal)item.Amount, contentPath, accumulateNpcOres, accumulateItems, accumulateComponents);
                                         }
                                         else
                                         {
-                                            if (item.Content.TypeId == SpaceEngineersTypes.Ore || item.Content.TypeId == SpaceEngineersTypes.Ingot)
+                                            if (item.PhysicalContent.TypeId == SpaceEngineersTypes.Ore || item.PhysicalContent.TypeId == SpaceEngineersTypes.Ingot)
                                             {
-                                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
+                                                TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, (decimal)item.Amount, contentPath, accumulateUnusedOres, accumulateItems, accumulateComponents);
                                             }
                                             else
                                             {
-                                                TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
+                                                TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, (decimal)item.Amount, contentPath, accumulateUsedOres, accumulateItems, accumulateComponents);
                                             }
                                         }
                                     }
@@ -565,7 +563,7 @@
                                 {
                                     foreach (var item in character.Inventory.Items)
                                     {
-                                        TallyItems(item.Content.TypeId, item.Content.SubtypeName, (decimal)item.Amount, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
+                                        TallyItems(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName, (decimal)item.Amount, contentPath, accumulatePlayerOres, accumulateItems, accumulateComponents);
                                     }
                                 }
                             }

@@ -138,13 +138,13 @@
             float compVolume = 1;
             double amount = 1;
 
-            if (Meteor.Item != null && Meteor.Item.Content is MyObjectBuilder_Ore)
+            if (Meteor.Item != null && Meteor.Item.PhysicalContent is MyObjectBuilder_Ore)
             {
-                compMass = SpaceEngineersApi.GetItemMass(Meteor.Item.Content.TypeId, Meteor.Item.Content.SubtypeName);
-                compVolume = SpaceEngineersApi.GetItemVolume(Meteor.Item.Content.TypeId, Meteor.Item.Content.SubtypeName);
+                compMass = SpaceEngineersApi.GetItemMass(Meteor.Item.PhysicalContent.TypeId, Meteor.Item.PhysicalContent.SubtypeName);
+                compVolume = SpaceEngineersApi.GetItemVolume(Meteor.Item.PhysicalContent.TypeId, Meteor.Item.PhysicalContent.SubtypeName);
                 amount = (double)Meteor.Item.Amount;
 
-                DisplayName = string.Format("{0} Ore", Meteor.Item.Content.SubtypeName);
+                DisplayName = string.Format("{0} Ore", Meteor.Item.PhysicalContent.SubtypeName);
                 Volume = compVolume * amount;
                 Mass = compMass * amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);

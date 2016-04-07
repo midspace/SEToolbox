@@ -5,8 +5,6 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Models;
     using SEToolbox.Support;
     using VRage;

@@ -8,19 +8,17 @@
     using System.Linq;
     using System.Windows.Shell;
     using System.Windows.Threading;
-
     using Microsoft.VisualBasic.FileIO;
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
-    using VRageMath;
-    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
-    using VRage.ObjectBuilders;
     using VRage;
     using VRage.Game;
+    using VRage.ObjectBuilders;
+    using VRageMath;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class ExplorerModel : BaseModel
     {
@@ -773,10 +771,10 @@
                 }
 
                 var pistonBase = cubeGrid as MyObjectBuilder_PistonBase;
-                if (pistonBase != null)
+                if (pistonBase != null && pistonBase.TopBlockId.HasValue)
                 {
                     // reattach PistonBase (and ExtendedPistonBase) to correct entity.
-                    pistonBase.TopBlockId = MergeId(pistonBase.TopBlockId, ref idReplacementTable);
+                    pistonBase.TopBlockId = MergeId(pistonBase.TopBlockId.Value, ref idReplacementTable);
                 }
 
                 var shipConnector = cubeGrid as MyObjectBuilder_ShipConnector;

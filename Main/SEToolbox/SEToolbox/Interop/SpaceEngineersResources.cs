@@ -5,8 +5,6 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Support;
     using VRage.Game;
     using VRage.ObjectBuilders;
