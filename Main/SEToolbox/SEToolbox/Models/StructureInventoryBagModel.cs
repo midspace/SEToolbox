@@ -4,14 +4,15 @@
     using System.Runtime.Serialization;
 
     using SEToolbox.Interop;
+    using VRage.Game.ObjectBuilders;
     using VRage.ObjectBuilders;
 
     [Serializable]
-    public class StructureReplicableModel : StructureBaseModel
+    public class StructureInventoryBagModel : StructureBaseModel
     {
         #region ctor
 
-        public StructureReplicableModel(MyObjectBuilder_EntityBase entityBase)
+        public StructureInventoryBagModel(MyObjectBuilder_EntityBase entityBase)
             : base(entityBase)
         {
         }
@@ -23,18 +24,18 @@
         [OnSerializing]
         private void OnSerializingMethod(StreamingContext context)
         {
-            SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_EntityBase>(EntityBase);
+            SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_InventoryBagEntity>(EntityBase);
         }
 
         [OnDeserialized]
         private void OnDeserializedMethod(StreamingContext context)
         {
-            EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_EntityBase>(SerializedEntity);
+            EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_InventoryBagEntity>(SerializedEntity);
         }
 
         public override void UpdateGeneralFromEntityBase()
         {
-            ClassType = ClassType.Replicable;
+            ClassType = ClassType.InventoryBag;
             DisplayName = EntityBase.EntityDefinitionId.HasValue ? EntityBase.EntityDefinitionId.Value.SubtypeName : null;
         }
 

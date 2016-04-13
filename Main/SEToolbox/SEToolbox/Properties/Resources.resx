@@ -265,7 +265,7 @@ To use the SEToolbox, you must have the Space Engineers game installed on your c
   <data name="ModelTraceVoxel_ThinSmoothed" xml:space="preserve">
     <value>Thin Shell with Smoothing</value>
   </data>
-  <data name="VoxelDetail" xml:space="preserve">
+  <data name="CtlVoxelDetail" xml:space="preserve">
     <value>Filename:	{0}
 Bounding Size:	{1} × {2} × {3} blocks
 Size:	{4} m × {5} m × {6} m
@@ -705,7 +705,7 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="target" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\target.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ReplicableDetail" xml:space="preserve">
+  <data name="InventoryBagDetail" xml:space="preserve">
     <value>Type:		{0}
 Distance:		{1:#,##0.0} m</value>
   </data>
@@ -1494,5 +1494,27 @@ Distance:		{1:#,##0.0} m</value>
   </data>
   <data name="WnComponentsTitle" xml:space="preserve">
     <value>Complete Component List</value>
+  </data>
+  <data name="ClassType_Planet" xml:space="preserve">
+    <value>Planet</value>
+  </data>
+  <data name="ClassType_InventoryBag" xml:space="preserve">
+    <value>Inventory Bag</value>
+  </data>
+  <data name="CtlPlanetDetail" xml:space="preserve">
+    <value>Filename:	{0}
+Center:	{1}, {2}, {3}
+Distance:	{4:#,##0.0} m
+Position:	{5}, {6}, {7}
+Radius:	{8:#,##0.0} m
+Has Atmosphere:	{9}
+Atmosphere Radius:	{10:#,##0.0} m
+Minimum Surface Radius:	{11:#,##0.0} m
+Maximum Hill Radius:	{12:#,##0.0} m
+Gravity Falloff:	{13:#,##0.0} m
+Surface Gravity:	{14:#,##0.0} g
+Spawns Flora:	{15}
+Show GPS:	{16}
+Planet Generator:	{17}</value>
   </data>
 </root>

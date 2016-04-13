@@ -3,11 +3,11 @@
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for ControlReplicable.xaml
+    /// Interaction logic for ControlPlanet.xaml
     /// </summary>
-    public partial class ControlReplicable : UserControl
+    public partial class ControlPlanet : UserControl
     {
-        public ControlReplicable()
+        public ControlPlanet()
         {
             InitializeComponent();
         }

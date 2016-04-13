@@ -1280,14 +1280,16 @@
                 item = new StructureCharacterViewModel(this, structureBase as StructureCharacterModel);
             else if (structureBase is StructureCubeGridModel)
                 item = new StructureCubeGridViewModel(this, structureBase as StructureCubeGridModel);
+            else if (structureBase is StructurePlanetModel)
+                item = new StructurePlanetViewModel(this, structureBase as StructurePlanetModel);
             else if (structureBase is StructureVoxelModel)
                 item = new StructureVoxelViewModel(this, structureBase as StructureVoxelModel);
             else if (structureBase is StructureFloatingObjectModel)
                 item = new StructureFloatingObjectViewModel(this, structureBase as StructureFloatingObjectModel);
             else if (structureBase is StructureMeteorModel)
                 item = new StructureMeteorViewModel(this, structureBase as StructureMeteorModel);
-            else if (structureBase is StructureReplicableModel)
-                item = new StructureReplicableViewModel(this, structureBase as StructureReplicableModel);
+            else if (structureBase is StructureInventoryBagModel)
+                item = new StructureInventoryBagViewModel(this, structureBase as StructureInventoryBagModel);
             else if (structureBase is StructureUnknownModel)
                 item = new StructureUnknownViewModel(this, structureBase as StructureUnknownModel);
             else
@@ -1584,10 +1586,15 @@
                         _dataModel.SaveEntity(cloneEntity, saveFileDialog.FileName);
                     }
                 }
-                else if (viewModel is StructureReplicableViewModel)
+                else if (viewModel is StructureInventoryBagViewModel)
                 {
                     // Need to use the specific serializer when exporting to generate the correct XML, so Unknown should never be export.
-                    _dialogService.ShowMessageBox(this, "Cannot export Replicable currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    _dialogService.ShowMessageBox(this, "Cannot export InventoryBag currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+                else if (viewModel is StructurePlanetViewModel)
+                {
+                    // Too complex to export without work to package the data,
+                    _dialogService.ShowMessageBox(this, "Cannot export Planet currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
                 else if (viewModel is StructureUnknownViewModel)
                 {

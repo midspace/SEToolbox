@@ -269,9 +269,6 @@
         [OnSerializing]
         private void OnSerializingMethod(StreamingContext context)
         {
-            // TODO: split MyObjectBuilder_VoxelMap to  MyObjectBuilder_Planet
-
-
             SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_VoxelMap>(VoxelMap);
         }
 

@@ -371,7 +371,6 @@
                     if (voxel.SourceVoxelFilepath != null && File.Exists(voxel.SourceVoxelFilepath))
                     {
                         // Any asteroid that already exists with same name, must be removed.
-                        // TODO: must improve this later when multiple sectors are implemented and the asteroid filename is used in a different sector.
                         if (File.Exists(voxel.VoxelFilepath))
                         {
                             FileSystem.DeleteFile(voxel.VoxelFilepath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
@@ -391,6 +390,23 @@
                         voxel.SourceVoxelFilepath = null;
                     }
                 }
+
+                if (entity is StructurePlanetModel)
+                {
+                    var voxel = (StructurePlanetModel)entity;
+                    if (voxel.SourceVoxelFilepath != null && File.Exists(voxel.SourceVoxelFilepath))
+                    {
+                        // Any asteroid that already exists with same name, must be removed.
+                        if (File.Exists(voxel.VoxelFilepath))
+                        {
+                            FileSystem.DeleteFile(voxel.VoxelFilepath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        }
+
+                        File.Copy(voxel.SourceVoxelFilepath, voxel.VoxelFilepath);
+                        voxel.SourceVoxelFilepath = null;
+                    }
+                }
+
             }
 
             // Manages the removal old voxels files.
@@ -716,6 +732,23 @@
                     else
                         entity.SourceVoxelFilepath = asteroid.VoxelFilepath;  // Source Voxel file exists.
                 }
+                else if (item is StructurePlanetModel)
+                {
+                    var planet = item as StructurePlanetModel;
+
+                    if (ContainsVoxelFilename(planet.Name, null))
+                    {
+                        planet.Name = CreateUniqueVoxelStorageName(planet.Name, null);
+                    }
+
+                    var entity = (StructurePlanetModel)AddEntity(planet.Planet);
+                    entity.EntityId = MergeId(planet.EntityId, ref idReplacementTable);
+
+                    if (planet.SourceVoxelFilepath != null)
+                        entity.SourceVoxelFilepath = planet.SourceVoxelFilepath;  // Source Voxel file is temporary. Hasn't been saved yet.
+                    else
+                        entity.SourceVoxelFilepath = planet.VoxelFilepath;  // Source Voxel file exists.
+                }
                 else if (item is StructureFloatingObjectModel)
                 {
                     var floatObject = item as StructureFloatingObjectModel;
@@ -728,11 +761,11 @@
                     var entity = AddEntity(meteor.Meteor);
                     entity.EntityId = MergeId(meteor.EntityId, ref idReplacementTable);
                 }
-                else if (item is StructureReplicableModel)
+                else if (item is StructureInventoryBagModel)
                 {
-                    var replicable = item as StructureReplicableModel;
-                    var entity = AddEntity(replicable.EntityBase);
-                    entity.EntityId = MergeId(replicable.EntityId, ref idReplacementTable);
+                    var inventoryBag = item as StructureInventoryBagModel;
+                    var entity = AddEntity(inventoryBag.EntityBase);
+                    entity.EntityId = MergeId(inventoryBag.EntityId, ref idReplacementTable);
                 }
                 else if (item is StructureUnknownModel)
                 {

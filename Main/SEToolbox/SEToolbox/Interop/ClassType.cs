@@ -1,6 +1,6 @@
 ﻿namespace SEToolbox.Interop
 {
-    public enum ClassType 
+    public enum ClassType
     {
         Unknown,
         Character,
@@ -10,7 +10,8 @@
         SmallShip,
         Meteor,
         Voxel,
-        Replicable
+        Planet,
+        InventoryBag
     };
 
     public enum ImportModelClassType

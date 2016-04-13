@@ -12,6 +12,7 @@
     using VRage.ObjectBuilders;
     using VRage;
     using VRage.Game;
+    using VRage.Game.ObjectBuilders;
 
     [Serializable]
     public class StructureBaseModel : BaseModel, IStructureBase
@@ -379,6 +380,11 @@
 
         public static IStructureBase Create(MyObjectBuilder_EntityBase entityBase, string savefilePath)
         {
+            if (entityBase is MyObjectBuilder_Planet)
+            {
+                return new StructurePlanetModel(entityBase, savefilePath);
+            }
+
             if (entityBase is MyObjectBuilder_VoxelMap)
             {
                 return new StructureVoxelModel(entityBase, savefilePath);
@@ -404,9 +410,9 @@
                 return new StructureMeteorModel(entityBase);
             }
 
-            if (entityBase is MyObjectBuilder_ReplicableEntity)
+            if (entityBase is MyObjectBuilder_InventoryBagEntity)
             {
-                return new StructureReplicableModel(entityBase);
+                return new StructureInventoryBagModel(entityBase);
             }
 
             return new StructureUnknownModel(entityBase);

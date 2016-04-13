@@ -9,7 +9,6 @@
     using System.Windows;
     using System.Windows.Input;
 
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
@@ -28,7 +27,7 @@
         public StructureVoxelViewModel(BaseViewModel parentViewModel, StructureVoxelModel dataModel)
             : base(parentViewModel, dataModel)
         {
-            DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            DataModel.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
                 OnPropertyChanged(e.PropertyName);
@@ -207,7 +206,7 @@
                 }
             }
 
-            var detail = string.Format(Properties.Resources.VoxelDetail,
+            var detail = string.Format(Properties.Resources.CtlVoxelDetail,
                 Name,
                 Size.Width, Size.Height, Size.Depth,
                 ContentSize.Width, ContentSize.Height, ContentSize.Depth,
@@ -621,7 +620,7 @@
                                 }
                             }
                         }
-                    
+
                         modified = true;
                     }
                 }

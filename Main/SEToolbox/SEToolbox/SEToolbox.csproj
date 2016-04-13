@@ -250,10 +250,11 @@
     <Compile Include="Models\GroupMoveItemModel.cs" />
     <Compile Include="Models\GroupMoveModel.cs" />
     <Compile Include="Models\StructureMeteorModel.cs" />
-    <Compile Include="Models\StructureReplicableModel.cs" />
+    <Compile Include="Models\StructureInventoryBagModel.cs" />
     <Compile Include="Models\StructureUnknownModel.cs" />
     <Compile Include="Models\OreAssetModel.cs" />
     <Compile Include="Models\CubeAssetModel.cs" />
+    <Compile Include="Models\StructurePlanetModel.cs" />
     <Compile Include="Models\VoxelMaterialAssetModel.cs" />
     <Compile Include="Models\GenerateVoxelDetailModel.cs" />
     <Compile Include="Models\GenerateVoxelFieldModel.cs" />
@@ -368,7 +369,7 @@
     <Compile Include="ViewModels\GenerateFloatingObjectViewModel.cs" />
     <Compile Include="ViewModels\GroupMoveViewModel.cs" />
     <Compile Include="ViewModels\StructureMeteorViewModel.cs" />
-    <Compile Include="ViewModels\StructureReplicableViewModel.cs" />
+    <Compile Include="ViewModels\StructureInventoryBagViewModel.cs" />
     <Compile Include="ViewModels\StructureUnknownViewModel.cs" />
     <Compile Include="ViewModels\GenerateVoxelFieldViewModel.cs" />
     <Compile Include="ViewModels\DataBaseViewModel.cs" />
@@ -382,6 +383,7 @@
     <Compile Include="ViewModels\StructureBaseViewModel.cs" />
     <Compile Include="ViewModels\StructureCharacterViewModel.cs" />
     <Compile Include="ViewModels\StructureCubeGridViewModel.cs" />
+    <Compile Include="ViewModels\StructurePlanetViewModel.cs" />
     <Compile Include="ViewModels\StructureVoxelViewModel.cs" />
     <Compile Include="Views\ControlBaseState.xaml.cs">
       <DependentUpon>ControlBaseState.xaml</DependentUpon>
@@ -395,8 +397,11 @@
     <Compile Include="Views\ControlSaveState.xaml.cs">
       <DependentUpon>ControlSaveState.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ControlReplicable.xaml.cs">
-      <DependentUpon>ControlReplicable.xaml</DependentUpon>
+    <Compile Include="Views\ControlInventoryBag.xaml.cs">
+      <DependentUpon>ControlInventoryBag.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlPlanet.xaml.cs">
+      <DependentUpon>ControlPlanet.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControlVoxel.xaml.cs">
       <DependentUpon>ControlVoxel.xaml</DependentUpon>
@@ -503,7 +508,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ControlReplicable.xaml">
+    <Page Include="Views\ControlInventoryBag.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ControlPlanet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -446,6 +446,9 @@
                             <DataTemplate DataType="{x:Type vm:StructureCharacterViewModel}">
                                 <views:ControlCharacter />
                             </DataTemplate>
+                            <DataTemplate DataType="{x:Type vm:StructurePlanetViewModel}">
+                                <views:ControlPlanet />
+                            </DataTemplate>
                             <DataTemplate DataType="{x:Type vm:StructureVoxelViewModel}">
                                 <views:ControlVoxel />
                             </DataTemplate>
@@ -458,8 +461,8 @@
                             <DataTemplate DataType="{x:Type vm:StructureMeteorViewModel}">
                                 <views:ControlMeteor />
                             </DataTemplate>
-                            <DataTemplate DataType="{x:Type vm:StructureReplicableViewModel}">
-                                <views:ControlReplicable />
+                            <DataTemplate DataType="{x:Type vm:StructureInventoryBagViewModel}">
+                                <views:ControlInventoryBag />
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type vm:StructureUnknownViewModel}">
                                 <views:ControlUnknown />

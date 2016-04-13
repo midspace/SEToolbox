@@ -185,11 +185,29 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inventory Bag.
+        /// </summary>
+        public static string ClassType_InventoryBag {
+            get {
+                return ResourceManager.GetString("ClassType_InventoryBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large Ship.
         /// </summary>
         public static string ClassType_LargeShip {
             get {
                 return ResourceManager.GetString("ClassType_LargeShip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Planet.
+        /// </summary>
+        public static string ClassType_Planet {
+            get {
+                return ResourceManager.GetString("ClassType_Planet", resourceCulture);
             }
         }
         
@@ -1301,6 +1319,28 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filename:	{0}
+        ///Center:	{1}, {2}, {3}
+        ///Distance:	{4:#,##0.0} m
+        ///Position:	{5}, {6}, {7}
+        ///Radius:	{8:#,##0.0} m
+        ///Has Atmosphere:	{9}
+        ///Atmosphere Radius:	{10:#,##0.0} m
+        ///Minimum Surface Radius:	{11:#,##0.0} m
+        ///Maximum Hill Radius:	{12:#,##0.0} m
+        ///Gravity Falloff:	{13:#,##0.0} m
+        ///Surface Gravity:	{14:#,##0.0} g
+        ///Spawns Flora:	{15}
+        ///Show GPS:	{16}
+        ///Planet Generator:	{17}.
+        /// </summary>
+        public static string CtlPlanetDetail {
+            get {
+                return ResourceManager.GetString("CtlPlanetDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unsaved.
         /// </summary>
         public static string CtlUnsavedStateTitle {
@@ -1315,6 +1355,25 @@ namespace SEToolbox.Properties {
         public static string CtlUnsavedStateTitleTooltip {
             get {
                 return ResourceManager.GetString("CtlUnsavedStateTitleTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filename:	{0}
+        ///Bounding Size:	{1} × {2} × {3} blocks
+        ///Size:	{4} m × {5} m × {6} m
+        ///Center:	{7}, {8}, {9}
+        ///Volume:	{10:#,##0.00} m³
+        ///VoxCells:	{11:#,##0}
+        ///Distance:	{12:#,##0.0} m
+        ///Position:	{13}, {14}, {15}
+        ///
+        ///Material	Mass	Percent
+        ///{16}.
+        /// </summary>
+        public static string CtlVoxelDetail {
+            get {
+                return ResourceManager.GetString("CtlVoxelDetail", resourceCulture);
             }
         }
         
@@ -2307,6 +2366,16 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type:		{0}
+        ///Distance:		{1:#,##0.0} m.
+        /// </summary>
+        public static string InventoryBagDetail {
+            get {
+                return ResourceManager.GetString("InventoryBagDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap media_stop {
@@ -2448,16 +2517,6 @@ namespace SEToolbox.Properties {
             get {
                 object obj = ResourceManager.GetObject("replace2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type:		{0}
-        ///Distance:		{1:#,##0.0} m.
-        /// </summary>
-        public static string ReplicableDetail {
-            get {
-                return ResourceManager.GetString("ReplicableDetail", resourceCulture);
             }
         }
         
@@ -2751,25 +2810,6 @@ namespace SEToolbox.Properties {
             get {
                 object obj = ResourceManager.GetObject("users_back", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Filename:	{0}
-        ///Bounding Size:	{1} × {2} × {3} blocks
-        ///Size:	{4} m × {5} m × {6} m
-        ///Center:	{7}, {8}, {9}
-        ///Volume:	{10:#,##0.00} m³
-        ///VoxCells:	{11:#,##0}
-        ///Distance:	{12:#,##0.0} m
-        ///Position:	{13}, {14}, {15}
-        ///
-        ///Material	Mass	Percent
-        ///{16}.
-        /// </summary>
-        public static string VoxelDetail {
-            get {
-                return ResourceManager.GetString("VoxelDetail", resourceCulture);
             }
         }
         
