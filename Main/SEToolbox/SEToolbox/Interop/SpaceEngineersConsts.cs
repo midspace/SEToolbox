@@ -2,6 +2,8 @@
 {
     using Support;
     using System;
+    using System.Reflection;
+    using VRage.Utils;
 
     public class SpaceEngineersConsts
     {
@@ -62,7 +64,7 @@
         {
             try
             {
-                return new Version(VRage.Game.MyFinalBuildConstants.APP_VERSION_STRING.ToString().Replace("_", "."));
+                return new Version(new MyVersion(GetSEVersionInt()).FormattedText.ToString().Replace("_", "."));
             }
             catch
             {
@@ -74,8 +76,9 @@
         {
             try
             {
-                // Use of Sandbox.Common.MyFinalBuildConstants.APP_VERSION causes the Compiler to hard code in the value from the assembly at the time of compile.
-                return Int32.Parse(VRage.Game.MyFinalBuildConstants.APP_VERSION_STRING.ToString().Replace("_", ""));
+                // SE_VERSION is a private constant. Need to use reflection to get it. 
+                FieldInfo field = typeof(SpaceEngineers.Game.SpaceEngineersGame).GetField("SE_VERSION", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                return (int)field.GetValue(null);
             }
             catch
             {
