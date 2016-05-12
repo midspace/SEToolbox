@@ -14,6 +14,7 @@
     {
         internal static readonly string[] CoreSpaceEngineersFiles = {
             "Sandbox.Common.dll",
+            "SpaceEngineers.Game.dll",
             "SpaceEngineers.ObjectBuilders.dll",
             "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",
             "Sandbox.Game.dll",

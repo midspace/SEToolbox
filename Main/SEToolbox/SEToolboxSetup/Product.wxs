@@ -46,6 +46,7 @@
               <RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
 
               <RemoveFile Id="file61275B9FC2AE484BA7A2BDB7459A3647" Name="Sandbox.Common.dll" On="install"/>
+              <RemoveFile Id="file3941098F688247798E7755FC8B2D18B7" Name="SpaceEngineers.Game.dll" On="install"/>
               <RemoveFile Id="fileA10D59ED71944ED7BD52C144A05A59A3" Name="SpaceEngineers.ObjectBuilders.dll" On="install"/>
               <RemoveFile Id="fileAF60B61F742940E7B68F86C3410E730C" Name="SpaceEngineers.ObjectBuilders.XmlSerializers.dll" On="install"/>
               <RemoveFile Id="file9BC4F4C590AF4888B721F2301140EB5A" Name="Sandbox.Game.dll" On="install"/>
