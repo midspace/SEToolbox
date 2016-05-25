@@ -1173,7 +1173,7 @@
                 return true;
 
             var cube = (CubeItemViewModel)item;
-            return _filerView.All(s => cube.FriendlyName.ToLowerInvariant().Contains(s) || cube.ColorText.ToLowerInvariant().Contains(s));
+            return _filerView.All(s => (cube.FriendlyName != null && cube.FriendlyName.ToLowerInvariant().Contains(s)) || cube.ColorText.ToLowerInvariant().Contains(s));
         }
 
         #endregion
