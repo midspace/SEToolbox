@@ -87,6 +87,8 @@
             ServiceLocator.Register<IColorDialog, ColorDialogViewModel>();
             ServiceLocator.Register<IFolderBrowserDialog, FolderBrowserDialogViewModel>();
 
+            System.Windows.FrameworkCompatibilityPreferences.KeepTextBoxDisplaySynchronizedWithTextProperty = false;
+
             _toolboxApplication = new CoreToolbox();
             if (_toolboxApplication.Init(e.Args))
                 _toolboxApplication.Load(e.Args);
