@@ -1,11 +1,14 @@
 ﻿namespace SEToolbox.Interop
 {
     using System.Collections.Generic;
-    using System.IO;
-    using System.Reflection;
+    using Sandbox;
+    using Sandbox.Engine.Utils;
     using SEToolbox.Models;
-    using VRage.ObjectBuilders;
-    using VRage.Plugins;
+    using SpaceEngineers.Game;
+    using Support;
+    using VRage.FileSystem;
+    using VRage.Utils;
+    using VRageRender;
 
     /// <summary>
     /// core interop for loading up Space Engineers content.
@@ -25,15 +28,22 @@
 
         public SpaceEngineersCore()
         {
-            //SpaceEngineersGame.SetupPerGameSettings(); // not required currently.
-            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            //MyPlugins.RegisterGameAssemblyFile(Path.Combine(path, "SpaceEngineers.Game.dll")); // not required currently.
-            MyPlugins.RegisterGameObjectBuildersAssemblyFile(Path.Combine(path, "SpaceEngineers.ObjectBuilders.dll"));
-            MyPlugins.RegisterSandboxAssemblyFile(Path.Combine(path, "Sandbox.Common.dll"));
-            //MyPlugins.RegisterSandboxGameAssemblyFile(Path.Combine(path, "Sandbox.Game.dll")); // not required currently.
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+            string userDataPath = SpaceEngineersConsts.BaseLocalPath.DataPath;
 
-            MyObjectBuilderType.RegisterAssemblies();
-            MyObjectBuilderSerializer.RegisterAssembliesAndLoadSerializers();
+            MyFileSystem.Reset();
+            MyFileSystem.Init(contentPath, userDataPath);
+
+            MyLog.Default = MySandboxGame.Log;
+            MySandboxGame.Config = new MyConfig("SpaceEngineers.cfg"); // TODO: Is specific to SE, not configurable to ME.
+            MySandboxGame.Config.Load();
+
+            MyFileSystem.InitUserSpecific(null);
+            SpaceEngineersGame.SetupPerGameSettings();
+
+            VRageRender.MyRenderProxy.Initialize(new MyNullRender());
+            // We create a whole instance of MySandboxGame!
+            MySandboxGame gameTemp = new MySandboxGame(null, null);
 
             SpaceEngineersApi.LoadLocalization();
             _stockDefinitions = new SpaceEngineersResources();

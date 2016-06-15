@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel;
-    using Sandbox.Common.ObjectBuilders;
 
     using SEToolbox.Interop;
     using VRage.Game;

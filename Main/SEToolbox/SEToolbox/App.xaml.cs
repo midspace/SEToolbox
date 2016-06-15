@@ -133,7 +133,7 @@
                     message = string.Format(Res.DialogUnhandledExceptionMessage, e.Exception.Message);
             }
 
-            MessageBox.Show(message, String.Format(Res.DialogUnhandledExceptionTitle, GlobalSettings.GetAppVersion()), MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(message, string.Format(Res.DialogUnhandledExceptionTitle, GlobalSettings.GetAppVersion()), MessageBoxButton.OK, MessageBoxImage.Error);
 
             TempfileUtil.Dispose();
 

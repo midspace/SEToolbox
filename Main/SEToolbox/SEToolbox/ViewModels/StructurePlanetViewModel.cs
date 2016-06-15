@@ -1,25 +1,10 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
     using System.Windows;
     using System.Windows.Input;
-
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
     using SEToolbox.Services;
-    using SEToolbox.Support;
-    using VRageMath;
-    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
-    using VRage;
-    using VRage.Game;
-    using VRage.ObjectBuilders;
 
     public class StructurePlanetViewModel : StructureBaseViewModel<StructurePlanetModel>
     {

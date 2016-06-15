@@ -5,7 +5,6 @@
     using System.Drawing.Imaging;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage;

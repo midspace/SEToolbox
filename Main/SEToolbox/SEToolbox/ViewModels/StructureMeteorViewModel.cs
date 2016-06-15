@@ -2,8 +2,6 @@
 {
     using System.ComponentModel;
     using System.Windows.Input;
-
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using VRage.Game;

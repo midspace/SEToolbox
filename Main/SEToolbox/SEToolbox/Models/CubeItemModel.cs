@@ -3,12 +3,11 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Definitions;
     using SEToolbox.Interop;
     using VRage;
     using VRage.Game;
     using VRage.ObjectBuilders;
-    using VRageMath;
 
     public class CubeItemModel : BaseModel
     {
@@ -48,7 +47,7 @@
 
         #region ctor
 
-        public CubeItemModel(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition)
+        public CubeItemModel(MyObjectBuilder_CubeBlock cube, MyCubeBlockDefinition definition)
         {
             SetProperties(cube, definition);
         }
@@ -316,7 +315,7 @@
             BuildPercent = Cube.BuildPercent;
         }
 
-        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition)
+        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyCubeBlockDefinition definition)
         {
             var newCube = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_CubeBlock>(typeId, subTypeId);
             newCube.BlockOrientation = Cube.BlockOrientation;
@@ -359,7 +358,7 @@
             return false;
         }
 
-        private void SetProperties(MyObjectBuilder_CubeBlock cube, MyObjectBuilder_CubeBlockDefinition definition)
+        private void SetProperties(MyObjectBuilder_CubeBlock cube, MyCubeBlockDefinition definition)
         {
             Cube = cube;
             Position = new BindablePoint3DIModel(cube.Min);
@@ -373,7 +372,7 @@
             }
 
             CubeSize = definition.CubeSize;
-            FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayName);
+            FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayNameText);
 
             var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
             var dead = " (dead)";
@@ -384,7 +383,7 @@
             }
             OwnerName = identity == null ? null : identity.DisplayName + dead;
             TypeId = definition.Id.TypeId;
-            SubtypeId = definition.Id.SubtypeId;
+            SubtypeId = definition.Id.SubtypeName;
 
             if (Inventory == null)
                 Inventory = new ObservableCollection<InventoryEditorModel>();

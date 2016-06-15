@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using VRage;
     using VRage.Game;

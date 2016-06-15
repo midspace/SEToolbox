@@ -711,12 +711,12 @@ namespace SEToolbox.Interop.Asteroids
             writer.Write(MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS);
             writer.Write(MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS);
 
-            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
             writer.Write((byte)materials.Count);
             for (byte idx = 0; idx < materials.Count; idx++)
             {
                 writer.Write(idx);
-                writer.Write(materials[idx].Id.SubtypeId);
+                writer.Write(materials[idx].Id.SubtypeName);
             }
 
             Vector3I cellCoord;
@@ -1890,7 +1890,7 @@ namespace SEToolbox.Interop.Asteroids
                 }
             }
 
-            var materialDefinitions = SpaceEngineersCore.Resources.GetMaterialList();
+            var materialDefinitions = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
             var assetNameCount = new Dictionary<string, long>();
 
             foreach (var kvp in assetCount)
@@ -1898,9 +1898,9 @@ namespace SEToolbox.Interop.Asteroids
                 string name;
 
                 if (kvp.Key >= materialDefinitions.Count)
-                    name = materialDefinitions[VoxelMaterial].Id.SubtypeId;
+                    name = materialDefinitions[VoxelMaterial].Id.SubtypeName;
                 else
-                    name = materialDefinitions[kvp.Key].Id.SubtypeId;
+                    name = materialDefinitions[kvp.Key].Id.SubtypeName;
 
                 if (assetNameCount.ContainsKey(name))
                 {
@@ -1917,7 +1917,7 @@ namespace SEToolbox.Interop.Asteroids
 
         public Dictionary<string, long> CountAssets(Dictionary<byte, long> assetCount)
         {
-            var materialDefinitions = SpaceEngineersCore.Resources.GetMaterialList();
+            var materialDefinitions = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
             var assetNameCount = new Dictionary<string, long>();
 
             foreach (var kvp in assetCount)
@@ -1925,9 +1925,9 @@ namespace SEToolbox.Interop.Asteroids
                 string name;
 
                 if (kvp.Key >= materialDefinitions.Count)
-                    name = materialDefinitions[VoxelMaterial].Id.SubtypeId;
+                    name = materialDefinitions[VoxelMaterial].Id.SubtypeName;
                 else
-                    name = materialDefinitions[kvp.Key].Id.SubtypeId;
+                    name = materialDefinitions[kvp.Key].Id.SubtypeName;
 
                 if (assetNameCount.ContainsKey(name))
                 {

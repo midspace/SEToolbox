@@ -9,16 +9,15 @@
     using System.Runtime.Serialization;
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
-
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
+    using Sandbox.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Support;
-    using VRageMath;
-    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
-    using VRage.ObjectBuilders;
     using VRage;
     using VRage.Game;
+    using VRage.ObjectBuilders;
+    using VRageMath;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     [Serializable]
     public class StructureCubeGridModel : StructureBaseModel
@@ -517,13 +516,13 @@
         #region methods
 
         [OnSerializing]
-        private void OnSerializingMethod(StreamingContext context)
+        internal void OnSerializingMethod(StreamingContext context)
         {
             SerializedEntity = SpaceEngineersApi.Serialize<MyObjectBuilder_CubeGrid>(CubeGrid);
         }
 
         [OnDeserialized]
-        private void OnDeserializedMethod(StreamingContext context)
+        internal void OnDeserializedMethod(StreamingContext context)
         {
             EntityBase = SpaceEngineersApi.Deserialize<MyObjectBuilder_CubeGrid>(SerializedEntity);
         }
@@ -557,7 +556,7 @@
                 var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, CubeGrid.GridSizeEnum, block.SubtypeName);
 
                 // definition is null when the block no longer exists in the Cube definitions. Ie, Ladder, or a Mod that was removed.
-                if (cubeDefinition == null || (cubeDefinition.Size.X == 1 && cubeDefinition.Size.Y == 1 && cubeDefinition.Size.z == 1))
+                if (cubeDefinition == null || (cubeDefinition.Size.X == 1 && cubeDefinition.Size.Y == 1 && cubeDefinition.Size.Z == 1))
                 {
                     max.X = Math.Max(max.X, block.Min.X);
                     max.Y = Math.Max(max.Y, block.Min.Y);
@@ -579,8 +578,7 @@
                 {
                     foreach (var component in cubeBlockDefinition.Components)
                     {
-                        var cd = (MyObjectBuilder_ComponentDefinition)SpaceEngineersApi.GetDefinition(component.Type, component.Subtype);
-                        float componentMass = cd.Mass * component.Count;
+                        float componentMass = component.Definition.Mass * component.Count;
                         cubeMass += componentMass;
                     }
                 }
@@ -703,15 +701,14 @@
                                 foreach (var component in cubeBlockDefinition.Components)
                                 {
                                     TimeSpan componentTime;
-                                    SpaceEngineersApi.AccumulateCubeBlueprintRequirements(component.Subtype, component.Type, component.Count, ingotRequirements, out componentTime);
+                                    SpaceEngineersApi.AccumulateCubeBlueprintRequirements(component.Definition.Id.SubtypeName, component.Definition.Id.TypeId, component.Count, ingotRequirements, out componentTime);
                                     timeTaken += componentTime;
 
-                                    var cd = (MyObjectBuilder_ComponentDefinition)SpaceEngineersApi.GetDefinition(component.Type, component.Subtype);
-                                    float componentMass = cd.Mass * component.Count;
-                                    float componentVolume = cd.Volume.Value * component.Count;
+                                    float componentMass = component.Definition.Mass * component.Count;
+                                    float componentVolume = component.Definition.Volume * SpaceEngineersConsts.VolumeMultiplyer * component.Count;
                                     cubeMass += componentMass;
 
-                                    var componentName = component.Subtype;
+                                    var componentName = component.Definition.Id.SubtypeName;
                                     if (componentAssetDict.ContainsKey(componentName))
                                     {
                                         componentAssetDict[componentName].Count += component.Count;
@@ -721,14 +718,14 @@
                                     }
                                     else
                                     {
-                                        var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icons.First(), Path.Combine(contentPath, cd.Icons.First()));
-                                        var m = new CubeAssetModel() { Name = cd.DisplayName, Mass = componentMass, Volume = componentVolume, Count = component.Count, Time = componentTime, TextureFile = componentTexture };
+                                        var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(component.Definition.Icons.First(), Path.Combine(contentPath, component.Definition.Icons.First()));
+                                        var m = new CubeAssetModel() { Name = component.Definition.DisplayNameText, Mass = componentMass, Volume = componentVolume, Count = component.Count, Time = componentTime, TextureFile = componentTexture };
                                         componentAssets.Add(m);
                                         componentAssetDict.Add(componentName, m);
                                     }
                                 }
 
-                                blockTime = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeBlockDefinition.BuildTimeSeconds));
+                                blockTime = TimeSpan.FromSeconds(cubeBlockDefinition.MaxIntegrity / cubeBlockDefinition.IntegrityPointsPerSec);
                                 blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icons.First(), Path.Combine(contentPath, cubeBlockDefinition.Icons.First()));
                             }
 
@@ -742,7 +739,7 @@
                             }
                             else
                             {
-                                var m = new CubeAssetModel() { Name = cubeBlockDefinition == null ? blockName : cubeBlockDefinition.DisplayName, Mass = cubeMass, Count = 1, TextureFile = blockTexture, Time = blockTime };
+                                var m = new CubeAssetModel() { Name = cubeBlockDefinition == null ? blockName : cubeBlockDefinition.DisplayNameText, Mass = cubeMass, Count = 1, TextureFile = blockTexture, Time = blockTime };
                                 cubeAssets.Add(m);
                                 cubeAssetDict.Add(blockName, m);
                             }
@@ -752,22 +749,22 @@
                         {
                             TimeSpan ingotTime;
                             SpaceEngineersApi.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.Id.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
-                            var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId);
+                            var cd = (MyPhysicalItemDefinition)MyDefinitionManager.Static.GetDefinition(kvp.Value.Id);
                             var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icons.First(), Path.Combine(contentPath, cd.Icons.First()));
-                            var volume = cd.Volume.HasValue ? (double)kvp.Value.Amount * cd.Volume.Value : 0d;
-                            var ingotAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = volume, Time = ingotTime, TextureFile = componentTexture };
+                            var volume = (double)kvp.Value.Amount * cd.Volume * SpaceEngineersConsts.VolumeMultiplyer;
+                            var ingotAsset = new OreAssetModel { Name = cd.DisplayNameText, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = volume, Time = ingotTime, TextureFile = componentTexture };
                             ingotAssets.Add(ingotAsset);
                             timeTaken += ingotTime;
                         }
 
                         foreach (var kvp in oreRequirements)
                         {
-                            var cd = (MyObjectBuilder_PhysicalItemDefinition)SpaceEngineersApi.GetDefinition(kvp.Value.Id.TypeId, kvp.Value.SubtypeId);
+                            var cd = MyDefinitionManager.Static.GetDefinition(kvp.Value.Id) as MyPhysicalItemDefinition;
                             if (cd != null)
                             {
                                 var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icons.First(), Path.Combine(contentPath, cd.Icons.First()));
-                                var volume = cd.Volume.HasValue ? (double)kvp.Value.Amount * cd.Volume.Value : 0d;
-                                var oreAsset = new OreAssetModel() { Name = cd.DisplayName, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = volume, TextureFile = componentTexture };
+                                var volume = (double)kvp.Value.Amount * cd.Volume * SpaceEngineersConsts.VolumeMultiplyer;
+                                var oreAsset = new OreAssetModel() { Name = cd.DisplayNameText, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = volume, TextureFile = componentTexture };
                                 oreAssets.Add(oreAsset);
                             }
                         }
@@ -886,7 +883,7 @@
                 if (cube.SubtypeName.StartsWith("LargeBlockArmor"))
                 {
                     var newSubTypeName = cube.SubtypeName.Replace("LargeBlockArmor", "LargeHeavyBlockArmor");
-                    if (SpaceEngineersCore.Resources.Definitions.CubeBlocks.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeId == newSubTypeName))
+                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
                     {
                         cube.SubtypeName = newSubTypeName;
                         count++;
@@ -895,7 +892,7 @@
                 else if (cube.SubtypeName.StartsWith("SmallBlockArmor"))
                 {
                     var newSubTypeName = cube.SubtypeName.Replace("SmallBlockArmor", "SmallHeavyBlockArmor");
-                    if (SpaceEngineersCore.Resources.Definitions.CubeBlocks.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeId == newSubTypeName))
+                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
                     {
                         cube.SubtypeName = newSubTypeName;
                         count++;
@@ -921,7 +918,7 @@
                 if (cube.SubtypeName.StartsWith("LargeHeavyBlockArmor"))
                 {
                     var newSubTypeName = cube.SubtypeName.Replace("LargeHeavyBlockArmor", "LargeBlockArmor");
-                    if (SpaceEngineersCore.Resources.Definitions.CubeBlocks.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeId == newSubTypeName))
+                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
                     {
                         cube.SubtypeName = newSubTypeName;
                         count++;
@@ -930,7 +927,7 @@
                 else if (cube.SubtypeName.StartsWith("SmallHeavyBlockArmor"))
                 {
                     var newSubTypeName = cube.SubtypeName.Replace("SmallHeavyBlockArmor", "SmallBlockArmor");
-                    if (SpaceEngineersCore.Resources.Definitions.CubeBlocks.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeId == newSubTypeName))
+                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
                     {
                         cube.SubtypeName = newSubTypeName;
                         count++;
@@ -998,7 +995,7 @@
             {
                 var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, CubeGrid.GridSizeEnum, cube.SubtypeName);
 
-                if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
+                if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.Z == 1)
                 {
                     // rotate position around origin.
                     cube.Min = Vector3I.Transform(cube.Min.ToVector3I(), quaternion);
@@ -1336,7 +1333,7 @@
                 newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
                 var definition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, viewModel.GridSize, block.SubtypeName);
 
-                if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.z == 1)
+                if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.Z == 1)
                 {
                     newBlock.Min = block.Min.Mirror(xMirror, xAxis, yMirror, yAxis, zMirror, zAxis);
                 }

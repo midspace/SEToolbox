@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Xml.Serialization;
+    using Sandbox.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage.Game;
@@ -219,7 +220,7 @@
 
         private InventoryModel CreateItem(MyObjectBuilder_InventoryItem item, string contentPath)
         {
-            var definition = SpaceEngineersApi.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName) as MyObjectBuilder_PhysicalItemDefinition;
+            var definition = MyDefinitionManager.Static.GetDefinition(item.PhysicalContent.TypeId, item.PhysicalContent.SubtypeName) as MyPhysicalItemDefinition;
 
             string name;
             string textureFile;
@@ -235,9 +236,9 @@
             }
             else
             {
-                name = definition.DisplayName;
+                name = definition.DisplayNameText;
                 massMultiplyer = definition.Mass;
-                volumeMultiplyer = definition.Volume.Value;
+                volumeMultiplyer = definition.Volume * SpaceEngineersConsts.VolumeMultiplyer;
                 textureFile = SpaceEngineersCore.GetDataPathOrDefault(definition.Icons.First(), Path.Combine(contentPath, definition.Icons.First()));
             }
 

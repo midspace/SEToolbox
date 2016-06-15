@@ -70,7 +70,7 @@
                 ReadVoxelDetails(previewFile);
             }
 
-            var materialList = SpaceEngineersCore.Resources.GetMaterialList().Select(m => m.Id.SubtypeName).OrderBy(s => s).ToList();
+            var materialList = SpaceEngineersCore.Resources.VoxelMaterialDefinitions.Select(m => m.Id.SubtypeName).OrderBy(s => s).ToList();
 
             GameMaterialList = new List<VoxelMaterialAssetModel>(materialList.Select(s => new VoxelMaterialAssetModel { MaterialName = s, DisplayName = s }));
             EditMaterialList = new List<VoxelMaterialAssetModel> { new VoxelMaterialAssetModel { MaterialName = null, DisplayName = "Delete/Remove" } };

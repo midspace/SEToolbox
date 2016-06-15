@@ -333,11 +333,11 @@
                         var list = cubeGrid.CubeBlocks.OfType<MyObjectBuilder_Cockpit>().ToArray();
                         for (var i = 0; i < list.Length; i++)
                         {
-                            if (((MyObjectBuilder_Cockpit)list[i]).Pilot != null)
+                            if (list[i].Pilot != null)
                             {
-                                character = ((MyObjectBuilder_Cockpit)list[i]).Pilot;
+                                character = (list[i]).Pilot;
 
-                                if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Model == character.CharacterModel || c.Name == character.CharacterModel))
+                                if (!SpaceEngineersCore.Resources.CharacterDefinitions.Any(c => c.Model == character.CharacterModel || c.Name == character.CharacterModel))
                                 {
                                     character.CharacterModel = Sandbox.Game.Entities.Character.MyCharacter.DefaultModel;
                                     statusNormal = false;
@@ -354,7 +354,7 @@
                     character = entity as MyObjectBuilder_Character;
                     if (character != null)
                     {
-                        if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Model == character.CharacterModel || c.Name == character.CharacterModel))
+                        if (!SpaceEngineersCore.Resources.CharacterDefinitions.Any(c => c.Model == character.CharacterModel || c.Name == character.CharacterModel))
                         {
                             character.CharacterModel = Sandbox.Game.Entities.Character.MyCharacter.DefaultModel;
                             statusNormal = false;
@@ -368,9 +368,9 @@
                 //{
                 //    foreach (var item in world.Checkpoint.Players.Dictionary)
                 //    {
-                //        if (!SpaceEngineersCore.Resources.Definitions.Characters.Any(c => c.Name == item.Value.PlayerModel))
+                //        if (!SpaceEngineersCore.Resources.CharacterDefinitions.Any(c => c.Name == item.Value.PlayerModel))
                 //        {
-                //            item.Value.PlayerModel = SpaceEngineersCore.Resources.Definitions.Characters[0].Name;
+                //            item.Value.PlayerModel = SpaceEngineersCore.Resources.CharacterDefinitions[0].Name;
                 //            statusNormal = false;
                 //            str.AppendLine("! Fixed astronaut's CharacterModel.");
                 //            saveAfterScan = true;

@@ -2,12 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Resources;
     using System.Xml;
+    using Sandbox.Definitions;
     using SEToolbox.Support;
     using VRage;
     using VRage.Game;
@@ -169,10 +169,7 @@
 
             if (cubeBlockDefinition != null)
             {
-                foreach (var component in cubeBlockDefinition.Components)
-                {
-                    mass += SpaceEngineersCore.Resources.Definitions.Components.Where(c => c.Id.SubtypeId == component.Subtype).Sum(c => c.Mass) * component.Count;
-                }
+                return cubeBlockDefinition.Mass;
             }
 
             return mass;
@@ -182,34 +179,33 @@
         {
             var time = new TimeSpan();
             var bp = SpaceEngineersApi.GetBlueprint(typeId, subType);
-            if (bp != null && bp.Result != null)
+
+            if (bp != null && bp.Results != null && bp.Results.Length > 0)
             {
                 foreach (var item in bp.Prerequisites)
                 {
-                    if (requirements.ContainsKey(item.SubtypeId))
+                    if (requirements.ContainsKey(item.Id.SubtypeName))
                     {
                         // append existing
-                        requirements[item.SubtypeId].Amount = ((amount / Convert.ToDecimal(bp.Result.Amount, CultureInfo.InvariantCulture)) * Convert.ToDecimal(item.Amount, CultureInfo.InvariantCulture)) + Convert.ToDecimal(requirements[item.SubtypeId].Amount, CultureInfo.InvariantCulture);
+                        requirements[item.Id.SubtypeName].Amount = ((amount / (decimal)bp.Results[0].Amount) * (decimal)item.Amount) + requirements[item.Id.SubtypeName].Amount;
                     }
                     else
                     {
                         // add new
-                        requirements.Add(item.SubtypeId, new BlueprintRequirement
+                        requirements.Add(item.Id.SubtypeName, new BlueprintRequirement
                         {
-                            Amount = (amount / Convert.ToDecimal(bp.Result.Amount, CultureInfo.InvariantCulture)) * Convert.ToDecimal(item.Amount, CultureInfo.InvariantCulture),
-                            TypeId = item.TypeId,
-                            SubtypeId = item.SubtypeId,
+                            Amount = (amount / (decimal)bp.Results[0].Amount) * (decimal)item.Amount,
+                            TypeId = item.Id.TypeId.ToString(),
+                            SubtypeId = item.Id.SubtypeName,
                             Id = item.Id
                         });
                     }
 
-
-                    decimal timeMassMultiplyer = 1;
+                    double timeMassMultiplyer = 1;
                     if (typeId == typeof(MyObjectBuilder_Ore) || typeId == typeof(MyObjectBuilder_Ingot))
-                        timeMassMultiplyer = decimal.Parse(bp.Result.Amount, CultureInfo.InvariantCulture);
+                        timeMassMultiplyer = (double)bp.Results[0].Amount;
 
-                    var ticks = TimeSpan.TicksPerSecond * (decimal)bp.BaseProductionTimeInSeconds * amount / timeMassMultiplyer;
-                    var ts = new TimeSpan((long)ticks);
+                    var ts = TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds * (double)amount / timeMassMultiplyer);
                     time += ts;
                 }
             }
@@ -217,82 +213,24 @@
             timeTaken = time;
         }
 
-        public static MyObjectBuilder_DefinitionBase GetDefinition(MyObjectBuilderType typeId, string subTypeId)
+        public static MyBlueprintDefinitionBase GetBlueprint(MyObjectBuilderType resultTypeId, string resultSubTypeId)
         {
-            var cube = SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
-            if (cube != null)
-            {
-                return cube;
-            }
-
-            var item = SpaceEngineersCore.Resources.Definitions.PhysicalItems.FirstOrDefault(d => d.Id.TypeId == typeId && d.Id.SubtypeId == subTypeId);
-            if (item != null)
-            {
-                return item;
-            }
-
-            var component = SpaceEngineersCore.Resources.Definitions.Components.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
-            if (component != null)
-            {
-                return component;
-            }
-
-            var magazine = SpaceEngineersCore.Resources.Definitions.AmmoMagazines.FirstOrDefault(c => c.Id.TypeId == typeId && c.Id.SubtypeId == subTypeId);
-            if (magazine != null)
-            {
-                return magazine;
-            }
-
-            return null;
-        }
-
-        public static MyObjectBuilder_BlueprintDefinition GetBlueprint(MyObjectBuilderType resultTypeId, string resultSubTypeId)
-        {
-            var bp = SpaceEngineersCore.Resources.Definitions.Blueprints.FirstOrDefault(b => b.Result != null && b.Result.Id.TypeId == resultTypeId && b.Result.SubtypeId == resultSubTypeId);
-            if (bp != null)
-                return bp;
-
-            var bpList = SpaceEngineersCore.Resources.Definitions.Blueprints.Where(b => b.Results != null && b.Results.Any(r => r.Id.TypeId == resultTypeId && r.SubtypeId == resultSubTypeId));
+            var bpList = SpaceEngineersCore.Resources.BlueprintDefinitions.Where(b => b.Results != null && b.Results.Any(r => r.Id.TypeId == resultTypeId && r.Id.SubtypeName == resultSubTypeId));
             return bpList.FirstOrDefault();
-        }
-
-        public static float GetItemMass(MyObjectBuilderType typeId, string subTypeId)
-        {
-            var def = GetDefinition(typeId, subTypeId);
-            if (def is MyObjectBuilder_PhysicalItemDefinition)
-            {
-                var item2 = def as MyObjectBuilder_PhysicalItemDefinition;
-                return item2.Mass;
-            }
-
-            return 0;
-        }
-
-        public static float GetItemVolume(MyObjectBuilderType typeId, string subTypeId)
-        {
-            var def = GetDefinition(typeId, subTypeId);
-            if (def is MyObjectBuilder_PhysicalItemDefinition)
-            {
-                var item2 = def as MyObjectBuilder_PhysicalItemDefinition;
-                if (item2.Volume.HasValue)
-                    return item2.Volume.Value;
-            }
-
-            return 0;
         }
 
         #endregion
 
         #region GetCubeDefinition
 
-        public static MyObjectBuilder_CubeBlockDefinition GetCubeDefinition(MyObjectBuilderType typeId, MyCubeSize cubeSize, string subtypeId)
+        public static MyCubeBlockDefinition GetCubeDefinition(MyObjectBuilderType typeId, MyCubeSize cubeSize, string subtypeName)
         {
-            if (string.IsNullOrEmpty(subtypeId))
+            if (string.IsNullOrEmpty(subtypeName))
             {
-                return SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
+                return SpaceEngineersCore.Resources.CubeBlockDefinitions.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
             }
 
-            return SpaceEngineersCore.Resources.Definitions.CubeBlocks.FirstOrDefault(d => d.Id.SubtypeId == subtypeId || (d.Variants != null && d.Variants.Any(v => subtypeId == d.Id.SubtypeId + v.Color)));
+            return SpaceEngineersCore.Resources.CubeBlockDefinitions.FirstOrDefault(d => d.Id.SubtypeName == subtypeName || (d.Variants != null && d.Variants.Any(v => subtypeName == d.Id.SubtypeName + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
         }
 

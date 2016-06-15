@@ -12,18 +12,30 @@
 
     public static class ToolboxUpdater
     {
+        /// <summary>
+        /// Required dependancies which must be copied for SEToolbox to work.
+        /// </summary>
         internal static readonly string[] CoreSpaceEngineersFiles = {
-            "Sandbox.Common.dll",
-            "SpaceEngineers.Game.dll",
-            "SpaceEngineers.ObjectBuilders.dll",
-            "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",
-            "Sandbox.Game.dll",
-            "HavokWrapper.dll",
-            "VRage.dll",
-            "VRage.Game.dll",
-            "VRage.Game.XmlSerializers.dll",
-            "VRage.Library.dll",
-            "VRage.Math.dll"
+            "HavokWrapper.dll",         // MSIL
+            "Sandbox.Common.dll",       // AnyCpu
+            "Sandbox.Game.dll",         // MSIL
+            "Sandbox.Graphics.dll",     // MSIL
+            "SharpDX.dll",              // AnyCpu
+            "SpaceEngineers.Game.dll",  // MSIL
+            "SpaceEngineers.ObjectBuilders.dll",                    // MSIL
+            "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",     // MSIL
+            "steam_api.dll",            // AnyCpu
+            "steam_api64.dll",          // AnyCpu
+            "SteamSDK.dll",             // MSIL
+            "VRage.dll",                // AnyCpu
+            "VRage.Game.dll",           // AnyCpu
+            "VRage.Game.XmlSerializers.dll",    // AnyCpu
+            "VRage.Input.dll",          // MSIL
+            "VRage.Library.dll",        // AnyCpu
+            "VRage.Math.dll",           // AnyCpu
+            "VRage.Native.dll",         // MSIL
+            "VRage.OpenVRWrapper.dll",  // MSIL
+            "VRage.Render.dll",         // AnyCpu
         };
 
         //internal static readonly string[] CoreMedievalEngineersFiles = {

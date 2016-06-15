@@ -43,9 +43,9 @@
                 new MaterialSelectionModel {Value = null, DisplayName = "No change"}
             };
 
-            foreach (var material in SpaceEngineersCore.Resources.GetMaterialList().OrderBy(m => m.Id.SubtypeId))
+            foreach (var material in SpaceEngineersCore.Resources.VoxelMaterialDefinitions.OrderBy(m => m.Id.SubtypeName))
             {
-                _materialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
+                _materialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeName, DisplayName = material.Id.SubtypeName });
             }
 
             SphereRadius = 150;
@@ -286,7 +286,7 @@
         {
             CharacterPosition = characterPosition;
 
-            var vms = SpaceEngineersCore.Resources.Definitions.VoxelMapStorages;
+            var vms = SpaceEngineersCore.Resources.VoxelMapStorageDefinitions;
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
             foreach (var voxelMap in vms)

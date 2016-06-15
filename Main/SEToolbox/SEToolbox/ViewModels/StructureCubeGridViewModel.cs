@@ -12,8 +12,6 @@
     using System.Windows.Data;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
-
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;

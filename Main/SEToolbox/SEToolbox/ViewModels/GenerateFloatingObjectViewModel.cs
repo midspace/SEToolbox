@@ -4,15 +4,13 @@
     using System.Collections.ObjectModel;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
-
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
-    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
-    using VRage.ObjectBuilders;
     using VRage;
     using VRage.Game;
+    using VRage.ObjectBuilders;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class GenerateFloatingObjectViewModel : BaseViewModel
     {

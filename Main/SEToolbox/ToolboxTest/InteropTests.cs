@@ -3,7 +3,6 @@
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage.Game;
@@ -19,14 +18,14 @@
             SpaceEngineersCore.LoadDefinitions();
 
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Large, "");
-            Assert.AreEqual("DisplayName_Block_GravityGenerator", d1.DisplayName, "Must match");
+            Assert.AreEqual("DisplayName_Block_GravityGenerator", d1.DisplayNameText, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
             var d2 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Small, "");
             Assert.IsNull(d2, "Must be null");
 
             var d3 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "SmallBlockGyro");
-            Assert.AreEqual("DisplayName_Block_Gyroscope", d3.DisplayName, "Must match");
+            Assert.AreEqual("DisplayName_Block_Gyroscope", d3.DisplayNameText, "Must match");
             Assert.AreEqual(MyCubeSize.Small, d3.CubeSize, "Must match");
 
             var d4 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "Fake");
@@ -73,7 +72,7 @@
         public void RotateComponent()
         {
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust)), MyCubeSize.Large, "LargeBlockLargeThrust");
-            Assert.AreEqual("DisplayName_Block_LargeThrust", d1.DisplayName, "Must match");
+            Assert.AreEqual("DisplayName_Block_LargeThrust", d1.DisplayNameText, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
             Assert.AreEqual(3, d1.Size.X, "Must match");
@@ -99,7 +98,7 @@
 
             //======//
 
-            var v = d1.Size.ToVector3();
+            var v = d1.Size;
             var fV1 = Vector3.Transform(v, m);
 
             // Orientation of Forward/Up should provide the exact same dimentions as the original Component above.

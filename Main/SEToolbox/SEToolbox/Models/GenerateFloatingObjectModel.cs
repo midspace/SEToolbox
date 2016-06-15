@@ -286,54 +286,54 @@
             var list = new List<ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            foreach (var componentDefinition in SpaceEngineersCore.Resources.Definitions.Components)
+            foreach (var componentDefinition in SpaceEngineersCore.Resources.ComponentDefinitions)
             {
-                var bp = SpaceEngineersApi.GetBlueprint(componentDefinition.Id.TypeId, componentDefinition.Id.SubtypeId);
+                var bp = SpaceEngineersApi.GetBlueprint(componentDefinition.Id.TypeId, componentDefinition.Id.SubtypeName);
                 list.Add(new ComponentItemModel
                 {
-                    Name = componentDefinition.DisplayName,
+                    Name = componentDefinition.DisplayNameText,
                     TypeId = componentDefinition.Id.TypeId,
-                    SubtypeId = componentDefinition.Id.SubtypeId,
+                    SubtypeId = componentDefinition.Id.SubtypeName,
                     Mass = componentDefinition.Mass,
                     TextureFile = componentDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icons.First(), Path.Combine(contentPath, componentDefinition.Icons.First())),
-                    Volume = componentDefinition.Volume.HasValue ? componentDefinition.Volume.Value : 0f,
+                    Volume = componentDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     Accessible = componentDefinition.Public,
-                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
+                    Time = bp != null ? TimeSpan.FromSeconds(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.PhysicalItems)
+            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.PhysicalItemDefinitions)
             {
-                if (physicalItemDefinition.Id.SubtypeId == "CubePlacerItem" || physicalItemDefinition.Id.SubtypeId == "WallPlacerItem")
+                if (physicalItemDefinition.Id.SubtypeName == "CubePlacerItem" || physicalItemDefinition.Id.SubtypeName == "WallPlacerItem")
                     continue;
 
-                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeId);
+                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeName);
                 list.Add(new ComponentItemModel
                 {
-                    Name = physicalItemDefinition.DisplayName,
+                    Name = physicalItemDefinition.DisplayNameText,
                     TypeId = physicalItemDefinition.Id.TypeId,
-                    SubtypeId = physicalItemDefinition.Id.SubtypeId,
+                    SubtypeId = physicalItemDefinition.Id.SubtypeName,
                     Mass = physicalItemDefinition.Mass,
-                    Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
+                    Volume = physicalItemDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = physicalItemDefinition.Public,
-                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
+                    Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.AmmoMagazines)
+            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.AmmoMagazineDefinitions)
             {
-                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeId);
+                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeName);
                 list.Add(new ComponentItemModel
                 {
-                    Name = physicalItemDefinition.DisplayName,
+                    Name = physicalItemDefinition.DisplayNameText,
                     TypeId = physicalItemDefinition.Id.TypeId,
-                    SubtypeId = physicalItemDefinition.Id.SubtypeId,
+                    SubtypeId = physicalItemDefinition.Id.SubtypeName,
                     Mass = physicalItemDefinition.Mass,
-                    Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
+                    Volume = physicalItemDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = !string.IsNullOrEmpty(physicalItemDefinition.Model),
-                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds)) : (TimeSpan?)null,
+                    Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
                 });
             }
 
@@ -350,7 +350,7 @@
             //    {
             //        Name = cubeDefinition.DisplayName,
             //        TypeId = cubeDefinition.Id.TypeId,
-            //        SubtypeId = cubeDefinition.Id.SubtypeId,
+            //        SubtypeId = cubeDefinition.Id.SubtypeName,
             //        CubeSize = cubeDefinition.CubeSize,
             //        TextureFile = cubeDefinition.Icon == null ? null : Path.Combine(contentPath, cubeDefinition.Icon),
             //        Accessible = !string.IsNullOrEmpty(cubeDefinition.Model),

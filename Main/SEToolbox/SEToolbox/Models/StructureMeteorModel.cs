@@ -5,6 +5,7 @@
     using System.Xml.Serialization;
 
     using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Definitions;
     using SEToolbox.Interop;
     using VRage.Game;
     using VRage.ObjectBuilders;
@@ -140,8 +141,10 @@
 
             if (Meteor.Item != null && Meteor.Item.PhysicalContent is MyObjectBuilder_Ore)
             {
-                compMass = SpaceEngineersApi.GetItemMass(Meteor.Item.PhysicalContent.TypeId, Meteor.Item.PhysicalContent.SubtypeName);
-                compVolume = SpaceEngineersApi.GetItemVolume(Meteor.Item.PhysicalContent.TypeId, Meteor.Item.PhysicalContent.SubtypeName);
+                var def = (MyPhysicalItemDefinition)MyDefinitionManager.Static.GetDefinition(Meteor.Item.PhysicalContent.TypeId, Meteor.Item.PhysicalContent.SubtypeName);
+
+                compMass = def.Mass;
+                compVolume = def.Volume;
                 amount = (double)Meteor.Item.Amount;
 
                 DisplayName = string.Format("{0} Ore", Meteor.Item.PhysicalContent.SubtypeName);

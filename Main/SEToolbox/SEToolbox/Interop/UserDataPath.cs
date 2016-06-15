@@ -9,20 +9,16 @@
 
         public UserDataPath(string basePath, string savesPathPart, string modsPathPart)
         {
+            DataPath = basePath;
             SavesPath = Path.Combine(basePath, savesPathPart);
             ModsPath = Path.Combine(basePath, modsPathPart);
-        }
-
-        public UserDataPath(string savesPath, string modsPath)
-        {
-            SavesPath = savesPath;
-            ModsPath = modsPath;
         }
 
         #endregion
 
         #region properties
 
+        public string DataPath { get; set; }
         public string SavesPath { get; set; }
         public string ModsPath { get; set; }
 
@@ -41,7 +37,7 @@
             var basePath = GetPathBase(savePath, "Saves");
             if (basePath != null)
             {
-                dp = new UserDataPath(Path.Combine(basePath, "Saves"), Path.Combine(basePath, "Mods"));
+                dp = new UserDataPath(basePath, "Saves", "Mods");
             }
 
             return dp;

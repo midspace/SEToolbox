@@ -1,15 +1,18 @@
 ﻿namespace SEToolbox.Interop
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using Sandbox.Definitions;
     using SEToolbox.Models;
     using SEToolbox.Support;
     using VRage;
     using VRage.Game;
     using VRage.Game.ObjectBuilders.ComponentSystem;
+    using VRage.ObjectBuilders;
     using VRageMath;
 
     /// <summary>
@@ -193,9 +196,21 @@
             return Vector3I.Transform(size.ToVector3I(), rotation);
         }
 
+        public static Vector3I Transform(this Vector3I size, SerializableBlockOrientation orientation)
+        {
+            var matrix = Matrix.CreateFromDir(Base6Directions.GetVector(orientation.Forward), Base6Directions.GetVector(orientation.Up));
+            var rotation = Quaternion.CreateFromRotationMatrix(matrix);
+            return Vector3I.Transform(size, rotation);
+        }
+
         public static SerializableVector3I Add(this SerializableVector3I size, int value)
         {
             return new SerializableVector3I(size.X + value, size.Y + value, size.Z + value);
+        }
+
+        public static Vector3I Add(this Vector3I size, int value)
+        {
+            return new Vector3I(size.X + value, size.Y + value, size.Z + value);
         }
 
         public static Vector3I Abs(this Vector3I size)
@@ -311,12 +326,7 @@
         /// <returns></returns>
         public static float ToLength(this MyCubeSize cubeSize)
         {
-            switch (cubeSize)
-            {
-                case MyCubeSize.Large: return SpaceEngineersCore.Resources.Definitions.Configuration.CubeSizes.Large;
-                case MyCubeSize.Small: return SpaceEngineersCore.Resources.Definitions.Configuration.CubeSizes.Small;
-            }
-            return 0f;
+            return MyDefinitionManager.Static.GetCubeSize(cubeSize);
         }
 
         public static MyFixedPoint ToFixedPoint(this decimal value)
@@ -448,7 +458,7 @@
         //    return inventoryEditors;
         //}
 
-        public static ObservableCollection<InventoryEditorModel> GetInventory(this MyObjectBuilder_ComponentContainer componentContainer, MyObjectBuilder_CubeBlockDefinition definition = null)
+        public static ObservableCollection<InventoryEditorModel> GetInventory(this MyObjectBuilder_ComponentContainer componentContainer, MyCubeBlockDefinition definition = null)
         {
             var inventoryEditors = new ObservableCollection<InventoryEditorModel>();
 
@@ -479,7 +489,7 @@
             return inventoryEditors;
         }
 
-        private static InventoryEditorModel ParseInventory(MyObjectBuilder_Inventory inventory, MyObjectBuilder_CubeBlockDefinition definition = null)
+        private static InventoryEditorModel ParseInventory(MyObjectBuilder_Inventory inventory, MyCubeBlockDefinition definition = null)
         {
             if (inventory == null)
                 return null;
@@ -508,5 +518,14 @@
             return new InventoryEditorModel(inventory, volumeMultiplier * 1000 * settings.InventorySizeMultiplier, null) { Name = inventory.InventoryFlags.ToString(), IsValid = true };
         }
 
+        public static List<MyGasProperties> GetGasDefinitions(this MyDefinitionManager definitionManager)
+        {
+            return definitionManager.GetAllDefinitions().Where(e => e.Id.TypeId == typeof(VRage.Game.ObjectBuilders.Definitions.MyObjectBuilder_GasProperties)).Cast<MyGasProperties>().ToList();
+        }
+
+        public static MyDefinitionBase GetDefinition(this MyDefinitionManager definitionManager, MyObjectBuilderType typeId, string subTypeId)
+        {
+            return definitionManager.GetAllDefinitions().FirstOrDefault(e => e.Id.TypeId == typeId && e.Id.SubtypeName == subTypeId);
+        }
     }
 }

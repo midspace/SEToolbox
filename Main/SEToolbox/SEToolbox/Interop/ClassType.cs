@@ -1,6 +1,6 @@
 ﻿namespace SEToolbox.Interop
 {
-    public enum ClassType
+    public enum ClassType 
     {
         Unknown,
         Character,

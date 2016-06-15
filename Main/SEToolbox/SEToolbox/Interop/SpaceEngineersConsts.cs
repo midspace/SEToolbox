@@ -1,7 +1,7 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Support;
     using System;
+    using System.IO;
     using System.Reflection;
     using VRage.Utils;
 
@@ -39,6 +39,11 @@
         public const float PlayerMass = 100f;
 
         /// <summary>
+        /// Converts the internal game value (mL) to the nominal metric (L) for display.
+        /// </summary>
+        public const float VolumeMultiplyer = 1000f;
+
+        /// <summary>
         /// The base path of the save files, minus the userid.
         /// </summary>
         public static readonly UserDataPath BaseLocalPath;
@@ -55,9 +60,9 @@
             //if (GlobalSettings.Default.SEBinPath.Contains("MedievalEngineers", StringComparison.InvariantCulture))
             //    basePath = "MedievalEngineers";
 
-            BaseLocalPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + @"\Saves", basePath + @"\Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
-            BaseDedicatedServerHostPath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + @"Dedicated\Saves", basePath + @"Dedicated\Mods"); // Followed by .\LastLoaded.sbl
-            BaseDedicatedServerServicePath = new UserDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), basePath + @"Dedicated", ""); // Followed by .\%instancename%\Saves\LastLoaded.sbl  (.\%instancename%\Mods)
+            BaseLocalPath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath), "Saves", "Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
+            BaseDedicatedServerHostPath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + "Dedicated"), "Saves", "Mods"); // Followed by .\LastLoaded.sbl
+            BaseDedicatedServerServicePath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), basePath + "Dedicated"), "", ""); // Followed by .\%instancename%\Saves\LastLoaded.sbl  (.\%instancename%\Mods)
         }
 
         public static Version GetSEVersion()

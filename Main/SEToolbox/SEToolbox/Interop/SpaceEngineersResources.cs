@@ -1,27 +1,17 @@
 ﻿namespace SEToolbox.Interop
 {
-    using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Reflection;
+    using Sandbox.Definitions;
     using SEToolbox.Support;
     using VRage.Game;
     using VRage.ObjectBuilders;
-    using Res = SEToolbox.Properties.Resources;
 
     /// <summary>
     /// Encapsulates the game definitions, either stock or loaded for a specific save game world.
     /// </summary>
     public class SpaceEngineersResources
     {
-        #region fields
-
-        private MyObjectBuilder_Definitions _definitions;
-        private Dictionary<string, ContentDataPath> _contentDataPaths;
-
-        #endregion
-
         #region LoadDefinitions
 
         /// <summary>
@@ -29,21 +19,8 @@
         /// </summary>
         public void LoadDefinitions()
         {
-            ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), null);
-        }
-
-        /// <summary>
-        /// Loads Stock definitions from specified path, useful for tests.
-        /// </summary>
-        /// <param name="contentPath"></param>
-        public void LoadDefinitions(string contentPath)
-        {
-            ReadCubeBlockDefinitions(contentPath, null);
-        }
-
-        public void LoadDefinitionsAndMods(params string[] modPaths)
-        {
-            ReadCubeBlockDefinitions(ToolboxUpdater.GetApplicationContentPath(), modPaths);
+            MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
+            MaterialIndex = new Dictionary<string, byte>();
         }
 
         public void LoadDefinitionsAndMods(string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
@@ -53,472 +30,13 @@
 
         public void LoadDefinitionsAndMods(string applicationContentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
         {
-            var modPaths = new List<string>();
-
-            if (mods != null && !string.IsNullOrEmpty(userModspath) && Directory.Exists(userModspath))
-            {
-                // Read through the mod paths manually.
-                // Using the MyObjectBuilder_Base.DeserializeXML() with MyFSLocationEnum.ContentWithMods does not work in the expected manner.
-
-                foreach (MyObjectBuilder_Checkpoint.ModItem mod in mods)
-                {
-                    if (mod.PublishedFileId != 0)
-                    {
-                        modPaths.Add(Path.Combine(userModspath, string.Format("{0}.sbm", mod.PublishedFileId)));
-                    }
-                    else if (mod.PublishedFileId == 0 && !string.IsNullOrEmpty(mod.Name))
-                    {
-                        modPaths.Add(Path.Combine(userModspath, mod.Name));
-                    }
-                }
-            }
-
-            ReadCubeBlockDefinitions(applicationContentPath, modPaths.ToArray());
-        }
-
-        #endregion
-
-        #region ReadCubeBlockDefinitions
-
-        private void ReadCubeBlockDefinitions(string contentPath, string[] modPaths)
-        {
-            // Dynamically read all definitions as soon as the SpaceEngineersAPI class is first invoked.
-            FindDefinitions(contentPath, modPaths, out _definitions, out _contentDataPaths);
+            MyDefinitionManager.Static.LoadData(mods.ToList());
             MaterialIndex = new Dictionary<string, byte>();
-        }
-
-        /// <summary>
-        /// Load all the Space Engineers data definitions.
-        /// </summary>
-        /// <param name="contentPath">allows redirection of path when switching between single player or server.</param>
-        /// <param name="modPaths"></param>
-        /// <param name="definitions"></param>
-        /// <param name="contentData"></param>
-        /// <returns></returns>
-        private void FindDefinitions(string contentPath, IEnumerable<string> modPaths, out MyObjectBuilder_Definitions definitions, out Dictionary<string, ContentDataPath> contentData)
-        {
-            // Maintain a list of referenced files, prefabs, models, textures, etc., as they must also be found and mapped.
-            // ie.,  "Models\Characters\Custom\Awesome_astronaut_model" might live under "Mods\Awesome_astronaut\Models\Characters\Custom\Awesome_astronaut_model".
-            contentData = new Dictionary<string, ContentDataPath>();
-
-            definitions = LoadAllDefinitions(contentPath, contentPath, ref contentData);
-
-            if (modPaths != null)
-            {
-                foreach (var modPath in modPaths)
-                {
-                    var filePath = Environment.ExpandEnvironmentVariables(modPath);
-
-                    if (File.Exists(filePath))
-                    {
-                        var modDefinitions = LoadAllDefinitionsZip(contentPath, filePath, ref contentData);
-                        MergeDefinitions(ref definitions, modDefinitions);
-                    }
-                    else if (Directory.Exists(filePath))
-                    {
-                        var modDefinitions = LoadAllDefinitions(contentPath, filePath, ref contentData);
-                        MergeDefinitions(ref definitions, modDefinitions);
-                    }
-                }
-            }
-
-            // Verify that content data was available, just in case the .sbc files didn't exist.
-            if (definitions.AmmoMagazines == null) throw new ToolboxException(ExceptionState.MissingContentFile, "AmmoMagazines.sbc");
-            if (definitions.Animations == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Animations.sbc");
-            if (definitions.Blueprints == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Blueprints.sbc");
-            if (definitions.Characters == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Characters.sbc");
-            if (definitions.Components == null) throw new ToolboxException(ExceptionState.MissingContentFile, "Components.sbc");
-            if (definitions.ContainerTypes == null) throw new ToolboxException(ExceptionState.MissingContentFile, "ContainerTypes.sbc");
-            if (definitions.CubeBlocks == null) throw new ToolboxException(ExceptionState.MissingContentFile, "CubeBlocks.sbc");
-            if (definitions.GlobalEvents == null) throw new ToolboxException(ExceptionState.MissingContentFile, "GlobalEvents.sbc");
-            if (definitions.HandItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "HandItems.sbc");
-            if (definitions.PhysicalItems == null) throw new ToolboxException(ExceptionState.MissingContentFile, "PhysicalItems.sbc");
-            if (definitions.TransparentMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "TransparentMaterials.sbc");
-            if (definitions.VoxelMaterials == null) throw new ToolboxException(ExceptionState.MissingContentFile, "VoxelMaterials.sbc");
-
-            // Deal with duplicate entries. Must use the last one found and overwrite all others.
-            definitions.AmmoMagazines = definitions.AmmoMagazines.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Animations = definitions.Animations.Where(c => !c.Id.TypeId.IsNull).GroupBy(a => a.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Blueprints = definitions.Blueprints.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.Characters = definitions.Characters.GroupBy(c => c.Name).Select(c => c.Last()).ToArray();
-            definitions.Components = definitions.Components.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            // definitions.Configuration is not an array.
-            definitions.ContainerTypes = definitions.ContainerTypes.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.CubeBlocks = definitions.CubeBlocks.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            // definitions.Environment is not an array.
-            definitions.GlobalEvents = definitions.GlobalEvents.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.HandItems = definitions.HandItems.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.PhysicalItems = definitions.PhysicalItems.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.SpawnGroups = definitions.SpawnGroups == null ? null : definitions.SpawnGroups.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.TransparentMaterials = definitions.TransparentMaterials.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.VoxelMapStorages = definitions.VoxelMapStorages == null ? null : definitions.VoxelMapStorages.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-            definitions.VoxelMaterials = definitions.VoxelMaterials.Where(c => !c.Id.TypeId.IsNull).GroupBy(c => c.Id.ToString()).Select(c => c.Last()).ToArray();
-        }
-
-        private MyObjectBuilder_Definitions LoadAllDefinitions(string stockContentPath, string modContentPath, ref Dictionary<string, ContentDataPath> contentData)
-        {
-            var searchPath = Path.Combine(modContentPath, "Data");
-            var definitions = new MyObjectBuilder_Definitions();
-
-            if (!Directory.Exists(searchPath))
-                return definitions;
-
-            var files = Directory.GetFiles(searchPath, "*.sbc");
-
-            foreach (var filePath in files)
-            {
-                MyObjectBuilder_Definitions stockTemp = null;
-                try
-                {
-                    bool isCompressed;
-                    stockTemp = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Definitions>(filePath, out isCompressed);
-                }
-                catch (Exception ex)
-                {
-                    // ignore errors, keep on trucking just like SE.
-                    // write event log warning of any files not loaded.
-                    DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptContentFile, filePath), ex);
-                }
-
-                if (stockTemp != null)
-                    MergeDefinitions(ref definitions, stockTemp);
-            }
-
-            LoadContent(stockContentPath, modContentPath, null, null, definitions, ref contentData);
-
-            return definitions;
-        }
-
-        private MyObjectBuilder_Definitions LoadAllDefinitionsZip(string stockContentPath, string zipModFile, ref Dictionary<string, ContentDataPath> contentData)
-        {
-            var zipFiles = ZipTools.ExtractZipContentList(zipModFile, null);
-            var definitions = new MyObjectBuilder_Definitions();
-
-            if (!zipFiles.Any(f => Path.GetDirectoryName(f).Equals("Data", StringComparison.InvariantCultureIgnoreCase)))
-            {
-                return definitions;
-            }
-
-            var files = zipFiles.Where(f => Path.GetDirectoryName(f).Equals("Data", StringComparison.InvariantCultureIgnoreCase) && Path.GetExtension(f).Equals(".sbc", StringComparison.InvariantCultureIgnoreCase)).ToArray();
-
-            foreach (var filePath in files)
-            {
-                MyObjectBuilder_Definitions stockTemp = null;
-                try
-                {
-                    using (var stream = ZipTools.ExtractZipFileToSteam(zipModFile, null, filePath))
-                    {
-                        stockTemp = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Definitions>(stream);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // ignore errors, keep on trucking just like SE.
-                    // write event log warning of any files not loaded.
-                    DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptContentFile, filePath), ex);
-                }
-
-                if (stockTemp != null)
-                    MergeDefinitions(ref definitions, stockTemp);
-            }
-
-            LoadContent(stockContentPath, null, zipModFile, zipFiles, definitions, ref contentData);
-
-            return definitions;
-        }
-
-        private void MergeDefinitions(ref MyObjectBuilder_Definitions baseDefinitions, MyObjectBuilder_Definitions newDefinitions)
-        {
-            var fields = newDefinitions.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-            foreach (var field in fields)
-            {
-                var readValues = field.GetValue(newDefinitions);
-                if (readValues != null)
-                {
-                    var currentValues = field.GetValue(baseDefinitions);
-                    if (currentValues == null || !field.FieldType.IsArray)
-                    {
-                        field.SetValue(baseDefinitions, readValues);
-                    }
-                    else
-                    {
-                        // Merge together multiple values from seperate files.
-                        var newArray = ArrayHelper.MergeGenericArrays(currentValues, readValues);
-                        field.SetValue(baseDefinitions, newArray);
-                    }
-                }
-            }
-        }
-
-        private void LoadContent(string stockContentPath, string modContentPath, string zipModFile, string[] zipFiles, MyObjectBuilder_Definitions definitions, ref Dictionary<string, ContentDataPath> contentData)
-        {
-            // rechecks pre-existing contentData
-            foreach (var kvp in contentData)
-            {
-                if (modContentPath != null)
-                {
-                    var contentFile = Path.Combine(modContentPath, kvp.Value.ReferencePath);
-                    if (File.Exists(contentFile))
-                    {
-                        kvp.Value.AbsolutePath = contentFile;
-                        kvp.Value.ZipFilePath = null;
-                    }
-                }
-                else if (zipModFile != null)
-                {
-                    var contentFile = zipFiles.FirstOrDefault(f => f.Equals(kvp.Value.ReferencePath, StringComparison.InvariantCultureIgnoreCase));
-                    if (contentFile != null)
-                    {
-                        kvp.Value.ZipFilePath = zipModFile;
-                        kvp.Value.AbsolutePath = null;
-                    }
-                }
-            }
-
-            var icons = new List<string>(); // .dds .png
-            var models = new List<string>(); // .mwm
-            var storages = new List<string>(); // .vx2
-
-            if (definitions.AmmoMagazines != null)
-            {
-                icons.AddRange(definitions.AmmoMagazines.SelectMany(magazine => magazine.Icons ?? new string[0]));
-                models.AddRange(definitions.AmmoMagazines.Select(magazine => magazine.Model));
-            }
-
-            if (definitions.Characters != null)
-            {
-                models.AddRange(definitions.Characters.Select(character => character.Model));
-            }
-
-            if (definitions.Components != null)
-            {
-                icons.AddRange(definitions.Components.SelectMany(component => component.Icons ?? new string[0]));
-                models.AddRange(definitions.Components.Select(component => component.Model));
-            }
-
-            if (definitions.CubeBlocks != null)
-            {
-                icons.AddRange(definitions.CubeBlocks.SelectMany(definition => definition.Icons ?? new string[0]));
-                models.AddRange(definitions.CubeBlocks.Where(d => d.CubeDefinition != null && d.CubeDefinition.Sides != null).SelectMany(d => d.CubeDefinition.Sides).Select(side => side.Model));
-                models.AddRange(definitions.CubeBlocks.Where(d => d.BuildProgressModels != null).SelectMany(d => d.BuildProgressModels).Select(model => model.File));
-            }
-
-            if (definitions.HandItems != null)
-            {
-                models.AddRange(definitions.HandItems.Select(handitem => handitem.FingersAnimation));
-            }
-
-            if (definitions.PhysicalItems != null)
-            {
-                icons.AddRange(definitions.PhysicalItems.SelectMany(physicalItem => physicalItem.Icons ?? new string[0]));
-                models.AddRange(definitions.PhysicalItems.Select(physicalItem => physicalItem.Model));
-            }
-
-            if (definitions.Environment != null)
-            {
-                icons.Add(definitions.Environment.EnvironmentTexture);
-            }
-
-            if (definitions.VoxelMaterials != null)
-            {
-                icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.DiffuseXZ)).Select(vm => vm.DiffuseXZ));
-                icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.DiffuseY)).Select(vm => vm.DiffuseY));
-                icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.NormalXZ)).Select(vm => vm.NormalXZ));
-                icons.AddRange(definitions.VoxelMaterials.Where(vm => !string.IsNullOrEmpty(vm.NormalY)).Select(vm => vm.NormalY));
-            }
-
-            if (definitions.VoxelMapStorages != null)
-            {
-                storages.AddRange(definitions.VoxelMapStorages.Select(voxelMap => voxelMap.StorageFile));
-            }
-
-            if (modContentPath != null)
-            {
-                var voxelsPath = Path.Combine(modContentPath, @"Textures\Voxels");
-                if (Directory.Exists(voxelsPath))
-                {
-                    foreach (var filePath in Directory.GetFiles(voxelsPath, "*.dds"))
-                    {
-                        // TODO: check if it exists in the mod or not.
-                        var refPath = Path.Combine(@"Textures\Voxels", Path.GetFileName(filePath));
-                        contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.Texture, refPath, filePath, zipModFile));
-                    }
-                }
-            }
-            else if (zipModFile != null)
-            {
-                var files = zipFiles.Where(f => Path.GetDirectoryName(f).Equals(@"Textures\Voxels", StringComparison.InvariantCultureIgnoreCase) && Path.GetExtension(f).Equals(".dds", StringComparison.InvariantCultureIgnoreCase)).ToArray();
-
-                foreach (var refPath in files)
-                {
-                    // TODO: check if it exists in the mod or not.
-                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.Texture, refPath, null, zipModFile));
-                }
-            }
-
-            foreach (var icon in icons.Where(s => !string.IsNullOrEmpty(s)).Select(s => s).Distinct())
-            {
-                if (modContentPath != null)
-                {
-                    var contentFile = Path.Combine(modContentPath, icon);
-
-                    // if the content exists, add/update it.
-                    if (File.Exists(contentFile))
-                    {
-                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile, null));
-                    }
-                    else if (!contentData.ContainsKey(icon.ToLower()))
-                    {
-                        // doesn't exist in this mod, assume it's stock icon and add/update it anyhow.
-                        contentFile = Path.Combine(stockContentPath, icon);
-                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile, null));
-                    }
-                }
-                else if (zipModFile != null)
-                {
-                    var contentFile = zipFiles.FirstOrDefault(f => f.Equals(icon, StringComparison.InvariantCultureIgnoreCase));
-
-                    // if the content exists, add/update it.
-                    if (contentFile != null)
-                    {
-                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, null, zipModFile));
-                    }
-                    else if (!contentData.ContainsKey(icon.ToLower()))
-                    {
-                        // doesn't exist in this mod, assume it's stock icon and add/update it anyhow.
-                        contentFile = Path.Combine(stockContentPath, icon);
-                        contentData.Update(icon.ToLower(), new ContentDataPath(ContentPathType.Texture, icon, contentFile, null));
-                    }
-                }
-            }
-
-            foreach (var model in models.Where(m => !string.IsNullOrEmpty(m)).Select(m => m).Distinct())
-            {
-                if (modContentPath != null)
-                {
-                    // TODO: check if it exists in the mod or not.
-                    contentData.Update(model.ToLower(), new ContentDataPath(ContentPathType.Model, model, Path.Combine(modContentPath, model), zipModFile));
-                }
-                else if (zipModFile != null)
-                {
-                    // TODO: check if it exists in the mod or not.
-                    contentData.Update(model.ToLower(), new ContentDataPath(ContentPathType.Model, model, null, zipModFile));
-                }
-            }
-
-            if (modContentPath != null)
-            {
-                var prefabPath = Path.Combine(modContentPath, @"Data\Prefabs");
-                if (Directory.Exists(prefabPath))
-                {
-                    foreach (var filePath in Directory.GetFiles(prefabPath, "*.sbc"))
-                    {
-                        var refPath = Path.Combine(@"Data\Prefabs", Path.GetFileName(filePath));
-                        contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxContent, refPath, filePath, zipModFile));
-                    }
-
-                    foreach (var filePath in Directory.GetFiles(prefabPath, "*.sbs"))
-                    {
-                        var refPath = Path.Combine(@"Data\Prefabs", Path.GetFileName(filePath));
-                        contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxSector, refPath, filePath, zipModFile));
-                    }
-                }
-            }
-            else if (zipModFile != null)
-            {
-                var files = zipFiles.Where(f => Path.GetDirectoryName(f).Equals(@"Data\Prefabs", StringComparison.InvariantCultureIgnoreCase) && Path.GetExtension(f).Equals(".sbc", StringComparison.InvariantCultureIgnoreCase)).ToArray();
-                foreach (var refPath in files)
-                {
-                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxContent, refPath, null, zipModFile));
-                }
-
-                files = zipFiles.Where(f => Path.GetDirectoryName(f).Equals(@"Data\Prefabs", StringComparison.InvariantCultureIgnoreCase) && Path.GetExtension(f).Equals(".sbs", StringComparison.InvariantCultureIgnoreCase)).ToArray();
-                foreach (var refPath in files)
-                {
-                    contentData.Update(refPath.ToLower(), new ContentDataPath(ContentPathType.SandboxContent, refPath, null, zipModFile));
-                }
-            }
-
-            // prefabs aren't defined with a directory name currently, so searching for them differing paths seems pointless.
-            //var prefabContent = new List<string>(); // .sbc
-            //prefabContent.AddRange(Directory.GetFiles(Path.Combine(contentPath, @"Data\Prefabs"), "*.sbc").Select(Path.GetFileNameWithoutExtension));
-            //prefabContent.AddRange(definitions.Scenarios.Where(s => s.WorldGeneratorOperations != null).SelectMany(s => s.WorldGeneratorOperations).
-            //    Where(o => o is MyObjectBuilder_WorldGeneratorOperation_SetupBasePrefab).
-            //    Cast<MyObjectBuilder_WorldGeneratorOperation_SetupBasePrefab>().
-            //    Select(o => o.PrefabFile));
-            //prefabContent.AddRange(definitions.Scenarios.Where(s => s.WorldGeneratorOperations != null).SelectMany(s => s.WorldGeneratorOperations).
-            //    Where(o => o is MyObjectBuilder_WorldGeneratorOperation_AddShipPrefab).
-            //    Cast<MyObjectBuilder_WorldGeneratorOperation_AddShipPrefab>().
-            //    Select(o => o.PrefabFile));
-            //prefabContent.AddRange(definitions.SpawnGroups.SelectMany(g => g.Prefabs).Select(p => p.File));
-            //prefabContent.Add(definitions.Configuration.BaseBlockPrefabs.SmallDynamic);
-            //prefabContent.Add(definitions.Configuration.BaseBlockPrefabs.SmallStatic);
-            //prefabContent.Add(definitions.Configuration.BaseBlockPrefabs.MediumDynamic);
-            //prefabContent.Add(definitions.Configuration.BaseBlockPrefabs.MediumStatic);
-            //prefabContent.Add(definitions.Configuration.BaseBlockPrefabs.LargeDynamic);
-            //prefabContent.Add(definitions.Configuration.BaseBlockPrefabs.LargeStatic);
-
-
-            // Find: "Data\Prefabs\*.sbs"
-            //var prefabSectors = new List<string>(); // .sbs
-            //prefabSectors = Directory.GetFiles(Path.Combine(contentPath, @"Data\Prefabs"), "*.sbs").Select(Path.GetFileNameWithoutExtension).ToList();
-            // Scenarios/ScenarioDefinition/WorldGeneratorOperations/Operation xsi:type="AddObjectsPrefab"/PrefabFile
-
-
-            // AddAsteroidPrefab.PrefabFile is an Enumeration currently, so it might be useless to consider tracking it for mods.
-            foreach (var storage in storages.Where(s => !string.IsNullOrEmpty(s)).Select(s => s).Distinct())
-            {
-                if (modContentPath != null)
-                {
-                    var contentFile = Path.Combine(modContentPath, storage);
-
-                    // if the content exists, add/update it.
-                    if (File.Exists(contentFile))
-                    {
-                        contentData.Update(storage.ToLower(), new ContentDataPath(ContentPathType.Texture, storage, contentFile, null));
-                    }
-                    else if (!contentData.ContainsKey(storage.ToLower()))
-                    {
-                        // doesn't exist in this mod, assume it's stock storage and add/update it anyhow.
-                        contentFile = Path.Combine(stockContentPath, storage);
-                        contentData.Update(storage.ToLower(), new ContentDataPath(ContentPathType.Texture, storage, contentFile, null));
-                    }
-                }
-                else if (zipModFile != null)
-                {
-                    var contentFile = zipFiles.FirstOrDefault(f => f.Equals(storage, StringComparison.InvariantCultureIgnoreCase));
-
-                    // if the content exists, add/update it.
-                    if (contentFile != null)
-                    {
-                        contentData.Update(storage.ToLower(), new ContentDataPath(ContentPathType.Texture, storage, null, zipModFile));
-                    }
-                    else if (!contentData.ContainsKey(storage.ToLower()))
-                    {
-                        // doesn't exist in this mod, assume it's stock storage and add/update it anyhow.
-                        contentFile = Path.Combine(stockContentPath, storage);
-                        contentData.Update(storage.ToLower(), new ContentDataPath(ContentPathType.Texture, storage, contentFile, null));
-                    }
-                }
-            }
-
-            //var voxelMaps = new List<string>(); // .vox ; .vx2
-            // Find: "VoxelMaps\*.vox;*.vx2"
-            //voxelMaps.AddRange(definitions.Scenarios.Where(s => s.WorldGeneratorOperations != null).SelectMany(s => s.WorldGeneratorOperations).
-            //    Where(o => o is MyObjectBuilder_WorldGeneratorOperation_AddAsteroidPrefab).
-            //    Cast<MyObjectBuilder_WorldGeneratorOperation_AddAsteroidPrefab>().
-            //    Select(o => o.PrefabFile));
-            //voxelMaps = voxelMaps.Where(s => !string.IsNullOrEmpty(s)).Select(s => s + ".vox").Distinct().ToList();
         }
 
         #endregion
 
         #region properties
-
-        public MyObjectBuilder_Definitions Definitions
-        {
-            get { return _definitions; }
-        }
 
         public Dictionary<string, byte> MaterialIndex { get; private set; }
 
@@ -528,28 +46,28 @@
 
         public string GetDataPathOrDefault(string key, string defaultValue)
         {
-            if (key != null && _contentDataPaths.ContainsKey(key.ToLower()))
-            {
-                if (_contentDataPaths[key.ToLower()].AbsolutePath != null)
-                    return _contentDataPaths[key.ToLower()].AbsolutePath;
+            //if (key != null && _contentDataPaths.ContainsKey(key.ToLower()))
+            //{
+            //    if (_contentDataPaths[key.ToLower()].AbsolutePath != null)
+            //        return _contentDataPaths[key.ToLower()].AbsolutePath;
 
-                if (_contentDataPaths[key.ToLower()].ZipFilePath != null)
-                {
-                    var tempContentFile = TempfileUtil.NewFilename(Path.GetExtension(defaultValue));
-                    try
-                    {
-                        ZipTools.ExtractZipFileToFile(_contentDataPaths[key.ToLower()].ZipFilePath, null, _contentDataPaths[key.ToLower()].ReferencePath, tempContentFile);
-                        return tempContentFile;
-                    }
-                    catch (Exception ex)
-                    {
-                        // ignore errors, keep on trucking just like SE.
-                        // write event log warning of any files not loaded.
-                        DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptModFile, _contentDataPaths[key.ToLower()].ZipFilePath), ex);
-                        return defaultValue;
-                    }
-                }
-            }
+            //    if (_contentDataPaths[key.ToLower()].ZipFilePath != null)
+            //    {
+            //        var tempContentFile = TempfileUtil.NewFilename(Path.GetExtension(defaultValue));
+            //        try
+            //        {
+            //            ZipTools.ExtractZipFileToFile(_contentDataPaths[key.ToLower()].ZipFilePath, null, _contentDataPaths[key.ToLower()].ReferencePath, tempContentFile);
+            //            return tempContentFile;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            // ignore errors, keep on trucking just like SE.
+            //            // write event log warning of any files not loaded.
+            //            DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptModFile, _contentDataPaths[key.ToLower()].ZipFilePath), ex);
+            //            return defaultValue;
+            //        }
+            //    }
+            //}
 
             return defaultValue;
         }
@@ -560,41 +78,78 @@
         {
             lock (matindexLock)
             {
-                if (MaterialIndex.ContainsKey(materialName))
-                    return MaterialIndex[materialName];
-
-                var material = _definitions.VoxelMaterials.FirstOrDefault(m => m.Id.SubtypeId == materialName);
-                var index = (byte)_definitions.VoxelMaterials.ToList().IndexOf(material);
-                MaterialIndex.Add(materialName, index);
-                return index;
+                return MyDefinitionManager.Static.GetVoxelMaterialDefinition(materialName).Index;
             }
         }
 
-        public IList<MyObjectBuilder_VoxelMaterialDefinition> GetMaterialList()
+        public IList<MyBlueprintDefinitionBase> BlueprintDefinitions
         {
-            return _definitions.VoxelMaterials;
+            get { return MyDefinitionManager.Static.GetBlueprintDefinitions().ToList(); }
+        }
+
+        public IList<MyCubeBlockDefinition> CubeBlockDefinitions
+        {
+            get { return MyDefinitionManager.Static.GetAllDefinitions().Where(e => e is MyCubeBlockDefinition).Cast<MyCubeBlockDefinition>().ToList(); }
+        }
+
+        public IList<MyComponentDefinition> ComponentDefinitions
+        {
+            get { return MyDefinitionManager.Static.GetPhysicalItemDefinitions().Where(e => e is MyComponentDefinition).Cast<MyComponentDefinition>().ToList(); }
+        }
+
+        public IList<MyPhysicalItemDefinition> PhysicalItemDefinitions
+        {
+            get { return MyDefinitionManager.Static.GetPhysicalItemDefinitions().Where(e => !(e is MyComponentDefinition)).ToList(); }
+        }
+
+        public IList<MyAmmoMagazineDefinition> AmmoMagazineDefinitions
+        {
+            get { return MyDefinitionManager.Static.GetAllDefinitions().Where(e => e is MyAmmoMagazineDefinition).Cast<MyAmmoMagazineDefinition>().ToList(); }
+        }
+
+        public IList<MyVoxelMaterialDefinition> VoxelMaterialDefinitions
+        {
+            get { return MyDefinitionManager.Static.GetVoxelMaterialDefinitions().ToList(); }
+        }
+
+        public IList<MyVoxelMapStorageDefinition> VoxelMapStorageDefinitions
+        {
+            get { return MyDefinitionManager.Static.GetVoxelMapStorageDefinitions().ToList(); }
+        }
+
+        public IList<MyCharacterDefinition> CharacterDefinitions
+        {
+            get { return MyDefinitionManager.Static.Characters.ToList(); }
         }
 
         public string GetMaterialName(byte materialIndex, byte defaultMaterialIndex)
         {
-            if (materialIndex <= _definitions.VoxelMaterials.Length)
-                return _definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
+            if (materialIndex <= MyDefinitionManager.Static.GetVoxelMaterialDefinitions().Count)
+                return MyDefinitionManager.Static.GetVoxelMaterialDefinition(materialIndex).Id.SubtypeName;
 
-            return _definitions.VoxelMaterials[defaultMaterialIndex].Id.SubtypeId;
+            return MyDefinitionManager.Static.GetVoxelMaterialDefinition(defaultMaterialIndex).Id.SubtypeName;
+
+            //if (materialIndex <= _definitions.VoxelMaterials.Length)
+            //    return _definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
+
+            //return _definitions.VoxelMaterials[defaultMaterialIndex].Id.SubtypeId;
         }
 
         public string GetMaterialName(byte materialIndex)
         {
-            return _definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
+            return MyDefinitionManager.Static.GetVoxelMaterialDefinition(materialIndex).Id.SubtypeName;
+            //return _definitions.VoxelMaterials[materialIndex].Id.SubtypeId;
         }
 
         public string GetDefaultMaterialName()
         {
-            var material = _definitions.VoxelMaterials.FirstOrDefault(m => !m.IsRare);
-            if (material == null)
-                material = _definitions.VoxelMaterials.FirstOrDefault();
+            return MyDefinitionManager.Static.GetDefaultVoxelMaterialDefinition().Id.SubtypeName;
 
-            return material.Id.SubtypeId;
+            //var material = _definitions.VoxelMaterials.FirstOrDefault(m => !m.IsRare);
+            //if (material == null)
+            //    material = _definitions.VoxelMaterials.FirstOrDefault();
+
+            //return material.Id.SubtypeId;
         }
 
         public T CreateNewObject<T>()

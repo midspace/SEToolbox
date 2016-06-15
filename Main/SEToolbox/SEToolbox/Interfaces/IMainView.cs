@@ -1,12 +1,10 @@
 ﻿namespace SEToolbox.Interfaces
 {
     using System.Collections.Generic;
-
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
     using VRage.Game;
-    using VRageMath;
     using VRage.ObjectBuilders;
+    using VRageMath;
 
     public interface IMainView
     {

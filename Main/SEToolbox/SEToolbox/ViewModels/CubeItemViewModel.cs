@@ -4,15 +4,13 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Common.ObjectBuilders.Definitions;
-
+    using Sandbox.Definitions;
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
-    using VRage.ObjectBuilders;
     using VRage;
     using VRage.Game;
+    using VRage.ObjectBuilders;
 
     public class CubeItemViewModel : BaseViewModel
     {
@@ -204,7 +202,7 @@
             _dataModel.UpdateBuildPercent(buildPercent);
         }
 
-        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyObjectBuilder_CubeBlockDefinition definition)
+        public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyCubeBlockDefinition definition)
         {
             return _dataModel.CreateCube(typeId, subTypeId, definition);
         }

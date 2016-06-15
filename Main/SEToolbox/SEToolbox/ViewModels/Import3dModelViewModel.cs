@@ -8,7 +8,6 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
@@ -550,9 +549,9 @@
             var transform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 0, 0, 0);
             SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
 
-            var baseMaterial = SpaceEngineersCore.Resources.GetMaterialList().FirstOrDefault(m => m.IsRare == false) ?? SpaceEngineersCore.Resources.GetMaterialList().FirstOrDefault();
+            var baseMaterial = SpaceEngineersCore.Resources.VoxelMaterialDefinitions.FirstOrDefault(m => m.IsRare == false) ?? SpaceEngineersCore.Resources.VoxelMaterialDefinitions.FirstOrDefault();
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, Filename, OutsideStockMaterial.Value, baseMaterial.Id.SubtypeId, InsideStockMaterial.Value != null, InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, Filename, OutsideStockMaterial.Value, baseMaterial.Id.SubtypeName, InsideStockMaterial.Value != null, InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
             voxelMap.Save(SourceFile);
 
             MainViewModel.ClearProgress();

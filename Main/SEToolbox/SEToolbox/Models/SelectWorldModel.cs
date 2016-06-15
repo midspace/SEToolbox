@@ -6,8 +6,6 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Converters;
     using SEToolbox.Interop;
     using SEToolbox.Support;
@@ -167,7 +165,7 @@
                     if (Directory.Exists(lastLoadedPath))
                     {
                         var instanceName = Path.GetFileName(instancePath);
-                        var dataPath = new UserDataPath(lastLoadedPath, Path.Combine(instancePath, "Mods"));
+                        var dataPath = new UserDataPath(instancePath, "Saves", "Mods");
                         list.AddRange(FindSaveFiles(lastLoadedPath, instanceName, SaveWorldType.DedicatedServerService, dataPath));
                     }
                 }

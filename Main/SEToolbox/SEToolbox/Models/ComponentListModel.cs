@@ -8,7 +8,8 @@
     using System.Linq;
     using System.Reflection;
     using System.Web.UI;
-    using Medieval.ObjectBuilders.Definitions; // DX11 voxel material
+    using Medieval.Definitions;     // DX11 voxel material
+    using Sandbox.Definitions;
     using SEToolbox.Converters;
     using SEToolbox.ImageLibrary;
     using SEToolbox.Interop;
@@ -172,7 +173,7 @@
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            foreach (var cubeDefinition in SpaceEngineersCore.Resources.Definitions.CubeBlocks)
+            foreach (var cubeDefinition in SpaceEngineersCore.Resources.CubeBlockDefinitions)
             {
                 var props = new Dictionary<string, string>();
                 var fields = cubeDefinition.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
@@ -184,56 +185,49 @@
 
                 CubeAssets.Add(new ComponentItemModel
                 {
-                    Name = cubeDefinition.DisplayName,
+                    Name = cubeDefinition.DisplayNameText,
                     TypeId = cubeDefinition.Id.TypeId,
-                    TypeIdString = cubeDefinition.Id.TypeIdString,
-                    SubtypeId = cubeDefinition.Id.SubtypeId,
+                    TypeIdString = cubeDefinition.Id.TypeId.ToString(),
+                    SubtypeId = cubeDefinition.Id.SubtypeName,
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First())),
-                    Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
+                    Time = TimeSpan.FromSeconds(cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec),
                     Accessible = cubeDefinition.Public,
-                    Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeId),
+                    Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeName),
                     CubeSize = cubeDefinition.CubeSize,
                     Size = new BindableSize3DIModel(cubeDefinition.Size),
                     CustomProperties = props,
                 });
             }
 
-            foreach (var componentDefinition in SpaceEngineersCore.Resources.Definitions.Components)
+            foreach (var componentDefinition in SpaceEngineersCore.Resources.ComponentDefinitions)
             {
-                var bp = SpaceEngineersApi.GetBlueprint(componentDefinition.Id.TypeId, componentDefinition.Id.SubtypeId);
+                var bp = SpaceEngineersApi.GetBlueprint(componentDefinition.Id.TypeId, componentDefinition.Id.SubtypeName);
                 float amount = 0;
-                if (bp != null)
-                {
-                    if (bp.Result != null)
-                        amount = float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture);
-                    else if (bp.Results.Length > 0)
-                        amount = float.Parse(bp.Results[0].Amount, CultureInfo.InvariantCulture);
-                }
+                if (bp != null && bp.Results.Length > 0)
+                    amount = (float)bp.Results[0].Amount;
 
                 ComponentAssets.Add(new ComponentItemModel
                 {
-                    Name = componentDefinition.DisplayName,
+                    Name = componentDefinition.DisplayNameText,
                     TypeId = componentDefinition.Id.TypeId,
-                    TypeIdString = componentDefinition.Id.TypeIdString,
-                    SubtypeId = componentDefinition.Id.SubtypeId,
+                    TypeIdString = componentDefinition.Id.TypeId.ToString(),
+                    SubtypeId = componentDefinition.Id.SubtypeName,
                     Mass = componentDefinition.Mass,
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icons.First(), Path.Combine(contentPath, componentDefinition.Icons.First())),
-                    Volume = componentDefinition.Volume.HasValue ? componentDefinition.Volume.Value : 0f,
+                    Volume = componentDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     Accessible = componentDefinition.Public,
-                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / amount))) : (TimeSpan?)null,
+                    Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds / amount) : (TimeSpan?)null,
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.PhysicalItems)
+            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.PhysicalItemDefinitions)
             {
-                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeId);
+                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeName);
                 float amount = 0;
                 if (bp != null)
                 {
-                    if (bp.Result != null)
-                        amount = float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture);
-                    else if (bp.Results.Length > 0)
-                        amount = float.Parse(bp.Results[0].Amount, CultureInfo.InvariantCulture);
+                    if (bp.Results != null && bp.Results.Length > 0)
+                        amount = (float)bp.Results[0].Amount;
                 }
 
                 float timeMassMultiplyer = 1f;
@@ -243,50 +237,32 @@
 
                 ItemAssets.Add(new ComponentItemModel
                 {
-                    Name = physicalItemDefinition.DisplayName,
+                    Name = physicalItemDefinition.DisplayNameText,
                     TypeId = physicalItemDefinition.Id.TypeId,
-                    TypeIdString = physicalItemDefinition.Id.TypeIdString,
-                    SubtypeId = physicalItemDefinition.Id.SubtypeId,
+                    TypeIdString = physicalItemDefinition.Id.TypeId.ToString(),
+                    SubtypeId = physicalItemDefinition.Id.SubtypeName,
                     Mass = physicalItemDefinition.Mass,
-                    Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
+                    Volume = physicalItemDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = physicalItemDefinition.Public,
-                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / amount / timeMassMultiplyer))) : (TimeSpan?)null,
+                    Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds / amount / timeMassMultiplyer) : (TimeSpan?)null,
                 });
             }
 
-            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.Definitions.AmmoMagazines)
-            {
-                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeId);
-                ItemAssets.Add(new ComponentItemModel
-                {
-                    Name = physicalItemDefinition.DisplayName,
-                    TypeId = physicalItemDefinition.Id.TypeId,
-                    TypeIdString = physicalItemDefinition.Id.TypeIdString,
-                    SubtypeId = physicalItemDefinition.Id.SubtypeId,
-                    Mass = physicalItemDefinition.Mass,
-                    Volume = physicalItemDefinition.Volume.HasValue ? physicalItemDefinition.Volume.Value : 0f,
-                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
-                    Accessible = !string.IsNullOrEmpty(physicalItemDefinition.Model),
-                    Time = bp != null ? new TimeSpan((long)(TimeSpan.TicksPerSecond * (bp.BaseProductionTimeInSeconds / float.Parse(bp.Result.Amount, CultureInfo.InvariantCulture)))) : (TimeSpan?)null,
-                });
-            }
-
-            foreach (MyObjectBuilder_VoxelMaterialDefinition voxelMaterialDefinition in SpaceEngineersCore.Resources.Definitions.VoxelMaterials)
+            foreach (MyVoxelMaterialDefinition voxelMaterialDefinition in SpaceEngineersCore.Resources.VoxelMaterialDefinitions)
             {
                 var texture = voxelMaterialDefinition.DiffuseXZ;
-                if (texture == null && voxelMaterialDefinition is MyObjectBuilder_Dx11VoxelMaterialDefinition)
-                    texture = ((MyObjectBuilder_Dx11VoxelMaterialDefinition)voxelMaterialDefinition).NormalGlossXZnY;
 
-                var oreBp = SpaceEngineersApi.GetDefinition(typeof(MyObjectBuilder_Ore), voxelMaterialDefinition.MinedOre);
-                string oreName = oreBp == null ? voxelMaterialDefinition.MinedOre : oreBp.DisplayName;
+                var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
+                if (texture == null && dx11MaterialDefinition != null)
+                    texture = dx11MaterialDefinition.NormalGlossXZnY;
 
                 MaterialAssets.Add(new ComponentItemModel
                 {
-                    Name = voxelMaterialDefinition.Id.SubtypeId,
+                    Name = voxelMaterialDefinition.Id.SubtypeName,
                     TextureFile = texture == null ? null : SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture)),
                     IsRare = voxelMaterialDefinition.IsRare,
-                    OreName = oreName,
+                    OreName = voxelMaterialDefinition.MinedOre,
                     MineOreRatio = voxelMaterialDefinition.MinedOreRatio,
                 });
             }

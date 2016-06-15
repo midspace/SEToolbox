@@ -211,9 +211,6 @@ To use the SEToolbox, you must have the Space Engineers game installed on your c
     <value>The Space Engineers game was not detected in Registry.
 To use the SEToolbox, you must have the Space Engineers game installed on your computer.</value>
   </data>
-  <data name="ExceptionState_CorruptContentFile" xml:space="preserve">
-    <value>The Space Engineers content file '{0}' could not be loaded, either because it is corrupt, or it is newer than expected.</value>
-  </data>
   <data name="ExceptionState_EmptyContentFile" xml:space="preserve">
     <value>The Space Engineers content file '{0}' could not be loaded, because it may be out of sync with SEToolbox.</value>
   </data>
@@ -695,9 +692,6 @@ Please update it before running SEToolbox {2} again.</value>
   </data>
   <data name="DialogLocationCustomVoxelFolder" xml:space="preserve">
     <value>Specify location of Custom Asteroids</value>
-  </data>
-  <data name="ExceptionState_CorruptModFile" xml:space="preserve">
-    <value>The Space Engineers mod file '{0}' could not be loaded, because it is corrupt.</value>
   </data>
   <data name="ExceptionState_CorruptAsteroidFile" xml:space="preserve">
     <value>The Space Engineers asteroid file '{0}' could not be loaded, either because it is corrupt, or it is newer than expected.</value>

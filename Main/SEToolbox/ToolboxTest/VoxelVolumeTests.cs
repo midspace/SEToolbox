@@ -20,9 +20,9 @@
         public void VoxelConvertToVolmeticOdd()
         {
             SpaceEngineersCore.LoadDefinitions();
-            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
 
-            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
+            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
 
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
@@ -42,7 +42,7 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName));
             }
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
@@ -64,9 +64,9 @@
         public void VoxelConvertToVolmeticEven()
         {
             SpaceEngineersCore.LoadDefinitions();
-            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
 
-            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
+            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
 
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
@@ -85,7 +85,7 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName));
             }
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
@@ -107,9 +107,9 @@
         public void VoxelConvertToVolmeticCancel()
         {
             SpaceEngineersCore.LoadDefinitions();
-            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
 
-            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
+            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
 
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
@@ -127,7 +127,7 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName));
             }
 
             bool doCancel = false;
@@ -157,15 +157,15 @@
         public void VoxelConvertToVolmeticMisc()
         {
             SpaceEngineersCore.LoadDefinitions();
-            var materials = SpaceEngineersCore.Resources.GetMaterialList();
+            var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
 
-            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Stone"));
+            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Stone"));
             Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
 
-            var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Gold"));
+            var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            var silverMaterial = materials.FirstOrDefault(m => m.Id.SubtypeId.Contains("Silver"));
+            var silverMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Silver"));
             Assert.IsNotNull(silverMaterial, "Silver material should exist.");
 
             // Basic test...
@@ -199,8 +199,8 @@
             //var scale = new ScaleTransform3D(0.78, 0.78, 0.78);
             //var rotateTransform = MeshHelper.TransformVector(new Vector3D(0, 0, 0), 180, 0, 0);
 
-            var modelMaterials = new string[] { stoneMaterial.Id.SubtypeId, goldMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId, stoneMaterial.Id.SubtypeId };
-            var fillerMaterial = silverMaterial.Id.SubtypeId;
+            var modelMaterials = new string[] { stoneMaterial.Id.SubtypeName, goldMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName };
+            var fillerMaterial = silverMaterial.Id.SubtypeName;
             var asteroidFile = @".\TestOutput\test_sphere.vx2";
 
             var model = MeshHelper.Load(modelFile, ignoreErrors: true);

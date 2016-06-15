@@ -1,8 +1,6 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Models;
-    using VRage.ObjectBuilders;
 
     public class StructureInventoryBagViewModel : StructureBaseViewModel<StructureInventoryBagModel>
     {

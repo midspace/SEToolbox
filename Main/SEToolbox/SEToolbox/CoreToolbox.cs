@@ -156,8 +156,8 @@
 #if DEBUG
             // This will make it hairy for testing the AppDomain stuff.
             #warning Force the local debugger to load the Types allowing inspection.
-            //var settings0 = new VRage.Game.MyObjectBuilder_SessionSettings();
-            //var settings1 = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_InteriorLight();
+            var settings0 = new VRage.Game.MyObjectBuilder_SessionSettings();
+            var settings1 = new Sandbox.Common.ObjectBuilders.MyObjectBuilder_InteriorLight();
 #endif
 
             return true;

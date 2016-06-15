@@ -17,7 +17,7 @@
             try
             {
                 if (((string)value).Length > 0)
-                    parseValue = Decimal.Parse((String)value, null);
+                    parseValue = decimal.Parse((string)value, null);
             }
             catch (Exception e)
             {

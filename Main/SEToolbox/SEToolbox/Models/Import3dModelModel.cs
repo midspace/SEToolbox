@@ -50,10 +50,10 @@
                 new MaterialSelectionModel {Value = null, DisplayName = "Empty"}
             };
 
-            foreach (var material in SpaceEngineersCore.Resources.GetMaterialList())
+            foreach (var material in SpaceEngineersCore.Resources.VoxelMaterialDefinitions)
             {
-                _outsideMaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
-                _insideMaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId });
+                _outsideMaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeName, DisplayName = material.Id.SubtypeName });
+                _insideMaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeName, DisplayName = material.Id.SubtypeName });
             }
 
             InsideStockMaterial = InsideMaterialsCollection[0];

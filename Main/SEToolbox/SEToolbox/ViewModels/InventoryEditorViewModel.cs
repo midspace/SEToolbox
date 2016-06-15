@@ -3,8 +3,6 @@
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
     using SEToolbox.Models;

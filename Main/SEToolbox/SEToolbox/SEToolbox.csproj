@@ -160,6 +160,9 @@
     <Reference Include="VRage.Math">
       <HintPath>$(BinPath)\VRage.Math.dll</HintPath>
     </Reference>
+    <Reference Include="VRage.Render">
+      <HintPath>$(BinPath)\VRage.Render.dll</HintPath>
+    </Reference>
     <ProjectReference Include="..\SEToolbox.Image.Library\SEToolbox.ImageLibrary.csproj">
       <Project>{e78476cb-bc3d-4265-806d-96f09229a449}</Project>
       <Name>SEToolbox.ImageLibrary</Name>
@@ -855,6 +858,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\target.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(BinPath)\steam_api.dll">
+      <Link>steam_api.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(BinPath)\steam_api64.dll">
+      <Link>steam_api64.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

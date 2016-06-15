@@ -5,8 +5,6 @@
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
-
-    using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage.Game;
@@ -75,20 +73,20 @@
             CubeList.Clear();
             var list = new SortedList<string, ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            var cubeDefinitions = SpaceEngineersCore.Resources.Definitions.CubeBlocks.Where(c => c.CubeSize == cubeSize);
+            var cubeDefinitions = SpaceEngineersCore.Resources.CubeBlockDefinitions.Where(c => c.CubeSize == cubeSize);
 
             foreach (var cubeDefinition in cubeDefinitions)
             {
                 var c = new ComponentItemModel
                 {
-                    Name = cubeDefinition.DisplayName,
+                    Name = cubeDefinition.DisplayNameText,
                     TypeId = cubeDefinition.Id.TypeId,
-                    TypeIdString = cubeDefinition.Id.TypeIdString,
-                    SubtypeId = cubeDefinition.Id.SubtypeId,
+                    TypeIdString = cubeDefinition.Id.TypeId.ToString(),
+                    SubtypeId = cubeDefinition.Id.SubtypeName,
                     TextureFile = SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First())),
-                    Time = new TimeSpan((long)(TimeSpan.TicksPerSecond * cubeDefinition.BuildTimeSeconds)),
+                    Time = TimeSpan.FromSeconds(cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec),
                     Accessible = cubeDefinition.Public,
-                    Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeId),
+                    Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeName),
                     CubeSize = cubeDefinition.CubeSize,
                     Size = new BindableSize3DIModel(cubeDefinition.Size),
                 };

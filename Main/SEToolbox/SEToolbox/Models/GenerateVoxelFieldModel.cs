@@ -4,11 +4,10 @@
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
-
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Support;
     using SEToolbox.Models.Asteroids;
+    using SEToolbox.Support;
     using VRage;
 
     public class GenerateVoxelFieldModel : BaseModel
@@ -191,15 +190,15 @@
             }
 
             MaterialsCollection.Clear();
-            foreach (var material in SpaceEngineersCore.Resources.GetMaterialList())
+            foreach (var material in SpaceEngineersCore.Resources.VoxelMaterialDefinitions)
             {
-                MaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeId, DisplayName = material.Id.SubtypeId, IsRare = material.IsRare, MinedRatio = material.MinedOreRatio });
+                MaterialsCollection.Add(new MaterialSelectionModel { Value = material.Id.SubtypeName, DisplayName = material.Id.SubtypeName, IsRare = material.IsRare, MinedRatio = material.MinedOreRatio });
             }
 
             BaseMaterial = MaterialsCollection.FirstOrDefault(m => m.IsRare == false) ?? MaterialsCollection.FirstOrDefault();
 
             // Voxel Map Storage, includes stock and mod asteroids.
-            var vms = SpaceEngineersCore.Resources.Definitions.VoxelMapStorages;
+            var vms = SpaceEngineersCore.Resources.VoxelMapStorageDefinitions;
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             var list = new List<GenerateVoxelDetailModel>();
 
