@@ -186,11 +186,8 @@
             if (File.Exists(lastLoadedFile))
             {
                 MyObjectBuilder_LastLoadedTimes lastLoaded = null;
-                try
-                {
-                    lastLoaded = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes>(lastLoadedFile);
-                }
-                catch { }
+                bool isCompressed;
+                SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes>(lastLoadedFile, out lastLoaded, out isCompressed);
                 var savePaths = Directory.GetDirectories(lastLoadedPath);
 
                 // Still check every potential game world path.

@@ -274,21 +274,9 @@
         {
             var filename = Path.Combine(Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
 
-            if (File.Exists(filename))
-            {
-                try
-                {
-                    Checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(filename, out _compressedCheckpointFormat, snapshot);
-                }
-                catch
-                {
-                    Checkpoint = null;
-                }
-            }
-            else
-            {
-                Checkpoint = null;
-            }
+            MyObjectBuilder_Checkpoint checkpoint;
+            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(filename, out checkpoint, out _compressedCheckpointFormat, snapshot);
+            Checkpoint = checkpoint;
         }
 
         public void LoadDefinitionsAndMods()
@@ -306,21 +294,10 @@
         public void LoadSector(bool snapshot = false)
         {
             var filename = Path.Combine(Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
-            if (File.Exists(filename))
-            {
-                try
-                {
-                    SectorData = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out _compressedSectorFormat, snapshot);
-                }
-                catch
-                {
-                    SectorData = null;
-                }
-            }
-            else
-            {
-                SectorData = null;
-            }
+            MyObjectBuilder_Sector sectorData;
+
+            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out _compressedSectorFormat, snapshot);
+            SectorData = sectorData;
         }
 
         public void SaveCheckPoint(bool backupFile)

@@ -29,27 +29,6 @@
 
         #region Serializers
 
-        public static bool TryReadSpaceEngineersFile<T>(string filename, out T entity, out bool isCompressed) where T : MyObjectBuilder_Base
-        {
-            try
-            {
-                entity = ReadSpaceEngineersFile<T>(filename, out isCompressed);
-                return true;
-            }
-            catch
-            {
-                entity = default(T);
-                isCompressed = false;
-                return false;
-            }
-        }
-
-        public static T ReadSpaceEngineersFile<T>(string filename) where T : MyObjectBuilder_Base
-        {
-            bool isCompressed;
-            return ReadSpaceEngineersFile<T>(filename, out isCompressed);
-        }
-
         public static T ReadSpaceEngineersFile<T>(Stream stream) where T : MyObjectBuilder_Base
         {
             T outObject;
@@ -57,7 +36,7 @@
             return outObject;
         }
 
-        public static T ReadSpaceEngineersFile<T>(string filename, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
+        public static bool TryReadSpaceEngineersFile<T>(string filename, out T outObject, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
         {
             isCompressed = false;
 
@@ -79,12 +58,11 @@
                     isCompressed = (b1 == 0x1f && b2 == 0x8b);
                 }
 
-                T outObject;
-                MyObjectBuilderSerializer.DeserializeXML<T>(tempFilename, out outObject);
-                return outObject;
+                return MyObjectBuilderSerializer.DeserializeXML<T>(tempFilename, out outObject);
             }
 
-            return default(T);
+            outObject = null;
+            return false;
         }
 
         public static T Deserialize<T>(string xml) where T : MyObjectBuilder_Base
