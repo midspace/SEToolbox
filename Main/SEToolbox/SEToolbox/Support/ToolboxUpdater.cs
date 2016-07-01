@@ -17,6 +17,8 @@
         /// </summary>
         internal static readonly string[] CoreSpaceEngineersFiles = {
             "HavokWrapper.dll",         // MSIL
+            "msvcp120.dll",             // SteamSDK dependancy.
+            "msvcr120.dll",             // SteamSDK dependancy.
             "Sandbox.Common.dll",       // AnyCpu
             "Sandbox.Game.dll",         // MSIL
             "Sandbox.Graphics.dll",     // MSIL
