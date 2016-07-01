@@ -160,6 +160,9 @@
     <Reference Include="VRage.Math">
       <HintPath>$(BinPath)\VRage.Math.dll</HintPath>
     </Reference>
+    <Reference Include="VRage.Native">
+      <HintPath>$(BinPath)\VRage.Native.dll</HintPath>
+    </Reference>
     <Reference Include="VRage.Render">
       <HintPath>$(BinPath)\VRage.Render.dll</HintPath>
     </Reference>
