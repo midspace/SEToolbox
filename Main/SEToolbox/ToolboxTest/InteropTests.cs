@@ -12,20 +12,24 @@
     [TestClass]
     public class InteropTests
     {
+        [TestInitialize]
+        public void InitTest()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+        }
+
         [TestMethod]
         public void ApiInterop()
         {
-            SpaceEngineersCore.LoadDefinitions();
-
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Large, "");
-            Assert.AreEqual("DisplayName_Block_GravityGenerator", d1.DisplayNameText, "Must match");
+            Assert.AreEqual("DisplayName_Block_GravityGenerator", d1.DisplayNameEnum.Value.String, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
             var d2 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Small, "");
             Assert.IsNull(d2, "Must be null");
 
             var d3 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "SmallBlockGyro");
-            Assert.AreEqual("DisplayName_Block_Gyroscope", d3.DisplayNameText, "Must match");
+            Assert.AreEqual("DisplayName_Block_Gyroscope", d3.DisplayNameEnum.Value.String, "Must match");
             Assert.AreEqual(MyCubeSize.Small, d3.CubeSize, "Must match");
 
             var d4 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Gyro)), MyCubeSize.Small, "Fake");
@@ -55,7 +59,7 @@
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\BaseEasyStart1.sbc");
+            var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\LargeShipRed.sbc");
             Assert.IsTrue(File.Exists(baseEasyStart1Path), "Sandbox content file should exist");
 
             MyObjectBuilder_Definitions prefabDefinitions;
@@ -72,7 +76,7 @@
         public void RotateComponent()
         {
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust)), MyCubeSize.Large, "LargeBlockLargeThrust");
-            Assert.AreEqual("DisplayName_Block_LargeThrust", d1.DisplayNameText, "Must match");
+            Assert.AreEqual("DisplayName_Block_LargeThrust", d1.DisplayNameEnum.Value.String, "Must match");
             Assert.AreEqual(MyCubeSize.Large, d1.CubeSize, "Must match");
 
             Assert.AreEqual(3, d1.Size.X, "Must match");

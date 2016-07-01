@@ -13,10 +13,15 @@
     [TestClass]
     public class ModelTests
     {
+        [TestInitialize]
+        public void InitTest()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+        }
+
         [TestMethod]
         public void BaseModel1LoadSave()
         {
-            SpaceEngineersCore.LoadDefinitions();
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
@@ -43,7 +48,6 @@
         [TestMethod]
         public void CustomModel1LoadSave()
         {
-            SpaceEngineersCore.LoadDefinitions();
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
@@ -68,7 +72,6 @@
         //[TestMethod]
         public void LoadModelFailures()
         {
-            SpaceEngineersCore.LoadDefinitions();
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");

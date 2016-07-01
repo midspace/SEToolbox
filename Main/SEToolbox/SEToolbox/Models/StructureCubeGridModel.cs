@@ -726,7 +726,7 @@
                                 }
 
                                 blockTime = TimeSpan.FromSeconds(cubeBlockDefinition.MaxIntegrity / cubeBlockDefinition.IntegrityPointsPerSec);
-                                blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icons.First(), Path.Combine(contentPath, cubeBlockDefinition.Icons.First()));
+                                blockTexture = cubeBlockDefinition.Icons?.First() == null ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icons.First(), Path.Combine(contentPath, cubeBlockDefinition.Icons.First()));
                             }
 
                             timeTaken += blockTime;
@@ -793,7 +793,7 @@
                             {
                                 cubeList.Add(new CubeItemModel(block, cubeDefinition)
                                 {
-                                    TextureFile = cubeDefinition == null ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First()))
+                                    TextureFile = cubeDefinition?.Icons?.First() == null ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First()))
                                 });
                             });
                         }

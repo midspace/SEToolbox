@@ -17,10 +17,15 @@
     [TestClass]
     public class TextureTests
     {
+        [TestInitialize]
+        public void InitTest()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+        }
+
         [TestMethod]
         public void LoadComponentTextures()
         {
-            SpaceEngineersCore.LoadDefinitions();
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
@@ -115,7 +120,6 @@
         [TestMethod]
         public void PixelEffectTextures()
         {
-            SpaceEngineersCore.LoadDefinitions();
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
@@ -189,8 +193,6 @@
         [TestMethod]
         public void CreateMenuTextures()
         {
-            SpaceEngineersCore.LoadDefinitions();
-
             var location = ToolboxUpdater.GetApplicationFilePath();
             Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
@@ -293,8 +295,6 @@
         //[TestMethod]
         //public void LoadAllCubeTextures()
         //{
-        //    SpaceEngineersCore.LoadDefinitions();
-
         //    var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"Textures\Models\Cubes"), "*.dds");
 
         //    foreach (var filename in files)

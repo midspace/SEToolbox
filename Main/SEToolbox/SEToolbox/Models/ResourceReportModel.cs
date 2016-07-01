@@ -332,14 +332,14 @@
 
                             if (bp != null && bp.CanBeHarvested)
                             {
-                                var cd = MyDefinitionManager.Static.GetDefinition(bp.Id) as MyPhysicalItemDefinition;
+                                var cd = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.Ore, bp.MinedOre);
 
                                 if (cd != null)
                                 {
-                                    if (ores.ContainsKey(cd.DisplayNameText))
-                                        ores[cd.DisplayNameText] += kvp.Value;
+                                    if (ores.ContainsKey(cd.DisplayNameEnum.Value.String))
+                                        ores[cd.DisplayNameEnum.Value.String] += kvp.Value;
                                     else
-                                        ores.Add(cd.DisplayNameText, kvp.Value);
+                                        ores.Add(cd.DisplayNameEnum.Value.String, kvp.Value);
                                 }
                             }
                         }
@@ -515,7 +515,7 @@
                             }
 
                             blockTime = TimeSpan.FromSeconds(cubeBlockDefinition.MaxIntegrity / cubeBlockDefinition.IntegrityPointsPerSec * block.BuildPercent);
-                            blockTexture = SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icons.First(), Path.Combine(contentPath, cubeBlockDefinition.Icons.First()));
+                            blockTexture = cubeBlockDefinition.Icons?.First() == null ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icons.First(), Path.Combine(contentPath, cubeBlockDefinition.Icons.First()));
                         }
 
                         if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))

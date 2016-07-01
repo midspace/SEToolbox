@@ -72,11 +72,11 @@
             return defaultValue;
         }
 
-        private static object matindexLock = new object();
+        private static readonly object MatindexLock = new object();
 
         public byte GetMaterialIndex(string materialName)
         {
-            lock (matindexLock)
+            lock (MatindexLock)
             {
                 return MyDefinitionManager.Static.GetVoxelMaterialDefinition(materialName).Index;
             }
@@ -144,12 +144,6 @@
         public string GetDefaultMaterialName()
         {
             return MyDefinitionManager.Static.GetDefaultVoxelMaterialDefinition().Id.SubtypeName;
-
-            //var material = _definitions.VoxelMaterials.FirstOrDefault(m => !m.IsRare);
-            //if (material == null)
-            //    material = _definitions.VoxelMaterials.FirstOrDefault();
-
-            //return material.Id.SubtypeId;
         }
 
         public T CreateNewObject<T>()

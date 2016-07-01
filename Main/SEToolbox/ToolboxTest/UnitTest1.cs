@@ -16,6 +16,12 @@
     [TestClass]
     public class UnitTest1
     {
+        [TestInitialize]
+        public void InitTest()
+        {
+            SpaceEngineersCore.LoadDefinitions();
+        }
+
         [TestMethod]
         public void GenerateTempFiles()
         {
