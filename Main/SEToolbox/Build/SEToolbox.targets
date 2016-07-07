@@ -23,6 +23,8 @@
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/System.Data.SQLite.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SharpDX.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/HavokWrapper.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Microsoft.CodeAnalysis.*;
+      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/System.Reflection.Metadata.*;
       $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/*.vshost.*"/>
       <ResourceFiles-zh Include="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/zh/*" Exclude=""/>
       <!-- Add additional languages here. -->
