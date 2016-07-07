@@ -38,9 +38,6 @@
             <Binding Path="ActiveWorld.SaveType" Converter="{StaticResource EnumToResouceConverter}"/>
         </MultiBinding>
     </Window.Title>
-    <Window.TaskbarItemInfo>
-        <TaskbarItemInfo ProgressState="{Binding ProgressState}" ProgressValue="{Binding ProgressValue}" />
-    </Window.TaskbarItemInfo>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
