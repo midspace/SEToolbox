@@ -6,27 +6,25 @@
 <Project DefaultTargets="DesktopBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <BuildTimestamp>$([System.DateTime]::Now.ToString('$(DateTimeFormat)'))</BuildTimestamp>
+    <BuildDir>$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/</BuildDir>
   </PropertyGroup>
 
   <Target Name="CopyBinaryFiles">
     <ItemGroup>
-      <EditorFiles Include="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/*"
-      Exclude="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Sandbox.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/VRage.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SpaceEngineers.Game.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SpaceEngineers.ObjectBuilders.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/InfinarioSDK.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SteamSDK.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SteamSDK.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/steam_api.dll;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/steam_api64.dll;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/System.Data.SQLite.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/SharpDX.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/HavokWrapper.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/Microsoft.CodeAnalysis.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/System.Reflection.Metadata.*;
-      $(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/*.vshost.*"/>
-      <ResourceFiles-zh Include="$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/zh/*" Exclude=""/>
+      <EditorFiles Include="$(BuildDir)/HelixToolkit.Wpf.dll;
+                   $(BuildDir)/ICSharpCode.SharpZipLib.dll;
+                   $(BuildDir)/log4net.dll;
+                   $(BuildDir)/SEToolbox.exe;
+                   $(BuildDir)/SEToolbox.exe.config;
+                   $(BuildDir)/SEToolbox.ImageLibrary.dll;
+                   $(BuildDir)/SEToolbox.ImageShaders.dll;
+                   $(BuildDir)/SEToolbox.pdb;
+                   $(BuildDir)/SEToolboxUpdate.exe;
+                   $(BuildDir)/System.Windows.Interactivity.dll;
+                   $(BuildDir)/WPFLocalizeExtension.dll;
+                   $(BuildDir)/XAMLMarkupExtensions.dll"
+      Exclude=""/>
+      <ResourceFiles-zh Include="$(BuildDir)/zh/*" Exclude=""/>
       <!-- Add additional languages here. -->
     </ItemGroup>
 
