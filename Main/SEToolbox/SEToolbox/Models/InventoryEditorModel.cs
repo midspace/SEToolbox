@@ -239,7 +239,7 @@
                 name = definition.DisplayNameText;
                 massMultiplyer = definition.Mass;
                 volumeMultiplyer = definition.Volume * SpaceEngineersConsts.VolumeMultiplyer;
-                textureFile = SpaceEngineersCore.GetDataPathOrDefault(definition.Icons.First(), Path.Combine(contentPath, definition.Icons.First()));
+                textureFile = (definition.Icons == null || definition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(definition.Icons.First(), Path.Combine(contentPath, definition.Icons.First()));
             }
 
             var newItem = new InventoryModel(item)

@@ -213,7 +213,7 @@
                     TypeIdString = componentDefinition.Id.TypeId.ToString(),
                     SubtypeId = componentDefinition.Id.SubtypeName,
                     Mass = componentDefinition.Mass,
-                    TextureFile = SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icons.First(), Path.Combine(contentPath, componentDefinition.Icons.First())),
+                    TextureFile = (componentDefinition.Icons == null || componentDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icons.First(), Path.Combine(contentPath, componentDefinition.Icons.First())),
                     Volume = componentDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     Accessible = componentDefinition.Public,
                     Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds / amount) : (TimeSpan?)null,
