@@ -26,23 +26,11 @@
 
     <BackConfiguration Condition="'$(Configuration)' == 'Debug'">Release</BackConfiguration>
     <BackConfiguration Condition="'$(Configuration)' == 'Release'">Debug</BackConfiguration>
-
-    <QuickTestsOnly Condition="'$(IsDesktopBuild)' == 'true'">true</QuickTestsOnly>
-    <QuickTestsOnly Condition="'$(QuickTestsOnly)' == ''">true</QuickTestsOnly>
-
-    <!-- Set to treat builds with test failures as failed, not partially succeeded. -->
-    <TreatTestFailureAsBuildFailure Condition="'$(IsDesktopBuild)' == 'true'">true</TreatTestFailureAsBuildFailure>
-    <TreatTestFailureAsBuildFailure Condition="'$(TreatTestFailureAsBuildFailure)' == ''">false</TreatTestFailureAsBuildFailure>
   </PropertyGroup>
 
   <!-- Do not edit this -->
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\TeamBuild\Microsoft.TeamFoundation.Build.targets" />
+  <Import Project="Microsoft.Build.targets" />
   <Import Project="SEToolbox.targets"/>
-
-  <ProjectExtensions>
-    <!-- Team Foundation Build Version - DO NOT CHANGE -->
-    <ProjectFileVersion>2</ProjectFileVersion>
-  </ProjectExtensions>
 
   <PropertyGroup>
     <!--  TESTING

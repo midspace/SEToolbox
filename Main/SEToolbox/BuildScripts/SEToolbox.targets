@@ -11,18 +11,18 @@
 
   <Target Name="CopyBinaryFiles">
     <ItemGroup>
-      <EditorFiles Include="$(BuildDir)/HelixToolkit.Wpf.dll;
-                   $(BuildDir)/ICSharpCode.SharpZipLib.dll;
-                   $(BuildDir)/log4net.dll;
-                   $(BuildDir)/SEToolbox.exe;
-                   $(BuildDir)/SEToolbox.exe.config;
-                   $(BuildDir)/SEToolbox.ImageLibrary.dll;
-                   $(BuildDir)/SEToolbox.ImageShaders.dll;
-                   $(BuildDir)/SEToolbox.pdb;
-                   $(BuildDir)/SEToolboxUpdate.exe;
-                   $(BuildDir)/System.Windows.Interactivity.dll;
-                   $(BuildDir)/WPFLocalizeExtension.dll;
-                   $(BuildDir)/XAMLMarkupExtensions.dll"
+      <EditorFiles Include="$(BuildDir)HelixToolkit.Wpf.dll;
+                   $(BuildDir)ICSharpCode.SharpZipLib.dll;
+                   $(BuildDir)log4net.dll;
+                   $(BuildDir)SEToolbox.exe;
+                   $(BuildDir)SEToolbox.exe.config;
+                   $(BuildDir)SEToolbox.ImageLibrary.dll;
+                   $(BuildDir)SEToolbox.ImageShaders.dll;
+                   $(BuildDir)SEToolbox.pdb;
+                   $(BuildDir)SEToolboxUpdate.exe;
+                   $(BuildDir)System.Windows.Interactivity.dll;
+                   $(BuildDir)WPFLocalizeExtension.dll;
+                   $(BuildDir)XAMLMarkupExtensions.dll"
       Exclude=""/>
       <ResourceFiles-zh Include="$(BuildDir)/zh/*" Exclude=""/>
       <!-- Add additional languages here. -->

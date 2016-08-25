@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolbox", "SEToolbox\SEToolbox.csproj", "{476405E8-27C7-4CD8-B75F-00B8DE0B4BD5}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -37,11 +37,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C63940A6-05C8-4EE2-ABE7-35F35BA9F240}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\build.bat = ..\..\build.bat
-		Build\Build.proj = Build\Build.proj
 		global.targets = global.targets
 		..\..\readme.txt = ..\..\readme.txt
 		SEToolbox.snk = SEToolbox.snk
-		Build\SEToolbox.targets = Build\SEToolbox.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildScripts", "BuildScripts", "{D520F47E-25A7-4151-8BBC-91AFFC202F4D}"
+	ProjectSection(SolutionItems) = preProject
+		BuildScripts\Build.proj = BuildScripts\Build.proj
+		BuildScripts\Microsoft.Build.targets = BuildScripts\Microsoft.Build.targets
+		BuildScripts\SEToolbox.targets = BuildScripts\SEToolbox.targets
 	EndProjectSection
 EndProject
 Global
@@ -131,28 +136,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs27
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = SEToolbox.Image.Library\\SEToolbox.ImageLibrary.csproj
-		SccProjectName1 = SEToolbox.Image.Library
-		SccLocalPath1 = SEToolbox.Image.Library
-		SccProjectUniqueName2 = SEToolbox\\SEToolbox.csproj
-		SccProjectName2 = SEToolbox
-		SccLocalPath2 = SEToolbox
-		SccProjectUniqueName3 = SEToolboxSetup\\SEToolboxSetup.wixproj
-		SccProjectName3 = SEToolboxSetup
-		SccLocalPath3 = SEToolboxSetup
-		SccProjectUniqueName4 = ToolboxTest\\ToolboxTest.csproj
-		SccProjectName4 = ToolboxTest
-		SccLocalPath4 = ToolboxTest
-		SccProjectUniqueName5 = SEToolbox.Image.Shaders\\SEToolbox.ImageShaders.csproj
-		SccProjectName5 = SEToolbox.Image.Shaders
-		SccLocalPath5 = SEToolbox.Image.Shaders
-		SccProjectUniqueName6 = SEToolboxUpdate\\SEToolboxUpdate.csproj
-		SccProjectName6 = SEToolboxUpdate
-		SccLocalPath6 = SEToolboxUpdate
+	GlobalSection(NestedProjects) = preSolution
+		{D520F47E-25A7-4151-8BBC-91AFFC202F4D} = {C63940A6-05C8-4EE2-ABE7-35F35BA9F240}
 	EndGlobalSection
 EndGlobal
