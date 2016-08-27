@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.138.005.3" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.144.000.0" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -67,6 +67,7 @@
               <RemoveFile Id="file7EB6EBCDF35A45D489E0E5C15A781571" Name="VRage.Native.dll" On="install"/>
               <RemoveFile Id="file80CFE451E8C94A27840BE5E85B4742B2" Name="VRage.OpenVRWrapper.dll" On="install"/>
               <RemoveFile Id="file992F750DB5744F849111CEA39D0CB16F" Name="VRage.Render.dll" On="install"/>
+              <RemoveFile Id="fileFCCDCA64927F4EEDB783F6D983838557" Name="VRage.Render11.dll" On="install"/>
 
               <RegistryKey Root="HKLM" Key="Software\MidSpace\SEToolbox">
                 <RegistryValue Id="SEToolboxRegInstallDir" Type="string" Name="InstallDir" Value="[APPLICATIONFOLDER]" />

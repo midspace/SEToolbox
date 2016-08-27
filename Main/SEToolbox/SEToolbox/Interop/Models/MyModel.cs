@@ -7,14 +7,20 @@
     using System.Reflection;
 
     using BulletXNA.BulletCollision;
-    using VRage.Animations;
     using VRage.Import;
     using VRageMath;
     using VRageMath.PackedVector;
+#if DEVELOP
+    using VRageRender.Animations;
+    using VRageRender.Import;
+#endif
+#if STABLE
+    using VRage.Animations;
+#endif
 
     public static class MyModel
     {
-        #region LoadModelData
+#region LoadModelData
 
         public static Dictionary<string, object> LoadModelData(string filename)
         {
@@ -48,9 +54,9 @@
             return data;
         }
 
-        #endregion
+#endregion
 
-        #region SaveModelData
+#region SaveModelData
 
         public static void SaveModelData(string filename, Dictionary<string, object> data)
         {
@@ -79,9 +85,9 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region Write helpers
+#region Write helpers
 
         private static void WriteBone(this BinaryWriter writer, ref MyModelBone bone)
         {
@@ -213,9 +219,9 @@
             writer.Write(val.PackedValue);
         }
 
-        #endregion
+#endregion
 
-        #region Export Data packers
+#region Export Data packers
 
         private static bool ExportDataPackedAsHV4(this BinaryWriter writer, string tagName, Vector3[] vectorArray)
         {
@@ -772,9 +778,9 @@
             return true;
         }
 
-        #endregion
+#endregion
 
-        #region read helpers
+#region read helpers
 
         /// <summary>
         /// Read HalfVector4
@@ -1206,9 +1212,9 @@
             return myLodDescriptorArray;
         }
 
-        #endregion
+#endregion
 
-        #region Import Data readers
+#region Import Data readers
 
         /// <summary>
         /// LoadTagData
@@ -1349,6 +1355,6 @@
             }
         }
 
-        #endregion
+#endregion
     }
 }

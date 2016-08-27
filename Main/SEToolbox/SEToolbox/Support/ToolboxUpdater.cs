@@ -38,6 +38,7 @@
             "VRage.Native.dll",         // MSIL
             "VRage.OpenVRWrapper.dll",  // MSIL
             "VRage.Render.dll",         // AnyCpu
+            "VRage.Render11.dll",       // AnyCpu
         };
 
         //internal static readonly string[] CoreMedievalEngineersFiles = {

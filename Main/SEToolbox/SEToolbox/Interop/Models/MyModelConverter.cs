@@ -13,6 +13,9 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
     using VRage.Import;
+#if DEVELOP
+    using VRageRender.Import;
+#endif
 
     public static class MyModelConverter
     {
@@ -46,24 +49,24 @@
             //var model = new MyModelImporter();
             //model.ImportData(filename);
 
-            Dictionary<string, VRage.Import.MyModelDummy> dummies = null;
+            Dictionary<string, MyModelDummy> dummies = null;
             VRageMath.PackedVector.Byte4[] normals = null;
             VRageMath.PackedVector.HalfVector2[] texCoords0 = null;
             //VRageMath.PackedVector.Byte4[] binormals = null;
             //VRageMath.PackedVector.Byte4[] tangents = null;
             //VRageMath.PackedVector.HalfVector2[] texCoords1 = null;
             VRageMath.PackedVector.HalfVector4[] vertices = null;
-            List<VRage.Import.MyMeshPartInfo> meshParts = null;
+            List<MyMeshPartInfo> meshParts = null;
             //float specularShininess = 0;
             float specularPower = 0;
-            //VRage.Import.MyModelInfo modelInfo = null;
+            //MyModelInfo modelInfo = null;
 
             foreach (var kvp in tagData)
             {
-                if (kvp.Key == MyImporterConstants.TAG_DUMMIES) dummies = (Dictionary<string, VRage.Import.MyModelDummy>)kvp.Value;
+                if (kvp.Key == MyImporterConstants.TAG_DUMMIES) dummies = (Dictionary<string, MyModelDummy>)kvp.Value;
                 if (kvp.Key == MyImporterConstants.TAG_VERTICES) vertices = (VRageMath.PackedVector.HalfVector4[])kvp.Value;
-                if (kvp.Key == MyImporterConstants.TAG_MESH_PARTS) meshParts = (List<VRage.Import.MyMeshPartInfo>)kvp.Value;
-                //if (kvp.Key == MyImporterConstants.TAG_MODEL_INFO) modelInfo = (VRage.Import.MyModelInfo)kvp.Value;
+                if (kvp.Key == MyImporterConstants.TAG_MESH_PARTS) meshParts = (List<MyMeshPartInfo>)kvp.Value;
+                //if (kvp.Key == MyImporterConstants.TAG_MODEL_INFO) modelInfo = (MyModelInfo)kvp.Value;
                 //if (kvp.Key == MyImporterConstants.TAG_SPECULAR_SHININESS) specularShininess = (float)kvp.Value;
                 if (kvp.Key == MyImporterConstants.TAG_SPECULAR_POWER) specularPower = (float)kvp.Value;
                 if (kvp.Key == MyImporterConstants.TAG_NORMALS) normals = (VRageMath.PackedVector.Byte4[])kvp.Value;
@@ -90,7 +93,7 @@
 
                 for (var i = 0; i < normals.Length; i++)
                 {
-                    meshGeometery.Normals.Add(VRage.Import.VF_Packer.UnpackNormal(ref normals[i]).ToVector3D());
+                    meshGeometery.Normals.Add(VF_Packer.UnpackNormal(ref normals[i]).ToVector3D());
                 }
 
                 foreach (var vertex in vertices)
