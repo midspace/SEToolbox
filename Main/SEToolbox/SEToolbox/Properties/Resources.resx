@@ -983,7 +983,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Click to Zoom out</value>
   </data>
   <data name="GlobalSIMassKilogram" xml:space="preserve">
-    <value>Kg</value>
+    <value>kg</value>
   </data>
   <data name="GlobalSIVolumeLitre" xml:space="preserve">
     <value>L</value>
@@ -1235,7 +1235,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Speed:</value>
   </data>
   <data name="GlobalSIDistanceKilometre" xml:space="preserve">
-    <value>Km</value>
+    <value>km</value>
   </data>
   <data name="GlobalSIDistanceMetre" xml:space="preserve">
     <value>m</value>

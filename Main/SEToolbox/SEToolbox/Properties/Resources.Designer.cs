@@ -2192,7 +2192,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Km.
+        ///   Looks up a localized string similar to km.
         /// </summary>
         public static string GlobalSIDistanceKilometre {
             get {
@@ -2210,7 +2210,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kg.
+        ///   Looks up a localized string similar to kg.
         /// </summary>
         public static string GlobalSIMassKilogram {
             get {
