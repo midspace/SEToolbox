@@ -25,7 +25,6 @@
     using SEToolbox.Support;
     using SEToolbox.Views;
     using Res = SEToolbox.Properties.Resources;
-    using Sandbox.Common.ObjectBuilders.Definitions;
     using VRage;
     using VRage.Game;
     using VRage.ObjectBuilders;

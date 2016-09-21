@@ -13,6 +13,8 @@
 
         private double _percent;
 
+        private string _textureFile;
+
         #region Properties
 
         /// <summary>
@@ -70,6 +72,20 @@
                 {
                     _percent = value;
                     RaisePropertyChanged(() => Percent);
+                }
+            }
+        }
+
+        public string TextureFile
+        {
+            get { return _textureFile; }
+
+            set
+            {
+                if (value != _textureFile)
+                {
+                    _textureFile = value;
+                    RaisePropertyChanged(() => TextureFile);
                 }
             }
         }

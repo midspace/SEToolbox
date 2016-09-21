@@ -7,7 +7,7 @@
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
-
+    using Sandbox.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
@@ -51,6 +51,8 @@
         public StructureVoxelModel(MyObjectBuilder_EntityBase entityBase, string voxelPath)
             : base(entityBase)
         {
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+
             if (voxelPath != null)
             {
                 VoxelFilepath = Path.Combine(voxelPath, Name + MyVoxelMap.V2FileExtension);
@@ -70,11 +72,16 @@
                 ReadVoxelDetails(previewFile);
             }
 
-            var materialList = SpaceEngineersCore.Resources.VoxelMaterialDefinitions.Select(m => m.Id.SubtypeName).OrderBy(s => s).ToList();
+            var materialList = new Dictionary<string, string>();
+            foreach (MyVoxelMaterialDefinition item in SpaceEngineersCore.Resources.VoxelMaterialDefinitions.OrderBy(m => m.Id.SubtypeName))
+            {
+                string texture = item.GetVoxelDisplayTexture();
+                materialList.Add(item.Id.SubtypeName, texture == null ? null : SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture)));
+            }
 
-            GameMaterialList = new List<VoxelMaterialAssetModel>(materialList.Select(s => new VoxelMaterialAssetModel { MaterialName = s, DisplayName = s }));
+            GameMaterialList = new List<VoxelMaterialAssetModel>(materialList.Select(m => new VoxelMaterialAssetModel { MaterialName = m.Key, DisplayName = m.Key, TextureFile = m.Value }));
             EditMaterialList = new List<VoxelMaterialAssetModel> { new VoxelMaterialAssetModel { MaterialName = null, DisplayName = "Delete/Remove" } };
-            EditMaterialList.AddRange(materialList.Select(s => new VoxelMaterialAssetModel { MaterialName = s, DisplayName = s }));
+            EditMaterialList.AddRange(materialList.Select(m => new VoxelMaterialAssetModel { MaterialName = m.Key, DisplayName = m.Key, TextureFile = m.Value }));
         }
 
         #endregion

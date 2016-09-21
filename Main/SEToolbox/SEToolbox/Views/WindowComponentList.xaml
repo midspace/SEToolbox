@@ -197,7 +197,7 @@
                                 <controls:SortableGridViewColumn Width="44" SortBinding="{Binding TextureFile}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32'}" SnapsToDevicePixels="True" />
+                                            <Image Width="32" Height="32" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='32,32,noalpha'}" SnapsToDevicePixels="True" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </controls:SortableGridViewColumn>

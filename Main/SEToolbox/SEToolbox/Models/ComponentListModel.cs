@@ -251,11 +251,7 @@
 
             foreach (MyVoxelMaterialDefinition voxelMaterialDefinition in SpaceEngineersCore.Resources.VoxelMaterialDefinitions)
             {
-                var texture = voxelMaterialDefinition.DiffuseXZ;
-
-                var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
-                if (texture == null && dx11MaterialDefinition != null)
-                    texture = dx11MaterialDefinition.NormalGlossXZnY;
+                string texture = voxelMaterialDefinition.GetVoxelDisplayTexture();
 
                 MaterialAssets.Add(new ComponentItemModel
                 {
@@ -422,7 +418,7 @@ td.right { text-align: right; }");
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
                     if (asset.TextureFile != null && File.Exists(asset.TextureFile))
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32));
+                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(asset.TextureFile, 32, 32, true));
                         writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
                         writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(asset.TextureFile));

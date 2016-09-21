@@ -259,11 +259,11 @@
         [StructLayout(LayoutKind.Sequential)]
         internal struct DDS_HEADER_DXT10
         {
-            DXGI_FORMAT dxgiFormat;
-            D3D10_RESOURCE_DIMENSION resourceDimension;
-            UInt32 miscFlag;
-            UInt32 arraySize;
-            UInt32 miscFlags2;
+            internal DXGI_FORMAT dxgiFormat;
+            internal D3D10_RESOURCE_DIMENSION resourceDimension;
+            internal UInt32 miscFlag;
+            internal UInt32 arraySize;
+            internal UInt32 miscFlags2;
 
             /// <summary>
             /// The size of the <see cref="DDS_HEADER"/> type, in bytes.
@@ -341,7 +341,7 @@
                 // TODO: rescale the bitmap to specified width/height.
                 return (Bitmap)Image.FromFile(filename, true);
             }
-            else if (extension == ".dds")
+            if (extension == ".dds")
             {
                 uint fourCC;
                 var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC);
@@ -357,9 +357,9 @@
             return null;
         }
 
-        public static string GetTextureToBase64(string filename, int width, int height)
+        public static string GetTextureToBase64(string filename, int width, int height, bool ignoreAlpha = false)
         {
-            using (var bmp = CreateBitmap(filename, 0, width, height))
+            using (var bmp = CreateBitmap(filename, 0, width, height, ignoreAlpha))
             {
                 var converter = new ImageConverter();
                 return Convert.ToBase64String((byte[])converter.ConvertTo(bmp, typeof(byte[])));

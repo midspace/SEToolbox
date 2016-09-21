@@ -6,12 +6,14 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using Medieval.Definitions;     // DX11 voxel material
     using Sandbox.Definitions;
     using SEToolbox.Models;
     using SEToolbox.Support;
     using VRage;
     using VRage.Game;
     using VRage.Game.ObjectBuilders.ComponentSystem;
+    using VRage.Voxels;
     using VRage.ObjectBuilders;
     using VRageMath;
 
@@ -526,6 +528,23 @@
         public static MyDefinitionBase GetDefinition(this MyDefinitionManager definitionManager, MyObjectBuilderType typeId, string subTypeId)
         {
             return definitionManager.GetAllDefinitions().FirstOrDefault(e => e.Id.TypeId == typeId && e.Id.SubtypeName == subTypeId);
+        }
+
+        public static string GetVoxelDisplayTexture(this MyVoxelMaterialDefinition voxelMaterialDefinition)
+        {
+            string texture = null;
+
+            var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
+            if (dx11MaterialDefinition != null)
+            {
+                texture = dx11MaterialDefinition.ColorMetalXZnY;
+                if (texture == null)
+                    texture = dx11MaterialDefinition.NormalGlossXZnY;
+            }
+            if (texture == null)
+                texture = voxelMaterialDefinition.DiffuseXZ;
+
+            return texture;
         }
     }
 }

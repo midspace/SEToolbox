@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:DDSConverter x:Key="DDSConverter"/>
         <Style TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
@@ -45,6 +46,9 @@
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
                 <MenuItem Header="Ore/Material">
+                    <MenuItem.Resources>
+                        <Image x:Shared="False" x:Key="MenuIcon" Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16,noalpha'}" SnapsToDevicePixels="True" />
+                    </MenuItem.Resources>
                     <!--<MenuItem Header="Re-seed Ore" Command="{Binding ReseedCommand}" />-->
                     <MenuItem Header="Replace All Material" ItemsSource="{Binding GameMaterialList}">
                         <MenuItem.ItemContainerStyle>
@@ -52,6 +56,7 @@
                                 <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
                                 <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.ReplaceAllCommand}" />
                                 <Setter Property="CommandParameter" Value="{Binding MaterialName}" />
+                                <Setter Property="Icon" Value="{StaticResource MenuIcon}" />
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
@@ -61,6 +66,7 @@
                                 <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
                                 <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.ReplaceSurfaceCommand}" />
                                 <Setter Property="CommandParameter" Value="{Binding MaterialName}" />
+                                <Setter Property="Icon" Value="{StaticResource MenuIcon}" />
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
@@ -70,6 +76,7 @@
                                 <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
                                 <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.ReplaceSelectedCommand}" />
                                 <Setter Property="CommandParameter" Value="{Binding MaterialName}" />
+                                <Setter Property="Icon" Value="{StaticResource MenuIcon}" />
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
@@ -166,11 +173,15 @@
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Replace Material" Command="{Binding ReplaceSelectedMenuCommand}" ItemsSource="{Binding EditMaterialList}">
+                            <MenuItem.Resources>
+                                <Image x:Shared="False" x:Key="MenuIcon" Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16,noalpha'}" SnapsToDevicePixels="True" />
+                            </MenuItem.Resources>
                             <MenuItem.ItemContainerStyle>
                                 <Style TargetType="MenuItem">
                                     <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
                                     <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}, Path=DataContext.ReplaceSelectedCommand}" />
                                     <Setter Property="CommandParameter" Value="{Binding MaterialName}" />
+                                    <Setter Property="Icon" Value="{StaticResource MenuIcon}" />
                                 </Style>
                             </MenuItem.ItemContainerStyle>
                         </MenuItem>
