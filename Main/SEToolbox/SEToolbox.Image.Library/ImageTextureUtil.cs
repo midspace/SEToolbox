@@ -204,7 +204,7 @@
             DXGI_FORMAT_A8P8 = 114,
             DXGI_FORMAT_B4G4R4A4_UNORM = 115,
             //DXGI_FORMAT_FORCE_UINT = 0xffffffffUL
-        } ;
+        };
 
         internal enum D3D10_RESOURCE_DIMENSION
         {
@@ -213,7 +213,7 @@
             D3D10_RESOURCE_DIMENSION_TEXTURE1D = 2,
             D3D10_RESOURCE_DIMENSION_TEXTURE2D = 3,
             D3D10_RESOURCE_DIMENSION_TEXTURE3D = 4
-        } ;
+        };
 
         #endregion
 
@@ -254,7 +254,7 @@
             /// The size of the <see cref="DDS_HEADER"/> type, in bytes.
             /// </summary>
             public static readonly int SizeInBytes = Marshal.SizeOf(typeof(DDS_HEADER));
-        } ;
+        };
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct DDS_HEADER_DXT10
@@ -269,7 +269,7 @@
             /// The size of the <see cref="DDS_HEADER"/> type, in bytes.
             /// </summary>
             public static readonly int SizeInBytes = Marshal.SizeOf(typeof(DDS_HEADER_DXT10));
-        } ;
+        };
 
         #endregion
 
@@ -319,7 +319,7 @@
                 }
                 catch { return null; }
             }
-            
+
             return null;
         }
 
@@ -351,6 +351,8 @@
                 {
                     if (fourCC == (uint)DDS_FOURCC.DXT3 || fourCC == (uint)DDS_FOURCC.DXT5)
                         return DxtUtil.DecompressDxt5TextureToBitmap(pixelChannel, width, height, ignoreAlpha);
+                    if (fourCC == (uint)DDS_FOURCC.DX10)
+                        return null; // TODO: load the Dx10 texture.
                 }
                 catch { return null; }
             }
@@ -391,38 +393,39 @@
                     }
 
                     var header = MarshalTo<DDS_HEADER>(reader.ReadBytes(DDS_HEADER.SizeInBytes));
-
-                    if (header.ddspf.dwFlags == (uint) PixelFormatFlags.FourCC && header.ddspf.dwFourCC == (uint) DDS_FOURCC.DX10)
-                    {
-                        var dx10Header = MarshalTo<DDS_HEADER_DXT10>(reader.ReadBytes(DDS_HEADER_DXT10.SizeInBytes));
-                    }
-
                     fourCC = header.ddspf.dwFourCC;
 
+                    if (header.ddspf.dwFlags == (uint)PixelFormatFlags.FourCC && fourCC == (uint)DDS_FOURCC.DX10)
+                    {
+                        DDS_HEADER_DXT10 dx10Header = MarshalTo<DDS_HEADER_DXT10>(reader.ReadBytes(DDS_HEADER_DXT10.SizeInBytes));
+                    }
+
+
                     var slices = 1;
-                    if (((DDSCAPS2) header.dwCaps2 & DDSCAPS2.DDSCAPS2_CUBEMAP) != 0)
+                    if (((DDSCAPS2)header.dwCaps2 & DDSCAPS2.DDSCAPS2_CUBEMAP) != 0)
                         slices = 6;
 
-                    var bytesPerPixel = header.dwPitchOrLinearSize/(header.dwWidth*header.dwHeight);
+                    var bytesPerPixel = header.dwPitchOrLinearSize / (header.dwWidth * header.dwHeight);
+
 
                     var c = header.dwCaps2;
-                    var mipCount = (int) header.dwMipMapCount;
+                    var mipCount = (int)header.dwMipMapCount;
                     if (mipCount == 0)
                         mipCount = 1;
 
 
                     for (var slice = 0; slice < slices; slice++)
                     {
-                        var w = header.dwWidth == 0 ? 1 : header.dwWidth;
-                        var h = header.dwHeight == 0 ? 1 : header.dwHeight;
+                        uint w = header.dwWidth == 0 ? 1 : header.dwWidth;
+                        uint h = header.dwHeight == 0 ? 1 : header.dwHeight;
 
                         for (var map = 0; map < mipCount; map++)
                         {
-                            var size = (int) (bytesPerPixel*w*h);
+                            var size = (int)(bytesPerPixel * w * h);
                             if (depthSlice == slice && ((width <= 0 && height <= 0) || (w == width && h == height)))
                             {
-                                width = (int) w;
-                                height = (int) h;
+                                width = (int)w;
+                                height = (int)h;
                                 return reader.ReadBytes(size);
                             }
                             else
