@@ -10,13 +10,8 @@
     using VRage.Import;
     using VRageMath;
     using VRageMath.PackedVector;
-#if !STABLE
     using VRageRender.Animations;
     using VRageRender.Import;
-#endif
-#if STABLE
-    using VRage.Animations;
-#endif
 
     public static class MyModel
     {
