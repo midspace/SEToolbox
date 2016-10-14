@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.153.009.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.153.010.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -59,6 +59,7 @@
               <RemoveFile Id="file0B63627F3DDC47E58FB0BCCB65B110BC" Name="steam_api64.dll" On="install"/>
               <RemoveFile Id="file26225324B8BC443AB0B4DE7161E48FCF" Name="SteamSDK.dll" On="install"/>
               <RemoveFile Id="fileEA4AE319577E449E9D1DF59BC1B6D3F0" Name="VRage.dll" On="install"/>
+              <RemoveFile Id="file34F2B15981F041C7A1EB6FCF29C72BC1" Name="VRage.Audio.dll" On="install"/>
               <RemoveFile Id="file0F16284F3E2D4C5CA5402B757C4951D1" Name="VRage.Game.dll" On="install"/>
               <RemoveFile Id="fukeD6616ECAB0004D46AE4DBA393C53F0ED" Name="VRage.Game.XmlSerializers.dll" On="install"/>
               <RemoveFile Id="file243D900CAA114FE2AB44B51CEE7840E2" Name="VRage.Input.dll" On="install"/>

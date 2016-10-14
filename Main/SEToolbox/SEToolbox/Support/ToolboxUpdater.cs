@@ -29,6 +29,7 @@
             "steam_api.dll",            // AnyCpu
             "steam_api64.dll",          // AnyCpu
             "SteamSDK.dll",             // MSIL
+            "VRage.Audio.dll",          // MSIL  1.147.x requirement.
             "VRage.dll",                // AnyCpu
             "VRage.Game.dll",           // AnyCpu
             "VRage.Game.XmlSerializers.dll",    // AnyCpu
