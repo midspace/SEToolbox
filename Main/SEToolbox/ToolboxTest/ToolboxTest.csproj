@@ -149,7 +149,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="TypeLoaderTests.cs" />
-    <Compile Include="ModelTests.cs" />
     <Compile Include="VoxelVolumeTests.cs" />
     <Compile Include="TextureTests.cs" />
     <Compile Include="InteropTests.cs" />

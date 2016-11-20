@@ -238,8 +238,6 @@
     <Compile Include="Interop\Asteroids\MyVoxelRayTracer.cs" />
     <Compile Include="Interop\BlueprintRequirement.cs" />
     <Compile Include="Interop\ContentDataPath.cs" />
-    <Compile Include="Interop\Models\MyModel.cs" />
-    <Compile Include="Interop\Models\MyModelConverter.cs" />
     <Compile Include="Interop\SpaceEngineersExtensions.cs" />
     <Compile Include="Interop\NativeMethods.cs" />
     <Compile Include="Interop\SpaceEngineersApi.cs" />
