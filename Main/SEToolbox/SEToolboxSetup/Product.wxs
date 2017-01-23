@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.153.010.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.168.006.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="SEToolbox.cab" EmbedCab="yes" />
 
@@ -69,6 +69,8 @@
               <RemoveFile Id="file80CFE451E8C94A27840BE5E85B4742B2" Name="VRage.OpenVRWrapper.dll" On="install"/>
               <RemoveFile Id="file992F750DB5744F849111CEA39D0CB16F" Name="VRage.Render.dll" On="install"/>
               <RemoveFile Id="fileFCCDCA64927F4EEDB783F6D983838557" Name="VRage.Render11.dll" On="install"/>
+              <RemoveFile Id="fileC53EDEDD55AC43C783A8E63B0FC7DEF1" Name="InfinarioSDK.dll" On="install"/>
+              <RemoveFile Id="file907C5A94D3964E7C86FF6FD07B8A46EA" Name="System.Data.SQLite.dll" On="install"/>
 
               <RegistryKey Root="HKLM" Key="Software\MidSpace\SEToolbox">
                 <RegistryValue Id="SEToolboxRegInstallDir" Type="string" Name="InstallDir" Value="[APPLICATIONFOLDER]" />
