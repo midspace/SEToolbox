@@ -132,7 +132,7 @@
             {
                 DisplayName = friendlyName;
                 Units = (decimal)FloatingObject.Item.Amount;
-                Volume = (cd == null || cd.Volume == null) ? 0 : cd.Volume * SpaceEngineersConsts.VolumeMultiplyer * (double)FloatingObject.Item.Amount;
+                Volume = cd == null ? 0 : cd.Volume * SpaceEngineersConsts.VolumeMultiplyer * (double)FloatingObject.Item.Amount;
                 Mass = cd == null ? 0 : cd.Mass * (double)FloatingObject.Item.Amount;
                 Description = string.Format("{0:#,##0.00} Kg", Mass);
             }
