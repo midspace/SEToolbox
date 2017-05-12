@@ -19,6 +19,7 @@
     using SEToolbox.Support;
     using SEToolbox.Views;
     using VRage.Game;
+    using Res = SEToolbox.Properties.Resources;
 
     public class StructureCubeGridViewModel : StructureBaseViewModel<StructureCubeGridModel>
     {
@@ -71,210 +72,89 @@
 
         #region command Properties
 
-        public ICommand OptimizeObjectCommand
-        {
-            get { return new DelegateCommand(OptimizeObjectExecuted, OptimizeObjectCanExecute); }
-        }
+        public ICommand OptimizeObjectCommand => new DelegateCommand(OptimizeObjectExecuted, OptimizeObjectCanExecute);
 
-        public ICommand RepairObjectCommand
-        {
-            get { return new DelegateCommand(RepairObjectExecuted, RepairObjectCanExecute); }
-        }
+        public ICommand RepairObjectCommand => new DelegateCommand(RepairObjectExecuted, RepairObjectCanExecute);
 
-        public ICommand ResetLinearVelocityCommand
-        {
-            get { return new DelegateCommand(ResetLinearVelocityExecuted, ResetLinearVelocityCanExecute); }
-        }
+        public ICommand ResetLinearVelocityCommand => new DelegateCommand(ResetLinearVelocityExecuted, ResetLinearVelocityCanExecute);
 
-        public ICommand ResetRotationVelocityCommand
-        {
-            get { return new DelegateCommand(ResetRotationVelocityExecuted, ResetRotationVelocityCanExecute); }
-        }
+        public ICommand ResetRotationVelocityCommand => new DelegateCommand(ResetRotationVelocityExecuted, ResetRotationVelocityCanExecute);
 
-        public ICommand ResetVelocityCommand
-        {
-            get { return new DelegateCommand(ResetVelocityExecuted, ResetVelocityCanExecute); }
-        }
+        public ICommand ResetVelocityCommand => new DelegateCommand(ResetVelocityExecuted, ResetVelocityCanExecute);
 
-        public ICommand ReverseVelocityCommand
-        {
-            get { return new DelegateCommand(ReverseVelocityExecuted, ReverseVelocityCanExecute); }
-        }
+        public ICommand ReverseVelocityCommand => new DelegateCommand(ReverseVelocityExecuted, ReverseVelocityCanExecute);
 
-        public ICommand MaxVelocityAtPlayerCommand
-        {
-            get { return new DelegateCommand(MaxVelocityAtPlayerExecuted, MaxVelocityAtPlayerCanExecute); }
-        }
+        public ICommand MaxVelocityAtPlayerCommand => new DelegateCommand(MaxVelocityAtPlayerExecuted, MaxVelocityAtPlayerCanExecute);
 
-        public ICommand ConvertCommand
-        {
-            get { return new DelegateCommand(ConvertExecuted, ConvertCanExecute); }
-        }
+        public ICommand ConvertCommand => new DelegateCommand(ConvertExecuted, ConvertCanExecute);
 
-        public ICommand ConvertToHeavyArmorCommand
-        {
-            get { return new DelegateCommand(ConvertToHeavyArmorExecuted, ConvertToHeavyArmorCanExecute); }
-        }
+        public ICommand ConvertToHeavyArmorCommand => new DelegateCommand(ConvertToHeavyArmorExecuted, ConvertToHeavyArmorCanExecute);
 
-        public ICommand ConvertToLightArmorCommand
-        {
-            get { return new DelegateCommand(ConvertToLightArmorExecuted, ConvertToLightArmorCanExecute); }
-        }
+        public ICommand ConvertToLightArmorCommand => new DelegateCommand(ConvertToLightArmorExecuted, ConvertToLightArmorCanExecute);
 
-        public ICommand FrameworkCommand
-        {
-            get { return new DelegateCommand(FrameworkExecuted, FrameworkCanExecute); }
-        }
+        public ICommand FrameworkCommand => new DelegateCommand(FrameworkExecuted, FrameworkCanExecute);
 
-        public ICommand ConvertToFrameworkCommand
-        {
-            get { return new DelegateCommand<double>(ConvertToFrameworkExecuted, ConvertToFrameworkCanExecute); }
-        }
+        public ICommand ConvertToFrameworkCommand => new DelegateCommand<double>(ConvertToFrameworkExecuted, ConvertToFrameworkCanExecute);
 
-        public ICommand ConvertToStationCommand
-        {
-            get { return new DelegateCommand(ConvertToStationExecuted, ConvertToStationCanExecute); }
-        }
+        public ICommand ConvertToStationCommand => new DelegateCommand(ConvertToStationExecuted, ConvertToStationCanExecute);
 
-        public ICommand ReorientStationCommand
-        {
-            get { return new DelegateCommand(ReorientStationExecuted, ReorientStationCanExecute); }
-        }
+        public ICommand ReorientStationCommand => new DelegateCommand(ReorientStationExecuted, ReorientStationCanExecute);
 
-        public ICommand RotateStructureYawPositiveCommand
-        {
-            get { return new DelegateCommand(RotateStructureYawPositiveExecuted, RotateStructureYawPositiveCanExecute); }
-        }
+        public ICommand RotateStructureYawPositiveCommand => new DelegateCommand(RotateStructureYawPositiveExecuted, RotateStructureYawPositiveCanExecute);
 
-        public ICommand RotateStructureYawNegativeCommand
-        {
-            get { return new DelegateCommand(RotateStructureYawNegativeExecuted, RotateStructureYawNegativeCanExecute); }
-        }
+        public ICommand RotateStructureYawNegativeCommand => new DelegateCommand(RotateStructureYawNegativeExecuted, RotateStructureYawNegativeCanExecute);
 
-        public ICommand RotateStructurePitchPositiveCommand
-        {
-            get { return new DelegateCommand(RotateStructurePitchPositiveExecuted, RotateStructurePitchPositiveCanExecute); }
-        }
+        public ICommand RotateStructurePitchPositiveCommand => new DelegateCommand(RotateStructurePitchPositiveExecuted, RotateStructurePitchPositiveCanExecute);
 
-        public ICommand RotateStructurePitchNegativeCommand
-        {
-            get { return new DelegateCommand(RotateStructurePitchNegativeExecuted, RotateStructurePitchNegativeCanExecute); }
-        }
+        public ICommand RotateStructurePitchNegativeCommand => new DelegateCommand(RotateStructurePitchNegativeExecuted, RotateStructurePitchNegativeCanExecute);
 
-        public ICommand RotateStructureRollPositiveCommand
-        {
-            get { return new DelegateCommand(RotateStructureRollPositiveExecuted, RotateStructureRollPositiveCanExecute); }
-        }
+        public ICommand RotateStructureRollPositiveCommand => new DelegateCommand(RotateStructureRollPositiveExecuted, RotateStructureRollPositiveCanExecute);
 
-        public ICommand RotateStructureRollNegativeCommand
-        {
-            get { return new DelegateCommand(RotateStructureRollNegativeExecuted, RotateStructureRollNegativeCanExecute); }
-        }
+        public ICommand RotateStructureRollNegativeCommand => new DelegateCommand(RotateStructureRollNegativeExecuted, RotateStructureRollNegativeCanExecute);
 
-        public ICommand RotateCubesYawPositiveCommand
-        {
-            get { return new DelegateCommand(RotateCubesYawPositiveExecuted, RotateCubesYawPositiveCanExecute); }
-        }
+        public ICommand RotateCubesYawPositiveCommand => new DelegateCommand(RotateCubesYawPositiveExecuted, RotateCubesYawPositiveCanExecute);
 
-        public ICommand RotateCubesYawNegativeCommand
-        {
-            get { return new DelegateCommand(RotateCubesYawNegativeExecuted, RotateCubesYawNegativeCanExecute); }
-        }
+        public ICommand RotateCubesYawNegativeCommand => new DelegateCommand(RotateCubesYawNegativeExecuted, RotateCubesYawNegativeCanExecute);
 
-        public ICommand RotateCubesPitchPositiveCommand
-        {
-            get { return new DelegateCommand(RotateCubesPitchPositiveExecuted, RotateCubesPitchPositiveCanExecute); }
-        }
+        public ICommand RotateCubesPitchPositiveCommand => new DelegateCommand(RotateCubesPitchPositiveExecuted, RotateCubesPitchPositiveCanExecute);
 
-        public ICommand RotateCubesPitchNegativeCommand
-        {
-            get { return new DelegateCommand(RotateCubesPitchNegativeExecuted, RotateCubesPitchNegativeCanExecute); }
-        }
+        public ICommand RotateCubesPitchNegativeCommand => new DelegateCommand(RotateCubesPitchNegativeExecuted, RotateCubesPitchNegativeCanExecute);
 
-        public ICommand RotateCubesRollPositiveCommand
-        {
-            get { return new DelegateCommand(RotateCubesRollPositiveExecuted, RotateCubesRollPositiveCanExecute); }
-        }
+        public ICommand RotateCubesRollPositiveCommand => new DelegateCommand(RotateCubesRollPositiveExecuted, RotateCubesRollPositiveCanExecute);
 
-        public ICommand RotateCubesRollNegativeCommand
-        {
-            get { return new DelegateCommand(RotateCubesRollNegativeExecuted, RotateCubesRollNegativeCanExecute); }
-        }
+        public ICommand RotateCubesRollNegativeCommand => new DelegateCommand(RotateCubesRollNegativeExecuted, RotateCubesRollNegativeCanExecute);
 
-        public ICommand ConvertToShipCommand
-        {
-            get { return new DelegateCommand(ConvertToShipExecuted, ConvertToShipCanExecute); }
-        }
+        public ICommand ConvertToShipCommand => new DelegateCommand(ConvertToShipExecuted, ConvertToShipCanExecute);
 
-        public ICommand ConvertToCornerArmorCommand
-        {
-            get { return new DelegateCommand(ConvertToCornerArmorExecuted, ConvertToCornerArmorCanExecute); }
-        }
+        public ICommand ConvertToCornerArmorCommand => new DelegateCommand(ConvertToCornerArmorExecuted, ConvertToCornerArmorCanExecute);
 
-        public ICommand ConvertToRoundArmorCommand
-        {
-            get { return new DelegateCommand(ConvertToRoundArmorExecuted, ConvertToRoundArmorCanExecute); }
-        }
+        public ICommand ConvertToRoundArmorCommand => new DelegateCommand(ConvertToRoundArmorExecuted, ConvertToRoundArmorCanExecute);
 
-        public ICommand MirrorStructureByPlaneCommand
-        {
-            get { return new DelegateCommand(MirrorStructureByPlaneExecuted, MirrorStructureByPlaneCanExecute); }
-        }
+        public ICommand MirrorStructureByPlaneCommand => new DelegateCommand(MirrorStructureByPlaneExecuted, MirrorStructureByPlaneCanExecute);
 
-        public ICommand MirrorStructureGuessOddCommand
-        {
-            get { return new DelegateCommand(MirrorStructureGuessOddExecuted, MirrorStructureGuessOddCanExecute); }
-        }
+        public ICommand MirrorStructureGuessOddCommand => new DelegateCommand(MirrorStructureGuessOddExecuted, MirrorStructureGuessOddCanExecute);
 
-        public ICommand MirrorStructureGuessEvenCommand
-        {
-            get { return new DelegateCommand(MirrorStructureGuessEvenExecuted, MirrorStructureGuessEvenCanExecute); }
-        }
+        public ICommand MirrorStructureGuessEvenCommand => new DelegateCommand(MirrorStructureGuessEvenExecuted, MirrorStructureGuessEvenCanExecute);
 
-        public ICommand CopyDetailCommand
-        {
-            get { return new DelegateCommand(CopyDetailExecuted, CopyDetailCanExecute); }
-        }
+        public ICommand CopyDetailCommand => new DelegateCommand(CopyDetailExecuted, CopyDetailCanExecute);
 
-        public ICommand FilterStartCommand
-        {
-            get { return new DelegateCommand(FilterStartExecuted, FilterStartCanExecute); }
-        }
+        public ICommand FilterStartCommand => new DelegateCommand(FilterStartExecuted, FilterStartCanExecute);
 
-        public ICommand FilterTabStartCommand
-        {
-            get { return new DelegateCommand(FilterTabStartExecuted, FilterTabStartCanExecute); }
-        }
+        public ICommand FilterTabStartCommand => new DelegateCommand(FilterTabStartExecuted, FilterTabStartCanExecute);
 
-        public ICommand FilterClearCommand
-        {
-            get { return new DelegateCommand(FilterClearExecuted, FilterClearCanExecute); }
-        }
+        public ICommand FilterClearCommand => new DelegateCommand(FilterClearExecuted, FilterClearCanExecute);
 
-        public ICommand DeleteCubesCommand
-        {
-            get { return new DelegateCommand(DeleteCubesExecuted, DeleteCubesCanExecute); }
-        }
+        public ICommand DeleteCubesCommand => new DelegateCommand(DeleteCubesExecuted, DeleteCubesCanExecute);
 
-        public ICommand ReplaceCubesCommand
-        {
-            get { return new DelegateCommand(ReplaceCubesExecuted, ReplaceCubesCanExecute); }
-        }
+        public ICommand ReplaceCubesCommand => new DelegateCommand(ReplaceCubesExecuted, ReplaceCubesCanExecute);
 
-        public ICommand ColorCubesCommand
-        {
-            get { return new DelegateCommand(ColorCubesExecuted, ColorCubesCanExecute); }
-        }
+        public ICommand ColorCubesCommand => new DelegateCommand(ColorCubesExecuted, ColorCubesCanExecute);
 
-        public ICommand FrameworkCubesCommand
-        {
-            get { return new DelegateCommand(FrameworkCubesExecuted, FrameworkCubesCanExecute); }
-        }
+        public ICommand FrameworkCubesCommand => new DelegateCommand(FrameworkCubesExecuted, FrameworkCubesCanExecute);
 
-        public ICommand SetOwnerCommand
-        {
-            get { return new DelegateCommand(SetOwnerExecuted, SetOwnerCanExecute); }
-        }
+        public ICommand SetOwnerCommand => new DelegateCommand(SetOwnerExecuted, SetOwnerCanExecute);
+
+        public ICommand SetBuiltByCommand => new DelegateCommand(SetBuiltByExecuted, SetBuiltByCanExecute);
 
         #endregion
 
@@ -1129,6 +1009,7 @@
         public void SetOwnerExecuted()
         {
             var model = new ChangeOwnerModel();
+            model.Title = Res.WnChangeOwnerTitle;
             model.Load(SelectedCubeItem.Owner);
             var loadVm = new ChangeOwnerViewModel(this, model);
             var result = _dialogService.ShowDialog<WindowChangeOwner>(this, loadVm);
@@ -1141,6 +1022,35 @@
                 {
                     MainViewModel.Progress++;
                     cube.ChangeOwner(model.SelectedPlayer.PlayerId);
+                }
+
+                MainViewModel.ClearProgress();
+                MainViewModel.IsModified = true;
+                MainViewModel.IsBusy = false;
+            }
+        }
+
+        public bool SetBuiltByCanExecute()
+        {
+            return SelectedCubeItem != null;
+        }
+
+        public void SetBuiltByExecuted()
+        {
+            var model = new ChangeOwnerModel();
+            model.Title = Res.WnChangeBuiltByTitle;
+            model.Load(SelectedCubeItem.BuiltBy);
+            var loadVm = new ChangeOwnerViewModel(this, model);
+            var result = _dialogService.ShowDialog<WindowChangeOwner>(this, loadVm);
+            if (result == true)
+            {
+                MainViewModel.IsBusy = true;
+                MainViewModel.ResetProgress(0, Selections.Count);
+
+                foreach (var cube in Selections)
+                {
+                    MainViewModel.Progress++;
+                    cube.ChangeBuiltBy(model.SelectedPlayer.PlayerId);
                 }
 
                 MainViewModel.ClearProgress();

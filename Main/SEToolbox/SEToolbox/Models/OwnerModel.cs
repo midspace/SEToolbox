@@ -76,10 +76,10 @@
         {
             get
             {
-                if (_isPlayer)
+                if (_isPlayer || _playerId == 0)
                     return _name;
-                else
-                    return string.Format("{0} (dead)", _name);
+
+                return string.Format("{0} (dead)", _name);
             }
         }
 

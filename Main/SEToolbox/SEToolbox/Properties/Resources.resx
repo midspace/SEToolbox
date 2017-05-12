@@ -1532,4 +1532,19 @@ Planet Generator:	{17}</value>
   <data name="WnExplorerMnuSelectionConvertToStationTooltip" xml:space="preserve">
     <value>Convert selected Ships to Stations</value>
   </data>
+  <data name="CtlCubeColBuiltBy" xml:space="preserve">
+    <value>Built By</value>
+  </data>
+  <data name="CtlCubeMnuBuiltByCube" xml:space="preserve">
+    <value>Built By</value>
+  </data>
+  <data name="hammer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hammer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WnChangeBuiltByTitle" xml:space="preserve">
+    <value>Change Built By</value>
+  </data>
+  <data name="WnChangeOwnerTitle" xml:space="preserve">
+    <value>Change Owner</value>
+  </data>
 </root>

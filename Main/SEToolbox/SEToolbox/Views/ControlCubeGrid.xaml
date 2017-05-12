@@ -365,6 +365,11 @@
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=users_back}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
+                            <MenuItem Command="{Binding SetBuiltByCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuBuiltByCube}" Style="{StaticResource ToolBarTopMenuitem}">
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=hammer}"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </Menu>
                         <Grid Grid.Row="2">
                             <Grid.RowDefinitions>
@@ -436,6 +441,13 @@
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding OwnerName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColBuiltBy}" Width="80">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding BuiltByName, Converter={StaticResource EnumToResouceConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>

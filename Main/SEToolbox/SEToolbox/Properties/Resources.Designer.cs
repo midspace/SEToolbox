@@ -287,6 +287,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Built By.
+        /// </summary>
+        public static string CtlCubeColBuiltBy {
+            get {
+                return ResourceManager.GetString("CtlCubeColBuiltBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Color.
         /// </summary>
         public static string CtlCubeColColor {
@@ -532,6 +541,15 @@ namespace SEToolbox.Properties {
         public static string CtlCubeDetail {
             get {
                 return ResourceManager.GetString("CtlCubeDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Built By.
+        /// </summary>
+        public static string CtlCubeMnuBuiltByCube {
+            get {
+                return ResourceManager.GetString("CtlCubeMnuBuiltByCube", resourceCulture);
             }
         }
         
@@ -2266,6 +2284,16 @@ namespace SEToolbox.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap hammer {
+            get {
+                object obj = ResourceManager.GetObject("hammer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap help {
             get {
                 object obj = ResourceManager.GetObject("help", resourceCulture);
@@ -2955,6 +2983,24 @@ namespace SEToolbox.Properties {
         public static string WnAboutTxtVersion {
             get {
                 return ResourceManager.GetString("WnAboutTxtVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Built By.
+        /// </summary>
+        public static string WnChangeBuiltByTitle {
+            get {
+                return ResourceManager.GetString("WnChangeBuiltByTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Owner.
+        /// </summary>
+        public static string WnChangeOwnerTitle {
+            get {
+                return ResourceManager.GetString("WnChangeOwnerTitle", resourceCulture);
             }
         }
         

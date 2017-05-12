@@ -91,6 +91,11 @@
             set { _dataModel.SelectedPlayer = value; }
         }
 
+        public string Title
+        {
+            get { return _dataModel.Title; }
+        }
+
         #endregion
 
         #region methods

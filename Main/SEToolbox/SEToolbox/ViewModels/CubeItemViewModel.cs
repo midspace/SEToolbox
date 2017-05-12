@@ -136,6 +136,18 @@
             set { _dataModel.Owner = value; }
         }
 
+        public string BuiltByName
+        {
+            get { return _dataModel.BuiltByName; }
+            set { _dataModel.BuiltByName = value; }
+        }
+
+        public long BuiltBy
+        {
+            get { return _dataModel.BuiltBy; }
+            set { _dataModel.BuiltBy = value; }
+        }
+
         public string ColorText
         {
             get { return _dataModel.ColorText; }
@@ -210,6 +222,11 @@
         public bool ChangeOwner(long newOwnerId)
         {
             return _dataModel.ChangeOwner(newOwnerId);
+        }
+
+        public bool ChangeBuiltBy(long newBuiltById)
+        {
+            return _dataModel.ChangeBuiltBy(newBuiltById);
         }
 
         #endregion

@@ -27,6 +27,8 @@
 
         private string _ownerName;
 
+        private string _builtByName;
+
         private string _colorText;
 
         private float _colorHue;
@@ -81,6 +83,19 @@
                 {
                     _cube.Owner = value;
                     RaisePropertyChanged(() => Owner);
+                }
+            }
+        }
+
+        public long BuiltBy
+        {
+            get { return _cube.BuiltBy; }
+            set
+            {
+                if (value != _cube.BuiltBy)
+                {
+                    _cube.BuiltBy = value;
+                    RaisePropertyChanged(() => BuiltBy);
                 }
             }
         }
@@ -165,6 +180,20 @@
                 {
                     _ownerName = value;
                     RaisePropertyChanged(() => OwnerName);
+                }
+            }
+        }
+
+        public string BuiltByName
+        {
+            get { return _builtByName; }
+
+            set
+            {
+                if (value != _builtByName)
+                {
+                    _builtByName = value;
+                    RaisePropertyChanged(() => BuiltByName);
                 }
             }
         }
@@ -358,6 +387,21 @@
             return false;
         }
 
+        public bool ChangeBuiltBy(long newOwnerId)
+        {
+            this.BuiltBy = newOwnerId;
+
+            var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == BuiltBy);
+            var dead = " (dead)";
+            if (SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData != null)
+            {
+                var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == BuiltBy);
+                dead = player.Value == null ? " (dead)" : "";
+            }
+            BuiltByName = identity == null ? null : identity.DisplayName + dead;
+            return true;
+        }
+
         private void SetProperties(MyObjectBuilder_CubeBlock cube, MyCubeBlockDefinition definition)
         {
             Cube = cube;
@@ -374,14 +418,21 @@
             CubeSize = definition.CubeSize;
             FriendlyName = SpaceEngineersApi.GetResourceName(definition.DisplayNameText);
 
-            var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
-            var dead = " (dead)";
+            var ownerIdentity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
+            var buyiltByIdentity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == BuiltBy);
+            var ownerDead = " (dead)";
+            var builtByDead = " (dead)";
             if (SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData != null)
             {
-                var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
-                dead = player.Value == null ? " (dead)" : "";
+                var ownerPlayer = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
+                ownerDead = ownerPlayer.Value == null ? " (dead)" : "";
+
+                var builtByPlayer = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == BuiltBy);
+                builtByDead = builtByPlayer.Value == null ? " (dead)" : "";
             }
-            OwnerName = identity == null ? null : identity.DisplayName + dead;
+            OwnerName = ownerIdentity == null ? null : ownerIdentity.DisplayName + ownerDead;
+            BuiltByName = buyiltByIdentity == null ? null : buyiltByIdentity.DisplayName + builtByDead;
+
             TypeId = definition.Id.TypeId;
             SubtypeId = definition.Id.SubtypeName;
 

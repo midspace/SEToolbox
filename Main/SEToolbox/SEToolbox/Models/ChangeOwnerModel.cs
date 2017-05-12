@@ -11,6 +11,7 @@
 
         private ObservableCollection<OwnerModel> _playerList;
         private OwnerModel _selectedPlayer;
+        private string _title;
 
         #endregion
 
@@ -27,10 +28,7 @@
 
         public ObservableCollection<OwnerModel> PlayerList
         {
-            get
-            {
-                return _playerList;
-            }
+            get { return _playerList; }
 
             set
             {
@@ -44,10 +42,7 @@
 
         public OwnerModel SelectedPlayer
         {
-            get
-            {
-                return _selectedPlayer;
-            }
+            get { return _selectedPlayer; }
 
             set
             {
@@ -55,6 +50,20 @@
                 {
                     _selectedPlayer = value;
                     RaisePropertyChanged(() => SelectedPlayer);
+                }
+            }
+        }
+
+        public string Title
+        {
+            get { return _title; }
+
+            set
+            {
+                if (value != _title)
+                {
+                    _title = value;
+                    RaisePropertyChanged(() => Title);
                 }
             }
         }
