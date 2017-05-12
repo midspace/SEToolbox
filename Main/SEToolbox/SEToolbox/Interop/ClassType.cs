@@ -6,8 +6,9 @@
         Character,
         FloatingObject,
         LargeShip,
-        Station,
+        LargeStation,
         SmallShip,
+        SmallStation,
         Meteor,
         Voxel,
         Planet,
@@ -17,16 +18,18 @@
     public enum ImportModelClassType
     {
         SmallShip,
+        SmallStation,
         LargeShip,
-        Station,
+        LargeStation,
         Asteroid
     };
 
     public enum ImportImageClassType
     {
         SmallShip,
+        SmallStation,
         LargeShip,
-        Station,
+        LargeStation,
     };
 
     public enum ImportArmorType

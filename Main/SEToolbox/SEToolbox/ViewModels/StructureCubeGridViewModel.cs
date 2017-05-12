@@ -609,7 +609,7 @@
 
         public bool ConvertToStationCanExecute()
         {
-            return !DataModel.IsStatic && DataModel.GridSize == MyCubeSize.Large;
+            return !DataModel.IsStatic;
         }
 
         public void ConvertToStationExecuted()
@@ -620,7 +620,7 @@
 
         public bool ReorientStationCanExecute()
         {
-            return DataModel.GridSize == MyCubeSize.Large;
+            return true;
         }
 
         public void ReorientStationExecuted()
@@ -799,7 +799,7 @@
 
         public bool ConvertToShipCanExecute()
         {
-            return DataModel.IsStatic && DataModel.GridSize == MyCubeSize.Large;
+            return DataModel.IsStatic;
         }
 
         public void ConvertToShipExecuted()

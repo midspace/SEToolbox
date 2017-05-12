@@ -532,7 +532,11 @@
             double scaleMultiplyer = CubeGrid.GridSizeEnum.ToLength();
             if (IsStatic && CubeGrid.GridSizeEnum == MyCubeSize.Large)
             {
-                ClassType = ClassType.Station;
+                ClassType = ClassType.LargeStation;
+            }
+            else if (IsStatic && CubeGrid.GridSizeEnum == MyCubeSize.Small)
+            {
+                ClassType = ClassType.SmallStation;
             }
             else if (!IsStatic && CubeGrid.GridSizeEnum == MyCubeSize.Large)
             {

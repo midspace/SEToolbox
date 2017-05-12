@@ -569,7 +569,7 @@
         {
             // Make a shortlist of station Entities in the bounding box of the asteroid.
             var asteroidWorldAABB = new BoundingBoxD(DataModel.ContentBounds.Min + DataModel.PositionAndOrientation.Value.Position, DataModel.ContentBounds.Max + DataModel.PositionAndOrientation.Value.Position);
-            var stations = MainViewModel.GetIntersectingEntities(asteroidWorldAABB).Where(e => e.ClassType == ClassType.Station).Cast<StructureCubeGridModel>().ToList();
+            var stations = MainViewModel.GetIntersectingEntities(asteroidWorldAABB).Where(e => e.ClassType == ClassType.LargeStation).Cast<StructureCubeGridModel>().ToList();
 
             if (stations.Count == 0)
                 return false;

@@ -98,220 +98,95 @@
 
         #region Command Properties
 
-        public ICommand ClosingCommand
-        {
-            get { return new DelegateCommand<CancelEventArgs>(ClosingExecuted, ClosingCanExecute); }
-        }
+        public ICommand ClosingCommand => new DelegateCommand<CancelEventArgs>(ClosingExecuted, ClosingCanExecute);
 
-        public ICommand OpenCommand
-        {
-            get { return new DelegateCommand(OpenExecuted, OpenCanExecute); }
-        }
+        public ICommand OpenCommand => new DelegateCommand(OpenExecuted, OpenCanExecute);
 
-        public ICommand SaveCommand
-        {
-            get { return new DelegateCommand(SaveExecuted, SaveCanExecute); }
-        }
+        public ICommand SaveCommand => new DelegateCommand(SaveExecuted, SaveCanExecute);
 
-        public ICommand SaveAsCommand
-        {
-            get { return new DelegateCommand(SaveAsExecuted, SaveAsCanExecute); }
-        }
+        public ICommand SaveAsCommand => new DelegateCommand(SaveAsExecuted, SaveAsCanExecute);
 
-        public ICommand ClearCommand
-        {
-            get { return new DelegateCommand(ClearExecuted, ClearCanExecute); }
-        }
+        public ICommand ClearCommand => new DelegateCommand(ClearExecuted, ClearCanExecute);
 
-        public ICommand ReloadCommand
-        {
-            get { return new DelegateCommand(ReloadExecuted, ReloadCanExecute); }
-        }
+        public ICommand ReloadCommand => new DelegateCommand(ReloadExecuted, ReloadCanExecute);
 
-        public ICommand IsActiveCommand
-        {
-            get { return new DelegateCommand(new Func<bool>(IsActiveCanExecute)); }
-        }
+        public ICommand IsActiveCommand => new DelegateCommand(new Func<bool>(IsActiveCanExecute));
 
-        public ICommand ImportVoxelCommand
-        {
-            get { return new DelegateCommand(ImportVoxelExecuted, ImportVoxelCanExecute); }
-        }
+        public ICommand ImportVoxelCommand => new DelegateCommand(ImportVoxelExecuted, ImportVoxelCanExecute);
 
-        public ICommand ImportImageCommand
-        {
-            get { return new DelegateCommand(ImportImageExecuted, ImportImageCanExecute); }
-        }
+        public ICommand ImportImageCommand => new DelegateCommand(ImportImageExecuted, ImportImageCanExecute);
 
-        public ICommand ImportModelCommand
-        {
-            get { return new DelegateCommand(ImportModelExecuted, ImportModelCanExecute); }
-        }
+        public ICommand ImportModelCommand => new DelegateCommand(ImportModelExecuted, ImportModelCanExecute);
 
-        public ICommand ImportAsteroidModelCommand
-        {
-            get { return new DelegateCommand(ImportAsteroidModelExecuted, ImportAsteroidModelCanExecute); }
-        }
+        public ICommand ImportAsteroidModelCommand => new DelegateCommand(ImportAsteroidModelExecuted, ImportAsteroidModelCanExecute);
 
-        public ICommand ImportSandboxObjectCommand
-        {
-            get { return new DelegateCommand(ImportSandboxObjectExecuted, ImportSandboxObjectCanExecute); }
-        }
+        public ICommand ImportSandboxObjectCommand => new DelegateCommand(ImportSandboxObjectExecuted, ImportSandboxObjectCanExecute);
 
-        public ICommand OpenComponentListCommand
-        {
-            get { return new DelegateCommand(OpenComponentListExecuted, OpenComponentListCanExecute); }
-        }
+        public ICommand OpenComponentListCommand => new DelegateCommand(OpenComponentListExecuted, OpenComponentListCanExecute);
 
-        public ICommand WorldReportCommand
-        {
-            get { return new DelegateCommand(WorldReportExecuted, WorldReportCanExecute); }
-        }
+        public ICommand WorldReportCommand => new DelegateCommand(WorldReportExecuted, WorldReportCanExecute);
 
-        public ICommand OpenFolderCommand
-        {
-            get { return new DelegateCommand(OpenFolderExecuted, OpenFolderCanExecute); }
-        }
+        public ICommand OpenFolderCommand => new DelegateCommand(OpenFolderExecuted, OpenFolderCanExecute);
 
-        public ICommand ViewSandboxCommand
-        {
-            get { return new DelegateCommand(ViewSandboxExecuted, ViewSandboxCanExecute); }
-        }
+        public ICommand ViewSandboxCommand => new DelegateCommand(ViewSandboxExecuted, ViewSandboxCanExecute);
 
-        public ICommand OpenWorkshopCommand
-        {
-            get { return new DelegateCommand(OpenWorkshopExecuted, OpenWorkshopCanExecute); }
-        }
+        public ICommand OpenWorkshopCommand => new DelegateCommand(OpenWorkshopExecuted, OpenWorkshopCanExecute);
 
-        public ICommand ExportSandboxObjectCommand
-        {
-            get { return new DelegateCommand(ExportSandboxObjectExecuted, ExportSandboxObjectCanExecute); }
-        }
+        public ICommand ExportSandboxObjectCommand => new DelegateCommand(ExportSandboxObjectExecuted, ExportSandboxObjectCanExecute);
 
-        public ICommand ExportBasicSandboxObjectCommand
-        {
-            get { return new DelegateCommand(ExportBasicSandboxObjectExecuted, ExportBasicSandboxObjectCanExecute); }
-        }
+        public ICommand ExportBasicSandboxObjectCommand => new DelegateCommand(ExportBasicSandboxObjectExecuted, ExportBasicSandboxObjectCanExecute);
 
-        public ICommand ExportPrefabObjectCommand
-        {
-            get { return new DelegateCommand(ExportPrefabObjectExecuted, ExportPrefabObjectCanExecute); }
-        }
+        public ICommand ExportPrefabObjectCommand => new DelegateCommand(ExportPrefabObjectExecuted, ExportPrefabObjectCanExecute);
 
-        public ICommand CreateFloatingItemCommand
-        {
-            get { return new DelegateCommand(CreateFloatingItemExecuted, CreateFloatingItemCanExecute); }
-        }
+        public ICommand CreateFloatingItemCommand => new DelegateCommand(CreateFloatingItemExecuted, CreateFloatingItemCanExecute);
 
-        public ICommand GenerateVoxelFieldCommand
-        {
-            get { return new DelegateCommand(GenerateVoxelFieldExecuted, GenerateVoxelFieldCanExecute); }
-        }
+        public ICommand GenerateVoxelFieldCommand => new DelegateCommand(GenerateVoxelFieldExecuted, GenerateVoxelFieldCanExecute);
 
-        public ICommand Test1Command
-        {
-            get { return new DelegateCommand(Test1Executed, Test1CanExecute); }
-        }
+        public ICommand Test1Command => new DelegateCommand(Test1Executed, Test1CanExecute);
 
-        public ICommand Test2Command
-        {
-            get { return new DelegateCommand(Test2Executed, Test2CanExecute); }
-        }
+        public ICommand Test2Command => new DelegateCommand(Test2Executed, Test2CanExecute);
 
-        public ICommand Test3Command
-        {
-            get { return new DelegateCommand(Test3Executed, Test3CanExecute); }
-        }
+        public ICommand Test3Command => new DelegateCommand(Test3Executed, Test3CanExecute);
 
-        public ICommand Test4Command
-        {
-            get { return new DelegateCommand(Test4Executed, Test4CanExecute); }
-        }
+        public ICommand Test4Command => new DelegateCommand(Test4Executed, Test4CanExecute);
 
-        public ICommand Test5Command
-        {
-            get { return new DelegateCommand(Test5Executed, Test5CanExecute); }
-        }
+        public ICommand Test5Command => new DelegateCommand(Test5Executed, Test5CanExecute);
 
-        public ICommand Test6Command
-        {
-            get { return new DelegateCommand(Test6Executed, Test6CanExecute); }
-        }
+        public ICommand Test6Command => new DelegateCommand(Test6Executed, Test6CanExecute);
 
-        public ICommand OpenSettingsCommand
-        {
-            get { return new DelegateCommand(OpenSettingsExecuted, OpenSettingsCanExecute); }
-        }
+        public ICommand OpenSettingsCommand => new DelegateCommand(OpenSettingsExecuted, OpenSettingsCanExecute);
 
-        public ICommand OpenUpdatesLinkCommand
-        {
-            get { return new DelegateCommand(OpenUpdatesLinkExecuted, OpenUpdatesLinkCanExecute); }
-        }
+        public ICommand OpenUpdatesLinkCommand => new DelegateCommand(OpenUpdatesLinkExecuted, OpenUpdatesLinkCanExecute);
 
-        public ICommand OpenDocumentationLinkCommand
-        {
-            get { return new DelegateCommand(OpenDocumentationLinkExecuted, OpenDocumentationLinkCanExecute); }
-        }
+        public ICommand OpenDocumentationLinkCommand => new DelegateCommand(OpenDocumentationLinkExecuted, OpenDocumentationLinkCanExecute);
 
-        public ICommand OpenSupportLinkCommand
-        {
-            get { return new DelegateCommand(OpenSupportLinkExecuted, OpenSupportLinkCanExecute); }
-        }
+        public ICommand OpenSupportLinkCommand => new DelegateCommand(OpenSupportLinkExecuted, OpenSupportLinkCanExecute);
 
-        public ICommand AboutCommand
-        {
-            get { return new DelegateCommand(AboutExecuted, AboutCanExecute); }
-        }
+        public ICommand AboutCommand => new DelegateCommand(AboutExecuted, AboutCanExecute);
 
-        public ICommand LanguageCommand
-        {
-            get { return new DelegateCommand(new Func<bool>(LanguageCanExecute)); }
-        }
+        public ICommand LanguageCommand => new DelegateCommand(new Func<bool>(LanguageCanExecute));
 
-        public ICommand SetLanguageCommand
-        {
-            get { return new DelegateCommand<string>(SetLanguageExecuted, SetLanguageCanExecute); }
-        }
+        public ICommand SetLanguageCommand => new DelegateCommand<string>(SetLanguageExecuted, SetLanguageCanExecute);
 
-        public ICommand DeleteObjectCommand
-        {
-            get { return new DelegateCommand(DeleteObjectExecuted, DeleteObjectCanExecute); }
-        }
+        public ICommand DeleteObjectCommand => new DelegateCommand(DeleteObjectExecuted, DeleteObjectCanExecute);
 
-        public ICommand CopyObjectGpsCommand
-        {
-            get { return new DelegateCommand(CopyObjectGpsExecuted, CopyObjectGpsCanExecute); }
-        }
+        public ICommand CopyObjectGpsCommand => new DelegateCommand(CopyObjectGpsExecuted, CopyObjectGpsCanExecute);
 
-        public ICommand GroupMoveCommand
-        {
-            get { return new DelegateCommand(GroupMoveExecuted, GroupMoveCanExecute); }
-        }
+        public ICommand GroupMoveCommand => new DelegateCommand(GroupMoveExecuted, GroupMoveCanExecute);
 
-        public ICommand RejoinShipCommand
-        {
-            get { return new DelegateCommand(RejoinShipExecuted, RejoinShipCanExecute); }
-        }
+        public ICommand RejoinShipCommand => new DelegateCommand(RejoinShipExecuted, RejoinShipCanExecute);
 
-        public ICommand JoinShipPartsCommand
-        {
-            get { return new DelegateCommand(JoinShipPartsExecuted, JoinShipPartsCanExecute); }
-        }
+        public ICommand JoinShipPartsCommand => new DelegateCommand(JoinShipPartsExecuted, JoinShipPartsCanExecute);
 
-        public ICommand VoxelMergeCommand
-        {
-            get { return new DelegateCommand(VoxelMergeExecuted, VoxelMergeCanExecute); }
-        }
+        public ICommand VoxelMergeCommand => new DelegateCommand(VoxelMergeExecuted, VoxelMergeCanExecute);
 
-        public ICommand RepairShipsCommand
-        {
-            get { return new DelegateCommand(RepairShipsExecuted, RepairShipsCanExecute); }
-        }
+        public ICommand RepairShipsCommand => new DelegateCommand(RepairShipsExecuted, RepairShipsCanExecute);
 
-        public ICommand ResetVelocityCommand
-        {
-            get { return new DelegateCommand(ResetVelocityExecuted, ResetVelocityCanExecute); }
-        }
+        public ICommand ResetVelocityCommand => new DelegateCommand(ResetVelocityExecuted, ResetVelocityCanExecute);
+
+        public ICommand ConvertToShipCommand => new DelegateCommand(ConvertToShipExecuted, ConvertToShipCanExecute);
+
+        public ICommand ConvertToStationCommand => new DelegateCommand(ConvertToStationExecuted, ConvertToStationCanExecute);
 
         #endregion
 
@@ -1148,6 +1023,31 @@
             IsBusy = false;
         }
 
+
+        public bool ConvertToShipCanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void ConvertToShipExecuted()
+        {
+            IsBusy = true;
+            ConvertToShips(Selections);
+            IsBusy = false;
+        }
+
+        public bool ConvertToStationCanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void ConvertToStationExecuted()
+        {
+            IsBusy = true;
+            ConvertToStations(Selections);
+            IsBusy = false;
+        }
+
         #endregion
 
         #region Test command methods
@@ -1421,7 +1321,8 @@
             {
                 if (structure.DataModel.ClassType == ClassType.SmallShip
                     || structure.DataModel.ClassType == ClassType.LargeShip
-                    || structure.DataModel.ClassType == ClassType.Station)
+                    || structure.DataModel.ClassType == ClassType.LargeStation
+                    || structure.DataModel.ClassType == ClassType.SmallStation)
                 {
                     ((StructureCubeGridViewModel)structure).RepairObjectExecuted();
                 }
@@ -1434,9 +1335,34 @@
             {
                 if (structure.DataModel.ClassType == ClassType.SmallShip
                     || structure.DataModel.ClassType == ClassType.LargeShip
-                    || structure.DataModel.ClassType == ClassType.Station)
+                    || structure.DataModel.ClassType == ClassType.LargeStation
+                    || structure.DataModel.ClassType == ClassType.SmallStation)
                 {
                     ((StructureCubeGridViewModel)structure).ResetVelocityExecuted();
+                }
+            }
+        }
+
+        private void ConvertToShips(IEnumerable<IStructureViewBase> structures)
+        {
+            foreach (var structure in structures)
+            {
+                if (structure.DataModel.ClassType == ClassType.LargeStation
+                    || structure.DataModel.ClassType == ClassType.SmallStation)
+                {
+                    ((StructureCubeGridViewModel)structure).ConvertToShipExecuted();
+                }
+            }
+        }
+
+        private void ConvertToStations(IEnumerable<IStructureViewBase> structures)
+        {
+            foreach (var structure in structures)
+            {
+                if (structure.DataModel.ClassType == ClassType.SmallShip
+                    || structure.DataModel.ClassType == ClassType.LargeShip)
+                {
+                    ((StructureCubeGridViewModel)structure).ConvertToStationExecuted();
                 }
             }
         }

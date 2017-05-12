@@ -182,6 +182,8 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=components}"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="{lex:Loc WnExplorerMnuSelectionConvertToShip}" Command="{Binding ConvertToShipCommand}" ToolTip="{lex:Loc WnExplorerMnuSelectionConvertToShipTooltip}"/>
+                    <MenuItem Header="{lex:Loc WnExplorerMnuSelectionConvertToStation}" Command="{Binding ConvertToStationCommand}" ToolTip="{lex:Loc WnExplorerMnuSelectionConvertToStationTooltip}"/>
                     <Separator/>
                     <MenuItem Command="{Binding VoxelMergeCommand}" Header="{lex:Loc WnExplorerMnuSelectionMergeAsteroid}" ToolTip="{lex:Loc WnExplorerMnuSelectionMergeAsteroidTooltip}">
                         <MenuItem.Icon>

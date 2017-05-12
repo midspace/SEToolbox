@@ -401,13 +401,22 @@
                     entity.IsStatic = false;
                     break;
 
+                case ImportImageClassType.SmallStation:
+                    entity.GridSizeEnum = MyCubeSize.Small;
+                    blockPrefix += "Small";
+                    entity.IsStatic = true;
+                    Position = Position.RoundOff(MyCubeSize.Small.ToLength());
+                    Forward = Forward.RoundToAxis();
+                    Up = Up.RoundToAxis();
+                    break;
+
                 case ImportImageClassType.LargeShip:
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = false;
                     break;
 
-                case ImportImageClassType.Station:
+                case ImportImageClassType.LargeStation:
                     entity.GridSizeEnum = MyCubeSize.Large;
                     blockPrefix += "Large";
                     entity.IsStatic = true;
