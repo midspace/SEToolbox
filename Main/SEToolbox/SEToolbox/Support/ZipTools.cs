@@ -96,7 +96,7 @@
 
                     var seperator = Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentUICulture);
 
-                    if (zipEntry.Name.Replace("/", seperator).Equals(archivedFile, StringComparison.InvariantCultureIgnoreCase))
+                    if (zipEntry.Name.Replace("/", seperator).Equals(archivedFile, StringComparison.OrdinalIgnoreCase))
                     {
                         var buffer = new byte[4096]; // 4K is optimum
                         var zipStream = zf.GetInputStream(zipEntry);
@@ -142,7 +142,7 @@
 
                     var seperator = Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentUICulture);
 
-                    if (zipEntry.Name.Replace("/", seperator).Equals(archivedFile, StringComparison.InvariantCultureIgnoreCase))
+                    if (zipEntry.Name.Replace("/", seperator).Equals(archivedFile, StringComparison.OrdinalIgnoreCase))
                     {
                         var buffer = new byte[4096]; // 4K is optimum
                         var zipStream = zf.GetInputStream(zipEntry);

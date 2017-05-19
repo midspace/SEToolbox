@@ -268,8 +268,8 @@
             MyTexts.Clear();
             MyTexts.LoadTexts(localizationPath, maincode, subcode);
 
-            GlobalSettings.Default.UseCustomResource = !MyTexts.Languages.Any(m => m.Value.FullCultureName.Equals(culture.IetfLanguageTag, StringComparison.InvariantCultureIgnoreCase)
-                || m.Value.CultureName.Equals(culture.Parent.IetfLanguageTag, StringComparison.InvariantCultureIgnoreCase));
+            GlobalSettings.Default.UseCustomResource = !MyTexts.Languages.Any(m => m.Value.FullCultureName.Equals(culture.IetfLanguageTag, StringComparison.OrdinalIgnoreCase)
+                || m.Value.CultureName.Equals(culture.Parent.IetfLanguageTag, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion

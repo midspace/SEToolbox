@@ -36,7 +36,7 @@
                 int.TryParse(sizeArray[1], out height);
 
             if (sizeArray.Length > 2)
-                noAlpha = sizeArray[2].Equals("noalpha", StringComparison.InvariantCultureIgnoreCase);
+                noAlpha = sizeArray[2].Equals("noalpha", StringComparison.OrdinalIgnoreCase);
 
             var filename = (string)value;
             var extension = Path.GetExtension(filename).ToLower();

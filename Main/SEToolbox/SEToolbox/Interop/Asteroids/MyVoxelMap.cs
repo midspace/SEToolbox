@@ -185,7 +185,7 @@ namespace SEToolbox.Interop.Asteroids
         public static bool IsVoxelMapFile(string filename)
         {
             var extension = Path.GetExtension(filename);
-            if (extension != null && extension.Equals(V1FileExtension, StringComparison.InvariantCultureIgnoreCase))
+            if (extension != null && extension.Equals(V1FileExtension, StringComparison.OrdinalIgnoreCase))
             {
                 using (var stream = File.OpenRead(filename))
                 {
@@ -205,7 +205,7 @@ namespace SEToolbox.Interop.Asteroids
                     }
                 }
             }
-            if (extension != null && extension.Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase))
+            if (extension != null && extension.Equals(V2FileExtension, StringComparison.OrdinalIgnoreCase))
             {
                 try
                 {
@@ -235,7 +235,7 @@ namespace SEToolbox.Interop.Asteroids
         public void Load(string filename, string defaultMaterial, bool loadMaterial)
         {
             var tempfilename = TempfileUtil.NewFilename();
-            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
+            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.OrdinalIgnoreCase) ? 1 : 0;
 
             if (initialVersion == 1)
                 ZipTools.GZipUncompress(filename, tempfilename);
@@ -517,7 +517,7 @@ namespace SEToolbox.Interop.Asteroids
         /// <param name="filename"></param>
         public static Vector3I LoadVoxelSize(string filename)
         {
-            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
+            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.OrdinalIgnoreCase) ? 1 : 0;
 
             try
             {
@@ -563,7 +563,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             Debug.Write("Saving binary.");
 
-            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
+            var initialVersion = Path.GetExtension(filename).Equals(V2FileExtension, StringComparison.OrdinalIgnoreCase) ? 1 : 0;
 
             var tempfilename = TempfileUtil.NewFilename();
             using (var ms = new FileStream(tempfilename, FileMode.Create))

@@ -24,21 +24,21 @@
         static void Main(string[] args)
         {
             // Install.
-            if (args.Any(a => a.Equals("/I", StringComparison.InvariantCultureIgnoreCase) || a.Equals("-I", StringComparison.InvariantCultureIgnoreCase)))
+            if (args.Any(a => a.Equals("/I", StringComparison.OrdinalIgnoreCase) || a.Equals("-I", StringComparison.OrdinalIgnoreCase)))
             {
                 InstallConfigurationSettings();
                 return;
             }
 
             // Uninstall.
-            if (args.Any(a => a.Equals("/U", StringComparison.InvariantCultureIgnoreCase) || a.Equals("-U", StringComparison.InvariantCultureIgnoreCase)))
+            if (args.Any(a => a.Equals("/U", StringComparison.OrdinalIgnoreCase) || a.Equals("-U", StringComparison.OrdinalIgnoreCase)))
             {
                 UninstallConfigurationSettings();
                 return;
             }
 
             // Binaries.
-            if (args.Any(a => a.Equals("/B", StringComparison.InvariantCultureIgnoreCase) || a.Equals("-B", StringComparison.InvariantCultureIgnoreCase)))
+            if (args.Any(a => a.Equals("/B", StringComparison.OrdinalIgnoreCase) || a.Equals("-B", StringComparison.OrdinalIgnoreCase)))
             {
                 UpdateBaseLibrariesFromSpaceEngineers(args);
                 return;

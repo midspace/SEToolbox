@@ -233,7 +233,7 @@
         //Assembly currentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         //{
         //    // Retrieve the list of referenced assemblies in an array of AssemblyName.
-        //    var filename = args.Name.Substring(0, args.Name.IndexOf(",", StringComparison.InvariantCulture)) + ".dll";
+        //    var filename = args.Name.Substring(0, args.Name.IndexOf(",", StringComparison.Ordinal)) + ".dll";
 
         //    const string filter = @"^(?<assembly>(?:\w+(?:\.?\w+)+))\s*(?:,\s?Version=(?<version>\d+\.\d+\.\d+\.\d+))?(?:,\s?Culture=(?<culture>[\w-]+))?(?:,\s?PublicKeyToken=(?<token>\w+))?$";
         //    var match = Regex.Match(args.Name, filter);
@@ -242,7 +242,7 @@
         //        filename = match.Groups["assembly"].Value + ".dll";
         //    }
 
-        //    if (ToolboxUpdater.CoreSpaceEngineersFiles.Any(f => string.Equals(f, filename, StringComparison.InvariantCultureIgnoreCase)))
+        //    if (ToolboxUpdater.CoreSpaceEngineersFiles.Any(f => string.Equals(f, filename, StringComparison.OrdinalIgnoreCase)))
         //    {
         //        var assemblyPath = Path.Combine(_tempBinPath, filename);
 

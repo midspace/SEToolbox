@@ -376,7 +376,7 @@
                             FileSystem.DeleteFile(voxel.VoxelFilepath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                         }
 
-                        if (Path.GetExtension(voxel.SourceVoxelFilepath).Equals(MyVoxelMap.V1FileExtension, StringComparison.InvariantCultureIgnoreCase))
+                        if (Path.GetExtension(voxel.SourceVoxelFilepath).Equals(MyVoxelMap.V1FileExtension, StringComparison.OrdinalIgnoreCase))
                         {
                             // Convert between formats.
                             var voxelmap = new MyVoxelMap();
