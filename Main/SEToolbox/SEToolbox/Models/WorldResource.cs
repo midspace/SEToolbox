@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -11,6 +12,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage.Game;
+    using VRage.Game.ObjectBuilders.Components;
 
     public class WorldResource : BaseModel
     {
@@ -445,9 +447,12 @@
                 var cubeGrid = entityBase as MyObjectBuilder_CubeGrid;
                 if (cubeGrid != null)
                 {
-                    var cockpit = (MyObjectBuilder_Cockpit)cubeGrid.CubeBlocks.FirstOrDefault(e => e.EntityId == Checkpoint.ControlledObject && e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null);
-                    if (cockpit != null)
-                        return cockpit.Pilot;
+                    foreach (MyObjectBuilder_CubeBlock cube in cubeGrid.CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e.EntityId == Checkpoint.ControlledObject && e is MyObjectBuilder_Cockpit))
+                    {
+                        List<MyObjectBuilder_Character> pilots = cube.GetHierarchyCharacters();
+                        if (pilots.Count > 0)
+                            return pilots[0];
+                    }
                 }
             }
 
@@ -467,11 +472,13 @@
                 {
                     if (entityBase is MyObjectBuilder_CubeGrid)
                     {
-                        var cubes = ((MyObjectBuilder_CubeGrid)entityBase).CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot != null).ToList();
-                        if (cubes.Count > 0)
+                        foreach (MyObjectBuilder_CubeBlock cube in ((MyObjectBuilder_CubeGrid)entityBase).CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit))
                         {
-                            return (MyObjectBuilder_Cockpit)cubes[0];
+                            List<MyObjectBuilder_Character> pilots = cube.GetHierarchyCharacters();
+                            if (pilots.Count > 0)
+                                return (MyObjectBuilder_Cockpit)cube;
                         }
+
                     }
                 }
             }

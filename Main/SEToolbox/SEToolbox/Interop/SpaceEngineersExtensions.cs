@@ -6,12 +6,15 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using Medieval.Definitions;     // DX11 voxel material
+    using Medieval.Definitions;
+    using Sandbox.Common.ObjectBuilders;
+// DX11 voxel material
     using Sandbox.Definitions;
     using SEToolbox.Models;
     using SEToolbox.Support;
     using VRage;
     using VRage.Game;
+    using VRage.Game.ObjectBuilders.Components;
     using VRage.Game.ObjectBuilders.ComponentSystem;
     using VRage.Voxels;
     using VRage.ObjectBuilders;
@@ -459,6 +462,43 @@
         //    }
         //    return inventoryEditors;
         //}
+
+        public static List<MyObjectBuilder_Character> GetHierarchyCharacters(this MyObjectBuilder_CubeBlock cube)
+        {
+            List<MyObjectBuilder_Character> list = new List<MyObjectBuilder_Character>();
+
+            MyObjectBuilder_Cockpit cockpit = cube as MyObjectBuilder_Cockpit;
+            if (cockpit == null)
+                return list;
+
+            var hierarchyBase = cockpit.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase")?.Component as MyObjectBuilder_HierarchyComponentBase;
+            if (hierarchyBase != null)
+            {
+                list.AddRange(hierarchyBase.Children.Where(e => e is MyObjectBuilder_Character).Cast<MyObjectBuilder_Character>());
+            }
+            return list;
+        }
+
+        public static void RemoveHierarchyCharacter(this MyObjectBuilder_CubeBlock cube, MyObjectBuilder_Character character)
+        {
+            if (character == null)
+                return;
+
+            MyObjectBuilder_Cockpit cockpit = cube as MyObjectBuilder_Cockpit;
+
+            var hierarchyBase = cockpit?.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase")?.Component as MyObjectBuilder_HierarchyComponentBase;
+            if (hierarchyBase != null)
+            {
+                for (int i = 0 ; i < hierarchyBase.Children.Count; i++)
+                {
+                    if (hierarchyBase.Children[i] == character)
+                    {
+                        hierarchyBase.Children.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
+        }
 
         public static ObservableCollection<InventoryEditorModel> GetInventory(this MyObjectBuilder_ComponentContainer componentContainer, MyCubeBlockDefinition definition = null)
         {

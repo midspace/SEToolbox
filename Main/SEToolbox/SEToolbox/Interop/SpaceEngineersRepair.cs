@@ -333,10 +333,9 @@
                         var list = cubeGrid.CubeBlocks.OfType<MyObjectBuilder_Cockpit>().ToArray();
                         for (var i = 0; i < list.Length; i++)
                         {
-                            if (list[i].Pilot != null)
+                            character = (list[i]).GetHierarchyCharacters().FirstOrDefault();
+                            if (character != null)
                             {
-                                character = (list[i]).Pilot;
-
                                 if (!SpaceEngineersCore.Resources.CharacterDefinitions.Any(c => c.Model == character.CharacterModel || c.Name == character.CharacterModel))
                                 {
                                     character.CharacterModel = Sandbox.Game.Entities.Character.MyCharacter.DefaultModel;
