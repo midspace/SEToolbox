@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -14,11 +15,11 @@
 
     public class SortableListView : ListView
     {
+        private const int MaxSortableColumns = 1;
+
         #region fields
 
-        private ListSortDirection _lastDirection = ListSortDirection.Ascending;
-        private GridViewColumn _lastColumnClicked;
-        private List<string> _lastSortList;
+        private readonly List<SortColumn> _sortList = new List<SortColumn>();
 
         #endregion
 
@@ -67,13 +68,11 @@
             if (this.ItemsSource != null)
             {
                 var dataView = CollectionViewSource.GetDefaultView(this.ItemsSource);
-                if (dataView.SortDescriptions.Count == 0 && _lastSortList != null && _lastSortList.Count > 0)
+
+                if (dataView.SortDescriptions.Count == 0 && _sortList != null && _sortList.Count > 0)
                 {
-                    foreach (var sortBy in _lastSortList)
-                    {
-                        var sd = new SortDescription(sortBy, _lastDirection);
-                        dataView.SortDescriptions.Add(sd);
-                    }
+                    for (int i = _sortList.Count - 1; i >=0 ; i--)
+                        dataView.SortDescriptions.Add(new SortDescription(_sortList[i].SortPath, _sortList[i].SortDirection));
                 }
 
                 dataView.Refresh();
@@ -132,15 +131,12 @@
 
                 if (selectedColumn != null)
                 {
-                    var list = new List<string> { DefaultSortColumn };
-                    Sort(this, list, ListSortDirection.Ascending);
+                    _sortList.Clear();
+                    _sortList.Add(new SortColumn(DefaultSortColumn, ListSortDirection.Ascending, selectedColumn));
+                    Sort(this, _sortList);
 
                     if (ColumnHeaderArrowUpTemplate != null)
                         selectedColumn.HeaderTemplate = ColumnHeaderArrowUpTemplate;
-
-                    _lastColumnClicked = selectedColumn;
-                    _lastDirection = ListSortDirection.Ascending;
-                    _lastSortList = list;
                 }
             }
         }
@@ -156,24 +152,6 @@
 
                 if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
                 {
-                    ListSortDirection direction;
-
-                    if (headerClicked.Column != _lastColumnClicked)
-                    {
-                        direction = ListSortDirection.Ascending;
-                    }
-                    else
-                    {
-                        if (_lastDirection == ListSortDirection.Ascending)
-                        {
-                            direction = ListSortDirection.Descending;
-                        }
-                        else
-                        {
-                            direction = ListSortDirection.Ascending;
-                        }
-                    }
-
                     var header = new List<string>();
                     if (headerClicked.Column is SortableGridViewColumn && ((SortableGridViewColumn)headerClicked.Column).SortBinding is Binding)
                     {
@@ -195,10 +173,54 @@
                         header.Add(headerClicked.Column.Header as string);
                     }
 
+                    // multi binding columns may not have anything to sort by.
                     if (header.Count == 0)
                         return;
 
-                    Sort(listView, header, direction);
+                    // Get the previous direction a column was sorted by.
+                    var oldItem = _sortList.FirstOrDefault(i => i.Column != null && i.Column.Equals(headerClicked.Column));
+                    ListSortDirection direction;
+                    if (oldItem == null)
+                        direction = ListSortDirection.Ascending;
+                    else
+                        direction = oldItem.SortDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+
+                 
+                    for (int i = 0; i < _sortList.Count; i++)
+                    {
+                        if (_sortList[i].Column == null || headerClicked.Column.Equals(_sortList[i].Column))
+                        {
+                            // Remove arrow from previously sorted header 
+                            if (_sortList[i].Column != null)
+                                _sortList[i].Column.HeaderTemplate = null;
+                            _sortList.RemoveAt(i);
+                            i--;
+                        }
+                    }
+
+                    int countUnique = 1;
+                    GridViewColumn lastColumn = null;
+                    for (int i = _sortList.Count - 1; i >= 0; i--)
+                    {
+                        if (!_sortList[i].Column.Equals(lastColumn))
+                        {
+                            lastColumn = _sortList[i].Column;
+                            countUnique++;
+                        }
+
+                        // restrict to 1 sortable columns.
+                        if (countUnique > MaxSortableColumns)
+                        {
+                            // Remove arrow from previously sorted header 
+                            _sortList[i].Column.HeaderTemplate = null;
+                            _sortList.RemoveAt(i);
+                        }
+                    }
+
+                    foreach (var colPath in header)
+                        _sortList.Add(new SortColumn(colPath, direction, headerClicked.Column));
+
+                    Sort(listView, _sortList);
 
                     if (direction == ListSortDirection.Ascending)
                     {
@@ -210,21 +232,11 @@
                         if (ColumnHeaderArrowDownTemplate != null)
                             headerClicked.Column.HeaderTemplate = ColumnHeaderArrowDownTemplate;
                     }
-
-                    // Remove arrow from previously sorted header 
-                    if (_lastColumnClicked != null && _lastColumnClicked != headerClicked.Column)
-                    {
-                        _lastColumnClicked.HeaderTemplate = null;
-                    }
-
-                    _lastColumnClicked = headerClicked.Column;
-                    _lastDirection = direction;
-                    _lastSortList = header;
                 }
             }
         }
 
-        private static void Sort(ItemsControl lv, List<string> sortList, ListSortDirection direction)
+        private static void Sort(ItemsControl lv, List<SortColumn> sortList)
         {
             if (lv.ItemsSource != null)
             {
@@ -232,11 +244,9 @@
                 //ICollectionView dataView = lv.Items as ICollectionView;
 
                 dataView.SortDescriptions.Clear();
-                foreach (var sortBy in sortList)
-                {
-                    var sd = new SortDescription(sortBy, direction);
-                    dataView.SortDescriptions.Add(sd);
-                }
+                for (int i = sortList.Count - 1; i >= 0; i--)
+                    dataView.SortDescriptions.Add(new SortDescription(sortList[i].SortPath, sortList[i].SortDirection));
+
                 dataView.Refresh();
             }
         }
@@ -256,6 +266,20 @@
                     var args = e as MouseButtonEventArgs;
                     MouseDoubleClickItem(sender, args);
                 }
+            }
+        }
+
+        protected class SortColumn
+        {
+            public string SortPath { get; set; }
+            public ListSortDirection SortDirection { get; set; }
+            public GridViewColumn Column { get; set; }
+
+            public SortColumn(  string sortPath, ListSortDirection sortDirection, GridViewColumn column )
+            {
+                SortPath = sortPath;
+                SortDirection = sortDirection;
+                Column = column;
             }
         }
     }
