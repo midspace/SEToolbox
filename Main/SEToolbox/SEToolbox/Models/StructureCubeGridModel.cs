@@ -826,11 +826,11 @@
 
             foreach (MyObjectBuilder_CubeBlock cube in CubeGrid.CubeBlocks.Where<MyObjectBuilder_CubeBlock>(e => e is MyObjectBuilder_Cockpit))
             {
-                var hierarchyBase = cube.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase")?.Component as MyObjectBuilder_HierarchyComponentBase;
+                var hierarchyBase = cube.ComponentContainer?.Components?.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase")?.Component as MyObjectBuilder_HierarchyComponentBase;
                 if (hierarchyBase != null)
                 {
                     if (hierarchyBase.Children.Any(e => e is MyObjectBuilder_Character))
-                        list.Add((MyObjectBuilder_Cockpit)cube);
+                        list.Add((MyObjectBuilder_Cockpit) cube);
                 }
             }
 

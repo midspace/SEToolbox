@@ -55,7 +55,8 @@
         internal static void RenderElement(this HtmlTextWriter writer, HtmlTextWriterTag tag, string format, params object[] arg)
         {
             writer.RenderBeginTag(tag);
-            writer.Write(format, arg);
+            if (format != null)
+                writer.Write(format, arg);
             writer.RenderEndTag();
         }
 
