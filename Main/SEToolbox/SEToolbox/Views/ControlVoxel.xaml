@@ -7,10 +7,14 @@
              xmlns:converters="clr-namespace:SEToolbox.Converters"
              xmlns:props="clr-namespace:SEToolbox.Properties"
              xmlns:views="clr-namespace:SEToolbox.Views"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:I18NFormatterConverter x:Key="I18NFormatter"  />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:DDSConverter x:Key="DDSConverter"/>
         <Style TargetType="ListViewItem">
@@ -38,19 +42,19 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Grid.ColumnSpan="2">Asteroid</Label>
+            <Label Grid.ColumnSpan="2" Content="{lex:Loc CtlVoxelTitle}"/>
             <Menu Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" DockPanel.Dock="Top">
                 <Menu.ItemsPanel>
                     <ItemsPanelTemplate>
                         <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
-                <MenuItem Header="Ore/Material">
+                <MenuItem Header="{lex:Loc CtlVoxelMnuMaterial}">
                     <MenuItem.Resources>
                         <Image x:Shared="False" x:Key="MenuIcon" Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16,noalpha'}" SnapsToDevicePixels="True" />
                     </MenuItem.Resources>
                     <!--<MenuItem Header="Re-seed Ore" Command="{Binding ReseedCommand}" />-->
-                    <MenuItem Header="Replace All Material" ItemsSource="{Binding GameMaterialList}">
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuReplaceAllMaterial}" ItemsSource="{Binding GameMaterialList}">
                         <MenuItem.ItemContainerStyle>
                             <Style TargetType="MenuItem">
                                 <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
@@ -60,7 +64,7 @@
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
-                    <MenuItem Header="Replace surface Material" ItemsSource="{Binding GameMaterialList}">
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuReplaceSurfaceMaterial}" ItemsSource="{Binding GameMaterialList}">
                         <MenuItem.ItemContainerStyle>
                             <Style TargetType="MenuItem">
                                 <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
@@ -70,7 +74,7 @@
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
-                    <MenuItem Header="Replace Selected Material" Command="{Binding ReplaceSelectedMenuCommand}" ItemsSource="{Binding EditMaterialList}">
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuReplaceSelectedMaterial}" Command="{Binding ReplaceSelectedMenuCommand}" ItemsSource="{Binding EditMaterialList}">
                         <MenuItem.ItemContainerStyle>
                             <Style TargetType="MenuItem">
                                 <Setter Property="Header" Value="{StaticResource DisplayBlock}"/>
@@ -81,58 +85,58 @@
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Slice">
-                    <MenuItem Header="Slice quarter (to copy)" Command="{Binding SliceQuarterCommand}" ToolTip="Removes a quarter from the direction of the sun." />
-                    <MenuItem Header="Slice half (to copy)" Command="{Binding SliceHalfCommand}"  ToolTip="Removes a half from the direction of the sun."  />
+                <MenuItem Header="{lex:Loc CtlVoxelMnuSlice}">
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuSliceQuarter}" Command="{Binding SliceQuarterCommand}" ToolTip="{lex:Loc CtlVoxelMnuSliceQuarterTooltip}" />
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuSliceHalf}" Command="{Binding SliceHalfCommand}"  ToolTip="{lex:Loc CtlVoxelMnuSliceHalfTooltip}"  />
                 </MenuItem>
-                <MenuItem Header="Extract">
-                    <MenuItem Header="Station intersection loose" Command="{Binding ExtractStationIntersectLooseCommand}" ToolTip="Any asteroid cell that intersects a station cube gets removed. This will lead to small narrow gaps between the asteroid and station surfaces." />
-                    <!--<MenuItem Header="Station intersection tight" Command="{Binding ExtractStationIntersectTightCommand}" ToolTip="Any asteroid cell that is completely enclosed by any number of station cubes get removed. This results in the asteroid overlapping the faces of the station, leaving no gaps." />-->
+                <MenuItem Header="{lex:Loc CtlVoxelMnuExtract}">
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuExtractStationLoose}" Command="{Binding ExtractStationIntersectLooseCommand}" ToolTip="{lex:Loc CtlVoxelMnuExtractStationLooseTooltip}" />
+                    <!--<MenuItem Header="{lex:Loc CtlVoxelMnuExtractStationTight}" Command="{Binding ExtractStationIntersectTightCommand}" ToolTip="{lex:Loc CtlVoxelMnuExtractStationTightTooltip}" />-->
                 </MenuItem>
-                <MenuItem Header="Rotate" Style="{StaticResource ToolBarTopMenuitem}">
+                <MenuItem Header="{lex:Loc CtlVoxelMnuRotate}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=replace2}" />
                     </MenuItem.Icon>
-                    <MenuItem Header="Rotate asteroid backward-down around X axis (+90 Pitch)" Command="{Binding RotateAsteroidPitchPositiveCommand}"/>
-                    <MenuItem Header="Rotate asteroid forward-down around X axis (-90 Pitch)" Command="{Binding RotateAsteroidPitchNegativeCommand}"/>
-                    <MenuItem Header="Rotate asteroid anti-clockwise around Y axis (+90 Yaw)" Command="{Binding RotateAsteroidYawPositiveCommand}"/>
-                    <MenuItem Header="Rotate asteroid clockwise around Y axis (-90 Yaw)" Command="{Binding RotateAsteroidYawNegativeCommand}"/>
-                    <MenuItem Header="Rotate asteroid left-down around Z axis (+90 Roll)" Command="{Binding RotateAsteroidRollPositiveCommand}"/>
-                    <MenuItem Header="Rotate asteroid right-down around Z axis (-90 Roll)" Command="{Binding RotateAsteroidRollNegativeCommand}"/>
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuRotatePitchPositive}" Command="{Binding RotateAsteroidPitchPositiveCommand}"/>
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuRotatePitchNegative}" Command="{Binding RotateAsteroidPitchNegativeCommand}"/>
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuRotateYawPositive}" Command="{Binding RotateAsteroidYawPositiveCommand}"/>
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuRotateYawNegative}" Command="{Binding RotateAsteroidYawNegativeCommand}"/>
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuRotateRollPositive}" Command="{Binding RotateAsteroidRollPositiveCommand}"/>
+                    <MenuItem Header="{lex:Loc CtlVoxelMnuRotateRollNegative}" Command="{Binding RotateAsteroidRollNegativeCommand}"/>
                 </MenuItem>
-                <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Copy text detail to Clipboard" Command="{Binding CopyDetailCommand}">
+                <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="{lex:Loc CtlVoxelMnuCopyDetail}" Command="{Binding CopyDetailCommand}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </Menu>
-            <Label Grid.Row="2" Grid.Column="0" Content="Position:"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="{lex:Loc CtlVoxelPosition}"/>
             <views:ControlPosition Grid.Row="2" Grid.Column="1"/>
             <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
 
-            <TextBlock Grid.Row="4" Grid.Column="0" Margin="4 0 4 0" Text="Name:"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlVoxelName}"/>
             <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name}"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Bounding Size:"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlVoxelBoundingSize}"/>
             <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0} × {1} × {2} blocks">
+                    <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="CtlVoxelBoundingSizeValue">
                         <Binding Path="Size.Width" />
                         <Binding Path="Size.Height" />
                         <Binding Path="Size.Depth" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="Size:"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlVoxelSize}"/>
             <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0}m × {1}m × {2}m">
+                    <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="CtlVoxelSizeValue">
                         <Binding Path="ContentSize.Width" />
                         <Binding Path="ContentSize.Height" />
                         <Binding Path="ContentSize.Depth" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="Center:"/>
+            <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlVoxelCenter}"/>
             <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0:#,##0.0000}, {1:#,##0.0000}, {2:#,##0.0000}">
@@ -142,26 +146,35 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="Volume:"/>
-            <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Volume, StringFormat='{}{0:#,##0.00}m³'}" />
-            <TextBlock Grid.Row="9" Grid.Column="0" Margin="4 0 4 0" Text="VoxCells:"/>
+            <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlVoxelVolume}"/>
+            <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding Volume, StringFormat='#,###0.00', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIVolumeCubicMetre}" />
+            </TextBlock>
+            <TextBlock Grid.Row="9" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlVoxelVoxCells}"/>
             <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding VoxCells, StringFormat='{}{0:#,##0}'}" />
-            <TextBlock Grid.Row="10" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
-            <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
+            <TextBlock Grid.Row="10" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlVoxelDistance}"/>
+            <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding PlayerDistance, StringFormat='#,###0.0', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+            </TextBlock>
 
             <controls:SortableListView Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding MaterialAssets, Mode=OneWay}" SelectedValue="{Binding SelectedMaterialAsset}"
                 ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Material" DisplayMemberBinding="{Binding MaterialName}" Width="95"/>
-                        <controls:SortableGridViewColumn Header="Volume" Width="100" SortBinding="{Binding Volume}">
+                        <GridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlVoxelColMaterial}" DisplayMemberBinding="{Binding MaterialName}" Width="95"/>
+                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlVoxelColVolume}" Width="100" SortBinding="{Binding Volume}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Volume, StringFormat='{}{0:#,##0.00} m³'}" />
+                                    <TextBlock TextAlignment="Right">
+                                        <Run Text="{Binding Volume, StringFormat='#,###0.00', Mode=OneWay}" />
+                                        <Run Text="{lex:Loc GlobalSIVolumeCubicMetre}" />
+                                    </TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </controls:SortableGridViewColumn>
-                        <controls:SortableGridViewColumn Header="Percent" SortBinding="{Binding Percent}">
+                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlVoxelColPercent}" SortBinding="{Binding Percent}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Percent, StringFormat='{}{0:P2}'}" />
@@ -172,7 +185,7 @@
                 </ListView.View>
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Replace Material" Command="{Binding ReplaceSelectedMenuCommand}" ItemsSource="{Binding EditMaterialList}">
+                        <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlVoxelMnuReplaceSelectedMaterial}" Command="{Binding ReplaceSelectedMenuCommand}" ItemsSource="{Binding EditMaterialList}">
                             <MenuItem.Resources>
                                 <Image x:Shared="False" x:Key="MenuIcon" Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16,noalpha'}" SnapsToDevicePixels="True" />
                             </MenuItem.Resources>

@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -19,7 +22,10 @@
         </Grid.RowDefinitions>
         <Label Grid.ColumnSpan="2">
             <Label.Content>
-                <TextBlock Text="{Binding Path=Selections.Count, StringFormat='{}Multiple Items Selected: {0:#,###0}'}" />
+                <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">
+                    <Run Text="{lex:Loc CtlMultiItemSelectInfo}" />
+                    <Run Text="{Binding Selections.Count, StringFormat='#,###0', Mode=OneWay}" />
+                </TextBlock>
             </Label.Content>
         </Label>
     </Grid>

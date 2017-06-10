@@ -4,8 +4,11 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Image" Height="415" Width="550" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="{lex:Loc WnImportImageTItle}" Height="415" Width="550" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -41,15 +44,15 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
-                <Label Content="Image:" />
+
+                <Label Content="{lex:Loc WnImportImageLabelImage}" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <TextBox Width="180" Text="{Binding Filename, Mode=TwoWay}" VerticalAlignment="Center" Name="uxInitialElement"/>
                     <Button ToolTip="Browse for Image" Command="{Binding BrowseImageCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>
-                <Label Content="Type:" Grid.Row="1" />
+                <Label Content="{lex:Loc WnImportImageLabelType}" Grid.Row="1" />
                 <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ImportImageTypeEnum}}" SelectedValue="{Binding ClassType}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -57,7 +60,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Label Content="Armor:" Grid.Row="2" />
+                <Label Content="{lex:Loc WnImportImageLabelArmor}" Grid.Row="2" />
                 <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource ArmorTypeEnum}}" SelectedValue="{Binding ArmorType}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -66,7 +69,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <GroupBox Header="Original Size" MinWidth="120">
+                    <GroupBox Header="{lex:Loc WnImportImageGrpOriginalSize}" MinWidth="120">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -76,14 +79,14 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="Width:" Margin="0,0,0,0" />
+                            <Label Content="{lex:Loc WnImportImageLabelOriginalWidth}" Margin="0,0,0,0" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=OriginalImageSize.Width}" />
-                            <Label Content="Height:" Margin="0,0,0,0" Grid.Row="1" />
+                            <Label Content="{lex:Loc WnImportImageLabelOriginalHeight}" Margin="0,0,0,0" Grid.Row="1" />
                             <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{Binding Path=OriginalImageSize.Height}" />
                         </Grid>
                     </GroupBox>
-                    <Button Content=">" VerticalAlignment="Center" ToolTip="Set size to back to Original size" Command="{Binding SetToOriginalSizeCommand}" />
-                    <GroupBox Header="New Size" MinWidth="120" Margin="8,0,0,0">
+                    <Button Content="{lex:Loc WnImportImageBtnSetOriginalSize}" VerticalAlignment="Center" ToolTip="{lex:Loc WnImportImageBtnSetOriginalSizeTooltip}" Command="{Binding SetToOriginalSizeCommand}" />
+                    <GroupBox Header="{lex:Loc WnImportImageGrpNewSize}" MinWidth="120" Margin="8,0,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -93,15 +96,15 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="Width:" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                            <Label Content="{lex:Loc WnImportImageLabelNewWidth}" Margin="0,0,0,0" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewImageSize.Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Label Content="Height:" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Center" />
+                            <Label Content="{lex:Loc WnImportImageLabelNewHeight}" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Grid.Row="1" MinWidth="60" VerticalAlignment="Center" Text="{Binding Path=NewImageSize.Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>
                 <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <GroupBox Header="Transparency">
+                    <GroupBox Header="{lex:Loc WnImportImageGrpTransparency}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -111,8 +114,8 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <RadioButton Content="Alpha Level" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsAlphaLevel}"/>
-                            <TextBox Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" ToolTip="An alpha mask above this number will generate a block.">
+                            <RadioButton Content="{lex:Loc WnImportImageRdoAlphaLevel}" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsAlphaLevel}"/>
+                            <TextBox Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" ToolTip="{lex:Loc WnImportImageTxtAlphaLevelTooltip}">
                                 <TextBox.Text>
                                     <Binding Path="AlphaLevel" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                                         <Binding.ValidationRules>
@@ -121,8 +124,8 @@
                                     </Binding>
                                 </TextBox.Text>
                             </TextBox>
-                            <RadioButton Grid.Row="1" Grid.Column="0" Content="Key Color" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsKeyColor}"/>
-                            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Padding="0" Command="{Binding ChangeKeyColorCommand}" ToolTip="Change Key color">
+                            <RadioButton Grid.Row="1" Grid.Column="0" Content="{lex:Loc WnImportImageRdoKeyColor}" VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsKeyColor}"/>
+                            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Padding="0" Command="{Binding ChangeKeyColorCommand}" ToolTip="{lex:Loc WnImportImageBtnKeyColorTooltip}">
                                 <Border Width="16" Height="16" BorderBrush="Black" BorderThickness="1">
                                     <Border.Background>
                                         <SolidColorBrush Color="{Binding KeyColor, Mode=OneWay}"/>
@@ -133,7 +136,7 @@
                     </GroupBox>
                 </StackPanel>
                 <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <GroupBox Header="Position" MinWidth="120">
+                    <GroupBox Header="{lex:Loc WnImportImageGrpPosition}" MinWidth="120">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -144,15 +147,15 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="X:" Margin="0,0,4,0" VerticalAlignment="Center" />
+                            <Label Content="{lex:Loc WnImportImageLabelPositionX}" Margin="0,0,4,0" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
+                            <Label Content="{lex:Loc WnImportImageLabelPositionY}" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Grid.Row="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Label Content="Z:" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
+                            <Label Content="{lex:Loc WnImportImageLabelPositionZ}" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" Grid.Row="2" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Orientation" MinWidth="120" Margin="8,0,0,0">
+                    <GroupBox Header="{lex:Loc WnImportImageGrpOrientation}" MinWidth="120" Margin="8,0,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -164,7 +167,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <RadioButton IsChecked="True" Content="Facing Player" />
+                            <RadioButton IsChecked="True" Content="{lex:Loc WnImportImageRdoFacingPlayer}" />
                             <!--<Label Content="X:" Margin="0,0,4,0" />
                             <TextBox Grid.Column="1" MinWidth="80" Text="1234" />
                             <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" />
@@ -178,17 +181,17 @@
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8" HorizontalAlignment="Right">
                     <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Image Width="250" Height="150" Stretch="None" ToolTip="Original Image" Source="{Binding Path=Filename, Converter={StaticResource NullImageConverter}}" />
+                        <Image Width="250" Height="150" Stretch="None" ToolTip="{lex:Loc WnImportImageImgOriginalTooltip}" Source="{Binding Path=Filename, Converter={StaticResource NullImageConverter}}" />
                     </Border>
                     <TextBlock Text="\/" VerticalAlignment="Center" HorizontalAlignment="Center" />
                     <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Image Width="250" Height="150" Stretch="None" ToolTip="Preview" Source="{Binding NewImage}" />
+                        <Image Width="250" Height="150" Stretch="None" ToolTip="{lex:Loc WnImportImageImgPreviewTooltip}" Source="{Binding NewImage}" />
                     </Border>
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right">
-                <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
-                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                <Button Width="90" Command="{Binding CreateCommand}" Content="{lex:Loc WnImportImageBtnCreate}" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnImportImageBtnCancel}" IsCancel="True"/>
             </StackPanel>
         </Grid>
         <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />

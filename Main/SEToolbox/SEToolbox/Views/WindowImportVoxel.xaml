@@ -4,8 +4,11 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Asteroid" Height="220" Width="445" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="{lex:Loc WnImportAsteroidTitle}" Height="220" Width="445" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -32,7 +35,7 @@
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <RadioButton Margin="0,0,4,0" Content="Stock" VerticalAlignment="Center" Name="uxInitialElement" IsChecked="{Binding IsStockVoxel}" />
+                <RadioButton Margin="0,0,4,0" Content="{lex:Loc WnImportAsteroidRdoStock}" VerticalAlignment="Center" Name="uxInitialElement" IsChecked="{Binding IsStockVoxel}" />
                 <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding VoxelFileList}" SelectedValue="{Binding StockVoxel}" IsTextSearchEnabled="True">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -50,18 +53,18 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <RadioButton Grid.Row="1" Grid.Column="0" Content="File" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
+                <RadioButton Grid.Row="1" Grid.Column="0" Content="{lex:Loc WnImportAsteroidRdoFile}" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
-                    <TextBox Width="178" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="Must be valid Space Engineers Asteroid file."/>
+                    <TextBox Width="178" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="{lex:Loc WnImportAsteroidTxtFile}"/>
                     <Button ToolTip="Browse for Asteroid file" Command="{Binding BrowseVoxelCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>
 
-                <RadioButton Grid.Row="2" Grid.Column="0" Content="Sphere" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsSphere}"/>
+                <RadioButton Grid.Row="2" Grid.Column="0" Content="{lex:Loc WnImportAsteroidRdoSphere}" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsSphere}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" >
                     <Grid Width="100">
-                        <TextBox ToolTip="Radius (M) (1 to 3000)." VerticalAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBox ToolTip="{lex:Loc WnImportAsteroidTxtRadiusTooltip}" VerticalAlignment="Center" VerticalContentAlignment="Center">
                             <TextBox.Text>
                                 <Binding Path="SphereRadius" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -70,10 +73,10 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Text="Radius" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                        <TextBlock Text="{lex:Loc WnImportAsteroidTxtRadius}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
                     </Grid>
                     <Grid Width="100">
-                        <TextBox ToolTip="Shell thickness. 0 = No shell" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBox ToolTip="{lex:Loc WnImportAsteroidTxtShellTooltip}" VerticalAlignment="Center" VerticalContentAlignment="Center">
                             <TextBox.Text>
                                 <Binding Path="SphereShellRadius" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -82,7 +85,7 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Text="Shell" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                        <TextBlock Text="{lex:Loc WnImportAsteroidTxtShell}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
                     </Grid>
                 </StackPanel>
 
@@ -94,8 +97,8 @@
             </Grid>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8">
-            <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
-            <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+            <Button Width="90" Command="{Binding CreateCommand}" Content="{lex:Loc WnImportAsteroidBtnCreate}" IsDefault="True"/>
+            <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnImportAsteroidBtnCancel}" IsCancel="True"/>
         </StackPanel>
         <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>

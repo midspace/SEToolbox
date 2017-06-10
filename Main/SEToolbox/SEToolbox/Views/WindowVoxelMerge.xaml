@@ -5,8 +5,11 @@
         xmlns:support="clr-namespace:SEToolbox.Support"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Asteroid Merge" Height="400" Width="460" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="{lex:Loc WnVoxelMergeTitle}" Height="400" Width="460" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=UxStartBox}">
@@ -38,7 +41,7 @@
                         <RowDefinition Height="4"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Column="0" Text="Action:" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <TextBlock Grid.Column="0" Text="{lex:Loc WnVoxelMergeLabelAction}" VerticalAlignment="Center" Margin="0,0,4,0"/>
                     <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource VoxelMergeTypeEnum}}" SelectedValue="{Binding VoxelMergeType}" Name="UxStartBox">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -46,9 +49,9 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="New Filename:" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc WnVoxelMergeLabelFilenameOutput}" VerticalAlignment="Center" Margin="0,0,4,0"/>
                     <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Text="{Binding MergeFileName}"/>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Content="Remove original asteroids" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding RemoveOriginalAsteroids}" />
+                    <CheckBox Grid.Row="4" Grid.Column="1" Content="{lex:Loc WnVoxelMergeChkRemoveOriginals}" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding RemoveOriginalAsteroids}" />
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
@@ -233,12 +236,12 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <TextBlock Text="The selected Asteroids do not overlap." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="{lex:Loc WnVoxelMergeLabelWarningNoOverlap}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
             <Grid Grid.Row="2" Margin="0,8,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Button Width="90" Command="{Binding ApplyCommand}" Content="Apply" IsDefault="True" Margin="0,0,8,0" />
-                    <Button Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                    <Button Width="90" Command="{Binding ApplyCommand}" Content="{lex:Loc WnVoxelMergeOkay}" IsDefault="True" Margin="0,0,8,0" />
+                    <Button Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnVoxelMergeCancel}" IsCancel="True"/>
                 </StackPanel>
             </Grid>
         </Grid>

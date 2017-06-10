@@ -284,7 +284,7 @@ Speed:	{4:#,##0.000} m/s
 Distance:	{5:#,##0.0} m
 Scale:	{6} × {7} × {8} blocks
 Size:	{9} m × {10} m × {11} m
-Mass:	{12:#,##0.00} Kg
+Mass:	{12:#,##0.00} kg
 Blocks:	{13:#,##0}
 Position:	{14}, {15}, {16}
 Total time to produce:	{17:dd} days, {17:hh} hours, {17:mm\:ss\.ff}
@@ -318,7 +318,7 @@ Ore	Amount	Mass	Volume
     <value>Type:		{0}
 Distance:		{1:#,##0.0} m
 Volume:		{2:#,##0.000} L
-Mass:		{3:#,##0.00} Kg
+Mass:		{3:#,##0.00} kg
 Units:		{4:#,##0.####}</value>
   </data>
   <data name="copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -722,7 +722,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Mass</value>
   </data>
   <data name="WnExplorerColMassTooltip" xml:space="preserve">
-    <value>Mass (Kg)</value>
+    <value>Mass (kg)</value>
   </data>
   <data name="WnExplorerColName" xml:space="preserve">
     <value>Name</value>
@@ -1421,7 +1421,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Size (W×H×D)</value>
   </data>
   <data name="WnComponentsColCubeMass" xml:space="preserve">
-    <value>Mass (Kg)</value>
+    <value>Mass (kg)</value>
   </data>
   <data name="WnComponentsColCubeName" xml:space="preserve">
     <value>Name</value>
@@ -1546,5 +1546,615 @@ Planet Generator:	{17}</value>
   </data>
   <data name="WnChangeOwnerTitle" xml:space="preserve">
     <value>Change Owner</value>
+  </data>
+  <data name="CtlBaseStateTip" xml:space="preserve">
+    <value>The Space Engineers save file content has been changed, and you should reload from here to get a fresh copy.</value>
+  </data>
+  <data name="CtlBaseStateTxt" xml:space="preserve">
+    <value>Save content changed!</value>
+  </data>
+  <data name="CtlCharacterBattery" xml:space="preserve">
+    <value>Battery:</value>
+  </data>
+  <data name="CtlCharacterBtnSpeed" xml:space="preserve">
+    <value>Speed:</value>
+  </data>
+  <data name="CtlCharacterCharTab" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="CtlCharacterDampeners" xml:space="preserve">
+    <value>Dampeners:</value>
+  </data>
+  <data name="CtlCharacterDistance" xml:space="preserve">
+    <value>Distance:</value>
+  </data>
+  <data name="CtlCharacterHealth" xml:space="preserve">
+    <value>Health:</value>
+  </data>
+  <data name="CtlCharacterInventoryTab" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="CtlCharacterJetPack" xml:space="preserve">
+    <value>Jet Pack:</value>
+  </data>
+  <data name="CtlCharacterMnuResetSpeed" xml:space="preserve">
+    <value>Reset Speed</value>
+  </data>
+  <data name="CtlCharacterMnuReverseSpeed" xml:space="preserve">
+    <value>Reverse Speed</value>
+  </data>
+  <data name="CtlCharacterMnuSpeed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="CtlCharacterOxygen" xml:space="preserve">
+    <value>Oxygen:</value>
+  </data>
+  <data name="CtlCharacterPilot" xml:space="preserve">
+    <value>Pilot:</value>
+  </data>
+  <data name="CtlCharacterPlayer" xml:space="preserve">
+    <value>Player:</value>
+  </data>
+  <data name="CtlCharacterPosition" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CtlCharacterSuitColor" xml:space="preserve">
+    <value>Suit Color:</value>
+  </data>
+  <data name="CtlCharacterSuitLight" xml:space="preserve">
+    <value>Light:</value>
+  </data>
+  <data name="CtlFloatingObjectPosition" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CtlFloatingObjectTitle" xml:space="preserve">
+    <value>Floating Object</value>
+  </data>
+  <data name="CtlInventoryBagPosition" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CtlInventoryBagTitle" xml:space="preserve">
+    <value>InventoryBag</value>
+  </data>
+  <data name="CtlInventoryBtnAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="CtlInventoryBtnDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="CtlInventoryColAmount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="CtlInventoryColIcon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="CtlInventoryColMass" xml:space="preserve">
+    <value>Mass (kg)</value>
+  </data>
+  <data name="CtlInventoryColName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CtlInventoryColVolume" xml:space="preserve">
+    <value>Volume (L)</value>
+  </data>
+  <data name="CtlInventoryVolumeTooltip" xml:space="preserve">
+    <value>Inventory Volume</value>
+  </data>
+  <data name="CtlMeteorMnuMaxAtPlayer" xml:space="preserve">
+    <value>Max Speed At Player</value>
+  </data>
+  <data name="CtlMeteorMnuMaxAtPlayerTooltip" xml:space="preserve">
+    <value>Sets the object velocity directly at the player at maximum speed.</value>
+  </data>
+  <data name="CtlMeteorMnuResetSpeed" xml:space="preserve">
+    <value>Reset Speed</value>
+  </data>
+  <data name="CtlMeteorMnuResetSpeedTooltip" xml:space="preserve">
+    <value>Set Linear and Rotation Velocity to zero (0).</value>
+  </data>
+  <data name="CtlMeteorMnuReverseSpeed" xml:space="preserve">
+    <value>Reverse Speed</value>
+  </data>
+  <data name="CtlMeteorMnuReverseSpeedTooltip" xml:space="preserve">
+    <value>Reverse Linear and Rotation Velocity, sending objects back in the opposite direction and spin.</value>
+  </data>
+  <data name="CtlMeteorMnuSpeed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="CtlMeteorTitle" xml:space="preserve">
+    <value>Meteor</value>
+  </data>
+  <data name="CtlMeteorDistance" xml:space="preserve">
+    <value>Distance:</value>
+  </data>
+  <data name="CtlMeteorIntegrity" xml:space="preserve">
+    <value>Integrity:</value>
+  </data>
+  <data name="CtlMeteorMass" xml:space="preserve">
+    <value>Mass:</value>
+  </data>
+  <data name="CtlMeteorPosition" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CtlMeteorType" xml:space="preserve">
+    <value>Type:</value>
+  </data>
+  <data name="CtlMeteorVolume" xml:space="preserve">
+    <value>Volume:</value>
+  </data>
+  <data name="CtlMultiItemSelectInfo" xml:space="preserve">
+    <value>Multiple Items Selected:</value>
+  </data>
+  <data name="CtlPlanetAtmosphereRadius" xml:space="preserve">
+    <value>Atmosphere Radius:</value>
+  </data>
+  <data name="CtlPlanetCenter" xml:space="preserve">
+    <value>Center:</value>
+  </data>
+  <data name="CtlPlanetDistance" xml:space="preserve">
+    <value>Distance:</value>
+  </data>
+  <data name="CtlPlanetGravityFalloff" xml:space="preserve">
+    <value>Gravity Falloff:</value>
+  </data>
+  <data name="CtlPlanetHasAtmosphere" xml:space="preserve">
+    <value>Has Atmosphere:</value>
+  </data>
+  <data name="CtlPlanetMaximumHillRadius" xml:space="preserve">
+    <value>Maximum Hill Radius:</value>
+  </data>
+  <data name="CtlPlanetMinimumSurfaceRadius" xml:space="preserve">
+    <value>Minimum Surface Radius:</value>
+  </data>
+  <data name="CtlPlanetMnuCopyDetail" xml:space="preserve">
+    <value>Copy text detail to Clipboard</value>
+  </data>
+  <data name="CtlPlanetName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="CtlPlanetPlanetGenerator" xml:space="preserve">
+    <value>Planet Generator:</value>
+  </data>
+  <data name="CtlPlanetPosition" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CtlPlanetRadius" xml:space="preserve">
+    <value>Radius:</value>
+  </data>
+  <data name="CtlPlanetShowGps" xml:space="preserve">
+    <value>Show GPS:</value>
+  </data>
+  <data name="CtlPlanetSpawnsFlora" xml:space="preserve">
+    <value>Spawns Flora:</value>
+  </data>
+  <data name="CtlPlanetSurfaceGravity" xml:space="preserve">
+    <value>Surface Gravity:</value>
+  </data>
+  <data name="CtlPlanetTitle" xml:space="preserve">
+    <value>Planet</value>
+  </data>
+  <data name="CtlPositionXLabel" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="CtlPositionXTooltip" xml:space="preserve">
+    <value>Position coordinate X</value>
+  </data>
+  <data name="CtlPositionYLabel" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="CtlPositionYTooltip" xml:space="preserve">
+    <value>Position coordinate Y</value>
+  </data>
+  <data name="CtlPositionZLabel" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="CtlPositionZTooltip" xml:space="preserve">
+    <value>Position coordinate Z</value>
+  </data>
+  <data name="CtlUnknownPosition" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CtlUnknownTitle" xml:space="preserve">
+    <value>Unknown -</value>
+  </data>
+  <data name="CtlVoxelBoundingSize" xml:space="preserve">
+    <value>Bounding Size:</value>
+  </data>
+  <data name="CtlVoxelBoundingSizeValue" xml:space="preserve">
+    <value>{0} × {1} × {2} blocks</value>
+  </data>
+  <data name="CtlVoxelCenter" xml:space="preserve">
+    <value>Center:</value>
+  </data>
+  <data name="CtlVoxelColMaterial" xml:space="preserve">
+    <value>Material</value>
+  </data>
+  <data name="CtlVoxelColPercent" xml:space="preserve">
+    <value>Percent</value>
+  </data>
+  <data name="CtlVoxelColVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="CtlVoxelDistance" xml:space="preserve">
+    <value>Distance:</value>
+  </data>
+  <data name="CtlVoxelMnuCopyDetail" xml:space="preserve">
+    <value>Copy text detail to Clipboard</value>
+  </data>
+  <data name="CtlVoxelMnuExtract" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="CtlVoxelMnuExtractStationLoose" xml:space="preserve">
+    <value>Station intersection loose</value>
+  </data>
+  <data name="CtlVoxelMnuExtractStationLooseTooltip" xml:space="preserve">
+    <value>Any asteroid cell that intersects a station cube gets removed. This will lead to small narrow gaps between the asteroid and station surfaces.</value>
+  </data>
+  <data name="CtlVoxelMnuExtractStationTight" xml:space="preserve">
+    <value>Station intersection tight</value>
+  </data>
+  <data name="CtlVoxelMnuExtractStationTightTooltip" xml:space="preserve">
+    <value>Any asteroid cell that is completely enclosed by any number of station cubes get removed. This results in the asteroid overlapping the faces of the station, leaving no gaps.</value>
+  </data>
+  <data name="CtlVoxelMnuMaterial" xml:space="preserve">
+    <value>Ore/Material</value>
+  </data>
+  <data name="CtlVoxelMnuReplaceAllMaterial" xml:space="preserve">
+    <value>Replace all Material</value>
+  </data>
+  <data name="CtlVoxelMnuReplaceSelectedMaterial" xml:space="preserve">
+    <value>Replace selected Material</value>
+  </data>
+  <data name="CtlVoxelMnuReplaceSurfaceMaterial" xml:space="preserve">
+    <value>Replace surface Material</value>
+  </data>
+  <data name="CtlVoxelMnuRotate" xml:space="preserve">
+    <value>Rotate</value>
+  </data>
+  <data name="CtlVoxelMnuRotatePitchNegative" xml:space="preserve">
+    <value>Rotate asteroid forward-down around X axis (-90 Pitch)</value>
+  </data>
+  <data name="CtlVoxelMnuRotatePitchPositive" xml:space="preserve">
+    <value>Rotate asteroid backward-down around X axis (+90 Pitch)</value>
+  </data>
+  <data name="CtlVoxelMnuRotateRollNegative" xml:space="preserve">
+    <value>Rotate asteroid right-down around Z axis (-90 Roll)</value>
+  </data>
+  <data name="CtlVoxelMnuRotateRollPositive" xml:space="preserve">
+    <value>Rotate asteroid left-down around Z axis (+90 Roll)</value>
+  </data>
+  <data name="CtlVoxelMnuRotateYawNegative" xml:space="preserve">
+    <value>Rotate asteroid clockwise around Y axis (-90 Yaw)</value>
+  </data>
+  <data name="CtlVoxelMnuRotateYawPositive" xml:space="preserve">
+    <value>Rotate asteroid anti-clockwise around Y axis (+90 Yaw)</value>
+  </data>
+  <data name="CtlVoxelMnuSlice" xml:space="preserve">
+    <value>Slice</value>
+  </data>
+  <data name="CtlVoxelMnuSliceHalf" xml:space="preserve">
+    <value>Slice half (to copy)</value>
+  </data>
+  <data name="CtlVoxelMnuSliceHalfTooltip" xml:space="preserve">
+    <value>Removes a half from the direction of the sun.</value>
+  </data>
+  <data name="CtlVoxelMnuSliceQuarter" xml:space="preserve">
+    <value>Slice quarter (to copy)</value>
+  </data>
+  <data name="CtlVoxelMnuSliceQuarterTooltip" xml:space="preserve">
+    <value>Removes a quarter from the direction of the sun.</value>
+  </data>
+  <data name="CtlVoxelName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="CtlVoxelPosition" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CtlVoxelSize" xml:space="preserve">
+    <value>Size:</value>
+  </data>
+  <data name="CtlVoxelSizeValue" xml:space="preserve">
+    <value>{0}m × {1}m × {2}m</value>
+  </data>
+  <data name="CtlVoxelTitle" xml:space="preserve">
+    <value>Asteroid</value>
+  </data>
+  <data name="CtlVoxelVolume" xml:space="preserve">
+    <value>Volume:</value>
+  </data>
+  <data name="CtlVoxelVoxCells" xml:space="preserve">
+    <value>VoxCells:</value>
+  </data>
+  <data name="GlobalSIVolumeCubicMetre" xml:space="preserve">
+    <value>m³</value>
+  </data>
+  <data name="WnChangeOwnerBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnChangeOwnerBtnChange" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="WnChangeOwnerLabelPlayer" xml:space="preserve">
+    <value>Player:</value>
+  </data>
+  <data name="WnFrameworkBuildBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnFrameworkBuildBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnFrameworkBuildLabelPercentComplete" xml:space="preserve">
+    <value>Build Percent:</value>
+  </data>
+  <data name="WnFrameworkBuildTitle" xml:space="preserve">
+    <value>Framework Build Percent</value>
+  </data>
+  <data name="WnGroupMoveBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnGroupMoveBtnOkay" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="WnGroupMoveColDistance" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="WnGroupMoveColNewDistance" xml:space="preserve">
+    <value>New Distance</value>
+  </data>
+  <data name="WnGroupMoveColNewPosition" xml:space="preserve">
+    <value>New Position</value>
+  </data>
+  <data name="WnGroupMoveColPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="WnGroupMoveColType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="WnGroupMoveRdoOffset" xml:space="preserve">
+    <value>Offset Position:</value>
+  </data>
+  <data name="WnGroupMoveRdoSingle" xml:space="preserve">
+    <value>Single Position:</value>
+  </data>
+  <data name="WnGroupMoveTitle" xml:space="preserve">
+    <value>Group Move</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetX" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetXTooltip" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetY" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetYTooltip" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetZ" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetZTooltip" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleX" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleXTooltip" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleY" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleYTooltip" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleZ" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleZTooltip" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnImportAsteroidBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnImportAsteroidBtnCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="WnImportAsteroidRdoFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="WnImportAsteroidRdoSphere" xml:space="preserve">
+    <value>Sphere</value>
+  </data>
+  <data name="WnImportAsteroidRdoStock" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+  <data name="WnImportAsteroidTitle" xml:space="preserve">
+    <value>Import Asteroid</value>
+  </data>
+  <data name="WnImportAsteroidTxtFile" xml:space="preserve">
+    <value>Must be valid Space Engineers Asteroid file.</value>
+  </data>
+  <data name="WnImportAsteroidTxtRadius" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="WnImportAsteroidTxtRadiusTooltip" xml:space="preserve">
+    <value>Radius (m) (1 to 3000).</value>
+  </data>
+  <data name="WnImportAsteroidTxtShell" xml:space="preserve">
+    <value>Shell</value>
+  </data>
+  <data name="WnImportAsteroidTxtShellTooltip" xml:space="preserve">
+    <value>Shell thickness. 0 = No shell</value>
+  </data>
+  <data name="WnImportImageBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnImportImageBtnCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="WnImportImageBtnKeyColorTooltip" xml:space="preserve">
+    <value>Change Key color</value>
+  </data>
+  <data name="WnImportImageBtnSetOriginalSize" xml:space="preserve">
+    <value>&gt;</value>
+  </data>
+  <data name="WnImportImageBtnSetOriginalSizeTooltip" xml:space="preserve">
+    <value>Set size to back to Original size</value>
+  </data>
+  <data name="WnImportImageGrpNewSize" xml:space="preserve">
+    <value>New Size</value>
+  </data>
+  <data name="WnImportImageGrpOrientation" xml:space="preserve">
+    <value>Orientation</value>
+  </data>
+  <data name="WnImportImageGrpOriginalSize" xml:space="preserve">
+    <value>Original Size</value>
+  </data>
+  <data name="WnImportImageGrpPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="WnImportImageGrpTransparency" xml:space="preserve">
+    <value>Transparency</value>
+  </data>
+  <data name="WnImportImageImgOriginalTooltip" xml:space="preserve">
+    <value>Original Image</value>
+  </data>
+  <data name="WnImportImageImgPreviewTooltip" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="WnImportImageLabelArmor" xml:space="preserve">
+    <value>Armor:</value>
+  </data>
+  <data name="WnImportImageLabelImage" xml:space="preserve">
+    <value>Image:</value>
+    <comment>Specify file for imaage</comment>
+  </data>
+  <data name="WnImportImageLabelNewHeight" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="WnImportImageLabelNewWidth" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="WnImportImageLabelOriginalHeight" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="WnImportImageLabelOriginalWidth" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="WnImportImageLabelPositionX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="WnImportImageLabelPositionY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="WnImportImageLabelPositionZ" xml:space="preserve">
+    <value>Z:</value>
+  </data>
+  <data name="WnImportImageLabelType" xml:space="preserve">
+    <value>Type:</value>
+  </data>
+  <data name="WnImportImageRdoAlphaLevel" xml:space="preserve">
+    <value>Alpha Level</value>
+  </data>
+  <data name="WnImportImageRdoFacingPlayer" xml:space="preserve">
+    <value>Facing Player</value>
+  </data>
+  <data name="WnImportImageRdoKeyColor" xml:space="preserve">
+    <value>Key Color</value>
+  </data>
+  <data name="WnImportImageTItle" xml:space="preserve">
+    <value>Import Image</value>
+  </data>
+  <data name="WnImportImageTxtAlphaLevelTooltip" xml:space="preserve">
+    <value>An alpha mask above this number will generate a block.</value>
+  </data>
+  <data name="WnResourceReportBtnClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WnResourceReportBtnCopy" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="WnResourceReportBtnExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="WnResourceReportBtnGenerate" xml:space="preserve">
+    <value>Generate Report</value>
+  </data>
+  <data name="WnResourceReportBtnHtmlFile" xml:space="preserve">
+    <value>.html file</value>
+  </data>
+  <data name="WnResourceReportBtnTextFile" xml:space="preserve">
+    <value>.txt file</value>
+  </data>
+  <data name="WnResourceReportBtnXmlFile" xml:space="preserve">
+    <value>.xml file</value>
+  </data>
+  <data name="WnResourceReportTitle" xml:space="preserve">
+    <value>Resource Report</value>
+  </data>
+  <data name="WnSelectCubeBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnSelectCubeBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnSelectCubeLabelCube" xml:space="preserve">
+    <value>Cube:</value>
+  </data>
+  <data name="WnSelectCubeTitle" xml:space="preserve">
+    <value>Select Cube</value>
+  </data>
+  <data name="WnSettingsCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnSettingsChkCheckForUpdates" xml:space="preserve">
+    <value>Always</value>
+  </data>
+  <data name="WnSettingsChkCheckForUpdatesTooltip" xml:space="preserve">
+    <value>Check for new updates on startup.</value>
+  </data>
+  <data name="WnSettingsLabelApplicationPath" xml:space="preserve">
+    <value>Application Path:</value>
+  </data>
+  <data name="WnSettingsLabelCheckForUpdates" xml:space="preserve">
+    <value>Check for updates:</value>
+  </data>
+  <data name="WnSettingsLabelCustomVoxelPath" xml:space="preserve">
+    <value>Custom Voxel Path:</value>
+  </data>
+  <data name="WnSettingsOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnSettingsTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="WnSettingsTxtCustomVoxelPath" xml:space="preserve">
+    <value>Specify an additional location for your personal asteroids.</value>
+  </data>
+  <data name="WnSettingsTxtlApplicationPathTooltip" xml:space="preserve">
+    <value>Space Engineers path.</value>
+  </data>
+  <data name="WnVoxelMergeCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnVoxelMergeChkRemoveOriginals" xml:space="preserve">
+    <value>Remove original asteroids</value>
+  </data>
+  <data name="WnVoxelMergeLabelAction" xml:space="preserve">
+    <value>Action:</value>
+  </data>
+  <data name="WnVoxelMergeLabelFilenameOutput" xml:space="preserve">
+    <value>New Filename:</value>
+  </data>
+  <data name="WnVoxelMergeLabelWarningNoOverlap" xml:space="preserve">
+    <value>The selected Asteroids do not overlap.</value>
+  </data>
+  <data name="WnVoxelMergeOkay" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="WnVoxelMergeTitle" xml:space="preserve">
+    <value>Asteroid Merge</value>
   </data>
 </root>

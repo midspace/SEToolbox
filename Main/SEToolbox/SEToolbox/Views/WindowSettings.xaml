@@ -4,8 +4,11 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Settings" Height="180" Width="400" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="{lex:Loc WnSettingsTitle}" Height="180" Width="400" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=UxStartBox}">
@@ -36,29 +39,29 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Application Path:" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" ToolTip="Space Engineers path.">
+                    <TextBlock Grid.Column="0" Text="{lex:Loc WnSettingsLabelApplicationPath}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" ToolTip="{lex:Loc WnSettingsTxtlApplicationPathTooltip}">
                         <TextBox.Text>
                             <Binding Path="SEBinPath" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                         </TextBox.Text>
                     </TextBox>
                     <Button Grid.Row="0" Grid.Column="2" Content="..." VerticalAlignment="Center" Command="{Binding BrowseAppPathCommand}" Padding="4 0" />
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Custom Voxel Path:" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" ToolTip="Specify an additional location for your personal asteroids.">
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc WnSettingsLabelCustomVoxelPath}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" ToolTip="{lex:Loc WnSettingsTxtCustomVoxelPath}">
                         <TextBox.Text>
                             <Binding Path="CustomVoxelPath" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                         </TextBox.Text>
                     </TextBox>
                     <Button Grid.Row="1" Grid.Column="2" Content="..." VerticalAlignment="Center" Command="{Binding BrowseVoxelPathCommand}" Padding="4 0"/>
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Check for updates:" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                    <CheckBox Grid.Row="2" Grid.Column="1" Content="Always" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding AlwaysCheckForUpdates}" ToolTip="Check for new updates on startup."/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc WnSettingsLabelCheckForUpdates}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <CheckBox Grid.Row="2" Grid.Column="1" Content="{lex:Loc WnSettingsChkCheckForUpdates}" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding AlwaysCheckForUpdates}" ToolTip="{lex:Loc WnSettingsChkCheckForUpdatesTooltip}"/>
                 </Grid>
             </Grid>
             
             <Grid Grid.Row="2" Margin="0,8,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Button Width="90" Command="{Binding OkayCommand}" Content="OK" IsDefault="True" Margin="0,0,8,0" />
-                    <Button Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                    <Button Width="90" Command="{Binding OkayCommand}" Content="{lex:Loc WnSettingsOkay}" IsDefault="True" Margin="0,0,8,0" />
+                    <Button Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnSettingsCancel}" IsCancel="True"/>
                 </StackPanel>
             </Grid>
         </Grid>

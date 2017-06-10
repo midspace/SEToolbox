@@ -6,6 +6,9 @@
              xmlns:converters="clr-namespace:SEToolbox.Converters"
              xmlns:services="clr-namespace:SEToolbox.Services"
              xmlns:controls="clr-namespace:SEToolbox.Controls"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              services:DialogService.IsRegisteredView="True">
@@ -20,18 +23,19 @@
                     <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
-            <TextBlock ToolTip="Inventory Volume">
+            <TextBlock ToolTip="{lex:Loc CtlInventoryVolumeTooltip}">
                 <Run Text="{Binding TotalVolume, StringFormat='{}{0:N}'}"/>
                 <Run Text="/"/>
                 <Run Text="{Binding MaxVolume, StringFormat='{}{0:N}'}"/>
-                <Run Text=" L"/>
+                <Run Text=" "/>
+                <Run Text="{lex:Loc GlobalSIVolumeLitre}"/>
             </TextBlock>
-            <MenuItem Header="Add" Style="{StaticResource ToolBarTopMenuitem}" Command="{Binding AddItemCommand}">
+            <MenuItem Header="{lex:Loc CtlInventoryBtnAdd}" Style="{StaticResource ToolBarTopMenuitem}" Command="{Binding AddItemCommand}">
                 <MenuItem.Icon>
                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=add2}" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Delete" Style="{StaticResource ToolBarTopMenuitem}" Command="{Binding DeleteItemCommand}">
+            <MenuItem Header="{lex:Loc CtlInventoryBtnDelete}" Style="{StaticResource ToolBarTopMenuitem}" Command="{Binding DeleteItemCommand}">
                 <MenuItem.Icon>
                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}" />
                 </MenuItem.Icon>
@@ -45,17 +49,17 @@
                     <KeyBinding Key="Delete" Command="{Binding DeleteItemCommand}" />
                 </DataGrid.InputBindings>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Icon">
+                    <DataGridTemplateColumn Header="{lex:Loc SEToolbox:Resources:CtlInventoryColIcon}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" Margin="0,0,2,0" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Name" Binding="{Binding FriendlyName}" IsReadOnly="True" />
-                    <DataGridTextColumn Header="Mass (Kg)" Binding="{Binding Mass, StringFormat='{}{0:#,###0.000}'}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Volume (L)" Binding="{Binding Volume, StringFormat='{}{0:#,###0.000}'}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Amount" ElementStyle="{StaticResource dataGridCellInError}">
+                    <DataGridTextColumn Header="{lex:Loc SEToolbox:Resources:CtlInventoryColName}" Binding="{Binding FriendlyName}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="{lex:Loc SEToolbox:Resources:CtlInventoryColMass}" Binding="{Binding Mass, StringFormat='{}{0:#,###0.000}'}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="{lex:Loc SEToolbox:Resources:CtlInventoryColVolume}" Binding="{Binding Volume, StringFormat='{}{0:#,###0.000}'}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="{lex:Loc SEToolbox:Resources:CtlInventoryColAmount}" ElementStyle="{StaticResource dataGridCellInError}">
                         <DataGridTextColumn.Binding>
                             <Binding Path="Amount" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True" >
                                 <Binding.ValidationRules>

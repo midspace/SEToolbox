@@ -4,6 +4,9 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
         Title="{Binding Path=Title}" Height="260" Width="320" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
@@ -27,12 +30,12 @@
                     <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Player:" VerticalAlignment="Top"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc WnChangeOwnerLabelPlayer}" VerticalAlignment="Top"/>
                 <ListBox Grid.Row="0" Grid.Column="1" Name="UxInitialElement" HorizontalAlignment="Stretch" ItemsSource="{Binding PlayerList}" SelectedValue="{Binding SelectedPlayer}" IsTextSearchEnabled="True" DisplayMemberPath="DisplayName"/>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
-                <Button Width="90" Command="{Binding ChangeCommand}" Content="Change" IsDefault="True"/>
-                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                <Button Width="90" Command="{Binding ChangeCommand}" Content="{lex:Loc WnChangeOwnerBtnChange}" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnChangeOwnerBtnCancel}" IsCancel="True"/>
             </StackPanel>
         </Grid>
         <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />

@@ -4,8 +4,11 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Group Move" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="{lex:Loc WnGroupMoveTitle}" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="800" MaxHeight="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=UxStartBox}">
@@ -37,55 +40,55 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <RadioButton Grid.Column="0" Content="Offset Position:" VerticalAlignment="Center" IsChecked="{Binding IsGlobalOffsetPosition}" Margin="0,0,4,0"/>
+                    <RadioButton Grid.Column="0" Content="{lex:Loc WnGroupMoveRdoOffset}" VerticalAlignment="Center" IsChecked="{Binding IsGlobalOffsetPosition}" Margin="0,0,4,0"/>
                     <Grid Grid.Column="1">
-                        <TextBox ToolTip="X" x:Name="UxStartBox">
+                        <TextBox ToolTip="{lex:Loc WnGroupMoveTxtOffsetXTooltip}" x:Name="UxStartBox">
                             <TextBox.Text>
                                 <Binding Path="GlobalOffsetPositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Text="X" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                        <TextBlock Text="{lex:Loc WnGroupMoveTxtOffsetX}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
                     </Grid>
                     <Grid Grid.Column="2">
-                        <TextBox ToolTip="Y">
+                        <TextBox ToolTip="{lex:Loc WnGroupMoveTxtOffsetYTooltip}">
                             <TextBox.Text>
                                 <Binding Path="GlobalOffsetPositionY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Text="Y" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                        <TextBlock Text="{lex:Loc WnGroupMoveTxtOffsetY}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
                     </Grid>
                     <Grid Grid.Column="3">
-                        <TextBox ToolTip="Z">
+                        <TextBox ToolTip="{lex:Loc WnGroupMoveTxtOffsetZTooltip}">
                             <TextBox.Text>
                                 <Binding Path="GlobalOffsetPositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Text="Z" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                        <TextBlock Text="{lex:Loc WnGroupMoveTxtOffsetZ}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
                     </Grid>
-                    <RadioButton Grid.Row="1" Grid.Column="0" Content="Single Position:" VerticalAlignment="Center" IsChecked="{Binding IsSinglePosition}" Margin="0,0,4,0"/>
+                    <RadioButton Grid.Row="1" Grid.Column="0" Content="{lex:Loc WnGroupMoveRdoSingle}" VerticalAlignment="Center" IsChecked="{Binding IsSinglePosition}" Margin="0,0,4,0"/>
                     <Grid Grid.Row="1" Grid.Column="1" >
-                        <TextBox ToolTip="X">
+                        <TextBox ToolTip="{lex:Loc WnGroupMoveTxtSingleXTooltip}">
                             <TextBox.Text>
                                 <Binding Path="SinglePositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Text="X" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                        <TextBlock Text="{lex:Loc WnGroupMoveTxtSingleX}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="2" >
-                        <TextBox ToolTip="Y">
+                        <TextBox ToolTip="{lex:Loc WnGroupMoveTxtSingleYTooltip}">
                             <TextBox.Text>
                                 <Binding Path="SinglePositionY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Text="Y" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                        <TextBlock Text="{lex:Loc WnGroupMoveTxtSingleY}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="3" >
-                        <TextBox ToolTip="Z">
+                        <TextBox ToolTip="{lex:Loc WnGroupMoveTxtSingleZTooltip}">
                             <TextBox.Text>
                                 <Binding Path="SinglePositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Text="Z" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                        <TextBlock Text="{lex:Loc WnGroupMoveTxtSingleZ}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
                     </Grid>
                 </Grid>
             </Grid>
@@ -98,8 +101,8 @@
                 </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding Item.DataModel.ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
-                        <controls:SortableGridViewColumn Header="Position" Width="210" SortBinding="{Binding Item.DataModel.PlayerDistance}">
+                        <GridViewColumn Header="{lex:Loc SEToolbox:Resources:WnGroupMoveColType}" Width="70" DisplayMemberBinding="{Binding Item.DataModel.ClassType, Converter={StaticResource EnumToResouceConverter}}"/>
+                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnGroupMoveColPosition}" Width="210" SortBinding="{Binding Item.DataModel.PlayerDistance}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock>
@@ -114,7 +117,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </controls:SortableGridViewColumn>
-                        <controls:SortableGridViewColumn Header="New Position" Width="210" SortBinding="{Binding PlayerDistance}">
+                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnGroupMoveColNewPosition}" Width="210" SortBinding="{Binding PlayerDistance}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock>
@@ -129,14 +132,14 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </controls:SortableGridViewColumn>
-                        <controls:SortableGridViewColumn Header="Distance" Width="70" SortBinding="{Binding Item.DataModel.PlayerDistance}">
+                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnGroupMoveColDistance}" Width="70" SortBinding="{Binding Item.DataModel.PlayerDistance}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Path=Item.DataModel.PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </controls:SortableGridViewColumn>
-                        <controls:SortableGridViewColumn Header="New Distance" Width="70" SortBinding="{Binding PlayerDistance}">
+                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnGroupMoveColNewDistance}" Width="70" SortBinding="{Binding PlayerDistance}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding PlayerDistance, Converter={StaticResource DistanceConverter}}" TextAlignment="Right"/>
@@ -148,8 +151,8 @@
             </controls:SortableListView>
             <Grid Grid.Row="2" Margin="0,8,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Button Width="90" Command="{Binding ApplyCommand}" Content="Apply" IsDefault="True" Margin="0,0,8,0" />
-                    <Button Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                    <Button Width="90" Command="{Binding ApplyCommand}" Content="{lex:Loc WnGroupMoveBtnOkay}" IsDefault="True" Margin="0,0,8,0" />
+                    <Button Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnGroupMoveBtnCancel}" IsCancel="True"/>
                 </StackPanel>
             </Grid>
         </Grid>

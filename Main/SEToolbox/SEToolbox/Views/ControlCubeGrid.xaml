@@ -196,7 +196,7 @@
                             </i:Interaction.Behaviors>
                             <Button.ContextMenu>
                                 <ContextMenu HorizontalAlignment="Right">
-                                    <MenuItem Header="{lex:Loc CtlCubeMnuRepair}" Command="{Binding RepairObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                                    <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuRepair}" Command="{Binding RepairObjectCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=wrench}" />
                                         </MenuItem.Icon>
@@ -213,27 +213,27 @@
                             </i:Interaction.Behaviors>
                             <Button.ContextMenu>
                                 <ContextMenu HorizontalAlignment="Right">
-                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedResetLinear}" Command="{Binding ResetLinearVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetLinearTooltip}">
+                                    <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedResetLinear}" Command="{Binding ResetLinearVelocityCommand}" ToolTip="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedResetLinearTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedResetRotation}" Command="{Binding ResetRotationVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetRotationTooltip}">
+                                    <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedResetRotation}" Command="{Binding ResetRotationVelocityCommand}" ToolTip="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedResetRotationTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedReset}" Command="{Binding ResetVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedResetTooltip}">
+                                    <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedReset}" Command="{Binding ResetVelocityCommand}" ToolTip="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedResetTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedReverse}" Command="{Binding ReverseVelocityCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedReverseTooltip}">
+                                    <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedReverse}" Command="{Binding ReverseVelocityCommand}" ToolTip="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedReverseTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="{lex:Loc CtlCubeMnuSpeedMaxToPlayer}" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="{lex:Loc CtlCubeMnuSpeedMaxToPlayerTooltip}">
+                                    <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedMaxToPlayer}" Command="{Binding MaxVelocityAtPlayerCommand}" ToolTip="{lex:Loc SEToolbox:Resources:CtlCubeMnuSpeedMaxToPlayerTooltip}">
                                         <MenuItem.Icon>
                                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_right2}" />
                                         </MenuItem.Icon>

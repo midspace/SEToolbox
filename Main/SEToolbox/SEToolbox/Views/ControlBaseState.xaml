@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              mc:Ignorable="d" 
              d:DesignHeight="20" d:DesignWidth="150">
     <UserControl.Style>
@@ -23,7 +26,7 @@
         </Border.Background>
         <Grid Margin="4,0,4,0">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Save content changed!" ToolTip="The Space Engineers save file content has been changed, and you should reload from here to get a fresh copy." Foreground="Black" />
+                <TextBlock Text="{lex:Loc CtlBaseStateTxt}" ToolTip="{lex:Loc CtlBaseStateTip}" Foreground="Black" />
             </StackPanel>
         </Grid>
     </Border>

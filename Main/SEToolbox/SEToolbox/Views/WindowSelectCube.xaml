@@ -3,8 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Select Cube" Height="140" Width="320" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="{lex:Loc WnSelectCubeTitle}" Height="140" Width="320" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -25,7 +28,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Cube:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc WnSelectCubeLabelCube}" VerticalAlignment="Center" Margin="0,0,8,0"/>
             <ComboBox Grid.Row="0" Grid.Column="1" Name="uxInitialElement" VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding CubeList}" SelectedValue="{Binding CubeItem}" IsTextSearchEnabled="True">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -38,8 +41,8 @@
             </ComboBox>
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8">
-            <Button Width="90" Command="{Binding OkayCommand}" Content="OK" IsDefault="True"/>
-            <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+            <Button Width="90" Command="{Binding OkayCommand}" Content="{lex:Loc WnSelectCubeBtnOkay}" IsDefault="True"/>
+            <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnSelectCubeBtnCancel}" IsCancel="True"/>
         </StackPanel>
     </Grid>
 </Window>

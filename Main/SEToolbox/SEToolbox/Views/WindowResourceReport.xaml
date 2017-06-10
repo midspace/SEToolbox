@@ -4,9 +4,12 @@
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Resource Report"  Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="{lex:Loc WnResourceReportTitle}"  Height="600" Width="700" MinWidth="260" MinHeight="200" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -33,8 +36,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"  MinWidth="120" Command="{Binding GenerateCommand}" Content="Generate Report" IsDefault="True" Name="uxInitialElement"/>
-                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding ExportCommand}" HorizontalAlignment="Left" Content="Export" Style="{StaticResource DropDownMenuButton}">
+                <Button Grid.Column="0"  MinWidth="120" Command="{Binding GenerateCommand}" Content="{lex:Loc WnResourceReportBtnGenerate}" IsDefault="True" Name="uxInitialElement"/>
+                <Button Grid.Column="1" Margin="8,0,0,0" MinWidth="80" Command="{Binding ExportCommand}" HorizontalAlignment="Left" Content="{lex:Loc WnResourceReportBtnExport}" Style="{StaticResource DropDownMenuButton}">
                     <i:Interaction.Behaviors>
                         <commands:ButtonDropDownMenuBehavior />
                     </i:Interaction.Behaviors>
@@ -46,15 +49,15 @@
                     </Button.Content>-->
                     <Button.ContextMenu>
                         <ContextMenu HorizontalAlignment="Right">
-                            <MenuItem Header="Clipboard" Command="{Binding CopyCommand}"/>
-                            <MenuItem Header=".txt file" Command="{Binding ExportTextCommand}"/>
-                            <MenuItem Header=".html file" Command="{Binding ExportHtmlCommand}"/>
-                            <MenuItem Header=".xml file" Command="{Binding ExportXmlCommand}"/>
+                            <MenuItem Header="{lex:Loc SEToolbox:Resources:WnResourceReportBtnCopy}" Command="{Binding CopyCommand}"/>
+                            <MenuItem Header="{lex:Loc SEToolbox:Resources:WnResourceReportBtnTextFile}" Command="{Binding ExportTextCommand}"/>
+                            <MenuItem Header="{lex:Loc SEToolbox:Resources:WnResourceReportBtnHtmlFile}" Command="{Binding ExportHtmlCommand}"/>
+                            <MenuItem Header="{lex:Loc SEToolbox:Resources:WnResourceReportBtnXmlFile}" Command="{Binding ExportXmlCommand}"/>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
                 <ProgressBar Grid.Column="2" Margin="8,0,8,0" Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" />
-                <Button Grid.Column="3" Width="90" Command="{Binding CloseCommand}" Content="Close" HorizontalAlignment="Right" IsCancel="True"/>
+                <Button Grid.Column="3" Width="90" Command="{Binding CloseCommand}" Content="{lex:Loc WnResourceReportBtnClose}" HorizontalAlignment="Right" IsCancel="True"/>
             </Grid>
         </Grid>
         <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />

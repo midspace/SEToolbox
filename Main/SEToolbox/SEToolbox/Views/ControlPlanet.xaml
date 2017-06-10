@@ -7,6 +7,9 @@
              xmlns:converters="clr-namespace:SEToolbox.Converters"
              xmlns:props="clr-namespace:SEToolbox.Properties"
              xmlns:views="clr-namespace:SEToolbox.Views"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -43,26 +46,26 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Grid.ColumnSpan="2">Planet</Label>
+            <Label Grid.ColumnSpan="2" Content="{lex:Loc CtlPlanetTitle}"/>
             <Menu Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" DockPanel.Dock="Top">
                 <Menu.ItemsPanel>
                     <ItemsPanelTemplate>
                         <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
-                <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="Copy text detail to Clipboard" Command="{Binding CopyDetailCommand}">
+                <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="{lex:Loc CtlPlanetMnuCopyDetail}" Command="{Binding CopyDetailCommand}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </Menu>
-            <Label Grid.Row="2" Grid.Column="0" Content="Position:"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="{lex:Loc CtlPlanetPosition}"/>
             <views:ControlPosition Grid.Row="2" Grid.Column="1"/>
             <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
 
-            <TextBlock Grid.Row="4" Grid.Column="0" Margin="4 0 4 0" Text="Name:"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetName}"/>
             <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name}"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="Center:"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetCenter}"/>
             <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0:#,##0.0000}, {1:#,##0.0000}, {2:#,##0.0000}">
@@ -72,27 +75,48 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="Distance:"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlayerDistance, StringFormat='{}{0:#,###0.0} m'}" />
-            <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="Radius:"/>
-            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Radius, StringFormat='{}{0:#,##0.00} m'}" />
-            <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="HasAtmosphere:"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetDistance}"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding PlayerDistance, StringFormat='#,###0.0', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+            </TextBlock>
+            <TextBlock Grid.Row="7" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetRadius}"/>
+            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding Radius, StringFormat='#,###0.00', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+            </TextBlock>
+            <TextBlock Grid.Row="8" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetHasAtmosphere}"/>
             <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Text="{Binding HasAtmosphere}" />
-            <TextBlock Grid.Row="9" Grid.Column="0" Margin="4 0 4 0" Text="Atmosphere Radius:"/>
-            <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Text="{Binding AtmosphereRadius, StringFormat='{}{0:#,##0.00} m'}" />
-            <TextBlock Grid.Row="10" Grid.Column="0" Margin="4 0 4 0" Text="Minimum Surface Radius:"/>
-            <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" Text="{Binding MinimumSurfaceRadius, StringFormat='{}{0:#,##0.00} m'}" />
-            <TextBlock Grid.Row="11" Grid.Column="0" Margin="4 0 4 0" Text="Maximum Hill Radius:"/>
-            <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" Text="{Binding MaximumHillRadius, StringFormat='{}{0:#,##0.00} m'}" />
-            <TextBlock Grid.Row="12" Grid.Column="0" Margin="4 0 4 0" Text="Gravity Falloff:"/>
-            <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" Text="{Binding GravityFalloff, StringFormat='{}{0:#,##0.00} m'}" />
-            <TextBlock Grid.Row="13" Grid.Column="0" Margin="4 0 4 0" Text="Surface Gravity:"/>
-            <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" Text="{Binding SurfaceGravity, StringFormat='{}{0:#,##0.00} m'}" />
-            <TextBlock Grid.Row="14" Grid.Column="0" Margin="4 0 4 0" Text="Spawns Flora:"/>
+            <TextBlock Grid.Row="9" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetAtmosphereRadius}"/>
+            <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding AtmosphereRadius, StringFormat='#,###0.00', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+            </TextBlock>
+            <TextBlock Grid.Row="10" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetMinimumSurfaceRadius}"/>
+            <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding MinimumSurfaceRadius, StringFormat='#,###0.00', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+            </TextBlock>
+            <TextBlock Grid.Row="11" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetMaximumHillRadius}"/>
+            <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding MaximumHillRadius, StringFormat='#,###0.00', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+            </TextBlock>
+            <TextBlock Grid.Row="12" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetGravityFalloff}"/>
+            <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding GravityFalloff, StringFormat='#,###0.00', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+            </TextBlock>
+            <TextBlock Grid.Row="13" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetSurfaceGravity}"/>
+            <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center">
+                <Run Text="{Binding SurfaceGravity, StringFormat='#,###0.00', Mode=OneWay}" />
+                <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+            </TextBlock>
+            <TextBlock Grid.Row="14" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetSpawnsFlora}"/>
             <TextBlock Grid.Row="14" Grid.Column="1" VerticalAlignment="Center" Text="{Binding SpawnsFlora}" />
-            <TextBlock Grid.Row="15" Grid.Column="0" Margin="4 0 4 0" Text="Show GPS:"/>
+            <TextBlock Grid.Row="15" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetShowGps}"/>
             <TextBlock Grid.Row="15" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ShowGPS}" />
-            <TextBlock Grid.Row="16" Grid.Column="0" Margin="4 0 4 0" Text="Planet Generator:"/>
+            <TextBlock Grid.Row="16" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetPlanetGenerator}"/>
             <TextBlock Grid.Row="16" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlanetGenerator}" />
         </Grid>
     </Grid>
