@@ -88,9 +88,6 @@
     <Import Project="$(SolutionDir)\global.targets" Condition="exists('$(SolutionDir)\global.targets')" />
   </ImportGroup>
   <ItemGroup>
-    <Reference Include="SpaceEngineers.ObjectBuilders">
-      <HintPath>C:\Program Files\Reference Assemblies\SpaceEngineers\SpaceEngineers.ObjectBuilders.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -114,6 +111,9 @@
     <Reference Include="SteamSDK">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BinPath)\SteamSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="SpaceEngineers.ObjectBuilders">
+      <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.dll</HintPath>
     </Reference>
     <Reference Include="VRage">
       <SpecificVersion>False</SpecificVersion>
