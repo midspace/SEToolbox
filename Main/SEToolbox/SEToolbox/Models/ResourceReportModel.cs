@@ -20,6 +20,7 @@
     using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ResourceReportModel : BaseModel
     {
@@ -830,51 +831,51 @@
         {
             var bld = new StringBuilder();
 
-            bld.AppendLine("Resource Report");
-            bld.AppendFormat("Save World: {0}\r\n", _saveName);
-            bld.AppendFormat("Date: {0}\r\n", _generatedDate);
+            bld.AppendLine(Res.ClsReportTitle);
+            bld.AppendFormat("{0} {1}\r\n", Res.ClsReportSaveWorld, _saveName);
+            bld.AppendFormat("{0} {1}\r\n", Res.ClsReportDate, _generatedDate);
             bld.AppendLine();
 
             #region In game resources
 
-            bld.AppendLine("In game resources");
-            bld.AppendLine("Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.");
+            bld.AppendLine(Res.ClsReportHeaderInGameResources);
+            bld.AppendLine(Res.ClsReportTextInGameResources);
             bld.AppendLine();
 
-            bld.AppendFormat("Untouched Ore (Asteroids)\r\n");
-            bld.AppendFormat("Name\tVolume m³\r\n");
+            bld.AppendFormat("{0}\r\n", Res.ClsReportHeadingUntouchedOre);
+            bld.AppendFormat("{0}\t{1}\r\n", Res.ClsReportColMaterialName, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeCubicMetre);
             foreach (var item in _untouchedOre)
             {
                 bld.AppendFormat("{0}\t{1:#,##0.000}\r\n", item.MaterialName, item.Volume);
             }
 
             bld.AppendLine();
-            bld.AppendFormat("Unused Ore (Ore and Ingots, either floating or in containers)\r\n");
-            bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
+            bld.AppendLine(Res.ClsReportHeaderUnusedUnrefinedOre);
+            bld.AppendFormat("{0}\t{1}\t{2}\r\n", Res.ClsReportColOreName, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre);
             foreach (var item in _unusedOre)
             {
                 bld.AppendFormat("{0}\t{1:#,##0.000}\t{2:#,##0.000}\r\n", item.FriendlyName, item.Mass, item.Volume);
             }
 
             bld.AppendLine();
-            bld.AppendFormat("Used Ore (tools, items, components, cubes)\r\n");
-            bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
+            bld.AppendLine(Res.ClsReportHeaderUnusedRefinerdOre);
+            bld.AppendFormat("{0}\t{1}\t{2}\r\n", Res.ClsReportColOreName, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre);
             foreach (var item in _usedOre)
             {
                 bld.AppendFormat("{0}\t{1:#,##0.000}\t{2:#,##0.000}\r\n", item.FriendlyName, item.Mass, item.Volume);
             }
 
             bld.AppendLine();
-            bld.AppendFormat("Player Ore (Player inventories)\r\n");
-            bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
+            bld.AppendLine(Res.ClsReportHeaderUsedPlayerOre);
+            bld.AppendFormat("{0}\t{1}\t{2}\r\n", Res.ClsReportColOreName, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre);
             foreach (var item in _playerOre)
             {
                 bld.AppendFormat("{0}\t{1:#,##0.000}\t{2:#,##0.000}\r\n", item.FriendlyName, item.Mass, item.Volume);
             }
 
             bld.AppendLine();
-            bld.AppendFormat("NPC Ore (Controlled by NPC)\r\n");
-            bld.AppendFormat("Name\tMass Kg\tVolume L\r\n");
+            bld.AppendLine(Res.ClsReportHeaderUsedNpcOre);
+            bld.AppendFormat("{0}\t{1}\t{2}\r\n", Res.ClsReportColOreName, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre);
             foreach (var item in _npcOre)
             {
                 bld.AppendFormat("{0}\t{1:#,##0.000}\t{2:#,##0.000}\r\n", item.FriendlyName, item.Mass, item.Volume);
@@ -885,28 +886,28 @@
             #region In game assets
 
             bld.AppendLine();
-            bld.AppendLine("In game assets");
-            bld.AppendLine("Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine.");
+            bld.AppendLine(Res.ClsReportHeaderInGameAssets);
+            bld.AppendLine(Res.ClsReportTextInGameAssets);
 
             bld.AppendLine();
-            bld.AppendFormat("All Cubes\r\n");
-            bld.AppendFormat("Name\tCount\tMass Kg\tTime\r\n");
+            bld.AppendLine(Res.ClsReportHeaderAllCubes);
+            bld.AppendFormat("{0}\t{1}\t{2}\t{3}\r\n", Res.ClsReportColCubeName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColTime);
             foreach (var item in _allCubes)
             {
                 bld.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.000}\t{3}\r\n", item.FriendlyName, item.Count, item.Mass, item.Time);
             }
 
             bld.AppendLine();
-            bld.AppendFormat("All Components\r\n");
-            bld.AppendFormat("Name\tCount\tMass Kg\tVolume L\tTime\r\n");
+            bld.AppendLine(Res.ClsReportHeaderAllComponents);
+            bld.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\r\n", Res.ClsReportColComponentName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre, Res.ClsReportColTime);
             foreach (var item in _allComponents)
             {
                 bld.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.000}\t{3:#,##0.000}\t{4}\r\n", item.FriendlyName, item.Count, item.Mass, item.Volume, item.Time);
             }
 
             bld.AppendLine();
-            bld.AppendFormat("All Items\r\n");
-            bld.AppendFormat("Name\tCount\tMass Kg\tVolume L\tTime\r\n");
+            bld.AppendLine(Res.ClsReportHeaderAllItems);
+            bld.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\r\n", Res.ClsReportColAllItemsName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre, Res.ClsReportColTime);
             foreach (var item in _allItems)
             {
                 bld.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.000}\t{3:#,##0.000}\t{4}\r\n", item.FriendlyName, item.Count, item.Mass, item.Volume, item.Time);
@@ -917,8 +918,8 @@
             #region Asteroid breakdown
 
             bld.AppendLine();
-            bld.AppendFormat("Untouched Ores (Asteroids)\r\n");
-            bld.AppendFormat("Asteroid\tOre Name\tVolume m³\r\n");
+            bld.AppendFormat("{0}\r\n", Res.ClsReportHeadingUntouchedOre);
+            bld.AppendFormat("{0}\t{1}\t{2}\r\n", Res.ClsReportColAsteroid, Res.ClsReportColOreName, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeCubicMetre);
             foreach (var asteroid in _untouchedOreByAsteroid)
             {
                 foreach (var item in asteroid.UntouchedOreList)
@@ -951,7 +952,7 @@
             {
                 #region header
 
-                writer.BeginDocument(string.Format("Resource Report - {0}", _saveName),
+                writer.BeginDocument(string.Format("{0} - {1}", Res.ClsReportTitle, _saveName),
                     @"
 body { background-color: #F6F6FA }
 b { font-family: Arial, Helvetica, sans-serif; }
@@ -964,18 +965,18 @@ td.right { text-align: right; }");
 
                 #endregion
 
-                writer.RenderElement(HtmlTextWriterTag.H1, "Resource Report");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.ClsReportTitle);
 
-                writer.RenderElement(HtmlTextWriterTag.P, "Save World: {0}", _saveName);
-                writer.RenderElement(HtmlTextWriterTag.P, "Date: {0}", _generatedDate);
+                writer.RenderElement(HtmlTextWriterTag.P, "{0} {1}", Res.ClsReportSaveWorld, _saveName);
+                writer.RenderElement(HtmlTextWriterTag.P, "{0} {1}", Res.ClsReportDate, _generatedDate);
 
                 #region In game resources
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "In game resources");
-                writer.RenderElement(HtmlTextWriterTag.P, "Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.");
+                writer.RenderElement(HtmlTextWriterTag.H2, Res.ClsReportHeaderInGameResources);
+                writer.RenderElement(HtmlTextWriterTag.P, Res.ClsReportTextInGameResources);
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "Untouched Ore (Asteroids)");
-                writer.BeginTable("1", "3", "0", new[] { "Name", "Volume m³" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeadingUntouchedOre);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColMaterialName, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeCubicMetre });
                 foreach (var item in _untouchedOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -986,8 +987,9 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "Unused Ore (Ore and Ingots, either floating or in containers)");
-                writer.BeginTable("1", "3", "0", new[] { "Name", "Mass Kg", "Volume L" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderUnusedUnrefinedOre);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColOreName, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre });
+
                 foreach (var item in _unusedOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1000,8 +1002,8 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "Used Ore (in tools, items, components, cubes)");
-                writer.BeginTable("1", "3", "0", new[] { "Name", "Mass Kg", "Volume L" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderUnusedRefinerdOre);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColOreName, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre });
                 foreach (var item in _usedOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1014,8 +1016,8 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "Player Ore (Player inventories)");
-                writer.BeginTable("1", "3", "0", new[] { "Name", "Mass Kg", "Volume L" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderUsedPlayerOre);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColOreName, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre });
                 foreach (var item in _playerOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1028,8 +1030,8 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "NPC Ore (Controlled by NPC)");
-                writer.BeginTable("1", "3", "0", new[] { "Name", "Mass Kg", "Volume L" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderUsedNpcOre);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColOreName, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre });
                 foreach (var item in _npcOre)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1049,11 +1051,11 @@ td.right { text-align: right; }");
 
                 #region In game assets
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "In game assets");
-                writer.RenderElement(HtmlTextWriterTag.P, "Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine.");
+                writer.RenderElement(HtmlTextWriterTag.H2, Res.ClsReportHeaderInGameAssets);
+                writer.RenderElement(HtmlTextWriterTag.P, Res.ClsReportTextInGameAssets);
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "All Cubes");
-                writer.BeginTable("1", "3", "0", new[] { "Icon", "Name", "Count", "Mass Kg", "Time" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderAllCubes);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColIcon, Res.ClsReportColCubeName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColTime });
                 foreach (var item in _allCubes)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1079,8 +1081,8 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "All Components");
-                writer.BeginTable("1", "3", "0", new[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderAllComponents);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColIcon, Res.ClsReportColComponentName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre, Res.ClsReportColTime });
                 foreach (var item in _allComponents)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1108,8 +1110,8 @@ td.right { text-align: right; }");
                 }
                 writer.EndTable();
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "All Items");
-                writer.BeginTable("1", "3", "0", new[] { "Icon", "Name", "Count", "Mass Kg", "Volume L", "Time" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderAllItems);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColIcon, Res.ClsReportColAllItemsName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeLitre, Res.ClsReportColTime });
                 foreach (var item in _allItems)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1142,12 +1144,12 @@ td.right { text-align: right; }");
                 writer.RenderElement(HtmlTextWriterTag.Br);
                 writer.RenderElement(HtmlTextWriterTag.Hr);
 
-                writer.RenderElement(HtmlTextWriterTag.H2, "Resources breakdown");
+                writer.RenderElement(HtmlTextWriterTag.H2, Res.ClsReportHeadingResourcesBreakdown);
 
                 #region Asteroid breakdown
 
-                writer.RenderElement(HtmlTextWriterTag.H3, "Untouched Ores (Asteroids)");
-                writer.BeginTable("1", "3", "0", new[] { "Asteroid", "Position", "Ore name", "Volume m³" });
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeadingUntouchedOre);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColAsteroid, Res.ClsReportColPosition, Res.ClsReportColOreName, Res.ClsReportColVolume + " " + Res.GlobalSIVolumeCubicMetre });
                 foreach (var asteroid in _untouchedOreByAsteroid)
                 {
                     var inx = 0;
@@ -1178,7 +1180,7 @@ td.right { text-align: right; }");
 
                 #region Ship breakdown
 
-                writer.BeginTable("1", "3", "0", new[] { "Ship", "EntityId", "Position", "Block Count" });
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColShip, Res.ClsReportColEntityId, Res.ClsReportColPosition, Res.ClsReportColBlockCount });
                 foreach (var ship in _allShips)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1218,7 +1220,7 @@ td.right { text-align: right; }");
             using (var xmlWriter = XmlWriter.Create(stringWriter, settingsDestination))
             {
                 xmlWriter.WriteStartElement("report");
-                xmlWriter.WriteAttributeString("title", "Resource Report");
+                xmlWriter.WriteAttributeString("title", Res.ClsReportTitle);
                 xmlWriter.WriteAttributeString("world", _saveName);
                 xmlWriter.WriteAttributeFormat("date", "{0:o}", _generatedDate);
 

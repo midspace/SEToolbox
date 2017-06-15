@@ -780,7 +780,7 @@
             {
                 foreach (var mat in CubeAssets)
                 {
-                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, mat.Time);
+                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} {3}\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, Res.GlobalSIMassKilogram, mat.Time);
                 }
             }
 
@@ -789,7 +789,7 @@
             {
                 foreach (var mat in ComponentAssets)
                 {
-                    components.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, mat.Volume, mat.Time);
+                    components.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0} {3}\t{4:#,##0.00} {5}\t{6:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, Res.GlobalSIMassKilogram, mat.Volume, Res.GlobalSIMassKilogram,  mat.Time);
                 }
             }
 
@@ -798,7 +798,7 @@
             {
                 foreach (var mat in IngotAssets)
                 {
-                    ingots.AppendFormat("{0}\t{1:#,##0.00}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Amount, mat.Mass, mat.Volume, mat.Time);
+                    ingots.AppendFormat("{0}\t{1:#,##0.00}\t{2:#,##0.00} {3}\t{4:#,##0.00} {5}\t{6:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Amount, mat.Mass, Res.GlobalSIMassKilogram, mat.Volume, Res.GlobalSIMassKilogram, mat.Time);
                 }
             }
 
@@ -807,7 +807,7 @@
             {
                 foreach (var mat in OreAssets)
                 {
-                    ores.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} Kg\t{3:#,##0.00} L\r\n", mat.FriendlyName, mat.Amount, mat.Mass, mat.Volume);
+                    ores.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} {3}\t{4:#,##0.00} {5}\r\n", mat.FriendlyName, mat.Amount, mat.Mass, Res.GlobalSIMassKilogram, mat.Volume, Res.GlobalSIMassKilogram);
                 }
             }
 

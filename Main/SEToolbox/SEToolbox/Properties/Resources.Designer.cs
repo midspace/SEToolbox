@@ -248,6 +248,528 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application:.
+        /// </summary>
+        public static string ClsErrorApplication {
+            get {
+                return ResourceManager.GetString("ClsErrorApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BinCachePath:.
+        /// </summary>
+        public static string ClsErrorBinCachePath {
+            get {
+                return ResourceManager.GetString("ClsErrorBinCachePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CommandLine:.
+        /// </summary>
+        public static string ClsErrorCommandLine {
+            get {
+                return ResourceManager.GetString("ClsErrorCommandLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CurrentCulture:.
+        /// </summary>
+        public static string ClsErrorCurrentCulture {
+            get {
+                return ResourceManager.GetString("ClsErrorCurrentCulture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CurrentDirectory:.
+        /// </summary>
+        public static string ClsErrorCurrentDirectory {
+            get {
+                return ResourceManager.GetString("ClsErrorCurrentDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CurrentUICulture:.
+        /// </summary>
+        public static string ClsErrorCurrentUICulture {
+            get {
+                return ResourceManager.GetString("ClsErrorCurrentUICulture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files:.
+        /// </summary>
+        public static string ClsErrorFiles {
+            get {
+                return ResourceManager.GetString("ClsErrorFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IntPtr.Size:.
+        /// </summary>
+        public static string ClsErrorIntPtrSize {
+            get {
+                return ResourceManager.GetString("ClsErrorIntPtrSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is64BitOperatingSystem:.
+        /// </summary>
+        public static string ClsErrorIs64BitOperatingSystem {
+            get {
+                return ResourceManager.GetString("ClsErrorIs64BitOperatingSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IsAdmin:.
+        /// </summary>
+        public static string ClsErrorIsAdmin {
+            get {
+                return ResourceManager.GetString("ClsErrorIsAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OSVersion:.
+        /// </summary>
+        public static string ClsErrorOSVersion {
+            get {
+                return ResourceManager.GetString("ClsErrorOSVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ProcessorCount:.
+        /// </summary>
+        public static string ClsErrorProcessorCount {
+            get {
+                return ResourceManager.GetString("ClsErrorProcessorCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SEBinPath:.
+        /// </summary>
+        public static string ClsErrorSEBinPath {
+            get {
+                return ResourceManager.GetString("ClsErrorSEBinPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SEBinVersion:.
+        /// </summary>
+        public static string ClsErrorSEBinVersion {
+            get {
+                return ResourceManager.GetString("ClsErrorSEBinVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unhandled Exception.
+        /// </summary>
+        public static string ClsErrorUnhandled {
+            get {
+                return ResourceManager.GetString("ClsErrorUnhandled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version:.
+        /// </summary>
+        public static string ClsErrorVersion {
+            get {
+                return ResourceManager.GetString("ClsErrorVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ! Checkpoint file is missing or broken..
+        /// </summary>
+        public static string ClsRepairCheckpointBroken {
+            get {
+                return ResourceManager.GetString("ClsRepairCheckpointBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ! Fixed astronaut&apos;s CharacterModel..
+        /// </summary>
+        public static string ClsRepairFixedCharacterModel {
+            get {
+                return ResourceManager.GetString("ClsRepairFixedCharacterModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ! Fixed player identity..
+        /// </summary>
+        public static string ClsRepairFixedPlayerIdentity {
+            get {
+                return ResourceManager.GetString("ClsRepairFixedPlayerIdentity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * Found and Set new active Player..
+        /// </summary>
+        public static string ClsRepairFoundSetPlayer {
+            get {
+                return ResourceManager.GetString("ClsRepairFoundSetPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detected no issues..
+        /// </summary>
+        public static string ClsRepairNoIssues {
+            get {
+                return ResourceManager.GetString("ClsRepairNoIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ! No active Player in Save content..
+        /// </summary>
+        public static string ClsRepairNoPlayerFound {
+            get {
+                return ResourceManager.GetString("ClsRepairNoPlayerFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * Replaced BlockGroup item..
+        /// </summary>
+        public static string ClsRepairReplacedBlockGroup {
+            get {
+                return ResourceManager.GetString("ClsRepairReplacedBlockGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ! Replaced astronaut&apos;s missing {0}..
+        /// </summary>
+        public static string ClsRepairReplacedCharacterSubType {
+            get {
+                return ResourceManager.GetString("ClsRepairReplacedCharacterSubType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * Saved changes..
+        /// </summary>
+        public static string ClsRepairSavedChanges {
+            get {
+                return ResourceManager.GetString("ClsRepairSavedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ! Sector file is missing or broken..
+        /// </summary>
+        public static string ClsRepairSectorBroken {
+            get {
+                return ResourceManager.GetString("ClsRepairSectorBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ! Unable to repair..
+        /// </summary>
+        public static string ClsRepairUnableToRepair {
+            get {
+                return ResourceManager.GetString("ClsRepairUnableToRepair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string ClsReportColAllItemsName {
+            get {
+                return ResourceManager.GetString("ClsReportColAllItemsName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asteroid.
+        /// </summary>
+        public static string ClsReportColAsteroid {
+            get {
+                return ResourceManager.GetString("ClsReportColAsteroid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Block Count.
+        /// </summary>
+        public static string ClsReportColBlockCount {
+            get {
+                return ResourceManager.GetString("ClsReportColBlockCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string ClsReportColComponentName {
+            get {
+                return ResourceManager.GetString("ClsReportColComponentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        public static string ClsReportColCount {
+            get {
+                return ResourceManager.GetString("ClsReportColCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string ClsReportColCubeName {
+            get {
+                return ResourceManager.GetString("ClsReportColCubeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EntityId.
+        /// </summary>
+        public static string ClsReportColEntityId {
+            get {
+                return ResourceManager.GetString("ClsReportColEntityId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon.
+        /// </summary>
+        public static string ClsReportColIcon {
+            get {
+                return ResourceManager.GetString("ClsReportColIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mass.
+        /// </summary>
+        public static string ClsReportColMass {
+            get {
+                return ResourceManager.GetString("ClsReportColMass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string ClsReportColMaterialName {
+            get {
+                return ResourceManager.GetString("ClsReportColMaterialName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ore name.
+        /// </summary>
+        public static string ClsReportColOreName {
+            get {
+                return ResourceManager.GetString("ClsReportColOreName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        public static string ClsReportColPosition {
+            get {
+                return ResourceManager.GetString("ClsReportColPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ship.
+        /// </summary>
+        public static string ClsReportColShip {
+            get {
+                return ResourceManager.GetString("ClsReportColShip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        public static string ClsReportColTime {
+            get {
+                return ResourceManager.GetString("ClsReportColTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volume.
+        /// </summary>
+        public static string ClsReportColVolume {
+            get {
+                return ResourceManager.GetString("ClsReportColVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date:.
+        /// </summary>
+        public static string ClsReportDate {
+            get {
+                return ResourceManager.GetString("ClsReportDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Components.
+        /// </summary>
+        public static string ClsReportHeaderAllComponents {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderAllComponents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Cubes.
+        /// </summary>
+        public static string ClsReportHeaderAllCubes {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderAllCubes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Items.
+        /// </summary>
+        public static string ClsReportHeaderAllItems {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderAllItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In game assets.
+        /// </summary>
+        public static string ClsReportHeaderInGameAssets {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderInGameAssets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In game resources.
+        /// </summary>
+        public static string ClsReportHeaderInGameResources {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderInGameResources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used Ore (in tools, items, components, cubes).
+        /// </summary>
+        public static string ClsReportHeaderUnusedRefinerdOre {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderUnusedRefinerdOre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unused Ore (Ore and Ingots, either floating or in containers).
+        /// </summary>
+        public static string ClsReportHeaderUnusedUnrefinedOre {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderUnusedUnrefinedOre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Ore (Controlled by NPC).
+        /// </summary>
+        public static string ClsReportHeaderUsedNpcOre {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderUsedNpcOre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player Ore (Player inventories).
+        /// </summary>
+        public static string ClsReportHeaderUsedPlayerOre {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderUsedPlayerOre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resources breakdown.
+        /// </summary>
+        public static string ClsReportHeadingResourcesBreakdown {
+            get {
+                return ResourceManager.GetString("ClsReportHeadingResourcesBreakdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untouched Ore (Asteroids).
+        /// </summary>
+        public static string ClsReportHeadingUntouchedOre {
+            get {
+                return ResourceManager.GetString("ClsReportHeadingUntouchedOre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save World:.
+        /// </summary>
+        public static string ClsReportSaveWorld {
+            get {
+                return ResourceManager.GetString("ClsReportSaveWorld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine..
+        /// </summary>
+        public static string ClsReportTextInGameAssets {
+            get {
+                return ResourceManager.GetString("ClsReportTextInGameAssets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item..
+        /// </summary>
+        public static string ClsReportTextInGameResources {
+            get {
+                return ResourceManager.GetString("ClsReportTextInGameResources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resource Report.
+        /// </summary>
+        public static string ClsReportTitle {
+            get {
+                return ResourceManager.GetString("ClsReportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap colors {
@@ -508,6 +1030,15 @@ namespace SEToolbox.Properties {
         public static string CtlCubeColComponentVolume {
             get {
                 return ResourceManager.GetString("CtlCubeColComponentVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        public static string CtlCubeColCount {
+            get {
+                return ResourceManager.GetString("CtlCubeColCount", resourceCulture);
             }
         }
         
@@ -5003,6 +5534,294 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add _Random.
+        /// </summary>
+        public static string WnGenAsteroidFieldBtnAddRandom {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldBtnAddRandom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Add.
+        /// </summary>
+        public static string WnGenAsteroidFieldBtnAddRow {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldBtnAddRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string WnGenAsteroidFieldBtnCancel {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldBtnCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Clear.
+        /// </summary>
+        public static string WnGenAsteroidFieldBtnClearRows {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldBtnClearRows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string WnGenAsteroidFieldBtnCreate {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldBtnCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Delete.
+        /// </summary>
+        public static string WnGenAsteroidFieldBtnDeleteRow {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldBtnDeleteRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asteroid.
+        /// </summary>
+        public static string WnGenAsteroidFieldColAsteroid {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColAsteroid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Material.
+        /// </summary>
+        public static string WnGenAsteroidFieldColMaterial {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2nd Material.
+        /// </summary>
+        public static string WnGenAsteroidFieldColMaterial2 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColMaterial2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3rd Material.
+        /// </summary>
+        public static string WnGenAsteroidFieldColMaterial3 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColMaterial3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4th Material.
+        /// </summary>
+        public static string WnGenAsteroidFieldColMaterial4 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColMaterial4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5th Material.
+        /// </summary>
+        public static string WnGenAsteroidFieldColMaterial5 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColMaterial5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 6th Material.
+        /// </summary>
+        public static string WnGenAsteroidFieldColMaterial6 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColMaterial6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 7th Material.
+        /// </summary>
+        public static string WnGenAsteroidFieldColMaterial7 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColMaterial7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Percent.
+        /// </summary>
+        public static string WnGenAsteroidFieldColPercent {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2nd Percent.
+        /// </summary>
+        public static string WnGenAsteroidFieldColPercent2 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColPercent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3rd Percent.
+        /// </summary>
+        public static string WnGenAsteroidFieldColPercent3 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColPercent3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4th Percent.
+        /// </summary>
+        public static string WnGenAsteroidFieldColPercent4 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColPercent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5th Percent.
+        /// </summary>
+        public static string WnGenAsteroidFieldColPercent5 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColPercent5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 6th Percent.
+        /// </summary>
+        public static string WnGenAsteroidFieldColPercent6 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColPercent6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;7th Percent.
+        /// </summary>
+        public static string WnGenAsteroidFieldColPercent7 {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldColPercent7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Center:.
+        /// </summary>
+        public static string WnGenAsteroidFieldLabelCenter {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldLabelCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill type:.
+        /// </summary>
+        public static string WnGenAsteroidFieldLabelFillType {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldLabelFillType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Range from:.
+        /// </summary>
+        public static string WnGenAsteroidFieldLabelRangeFrom {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldLabelRangeFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to:.
+        /// </summary>
+        public static string WnGenAsteroidFieldLabelRangeTo {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldLabelRangeTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate Asteroid Field.
+        /// </summary>
+        public static string WnGenAsteroidFieldTitle {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X.
+        /// </summary>
+        public static string WnGenAsteroidFieldTxtCenterX {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldTxtCenterX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X.
+        /// </summary>
+        public static string WnGenAsteroidFieldTxtCenterXTooltip {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldTxtCenterXTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y.
+        /// </summary>
+        public static string WnGenAsteroidFieldTxtCenterY {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldTxtCenterY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y.
+        /// </summary>
+        public static string WnGenAsteroidFieldTxtCenterYTooltip {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldTxtCenterYTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Z.
+        /// </summary>
+        public static string WnGenAsteroidFieldTxtCenterZ {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldTxtCenterZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Z.
+        /// </summary>
+        public static string WnGenAsteroidFieldTxtCenterZTooltip {
+            get {
+                return ResourceManager.GetString("WnGenAsteroidFieldTxtCenterZTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string WnGenFloatBtnCancel {
@@ -5282,6 +6101,312 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse for Model.
+        /// </summary>
+        public static string WnImport3dModelBtnBrowseModelTooltip {
+            get {
+                return ResourceManager.GetString("WnImport3dModelBtnBrowseModelTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string WnImport3dModelBtnCancel {
+            get {
+                return ResourceManager.GetString("WnImport3dModelBtnCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string WnImport3dModelBtnCreate {
+            get {
+                return ResourceManager.GetString("WnImport3dModelBtnCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approximate New Size.
+        /// </summary>
+        public static string WnImport3dModelGrpNewSize {
+            get {
+                return ResourceManager.GetString("WnImport3dModelGrpNewSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orientation.
+        /// </summary>
+        public static string WnImport3dModelGrpOrientation {
+            get {
+                return ResourceManager.GetString("WnImport3dModelGrpOrientation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original Size.
+        /// </summary>
+        public static string WnImport3dModelGrpOriginalSize {
+            get {
+                return ResourceManager.GetString("WnImport3dModelGrpOriginalSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        public static string WnImport3dModelGrpPosition {
+            get {
+                return ResourceManager.GetString("WnImport3dModelGrpPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale.
+        /// </summary>
+        public static string WnImport3dModelGrpScale {
+            get {
+                return ResourceManager.GetString("WnImport3dModelGrpScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Armor:.
+        /// </summary>
+        public static string WnImport3dModelLabelArmor {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelArmor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculation:.
+        /// </summary>
+        public static string WnImport3dModelLabelCalculation {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelCalculation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance:.
+        /// </summary>
+        public static string WnImport3dModelLabelDistance {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill:.
+        /// </summary>
+        public static string WnImport3dModelLabelFill {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelFill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model:.
+        /// </summary>
+        public static string WnImport3dModelLabelModel {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Depth:.
+        /// </summary>
+        public static string WnImport3dModelLabelNewDepth {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelNewDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height:.
+        /// </summary>
+        public static string WnImport3dModelLabelNewHeight {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelNewHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blocks.
+        /// </summary>
+        public static string WnImport3dModelLabelNewSizeBlocks {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelNewSizeBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meters.
+        /// </summary>
+        public static string WnImport3dModelLabelNewSizeMeters {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelNewSizeMeters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width:.
+        /// </summary>
+        public static string WnImport3dModelLabelNewWidth {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelNewWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ore Inside:.
+        /// </summary>
+        public static string WnImport3dModelLabelOreInside {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelOreInside", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ore Shell:.
+        /// </summary>
+        public static string WnImport3dModelLabelOreShell {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelOreShell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Depth:.
+        /// </summary>
+        public static string WnImport3dModelLabelOriginalDepth {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelOriginalDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height:.
+        /// </summary>
+        public static string WnImport3dModelLabelOriginalHeight {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelOriginalHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width:.
+        /// </summary>
+        public static string WnImport3dModelLabelOriginalWidth {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelOriginalWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type:.
+        /// </summary>
+        public static string WnImport3dModelLabelType {
+            get {
+                return ResourceManager.GetString("WnImport3dModelLabelType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X:.
+        /// </summary>
+        public static string WnImport3dModelPositionX {
+            get {
+                return ResourceManager.GetString("WnImport3dModelPositionX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y:.
+        /// </summary>
+        public static string WnImport3dModelPositionY {
+            get {
+                return ResourceManager.GetString("WnImport3dModelPositionY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Z:.
+        /// </summary>
+        public static string WnImport3dModelPositionZ {
+            get {
+                return ResourceManager.GetString("WnImport3dModelPositionZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Facing Player.
+        /// </summary>
+        public static string WnImport3dModelRdoFacingPlayer {
+            get {
+                return ResourceManager.GetString("WnImport3dModelRdoFacingPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Length:.
+        /// </summary>
+        public static string WnImport3dModelRdoMaxLength {
+            get {
+                return ResourceManager.GetString("WnImport3dModelRdoMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiply:.
+        /// </summary>
+        public static string WnImport3dModelRdoMultiply {
+            get {
+                return ResourceManager.GetString("WnImport3dModelRdoMultiply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import 3D Model.
+        /// </summary>
+        public static string WnImport3dModelTitle {
+            get {
+                return ResourceManager.GetString("WnImport3dModelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance in front of Player in Meters..
+        /// </summary>
+        public static string WnImport3dModelTxtDistanceTooltip {
+            get {
+                return ResourceManager.GetString("WnImport3dModelTxtDistanceTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This specifies the longest dimension of the structure..
+        /// </summary>
+        public static string WnImport3dModelTxtMaxLengthTooltip {
+            get {
+                return ResourceManager.GetString("WnImport3dModelTxtMaxLengthTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse for Asteroid file.
+        /// </summary>
+        public static string WnImportAsteroidBtnBrowseFileTooltip {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidBtnBrowseFileTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string WnImportAsteroidBtnCancel {
@@ -5296,6 +6421,420 @@ namespace SEToolbox.Properties {
         public static string WnImportAsteroidBtnCreate {
             get {
                 return ResourceManager.GetString("WnImportAsteroidBtnCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse for Model.
+        /// </summary>
+        public static string WnImportAsteroidModelBtnBrowseTooltip {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelBtnBrowseTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string WnImportAsteroidModelBtnCancel {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelBtnCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string WnImportAsteroidModelBtnCreate {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelBtnCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies the direction of rays. Having rays from all 3 directions takes 3 times longer but produces a more accurate conversion for highly detailed models..
+        /// </summary>
+        public static string WnImportAsteroidModelCboTraceDirectionTooltip {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelCboTraceDirectionTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Affects the balance of symmetrical model, whether the voxels generated are odd or even from the origin.  Visually you may not see any difference on large asteroids..
+        /// </summary>
+        public static string WnImportAsteroidModelCboTraceTypeTooltip {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelCboTraceTypeTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approximate New Size.
+        /// </summary>
+        public static string WnImportAsteroidModelGrpNewSize {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelGrpNewSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orientation.
+        /// </summary>
+        public static string WnImportAsteroidModelGrpOrientation {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelGrpOrientation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original Size.
+        /// </summary>
+        public static string WnImportAsteroidModelGrpOriginalSize {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelGrpOriginalSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale.
+        /// </summary>
+        public static string WnImportAsteroidModelGrpScale {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelGrpScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beep when finished:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelBeepFinished {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelBeepFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Depth of shell material :.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelDepthMaterialShell {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelDepthMaterialShell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelFrontDistance {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelFrontDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid file specified.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelInvalidFile {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelInvalidFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Material Inside:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelMaterialInside {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelMaterialInside", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Material Shell:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelMaterialShell {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelMaterialShell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelModel {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Depth:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelNewDepth {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelNewDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelNewHeight {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelNewHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blocks.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelNewSizeBlocks {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelNewSizeBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meters.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelNewSizeMeters {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelNewSizeMeters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelNewWidth {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelNewWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pitch:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelOrientationPitch {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelOrientationPitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roll:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelOrientationRoll {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelOrientationRoll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yaw:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelOrientationYaw {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelOrientationYaw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Depth:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelOriginalDepth {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelOriginalDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelOriginalHeight {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelOriginalHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelOriginalWidth {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelOriginalWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelPositionX {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelPositionX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelPositionY {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelPositionY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Z:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelPositionZ {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelPositionZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run in low priority:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelRunLowPriority {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelRunLowPriority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save when finished:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelSaveFinished {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelSaveFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trace Directions:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelTraceDirection {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelTraceDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trace Type:.
+        /// </summary>
+        public static string WnImportAsteroidModelLabelTraceType {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelLabelTraceType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In front of Player.
+        /// </summary>
+        public static string WnImportAsteroidModelRdoFrontOfPlayer {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelRdoFrontOfPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Absolute.
+        /// </summary>
+        public static string WnImportAsteroidModelRdoPosAbsolute {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelRdoPosAbsolute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Length:.
+        /// </summary>
+        public static string WnImportAsteroidModelRdoScaleMaxLength {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelRdoScaleMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiply:.
+        /// </summary>
+        public static string WnImportAsteroidModelRdoScaleMultiply {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelRdoScaleMultiply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Materials.
+        /// </summary>
+        public static string WnImportAsteroidModelTabMaterials {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelTabMaterials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        public static string WnImportAsteroidModelTabPosition {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelTabPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing.
+        /// </summary>
+        public static string WnImportAsteroidModelTabProcessing {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelTabProcessing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quality/Speed.
+        /// </summary>
+        public static string WnImportAsteroidModelTabQualitySpeed {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelTabQualitySpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale.
+        /// </summary>
+        public static string WnImportAsteroidModelTabScale {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelTabScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Asteroid 3D Model.
+        /// </summary>
+        public static string WnImportAsteroidModelTitle {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance in front of Player in Meters..
+        /// </summary>
+        public static string WnImportAsteroidModelTxtFrontDistanceTooltip {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelTxtFrontDistanceTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This specifies the longest dimension of the structure..
+        /// </summary>
+        public static string WnImportAsteroidModelTxtMaxLengthTooltip {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidModelTxtMaxLengthTooltip", resourceCulture);
             }
         }
         
@@ -5377,6 +6916,15 @@ namespace SEToolbox.Properties {
         public static string WnImportAsteroidTxtShellTooltip {
             get {
                 return ResourceManager.GetString("WnImportAsteroidTxtShellTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse for Image.
+        /// </summary>
+        public static string WnImportImageBtnBrowseImageTooltip {
+            get {
+                return ResourceManager.GetString("WnImportImageBtnBrowseImageTooltip", resourceCulture);
             }
         }
         
@@ -5945,6 +7493,24 @@ namespace SEToolbox.Properties {
         public static string WnSelectCubeTitle {
             get {
                 return ResourceManager.GetString("WnSelectCubeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ....
+        /// </summary>
+        public static string WnSettingsBtnApplicationPath {
+            get {
+                return ResourceManager.GetString("WnSettingsBtnApplicationPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ....
+        /// </summary>
+        public static string WnSettingsBtnCustomVoxelPath {
+            get {
+                return ResourceManager.GetString("WnSettingsBtnCustomVoxelPath", resourceCulture);
             }
         }
         

@@ -10,6 +10,7 @@
     using SEToolbox.Models;
     using SEToolbox.Support;
     using VRage.Game;
+    using Res = SEToolbox.Properties.Resources;
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public static class SpaceEngineersRepair
@@ -31,8 +32,8 @@
 
             if (xDoc == null)
             {
-                str.AppendLine("! Sector file is missing or broken.");
-                str.AppendLine("! Unable to repair.");
+                str.AppendLine(Res.ClsRepairSectorBroken);
+                str.AppendLine(Res.ClsRepairUnableToRepair);
                 missingFiles = true;
             }
             else
@@ -62,7 +63,7 @@
 
                                 entityIdNodes.Current.InsertBefore(string.Format("<Vector3I><X>{0}</X><Y>{1}</Y><Z>{2}</Z></Vector3I>", x, y, z));
                                 removeNodes.Add(entityIdNodes.Current.Clone());
-                                str.AppendLine("* Replaced BlockGroup item.");
+                                str.AppendLine(Res.ClsRepairReplacedBlockGroup);
                                 saveAfterScan = true;
                                 statusNormal = false;
                             }
@@ -118,7 +119,7 @@
                 if (saveAfterScan)
                 {
                     repairWorld.SaveSectorXml(true, xDoc);
-                    str.AppendLine("* Saved changes.");
+                    str.AppendLine(Res.ClsRepairSavedChanges);
                 }
 
                 #endregion
@@ -130,16 +131,16 @@
             if (repairWorld.Checkpoint == null)
             {
                 statusNormal = false;
-                str.AppendLine("! Checkpoint file is missing or broken.");
-                str.AppendLine("! Unable to repair.");
+                str.AppendLine(Res.ClsRepairCheckpointBroken);
+                str.AppendLine(Res.ClsRepairUnableToRepair);
                 missingFiles = true;
             }
 
             if (repairWorld.SectorData == null)
             {
                 statusNormal = false;
-                str.AppendLine("! Sector file is missing or broken.");
-                str.AppendLine("! Unable to repair.");
+                str.AppendLine(Res.ClsRepairSectorBroken);
+                str.AppendLine(Res.ClsRepairUnableToRepair);
                 missingFiles = true;
             }
 
@@ -159,7 +160,7 @@
                             identity.IdentityId = MergeId(identity.IdentityId, IDType.IDENTITY, ref idReplacementTable);
 
                             statusNormal = false;
-                            str.AppendLine("! Fixed player identity.");
+                            str.AppendLine(Res.ClsRepairFixedPlayerIdentity);
                             saveAfterScan = true;
                         }
                     }
@@ -174,7 +175,7 @@
                             player.Value.IdentityId = MergeId(player.Value.IdentityId, IDType.IDENTITY, ref idReplacementTable);
 
                             statusNormal = false;
-                            str.AppendLine("! Fixed player identity.");
+                            str.AppendLine(Res.ClsRepairFixedPlayerIdentity);
                             saveAfterScan = true;
                         }
                     }
@@ -183,7 +184,7 @@
                 if (saveAfterScan)
                 {
                     repairWorld.SaveCheckPointAndSector(true);
-                    str.AppendLine("* Saved changes.");
+                    str.AppendLine(Res.ClsRepairSavedChanges);
                 }
 
                 if (world.SaveType == SaveWorldType.Local)
@@ -193,7 +194,7 @@
                     if (player == null)
                     {
                         statusNormal = false;
-                        str.AppendLine("! No active Player in Save content.");
+                        str.AppendLine(Res.ClsRepairNoPlayerFound);
 
                         character = repairWorld.FindAstronautCharacter();
                         if (character != null)
@@ -201,9 +202,9 @@
                             repairWorld.Checkpoint.ControlledObject = character.EntityId;
                             repairWorld.Checkpoint.CameraController = MyCameraControllerEnum.Entity;
                             repairWorld.Checkpoint.CameraEntity = character.EntityId;
-                            str.AppendLine("* Found and Set new active Player.");
+                            str.AppendLine(Res.ClsRepairFoundSetPlayer);
                             repairWorld.SaveCheckPointAndSector(true);
-                            str.AppendLine("* Saved changes.");
+                            str.AppendLine(Res.ClsRepairSavedChanges);
                         }
                         else
                         {
@@ -213,9 +214,9 @@
                                 repairWorld.Checkpoint.ControlledObject = cockpit.EntityId;
                                 repairWorld.Checkpoint.CameraController = MyCameraControllerEnum.ThirdPersonSpectator;
                                 repairWorld.Checkpoint.CameraEntity = 0;
-                                str.AppendLine("* Found and Set new active Player.");
+                                str.AppendLine(Res.ClsRepairFoundSetPlayer);
                                 repairWorld.SaveCheckPointAndSector(true);
-                                str.AppendLine("* Saved changes.");
+                                str.AppendLine(Res.ClsRepairSavedChanges);
                             }
                             else
                             {
@@ -280,7 +281,7 @@
 
                                 str.AppendLine("* Created new active Player.");
                                 repairWorld.SaveCheckPointAndSector(true);
-                                str.AppendLine("* Saved changes.");
+                                str.AppendLine(Res.ClsRepairSavedChanges);
                                 */
                             }
                         }
@@ -309,7 +310,7 @@
                                     i.PhysicalContent.SubtypeName == subtypeName))
                                 {
                                     statusNormal = false;
-                                    str.AppendLine("! Replaced astronaut's missing " + subtypeName + ".");
+                                    str.AppendLine(string.Format(Res.ClsRepairReplacedCharacterSubType, subtypeName));
                                     saveAfterScan = true;
                                     inventory.Items.Add(new MyObjectBuilder_InventoryItem
                                     {
@@ -340,7 +341,7 @@
                                 {
                                     character.CharacterModel = Sandbox.Game.Entities.Character.MyCharacter.DefaultModel;
                                     statusNormal = false;
-                                    str.AppendLine("! Fixed astronaut's CharacterModel.");
+                                    str.AppendLine(Res.ClsRepairFixedCharacterModel);
                                     saveAfterScan = true;
                                 }
                             }
@@ -357,7 +358,7 @@
                         {
                             character.CharacterModel = Sandbox.Game.Entities.Character.MyCharacter.DefaultModel;
                             statusNormal = false;
-                            str.AppendLine("! Fixed astronaut's CharacterModel.");
+                            str.AppendLine(Res.ClsRepairFixedCharacterModel);
                             saveAfterScan = true;
                         }
                     }
@@ -371,7 +372,7 @@
                 //        {
                 //            item.Value.PlayerModel = SpaceEngineersCore.Resources.CharacterDefinitions[0].Name;
                 //            statusNormal = false;
-                //            str.AppendLine("! Fixed astronaut's CharacterModel.");
+                //            str.AppendLine(Res.ClsRepairFixedCharacterModel);
                 //            saveAfterScan = true;
                 //        }
 
@@ -390,13 +391,13 @@
                 if (saveAfterScan)
                 {
                     repairWorld.SaveCheckPointAndSector(true);
-                    str.AppendLine("* Saved changes.");
+                    str.AppendLine(Res.ClsRepairSavedChanges);
                 }
             }
 
             if (statusNormal)
             {
-                str.AppendLine("Detected no issues.");
+                str.AppendLine(Res.ClsRepairNoIssues);
             }
 
             return str.ToString();

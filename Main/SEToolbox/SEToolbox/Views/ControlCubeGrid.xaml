@@ -580,7 +580,7 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="Count" Width="80" SortBinding="{Binding Count}">
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColCount}" Width="80" SortBinding="{Binding Count}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock TextAlignment="Right" Text="{Binding Path=Count, StringFormat='{}{0:#,##0}'}" />

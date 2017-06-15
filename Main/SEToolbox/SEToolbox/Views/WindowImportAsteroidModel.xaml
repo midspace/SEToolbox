@@ -9,7 +9,7 @@
         lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
         lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
-        Title="Import Asteroid 3D Model" Height="600" Width="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        Title="{lex:Loc WnImportAsteroidModelTitle}" Height="600" Width="800" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
@@ -37,9 +37,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Label Content="Model:" />
+                <Label Content="{lex:Loc WnImportAsteroidModelLabelModel}" />
                 <TextBox Width="180" Text="{Binding Filename, Mode=TwoWay}" VerticalAlignment="Center" Name="uxInitialElement" Grid.Column="1"/>
-                <Button ToolTip="Browse for Model" Command="{Binding Browse3DModelCommand}" VerticalAlignment="Center" Grid.Column="2">
+                <Button ToolTip="{lex:Loc WnImportAsteroidModelBtnBrowseTooltip}" Command="{Binding Browse3DModelCommand}" VerticalAlignment="Center" Grid.Column="2">
                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                 </Button>
                 <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8,0,0,0" Visibility="{Binding IsValidModel, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -48,7 +48,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8,0,0,0" Visibility="{Binding IsWrongModel, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Image Width="24" Height="24" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=error24}" VerticalAlignment="Center"/>
-                    <TextBlock Text="Invalid file specified" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <TextBlock Text="{lex:Loc WnImportAsteroidModelLabelInvalidFile}" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
@@ -81,9 +81,9 @@
                 </Border>
             </Grid>
             <TabControl Grid.Row="2">
-                <TabItem Header="Scale">
+                <TabItem Header="{lex:Loc WnImportAsteroidModelTabScale}">
                     <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal">
-                        <GroupBox Header="Original Size" MinWidth="120">
+                        <GroupBox Header="{lex:Loc WnImportAsteroidModelGrpOriginalSize}" MinWidth="120">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -94,15 +94,15 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="65"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Width:" VerticalAlignment="Center" Margin="4,0" />
+                                <TextBlock Text="{lex:Loc WnImportAsteroidModelLabelOriginalWidth}" VerticalAlignment="Center" Margin="4,0" />
                                 <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Width, StringFormat='{}{0:#,##0.00}'}" />
-                                <TextBlock Text="Height:" VerticalAlignment="Center" Margin="4,0" Grid.Row="1" />
+                                <TextBlock Text="{lex:Loc WnImportAsteroidModelLabelOriginalHeight}" VerticalAlignment="Center" Margin="4,0" Grid.Row="1" />
                                 <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Height, StringFormat='{}{0:#,##0.00}'}" />
-                                <TextBlock Text="Depth:" VerticalAlignment="Center" Margin="4,0" Grid.Row="2" />
+                                <TextBlock Text="{lex:Loc WnImportAsteroidModelLabelOriginalDepth}" VerticalAlignment="Center" Margin="4,0" Grid.Row="2" />
                                 <TextBlock Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=OriginalModelSize.Depth, StringFormat='{}{0:#,##0.00}'}" />
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Orientation">
+                        <GroupBox Header="{lex:Loc WnImportAsteroidModelGrpOrientation}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -113,7 +113,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Row="0" Text="Pitch:" VerticalAlignment="Center" Margin="4,0"/>
+                                <TextBlock Grid.Row="0" Text="{lex:Loc WnImportAsteroidModelLabelOrientationPitch}" VerticalAlignment="Center" Margin="4,0"/>
                                 <TextBox Width="80" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
                                     <TextBox.Text>
                                         <Binding Path="RotatePitch" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
@@ -123,7 +123,7 @@
                                         </Binding>
                                     </TextBox.Text>
                                 </TextBox>
-                                <TextBlock Text="Yaw:" Grid.Row="1" VerticalAlignment="Center" Margin="4,0"/>
+                                <TextBlock Text="{lex:Loc WnImportAsteroidModelLabelOrientationYaw}" Grid.Row="1" VerticalAlignment="Center" Margin="4,0"/>
                                 <TextBox Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
                                     <TextBox.Text>
                                         <Binding Path="RotateYaw" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
@@ -133,7 +133,7 @@
                                         </Binding>
                                     </TextBox.Text>
                                 </TextBox>
-                                <TextBlock Grid.Row="2" Text="Roll:" VerticalAlignment="Center" Margin="4,0"/>
+                                <TextBlock Grid.Row="2" Text="{lex:Loc WnImportAsteroidModelLabelOrientationRoll}" VerticalAlignment="Center" Margin="4,0"/>
                                 <TextBox Width="80" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
                                     <TextBox.Text>
                                         <Binding Path="RotateRoll" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
@@ -146,7 +146,7 @@
                             </Grid>
                         </GroupBox>
 
-                        <GroupBox Header="Scale" MinWidth="120">
+                        <GroupBox Header="{lex:Loc WnImportAsteroidModelGrpScale}" MinWidth="120">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -156,7 +156,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <RadioButton Content="Multiply:" IsChecked="{Binding IsMultipleScale}" />
+                                <RadioButton Content="{lex:Loc WnImportAsteroidModelRdoScaleMultiply}" IsChecked="{Binding IsMultipleScale}" />
                                 <TextBox Width="80" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
                                     <TextBox.Text>
                                         <Binding Path="MultipleScale" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
@@ -166,8 +166,8 @@
                                         </Binding>
                                     </TextBox.Text>
                                 </TextBox>
-                                <RadioButton Content="Max Length:" Grid.Row="1" IsChecked="{Binding IsMaxLengthScale}"/>
-                                <TextBox Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}" ToolTip="This specifies the longest dimension of the structure.">
+                                <RadioButton Content="{lex:Loc WnImportAsteroidModelRdoScaleMaxLength}" Grid.Row="1" IsChecked="{Binding IsMaxLengthScale}"/>
+                                <TextBox Width="80" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource textBoxInError}" ToolTip="{lex:Loc WnImportAsteroidModelTxtMaxLengthTooltip}">
                                     <TextBox.Text>
                                         <Binding Path="MaxLengthScale" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                                             <Binding.ValidationRules>
@@ -179,7 +179,7 @@
                             </Grid>
                         </GroupBox>
 
-                        <GroupBox Header="Approximate New Size" MinWidth="120" Margin="8,0,0,0">
+                        <GroupBox Header="{lex:Loc WnImportAsteroidModelGrpNewSize}" MinWidth="120" Margin="8,0,0,0">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -192,22 +192,22 @@
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="60"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="1" Text="Blocks" HorizontalAlignment="Right" />
-                                <TextBlock Grid.Column="2" Text="Meters" HorizontalAlignment="Right" />
-                                <TextBlock Grid.Row="1" Text="Width:" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc WnImportAsteroidModelLabelNewSizeBlocks}" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="2" Text="{lex:Loc WnImportAsteroidModelLabelNewSizeMeters}" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Row="1" Text="{lex:Loc WnImportAsteroidModelLabelNewWidth}" Margin="0,0,0,0" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Width, StringFormat='{}{0:#,##0}'}" />
                                 <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.X, StringFormat='{}{0:#,##0.0}'}" />
-                                <TextBlock Grid.Row="2" Text="Height:" Margin="0,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="2" Text="{lex:Loc WnImportAsteroidModelLabelNewHeight}" Margin="0,0,0,0" VerticalAlignment="Center" />
                                 <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Height, StringFormat='{}{0:#,##0}'}" />
                                 <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.Y, StringFormat='{}{0:#,##0.0}'}" />
-                                <TextBlock Grid.Row="3" Text="Depth:" Margin="0,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="3" Text="{lex:Loc WnImportAsteroidModelLabelNewDepth}" Margin="0,0,0,0" VerticalAlignment="Center" />
                                 <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelSize.Depth, StringFormat='{}{0:#,##0}'}" />
                                 <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=NewModelScale.Z, StringFormat='{}{0:#,##0.0}'}" />
                             </Grid>
                         </GroupBox>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="Quality/Speed">
+                <TabItem Header="{lex:Loc WnImportAsteroidModelTabQualitySpeed}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -221,16 +221,16 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="Trace Type:" Grid.Row="0"/>
-                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceTypeEnum}}" SelectedValue="{Binding TraceType}" Margin="0,1,0,3" ToolTip="Affects the balance of symmetrical model, whether the voxels generated are odd or even from the origin.  Visually you may not see any difference on large asteroids.">
+                        <Label Content="{lex:Loc WnImportAsteroidModelLabelTraceType}" Grid.Row="0"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceTypeEnum}}" SelectedValue="{Binding TraceType}" Margin="0,1,0,3" ToolTip="{lex:Loc WnImportAsteroidModelCboTraceTypeTooltip}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Label Grid.Row="1" Grid.Column="0" Content="Trace Directions:"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceDirectionEnum}}" SelectedValue="{Binding TraceDirection}" Margin="0,1,0,3" ToolTip="Specifies the direction of rays. Having rays from all 3 directions takes 3 times longer but produces a more accurate conversion for highly detailed models.">
+                        <Label Grid.Row="1" Grid.Column="0" Content="{lex:Loc WnImportAsteroidModelLabelTraceDirection}"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource TraceDirectionEnum}}" SelectedValue="{Binding TraceDirection}" Margin="0,1,0,3" ToolTip="{lex:Loc WnImportAsteroidModelCboTraceDirectionTooltip}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
@@ -247,7 +247,7 @@
                         </ComboBox>-->
                     </Grid>
                 </TabItem>
-                <TabItem Header="Position">
+                <TabItem Header="{lex:Loc WnImportAsteroidModelTabPosition}">
                     <Grid Margin="8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -258,7 +258,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <RadioButton IsChecked="{Binding IsAbsolutePosition}" Content="Absolute" />
+                        <RadioButton IsChecked="{Binding IsAbsolutePosition}" Content="{lex:Loc WnImportAsteroidModelRdoPosAbsolute}" />
                         <Grid Grid.Row="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -269,15 +269,15 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="X:" Margin="0,0,4,0" VerticalAlignment="Center" />
+                            <Label Content="{lex:Loc WnImportAsteroidModelLabelPositionX}" Margin="0,0,4,0" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Label Content="Y:" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
+                            <Label Content="{lex:Loc WnImportAsteroidModelLabelPositionY}" Margin="0,0,4,0" Grid.Row="1" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Grid.Row="1" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Label Content="Z:" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
+                            <Label Content="{lex:Loc WnImportAsteroidModelLabelPositionZ}" Margin="0,0,4,0" Grid.Row="2"  VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" Grid.Row="2" MinWidth="80" Width="100" VerticalAlignment="Center" Text="{Binding Path=Position.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                         <Separator Grid.Column="1" Grid.RowSpan="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Width="1"/>
-                        <RadioButton Grid.Column="2" IsChecked="{Binding IsInfrontofPlayer}" Content="In front of Player"/>
+                        <RadioButton Grid.Column="2" IsChecked="{Binding IsInfrontofPlayer}" Content="{lex:Loc WnImportAsteroidModelRdoFrontOfPlayer}"/>
                         <Grid Grid.Column="2" Grid.Row="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -290,14 +290,14 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Distance:" Grid.Row="2" />
-                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" ToolTip="Distance in front of Player in Meters." />
+                            <Label Content="{lex:Loc WnImportAsteroidModelLabelFrontDistance}" Grid.Row="2" />
+                            <TextBox Grid.Column="1" MinWidth="80" Grid.Row="2" Text="{Binding BuildDistance}" ToolTip="{lex:Loc WnImportAsteroidModelTxtFrontDistanceTooltip}" />
                         </Grid>
 
                     </Grid>
 
                 </TabItem>
-                <TabItem Header="Materials">
+                <TabItem Header="{lex:Loc WnImportAsteroidModelTabMaterials}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -319,13 +319,13 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <!--Import To Asteroid settings-->
-                            <Label Grid.Row="2" Grid.Column="0" Content="Material Inside:"/>
+                            <Label Grid.Row="2" Grid.Column="0" Content="{lex:Loc WnImportAsteroidModelLabelMaterialInside}"/>
                             <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding InsideMaterialsCollection}" SelectedValue="{Binding InsideStockMaterial}" DisplayMemberPath="DisplayName"/>
 
-                            <Label Grid.Row="3" Grid.Column="0" Content="Material Shell:"/>
+                            <Label Grid.Row="3" Grid.Column="0" Content="{lex:Loc WnImportAsteroidModelLabelMaterialShell}"/>
                             <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding OutsideMaterialsCollection}" SelectedValue="{Binding OutsideStockMaterial}" DisplayMemberPath="DisplayName"/>
 
-                            <Label Grid.Row="4" Grid.Column="0" Content="Depth of shell material :"/>
+                            <Label Grid.Row="4" Grid.Column="0" Content="{lex:Loc WnImportAsteroidModelLabelDepthMaterialShell}"/>
                             <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200">
                                 <TextBox.Text>
                                     <Binding Path="OutsideMaterialDepth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
@@ -385,7 +385,7 @@
                         </Grid>-->
                     </Grid>
                 </TabItem>
-                <TabItem Header="Processing">
+                <TabItem Header="{lex:Loc WnImportAsteroidModelTabProcessing}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -407,21 +407,21 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="0" Grid.Column="0" Content="Beep when finished:"/>
+                            <Label Grid.Row="0" Grid.Column="0" Content="{lex:Loc WnImportAsteroidModelLabelBeepFinished}"/>
                             <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding BeepWhenFinished}"/>
 
-                            <Label Grid.Row="1" Grid.Column="0" Content="Run in low priority:"/>
+                            <Label Grid.Row="1" Grid.Column="0" Content="{lex:Loc WnImportAsteroidModelLabelRunLowPriority}"/>
                             <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding RunInLowPrioity}"/>
 
-                            <Label Grid.Row="2" Grid.Column="0" Content="Save when finished:"/>
+                            <Label Grid.Row="2" Grid.Column="0" Content="{lex:Loc WnImportAsteroidModelLabelSaveFinished}"/>
                             <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding SaveWhenFinsihed}"/>
                         </Grid>
                     </Grid>
                 </TabItem>
             </TabControl>
             <StackPanel Grid.Row="3" Orientation="Horizontal" Height="28" Margin="8,8" HorizontalAlignment="Right">
-                <Button Width="90" Command="{Binding CreateCommand}" Content="Create" IsDefault="True"/>
-                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="Cancel" IsCancel="True"/>
+                <Button Width="90" Command="{Binding CreateCommand}" Content="{lex:Loc WnImportAsteroidModelBtnCreate}" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnImportAsteroidModelBtnCancel}" IsCancel="True"/>
             </StackPanel>
         </Grid>
         <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />

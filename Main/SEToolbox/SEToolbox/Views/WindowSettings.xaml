@@ -45,14 +45,14 @@
                             <Binding Path="SEBinPath" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                         </TextBox.Text>
                     </TextBox>
-                    <Button Grid.Row="0" Grid.Column="2" Content="..." VerticalAlignment="Center" Command="{Binding BrowseAppPathCommand}" Padding="4 0" />
+                    <Button Grid.Row="0" Grid.Column="2" Content="{lex:Loc WnSettingsBtnApplicationPath}" VerticalAlignment="Center" Command="{Binding BrowseAppPathCommand}" Padding="4 0" />
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc WnSettingsLabelCustomVoxelPath}" VerticalAlignment="Center" Margin="0,0,4,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" ToolTip="{lex:Loc WnSettingsTxtCustomVoxelPath}">
                         <TextBox.Text>
                             <Binding Path="CustomVoxelPath" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                         </TextBox.Text>
                     </TextBox>
-                    <Button Grid.Row="1" Grid.Column="2" Content="..." VerticalAlignment="Center" Command="{Binding BrowseVoxelPathCommand}" Padding="4 0"/>
+                    <Button Grid.Row="1" Grid.Column="2" Content="{lex:Loc WnSettingsBtnCustomVoxelPath}" VerticalAlignment="Center" Command="{Binding BrowseVoxelPathCommand}" Padding="4 0"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc WnSettingsLabelCheckForUpdates}" VerticalAlignment="Center" Margin="0,0,4,0"/>
                     <CheckBox Grid.Row="2" Grid.Column="1" Content="{lex:Loc WnSettingsChkCheckForUpdates}" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding AlwaysCheckForUpdates}" ToolTip="{lex:Loc WnSettingsChkCheckForUpdatesTooltip}"/>
                 </Grid>

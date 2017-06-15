@@ -56,7 +56,7 @@
                 <RadioButton Grid.Row="1" Grid.Column="0" Content="{lex:Loc WnImportAsteroidRdoFile}" Margin="0,0,4,0" VerticalAlignment="Center" IsChecked="{Binding IsFileVoxel}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
                     <TextBox Width="178" Text="{Binding SourceFile, Mode=TwoWay}" VerticalAlignment="Center" ToolTip="{lex:Loc WnImportAsteroidTxtFile}"/>
-                    <Button ToolTip="Browse for Asteroid file" Command="{Binding BrowseVoxelCommand}" VerticalAlignment="Center">
+                    <Button ToolTip="{lex:Loc WnImportAsteroidBtnBrowseFileTooltip}" Command="{Binding BrowseVoxelCommand}" VerticalAlignment="Center">
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=folder}" />
                     </Button>
                 </StackPanel>

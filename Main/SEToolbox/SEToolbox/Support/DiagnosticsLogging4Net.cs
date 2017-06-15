@@ -7,6 +7,7 @@
     using log4net;
     using System;
     using System.Globalization;
+    using Res = SEToolbox.Properties.Resources;
 
     public static partial class DiagnosticsLogging
     {
@@ -27,27 +28,27 @@
         public static void LogException(Exception exception)
         {
             var diagReport = new StringBuilder();
-            diagReport.AppendLine("Unhandled Exception");
+            diagReport.AppendLine(Res.ClsErrorUnhandled);
 
             var appFile = Path.GetFullPath(Assembly.GetEntryAssembly().Location);
             var appFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-            diagReport.AppendFormat("Application: {0}\r\n", ObsufacatePathNames(appFile));
-            diagReport.AppendFormat("CommandLine: {0}\r\n", ObsufacatePathNames(Environment.CommandLine));
-            diagReport.AppendFormat("CurrentDirectory: {0}\r\n", ObsufacatePathNames(Environment.CurrentDirectory));
-            diagReport.AppendFormat("SEBinPath: {0}\r\n", GlobalSettings.Default.SEBinPath);
-            diagReport.AppendFormat("SEBinVersion: {0}\r\n", GlobalSettings.Default.SEVersion);
-            diagReport.AppendFormat("ProcessorCount: {0}\r\n", Environment.ProcessorCount);
-            diagReport.AppendFormat("OSVersion: {0}\r\n", Environment.OSVersion);
-            diagReport.AppendFormat("Version: {0}\r\n", Environment.Version);
-            diagReport.AppendFormat("Is64BitOperatingSystem: {0}\r\n", Environment.Is64BitOperatingSystem);
-            diagReport.AppendFormat("IntPtr.Size: {0}\r\n", IntPtr.Size);
-            diagReport.AppendFormat("IsAdmin: {0}\r\n", ToolboxUpdater.IsRuningElevated());
-            diagReport.AppendFormat("CurrentUICulture: {0}\r\n", CultureInfo.CurrentUICulture.IetfLanguageTag);
-            diagReport.AppendFormat("CurrentCulture: {0}\r\n", CultureInfo.CurrentCulture.IetfLanguageTag);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorApplication, ObsufacatePathNames(appFile));
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorCommandLine, ObsufacatePathNames(Environment.CommandLine));
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorCurrentDirectory, ObsufacatePathNames(Environment.CurrentDirectory));
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorSEBinPath, GlobalSettings.Default.SEBinPath);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorSEBinVersion, GlobalSettings.Default.SEVersion);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorProcessorCount, Environment.ProcessorCount);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorOSVersion, Environment.OSVersion);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorVersion, Environment.Version);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorIs64BitOperatingSystem, Environment.Is64BitOperatingSystem);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorIntPtrSize, IntPtr.Size);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorIsAdmin, ToolboxUpdater.IsRuningElevated());
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorCurrentUICulture, CultureInfo.CurrentUICulture.IetfLanguageTag);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorCurrentCulture, CultureInfo.CurrentCulture.IetfLanguageTag);
             diagReport.AppendFormat("\r\n");
 
-            diagReport.AppendFormat("Files:\r\n");
+            diagReport.AppendFormat("{0}\r\n", Res.ClsErrorFiles);
 
             if (appFilePath != null)
             {
@@ -65,7 +66,7 @@
             if (binCache != null && Directory.Exists(binCache))
             {
                 diagReport.AppendFormat("\r\n");
-                diagReport.AppendFormat("BinCachePath: {0}\r\n", ObsufacatePathNames(binCache));
+                diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorBinCachePath, ObsufacatePathNames(binCache));
 
                 var files = Directory.GetFiles(binCache);
                 foreach (var file in files)

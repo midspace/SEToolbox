@@ -2157,4 +2157,526 @@ Planet Generator:	{17}</value>
   <data name="WnVoxelMergeTitle" xml:space="preserve">
     <value>Asteroid Merge</value>
   </data>
+  <data name="ClsRepairCheckpointBroken" xml:space="preserve">
+    <value>! Checkpoint file is missing or broken.</value>
+  </data>
+  <data name="ClsRepairFixedCharacterModel" xml:space="preserve">
+    <value>! Fixed astronaut's CharacterModel.</value>
+  </data>
+  <data name="ClsRepairFixedPlayerIdentity" xml:space="preserve">
+    <value>! Fixed player identity.</value>
+  </data>
+  <data name="ClsRepairFoundSetPlayer" xml:space="preserve">
+    <value>* Found and Set new active Player.</value>
+  </data>
+  <data name="ClsRepairNoIssues" xml:space="preserve">
+    <value>Detected no issues.</value>
+  </data>
+  <data name="ClsRepairNoPlayerFound" xml:space="preserve">
+    <value>! No active Player in Save content.</value>
+  </data>
+  <data name="ClsRepairReplacedBlockGroup" xml:space="preserve">
+    <value>* Replaced BlockGroup item.</value>
+  </data>
+  <data name="ClsRepairReplacedCharacterSubType" xml:space="preserve">
+    <value>! Replaced astronaut's missing {0}.</value>
+  </data>
+  <data name="ClsRepairSavedChanges" xml:space="preserve">
+    <value>* Saved changes.</value>
+  </data>
+  <data name="ClsRepairSectorBroken" xml:space="preserve">
+    <value>! Sector file is missing or broken.</value>
+  </data>
+  <data name="ClsRepairUnableToRepair" xml:space="preserve">
+    <value>! Unable to repair.</value>
+  </data>
+  <data name="CtlCubeColCount" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="WnGenAsteroidFieldBtnAddRandom" xml:space="preserve">
+    <value>Add _Random</value>
+  </data>
+  <data name="WnGenAsteroidFieldBtnAddRow" xml:space="preserve">
+    <value>_Add</value>
+  </data>
+  <data name="WnGenAsteroidFieldBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnGenAsteroidFieldBtnClearRows" xml:space="preserve">
+    <value>_Clear</value>
+  </data>
+  <data name="WnGenAsteroidFieldBtnCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="WnGenAsteroidFieldBtnDeleteRow" xml:space="preserve">
+    <value>_Delete</value>
+  </data>
+  <data name="WnGenAsteroidFieldColAsteroid" xml:space="preserve">
+    <value>Asteroid</value>
+  </data>
+  <data name="WnGenAsteroidFieldColMaterial" xml:space="preserve">
+    <value>Material</value>
+  </data>
+  <data name="WnGenAsteroidFieldColMaterial2" xml:space="preserve">
+    <value>2nd Material</value>
+  </data>
+  <data name="WnGenAsteroidFieldColMaterial3" xml:space="preserve">
+    <value>3rd Material</value>
+  </data>
+  <data name="WnGenAsteroidFieldColMaterial4" xml:space="preserve">
+    <value>4th Material</value>
+  </data>
+  <data name="WnGenAsteroidFieldColMaterial5" xml:space="preserve">
+    <value>5th Material</value>
+  </data>
+  <data name="WnGenAsteroidFieldColMaterial6" xml:space="preserve">
+    <value>6th Material</value>
+  </data>
+  <data name="WnGenAsteroidFieldColMaterial7" xml:space="preserve">
+    <value>7th Material</value>
+  </data>
+  <data name="WnGenAsteroidFieldColPercent" xml:space="preserve">
+    <value>Percent</value>
+  </data>
+  <data name="WnGenAsteroidFieldColPercent2" xml:space="preserve">
+    <value>2nd Percent</value>
+  </data>
+  <data name="WnGenAsteroidFieldColPercent3" xml:space="preserve">
+    <value>3rd Percent</value>
+  </data>
+  <data name="WnGenAsteroidFieldColPercent4" xml:space="preserve">
+    <value>4th Percent</value>
+  </data>
+  <data name="WnGenAsteroidFieldColPercent5" xml:space="preserve">
+    <value>5th Percent</value>
+  </data>
+  <data name="WnGenAsteroidFieldColPercent6" xml:space="preserve">
+    <value>6th Percent</value>
+  </data>
+  <data name="WnGenAsteroidFieldColPercent7" xml:space="preserve">
+    <value>"7th Percent</value>
+  </data>
+  <data name="WnGenAsteroidFieldLabelCenter" xml:space="preserve">
+    <value>Center:</value>
+  </data>
+  <data name="WnGenAsteroidFieldLabelFillType" xml:space="preserve">
+    <value>Fill type:</value>
+  </data>
+  <data name="WnGenAsteroidFieldLabelRangeFrom" xml:space="preserve">
+    <value>Range from:</value>
+  </data>
+  <data name="WnGenAsteroidFieldLabelRangeTo" xml:space="preserve">
+    <value>to:</value>
+  </data>
+  <data name="WnGenAsteroidFieldTitle" xml:space="preserve">
+    <value>Generate Asteroid Field</value>
+  </data>
+  <data name="WnGenAsteroidFieldTxtCenterX" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGenAsteroidFieldTxtCenterXTooltip" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGenAsteroidFieldTxtCenterY" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGenAsteroidFieldTxtCenterYTooltip" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGenAsteroidFieldTxtCenterZ" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnGenAsteroidFieldTxtCenterZTooltip" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnImport3dModelBtnBrowseModelTooltip" xml:space="preserve">
+    <value>Browse for Model</value>
+  </data>
+  <data name="WnImport3dModelBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnImport3dModelBtnCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="WnImport3dModelGrpNewSize" xml:space="preserve">
+    <value>Approximate New Size</value>
+  </data>
+  <data name="WnImport3dModelGrpOrientation" xml:space="preserve">
+    <value>Orientation</value>
+  </data>
+  <data name="WnImport3dModelGrpOriginalSize" xml:space="preserve">
+    <value>Original Size</value>
+  </data>
+  <data name="WnImport3dModelGrpPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="WnImport3dModelGrpScale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="WnImport3dModelLabelArmor" xml:space="preserve">
+    <value>Armor:</value>
+  </data>
+  <data name="WnImport3dModelLabelCalculation" xml:space="preserve">
+    <value>Calculation:</value>
+  </data>
+  <data name="WnImport3dModelLabelDistance" xml:space="preserve">
+    <value>Distance:</value>
+  </data>
+  <data name="WnImport3dModelLabelFill" xml:space="preserve">
+    <value>Fill:</value>
+  </data>
+  <data name="WnImport3dModelLabelModel" xml:space="preserve">
+    <value>Model:</value>
+  </data>
+  <data name="WnImport3dModelLabelNewDepth" xml:space="preserve">
+    <value>Depth:</value>
+  </data>
+  <data name="WnImport3dModelLabelNewHeight" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="WnImport3dModelLabelNewSizeBlocks" xml:space="preserve">
+    <value>Blocks</value>
+  </data>
+  <data name="WnImport3dModelLabelNewSizeMeters" xml:space="preserve">
+    <value>Meters</value>
+  </data>
+  <data name="WnImport3dModelLabelNewWidth" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="WnImport3dModelLabelOreInside" xml:space="preserve">
+    <value>Ore Inside:</value>
+  </data>
+  <data name="WnImport3dModelLabelOreShell" xml:space="preserve">
+    <value>Ore Shell:</value>
+  </data>
+  <data name="WnImport3dModelLabelOriginalDepth" xml:space="preserve">
+    <value>Depth:</value>
+  </data>
+  <data name="WnImport3dModelLabelOriginalHeight" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="WnImport3dModelLabelOriginalWidth" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="WnImport3dModelLabelType" xml:space="preserve">
+    <value>Type:</value>
+  </data>
+  <data name="WnImport3dModelPositionX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="WnImport3dModelPositionY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="WnImport3dModelPositionZ" xml:space="preserve">
+    <value>Z:</value>
+  </data>
+  <data name="WnImport3dModelRdoFacingPlayer" xml:space="preserve">
+    <value>Facing Player</value>
+  </data>
+  <data name="WnImport3dModelRdoMaxLength" xml:space="preserve">
+    <value>Max Length:</value>
+  </data>
+  <data name="WnImport3dModelRdoMultiply" xml:space="preserve">
+    <value>Multiply:</value>
+  </data>
+  <data name="WnImport3dModelTitle" xml:space="preserve">
+    <value>Import 3D Model</value>
+  </data>
+  <data name="WnImport3dModelTxtDistanceTooltip" xml:space="preserve">
+    <value>Distance in front of Player in Meters.</value>
+  </data>
+  <data name="WnImport3dModelTxtMaxLengthTooltip" xml:space="preserve">
+    <value>This specifies the longest dimension of the structure.</value>
+  </data>
+  <data name="WnImportAsteroidBtnBrowseFileTooltip" xml:space="preserve">
+    <value>Browse for Asteroid file</value>
+  </data>
+  <data name="WnImportAsteroidModelBtnBrowseTooltip" xml:space="preserve">
+    <value>Browse for Model</value>
+  </data>
+  <data name="WnImportAsteroidModelBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnImportAsteroidModelBtnCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="WnImportAsteroidModelCboTraceDirectionTooltip" xml:space="preserve">
+    <value>Specifies the direction of rays. Having rays from all 3 directions takes 3 times longer but produces a more accurate conversion for highly detailed models.</value>
+  </data>
+  <data name="WnImportAsteroidModelCboTraceTypeTooltip" xml:space="preserve">
+    <value>Affects the balance of symmetrical model, whether the voxels generated are odd or even from the origin.  Visually you may not see any difference on large asteroids.</value>
+  </data>
+  <data name="WnImportAsteroidModelGrpNewSize" xml:space="preserve">
+    <value>Approximate New Size</value>
+  </data>
+  <data name="WnImportAsteroidModelGrpOrientation" xml:space="preserve">
+    <value>Orientation</value>
+  </data>
+  <data name="WnImportAsteroidModelGrpOriginalSize" xml:space="preserve">
+    <value>Original Size</value>
+  </data>
+  <data name="WnImportAsteroidModelGrpScale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelBeepFinished" xml:space="preserve">
+    <value>Beep when finished:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelDepthMaterialShell" xml:space="preserve">
+    <value>Depth of shell material :</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelFrontDistance" xml:space="preserve">
+    <value>Distance:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelInvalidFile" xml:space="preserve">
+    <value>Invalid file specified</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelMaterialInside" xml:space="preserve">
+    <value>Material Inside:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelMaterialShell" xml:space="preserve">
+    <value>Material Shell:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelModel" xml:space="preserve">
+    <value>Model:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelNewDepth" xml:space="preserve">
+    <value>Depth:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelNewHeight" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelNewSizeBlocks" xml:space="preserve">
+    <value>Blocks</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelNewSizeMeters" xml:space="preserve">
+    <value>Meters</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelNewWidth" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelOrientationPitch" xml:space="preserve">
+    <value>Pitch:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelOrientationRoll" xml:space="preserve">
+    <value>Roll:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelOrientationYaw" xml:space="preserve">
+    <value>Yaw:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelOriginalDepth" xml:space="preserve">
+    <value>Depth:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelOriginalHeight" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelOriginalWidth" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelPositionX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelPositionY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelPositionZ" xml:space="preserve">
+    <value>Z:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelRunLowPriority" xml:space="preserve">
+    <value>Run in low priority:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelSaveFinished" xml:space="preserve">
+    <value>Save when finished:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelTraceDirection" xml:space="preserve">
+    <value>Trace Directions:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelTraceType" xml:space="preserve">
+    <value>Trace Type:</value>
+  </data>
+  <data name="WnImportAsteroidModelRdoFrontOfPlayer" xml:space="preserve">
+    <value>In front of Player</value>
+  </data>
+  <data name="WnImportAsteroidModelRdoPosAbsolute" xml:space="preserve">
+    <value>Absolute</value>
+  </data>
+  <data name="WnImportAsteroidModelRdoScaleMaxLength" xml:space="preserve">
+    <value>Max Length:</value>
+  </data>
+  <data name="WnImportAsteroidModelRdoScaleMultiply" xml:space="preserve">
+    <value>Multiply:</value>
+  </data>
+  <data name="WnImportAsteroidModelTabMaterials" xml:space="preserve">
+    <value>Materials</value>
+  </data>
+  <data name="WnImportAsteroidModelTabPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="WnImportAsteroidModelTabProcessing" xml:space="preserve">
+    <value>Processing</value>
+  </data>
+  <data name="WnImportAsteroidModelTabQualitySpeed" xml:space="preserve">
+    <value>Quality/Speed</value>
+  </data>
+  <data name="WnImportAsteroidModelTabScale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="WnImportAsteroidModelTitle" xml:space="preserve">
+    <value>Import Asteroid 3D Model</value>
+  </data>
+  <data name="WnImportAsteroidModelTxtFrontDistanceTooltip" xml:space="preserve">
+    <value>Distance in front of Player in Meters.</value>
+  </data>
+  <data name="WnImportAsteroidModelTxtMaxLengthTooltip" xml:space="preserve">
+    <value>This specifies the longest dimension of the structure.</value>
+  </data>
+  <data name="WnImportImageBtnBrowseImageTooltip" xml:space="preserve">
+    <value>Browse for Image</value>
+  </data>
+  <data name="WnSettingsBtnApplicationPath" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="WnSettingsBtnCustomVoxelPath" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="ClsErrorApplication" xml:space="preserve">
+    <value>Application:</value>
+  </data>
+  <data name="ClsErrorBinCachePath" xml:space="preserve">
+    <value>BinCachePath:</value>
+  </data>
+  <data name="ClsErrorCommandLine" xml:space="preserve">
+    <value>CommandLine:</value>
+  </data>
+  <data name="ClsErrorCurrentCulture" xml:space="preserve">
+    <value>CurrentCulture:</value>
+  </data>
+  <data name="ClsErrorCurrentDirectory" xml:space="preserve">
+    <value>CurrentDirectory:</value>
+  </data>
+  <data name="ClsErrorCurrentUICulture" xml:space="preserve">
+    <value>CurrentUICulture:</value>
+  </data>
+  <data name="ClsErrorFiles" xml:space="preserve">
+    <value>Files:</value>
+  </data>
+  <data name="ClsErrorIntPtrSize" xml:space="preserve">
+    <value>IntPtr.Size:</value>
+  </data>
+  <data name="ClsErrorIs64BitOperatingSystem" xml:space="preserve">
+    <value>Is64BitOperatingSystem:</value>
+  </data>
+  <data name="ClsErrorIsAdmin" xml:space="preserve">
+    <value>IsAdmin:</value>
+  </data>
+  <data name="ClsErrorOSVersion" xml:space="preserve">
+    <value>OSVersion:</value>
+  </data>
+  <data name="ClsErrorProcessorCount" xml:space="preserve">
+    <value>ProcessorCount:</value>
+  </data>
+  <data name="ClsErrorSEBinPath" xml:space="preserve">
+    <value>SEBinPath:</value>
+  </data>
+  <data name="ClsErrorSEBinVersion" xml:space="preserve">
+    <value>SEBinVersion:</value>
+  </data>
+  <data name="ClsErrorUnhandled" xml:space="preserve">
+    <value>Unhandled Exception</value>
+  </data>
+  <data name="ClsErrorVersion" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="ClsReportColAsteroid" xml:space="preserve">
+    <value>Asteroid</value>
+  </data>
+  <data name="ClsReportColBlockCount" xml:space="preserve">
+    <value>Block Count</value>
+  </data>
+  <data name="ClsReportColEntityId" xml:space="preserve">
+    <value>EntityId</value>
+  </data>
+  <data name="ClsReportColMaterialName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ClsReportColOreName" xml:space="preserve">
+    <value>Ore name</value>
+  </data>
+  <data name="ClsReportColPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="ClsReportColShip" xml:space="preserve">
+    <value>Ship</value>
+  </data>
+  <data name="ClsReportColVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="ClsReportDate" xml:space="preserve">
+    <value>Date:</value>
+  </data>
+  <data name="ClsReportSaveWorld" xml:space="preserve">
+    <value>Save World:</value>
+  </data>
+  <data name="ClsReportTitle" xml:space="preserve">
+    <value>Resource Report</value>
+  </data>
+  <data name="ClsReportColMass" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="ClsReportHeadingResourcesBreakdown" xml:space="preserve">
+    <value>Resources breakdown</value>
+  </data>
+  <data name="ClsReportHeadingUntouchedOre" xml:space="preserve">
+    <value>Untouched Ore (Asteroids)</value>
+  </data>
+  <data name="ClsReportColAllItemsName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ClsReportColComponentName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ClsReportColCount" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="ClsReportColCubeName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ClsReportColIcon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="ClsReportColTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="ClsReportHeaderAllComponents" xml:space="preserve">
+    <value>All Components</value>
+  </data>
+  <data name="ClsReportHeaderAllCubes" xml:space="preserve">
+    <value>All Cubes</value>
+  </data>
+  <data name="ClsReportHeaderAllItems" xml:space="preserve">
+    <value>All Items</value>
+  </data>
+  <data name="ClsReportHeaderInGameAssets" xml:space="preserve">
+    <value>In game assets</value>
+  </data>
+  <data name="ClsReportHeaderInGameResources" xml:space="preserve">
+    <value>In game resources</value>
+  </data>
+  <data name="ClsReportHeaderUnusedRefinerdOre" xml:space="preserve">
+    <value>Used Ore (in tools, items, components, cubes)</value>
+  </data>
+  <data name="ClsReportHeaderUnusedUnrefinedOre" xml:space="preserve">
+    <value>Unused Ore (Ore and Ingots, either floating or in containers)</value>
+  </data>
+  <data name="ClsReportHeaderUsedNpcOre" xml:space="preserve">
+    <value>NPC Ore (Controlled by NPC)</value>
+  </data>
+  <data name="ClsReportHeaderUsedPlayerOre" xml:space="preserve">
+    <value>Player Ore (Player inventories)</value>
+  </data>
+  <data name="ClsReportTextInGameAssets" xml:space="preserve">
+    <value>Counts of all current items in game Assets. These indicate actual time spent to construct, part construct or refine.</value>
+  </data>
+  <data name="ClsReportTextInGameResources" xml:space="preserve">
+    <value>Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.</value>
+  </data>
 </root>
