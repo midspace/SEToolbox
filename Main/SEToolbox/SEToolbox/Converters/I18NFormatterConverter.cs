@@ -24,12 +24,7 @@
             }
 
             var keyStr = (string)parameter;
-
-#pragma warning disable 618
-            // It needs to identify the Assembly and Dictionary, as the Converter doesn't know squat about what is defined on the Window.
-            var ext = new LocExtension(keyStr) { Assembly = "SEToolbox", Dict = "Resources" };
-#pragma warning restore 618
-
+            var ext = new LocExtension(keyStr);
             string localizedValue;
             return ext.ResolveLocalizedValue(out localizedValue) ? string.Format(localizedValue, bindingParams) : null;
         }
