@@ -14,6 +14,7 @@
     using VRage.Game;
     using VRageMath;
     using VRage.ObjectBuilders;
+    using Res = SEToolbox.Properties.Resources;
 
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
@@ -80,7 +81,7 @@
             }
 
             GameMaterialList = new List<VoxelMaterialAssetModel>(materialList.Select(m => new VoxelMaterialAssetModel { MaterialName = m.Key, DisplayName = m.Key, TextureFile = m.Value }));
-            EditMaterialList = new List<VoxelMaterialAssetModel> { new VoxelMaterialAssetModel { MaterialName = null, DisplayName = "Delete/Remove" } };
+            EditMaterialList = new List<VoxelMaterialAssetModel> { new VoxelMaterialAssetModel { MaterialName = null, DisplayName = Res.CtlVoxelMnuRemoveMaterial } };
             EditMaterialList.AddRange(materialList.Select(m => new VoxelMaterialAssetModel { MaterialName = m.Key, DisplayName = m.Key, TextureFile = m.Value }));
         }
 

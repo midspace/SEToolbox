@@ -1399,7 +1399,7 @@
 
                 foreach (var filename in badfiles)
                 {
-                    _dialogService.ShowMessageBox(this, string.Format("Could not load '{0}', because the file is either corrupt or invalid.", Path.GetFileName(filename)), "Could not import", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    _dialogService.ShowMessageBox(this, string.Format(Res.ClsImportInvalid, Path.GetFileName(filename)), Res.ClsImportTitleFailed, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
             }
         }
@@ -1514,17 +1514,17 @@
                 else if (viewModel is StructureInventoryBagViewModel)
                 {
                     // Need to use the specific serializer when exporting to generate the correct XML, so Unknown should never be export.
-                    _dialogService.ShowMessageBox(this, "Cannot export InventoryBag currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    _dialogService.ShowMessageBox(this, Res.ClsExportInventoryBag, Res.ClsExportTitleFailed, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
                 else if (viewModel is StructurePlanetViewModel)
                 {
                     // Too complex to export without work to package the data,
-                    _dialogService.ShowMessageBox(this, "Cannot export Planet currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    _dialogService.ShowMessageBox(this, Res.ClsExportPlanet, Res.ClsExportTitleFailed, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
                 else if (viewModel is StructureUnknownViewModel)
                 {
                     // Need to use the specific serializer when exporting to generate the correct XML, so Unknown should never be export.
-                    _dialogService.ShowMessageBox(this, "Cannot export Unknown currently", "Cannot export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    _dialogService.ShowMessageBox(this, Res.ClsExportUnknown, Res.ClsExportTitleFailed, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
             }
         }

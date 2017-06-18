@@ -170,8 +170,8 @@
         {
             var saveFileDialog = _saveFileDialogFactory();
             saveFileDialog.Filter = Res.DialogExportReportFilter;
-            saveFileDialog.Title = string.Format(Res.DialogExportReportTitle, "Component Item Report");
-            saveFileDialog.FileName = "Space Engineers Component Item Report";
+            saveFileDialog.Title = Res.DialogExportReportTitle;
+            saveFileDialog.FileName = Res.DialogExportReportFilename;
             saveFileDialog.OverwritePrompt = true;
 
             // Open the dialog

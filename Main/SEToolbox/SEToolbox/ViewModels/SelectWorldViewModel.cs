@@ -190,7 +190,7 @@
             IsBusy = true;
             var results = SpaceEngineersRepair.RepairSandBox(_dataModel.SelectedWorld);
             IsBusy = false;
-            _dialogService.ShowMessageBox(this, results, "Repair results", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
+            _dialogService.ShowMessageBox(this, results, Res.ClsRepairTitle, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.None);
         }
 
         public bool BrowseCanExecute()

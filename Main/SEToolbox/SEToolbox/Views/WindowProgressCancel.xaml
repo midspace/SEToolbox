@@ -36,6 +36,8 @@
                 </StackPanel>
                 <TextBlock Grid.Row="1" Height="50" TextWrapping="Wrap" Margin="0,8,0,8">
                     <Run Text="{lex:Loc WnProgressTxtTimeRemain}"/>
+                    <Run Text="{Binding EstimatedTimeLeft, StringFormat='d'}"/>
+                    <Run Text="{lex:Loc GlobalTimeDays}"/>
                     <Run Text="{Binding EstimatedTimeLeft, StringFormat='hh\\:mm\\:ss'}"/>
                 </TextBlock>
                 <ProgressBar Grid.Row="2" Margin="0" Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" Height="20" />

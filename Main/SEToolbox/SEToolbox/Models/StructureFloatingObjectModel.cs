@@ -7,6 +7,7 @@
     using SEToolbox.Interop;
     using VRage.Game;
     using VRage.ObjectBuilders;
+    using Res = SEToolbox.Properties.Resources;
 
     [Serializable]
     public class StructureFloatingObjectModel : StructureBaseModel
@@ -126,7 +127,7 @@
                 Units = (decimal)FloatingObject.Item.Amount;
                 Volume = cd == null ? 0 : cd.Volume * SpaceEngineersConsts.VolumeMultiplyer * (double)FloatingObject.Item.Amount;
                 Mass = cd == null ? 0 : cd.Mass * (double)FloatingObject.Item.Amount;
-                Description = string.Format("{0:#,##0.00} Kg", Mass);
+                Description = string.Format("{0:#,##0.00} {1}", Mass, Res.GlobalSIMassKilogram);
             }
             else if (FloatingObject.Item.PhysicalContent is MyObjectBuilder_Ingot)
             {
@@ -134,7 +135,7 @@
                 Units = (decimal)FloatingObject.Item.Amount;
                 Volume = cd == null ? 0 : cd.Volume * SpaceEngineersConsts.VolumeMultiplyer * (double)FloatingObject.Item.Amount;
                 Mass = cd == null ? 0 : cd.Mass * (double)FloatingObject.Item.Amount;
-                Description = string.Format("{0:#,##0.00} Kg", Mass);
+                Description = string.Format("{0:#,##0.00} {1}", Mass, Res.GlobalSIMassKilogram);
             }
             else
             {

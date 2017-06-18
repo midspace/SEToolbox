@@ -501,7 +501,7 @@
 
             var doCancel = false;
 
-            var progressModel = new ProgressCancelModel { Title = "Processing...", SubTitle = "Processing...", DialogText = "Time remaining: Calculating..." };
+            var progressModel = new ProgressCancelModel { Title = Res.WnProgressTitle, SubTitle = Res.WnProgressTitle, DialogText = Res.WnProgressTxtTimeRemain + " " + Res.WnProgressTxtTimeCalculating };
             var progressVm = new ProgressCancelViewModel(this, progressModel);
             progressVm.CloseRequested += delegate(object sender, EventArgs e)
             {

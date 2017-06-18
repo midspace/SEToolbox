@@ -10,6 +10,7 @@
     using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
+    using Res = SEToolbox.Properties.Resources;
 
     [Serializable]
     public class StructureMeteorModel : StructureBaseModel
@@ -147,14 +148,14 @@
                 compVolume = def.Volume;
                 amount = (double)Meteor.Item.Amount;
 
-                DisplayName = string.Format("{0} Ore", Meteor.Item.PhysicalContent.SubtypeName);
+                DisplayName = string.Format("{0} {1}", Meteor.Item.PhysicalContent.SubtypeName, Res.CtlMeteorOre);
                 Volume = compVolume * amount;
                 Mass = compMass * amount;
-                Description = string.Format("{0:#,##0.00} Kg", Mass);
+                Description = string.Format("{0:#,##0.00} {1}", Mass, Res.GlobalSIMassKilogram);
             }
             else
             {
-                DisplayName = "Meteor";
+                DisplayName = Res.CtlMeteorDisplayName;
                 Description = string.Format("x {0}", amount);
                 Volume = compVolume * amount;
                 Mass = compMass * amount;

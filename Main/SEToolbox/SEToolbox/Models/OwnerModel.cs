@@ -1,5 +1,7 @@
 ﻿namespace SEToolbox.Models
 {
+    using Res = SEToolbox.Properties.Resources;
+
     public class OwnerModel : BaseModel
     {
         #region fields
@@ -79,7 +81,7 @@
                 if (_isPlayer || _playerId == 0)
                     return _name;
 
-                return string.Format("{0} (dead)", _name);
+                return string.Format("{0} {1}", _name, Res.ClsCharacterDead);
             }
         }
 

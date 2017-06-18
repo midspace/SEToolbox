@@ -3,6 +3,7 @@
     using System;
     using System.Globalization;
     using System.Windows.Data;
+    using Res = SEToolbox.Properties.Resources;
 
     public class DistanceConverter : IValueConverter
     {
@@ -11,9 +12,9 @@
             var distance = (double)value;
 
             if (distance > 1000)
-                return String.Format("{0:#,###0.0.0} Km", distance / 1000);
-            else
-                return String.Format("{0:#,###0.0} m", distance);
+                return string.Format("{0:#,###0.0.0} {1}", distance / 1000, Res.GlobalSIDistanceKilometre);
+
+            return string.Format("{0:#,###0.0} {1}", distance, Res.GlobalSIDistanceMetre);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

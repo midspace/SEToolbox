@@ -5,6 +5,7 @@
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage;
+    using Res = SEToolbox.Properties.Resources;
 
     public class Import3DModelModel : BaseModel
     {
@@ -47,7 +48,7 @@
             _outsideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>();
             _insideMaterialsCollection = new ObservableCollection<MaterialSelectionModel>
             {
-                new MaterialSelectionModel {Value = null, DisplayName = "Empty"}
+                new MaterialSelectionModel {Value = null, DisplayName = Res.WnImport3dModelEmpty}
             };
 
             foreach (var material in SpaceEngineersCore.Resources.VoxelMaterialDefinitions)

@@ -3,6 +3,7 @@
     using System;
     using System.Globalization;
     using System.Windows.Controls;
+    using Res = SEToolbox.Properties.Resources;
 
     public class RangeRuleI : ValidationRule
     {
@@ -17,17 +18,16 @@
             try
             {
                 if (((string)value).Length > 0)
-                    parseValue = Int32.Parse((String)value, null);
+                    parseValue = Int32.Parse((string)value, null);
             }
             catch (Exception e)
             {
-                return new ValidationResult(false, "Illegal characters or " + e.Message);
+                return new ValidationResult(false, Res.ValidationInvalidCharacters + " " + e.Message);
             }
 
             if ((parseValue < Min) || (parseValue > Max))
             {
-                return new ValidationResult(false,
-                  "Please enter a value in the range: " + Min + " - " + Max + ".");
+                return new ValidationResult(false, string.Format("{0} {1} - {2}.", Res.ValidationInvalidRange, Min, Max));
             }
 
             return new ValidationResult(true, null);

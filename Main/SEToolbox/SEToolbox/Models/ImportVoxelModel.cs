@@ -9,6 +9,7 @@
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRage;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ImportVoxelModel : BaseModel
     {
@@ -40,7 +41,7 @@
             _voxelFileList = new List<GenerateVoxelDetailModel>();
             _materialsCollection = new ObservableCollection<MaterialSelectionModel>
             {
-                new MaterialSelectionModel {Value = null, DisplayName = "No change"}
+                new MaterialSelectionModel { Value = null, DisplayName = Res.WnImportAsteroidNoChange }
             };
 
             foreach (var material in SpaceEngineersCore.Resources.VoxelMaterialDefinitions.OrderBy(m => m.Id.SubtypeName))

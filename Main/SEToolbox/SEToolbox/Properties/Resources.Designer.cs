@@ -248,6 +248,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (dead).
+        /// </summary>
+        public static string ClsCharacterDead {
+            get {
+                return ResourceManager.GetString("ClsCharacterDead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application:.
         /// </summary>
         public static string ClsErrorApplication {
@@ -392,6 +401,60 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot export InventoryBag currently.
+        /// </summary>
+        public static string ClsExportInventoryBag {
+            get {
+                return ResourceManager.GetString("ClsExportInventoryBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot export Planet currently.
+        /// </summary>
+        public static string ClsExportPlanet {
+            get {
+                return ResourceManager.GetString("ClsExportPlanet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot export.
+        /// </summary>
+        public static string ClsExportTitleFailed {
+            get {
+                return ResourceManager.GetString("ClsExportTitleFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot export Unknown currently.
+        /// </summary>
+        public static string ClsExportUnknown {
+            get {
+                return ResourceManager.GetString("ClsExportUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not load &apos;{0}&apos;, because the file is either corrupt or invalid..
+        /// </summary>
+        public static string ClsImportInvalid {
+            get {
+                return ResourceManager.GetString("ClsImportInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not import.
+        /// </summary>
+        public static string ClsImportTitleFailed {
+            get {
+                return ResourceManager.GetString("ClsImportTitleFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ! Checkpoint file is missing or broken..
         /// </summary>
         public static string ClsRepairCheckpointBroken {
@@ -478,6 +541,15 @@ namespace SEToolbox.Properties {
         public static string ClsRepairSectorBroken {
             get {
                 return ResourceManager.GetString("ClsRepairSectorBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repair results.
+        /// </summary>
+        public static string ClsRepairTitle {
+            get {
+                return ResourceManager.GetString("ClsRepairTitle", resourceCulture);
             }
         }
         
@@ -2156,6 +2228,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Meteor.
+        /// </summary>
+        public static string CtlMeteorDisplayName {
+            get {
+                return ResourceManager.GetString("CtlMeteorDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Distance:.
         /// </summary>
         public static string CtlMeteorDistance {
@@ -2242,6 +2323,15 @@ namespace SEToolbox.Properties {
         public static string CtlMeteorMnuSpeed {
             get {
                 return ResourceManager.GetString("CtlMeteorMnuSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ore.
+        /// </summary>
+        public static string CtlMeteorOre {
+            get {
+                return ResourceManager.GetString("CtlMeteorOre", resourceCulture);
             }
         }
         
@@ -2692,6 +2782,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete/Remove.
+        /// </summary>
+        public static string CtlVoxelMnuRemoveMaterial {
+            get {
+                return ResourceManager.GetString("CtlVoxelMnuRemoveMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replace all Material.
         /// </summary>
         public static string CtlVoxelMnuReplaceAllMaterial {
@@ -2946,6 +3045,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Space Engineers Component Item Report.
+        /// </summary>
+        public static string DialogExportReportFilename {
+            get {
+                return ResourceManager.GetString("DialogExportReportFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sandbox Content files (*.htm)|*.htm.
         /// </summary>
         public static string DialogExportReportFilter {
@@ -2955,7 +3063,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify filename to export &apos;{0}&apos; to.
+        ///   Looks up a localized string similar to Specify filename to export &apos;Component Item Report&apos; to.
         /// </summary>
         public static string DialogExportReportTitle {
             get {
@@ -3767,6 +3875,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to days.
+        /// </summary>
+        public static string GlobalTimeDays {
+            get {
+                return ResourceManager.GetString("GlobalTimeDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/midspace/SEToolbox/releases/latest.
         /// </summary>
         public static string GlobalUpdatesUrl {
@@ -4325,6 +4442,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Even.
+        /// </summary>
+        public static string TraceType_Even {
+            get {
+                return ResourceManager.GetString("TraceType_Even", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Odd.
+        /// </summary>
+        public static string TraceType_Odd {
+            get {
+                return ResourceManager.GetString("TraceType_Odd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap transform {
@@ -4341,6 +4476,24 @@ namespace SEToolbox.Properties {
             get {
                 object obj = ResourceManager.GetObject("users_back", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Illegal characters or.
+        /// </summary>
+        public static string ValidationInvalidCharacters {
+            get {
+                return ResourceManager.GetString("ValidationInvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a value in the range:.
+        /// </summary>
+        public static string ValidationInvalidRange {
+            get {
+                return ResourceManager.GetString("ValidationInvalidRange", resourceCulture);
             }
         }
         
@@ -5003,7 +5156,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Export all ships and stations to a single an prefab .sbc file..
+        ///   Looks up a localized string similar to Export all ships and stations to a single an prefab .sbc file..
         /// </summary>
         public static string WnExplorerMnuExportPrefabTooltip {
             get {
@@ -5714,7 +5867,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;7th Percent.
+        ///   Looks up a localized string similar to 7th Percent.
         /// </summary>
         public static string WnGenAsteroidFieldColPercent7 {
             get {
@@ -6124,6 +6277,15 @@ namespace SEToolbox.Properties {
         public static string WnImport3dModelBtnCreate {
             get {
                 return ResourceManager.GetString("WnImport3dModelBtnCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty.
+        /// </summary>
+        public static string WnImport3dModelEmpty {
+            get {
+                return ResourceManager.GetString("WnImport3dModelEmpty", resourceCulture);
             }
         }
         
@@ -6830,11 +6992,20 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This specifies the longest dimension of the structure..
+        ///   Looks up a localized string similar to This specifies the longest dimension of the structure in blocks..
         /// </summary>
         public static string WnImportAsteroidModelTxtMaxLengthTooltip {
             get {
                 return ResourceManager.GetString("WnImportAsteroidModelTxtMaxLengthTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No change.
+        /// </summary>
+        public static string WnImportAsteroidNoChange {
+            get {
+                return ResourceManager.GetString("WnImportAsteroidNoChange", resourceCulture);
             }
         }
         
@@ -7376,6 +7547,24 @@ namespace SEToolbox.Properties {
         public static string WnProgressBtnShutdown {
             get {
                 return ResourceManager.GetString("WnProgressBtnShutdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing....
+        /// </summary>
+        public static string WnProgressTitle {
+            get {
+                return ResourceManager.GetString("WnProgressTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculating....
+        /// </summary>
+        public static string WnProgressTxtTimeCalculating {
+            get {
+                return ResourceManager.GetString("WnProgressTxtTimeCalculating", resourceCulture);
             }
         }
         

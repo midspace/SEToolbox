@@ -355,7 +355,7 @@ Units:		{4:#,##0.####}</value>
     <value>Sandbox Content files (*.htm)|*.htm</value>
   </data>
   <data name="DialogExportReportTitle" xml:space="preserve">
-    <value>Specify filename to export '{0}' to</value>
+    <value>Specify filename to export 'Component Item Report' to</value>
   </data>
   <data name="DialogLocateApplicationFilter" xml:space="preserve">
     <value>Space Engineers Application|SpaceEngineers*.exe</value>
@@ -761,7 +761,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Export as prefab</value>
   </data>
   <data name="WnExplorerMnuExportPrefabTooltip" xml:space="preserve">
-    <value>"Export all ships and stations to a single an prefab .sbc file.</value>
+    <value>Export all ships and stations to a single an prefab .sbc file.</value>
   </data>
   <data name="WnExplorerMnuExportSandboxWithoutOwner" xml:space="preserve">
     <value>Export without owner and MedBay</value>
@@ -2254,7 +2254,7 @@ Planet Generator:	{17}</value>
     <value>6th Percent</value>
   </data>
   <data name="WnGenAsteroidFieldColPercent7" xml:space="preserve">
-    <value>"7th Percent</value>
+    <value>7th Percent</value>
   </data>
   <data name="WnGenAsteroidFieldLabelCenter" xml:space="preserve">
     <value>Center:</value>
@@ -2527,7 +2527,7 @@ Planet Generator:	{17}</value>
     <value>Distance in front of Player in Meters.</value>
   </data>
   <data name="WnImportAsteroidModelTxtMaxLengthTooltip" xml:space="preserve">
-    <value>This specifies the longest dimension of the structure.</value>
+    <value>This specifies the longest dimension of the structure in blocks.</value>
   </data>
   <data name="WnImportImageBtnBrowseImageTooltip" xml:space="preserve">
     <value>Browse for Image</value>
@@ -2678,5 +2678,68 @@ Planet Generator:	{17}</value>
   </data>
   <data name="ClsReportTextInGameResources" xml:space="preserve">
     <value>Everything is measured in its regressed state. Ie., how much ore was used/needed to build this item.</value>
+  </data>
+  <data name="GlobalTimeDays" xml:space="preserve">
+    <value>days</value>
+  </data>
+  <data name="WnProgressTitle" xml:space="preserve">
+    <value>Processing...</value>
+  </data>
+  <data name="WnProgressTxtTimeCalculating" xml:space="preserve">
+    <value>Calculating...</value>
+  </data>
+  <data name="ClsCharacterDead" xml:space="preserve">
+    <value>(dead)</value>
+  </data>
+  <data name="ClsExportInventoryBag" xml:space="preserve">
+    <value>Cannot export InventoryBag currently</value>
+  </data>
+  <data name="ClsExportPlanet" xml:space="preserve">
+    <value>Cannot export Planet currently</value>
+  </data>
+  <data name="ClsExportTitleFailed" xml:space="preserve">
+    <value>Cannot export</value>
+  </data>
+  <data name="ClsExportUnknown" xml:space="preserve">
+    <value>Cannot export Unknown currently</value>
+  </data>
+  <data name="ClsImportInvalid" xml:space="preserve">
+    <value>Could not load '{0}', because the file is either corrupt or invalid.</value>
+  </data>
+  <data name="ClsImportTitleFailed" xml:space="preserve">
+    <value>Could not import</value>
+  </data>
+  <data name="ClsRepairTitle" xml:space="preserve">
+    <value>Repair results</value>
+  </data>
+  <data name="CtlMeteorDisplayName" xml:space="preserve">
+    <value>Meteor</value>
+  </data>
+  <data name="CtlMeteorOre" xml:space="preserve">
+    <value>Ore</value>
+  </data>
+  <data name="CtlVoxelMnuRemoveMaterial" xml:space="preserve">
+    <value>Delete/Remove</value>
+  </data>
+  <data name="DialogExportReportFilename" xml:space="preserve">
+    <value>Space Engineers Component Item Report</value>
+  </data>
+  <data name="ValidationInvalidCharacters" xml:space="preserve">
+    <value>Illegal characters or</value>
+  </data>
+  <data name="ValidationInvalidRange" xml:space="preserve">
+    <value>Please enter a value in the range:</value>
+  </data>
+  <data name="WnImport3dModelEmpty" xml:space="preserve">
+    <value>Empty</value>
+  </data>
+  <data name="WnImportAsteroidNoChange" xml:space="preserve">
+    <value>No change</value>
+  </data>
+  <data name="TraceType_Even" xml:space="preserve">
+    <value>Even</value>
+  </data>
+  <data name="TraceType_Odd" xml:space="preserve">
+    <value>Odd</value>
   </data>
 </root>
