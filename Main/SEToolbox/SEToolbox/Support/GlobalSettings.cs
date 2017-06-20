@@ -57,9 +57,8 @@
 
         /// <summary>
         /// Indicates that a SETooolbox resource is to be used first when trying to load localized resources from the game.
-        /// This setting does not get saved.
         /// </summary>
-        public bool UseCustomResource;
+        public bool? UseCustomResource { get; set; }
 
         /// <summary>
         /// Delimited ';' list of UNC paths to search for Save World data, with the 'LastLoaded.sbl' at its root.
@@ -104,6 +103,7 @@
             UpdateValue(key, "WindowWidth", WindowWidth);
             UpdateValue(key, "WindowHeight", WindowHeight);
             UpdateValue(key, "AlwaysCheckForUpdates", AlwaysCheckForUpdates);
+            UpdateValue(key, "UseCustomResource", UseCustomResource);
             UpdateValue(key, "IgnoreUpdateVersion", IgnoreUpdateVersion);
             UpdateValue(key, "CustomVoxelPath", CustomVoxelPath);
         }
@@ -127,6 +127,7 @@
             WindowWidth = ReadValue<double?>(key, "WindowWidth", null);
             WindowHeight = ReadValue<double?>(key, "WindowHeight", null);
             AlwaysCheckForUpdates = ReadValue<bool?>(key, "AlwaysCheckForUpdates", true);
+            UseCustomResource = ReadValue<bool?>(key, "UseCustomResource", true);
             IgnoreUpdateVersion = ReadValue<string>(key, "IgnoreUpdateVersion", null);
             CustomVoxelPath = ReadValue<string>(key, "CustomVoxelPath", null);
         }

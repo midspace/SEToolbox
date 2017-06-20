@@ -107,6 +107,12 @@
             set { _dataModel.AlwaysCheckForUpdates = value; }
         }
 
+        public bool? UseCustomResource
+        {
+            get { return _dataModel.UseCustomResource; }
+            set { _dataModel.UseCustomResource = value; }
+        }
+
         public bool IsValid
         {
             get { return _dataModel.IsValid; }
@@ -159,7 +165,7 @@
             openFileDialog.CheckPathExists = true;
             openFileDialog.DefaultExt = "exe";
             openFileDialog.FileName = "SpaceEngineers";
-            openFileDialog.Filter = Res.DialogLocateApplicationFilter;
+            openFileDialog.Filter = AppConstants.SpaceEngineersApplicationFilter;
             openFileDialog.InitialDirectory = startPath;
             openFileDialog.Multiselect = false;
             openFileDialog.Title = Res.DialogLocateApplicationTitle;

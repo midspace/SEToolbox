@@ -27,7 +27,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    FriendlyName = SpaceEngineersApi.GetResourceName(Name);
+                    FriendlyName = SpaceEngineersApi.GetResourceName(_name);
                     RaisePropertyChanged(() => Name);
                     RaisePropertyChanged(() => FriendlyName);
                 }

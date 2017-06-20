@@ -9,6 +9,7 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using Support;
     using Res = SEToolbox.Properties.Resources;
 
     public class ComponentListViewModel : BaseViewModel
@@ -169,7 +170,7 @@
         public void ExportReportExecuted()
         {
             var saveFileDialog = _saveFileDialogFactory();
-            saveFileDialog.Filter = Res.DialogExportReportFilter;
+            saveFileDialog.Filter = AppConstants.HtmlFilter;
             saveFileDialog.Title = Res.DialogExportReportTitle;
             saveFileDialog.FileName = Res.DialogExportReportFilename;
             saveFileDialog.OverwritePrompt = true;

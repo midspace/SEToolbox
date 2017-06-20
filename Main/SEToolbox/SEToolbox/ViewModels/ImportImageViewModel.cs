@@ -241,7 +241,7 @@
             IsValidImage = false;
 
             var openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = Res.DialogImportImageFilter;
+            openFileDialog.Filter = AppConstants.ImageFilter;
             openFileDialog.Title = Res.DialogImportImageTitle;
 
             // Open the dialog

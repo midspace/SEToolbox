@@ -33,6 +33,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -55,6 +56,9 @@
                     <Button Grid.Row="1" Grid.Column="2" Content="{lex:Loc WnSettingsBtnCustomVoxelPath}" VerticalAlignment="Center" Command="{Binding BrowseVoxelPathCommand}" Padding="4 0"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc WnSettingsLabelCheckForUpdates}" VerticalAlignment="Center" Margin="0,0,4,0"/>
                     <CheckBox Grid.Row="2" Grid.Column="1" Content="{lex:Loc WnSettingsChkCheckForUpdates}" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding AlwaysCheckForUpdates}" ToolTip="{lex:Loc WnSettingsChkCheckForUpdatesTooltip}"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{lex:Loc WnSettingsLabelUseCustomResource}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <CheckBox Grid.Row="3" Grid.Column="1" Content="{lex:Loc WnSettingsChkCustomResource}" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding UseCustomResource}" ToolTip="{lex:Loc WnSettingsChkCustomResourceTooltip}"/>
                 </Grid>
             </Grid>
             

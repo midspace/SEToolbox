@@ -349,7 +349,7 @@
             IsValidEntity = false;
 
             var openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = Res.DialogImportModelFilter;
+            openFileDialog.Filter = AppConstants.ModelFilter;
             openFileDialog.Title = Res.DialogImportModelTitle;
 
             // Open the dialog

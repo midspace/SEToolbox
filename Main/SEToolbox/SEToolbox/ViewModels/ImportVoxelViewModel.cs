@@ -245,7 +245,7 @@
         {
             IsValidVoxelFile = false;
             var openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = Res.DialogImportVoxelFilter;
+            openFileDialog.Filter = AppConstants.VoxelAnyFilter;
             openFileDialog.Title = Res.DialogImportVoxelTitle;
 
             // Open the dialog

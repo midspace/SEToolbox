@@ -9,6 +9,7 @@
     using SEToolbox.Interfaces;
     using SEToolbox.Models;
     using SEToolbox.Services;
+    using Support;
     using Res = SEToolbox.Properties.Resources;
 
     public class ResourceReportViewModel : BaseViewModel
@@ -195,7 +196,7 @@
         public void ExportTextExecuted()
         {
             var saveFileDialog = _saveFileDialogFactory();
-            saveFileDialog.Filter = Res.DialogExportTextFileFilter;
+            saveFileDialog.Filter = AppConstants.TextFileFilter;
             saveFileDialog.Title = string.Format(Res.DialogExportTextFileTitle, "Resource Report");
             saveFileDialog.FileName = string.Format("Resource Report - {0}.txt", _dataModel.SaveName);
             saveFileDialog.OverwritePrompt = true;
@@ -214,7 +215,7 @@
         public void ExportHtmlExecuted()
         {
             var saveFileDialog = _saveFileDialogFactory();
-            saveFileDialog.Filter = Res.DialogExportHtmlFileFilter;
+            saveFileDialog.Filter = AppConstants.HtmlFilter;
             saveFileDialog.Title = string.Format(Res.DialogExportHtmlFileTitle, "Resource Report");
             saveFileDialog.FileName = string.Format("Resource Report - {0}.html", _dataModel.SaveName);
             saveFileDialog.OverwritePrompt = true;
@@ -233,7 +234,7 @@
         public void ExportXmlExecuted()
         {
             var saveFileDialog = _saveFileDialogFactory();
-            saveFileDialog.Filter = Res.DialogExportXmlFileFilter;
+            saveFileDialog.Filter = AppConstants.XmlFileFilter;
             saveFileDialog.Title = string.Format(Res.DialogExportXmlFileTitle, "Resource Report");
             saveFileDialog.FileName = string.Format("Resource Report - {0}.xml", _dataModel.SaveName);
             saveFileDialog.OverwritePrompt = true;

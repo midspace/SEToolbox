@@ -1,11 +1,13 @@
 ﻿namespace SEToolbox.Interop
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Resources;
+    using System.Text;
     using System.Xml;
     using Sandbox.Definitions;
     using SEToolbox.Support;
@@ -20,13 +22,6 @@
     /// </summary>
     public static class SpaceEngineersApi
     {
-        private static readonly ResourceManager CustomGameResourceManager;
-
-        static SpaceEngineersApi()
-        {
-            CustomGameResourceManager = new ResourceManager("SEToolbox.Properties.MyTexts", Assembly.GetExecutingAssembly());
-        }
-
         #region Serializers
 
         public static T ReadSpaceEngineersFile<T>(Stream stream) where T : MyObjectBuilder_Base
@@ -266,10 +261,38 @@
             var subcode = codes.Length > 1 ? codes[1] : null;
 
             MyTexts.Clear();
+
+            if (GlobalSettings.Default.UseCustomResource.HasValue && GlobalSettings.Default.UseCustomResource.Value)
+            {
+                AddLanguage(MyLanguagesEnum.ChineseChina, "zh", null, "Chinese", 1f, true);
+            }
+
             MyTexts.LoadTexts(localizationPath, maincode, subcode);
 
-            GlobalSettings.Default.UseCustomResource = !MyTexts.Languages.Any(m => m.Value.FullCultureName.Equals(culture.IetfLanguageTag, StringComparison.OrdinalIgnoreCase)
-                || m.Value.CultureName.Equals(culture.Parent.IetfLanguageTag, StringComparison.OrdinalIgnoreCase));
+            if (GlobalSettings.Default.UseCustomResource.HasValue && GlobalSettings.Default.UseCustomResource.Value)
+            {
+                // Load alternate localization in instead using game refined resources, as they may not yet exist.
+                ResourceManager customGameResourceManager = new ResourceManager("SEToolbox.Properties.MyTexts", Assembly.GetExecutingAssembly());
+                ResourceSet customResourceSet = customGameResourceManager.GetResourceSet(culture, true, false);
+                if (customResourceSet != null)
+                {
+                    // Reflection copy of MyTexts.PatchTexts(string resourceFile)
+                    foreach (DictionaryEntry dictionaryEntry in customResourceSet)
+                    {
+                        string text = dictionaryEntry.Key as string;
+                        string text2 = dictionaryEntry.Value as string;
+                        if (text != null && text2 != null)
+                        {
+                            MyStringId orCompute = MyStringId.GetOrCompute(text);
+                            Dictionary<MyStringId, string> m_strings = typeof(MyTexts).GetStaticField<Dictionary<MyStringId, string>>("m_strings");
+                            Dictionary<MyStringId, StringBuilder> m_stringBuilders = typeof(MyTexts).GetStaticField<Dictionary<MyStringId, StringBuilder>>("m_stringBuilders");
+
+                            m_strings[orCompute] = text2;
+                            m_stringBuilders[orCompute] = new StringBuilder(text2);
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
@@ -281,16 +304,26 @@
             if (value == null)
                 return null;
 
-            // This will load a custom localized Satellite Resource that the game doesn't offically support.
-            if (GlobalSettings.Default.UseCustomResource)
-            {
-                string text = CustomGameResourceManager.GetString(value);
-                if (text != null)
-                    return text;
-            }
-
-            var stringId = MyStringId.GetOrCompute(value);
+            MyStringId stringId = MyStringId.GetOrCompute(value);
             return MyTexts.GetString(stringId);
+        }
+
+        // Reflection copy of MyTexts.AddLanguage
+        private static void AddLanguage(MyLanguagesEnum id, string cultureName, string subcultureName = null, string displayName = null, float guiTextScale = 1f, bool isCommunityLocalized = true)
+        {
+            // Create an empty instance of LanguageDescription.
+            ConstructorInfo constructorInfo = typeof(MyTexts.LanguageDescription).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new Type[] { typeof(MyLanguagesEnum), typeof(string), typeof(string), typeof(string), typeof(float), typeof(bool) }, null);
+            MyTexts.LanguageDescription languageDescription = (MyTexts.LanguageDescription)constructorInfo.Invoke(new object[] { id, displayName, cultureName, subcultureName, guiTextScale, isCommunityLocalized });
+
+            Dictionary<int, MyTexts.LanguageDescription> m_languageIdToLanguage = typeof(MyTexts).GetStaticField<Dictionary<int, MyTexts.LanguageDescription>>("m_languageIdToLanguage");
+            Dictionary<string, int> m_cultureToLanguageId = typeof(MyTexts).GetStaticField<Dictionary<string, int>>("m_cultureToLanguageId");
+
+            if (!m_languageIdToLanguage.ContainsKey((int)id))
+            {
+                m_languageIdToLanguage.Add((int)id, languageDescription);
+                m_cultureToLanguageId.Add(languageDescription.FullCultureName, (int)id);
+            }
         }
 
         #endregion

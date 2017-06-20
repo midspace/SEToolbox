@@ -205,7 +205,7 @@
             openFileDialog.CheckPathExists = true;
             openFileDialog.DefaultExt = "sbc";
             openFileDialog.FileName = "Sandbox.sbc";
-            openFileDialog.Filter = Res.DialogLocateSandboxFilter;
+            openFileDialog.Filter = AppConstants.SandboxFilter;
             openFileDialog.Multiselect = false;
             openFileDialog.Title = Res.DialogLocateSandboxTitle;
 

@@ -15,7 +15,6 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Shell;
-
     using Sandbox.Common.ObjectBuilders;
     using SEToolbox.Interfaces;
     using SEToolbox.Interop;
@@ -794,14 +793,16 @@
         public void OpenSettingsExecuted()
         {
             var model = new SettingsModel();
-            model.Load(GlobalSettings.Default.SEBinPath, GlobalSettings.Default.CustomVoxelPath, GlobalSettings.Default.AlwaysCheckForUpdates);
+            model.Load(GlobalSettings.Default.SEBinPath, GlobalSettings.Default.CustomVoxelPath, GlobalSettings.Default.AlwaysCheckForUpdates, GlobalSettings.Default.UseCustomResource);
             var loadVm = new SettingsViewModel(this, model);
             if (_dialogService.ShowDialog<WindowSettings>(this, loadVm) == true)
             {
-                var reloadMods = GlobalSettings.Default.SEBinPath != model.SEBinPath;
+                bool reloadMods = GlobalSettings.Default.SEBinPath != model.SEBinPath;
                 GlobalSettings.Default.SEBinPath = model.SEBinPath;
                 GlobalSettings.Default.CustomVoxelPath = model.CustomVoxelPath;
                 GlobalSettings.Default.AlwaysCheckForUpdates = model.AlwaysCheckForUpdates;
+                bool resetLocalization = GlobalSettings.Default.UseCustomResource != model.UseCustomResource;
+                GlobalSettings.Default.UseCustomResource = model.UseCustomResource;
                 GlobalSettings.Default.Save();
 
                 if (reloadMods)
@@ -819,6 +820,12 @@
                     }
 
                     IsBusy = false;
+                }
+
+                if (resetLocalization)
+                {
+                    SpaceEngineersApi.LoadLocalization();
+                    UpdateLanguages();
                 }
             }
         }
@@ -1386,7 +1393,7 @@
         public void ImportSandboxObjectFromFile()
         {
             var openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = Res.DialogImportSandboxObjectFilter;
+            openFileDialog.Filter = AppConstants.SandboxObjectFilter;
             openFileDialog.Title = Res.DialogImportSandboxObjectTitle;
             openFileDialog.Multiselect = true;
 
@@ -1413,7 +1420,7 @@
                     var structure = (StructureCharacterViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.Description);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1427,7 +1434,7 @@
                 {
                     var structure = (StructureVoxelViewModel)viewModel;
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = Res.DialogExportVoxelFilter;
+                    saveFileDialog.Filter = AppConstants.VoxelFilter;
                     saveFileDialog.Title = Res.DialogExportVoxelTitle;
                     saveFileDialog.FileName = structure.Name + MyVoxelMap.V2FileExtension;
                     saveFileDialog.OverwritePrompt = true;
@@ -1449,7 +1456,7 @@
                     var structure = (StructureFloatingObjectViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1464,7 +1471,7 @@
                     var structure = (StructureMeteorViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1480,7 +1487,7 @@
 
                     var partname = string.IsNullOrEmpty(structure.DisplayName) ? structure.EntityId.ToString() : structure.DisplayName.Replace("|", "_").Replace("\\", "_").Replace("/", "_");
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = Res.DialogExportSandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, partname);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, partname);
                     saveFileDialog.OverwritePrompt = true;
@@ -1533,7 +1540,7 @@
         public void ExportPrefabObjectToFile(bool blankOwnerAndMedBays, params IStructureViewBase[] viewModels)
         {
             var saveFileDialog = _saveFileDialogFactory();
-            saveFileDialog.Filter = Res.DialogExportPrefabObjectFilter;
+            saveFileDialog.Filter = AppConstants.PrefabObjectFilter;
             saveFileDialog.Title = Res.DialogExportSandboxObjectTitle;
             saveFileDialog.FileName = "export prefab.sbc";
             saveFileDialog.OverwritePrompt = true;

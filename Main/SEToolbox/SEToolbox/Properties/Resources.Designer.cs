@@ -3009,11 +3009,47 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Html files (*.htm;*.htm)|*.htm;*.html.
+        ///   Looks up a localized string similar to 3D Studio.
         /// </summary>
-        public static string DialogExportHtmlFileFilter {
+        public static string Dialog3DStudioFiles {
             get {
-                return ResourceManager.GetString("DialogExportHtmlFileFilter", resourceCulture);
+                return ResourceManager.GetString("Dialog3DStudioFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All files.
+        /// </summary>
+        public static string DialogAllFiles {
+            get {
+                return ResourceManager.GetString("DialogAllFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All supported files.
+        /// </summary>
+        public static string DialogAllSupportedFiles {
+            get {
+                return ResourceManager.GetString("DialogAllSupportedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asteroid files.
+        /// </summary>
+        public static string DialogAsteroidFiles {
+            get {
+                return ResourceManager.GetString("DialogAsteroidFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asteroid version 2 files.
+        /// </summary>
+        public static string DialogAsteroidVersion2Files {
+            get {
+                return ResourceManager.GetString("DialogAsteroidVersion2Files", resourceCulture);
             }
         }
         
@@ -3023,15 +3059,6 @@ namespace SEToolbox.Properties {
         public static string DialogExportHtmlFileTitle {
             get {
                 return ResourceManager.GetString("DialogExportHtmlFileTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sandbox Prefab files (*.sbc)|*.sbc.
-        /// </summary>
-        public static string DialogExportPrefabObjectFilter {
-            get {
-                return ResourceManager.GetString("DialogExportPrefabObjectFilter", resourceCulture);
             }
         }
         
@@ -3054,29 +3081,11 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sandbox Content files (*.htm)|*.htm.
-        /// </summary>
-        public static string DialogExportReportFilter {
-            get {
-                return ResourceManager.GetString("DialogExportReportFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Specify filename to export &apos;Component Item Report&apos; to.
         /// </summary>
         public static string DialogExportReportTitle {
             get {
                 return ResourceManager.GetString("DialogExportReportTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sandbox Content files (*.sbc)|*.sbc|Xml files (*.xml)|*.xml|All files (*.*)|*.*.
-        /// </summary>
-        public static string DialogExportSandboxObjectFilter {
-            get {
-                return ResourceManager.GetString("DialogExportSandboxObjectFilter", resourceCulture);
             }
         }
         
@@ -3090,29 +3099,11 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text files (*.txt)|*.txt.
-        /// </summary>
-        public static string DialogExportTextFileFilter {
-            get {
-                return ResourceManager.GetString("DialogExportTextFileFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Specify filename to export &apos;{0}&apos; to.
         /// </summary>
         public static string DialogExportTextFileTitle {
             get {
                 return ResourceManager.GetString("DialogExportTextFileTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Asteroid version 2 files (*.vx2)|*.vx2|Asteroid version 1 files (*.vox)|*.vox.
-        /// </summary>
-        public static string DialogExportVoxelFilter {
-            get {
-                return ResourceManager.GetString("DialogExportVoxelFilter", resourceCulture);
             }
         }
         
@@ -3126,15 +3117,6 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML files (*.xml)|*.xml.
-        /// </summary>
-        public static string DialogExportXmlFileFilter {
-            get {
-                return ResourceManager.GetString("DialogExportXmlFileFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Specify filename to export &apos;{0}&apos; to.
         /// </summary>
         public static string DialogExportXmlFileTitle {
@@ -3144,11 +3126,20 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Image files (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*.
+        ///   Looks up a localized string similar to Html files.
         /// </summary>
-        public static string DialogImportImageFilter {
+        public static string DialogHtmlFiles {
             get {
-                return ResourceManager.GetString("DialogImportImageFilter", resourceCulture);
+                return ResourceManager.GetString("DialogHtmlFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image files.
+        /// </summary>
+        public static string DialogImageFiles {
+            get {
+                return ResourceManager.GetString("DialogImageFiles", resourceCulture);
             }
         }
         
@@ -3162,29 +3153,11 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All supported files|*.3ds;*.lwo;*.obj;*.objx;*.stl;*.off|3D Studio (*.3ds)|*.3ds|Lightwave (*.lwo)|*.lwo|Wavefront (*.obj)|*.obj;*.objx|StereoLithography (*.stl)|*.stl|OFF (*.off)|*.off.
-        /// </summary>
-        public static string DialogImportModelFilter {
-            get {
-                return ResourceManager.GetString("DialogImportModelFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Select Model to Import.
         /// </summary>
         public static string DialogImportModelTitle {
             get {
                 return ResourceManager.GetString("DialogImportModelTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sandbox Content files (*.sbc)|*.sbc|Xml files (*.xml)|*.xml|All files (*.*)|*.*.
-        /// </summary>
-        public static string DialogImportSandboxObjectFilter {
-            get {
-                return ResourceManager.GetString("DialogImportSandboxObjectFilter", resourceCulture);
             }
         }
         
@@ -3198,15 +3171,6 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asteroid files (*.vox;*.vx2)|*.vox;*.vx2|All files (*.*)|*.*.
-        /// </summary>
-        public static string DialogImportVoxelFilter {
-            get {
-                return ResourceManager.GetString("DialogImportVoxelFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Select Asteroid to Import.
         /// </summary>
         public static string DialogImportVoxelTitle {
@@ -3216,11 +3180,11 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Space Engineers Application|SpaceEngineers*.exe.
+        ///   Looks up a localized string similar to Lightwave.
         /// </summary>
-        public static string DialogLocateApplicationFilter {
+        public static string DialogLightwaveFiles {
             get {
-                return ResourceManager.GetString("DialogLocateApplicationFilter", resourceCulture);
+                return ResourceManager.GetString("DialogLightwaveFiles", resourceCulture);
             }
         }
         
@@ -3230,15 +3194,6 @@ namespace SEToolbox.Properties {
         public static string DialogLocateApplicationTitle {
             get {
                 return ResourceManager.GetString("DialogLocateApplicationTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Space Engineers Sandbox|Sandbox.sbc.
-        /// </summary>
-        public static string DialogLocateSandboxFilter {
-            get {
-                return ResourceManager.GetString("DialogLocateSandboxFilter", resourceCulture);
             }
         }
         
@@ -3280,6 +3235,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OFF.
+        /// </summary>
+        public static string DialogOFFFiles {
+            get {
+                return ResourceManager.GetString("DialogOFFFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An old version &apos;{0}&apos; of Space Engineers was detected in the folder &apos;{1}&apos;.
         ///Please update it before running SEToolbox {2} again..
         /// </summary>
@@ -3295,6 +3259,60 @@ namespace SEToolbox.Properties {
         public static string DialogOldSEVersionTitle {
             get {
                 return ResourceManager.GetString("DialogOldSEVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sandbox Content files.
+        /// </summary>
+        public static string DialogSandboxContentFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxContentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Space Engineers Sandbox.
+        /// </summary>
+        public static string DialogSandboxFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sandbox Prefab files.
+        /// </summary>
+        public static string DialogSandboxPrefabFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxPrefabFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Space Engineers Application.
+        /// </summary>
+        public static string DialogSpaceEngineersApplicationFiles {
+            get {
+                return ResourceManager.GetString("DialogSpaceEngineersApplicationFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to StereoLithography.
+        /// </summary>
+        public static string DialogStereoLithographyFiles {
+            get {
+                return ResourceManager.GetString("DialogStereoLithographyFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text files.
+        /// </summary>
+        public static string DialogTextFiles {
+            get {
+                return ResourceManager.GetString("DialogTextFiles", resourceCulture);
             }
         }
         
@@ -3331,6 +3349,24 @@ namespace SEToolbox.Properties {
         public static string DialogUnhandledExceptionTitle {
             get {
                 return ResourceManager.GetString("DialogUnhandledExceptionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wavefront.
+        /// </summary>
+        public static string DialogWavefrontFiles {
+            get {
+                return ResourceManager.GetString("DialogWavefrontFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML files.
+        /// </summary>
+        public static string DialogXmlFiles {
+            get {
+                return ResourceManager.GetString("DialogXmlFiles", resourceCulture);
             }
         }
         
@@ -7731,6 +7767,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Override.
+        /// </summary>
+        public static string WnSettingsChkCustomResource {
+            get {
+                return ResourceManager.GetString("WnSettingsChkCustomResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override text provided by Space Engineers by using Custom localization provided by SEToolbox instead..
+        /// </summary>
+        public static string WnSettingsChkCustomResourceTooltip {
+            get {
+                return ResourceManager.GetString("WnSettingsChkCustomResourceTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application Path:.
         /// </summary>
         public static string WnSettingsLabelApplicationPath {
@@ -7754,6 +7808,15 @@ namespace SEToolbox.Properties {
         public static string WnSettingsLabelCustomVoxelPath {
             get {
                 return ResourceManager.GetString("WnSettingsLabelCustomVoxelPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Custom localization.
+        /// </summary>
+        public static string WnSettingsLabelUseCustomResource {
+            get {
+                return ResourceManager.GetString("WnSettingsLabelUseCustomResource", resourceCulture);
             }
         }
         

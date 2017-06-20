@@ -9,6 +9,7 @@
         private string _seBinPath;
         private string _customVoxelPath;
         private bool? _alwaysCheckForUpdates;
+        private bool? _useCustomResource;
         private bool _isValid;
 
         #endregion
@@ -60,6 +61,22 @@
             }
         }
 
+        public bool? UseCustomResource
+        {
+            get { return _useCustomResource; }
+
+            set
+            {
+                if (value != _useCustomResource)
+                {
+                    _useCustomResource = value;
+                    RaisePropertyChanged(() => UseCustomResource);
+                    Validate();
+                }
+            }
+        }
+        
+
         public bool IsValid
         {
             get { return _isValid; }
@@ -78,17 +95,18 @@
 
         #region methods
 
-        public void Load(string seBinPath, string customVoxelPath, bool? alwaysCheckForUpdates)
+        public void Load(string seBinPath, string customVoxelPath, bool? alwaysCheckForUpdates, bool? useCustomResource)
         {
             SEBinPath = seBinPath;
             CustomVoxelPath = customVoxelPath;
             AlwaysCheckForUpdates = alwaysCheckForUpdates;
+            UseCustomResource = useCustomResource;
         }
 
         private void Validate()
         {
             IsValid = ToolboxUpdater.ValidateSpaceEngineersInstall(SEBinPath);
-            // no need to check CustomVoxelPath or AlwaysCheckForUpdates.
+            // no need to check CustomVoxelPath, AlwaysCheckForUpdates, or UseCustomResource.
         }
 
         #endregion

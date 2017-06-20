@@ -130,8 +130,8 @@
   <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DialogImportImageFilter" xml:space="preserve">
-    <value>Image files (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*</value>
+  <data name="DialogImageFiles" xml:space="preserve">
+    <value>Image files</value>
   </data>
   <data name="DialogImportImageTitle" xml:space="preserve">
     <value>Select Image to Import</value>
@@ -163,8 +163,8 @@
   <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DialogImportModelFilter" xml:space="preserve">
-    <value>All supported files|*.3ds;*.lwo;*.obj;*.objx;*.stl;*.off|3D Studio (*.3ds)|*.3ds|Lightwave (*.lwo)|*.lwo|Wavefront (*.obj)|*.obj;*.objx|StereoLithography (*.stl)|*.stl|OFF (*.off)|*.off</value>
+  <data name="DialogAllSupportedFiles" xml:space="preserve">
+    <value>All supported files</value>
   </data>
   <data name="DialogImportModelTitle" xml:space="preserve">
     <value>Select Model to Import</value>
@@ -190,8 +190,8 @@
   <data name="wrench" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wrench.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DialogImportVoxelFilter" xml:space="preserve">
-    <value>Asteroid files (*.vox;*.vx2)|*.vox;*.vx2|All files (*.*)|*.*</value>
+  <data name="DialogAsteroidFiles" xml:space="preserve">
+    <value>Asteroid files</value>
   </data>
   <data name="DialogImportVoxelTitle" xml:space="preserve">
     <value>Select Asteroid to Import</value>
@@ -220,8 +220,8 @@ To use the SEToolbox, you must have the Space Engineers game installed on your c
   <data name="workshop16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\workshop16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DialogExportSandboxObjectFilter" xml:space="preserve">
-    <value>Sandbox Content files (*.sbc)|*.sbc|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
+  <data name="DialogSandboxContentFiles" xml:space="preserve">
+    <value>Sandbox Content files</value>
   </data>
   <data name="DialogExportSandboxObjectTitle" xml:space="preserve">
     <value>Specify filename to export '{0}_{1}' to</value>
@@ -243,9 +243,6 @@ To use the SEToolbox, you must have the Space Engineers game installed on your c
   </data>
   <data name="Toolbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Toolbox_logo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DialogImportSandboxObjectFilter" xml:space="preserve">
-    <value>Sandbox Content files (*.sbc)|*.sbc|Xml files (*.xml)|*.xml|All files (*.*)|*.*</value>
   </data>
   <data name="sort_descending" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sort_descending.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -351,14 +348,11 @@ Units:		{4:#,##0.####}</value>
   <data name="Boolean_True" xml:space="preserve">
     <value>Yes</value>
   </data>
-  <data name="DialogExportReportFilter" xml:space="preserve">
-    <value>Sandbox Content files (*.htm)|*.htm</value>
-  </data>
   <data name="DialogExportReportTitle" xml:space="preserve">
     <value>Specify filename to export 'Component Item Report' to</value>
   </data>
-  <data name="DialogLocateApplicationFilter" xml:space="preserve">
-    <value>Space Engineers Application|SpaceEngineers*.exe</value>
+  <data name="DialogSpaceEngineersApplicationFiles" xml:space="preserve">
+    <value>Space Engineers Application</value>
   </data>
   <data name="DialogLocateApplicationTitle" xml:space="preserve">
     <value>Specify location of Space Engineers Application</value>
@@ -442,26 +436,26 @@ Would you like to download it now?</value>
   <data name="flag_great_britain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\flag_great_britain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DialogExportVoxelFilter" xml:space="preserve">
-    <value>Asteroid version 2 files (*.vx2)|*.vx2|Asteroid version 1 files (*.vox)|*.vox</value>
+  <data name="DialogAsteroidVersion2Files" xml:space="preserve">
+    <value>Asteroid version 2 files</value>
   </data>
   <data name="DialogExportVoxelTitle" xml:space="preserve">
     <value>Specify file to Export Asteroid to</value>
   </data>
-  <data name="DialogExportHtmlFileFilter" xml:space="preserve">
-    <value>Html files (*.htm;*.htm)|*.htm;*.html</value>
+  <data name="DialogHtmlFiles" xml:space="preserve">
+    <value>Html files</value>
   </data>
   <data name="DialogExportHtmlFileTitle" xml:space="preserve">
     <value>Specify filename to export '{0}' to</value>
   </data>
-  <data name="DialogExportTextFileFilter" xml:space="preserve">
-    <value>Text files (*.txt)|*.txt</value>
+  <data name="DialogTextFiles" xml:space="preserve">
+    <value>Text files</value>
   </data>
   <data name="DialogExportTextFileTitle" xml:space="preserve">
     <value>Specify filename to export '{0}' to</value>
   </data>
-  <data name="DialogExportXmlFileFilter" xml:space="preserve">
-    <value>XML files (*.xml)|*.xml</value>
+  <data name="DialogXmlFiles" xml:space="preserve">
+    <value>XML files</value>
   </data>
   <data name="DialogExportXmlFileTitle" xml:space="preserve">
     <value>Specify filename to export '{0}' to</value>
@@ -575,8 +569,8 @@ Please specify the location of the Space Engineers Application file.</value>
   <data name="flag_usa" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\flag_usa.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DialogLocateSandboxFilter" xml:space="preserve">
-    <value>Space Engineers Sandbox|Sandbox.sbc</value>
+  <data name="DialogSandboxFiles" xml:space="preserve">
+    <value>Space Engineers Sandbox</value>
   </data>
   <data name="DialogLocateSandboxTitle" xml:space="preserve">
     <value>Specify location of Space Engineers save game</value>
@@ -672,8 +666,8 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="VoxelMergeType_UnionVolumeRightToLeft" xml:space="preserve">
     <value>Union Volume Right to Left</value>
   </data>
-  <data name="DialogExportPrefabObjectFilter" xml:space="preserve">
-    <value>Sandbox Prefab files (*.sbc)|*.sbc</value>
+  <data name="DialogSandboxPrefabFiles" xml:space="preserve">
+    <value>Sandbox Prefab files</value>
   </data>
   <data name="DialogExportPrefabObjectTitle" xml:space="preserve">
     <value>Specify filename to export to</value>
@@ -2741,5 +2735,32 @@ Planet Generator:	{17}</value>
   </data>
   <data name="TraceType_Odd" xml:space="preserve">
     <value>Odd</value>
+  </data>
+  <data name="Dialog3DStudioFiles" xml:space="preserve">
+    <value>3D Studio</value>
+  </data>
+  <data name="DialogAllFiles" xml:space="preserve">
+    <value>All files</value>
+  </data>
+  <data name="DialogLightwaveFiles" xml:space="preserve">
+    <value>Lightwave</value>
+  </data>
+  <data name="DialogOFFFiles" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="DialogStereoLithographyFiles" xml:space="preserve">
+    <value>StereoLithography</value>
+  </data>
+  <data name="DialogWavefrontFiles" xml:space="preserve">
+    <value>Wavefront</value>
+  </data>
+  <data name="WnSettingsChkCustomResource" xml:space="preserve">
+    <value>Override</value>
+  </data>
+  <data name="WnSettingsChkCustomResourceTooltip" xml:space="preserve">
+    <value>Override text provided by Space Engineers by using Custom localization provided by SEToolbox instead.</value>
+  </data>
+  <data name="WnSettingsLabelUseCustomResource" xml:space="preserve">
+    <value>Use Custom localization</value>
   </data>
 </root>

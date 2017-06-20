@@ -1,6 +1,53 @@
 ﻿namespace SEToolbox.Support
 {
     using System.Collections.Generic;
+    using Res = SEToolbox.Properties.Resources;
+
+    internal class AppConstants
+    {
+        internal static Dictionary<string, string> SupportedLanguages = new Dictionary<string, string>()
+        {
+            {"en", "flag_great_britain"},
+            {"en-US", "flag_usa"},
+            {"ca-ES", "flag_catalonia"},
+            {"cs-CZ", "flag_czech_republic"},
+            {"da", "flag_denmark"},
+            {"de", "flag_germany"},
+            {"es", "flag_spain"},
+            {"es-MX", "flag_mexico"},
+            {"et-EE", "flag_estonia"},
+            {"fi", "flag_finland"},
+            {"fr", "flag_france"},
+            {"hr-HR", "flag_croatia"},
+            {"hu-HU", "flag_hungary"},
+            {"is-IS", "flag_iceland"},
+            {"it", "flag_italy"},
+            {"lv", "flag_lithuania"},
+            {"nl", "flag_netherlands"},
+            {"no", "flag_norway"},
+            {"pl-PL", "flag_poland"},
+            {"pt-BR", "flag_brazil"},
+            {"ro", "flag_romania"},
+            {"ru", "flag_russia"},
+            {"sk-SK", "flag_slovakia"},
+            {"sv", "flag_sweden"},
+            {"tr-TR", "flag_turkey"},
+            {"uk", "flag_ukraine"},
+            {"zh", "flag_china"},
+        };
+
+        public static string HtmlFilter => $"{Res.DialogHtmlFiles} (*.htm;*.htm)|*.htm;*.html";
+        public static string ImageFilter => $"{Res.DialogImageFiles} (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|{Res.DialogAllFiles} (*.*)|*.*";
+        public static string ModelFilter => $"{Res.DialogAllSupportedFiles}|*.3ds;*.lwo;*.obj;*.objx;*.stl;*.off|{Res.Dialog3DStudioFiles} (*.3ds)|*.3ds|{Res.DialogLightwaveFiles} (*.lwo)|*.lwo|{Res.DialogWavefrontFiles} (*.obj)|*.obj;*.objx|{Res.DialogStereoLithographyFiles} (*.stl)|*.stl|{Res.DialogOFFFiles} (*.off)|*.off";
+        public static string PrefabObjectFilter => $"{Res.DialogSandboxPrefabFiles} (*.sbc)|*.sbc";
+        public static string SandboxFilter => $"{Res.DialogSandboxFiles} |Sandbox.sbc";
+        public static string SandboxObjectFilter => $"{Res.DialogSandboxContentFiles} (*.sbc)|*.sbc|{Res.DialogXmlFiles} (*.xml)|*.xml|{Res.DialogAllFiles} (*.*)|*.*";
+        public static string SpaceEngineersApplicationFilter => $"{Res.DialogSpaceEngineersApplicationFiles}|SpaceEngineers*.exe";
+        public static string TextFileFilter => $"{Res.DialogTextFiles} (*.txt)|*.txt";
+        public static string VoxelAnyFilter => $"{Res.DialogAsteroidFiles} (*.vox;*.vx2)|*.vox;*.vx2|{Res.DialogAllFiles} (*.*)|*.*";
+        public static string VoxelFilter => $"{Res.DialogAsteroidFiles} (*.vx2)|*.vx2";
+        public static string XmlFileFilter => $"{Res.DialogXmlFiles} (*.xml)|*.xml";
+    }
 
     public enum ExceptionState
     {
@@ -119,40 +166,6 @@
         Axis24_Up_Left,
         Axis24_Up_Right,
     };
-
-    internal class AppConstants
-    {
-        internal static Dictionary<string, string> SupportedLanguages = new Dictionary<string, string>()
-        {
-            {"en", "flag_great_britain"},
-            {"en-US", "flag_usa"},
-            {"ca-ES", "flag_catalonia"},
-            {"cs-CZ", "flag_czech_republic"},
-            {"da", "flag_denmark"},
-            {"de", "flag_germany"},
-            {"es", "flag_spain"},
-            {"es-MX", "flag_mexico"},
-            {"et-EE", "flag_estonia"},
-            {"fi", "flag_finland"},
-            {"fr", "flag_france"},
-            {"hr-HR", "flag_croatia"},
-            {"hu-HU", "flag_hungary"},
-            {"is-IS", "flag_iceland"},
-            {"it", "flag_italy"},
-            {"lv", "flag_lithuania"},
-            {"nl", "flag_netherlands"},
-            {"no", "flag_norway"},
-            {"pl-PL", "flag_poland"},
-            {"pt-BR", "flag_brazil"},
-            {"ro", "flag_romania"},
-            {"ru", "flag_russia"},
-            {"sk-SK", "flag_slovakia"},
-            {"sv", "flag_sweden"},
-            {"tr-TR", "flag_turkey"},
-            {"uk", "flag_ukraine"},
-            {"zh", "flag_china"},
-        };
-    }
 
 
     // TODO: Temporary enum, before creating a proper registrable fill types.

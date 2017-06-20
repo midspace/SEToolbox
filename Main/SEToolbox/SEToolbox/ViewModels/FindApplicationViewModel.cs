@@ -137,7 +137,7 @@
             openFileDialog.CheckPathExists = true;
             openFileDialog.DefaultExt = "exe";
             openFileDialog.FileName = "SpaceEngineers";
-            openFileDialog.Filter = Res.DialogLocateApplicationFilter;
+            openFileDialog.Filter = AppConstants.SpaceEngineersApplicationFilter;
             openFileDialog.InitialDirectory = startPath;
             openFileDialog.Multiselect = false;
             openFileDialog.Title = Res.DialogLocateApplicationTitle;
