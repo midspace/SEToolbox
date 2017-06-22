@@ -177,9 +177,15 @@
             }
             else
             {
+                // Registry values need to be non-culture specific when written.
                 if (value is bool || value is Int32)
                 {
                     key.SetValue(subkey, value, RegistryValueKind.DWord);
+                }
+                if (value is double)
+                {
+                    value = ((double)value).ToString(CultureInfo.InvariantCulture);
+                    key.SetValue(subkey, value);
                 }
                 else
                 {
@@ -208,7 +214,8 @@
                         return (T)Enum.Parse(baseType, (string)item);
                     }
 
-                    return (T)Convert.ChangeType(item, baseType);
+                    // Registry values need to be non-culture specific when read.
+                    return (T)Convert.ChangeType(item, baseType, CultureInfo.InvariantCulture);
                 }
 
                 if (typeof(T) == typeof(Version))
