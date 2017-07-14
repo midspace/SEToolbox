@@ -39,6 +39,8 @@ If you are interested in fixing issues and contributing directly to the code bas
 
 This application contains code expressly licenced to it, and should not be used in any other application without the permission of Keen Software House.
 
+The Space Engineers logo was sourced from spaceengineerswiki.com under creative commons.
+
 ---
 
 SEToolbox was started in 2013 soon after Space Engineers was released for Early Access, and has been worked on in my free time.
