@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using Sandbox.Definitions;
     using SEToolbox.Interop;
     using VRage;
     using VRage.Game;
@@ -165,16 +167,36 @@
         {
             get
             {
-                return Character.OxygenLevel;
+                if (Character.StoredGases == null)
+                    return 0;
+                // doesn't matter if Oxygen is not there, as it will still be 0.
+                MyObjectBuilder_Character.StoredGas gas = Character.StoredGases.FirstOrDefault(e => e.Id.SubtypeName == "Oxygen");
+                return gas.FillLevel;
             }
 
             set
             {
-                if (value != Character.OxygenLevel)
-                {
-                    Character.OxygenLevel = value;
+                if (ReplaceGasValue("Oxygen", value))
                     RaisePropertyChanged(() => OxygenLevel);
-                }
+            }
+        }
+
+        [XmlIgnore]
+        public float HydrogenLevel
+        {
+            get
+            {
+                if (Character.StoredGases == null)
+                    return 0;
+                // doesn't matter if Oxygen is not there, as it will still be 0.
+                MyObjectBuilder_Character.StoredGas gas = Character.StoredGases.FirstOrDefault(e => e.Id.SubtypeName == "Hydrogen");
+                return gas.FillLevel;
+            }
+
+            set
+            {
+                if (ReplaceGasValue("Hydrogen", value))
+                    RaisePropertyChanged(() => HydrogenLevel);
             }
         }
 
@@ -312,6 +334,37 @@
         {
             Character.LinearVelocity = new VRageMath.Vector3(Character.LinearVelocity.X * -1, Character.LinearVelocity.Y * -1, Character.LinearVelocity.Z * -1);
             RaisePropertyChanged(() => LinearVelocity);
+        }
+
+        private bool ReplaceGasValue(string gasName, float value)
+        {
+            if (Character.StoredGases == null)
+                Character.StoredGases = new List<MyObjectBuilder_Character.StoredGas>();
+
+            // Find the existing gas value.
+            for (int i = 0; i < Character.StoredGases.Count; i++)
+            {
+                MyObjectBuilder_Character.StoredGas gas = Character.StoredGases[i];
+                if (gas.Id.SubtypeName == gasName)
+                {
+                    if (value != gas.FillLevel)
+                    {
+                        gas.FillLevel = value;
+                        Character.StoredGases[i] = gas;
+                        return true;
+                    }
+                }
+            }
+
+            // If it doesn't exist for old save games, add it in.
+            MyObjectBuilder_Character.StoredGas newGas = new MyObjectBuilder_Character.StoredGas
+            {
+                // This could cause an exception if the gas names are ever changed, even in casing.
+                Id = MyDefinitionManager.Static.GetGasDefinitions().FirstOrDefault(e => e.Id.SubtypeName == gasName).Id,
+                FillLevel = value
+            };
+            Character.StoredGases.Add(newGas);
+            return true;
         }
 
         #endregion

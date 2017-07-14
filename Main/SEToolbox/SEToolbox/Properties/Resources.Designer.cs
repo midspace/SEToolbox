@@ -944,6 +944,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hydrogen.
+        /// </summary>
+        public static string CtlCharacterHydrogen {
+            get {
+                return ResourceManager.GetString("CtlCharacterHydrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to H₂.
+        /// </summary>
+        public static string CtlCharacterHydrogenGasSymbol {
+            get {
+                return ResourceManager.GetString("CtlCharacterHydrogenGasSymbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inventory.
         /// </summary>
         public static string CtlCharacterInventoryTab {
@@ -994,6 +1012,15 @@ namespace SEToolbox.Properties {
         public static string CtlCharacterOxygen {
             get {
                 return ResourceManager.GetString("CtlCharacterOxygen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O₂.
+        /// </summary>
+        public static string CtlCharacterOxygenGasSymbol {
+            get {
+                return ResourceManager.GetString("CtlCharacterOxygenGasSymbol", resourceCulture);
             }
         }
         

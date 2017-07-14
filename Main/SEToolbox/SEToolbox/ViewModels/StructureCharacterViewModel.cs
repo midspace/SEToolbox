@@ -37,7 +37,7 @@
                 return;
             Inventory = new InventoryEditorViewModel(this, dataModel.Inventory);
 
-            DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            DataModel.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
                 OnPropertyChanged(e.PropertyName);
@@ -69,44 +69,24 @@
 
         protected new StructureCharacterModel DataModel
         {
-            get
-            {
-                return base.DataModel as StructureCharacterModel;
-            }
+            get { return base.DataModel as StructureCharacterModel; }
         }
 
         public bool IsPilot
         {
-            get
-            {
-                return DataModel.IsPilot;
-            }
-
-            set
-            {
-                DataModel.IsPilot = value;
-            }
+            get { return DataModel.IsPilot; }
+            set { DataModel.IsPilot = value; }
         }
 
         public bool IsPlayer
         {
-            get
-            {
-                return DataModel.IsPlayer;
-            }
-
-            set
-            {
-                DataModel.IsPlayer = value;
-            }
+            get { return DataModel.IsPlayer; }
+            set { DataModel.IsPlayer = value; }
         }
 
         public System.Windows.Media.Brush Color
         {
-            get
-            {
-                return new System.Windows.Media.SolidColorBrush(DataModel.Color.ToSandboxMediaColor());
-            }
+            get { return new System.Windows.Media.SolidColorBrush(DataModel.Color.ToSandboxMediaColor()); }
 
             set
             {
@@ -117,10 +97,7 @@
 
         public bool Light
         {
-            get
-            {
-                return DataModel.Light;
-            }
+            get { return DataModel.Light; }
 
             set
             {
@@ -131,10 +108,7 @@
 
         public bool JetPack
         {
-            get
-            {
-                return DataModel.JetPack;
-            }
+            get { return DataModel.JetPack; }
 
             set
             {
@@ -145,10 +119,7 @@
 
         public bool Dampeners
         {
-            get
-            {
-                return DataModel.Dampeners;
-            }
+            get { return DataModel.Dampeners; }
 
             set
             {
@@ -159,15 +130,9 @@
 
         public List<string> CharacterModels
         {
-            get
-            {
-                return DataModel.CharacterModels;
-            }
+            get { return DataModel.CharacterModels; }
 
-            set
-            {
-                DataModel.CharacterModels = value;
-            }
+            set { DataModel.CharacterModels = value; }
         }
 
         public override double LinearVelocity
@@ -191,6 +156,12 @@
         {
             get { return DataModel.OxygenLevel; }
             set { DataModel.OxygenLevel = value; }
+        }
+
+        public float HydrogenLevel
+        {
+            get { return DataModel.HydrogenLevel; }
+            set { DataModel.HydrogenLevel = value; }
         }
 
         public InventoryEditorViewModel Inventory

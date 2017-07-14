@@ -2763,4 +2763,13 @@ Planet Generator:	{17}</value>
   <data name="WnSettingsLabelUseCustomResource" xml:space="preserve">
     <value>Use Custom localization</value>
   </data>
+  <data name="CtlCharacterHydrogen" xml:space="preserve">
+    <value>Hydrogen</value>
+  </data>
+  <data name="CtlCharacterHydrogenGasSymbol" xml:space="preserve">
+    <value>H₂</value>
+  </data>
+  <data name="CtlCharacterOxygenGasSymbol" xml:space="preserve">
+    <value>O₂</value>
+  </data>
 </root>
