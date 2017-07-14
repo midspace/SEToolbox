@@ -4,6 +4,7 @@
     using System.Collections.ObjectModel;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
+    using Sandbox.Common.ObjectBuilders.Definitions;
     using SEToolbox.Interop;
     using SEToolbox.Models;
     using SEToolbox.Services;
@@ -296,6 +297,10 @@
 
             IsValidItemToImport = true;
             entity.Item.PhysicalContent = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_PhysicalObject>(StockItem.TypeId, StockItem.SubtypeId);
+
+            var gasContainer = entity.Item.PhysicalContent as MyObjectBuilder_GasContainerObject;
+            if (gasContainer != null)
+                gasContainer.GasLevel = 1f;
 
             //switch (StockItem.TypeId)
             //{

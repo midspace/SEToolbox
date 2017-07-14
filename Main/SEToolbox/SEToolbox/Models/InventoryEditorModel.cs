@@ -229,7 +229,7 @@
 
             if (definition == null)
             {
-                name = item.PhysicalContent.SubtypeName + " " + item.PhysicalContent.TypeId.ToString();
+                name = item.PhysicalContent.SubtypeName + " " + item.PhysicalContent.TypeId;
                 massMultiplyer = 1;
                 volumeMultiplyer = 1;
                 textureFile = null;
