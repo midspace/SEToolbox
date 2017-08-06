@@ -25,9 +25,6 @@
         private bool _isPilot;
 
         [NonSerialized]
-        private List<string> _characterModels;
-
-        [NonSerialized]
         private InventoryEditorModel _inventory;
 
         #endregion
@@ -37,7 +34,6 @@
         public StructureCharacterModel(MyObjectBuilder_EntityBase entityBase)
             : base(entityBase)
         {
-            CharacterModels = new List<string>(Enum.GetNames(typeof(MyCharacterModelEnum)));
         }
 
         #endregion
@@ -197,20 +193,6 @@
             {
                 if (ReplaceGasValue("Hydrogen", value))
                     RaisePropertyChanged(() => HydrogenLevel);
-            }
-        }
-
-        [XmlIgnore]
-        public List<string> CharacterModels
-        {
-            get { return _characterModels; }
-            set
-            {
-                if (value != _characterModels)
-                {
-                    _characterModels = value;
-                    RaisePropertyChanged(() => CharacterModels);
-                }
             }
         }
 

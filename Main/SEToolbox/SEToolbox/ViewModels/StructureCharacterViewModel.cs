@@ -128,13 +128,6 @@
             }
         }
 
-        public List<string> CharacterModels
-        {
-            get { return DataModel.CharacterModels; }
-
-            set { DataModel.CharacterModels = value; }
-        }
-
         public override double LinearVelocity
         {
             get { return DataModel.LinearVelocity; }
