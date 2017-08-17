@@ -30,11 +30,6 @@
         private readonly SpaceEngineersResources _resources;
         private Version _version;
 
-        /// <summary>
-        /// Populated from LastLoadedTimes
-        /// </summary>
-        private DateTime _lastLoadTime;
-
         #endregion
 
         public WorldResource()
@@ -169,20 +164,6 @@
                 {
                     _checkpoint.LastSaveTime = value.Value;
                     RaisePropertyChanged(() => LastSaveTime);
-                }
-            }
-        }
-
-        public DateTime LastLoadTime
-        {
-            get { return _lastLoadTime; }
-
-            set
-            {
-                if (value != _lastLoadTime)
-                {
-                    _lastLoadTime = value;
-                    RaisePropertyChanged(() => LastLoadTime);
                 }
             }
         }

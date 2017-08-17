@@ -946,9 +946,6 @@ Distance:		{1:#,##0.0} m</value>
   <data name="WnLoadBtnRepairTooltip" xml:space="preserve">
     <value>This will attempt to repair the save content it it finds any issues.</value>
   </data>
-  <data name="WnLoadColLoaded" xml:space="preserve">
-    <value>Loaded</value>
-  </data>
   <data name="WnLoadColName" xml:space="preserve">
     <value>Name</value>
   </data>

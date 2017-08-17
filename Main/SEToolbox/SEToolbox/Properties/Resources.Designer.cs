@@ -7451,15 +7451,6 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loaded.
-        /// </summary>
-        public static string WnLoadColLoaded {
-            get {
-                return ResourceManager.GetString("WnLoadColLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string WnLoadColName {

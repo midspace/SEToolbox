@@ -48,7 +48,6 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </controls:SortableGridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding LastLoadTime}" Header="{lex:Loc SEToolbox:Resources:WnLoadColLoaded}"/>
                         <GridViewColumn DisplayMemberBinding="{Binding LastSaveTime}" Header="{lex:Loc SEToolbox:Resources:WnLoadColSaved}"/>
                         <GridViewColumn DisplayMemberBinding="{Binding WorkshopId}" Header="{lex:Loc SEToolbox:Resources:WnLoadColWorkshop}"/>
                         <GridViewColumn DisplayMemberBinding="{Binding Version}" Header="{lex:Loc SEToolbox:Resources:WnLoadColVersion}"/>

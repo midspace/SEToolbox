@@ -184,7 +184,7 @@
             {
                 if (Character.StoredGases == null)
                     return 0;
-                // doesn't matter if Oxygen is not there, as it will still be 0.
+                // doesn't matter if Hydrogen is not there, as it will still be 0.
                 MyObjectBuilder_Character.StoredGas gas = Character.StoredGases.FirstOrDefault(e => e.Id.SubtypeName == "Hydrogen");
                 return gas.FillLevel;
             }

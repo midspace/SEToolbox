@@ -173,35 +173,24 @@
 
             #endregion
 
-            foreach (var item in list.OrderByDescending(w => w.LastLoadTime))
+            foreach (var item in list.OrderByDescending(w => w.LastSaveTime))
                 Worlds.Add(item);
         }
 
         private IEnumerable<WorldResource> FindSaveFiles(string lastLoadedPath, string userName, SaveWorldType saveType, UserDataPath dataPath)
         {
-            var lastLoadedFile = Path.Combine(lastLoadedPath, SpaceEngineersConsts.LoadLoadedFilename);
             var list = new List<WorldResource>();
 
             // Ignore any other base Save paths without the LastLoaded file.
-            if (File.Exists(lastLoadedFile))
+            if (Directory.Exists(lastLoadedPath))
             {
-                MyObjectBuilder_LastLoadedTimes lastLoaded = null;
                 bool isCompressed;
-                SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_LastLoadedTimes>(lastLoadedFile, out lastLoaded, out isCompressed);
                 var savePaths = Directory.GetDirectories(lastLoadedPath);
 
                 // Still check every potential game world path.
                 foreach (var savePath in savePaths)
                 {
                     var saveResource = LoadSaveFromPath(savePath, userName, saveType, dataPath);
-                    if (lastLoaded != null)
-                    {
-                        var last = lastLoaded.LastLoaded.Dictionary.FirstOrDefault(d => d.Key.Equals(savePath, StringComparison.OrdinalIgnoreCase));
-                        if (last.Key != null)
-                        {
-                            saveResource.LastLoadTime = last.Value;
-                        }
-                    }
 
                     // This should still allow Games to be copied into the Save path manually.
 
@@ -236,10 +225,8 @@
 
                 foreach (var userPath in userPaths)
                 {
-                    var lastLoadedFile = Path.Combine(userPath, SpaceEngineersConsts.LoadLoadedFilename);
-
                     // Ignore any other base Save paths without the LastLoaded file.
-                    if (File.Exists(lastLoadedFile))
+                    if (Directory.Exists(userPath))
                     {
                         var savePaths = Directory.GetDirectories(userPath);
 

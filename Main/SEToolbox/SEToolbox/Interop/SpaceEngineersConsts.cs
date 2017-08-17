@@ -22,11 +22,6 @@
         /// </summary>
         public const string SandBoxSectorFilename = "SANDBOX_0_0_0_.sbs";
 
-        /// <summary>
-        /// Contains list of save 'worlds'.
-        /// </summary>
-        public const string LoadLoadedFilename = "LastLoaded.sbl";
-
         // Current set max speed m/s for Ships.
         public const float MaxShipVelocity = 104.375f;
 
