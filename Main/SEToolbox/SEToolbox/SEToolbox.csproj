@@ -882,10 +882,6 @@
     <None Include="Resources\target.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(BinPath)\steam_api.dll">
-      <Link>steam_api.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="$(BinPath)\steam_api64.dll">
       <Link>steam_api64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -26,7 +26,6 @@
             "SpaceEngineers.Game.dll",  // MSIL
             "SpaceEngineers.ObjectBuilders.dll",                    // MSIL
             "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",     // MSIL
-            "steam_api.dll",            // AnyCpu
             "steam_api64.dll",          // AnyCpu
             "SteamSDK.dll",             // MSIL
             "VRage.Audio.dll",          // MSIL  1.147.x requirement.

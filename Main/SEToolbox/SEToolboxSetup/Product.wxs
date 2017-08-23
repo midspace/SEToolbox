@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.183.001.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.183.001.2" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <!-- DOS 8.3 Format required for cab filenames. -->
     <Media Id="1" Cabinet="SEToolbx.cab" EmbedCab="yes" />
@@ -56,7 +56,6 @@
               <RemoveFile Id="file3941098F688247798E7755FC8B2D18B7" Name="SpaceEngineers.Game.dll" On="install"/>
               <RemoveFile Id="fileA10D59ED71944ED7BD52C144A05A59A3" Name="SpaceEngineers.ObjectBuilders.dll" On="install"/>
               <RemoveFile Id="fileAF60B61F742940E7B68F86C3410E730C" Name="SpaceEngineers.ObjectBuilders.XmlSerializers.dll" On="install"/>
-              <RemoveFile Id="file58A40094239040D2AD4316B763F6D290" Name="steam_api.dll" On="install"/>
               <RemoveFile Id="file0B63627F3DDC47E58FB0BCCB65B110BC" Name="steam_api64.dll" On="install"/>
               <RemoveFile Id="file26225324B8BC443AB0B4DE7161E48FCF" Name="SteamSDK.dll" On="install"/>
               <RemoveFile Id="fileEA4AE319577E449E9D1DF59BC1B6D3F0" Name="VRage.dll" On="install"/>
