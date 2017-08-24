@@ -42,7 +42,7 @@
     <!--         Copy the Control folder structure into the build output     -->
     <Copy SourceFiles="@(EditorFiles)" DestinationFolder="$(BinariesRoot)" SkipUnchangedFiles="false"></Copy>
 
-    <!-- ### Uncomment to package language resources into .zip ### -->
+    <!-- ### Uncomment to package satellite language resources into .zip ### -->
     <!--
     <Copy SourceFiles="@(ResourceFiles-zh)" DestinationFolder="$(BinariesRoot)/zh" SkipUnchangedFiles="false"></Copy>
     -->

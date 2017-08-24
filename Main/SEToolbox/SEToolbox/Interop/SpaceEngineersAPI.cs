@@ -264,7 +264,8 @@
 
             if (GlobalSettings.Default.UseCustomResource.HasValue && GlobalSettings.Default.UseCustomResource.Value)
             {
-                AddLanguage(MyLanguagesEnum.ChineseChina, "zh", null, "Chinese", 1f, true);
+                // no longer required, as Chinese is now officially in game.
+                //AddLanguage(MyLanguagesEnum.ChineseChina, "zh", null, "Chinese", 1f, true);
             }
 
             MyTexts.LoadTexts(localizationPath, maincode, subcode);

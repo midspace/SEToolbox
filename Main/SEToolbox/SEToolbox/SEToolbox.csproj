@@ -662,9 +662,6 @@
     <EmbeddedResource Include="Properties\MyTexts.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\MyTexts.zh.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.zh.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -886,6 +883,7 @@
       <Link>steam_api64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\SEToolbox_splash_zh.png" />
     <None Include="Resources\hammer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -896,5 +894,6 @@
   -->
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)\SEToolboxUpdate.exe" DestinationFolder="$(TargetDir)" />
+    <!--    <Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)\zh" DestinationFolder="$(TargetDir)\zh" />-->
   </Target>
 </Project>
