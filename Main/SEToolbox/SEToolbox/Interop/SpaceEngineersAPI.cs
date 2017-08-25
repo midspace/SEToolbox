@@ -265,7 +265,8 @@
             if (GlobalSettings.Default.UseCustomResource.HasValue && GlobalSettings.Default.UseCustomResource.Value)
             {
                 // no longer required, as Chinese is now officially in game.
-                //AddLanguage(MyLanguagesEnum.ChineseChina, "zh", null, "Chinese", 1f, true);
+                // left as an example for later additional custom languages.
+                //AddLanguage(MyLanguagesEnum.ChineseChina, "zh-CN", null, "Chinese", 1f, true);
             }
 
             MyTexts.LoadTexts(localizationPath, maincode, subcode);
@@ -317,13 +318,13 @@
                 new Type[] { typeof(MyLanguagesEnum), typeof(string), typeof(string), typeof(string), typeof(float), typeof(bool) }, null);
             MyTexts.LanguageDescription languageDescription = (MyTexts.LanguageDescription)constructorInfo.Invoke(new object[] { id, displayName, cultureName, subcultureName, guiTextScale, isCommunityLocalized });
 
-            Dictionary<int, MyTexts.LanguageDescription> m_languageIdToLanguage = typeof(MyTexts).GetStaticField<Dictionary<int, MyTexts.LanguageDescription>>("m_languageIdToLanguage");
-            Dictionary<string, int> m_cultureToLanguageId = typeof(MyTexts).GetStaticField<Dictionary<string, int>>("m_cultureToLanguageId");
+            Dictionary<MyLanguagesEnum, MyTexts.LanguageDescription> m_languageIdToLanguage = typeof(MyTexts).GetStaticField<Dictionary<MyLanguagesEnum, MyTexts.LanguageDescription>>("m_languageIdToLanguage");
+            Dictionary<string, MyLanguagesEnum> m_cultureToLanguageId = typeof(MyTexts).GetStaticField<Dictionary<string, MyLanguagesEnum>>("m_cultureToLanguageId");
 
-            if (!m_languageIdToLanguage.ContainsKey((int)id))
+            if (!m_languageIdToLanguage.ContainsKey(id))
             {
-                m_languageIdToLanguage.Add((int)id, languageDescription);
-                m_cultureToLanguageId.Add(languageDescription.FullCultureName, (int)id);
+                m_languageIdToLanguage.Add(id, languageDescription);
+                m_cultureToLanguageId.Add(languageDescription.FullCultureName, id);
             }
         }
 

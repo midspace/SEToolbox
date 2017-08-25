@@ -7,6 +7,7 @@
     {
         internal static Dictionary<string, string> SupportedLanguages = new Dictionary<string, string>()
         {
+            // The following local code must match those from the game, or they will be considered new.
             {"en", "flag_great_britain"},
             {"en-US", "flag_usa"},
             {"ca-ES", "flag_catalonia"},
@@ -33,7 +34,7 @@
             {"sv", "flag_sweden"},
             {"tr-TR", "flag_turkey"},
             {"uk", "flag_ukraine"},
-            {"zh", "flag_china"},
+            {"zh-CN", "flag_china"},
         };
 
         public static string HtmlFilter => $"{Res.DialogHtmlFiles} (*.htm;*.htm)|*.htm;*.html";
