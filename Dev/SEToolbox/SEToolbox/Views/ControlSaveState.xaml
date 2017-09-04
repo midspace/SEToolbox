@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="SEToolbox.Views.ControlSaveState"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" d:DesignWidth="150">
+    <Grid>
+        <Border CornerRadius="2" BorderBrush="Black" BorderThickness="0">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.IsModified, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border.Background>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FF8B2020" Offset="4"/>
+                    <GradientStop Color="#FFFFCFAF" Offset="0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid Margin="4,0,4,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{lex:Loc CtlUnsavedStateTitle}" ToolTip="{lex:Loc CtlUnsavedStateTooltip}" Foreground="Black" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border CornerRadius="2" BorderBrush="Black" BorderThickness="0" Background="Transparent">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.IsModified, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid Margin="4,0,4,0">
+                <StackPanel Orientation="Horizontal" Width="46">
+                    <TextBlock Text=" "/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

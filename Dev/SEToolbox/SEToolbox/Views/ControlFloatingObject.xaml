@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="SEToolbox.Views.ControlFloatingObject"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:views="clr-namespace:SEToolbox.Views"
+             xmlns:props="clr-namespace:SEToolbox.Properties"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.ColumnSpan="2" Content="{lex:Loc CtlFloatingObjectTitle}"/>
+        <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="2">
+            <TextBox.Text>
+                <MultiBinding StringFormat="{x:Static props:Resources.FloatingDetail}" Mode="OneWay">
+                    <Binding Path="DisplayName"/>
+                    <Binding Path="PlayerDistance"/>
+                    <Binding Path="Volume"/>
+                    <Binding Path="Mass"/>
+                    <Binding Path="Units"/>
+                </MultiBinding>
+            </TextBox.Text>
+        </TextBox>
+        <Label Grid.Row="2" Grid.Column="0" Content="{lex:Loc CtlFloatingObjectPosition}"/>
+        <views:ControlPosition Grid.Row="2" Grid.Column="1"/>
+    </Grid>
+</UserControl>

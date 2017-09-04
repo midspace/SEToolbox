@@ -1,0 +1,1069 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DisplayName_Item_StoneOre" xml:space="preserve">
+    <value>石头</value>
+  </data>
+  <data name="DisplayName_Item_IronIngot" xml:space="preserve">
+    <value>铁锭</value>
+  </data>
+  <data name="DisplayName_Item_IronOre" xml:space="preserve">
+    <value>铁矿</value>
+  </data>
+  <data name="DisplayName_Block_AdvancedRotor" xml:space="preserve">
+    <value>先进转子</value>
+  </data>
+  <data name="DisplayName_Block_AdvancedRotorPart" xml:space="preserve">
+    <value>先进转子部件</value>
+  </data>
+  <data name="DisplayName_Block_AirtightHangarDoor" xml:space="preserve">
+    <value>舱门</value>
+  </data>
+  <data name="DisplayName_Block_AirtightSlideDoor" xml:space="preserve">
+    <value>滑动门</value>
+  </data>
+  <data name="DisplayName_Block_AirVent" xml:space="preserve">
+    <value>排气孔</value>
+  </data>
+  <data name="DisplayName_Block_Ammo_Assembler" xml:space="preserve">
+    <value>弹药装配机</value>
+  </data>
+  <data name="DisplayName_Block_Antenna" xml:space="preserve">
+    <value>天线</value>
+  </data>
+  <data name="DisplayName_Block_Arc_Furnace" xml:space="preserve">
+    <value>电弧熔炉</value>
+  </data>
+  <data name="DisplayName_Block_ArmorCenter" xml:space="preserve">
+    <value>防爆门</value>
+  </data>
+  <data name="DisplayName_Block_ArmorCorner" xml:space="preserve">
+    <value>防爆门角</value>
+  </data>
+  <data name="DisplayName_Block_ArmorInvCorner" xml:space="preserve">
+    <value>防爆门倒角</value>
+  </data>
+  <data name="DisplayName_Block_ArmorSide" xml:space="preserve">
+    <value>防爆门边</value>
+  </data>
+  <data name="DisplayName_Block_Assembler" xml:space="preserve">
+    <value>装配机</value>
+  </data>
+  <data name="DisplayName_Block_Base_Components_Assembler" xml:space="preserve">
+    <value>基础部件装配机</value>
+  </data>
+  <data name="DisplayName_Block_Battery" xml:space="preserve">
+    <value>电池</value>
+  </data>
+  <data name="DisplayName_Block_Beacon" xml:space="preserve">
+    <value>信标</value>
+  </data>
+  <data name="DisplayName_Block_Big_Arc_Furnace" xml:space="preserve">
+    <value>大型电弧炉</value>
+  </data>
+  <data name="DisplayName_Block_Big_Gas_Centrifugal_Refinery" xml:space="preserve">
+    <value>大型燃油离心提炼机</value>
+  </data>
+  <data name="DisplayName_Block_Big_Precious_Furnace" xml:space="preserve">
+    <value>大型贵金属炉</value>
+  </data>
+  <data name="DisplayName_Block_Big_Solids_Refinery" xml:space="preserve">
+    <value>大型固体物提炼机</value>
+  </data>
+  <data name="DisplayName_Block_ButtonPanel" xml:space="preserve">
+    <value>按钮面板</value>
+  </data>
+  <data name="DisplayName_Block_Camera" xml:space="preserve">
+    <value>摄像机</value>
+  </data>
+  <data name="DisplayName_Block_Cockpit1" xml:space="preserve">
+    <value>驾驶舱</value>
+  </data>
+  <data name="DisplayName_Block_Cockpit2" xml:space="preserve">
+    <value>控制台</value>
+  </data>
+  <data name="DisplayName_Block_Cockpit3" xml:space="preserve">
+    <value>飞行座椅</value>
+  </data>
+  <data name="DisplayName_Block_Collector" xml:space="preserve">
+    <value>收集器</value>
+  </data>
+  <data name="DisplayName_Block_Connector" xml:space="preserve">
+    <value>物品输送器</value>
+  </data>
+  <data name="DisplayName_Block_ConnectorSmall" xml:space="preserve">
+    <value>物资排出器</value>
+  </data>
+  <data name="DisplayName_Block_Construction_Components_Assembler" xml:space="preserve">
+    <value>Construction Components Assembler</value>
+  </data>
+  <data name="DisplayName_Block_ControlPanel" xml:space="preserve">
+    <value>控制面板</value>
+  </data>
+  <data name="DisplayName_Block_Conveyor" xml:space="preserve">
+    <value>输送机</value>
+  </data>
+  <data name="DisplayName_Block_ConveyorFrame" xml:space="preserve">
+    <value>输送器框架</value>
+  </data>
+  <data name="DisplayName_Block_ConveyorSmall" xml:space="preserve">
+    <value>小型输送中继器</value>
+  </data>
+  <data name="DisplayName_Block_ConveyorSorter" xml:space="preserve">
+    <value>分拣传输机</value>
+  </data>
+  <data name="DisplayName_Block_ConveyorTube" xml:space="preserve">
+    <value>输送管道</value>
+  </data>
+  <data name="DisplayName_Block_ConveyorTubeCurved" xml:space="preserve">
+    <value>弯曲输送管道</value>
+  </data>
+  <data name="DisplayName_Block_ConveyorTubeCurvedSmall" xml:space="preserve">
+    <value>Small Curved Conveyor Tube</value>
+  </data>
+  <data name="DisplayName_Block_ConveyorTubeMedium" xml:space="preserve">
+    <value>输送管道</value>
+  </data>
+  <data name="DisplayName_Block_ConveyorTubeSmall" xml:space="preserve">
+    <value>小型输送管道</value>
+  </data>
+  <data name="DisplayName_Block_CryoChamber" xml:space="preserve">
+    <value>Cryo Chamber</value>
+  </data>
+  <data name="DisplayName_Block_DebugSphere1" xml:space="preserve">
+    <value>Debug spheres 1</value>
+  </data>
+  <data name="DisplayName_Block_DebugSphere2" xml:space="preserve">
+    <value>Debug spheres 2 (no metal)</value>
+  </data>
+  <data name="DisplayName_Block_DebugSphere3" xml:space="preserve">
+    <value>Debug spheres 3 (fixed gloss)</value>
+  </data>
+  <data name="DisplayName_Block_Decoy" xml:space="preserve">
+    <value>Decoy</value>
+  </data>
+  <data name="DisplayName_Block_DiagonalWindow" xml:space="preserve">
+    <value>Diagonal Window</value>
+  </data>
+  <data name="DisplayName_Block_Door" xml:space="preserve">
+    <value>Door</value>
+  </data>
+  <data name="DisplayName_Block_Drill" xml:space="preserve">
+    <value>Drill</value>
+  </data>
+  <data name="DisplayName_Block_EffectivenessModule" xml:space="preserve">
+    <value>Effectiveness Module</value>
+  </data>
+  <data name="DisplayName_Block_Electronics_Assembler" xml:space="preserve">
+    <value>Electronics Assembler</value>
+  </data>
+  <data name="DisplayName_Block_FighterCockpit" xml:space="preserve">
+    <value>Fighter Cockpit</value>
+  </data>
+  <data name="DisplayName_Block_FullCoverWall" xml:space="preserve">
+    <value>Full Cover Wall</value>
+  </data>
+  <data name="DisplayName_Block_GatlingGun" xml:space="preserve">
+    <value>Gatling Gun</value>
+  </data>
+  <data name="DisplayName_Block_GatlingTurret" xml:space="preserve">
+    <value>Gatling Turret</value>
+  </data>
+  <data name="DisplayName_Block_GravityGenerator" xml:space="preserve">
+    <value>Gravity Generator</value>
+  </data>
+  <data name="DisplayName_Block_GravityGeneratorSphere" xml:space="preserve">
+    <value>Spherical Gravity Generator</value>
+  </data>
+  <data name="DisplayName_Block_Gyroscope" xml:space="preserve">
+    <value>Gyroscope</value>
+  </data>
+  <data name="DisplayName_Block_HalfCoverWall" xml:space="preserve">
+    <value>Half Cover Wall</value>
+  </data>
+  <data name="DisplayName_Block_HeavyAngledArmorCorner" xml:space="preserve">
+    <value>Angled Heavy Armor Corner</value>
+  </data>
+  <data name="DisplayName_Block_HeavyAngledArmorSlope" xml:space="preserve">
+    <value>Angled Heavy Armor Slope</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorBlock" xml:space="preserve">
+    <value>Heavy Armor Block</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorCorner" xml:space="preserve">
+    <value>Heavy Armor Corner</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorCorner2" xml:space="preserve">
+    <value>Heavy Armor Corner 2x1x1</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorCorner2Base" xml:space="preserve">
+    <value>Heavy Armor Corner 2x1x1 Base</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorCorner2BaseSmooth" xml:space="preserve">
+    <value>Heavy Armor Corner 2x1x1 Base Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorCorner2Smooth" xml:space="preserve">
+    <value>Heavy Armor Corner 2x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorCorner2Tip" xml:space="preserve">
+    <value>Heavy Armor Corner 2x1x1 Tip</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorCorner2TipSmooth" xml:space="preserve">
+    <value>Heavy Armor Corner 2x1x1 Tip Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorInvCorner" xml:space="preserve">
+    <value>Heavy Armor Inv. Corner</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorInvCorner2" xml:space="preserve">
+    <value>Heavy Armor Inv. Corner 2x1x1</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorInvCorner2Base" xml:space="preserve">
+    <value>Heavy Armor Inv. Corner 2x1x1 Base</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorInvCorner2BaseSmooth" xml:space="preserve">
+    <value>Heavy Armor Inv. Corner 2x1x1 Base Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorInvCorner2Smooth" xml:space="preserve">
+    <value>Heavy Armor Inv. Corner 2x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorInvCorner2Tip" xml:space="preserve">
+    <value>Heavy Armor Inv. Corner 2x1x1 Tip</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorInvCorner2TipSmooth" xml:space="preserve">
+    <value>Heavy Armor Inv. Corner 2x1x1 Tip Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorSlope" xml:space="preserve">
+    <value>Heavy Armor Slope</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorSlope2" xml:space="preserve">
+    <value>Heavy Armor Slope 2x1x1</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorSlope2Base" xml:space="preserve">
+    <value>Heavy Armor Slope 2x1x1 Base</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorSlope2BaseSmooth" xml:space="preserve">
+    <value>Heavy Armor Slope 2x1x1 Base Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorSlope2Smooth" xml:space="preserve">
+    <value>Heavy Armor Slope 2x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorSlope2Tip" xml:space="preserve">
+    <value>Heavy Armor Slope 2x1x1 Tip</value>
+  </data>
+  <data name="DisplayName_Block_HeavyArmorSlope2TipSmooth" xml:space="preserve">
+    <value>Heavy Armor Slope 2x1x1 Tip Smooth</value>
+  </data>
+  <data name="DisplayName_Block_HeavyRoundArmorCorner" xml:space="preserve">
+    <value>Heavy Armor Round Corner</value>
+  </data>
+  <data name="DisplayName_Block_HeavyRoundArmorInvCorner" xml:space="preserve">
+    <value>Heavy Armor Round Inv. Corner</value>
+  </data>
+  <data name="DisplayName_Block_HeavyRoundArmorSlope" xml:space="preserve">
+    <value>Heavy Armor Round Slope</value>
+  </data>
+  <data name="DisplayName_Block_HeavyRoundedArmorCorner" xml:space="preserve">
+    <value>Rounded Heavy Armor Corner</value>
+  </data>
+  <data name="DisplayName_Block_HeavyRoundedArmorSlope" xml:space="preserve">
+    <value>Rounded Heavy Armor Slope</value>
+  </data>
+  <data name="DisplayName_Block_HydrogenTank" xml:space="preserve">
+    <value>Hydrogen Tank</value>
+  </data>
+  <data name="DisplayName_Block_HydrogenTankSmall" xml:space="preserve">
+    <value>Hydrogen Tank Small</value>
+  </data>
+  <data name="DisplayName_Block_InteriorLight" xml:space="preserve">
+    <value>Interior Light</value>
+  </data>
+  <data name="DisplayName_Block_InteriorPillar" xml:space="preserve">
+    <value>Interior Pillar</value>
+  </data>
+  <data name="DisplayName_Block_InteriorTurret" xml:space="preserve">
+    <value>Interior Turret</value>
+  </data>
+  <data name="DisplayName_Block_InteriorWall" xml:space="preserve">
+    <value>Interior Wall</value>
+  </data>
+  <data name="DisplayName_Block_JumpDrive" xml:space="preserve">
+    <value>Jump Drive</value>
+  </data>
+  <data name="DisplayName_Block_LandingGear" xml:space="preserve">
+    <value>Landing Gear</value>
+  </data>
+  <data name="DisplayName_Block_LargeAtmoThrust" xml:space="preserve">
+    <value>Large Atmospheric Thruster</value>
+  </data>
+  <data name="DisplayName_Block_LargeCargoContainer" xml:space="preserve">
+    <value>Large Cargo Container</value>
+  </data>
+  <data name="DisplayName_Block_LargeHydrogenThrust" xml:space="preserve">
+    <value>Large Hydrogen Thruster</value>
+  </data>
+  <data name="DisplayName_Block_LargeReactor" xml:space="preserve">
+    <value>Large Reactor</value>
+  </data>
+  <data name="DisplayName_Block_LargeThrust" xml:space="preserve">
+    <value>Large Thruster</value>
+  </data>
+  <data name="DisplayName_Block_LaserAntenna" xml:space="preserve">
+    <value>Laser Antenna</value>
+  </data>
+  <data name="DisplayName_Block_LightAngledArmorCorner" xml:space="preserve">
+    <value>Angled Armor Corner</value>
+  </data>
+  <data name="DisplayName_Block_LightAngledArmorSlope" xml:space="preserve">
+    <value>Angled Armor Slope</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorBlock" xml:space="preserve">
+    <value>Light Armor Block</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner" xml:space="preserve">
+    <value>Light Armor Corner</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner2" xml:space="preserve">
+    <value>Light Armor Corner 2x1x1</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner2Base" xml:space="preserve">
+    <value>Light Armor Corner 2x1x1 Base</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner2BaseSmooth" xml:space="preserve">
+    <value>Light Armor Corner 2x1x1 Base Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner2Smooth" xml:space="preserve">
+    <value>Light Armor Corner 2x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner2Tip" xml:space="preserve">
+    <value>Light Armor Corner 2x1x1 Tip</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner2TipSmooth" xml:space="preserve">
+    <value>Light Armor Corner 2x1x1 Tip Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner3" xml:space="preserve">
+    <value>Light Armor Corner 3x1x1</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorCorner3Smooth" xml:space="preserve">
+    <value>Light Armor Corner 3x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner" xml:space="preserve">
+    <value>Light Armor Inv. Corner</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner2" xml:space="preserve">
+    <value>Light Armor Inv. Corner 2x1x1</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner2Base" xml:space="preserve">
+    <value>Light Armor Inv. Corner 2x1x1 Base</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner2BaseSmooth" xml:space="preserve">
+    <value>Light Armor Inv. Corner 2x1x1 Base Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner2Smooth" xml:space="preserve">
+    <value>Light Armor Inv. Corner 2x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner2Tip" xml:space="preserve">
+    <value>Light Armor Inv. Corner 2x1x1 Tip</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner2TipSmooth" xml:space="preserve">
+    <value>Light Armor Inv. Corner 2x1x1 Tip Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner3" xml:space="preserve">
+    <value>Light Armor Inv. Corner 3x1x1</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorInvCorner3Smooth" xml:space="preserve">
+    <value>Light Armor Inv. Corner 3x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope" xml:space="preserve">
+    <value>Light Armor Slope</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope2" xml:space="preserve">
+    <value>Light Armor Slope 2x1x1</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope2Base" xml:space="preserve">
+    <value>Light Armor Slope 2x1x1 Base</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope2BaseSmooth" xml:space="preserve">
+    <value>Light Armor Slope 2x1x1 Base Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope2Smooth" xml:space="preserve">
+    <value>Light Armor Slope 2x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope2Tip" xml:space="preserve">
+    <value>Light Armor Slope 2x1x1 Tip</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope2TipSmooth" xml:space="preserve">
+    <value>Light Armor Slope 2x1x1 Tip Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope3" xml:space="preserve">
+    <value>Light Armor Slope 3x1x1</value>
+  </data>
+  <data name="DisplayName_Block_LightArmorSlope3Smooth" xml:space="preserve">
+    <value>Light Armor Slope 3x1x1 Smooth</value>
+  </data>
+  <data name="DisplayName_Block_LightRoundArmorCorner" xml:space="preserve">
+    <value>Round Armor Corner</value>
+  </data>
+  <data name="DisplayName_Block_LightRoundArmorInvCorner" xml:space="preserve">
+    <value>Round Armor Inv. Corner</value>
+  </data>
+  <data name="DisplayName_Block_LightRoundArmorSlope" xml:space="preserve">
+    <value>Round Armor Slope</value>
+  </data>
+  <data name="DisplayName_Block_LightRoundedArmorCorner" xml:space="preserve">
+    <value>Rounded Armor Corner</value>
+  </data>
+  <data name="DisplayName_Block_LightRoundedArmorSlope" xml:space="preserve">
+    <value>Rounded Armor Slope</value>
+  </data>
+  <data name="DisplayName_Block_MedicalRoom" xml:space="preserve">
+    <value>医疗室</value>
+  </data>
+  <data name="DisplayName_Block_MediumCargoContainer" xml:space="preserve">
+    <value>中型货舱</value>
+  </data>
+  <data name="DisplayName_Block_MergeBlock" xml:space="preserve">
+    <value>合并块</value>
+  </data>
+  <data name="DisplayName_Block_MissileTurret" xml:space="preserve">
+    <value>导弹塔</value>
+  </data>
+  <data name="DisplayName_Block_OreDetector" xml:space="preserve">
+    <value>矿石探测仪</value>
+  </data>
+  <data name="DisplayName_Block_OxygenFarm" xml:space="preserve">
+    <value>氧气农场</value>
+  </data>
+  <data name="DisplayName_Block_OxygenGenerator" xml:space="preserve">
+    <value>氧气制造机</value>
+  </data>
+  <data name="DisplayName_Block_OxygenTank" xml:space="preserve">
+    <value>氧气瓶</value>
+  </data>
+  <data name="DisplayName_Block_Passage" xml:space="preserve">
+    <value>通道</value>
+  </data>
+  <data name="DisplayName_Block_PassengerSeat" xml:space="preserve">
+    <value>副驾座</value>
+  </data>
+  <data name="DisplayName_Block_PistonBase" xml:space="preserve">
+    <value>活塞</value>
+  </data>
+  <data name="DisplayName_Block_PistonTop" xml:space="preserve">
+    <value>顶部活塞部件</value>
+  </data>
+  <data name="DisplayName_Block_PowerEfficiencyModule" xml:space="preserve">
+    <value>节能模块</value>
+  </data>
+  <data name="DisplayName_Block_ProductivityModule" xml:space="preserve">
+    <value>吞吐加强模块</value>
+  </data>
+  <data name="DisplayName_Block_Projector" xml:space="preserve">
+    <value>投影仪</value>
+  </data>
+  <data name="DisplayName_Block_Ramp" xml:space="preserve">
+    <value>斜面</value>
+  </data>
+  <data name="DisplayName_Block_Refinery" xml:space="preserve">
+    <value>精炼厂</value>
+  </data>
+  <data name="DisplayName_Block_ReflectorLight" xml:space="preserve">
+    <value>聚光灯</value>
+  </data>
+  <data name="DisplayName_Block_RemoteControl" xml:space="preserve">
+    <value>远程控制</value>
+  </data>
+  <data name="DisplayName_Block_RocketLauncher" xml:space="preserve">
+    <value>火箭发射器</value>
+  </data>
+  <data name="DisplayName_Block_Rotor" xml:space="preserve">
+    <value>引擎</value>
+  </data>
+  <data name="DisplayName_Block_RotorPart" xml:space="preserve">
+    <value>转子部件</value>
+  </data>
+  <data name="DisplayName_Block_Sensor" xml:space="preserve">
+    <value>感应器</value>
+  </data>
+  <data name="DisplayName_Block_ShipGrinder" xml:space="preserve">
+    <value>电锯</value>
+  </data>
+  <data name="DisplayName_Block_ShipWelder" xml:space="preserve">
+    <value>焊接器</value>
+  </data>
+  <data name="DisplayName_Block_SmallAtmoThrust" xml:space="preserve">
+    <value>Small Atmospheric Thruster</value>
+  </data>
+  <data name="DisplayName_Block_SmallCargoContainer" xml:space="preserve">
+    <value>Small Cargo Container</value>
+  </data>
+  <data name="DisplayName_Block_SmallConveyorSorter" xml:space="preserve">
+    <value>Small Conveyor Sorter</value>
+  </data>
+  <data name="DisplayName_Block_SmallHydrogenThrust" xml:space="preserve">
+    <value>Small Hydrogen Thruster</value>
+  </data>
+  <data name="DisplayName_Block_SmallReactor" xml:space="preserve">
+    <value>Small Reactor</value>
+  </data>
+  <data name="DisplayName_Block_SmallRocketLauncherReload" xml:space="preserve">
+    <value>Reloadable Rocket Launcher</value>
+  </data>
+  <data name="DisplayName_Block_SmallThrust" xml:space="preserve">
+    <value>Small Thruster</value>
+  </data>
+  <data name="DisplayName_Block_SolarPanel" xml:space="preserve">
+    <value>Solar Panel</value>
+  </data>
+  <data name="DisplayName_Block_SoundBlock" xml:space="preserve">
+    <value>Sound Block</value>
+  </data>
+  <data name="DisplayName_Block_SpaceBall" xml:space="preserve">
+    <value>Space Ball</value>
+  </data>
+  <data name="DisplayName_Block_Stairs" xml:space="preserve">
+    <value>Stairs</value>
+  </data>
+  <data name="DisplayName_Block_SteelCatwalk" xml:space="preserve">
+    <value>Steel Catwalk</value>
+  </data>
+  <data name="DisplayName_Block_SteelCatwalkCorner" xml:space="preserve">
+    <value>Steel Catwalk Corner</value>
+  </data>
+  <data name="DisplayName_Block_SteelCatwalkPlate" xml:space="preserve">
+    <value>Steel Catwalk Plate</value>
+  </data>
+  <data name="DisplayName_Block_SteelCatwalkTwoSides" xml:space="preserve">
+    <value>Steel Catwalk Two Sides</value>
+  </data>
+  <data name="DisplayName_Block_Suspension1x1" xml:space="preserve">
+    <value>Wheel Suspension 1x1</value>
+  </data>
+  <data name="DisplayName_Block_Suspension3x3" xml:space="preserve">
+    <value>Wheel Suspension 3x3</value>
+  </data>
+  <data name="DisplayName_Block_Suspension5x5" xml:space="preserve">
+    <value>Wheel Suspension 5x5</value>
+  </data>
+  <data name="DisplayName_Block_TextPanel" xml:space="preserve">
+    <value>Text panel</value>
+  </data>
+  <data name="DisplayName_Block_TimerBlock" xml:space="preserve">
+    <value>Timer Block</value>
+  </data>
+  <data name="DisplayName_Block_VerticalCen" xml:space="preserve">
+    <value>Centered Window</value>
+  </data>
+  <data name="DisplayName_Block_VerticalWindow" xml:space="preserve">
+    <value>Vertical Window</value>
+  </data>
+  <data name="DisplayName_Block_VirtualMass" xml:space="preserve">
+    <value>Artificial Mass</value>
+  </data>
+  <data name="DisplayName_Block_Warhead" xml:space="preserve">
+    <value>Warhead</value>
+  </data>
+  <data name="DisplayName_Block_Wheel1x1" xml:space="preserve">
+    <value>Wheel 1x1</value>
+  </data>
+  <data name="DisplayName_Block_Wheel3x3" xml:space="preserve">
+    <value>Wheel 3x3</value>
+  </data>
+  <data name="DisplayName_Block_Wheel5x5" xml:space="preserve">
+    <value>Wheel 5x5</value>
+  </data>
+  <data name="DisplayName_Block_Window1x1Face" xml:space="preserve">
+    <value>Window 1x1 Face</value>
+  </data>
+  <data name="DisplayName_Block_Window1x1Flat" xml:space="preserve">
+    <value>Window 1x1 Flat</value>
+  </data>
+  <data name="DisplayName_Block_Window1x1FlatInv" xml:space="preserve">
+    <value>Window 1x1 Flat Inv.</value>
+  </data>
+  <data name="DisplayName_Block_Window1x1Inv" xml:space="preserve">
+    <value>Window 1x1 Inv.</value>
+  </data>
+  <data name="DisplayName_Block_Window1x1Side" xml:space="preserve">
+    <value>Window 1x1 Side</value>
+  </data>
+  <data name="DisplayName_Block_Window1x1Slope" xml:space="preserve">
+    <value>Window 1x1 Slope</value>
+  </data>
+  <data name="DisplayName_Block_Window1x2Face" xml:space="preserve">
+    <value>Window 1x2 Face</value>
+  </data>
+  <data name="DisplayName_Block_Window1x2Flat" xml:space="preserve">
+    <value>Window 1x2 Flat</value>
+  </data>
+  <data name="DisplayName_Block_Window1x2FlatInv" xml:space="preserve">
+    <value>Window 1x2 Flat Inv.</value>
+  </data>
+  <data name="DisplayName_Block_Window1x2Inv" xml:space="preserve">
+    <value>Window 1x2 Inv.</value>
+  </data>
+  <data name="DisplayName_Block_Window1x2SideLeft" xml:space="preserve">
+    <value>Window 1x2 Side Left</value>
+  </data>
+  <data name="DisplayName_Block_Window1x2SideRight" xml:space="preserve">
+    <value>Window 1x2 Side Right</value>
+  </data>
+  <data name="DisplayName_Block_Window1x2Slope" xml:space="preserve">
+    <value>Window 1x2 Slope</value>
+  </data>
+  <data name="DisplayName_Block_Window2x3Flat" xml:space="preserve">
+    <value>Window 2x3 Flat</value>
+  </data>
+  <data name="DisplayName_Block_Window2x3FlatInv" xml:space="preserve">
+    <value>Window 2x3 Flat Inv.</value>
+  </data>
+  <data name="DisplayName_Block_Window3x3Flat" xml:space="preserve">
+    <value>Window 3x3 Flat</value>
+  </data>
+  <data name="DisplayName_Block_Window3x3FlatInv" xml:space="preserve">
+    <value>Window 3x3 Flat Inv.</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_Ammo" xml:space="preserve">
+    <value>Ammo</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_Base_Components" xml:space="preserve">
+    <value>Base Components</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_CommonMetals" xml:space="preserve">
+    <value>Common Metals</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_Components" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_Construction_Components" xml:space="preserve">
+    <value>Construction Components</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_Electronics" xml:space="preserve">
+    <value>Electronics</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_EnergeticIngots" xml:space="preserve">
+    <value>Energetic Ingots</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_HydrogenBottles" xml:space="preserve">
+    <value>氢气瓶</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_Ice" xml:space="preserve">
+    <value>冰</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_Ingots" xml:space="preserve">
+    <value>Ingots</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_LargeBlocks" xml:space="preserve">
+    <value>大型块</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_OxygenBottles" xml:space="preserve">
+    <value>氧气瓶</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_PreciousMetals" xml:space="preserve">
+    <value>Noble Metals</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_SmallBlocks" xml:space="preserve">
+    <value>小型方块</value>
+  </data>
+  <data name="DisplayName_BlueprintClass_Solids" xml:space="preserve">
+    <value>Solids</value>
+  </data>
+  <data name="DisplayName_Category_AllBlocks" xml:space="preserve">
+    <value>All Blocks</value>
+  </data>
+  <data name="DisplayName_Category_ArmorBlocks" xml:space="preserve">
+    <value>Armor Blocks</value>
+  </data>
+  <data name="DisplayName_Category_CharacterAnimations" xml:space="preserve">
+    <value>Character Animations</value>
+  </data>
+  <data name="DisplayName_Category_CharacterTools" xml:space="preserve">
+    <value>Character Tools</value>
+  </data>
+  <data name="DisplayName_Category_Cockpit" xml:space="preserve">
+    <value>Cockpit Blocks</value>
+  </data>
+  <data name="DisplayName_Category_ConveyorBlocks" xml:space="preserve">
+    <value>Conv./Cargo Blocks</value>
+  </data>
+  <data name="DisplayName_Category_GeneratedBlocks" xml:space="preserve">
+    <value>Generated Blocks</value>
+  </data>
+  <data name="DisplayName_Category_LargeBlocks" xml:space="preserve">
+    <value>Large Blocks</value>
+  </data>
+  <data name="DisplayName_Category_Power" xml:space="preserve">
+    <value>Power Blocks</value>
+  </data>
+  <data name="DisplayName_Category_Production" xml:space="preserve">
+    <value>Production Blocks</value>
+  </data>
+  <data name="DisplayName_Category_ShipGroups" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="DisplayName_Category_ShipLights" xml:space="preserve">
+    <value>Lights</value>
+  </data>
+  <data name="DisplayName_Category_ShipThrusters" xml:space="preserve">
+    <value>Thrusters</value>
+  </data>
+  <data name="DisplayName_Category_ShipWeaponsTools" xml:space="preserve">
+    <value>Weapons and Tools</value>
+  </data>
+  <data name="DisplayName_Category_SmallBlocks" xml:space="preserve">
+    <value>Small Blocks</value>
+  </data>
+  <data name="DisplayName_Category_VoxelHands" xml:space="preserve">
+    <value>Voxel Hands</value>
+  </data>
+  <data name="DisplayName_Category_WindowBlocks" xml:space="preserve">
+    <value>Window Blocks</value>
+  </data>
+  <data name="DisplayName_CloseHelmet" xml:space="preserve">
+    <value>Close Helmet</value>
+  </data>
+  <data name="DisplayName_ConvSorterTypes_Ammo" xml:space="preserve">
+    <value>*弹药*</value>
+  </data>
+  <data name="DisplayName_ConvSorterTypes_Component" xml:space="preserve">
+    <value>*组件*</value>
+  </data>
+  <data name="DisplayName_ConvSorterTypes_HandTool" xml:space="preserve">
+    <value>*手持工具*</value>
+  </data>
+  <data name="DisplayName_ConvSorterTypes_Ingot" xml:space="preserve">
+    <value>*锭*</value>
+  </data>
+  <data name="DisplayName_ConvSorterTypes_Ore" xml:space="preserve">
+    <value>*矿石*</value>
+  </data>
+  <data name="DisplayName_Item_AngleGrinder" xml:space="preserve">
+    <value>粉碎机</value>
+    <comment>Angle grinder hand tool for dismounting blocks</comment>
+  </data>
+  <data name="DisplayName_Item_AngleGrinder2" xml:space="preserve">
+    <value>Enhanced Grinder</value>
+  </data>
+  <data name="DisplayName_Item_AngleGrinder3" xml:space="preserve">
+    <value>Proficient Grinder</value>
+  </data>
+  <data name="DisplayName_Item_AngleGrinder4" xml:space="preserve">
+    <value>Elite Grinder</value>
+  </data>
+  <data name="DisplayName_Item_AutomaticRifle" xml:space="preserve">
+    <value>自动步枪</value>
+  </data>
+  <data name="DisplayName_Item_BulletproofGlass" xml:space="preserve">
+    <value>防弹玻璃</value>
+  </data>
+  <data name="DisplayName_Item_CobaltIngot" xml:space="preserve">
+    <value>钴锭</value>
+  </data>
+  <data name="DisplayName_Item_CobaltOre" xml:space="preserve">
+    <value>钴矿</value>
+  </data>
+  <data name="DisplayName_Item_Computer" xml:space="preserve">
+    <value>计算机</value>
+  </data>
+  <data name="DisplayName_Item_ConstructionComponent" xml:space="preserve">
+    <value>建筑部件</value>
+  </data>
+  <data name="DisplayName_Item_DetectorComponents" xml:space="preserve">
+    <value>探测器组件</value>
+  </data>
+  <data name="DisplayName_Item_Display" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="DisplayName_Item_EliteAutomaticRifle" xml:space="preserve">
+    <value>自动步枪</value>
+  </data>
+  <data name="DisplayName_Item_Explosives" xml:space="preserve">
+    <value>爆炸物</value>
+  </data>
+  <data name="DisplayName_Item_Girder" xml:space="preserve">
+    <value>钢梁</value>
+  </data>
+  <data name="DisplayName_Item_GoldIngot" xml:space="preserve">
+    <value>金锭</value>
+  </data>
+  <data name="DisplayName_Item_GoldOre" xml:space="preserve">
+    <value>金矿</value>
+  </data>
+  <data name="DisplayName_Item_Gravel" xml:space="preserve">
+    <value>沙砾</value>
+  </data>
+  <data name="DisplayName_Item_GravityGeneratorComponents" xml:space="preserve">
+    <value>重力装置组件</value>
+  </data>
+  <data name="DisplayName_Item_HandDrill" xml:space="preserve">
+    <value>手钻</value>
+  </data>
+  <data name="DisplayName_Item_HandDrill2" xml:space="preserve">
+    <value>Enhanced Hand Drill</value>
+  </data>
+  <data name="DisplayName_Item_HandDrill3" xml:space="preserve">
+    <value>Proficient Hand Drill</value>
+  </data>
+  <data name="DisplayName_Item_HandDrill4" xml:space="preserve">
+    <value>Elite Hand Drill</value>
+  </data>
+  <data name="DisplayName_Item_Hydrogen" xml:space="preserve">
+    <value>Hydrogen</value>
+  </data>
+  <data name="DisplayName_Item_HydrogenBottle" xml:space="preserve">
+    <value>氢气瓶</value>
+  </data>
+  <data name="DisplayName_Item_HydrogenBottles" xml:space="preserve">
+    <value>氢气瓶</value>
+  </data>
+  <data name="DisplayName_Item_Ice" xml:space="preserve">
+    <value>冰</value>
+  </data>
+  <data name="DisplayName_Item_InteriorPlate" xml:space="preserve">
+    <value>室内板</value>
+  </data>
+  <data name="DisplayName_Item_LargeSteelTube" xml:space="preserve">
+    <value>大型钢管</value>
+  </data>
+  <data name="DisplayName_Item_MagnesiumOre" xml:space="preserve">
+    <value>镁矿</value>
+  </data>
+  <data name="DisplayName_Item_MagnesiumPowder" xml:space="preserve">
+    <value>镁粉</value>
+  </data>
+  <data name="DisplayName_Item_MedicalComponents" xml:space="preserve">
+    <value>医疗组件</value>
+  </data>
+  <data name="DisplayName_Item_MetalGrid" xml:space="preserve">
+    <value>金属栅栏</value>
+  </data>
+  <data name="DisplayName_Item_Missile200mm" xml:space="preserve">
+    <value>200mm 导弹货舱</value>
+  </data>
+  <data name="DisplayName_Item_Motor" xml:space="preserve">
+    <value>马达</value>
+  </data>
+  <data name="DisplayName_Item_NATO_25x184mm" xml:space="preserve">
+    <value>25x184mm NATO弹集装箱</value>
+  </data>
+  <data name="DisplayName_Item_NATO_5p56x45mm" xml:space="preserve">
+    <value>5.56x45mm NATO弹集装箱</value>
+  </data>
+  <data name="DisplayName_Item_NickelIngot" xml:space="preserve">
+    <value>镍锭</value>
+  </data>
+  <data name="DisplayName_Item_NickelOre" xml:space="preserve">
+    <value>镍矿</value>
+  </data>
+  <data name="DisplayName_Item_Organic" xml:space="preserve">
+    <value>Organic</value>
+  </data>
+  <data name="DisplayName_Item_Oxygen" xml:space="preserve">
+    <value>氧气</value>
+  </data>
+  <data name="DisplayName_Item_OxygenBottle" xml:space="preserve">
+    <value>氧气</value>
+  </data>
+  <data name="DisplayName_Item_OxygenBottles" xml:space="preserve">
+    <value>氧气瓶</value>
+  </data>
+  <data name="DisplayName_Item_PlatinumIngot" xml:space="preserve">
+    <value>铂碇</value>
+  </data>
+  <data name="DisplayName_Item_PlatinumOre" xml:space="preserve">
+    <value>铂矿</value>
+  </data>
+  <data name="DisplayName_Item_Potassium" xml:space="preserve">
+    <value>钾</value>
+  </data>
+  <data name="DisplayName_Item_PowerCell" xml:space="preserve">
+    <value>能量电池</value>
+  </data>
+  <data name="DisplayName_Item_PreciseAutomaticRifle" xml:space="preserve">
+    <value>Precise Automatic Rifle</value>
+  </data>
+  <data name="DisplayName_Item_RadioCommunicationComponents" xml:space="preserve">
+    <value>Radio-communication Components</value>
+  </data>
+  <data name="DisplayName_Item_RapidFireAutomaticRifle" xml:space="preserve">
+    <value>Rapid-Fire Automatic Rifle</value>
+  </data>
+  <data name="DisplayName_Item_ReactorComponents" xml:space="preserve">
+    <value>反应堆组件</value>
+  </data>
+  <data name="DisplayName_Item_Scrap" xml:space="preserve">
+    <value>金属废料</value>
+  </data>
+  <data name="DisplayName_Item_ScrapIngot" xml:space="preserve">
+    <value>Old Scrap Metal</value>
+  </data>
+  <data name="DisplayName_Item_SiliconOre" xml:space="preserve">
+    <value>硅矿</value>
+  </data>
+  <data name="DisplayName_Item_SiliconWafer" xml:space="preserve">
+    <value>硅片</value>
+  </data>
+  <data name="DisplayName_Item_SilverIngot" xml:space="preserve">
+    <value>银锭</value>
+  </data>
+  <data name="DisplayName_Item_SilverOre" xml:space="preserve">
+    <value>银矿</value>
+  </data>
+  <data name="DisplayName_Item_SmallSteelTube" xml:space="preserve">
+    <value>小型钢管</value>
+  </data>
+  <data name="DisplayName_Item_SolarCell" xml:space="preserve">
+    <value>太阳能电池</value>
+  </data>
+  <data name="DisplayName_Item_SteelPlate" xml:space="preserve">
+    <value>钢板</value>
+  </data>
+  <data name="DisplayName_Item_Superconductor" xml:space="preserve">
+    <value>超导管道</value>
+  </data>
+  <data name="DisplayName_Item_ThrustComponents" xml:space="preserve">
+    <value>推进器组件</value>
+  </data>
+  <data name="DisplayName_Item_UraniumIngot" xml:space="preserve">
+    <value>铀锭</value>
+  </data>
+  <data name="DisplayName_Item_UraniumOre" xml:space="preserve">
+    <value>铀矿</value>
+  </data>
+  <data name="DisplayName_Item_Welder" xml:space="preserve">
+    <value>焊枪</value>
+  </data>
+  <data name="DisplayName_Item_Welder2" xml:space="preserve">
+    <value>Enhanced Welder</value>
+  </data>
+  <data name="DisplayName_Item_Welder3" xml:space="preserve">
+    <value>Proficient Welder</value>
+  </data>
+  <data name="DisplayName_Item_Welder4" xml:space="preserve">
+    <value>Elite Welder</value>
+  </data>
+  <data name="DisplayName_LCD_Panel" xml:space="preserve">
+    <value>LCD液晶屏</value>
+  </data>
+  <data name="DisplayName_LCD_PanelWide" xml:space="preserve">
+    <value>宽屏LCD液晶屏</value>
+  </data>
+  <data name="DisplayName_Programmable_Block" xml:space="preserve">
+    <value>可编程块</value>
+  </data>
+</root>

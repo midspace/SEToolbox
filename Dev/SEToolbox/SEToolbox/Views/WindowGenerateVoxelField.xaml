@@ -1,0 +1,302 @@
+﻿<Window x:Class="SEToolbox.Views.WindowGenerateVoxelField"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+        ResizeMode="CanResize"  ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow" 
+        Title="{lex:Loc WnGenAsteroidFieldTitle}" Height="380" Width="600" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        MinHeight="150" MinWidth="250"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}" FocusManager.FocusedElement="{Binding ElementName=UxInitialElement}">
+    <Window.Resources>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
+        <converters:EnumToResouceConverter x:Key="EnumToResouceConverter"/>
+    </Window.Resources>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
+    <Grid>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0 0 0 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="{lex:Loc WnGenAsteroidFieldLabelCenter}" Grid.Column="0"/>
+                <Grid Grid.Column="1" Width="80">
+                    <TextBox ToolTip="{lex:Loc WnGenAsteroidFieldTxtCenterXTooltip}" x:Name="UxInitialElement">
+                        <TextBox.Text>
+                            <Binding Path="CenterPositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Text="{lex:Loc WnGenAsteroidFieldTxtCenterX}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                </Grid>
+                <Grid Grid.Column="2" Width="80">
+                    <TextBox ToolTip="{lex:Loc WnGenAsteroidFieldTxtCenterYTooltip}">
+                        <TextBox.Text>
+                            <Binding Path="CenterPositionY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Text="{lex:Loc WnGenAsteroidFieldTxtCenterY}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                </Grid>
+                <Grid Grid.Column="3" Width="80">
+                    <TextBox ToolTip="{lex:Loc WnGenAsteroidFieldTxtCenterZTooltip}">
+                        <TextBox.Text>
+                            <Binding Path="CenterPositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Text="{lex:Loc WnGenAsteroidFieldTxtCenterZ}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+                </Grid>
+
+                <Label Content="{lex:Loc WnGenAsteroidFieldLabelRangeFrom}" Grid.Column="5"/>
+                <TextBox Width="80" Style="{StaticResource textBoxInError}" Grid.Column="6">
+                    <TextBox.Text>
+                        <Binding Path="MinimumRange" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                            <Binding.ValidationRules>
+                                <converters:RangeRuleI Min="0" Max="10000"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <Label Content="{lex:Loc WnGenAsteroidFieldLabelRangeTo}" Grid.Column="7"/>
+                <TextBox Width="80" Style="{StaticResource textBoxInError}" Grid.Column="8">
+                    <TextBox.Text>
+                        <Binding Path="MaximumRange" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                            <Binding.ValidationRules>
+                                <converters:RangeRuleI Min="0" Max="50000"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0 0 0 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="{lex:Loc WnGenAsteroidFieldLabelFillType}"/>
+                <ComboBox Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" ItemsSource="{Binding Source={StaticResource AsteroidFillTypeEnum}}" SelectedValue="{Binding AsteroidFillType}" ToolTip="">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumToResouceConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+
+            <controls:MyDataGrid Grid.Row="3" AutoGenerateColumns="False" ItemsSource="{Binding VoxelCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False" CanUserAddRows="False" SelectedItem="{Binding SelectedRow}" CanUserSortColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Index}" IsReadOnly="True" />
+
+                    <DataGridTextColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColPercent}" Binding="{Binding TotalPercent}">
+                    </DataGridTextColumn>
+
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColAsteroid}" SelectedValueBinding="{Binding VoxelFile}" DisplayMemberPath="Name">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.VoxelFileList}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.VoxelFileList, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColMaterial}" SelectedValueBinding="{Binding MainMaterial}" DisplayMemberPath="DisplayName">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColMaterial2}" SelectedValueBinding="{Binding SecondMaterial}" DisplayMemberPath="DisplayName">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColPercent2}" SelectedValueBinding="{Binding SecondPercent}">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColMaterial3}" SelectedValueBinding="{Binding ThirdMaterial}" DisplayMemberPath="DisplayName">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColPercent3}" SelectedValueBinding="{Binding ThirdPercent}">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColMaterial4}" SelectedValueBinding="{Binding FourthMaterial}" DisplayMemberPath="DisplayName">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColPercent4}" SelectedValueBinding="{Binding FourthPercent}">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColMaterial5}" SelectedValueBinding="{Binding FifthMaterial}" DisplayMemberPath="DisplayName">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColPercent5}" SelectedValueBinding="{Binding FifthPercent}">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColMaterial6}" SelectedValueBinding="{Binding SixthMaterial}" DisplayMemberPath="DisplayName">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColPercent6}" SelectedValueBinding="{Binding SixthPercent}">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColMaterial7}" SelectedValueBinding="{Binding SeventhMaterial}" DisplayMemberPath="DisplayName">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MaterialsCollection, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Header="{lex:Loc SEToolbox:Resources:WnGenAsteroidFieldColPercent7}" SelectedValueBinding="{Binding SeventhPercent}">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PercentList, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+
+                </DataGrid.Columns>
+            </controls:MyDataGrid>
+            <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0 8" HorizontalAlignment="Left">
+                <Button Content="{lex:Loc WnGenAsteroidFieldBtnClearRows}" Margin="0,0,0,0" Width="50" Command="{Binding ClearRowsCommand}"/>
+                <Button Content="{lex:Loc WnGenAsteroidFieldBtnAddRandom}" Margin="8,0,0,0" Width="80" Command="{Binding AddRandomRowCommand}"/>
+                <Button Content="{lex:Loc WnGenAsteroidFieldBtnAddRow}" Margin="8,0,0,0" Width="50" Command="{Binding AddRowCommand}"/>
+                <Button Content="{lex:Loc WnGenAsteroidFieldBtnDeleteRow}" Margin="8,0,0,0" Width="50" Command="{Binding DeleteRowCommand}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 8 0 0">
+                <Button Width="90" Command="{Binding CreateCommand}" Content="{lex:Loc WnGenAsteroidFieldBtnCreate}" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnGenAsteroidFieldBtnCancel}" IsCancel="True"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

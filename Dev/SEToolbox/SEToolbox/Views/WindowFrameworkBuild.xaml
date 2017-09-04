@@ -1,0 +1,47 @@
+﻿<Window x:Class="SEToolbox.Views.WindowFrameworkBuild"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="{lex:Loc WnFrameworkBuildTitle}" Height="160" Width="360" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        commands:DialogService.IsRegisteredView="True"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="{lex:Loc WnFrameworkBuildLabelPercentComplete}" />
+            <TextBox Grid.Row="0" Grid.Column="1" Width="80" Style="{StaticResource textBoxInError}" Name="uxInitialElement">
+                <TextBox.Text>
+                    <Binding Path="BuildPercent" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                        <Binding.ValidationRules>
+                            <converters:RangeRuleD Min="0.5" Max="100"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Slider Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Value="{Binding BuildPercent}" Minimum="0.5" Maximum="100" SmallChange="0.5" LargeChange="5" Margin="0,4,0,0" />
+        </Grid>
+        <StackPanel Grid.Row="1"  Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8">
+            <Button Width="90" Command="{Binding OkayCommand}" Content="{lex:Loc WnFrameworkBuildBtnOkay}" IsDefault="True"/>
+            <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnFrameworkBuildBtnCancel}" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

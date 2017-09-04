@@ -1,0 +1,51 @@
+﻿<Window x:Class="SEToolbox.Views.WindowProgressCancel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:LocalizeDictionary.DesignCulture="en"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+        Height="200" Width="400" ResizeMode="NoResize" Title="{Binding Title}"
+        WindowStartupLocation="CenterOwner" Icon="/SEToolbox;component/app.ico"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        commands:DialogService.IsRegisteredView="True"
+        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <commands:CommandAction Command="{Binding ClosingCommand}" EventArgs="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid IsEnabled="{Binding IsActive}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="8,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,8,0,8" Text="{Binding SubTitle}"/>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Height="50" TextWrapping="Wrap" Margin="0,8,0,8">
+                    <Run Text="{lex:Loc WnProgressTxtTimeRemain}"/>
+                    <Run Text="{Binding EstimatedTimeLeft, StringFormat='{}{0:%d}'}"/>
+                    <Run Text="{lex:Loc GlobalTimeDays}"/>
+                    <Run Text="{Binding EstimatedTimeLeft, StringFormat='hh\\:mm\\:ss'}"/>
+                </TextBlock>
+                <ProgressBar Grid.Row="2" Margin="0" Value="{Binding Progress}" Maximum="{Binding MaximumProgress}" Height="20" />
+            </Grid>
+            <!--<CheckBox Grid.Row="3" Content="{lex:Loc WnProgressBtnShutdown}" VerticalAlignment="Center" Margin="8,0" />-->
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnProgressBtnCancel}" IsCancel="True"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

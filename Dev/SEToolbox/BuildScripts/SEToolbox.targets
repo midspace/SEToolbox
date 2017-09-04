@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DO NOT EDIT the project element - the ToolsVersion specified here does not prevent the solutions 
+     and projects in the SolutionToBuild item group from targeting other versions of the .NET framework. 
+     -->
+
+<Project DefaultTargets="DesktopBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <BuildTimestamp>$([System.DateTime]::Now.ToString('$(DateTimeFormat)'))</BuildTimestamp>
+    <BuildDir>$(SolutionRoot)/SEToolbox/SEToolbox/bin/$(Configuration)/</BuildDir>
+  </PropertyGroup>
+
+  <Target Name="CopyBinaryFiles">
+    <ItemGroup>
+      <EditorFiles Include="$(BuildDir)HelixToolkit.Wpf.dll;
+                   $(BuildDir)ICSharpCode.SharpZipLib.dll;
+                   $(BuildDir)log4net.dll;
+                   $(BuildDir)SEToolbox.exe;
+                   $(BuildDir)SEToolbox.exe.config;
+                   $(BuildDir)SEToolbox.ImageLibrary.dll;
+                   $(BuildDir)SEToolbox.ImageShaders.dll;
+                   $(BuildDir)SEToolbox.pdb;
+                   $(BuildDir)SEToolboxUpdate.exe;
+                   $(BuildDir)System.Windows.Interactivity.dll;
+                   $(BuildDir)WPFLocalizeExtension.dll;
+                   $(BuildDir)XAMLMarkupExtensions.dll"
+      Exclude=""/>
+      <ResourceFiles-zh Include="$(BuildDir)/zh/*" Exclude=""/>
+      <!-- Add additional languages here. -->
+    </ItemGroup>
+
+    <Message Text="@#@#@#@#@# Inside After Compile Configuration #@#@#@#@#@#"/>
+
+    <ItemGroup>
+      <PreviousBinaries Include="$(BinariesRoot)\*.*"/>
+      <!-- Add additional languages here. -->
+      <DirsToClean Include="$(BinariesRoot)\zh" />
+    </ItemGroup>
+    <Delete Files="@(PreviousBinaries)" />
+    <RemoveDir Directories="@(DirsToClean)" />
+
+    <Message Text="Copying from '$(EditorFiles)' to '$(BinariesRoot)'" />
+    <!--         Copy the Control folder structure into the build output     -->
+    <Copy SourceFiles="@(EditorFiles)" DestinationFolder="$(BinariesRoot)" SkipUnchangedFiles="false"></Copy>
+
+    <!-- ### Uncomment to package satellite language resources into .zip ### -->
+    <!--
+    <Copy SourceFiles="@(ResourceFiles-zh)" DestinationFolder="$(BinariesRoot)/zh" SkipUnchangedFiles="false"></Copy>
+    -->
+    <!-- Add additional languages here. -->
+    
+    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/en-us/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-en.msi" SkipUnchangedFiles="false"></Copy>
+    <!-- ### Uncomment to copy localized .MSI build. ### -->
+    <!--
+    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/de-de/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-de.msi" SkipUnchangedFiles="false"></Copy>
+    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/cs-cz/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-cz.msi" SkipUnchangedFiles="false"></Copy>
+    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/zh-cn/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-zh.msi" SkipUnchangedFiles="false"></Copy>
+    -->
+    <!-- Add additional languages here. -->
+  </Target>
+
+  <!--<Target Name="WriteToDeploymentBinaries">
+    <ItemGroup>
+      <Line Include="line01"><Text>@echo off</Text></Line>
+      <Line Include="line02"><Text>start setoolbox.exe /OLDDLL</Text></Line>
+      <LineText Include="%(Line.Text)" />
+    </ItemGroup>
+    <WriteLinesToFile
+        File="$(BinariesRoot)\SEToolbox -OLDDLL.bat"
+        Lines="@(LineText)"
+        Overwrite="true"/>
+  </Target>-->
+
+  <Target Name="PackageZipDeployment" DependsOnTargets="CopyBinaryFiles">
+    <ItemGroup>
+      <PackageFilesToDelete Include="$(ReleaseRoot)\SEToolbox-$(VersionNumber).zip"/>
+    </ItemGroup>
+    <Delete Files="@(PackageFilesToDelete)" />
+
+    <Exec WorkingDirectory="$(BinariesRoot)" Command="&quot;%ProgramW6432%\7-Zip\7z.exe&quot; a -r &quot;$(ReleaseRoot)\SEToolbox-$(VersionNumber).zip&quot; *.*" />
+  </Target>
+
+  <Target Name="CopyDotNetRuntimeTestFiles" Condition="'$(BuildingInsideVisualStudio)' != 'true'" DependsOnTargets="CopyBinaryFiles">
+    <ItemGroup>
+      <DotNetRuntimeTestFiles Include="$(SolutionRoot)\SEToolbox\bin\$(Configuration)\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DotNetRuntimeTestFiles)" DestinationFolder="$(DotNetRuntimeTestPath)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="ReadAssemblyVersion" DependsOnTargets="SetupSolutionList">
+    <ReadLinesFromFile File="$(VersionFile)">
+      <Output TaskParameter="Lines" ItemName="ItemsFromFile"/>
+    </ReadLinesFromFile>
+
+    <PropertyGroup>
+      <Pattern>\[assembly: AssemblyFileVersion\(&quot;(\d+\.\d+\.\d+\.\d+)</Pattern>
+      <In>@(ItemsFromFile)</In>
+      <VersionNumber>$([System.Text.RegularExpressions.Regex]::Match($(In), $(Pattern), System.Text.RegularExpressions.RegexOptions.Multiline).Groups[1].Value)</VersionNumber>
+    </PropertyGroup>
+
+    <Message Text="Version : $(VersionNumber)"/>
+  </Target>
+</Project>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DO NOT EDIT the project element - the ToolsVersion specified here does not prevent the solutions 
+     and projects in the SolutionToBuild item group from targeting other versions of the .NET framework. 
+     -->
+<Project DefaultTargets="DesktopBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+
+  <!-- Detect 32 or 64 bit OS and set ProgramFilesPath accordingly -->
+  <Choose>
+    <When Condition="Exists('$(ProgramFiles) %28x86%29')">
+      <PropertyGroup>
+        <ProgramFilesPath>$(ProgramFiles) (x86)</ProgramFilesPath>
+      </PropertyGroup>
+    </When>
+    <When Condition="!Exists('$(ProgramFiles) %28x86%29')">
+      <PropertyGroup>
+        <ProgramFilesPath>$(ProgramFiles)</ProgramFilesPath>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <PropertyGroup>
+    <DevEnvDir Condition="'$(DevEnvDir)' == ''">$(ProgramFilesPath)\Microsoft Visual Studio 10.0\Common7\IDE</DevEnvDir>
+
+    <BinariesRoot>$(ReleaseRoot)\binaries</BinariesRoot>
+    <VersionFile>$(SolutionRoot)\SEToolbox\SEToolbox\Properties\AssemblyInfo.cs</VersionFile>
+
+    <BackConfiguration Condition="'$(Configuration)' == 'Debug'">Release</BackConfiguration>
+    <BackConfiguration Condition="'$(Configuration)' == 'Release'">Debug</BackConfiguration>
+  </PropertyGroup>
+
+  <!-- Do not edit this -->
+  <Import Project="Microsoft.Build.targets" />
+  <Import Project="SEToolbox.targets"/>
+
+  <PropertyGroup>
+    <!--  TESTING
+     Set this flag to enable/disable running tests as a post-compilation build step.
+    -->
+    <RunTest Condition="'$(RunTest)' == ''">true</RunTest>
+
+    <!--  CODE ANALYSIS
+     Set this property to enable/disable running code analysis. Valid values for this property are 
+     Default, Always and Never.
+
+         Default - Perform code analysis as per the individual project settings
+         Always  - Always perform code analysis irrespective of project settings
+         Never   - Never perform code analysis irrespective of project settings
+     -->
+    <RunCodeAnalysis>Never</RunCodeAnalysis>
+
+    <!-- Additional Properties -->
+
+    <!--  WorkItemType
+     The type of the work item created on a build failure. 
+     -->
+    <WorkItemType>Bug</WorkItemType>
+
+    <!--  WorkItemFieldValues
+     Fields and values of the work item created on a build failure.
+     
+     Note: Use reference names for fields if you want the build to be resistant to field name 
+     changes. Reference names are language independent while friendly names are changed depending 
+     on the installed language. For example, "System.Reason" is the reference name for the "Reason" 
+     field.
+     -->
+    <WorkItemFieldValues>System.Reason=Build Failure;System.Description=Start the build using Team Build</WorkItemFieldValues>
+
+    <!--  WorkItemTitle
+     Title of the work item created on build failure.
+     -->
+    <WorkItemTitle>Build failure in build:</WorkItemTitle>
+
+    <!--  DescriptionText
+     History comment of the work item created on a build failure. 
+     -->
+    <DescriptionText>This work item was created by Team Build on a build failure.</DescriptionText>
+
+    <!--  BuildLogText
+     Additional comment text for the work item created on a build failure.
+     -->
+    <BuildlogText>The build log file is at:</BuildlogText>
+
+    <!--  ErrorWarningLogText
+     Additional comment text for the work item created on a build failure. 
+     This text will only be added if there were errors or warnings.
+     -->
+    <ErrorWarningLogText>The errors/warnings log file is at:</ErrorWarningLogText>
+
+    <!--  UpdateAssociatedWorkItems
+     Set this flag to enable/disable updating associated workitems on a successful build.
+     -->
+    <UpdateAssociatedWorkItems>false</UpdateAssociatedWorkItems>
+
+    <!--  AdditionalVCOverrides
+     Additional text for the VCOverrides file generated for VC++ projects.
+     -->
+    <AdditionalVCOverrides></AdditionalVCOverrides>
+
+    <!--  CustomPropertiesForClean
+     Custom properties to pass to the MSBuild task while calling the "Clean" target for all solutions.
+     The format should be: PropertyName1=value1;PropertyName2=value2;...
+     -->
+    <CustomPropertiesForClean></CustomPropertiesForClean>
+
+    <!--  CustomPropertiesForBuild
+     Custom properties to pass to the MSBuild task while calling the default targets for all solutions.
+     The format should be: Property1=value1;Property2=value2;...  To pass custom properties to
+     individual solutions, use the Properties metadata item of the SolutionToBuild ItemGroup.
+     -->
+    <CustomPropertiesForBuild></CustomPropertiesForBuild>
+
+    <!--  CustomizableOutDir
+    Set this property to true when you want to prevent Team Foundation Build from setting OutDir 
+    for each solution. Note that you can use the TeamBuildOutDir property to retrieve the value 
+    Team Foundation Build would have assigned to OutDir if CustomizableOutDir was set to false.
+        CustomizablePublishDir
+    Ditto for PublishDir and TeamBuildPublishDir
+    -->
+    <CustomizableOutDir>true</CustomizableOutDir>
+
+    <!--<DotNetRuntimeTestPath>$(BinariesRoot)\$(BinaryPathPlatform)\$(Configuration)\DotNetRuntimeTest</DotNetRuntimeTestPath>-->
+    <RunConfigFile>$(MSBuildProjectDirectory)/Build.TestSettings</RunConfigFile>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ComputeSolutionListDependsOn>$(ComputeSolutionListDependsOn);SetupSolutionList</ComputeSolutionListDependsOn>
+  </PropertyGroup>
+
+  <!-- Check to see whether the portable class libraries addin is installed -->
+  <Choose>
+    <When Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\Portable')">
+      <PropertyGroup>
+        <BuildPCL>true</BuildPCL>
+      </PropertyGroup>
+    </When>
+    <When Condition="!Exists('$(MSBuildExtensionsPath32)\Microsoft\Portable')">
+      <PropertyGroup>
+        <BuildPCL>false</BuildPCL>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <Target Name="SetupSolutionList" DependsOnTargets="BuildNumberOverrideTarget">
+    <ItemGroup>
+      <SolutionToBuild Condition="'$(BuildDotNetOnly)' != 'true'" Include="$(SolutionRoot)\SEToolbox\SEToolbox.sln">
+        <Targets></Targets>
+        <Properties>Platform=Any CPU</Properties>
+      </SolutionToBuild>
+      <!--<TestContainer Include="..\Output\bin\Debug\*toolboxtest.dll"/>-->
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <!--  CONFIGURATIONS
+     The list of configurations to build. To add/delete configurations, edit this value. For example, 
+     to add a new configuration, add the following lines:
+         
+         <ConfigurationToBuild Include="Debug|x86">
+             <FlavorToBuild>Debug</FlavorToBuild>
+             <PlatformToBuild>x86</PlatformToBuild>
+         </ConfigurationToBuild>
+
+     The Include attribute value should be unique for each ConfigurationToBuild node.
+    -->
+    <ConfigurationToBuild Condition="'$(Configuration)'=='Debug' or '$(Configuration)'==''" Include="Debug|Any CPU">
+      <FlavorToBuild>Debug</FlavorToBuild>
+      <PlatformToBuild>Any CPU</PlatformToBuild>
+    </ConfigurationToBuild>
+    <ConfigurationToBuild Condition="'$(Configuration)'=='Release' or '$(Configuration)'==''" Include="Release|Any CPU">
+      <FlavorToBuild>Release</FlavorToBuild>
+      <PlatformToBuild>Any CPU</PlatformToBuild>
+    </ConfigurationToBuild>
+  </ItemGroup>
+
+  <Target Name="BeforeTestConfiguration" DependsOnTargets="" />
+
+  <Target Name="BeforeCompile" DependsOnTargets="" />
+
+  <Target Name="BeforeCompileConfiguration" Condition="'$(BuildBreak)'!='true'" DependsOnTargets="SetupSolutionList;ReadAssemblyVersion" />
+
+  <Target Name="AfterCompileConfiguration" Condition="'$(BuildBreak)'!='true'" DependsOnTargets="CopyBinaryFiles;PackageZipDeployment" />
+
+  <Target Name="AfterCompile" DependsOnTargets="" />
+
+  <Target Name="BeforeDropBuild" DependsOnTargets="" />
+</Project>

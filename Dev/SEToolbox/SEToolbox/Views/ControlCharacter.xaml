@@ -1,0 +1,203 @@
+﻿<UserControl x:Class="SEToolbox.Views.ControlCharacter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:converters="clr-namespace:SEToolbox.Converters"
+             xmlns:commands="clr-namespace:SEToolbox.Services"
+             xmlns:views="clr-namespace:SEToolbox.Views"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Header="{lex:Loc CtlCharacterCharTab}">
+                <DockPanel>
+                    <Menu DockPanel.Dock="Top">
+                        <Menu.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <DockPanel HorizontalAlignment="Stretch" Height="22"/>
+                            </ItemsPanelTemplate>
+                        </Menu.ItemsPanel>
+                        <MenuItem Header="{lex:Loc CtlCharacterMnuSpeed}" Style="{StaticResource ToolBarTopMenuitem}">
+                            <MenuItem.Icon>
+                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=speedometer}" />
+                            </MenuItem.Icon>
+                            <MenuItem Header="{lex:Loc CtlCharacterMnuResetSpeed}" Command="{Binding ResetVelocityCommand}">
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{lex:Loc CtlCharacterMnuReverseSpeed}" Command="{Binding ReverseVelocityCommand}">
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <Separator HorizontalAlignment="Left" Width="4"/>
+                    </Menu>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="2" Content="{lex:Loc CtlCharacterSuitColor}"/>
+                        <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Padding="0" Command="{Binding ChangeColorCommand}">
+                            <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1"/>
+                        </Button>
+                        <Label Grid.Column="0" Grid.Row="3" Content="{lex:Loc CtlCharacterSuitLight}"/>
+                        <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Light, Mode=TwoWay}" />
+                        <Label Grid.Column="0" Grid.Row="4" Content="{lex:Loc CtlCharacterJetPack}"/>
+                        <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding JetPack, Mode=TwoWay}" />
+                        <Label Grid.Column="0" Grid.Row="5" Content="{lex:Loc CtlCharacterDampeners}"/>
+                        <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Dampeners, Mode=TwoWay}" />
+                        <Label Grid.Column="0" Grid.Row="6" Content="{lex:Loc CtlCharacterPosition}"/>
+                        <views:ControlPosition Grid.Column="1" Grid.Row="6" IsEnabled="{Binding IsPilot, Converter={StaticResource InverseBooleanConverter}}" />
+                        <Label Grid.Column="0" Grid.Row="7" Content="{lex:Loc CtlCharacterHealth}"/>
+                        <Grid Grid.Row="7" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="Health" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="100"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Image Grid.Column="1" Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=medical_bag}" />
+                            <Slider Grid.Column="2" Value="{Binding Health}" Minimum="0" Maximum="100" SmallChange="1" LargeChange="10" />
+                        </Grid>
+                        <Label Grid.Column="0" Grid.Row="8" Content="{lex:Loc CtlCharacterBattery}"/>
+                        <Grid Grid.Row="8" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="BatteryCapacity" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="1"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Image Grid.Column="1" Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=battery}" />
+                            <Slider Grid.Column="2" Value="{Binding BatteryCapacity}" Minimum="0" Maximum="1" SmallChange=".01" LargeChange=".1"/>
+                        </Grid>
+                        <Label Grid.Row="9" Grid.Column="0" Content="{lex:Loc CtlCharacterOxygen}"/>
+                        <Grid Grid.Row="9" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="OxygenLevel" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="1"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Grid.Column="1" Content="{lex:Loc CtlCharacterOxygenGasSymbol}" />
+                            <Slider Grid.Column="2" Value="{Binding OxygenLevel}" Minimum="0" Maximum="1" SmallChange=".01" LargeChange=".1"/>
+                        </Grid>
+
+                        <Label Grid.Row="10" Grid.Column="0" Content="{lex:Loc CtlCharacterHydrogen}"/>
+                        <Grid Grid.Row="10" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="HydrogenLevel" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                        <Binding.ValidationRules>
+                                            <converters:RangeRuleD Min="0" Max="1"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Grid.Column="1" Content="{lex:Loc CtlCharacterHydrogenGasSymbol}" />
+                            <Slider Grid.Column="2" Value="{Binding HydrogenLevel}" Minimum="0" Maximum="1" SmallChange=".01" LargeChange=".1"/>
+                        </Grid>
+
+
+
+                        <Button Grid.Column="0" Grid.Row="11" Content="{lex:Loc CtlCharacterBtnSpeed}" HorizontalAlignment="Left" Style="{StaticResource DropDownMenuButton}">
+                            <i:Interaction.Behaviors>
+                                <commands:ButtonDropDownMenuBehavior />
+                            </i:Interaction.Behaviors>
+                            <Button.ContextMenu>
+                                <ContextMenu HorizontalAlignment="Right">
+                                    <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlCharacterMnuResetSpeed}" Command="{Binding ResetVelocityCommand}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=media_stop}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{lex:Loc SEToolbox:Resources:CtlCharacterMnuReverseSpeed}" Command="{Binding ReverseVelocityCommand}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=navigate_left2}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                        <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center">
+                                <Run Text="{Binding LinearVelocity, StringFormat='#,###0.000', Mode=OneWay}" />
+                                <Run Text="{lex:Loc GlobalSIVelocityMetresPerSecond}" />
+                        </TextBlock>
+                        <Separator Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2"/>
+                        <Label Grid.Row="13" Grid.Column="0" Content="{lex:Loc CtlCharacterPilot}"/>
+                        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPilot}" />
+                        <Label Grid.Row="14" Grid.Column="0" Content="{lex:Loc CtlCharacterPlayer}"/>
+                        <TextBlock Grid.Row="14" Grid.Column="1" VerticalAlignment="Center" Text="{Binding IsPlayer}" />
+                        <Label Grid.Row="15" Grid.Column="0" Content="{lex:Loc CtlCharacterDistance}"/>
+                        <TextBlock Grid.Row="15" Grid.Column="1" VerticalAlignment="Center">
+                            <Run Text="{Binding PlayerDistance, StringFormat='#,###0.0', Mode=OneWay}" />
+                            <Run Text="{lex:Loc GlobalSIDistanceMetre}" />
+                        </TextBlock>
+                    </Grid>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="{lex:Loc CtlCharacterInventoryTab}">
+                <views:ControlInventory Grid.Row="1" DataContext="{Binding Inventory}"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

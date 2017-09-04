@@ -1,0 +1,181 @@
+﻿TODO: list of tasks and features (in no particular order):
+- All the TODO: items in code!
+- https://setoolbox.codeplex.com/workitem/list/basic
+- Documentation.... lots of it to be added to CodePlex.
+
+
+- Close Dialog on IsModified.
+- Wix installer project,
+  * Desktop Icon.
+- View subscribed workshop Items (to allow exporting/copying from).
+  * C:\Users\%Username%\AppData\Roaming\SpaceEngineers\WorkshopWorlds\*.sbw  These are .zip files.
+  * It's not until the user presses "Copy & Load" that it's actually saved there.
+  * The workshopId may or may not be present, depending on if it is the first version, or a subsequent upload by the author.
+- Multi lingual support.
+
+- Global:
+  * Refresh/Save needs to check if save directory no longer exists.
+  * tree view of everything.
+  * Property Grid, to edit properties and sub items.
+    * https://wpg.codeplex.com/
+    * https://wpftoolkit.codeplex.com/wikipage?title=PropertyGrid
+  * Corrupt and null save file check.
+
+- Drag drop files direct into the interface.
+  * Detect .vox files for asteroids.
+  * Detect .sbc files for other content.
+  * Detect 3D models?
+  * Detect image files?
+
+- Improve Import Image:
+  * Preview (pan and zoom).
+  * Orientation options.
+
+- Improve Import 3D Model:
+  * New volumetric conversion type calculate the slopes differently to create a more accurate conversion.
+  * Import model colors or average model textures.
+  * 3D Preview of Volmetric?
+  * Orientation options.
+
+- Mixed:
+  * Import multiple ships/stations/objects from another 'world' as a group.  (Required to keep attached items. ie, Station/asteroid, Large Carrier/fighters.)
+    Need a way to detect attached landing skids, or overlapping objects (sigh).  Check if landing gear activated?
+  * Export and Import Asteroids/Floating Objects/Meteors to/from files.
+  * Duplicate. Clone any object.
+  * Group Move - Disperse over set area.
+  * Duplicate any item.
+
+- Character:
+  * Exit Pilot from ship to Astronaut.
+
+- Asteroid:
+  * Detect multiple objects in 3D import and allow assigning material to individal parts somehow.
+  * Replace Asteroid/Voxel.
+  * Rotate Asteroid/Voxel (not supported by sandbox currently, but procedural voxel rotation could be accomplished.)
+  * Dialog to Generate box/sphere asteroid (size, hollow shell size, material).
+  * Generate 'Random' asteroid field.
+  * Improve the material mix in Asteroids somehow by creating clumps with the aim of optimising it along the cell boundaries.
+
+- Items:
+
+- Meteor:
+  * Change size (mass).
+  * Set/Reset Ship Vector. (specify Direction and specify Speed)
+  * Set Meteor direction at specific object (calc correct center of object).
+
+- Ship/Station:
+  * Show ship status. Size. Item count. Weight. Thrust.
+  * Switch power on/off.
+  * Set/Reset Ship Vector. (specify Direction and specify Speed)
+  * Replace user specified blocks with other user blocks (ie., by Armor light/heavy/color.)
+  * Set Ship direction at specific object (calc correct center of object).
+  * Finish Mirror calculations for final 2 window cubes.
+  * Resize ship small<->large.
+  * Subsystem editor.
+
+========--------~~~~~~~~
+
+Completed:
+- Check if Space Engineers Game is installed first.
+- Refresh button, to reload selected Sandbox content.
+- Change Astronaut color.
+- Import Image.
+- Import 3D model.
+- Delete ship/station/object.
+- Show Ship Pilot/Roaming Astronaut status.
+- Repair ship.
+- Import Asteroid/Voxel.
+- Link to open Workshop ID.
+- Add collection for temporary files, to allow cleanup during shutdown.
+- Improve Import 3D Model:
+  * Recode Poly2Vox to VisualC CLR to integrate with app, and enhance. Replaced Poly2Vox with HelixToolkit.
+- Switch Jetpack on/off.
+- Set/Reset Astronaut Vector. (Direction and Speed)
+- Switch Inertia Dampeners on/off.
+- Strip beacon's for name of ship.
+- Auto Updater, detect current and available version, prompt for update.
+- Switch Ship Inertia Dampeners on/off.
+- Create backup of checkpoint and sandbox files when saving.
+- Move Astronaut to position.
+- Move Asteroid/Voxel.
+- Move Ship/s to position.
+- Asteroid contents (list of ores in quantity cubic meters-m³ and percent %).
+- Asteroid Import 3D model.
+- Remove the prebuilt asteroids.
+- Splash screen (only whilst preloading data).
+- Display list of all Cubes/Components/Items/Materials.
+- Drag-Drop copy Meteors.
+- Drag-Drop copy Unknown items.
+- Dialog to Create/Drop Components and Items (pipes, weapons, ingots, ores, ammos).
+- Rotate ship/station cubes to face new orientation.
+- Join two ship parts together after accidently breaking them apart.
+- Group Move - move all to single point.
+- Report of all in world assets.
+  * Breakdown of all ores in untouched (in asteroid), unused (ore and ingot), used (component, tool, cube), npc (ore, ingot, component, tool, cube).
+  * Counts of components, tools, cubes  (npc and non-npc).
+
+========--------~~~~~~~~
+
+Dropped:
+- Obfuscate/dotfuscator. Don't think it's worth it, considering I've gone open source. :D
+- Text Unicode support. Space Engineers doesn't appear to support Unicode.
+  * testing text
+  * テキストをテスト
+  * 测试文字
+
+========--------~~~~~~~~
+
+References:
+
+Offical file extensions in use.
+".sba" Sand Box Audio. App content, MyObjectBuilder_XA2CueDefinition.
+".sbc" Sand Box Content. Various app content, Blueprints, CubeBlocks, etc...
+".sbc" Sand Box 'Checkpoint'. Game content, MyObjectBuilder_Checkpoint.
+".sbl" Sand Box 'LastSession'. Game content, MyObjectBuilder_LastSession.
+".sbs" Sand Box 'Sector'. Game content, MyObjectBuilder_Sector.
+".sbw" Sand Box World. Zip compressed game world, used by workshop downloads.
+".sbm" Sand Box Mod. Zip compressed mods, used by workshop downloads.
+
+Localization
+  http://www.spaceengineersgame.com/localization.html
+
+Unoffical file extensions.
+".sbo" Sand Box Object. I made this one up for import and export of ships (MyObjectBuilder_CubeGrid).  .sbc seemed like it would conflict with the other offical extensions.
+  Though looking at content assets, prefab fighters use the ".sbc" extension which are MyObjectBuilder_CubeGrid, so I will change this now.
+  Have now removed this file extension from use.
+
+
+Why are the blocks 0.5 and 2.5 meter blocks?
+Sectors have the same size as in Miner Wars: 50x50x50km. It would take a couple of minutes to get from one border to the other.
+http://spaceengineerswiki.com/index.php?title=FAQs
+
+
+My experiments turning 3D models into in-game ships
+http://forums.keenswh.com/post/my-experiments-turning-3d-models-into-ingame-ships-6588883?&trail=15
+
+
+Python v3.1.5 documentation » The Python Standard Library »
+http://docs.python.org/3.1/library/functions.html
+
+
+ILMerge
+http://www.microsoft.com/en-us/download/details.aspx?id=17630
+http://research.microsoft.com/en-us/people/mbarnett/ILMerge.aspx
+https://www.nuget.org/packages/ilmerge
+ilmerge /target:winexe /out:SEToolbox.exe SEToolbox.exe SEToolbox.ImageLibrary.dll
+
+
+
+
+
+ Official SE orientation.
+          (top/up)+Y|   /-Z(forward/front)
+                    |  /
+                    | /
+       -X(left)     |/       +X(right)
+       -------------+-----------------
+                   /|
+                  / |
+                 /  |
+        (back)+Z/   |-Y(bottom/down)
+

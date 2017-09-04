@@ -1,0 +1,112 @@
+﻿<Window x:Class="SEToolbox.Views.WindowGenerateFloatingObject"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="{lex:Loc WnGenFloatTitle}" Height="260" Width="320" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        commands:DialogService.IsRegisteredView="True"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        FocusManager.FocusedElement="{Binding ElementName=UxInitialElement}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:BusyMouseConverter x:Key="BusyMouseConverter" />
+        <converters:DDSConverter x:Key="DDSConverter"/>
+        <converters:I18NFormatterConverter x:Key="I18NFormatter"  />
+    </Window.Resources>
+    <Window.Cursor>
+        <Binding Path="IsBusy" Converter="{StaticResource BusyMouseConverter}"/>
+    </Window.Cursor>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Margin="8,8,8,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc WnGenFloatTxtItem}" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Name="UxInitialElement" VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding StockItemList}" SelectedValue="{Binding StockItem}" IsTextSearchEnabled="True">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Source="{Binding Path=TextureFile, Converter={StaticResource DDSConverter}, ConverterParameter='16,16'}" SnapsToDevicePixels="True" Margin="0,0,2,0" />
+                                <TextBlock Text="{Binding FriendlyName}"/>
+                                <!--<TextBlock Text="{Binding CubeSize, StringFormat='{} ({0})'}"/>-->
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc WnGenFloatTxtUnit}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="1" VerticalAlignment="Center" Visibility="{Binding IsUnique, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" Visibility="{Binding IsDecimal, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBox.Text>
+                        <Binding Path="DecimalUnits" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                            <Binding.ValidationRules>
+                                <converters:RangeRuleDec Min="0.000001" Max="1000000000"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center" Visibility="{Binding IsInt, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBox.Text>
+                        <Binding Path="Units" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                            <Binding.ValidationRules>
+                                <converters:RangeRuleI Min="1" Max="1000000"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc WnGenFloatTxtMass}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+                    <Run Text="{Binding Mass, StringFormat='#,###0.00'}" />
+                    <Run Text="{lex:Loc GlobalSIMassKilogram}" />
+                </TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="{lex:Loc WnGenFloatTxtVolume}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center">
+                    <Run Text="{Binding Volume, StringFormat='#,###0.00'}" />
+                    <Run Text="{lex:Loc GlobalSIVolumeLitre}" />
+                </TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc WnGenFloatTxtMultiplier}" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource textBoxInError}" VerticalAlignment="Center">
+                    <TextBox.Text>
+                        <Binding Path="Multiplier" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                            <Binding.ValidationRules>
+                                <converters:RangeRuleI Min="1" Max="1024"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <StackPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
+                    <TextBlock TextWrapping="Wrap">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="WnGenFloatTxtMaxItems">
+                                <Binding Path="MaxFloatingObjects"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,8,8,8">
+                <Button Width="90" Command="{Binding CreateCommand}" Content="{lex:Loc WnGenFloatBtnCreate}" IsDefault="True"/>
+                <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnGenFloatBtnCancel}" IsCancel="True"/>
+            </StackPanel>
+        </Grid>
+        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</Window>

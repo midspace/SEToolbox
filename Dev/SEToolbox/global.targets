@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+
+  <!-- Copy this PropertyGroup into "user.targets" and modify the "MainPath" to indicate the path to SpaceEngineers in the Steam directory. -->
+  <PropertyGroup>
+    <MainPath>c:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers</MainPath>
+    <BinPathx86>$(MainPath)\Bin</BinPathx86>
+    <BinPathx64>$(MainPath)\Bin64</BinPathx64>
+    <BinPath>$(BinPathx64)</BinPath>
+  </PropertyGroup>
+
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(SolutionDir)\user.targets" Condition="exists('$(SolutionDir)\user.targets')" />
+  </ImportGroup>
+  <Choose>
+    <When Condition=" '$(Platform)' == '' ">
+      <PropertyGroup>
+        <BinPath>$(BinPathx64)</BinPath>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(Platform.StartsWith(&quot;x64&quot;))' == 'true' ">
+      <PropertyGroup>
+        <BinPath>$(BinPathx64)</BinPath>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(Platform.StartsWith(&quot;x86&quot;))' == 'true' ">
+      <PropertyGroup>
+        <BinPath>$(BinPathx86)</BinPath>
+      </PropertyGroup>
+    </When>
+  </Choose>
+</Project>

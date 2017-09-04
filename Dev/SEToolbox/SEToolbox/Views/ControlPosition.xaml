@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="SEToolbox.Views.ControlPosition"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <TextBox ToolTip="{lex:Loc CtlPositionXTooltip}" AutomationProperties.AutomationId="PositionX" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="PositionX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="{lex:Loc CtlPositionXLabel}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+        </Grid>
+        <Grid Grid.Column="1">
+            <TextBox ToolTip="{lex:Loc CtlPositionYTooltip}" AutomationProperties.AutomationId="PositionY" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="PositionY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="{lex:Loc CtlPositionYLabel}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+        </Grid>
+        <Grid Grid.Column="2">
+            <TextBox ToolTip="{lex:Loc CtlPositionZTooltip}" AutomationProperties.AutomationId="PositionZ" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="PositionZ" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="{lex:Loc CtlPositionZLabel}" Background="Transparent" Foreground="LightSteelBlue" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0" IsHitTestVisible="False" />
+        </Grid>
+    </Grid>
+</UserControl>

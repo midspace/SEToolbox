@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="zh-cn" xmlns="http://schemas.microsoft.com/wix/2006/localization" Language="936">
+  <String Id="ApplicationTitle">太空工程师 工具箱</String>
+  <String Id="ManufacturerName">Mid-Space Productions</String>
+  <String Id="ProductName">太空工程师 工具箱</String>
+
+  <String Id="DirCompanyName">MidSpace</String>
+  <String Id="DirApplicationName">SEToolbox</String>
+  <String Id="ShortcutName">太空工程师 工具箱</String>
+  <String Id="ShortcutDescription">太空工程师 工具箱 (SEToolbox) - a comprehensive 'world' Save Editor for the Space Engineers game.</String>
+
+  <String Id="OldDllShortcutName">太空工程师 工具箱 - original</String>
+  <String Id="OldDllShortcutDescription">太空工程师 工具箱 (SEToolbox) - original shortcut, requies UAC when Space Engineers is updated. A comprehensive 'world' Save Editor for the Space Engineers game.</String>
+
+  <String Id="ProductServerDlg_Title">ProductServerDlg_Title</String>
+  <String Id="ProductServerDlgDescription">ProductServerDlgDescription</String>
+  <String Id="ProductServerDlgEnterServer">ProductServerDlgEnterServer</String>
+  <String Id="ProductServerDlgTitle">ProductServerDlgTitle</String>
+
+  <String Id="LaunchProductOnFinish">Launch Application when finished</String>
+</WixLocalization>
