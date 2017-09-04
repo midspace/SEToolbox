@@ -130,6 +130,15 @@
             UseCustomResource = ReadValue<bool?>(key, "UseCustomResource", true);
             IgnoreUpdateVersion = ReadValue<string>(key, "IgnoreUpdateVersion", null);
             CustomVoxelPath = ReadValue<string>(key, "CustomVoxelPath", null);
+
+            if (WindowTop.HasValue && (int.MinValue > WindowTop || WindowTop > int.MaxValue))
+                WindowTop = null;
+            if (WindowLeft.HasValue && (int.MinValue > WindowLeft || WindowLeft > int.MaxValue))
+                WindowLeft = null;
+            if (WindowWidth.HasValue && (0 > WindowWidth || WindowWidth > int.MaxValue))
+                WindowWidth = null;
+            if (WindowHeight.HasValue && (0 > WindowHeight || WindowHeight > int.MaxValue))
+                WindowHeight = null;
         }
 
         /// <summary>
