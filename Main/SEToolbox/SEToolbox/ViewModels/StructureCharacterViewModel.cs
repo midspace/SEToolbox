@@ -37,7 +37,7 @@
                 return;
             Inventory = new InventoryEditorViewModel(this, dataModel.Inventory);
 
-            DataModel.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+            DataModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 // Will bubble property change events from the Model to the ViewModel.
                 OnPropertyChanged(e.PropertyName);

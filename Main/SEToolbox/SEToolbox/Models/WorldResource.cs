@@ -317,14 +317,23 @@
 
             if (backupFile)
             {
+                // xml sector file.  (it may or may not be compressed)
                 var sectorBackupFilename = sectorFilename + ".bak";
 
                 if (File.Exists(sectorBackupFilename))
-                {
                     FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                }
 
                 File.Move(sectorFilename, sectorBackupFilename);
+
+                // binary sector file. (it may or may not be compressed)
+                sectorBackupFilename = sectorFilename + SpaceEngineersConsts.ProtobuffersExtension + ".bak";
+
+                if (File.Exists(sectorBackupFilename))
+                    FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+
+                // The protoBuf .sbsPB may not exist in older save games.
+                if (File.Exists(sectorFilename + SpaceEngineersConsts.ProtobuffersExtension))
+                    File.Move(sectorFilename + SpaceEngineersConsts.ProtobuffersExtension, sectorBackupFilename);
             }
 
             if (_compressedSectorFormat)
@@ -337,6 +346,7 @@
             {
                 SpaceEngineersApi.WriteSpaceEngineersFile(SectorData, sectorFilename);
             }
+            SpaceEngineersApi.WriteSpaceEngineersFilePB(SectorData, sectorFilename + SpaceEngineersConsts.ProtobuffersExtension, _compressedSectorFormat);
         }
 
         public XmlDocument LoadSectorXml()

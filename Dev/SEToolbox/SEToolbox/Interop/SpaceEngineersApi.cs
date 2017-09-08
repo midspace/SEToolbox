@@ -24,6 +24,7 @@
     {
         #region Serializers
 
+        [Obsolete("does not cater for ProtoBuf binary serialized files. Use TryReadSpaceEngineersFile<T>().")]
         public static T ReadSpaceEngineersFile<T>(Stream stream) where T : MyObjectBuilder_Base
         {
             T outObject;
@@ -32,6 +33,38 @@
         }
 
         public static bool TryReadSpaceEngineersFile<T>(string filename, out T outObject, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
+        {
+            string protoBufFile = filename + SpaceEngineersConsts.ProtobuffersExtension;
+            if (File.Exists(protoBufFile))
+            {
+                var tempFilename = protoBufFile;
+
+                if (snapshot)
+                {
+                    // Snapshot used for Report on Dedicated servers to prevent locking of the orginal file whilst reading it.
+                    tempFilename = TempfileUtil.NewFilename();
+                    File.Copy(protoBufFile, tempFilename);
+                }
+
+                using (var fileStream = new FileStream(tempFilename, FileMode.Open, FileAccess.Read))
+                {
+                    var b1 = fileStream.ReadByte();
+                    var b2 = fileStream.ReadByte();
+                    isCompressed = (b1 == 0x1f && b2 == 0x8b);
+                }
+
+                bool retCode = MyObjectBuilderSerializer.DeserializePB<T>(tempFilename, out outObject);
+                if (retCode && outObject != null)
+                {
+                    return true;
+                }
+                return TryReadSpaceEngineersFileXml(filename, out outObject, out isCompressed, snapshot);
+            }
+
+            return TryReadSpaceEngineersFileXml(filename, out outObject, out isCompressed, snapshot);
+        }
+
+        private static bool TryReadSpaceEngineersFileXml<T>(string filename, out T outObject, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
         {
             isCompressed = false;
 
@@ -107,6 +140,12 @@
             }
 
             return true;
+        }
+
+        public static bool WriteSpaceEngineersFilePB<T>(T myObject, string filename, bool compress)
+            where T : MyObjectBuilder_Base
+        {
+            return MyObjectBuilderSerializer.SerializePB(filename, compress, myObject);
         }
 
         #endregion

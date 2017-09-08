@@ -290,7 +290,7 @@
             get
             {
                 // TODO: create a seperate property for the CubeBlocks/ cube.IntegrityPercent
-                return CubeGrid.Skeleton.Count;
+                return CubeGrid.Skeleton?.Count ?? 0;
             }
         }
 

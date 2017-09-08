@@ -14,12 +14,24 @@
     using Color = System.Drawing.Color;
 
     [TestClass]
+    // TODO: should use DeploymentItem attributes, but this will screw up all file dependant tests.
+    //       It's an all or nothing, approach to get the correct binaries into the tests.
+    //       Also, need some way of getting the Test Settings to sticking to X64 architecture.
+    //[DeploymentItem(@"TestAssets\SANDBOX_0_0_0_.XML.sbs", "TestAssets")]
     public class UnitTest1
     {
         [TestInitialize]
         public void InitTest()
         {
-            SpaceEngineersCore.LoadDefinitions();
+            try
+            {
+                SpaceEngineersCore.LoadDefinitions();
+            }
+            // For debugging tests.
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         [TestMethod]
@@ -110,6 +122,36 @@
             const string xmlfilename = @".\TestOutput\SANDBOX_0_0_0_.xml";
 
             ZipTools.GZipUncompress(filename, xmlfilename);
+        }
+
+        [TestMethod]
+        public void ExtractContentFromXmlSandbox()
+        {
+            const string filename = @".\TestAssets\SANDBOX_0_0_0_.XML.sbs";
+
+            MyObjectBuilder_Sector sectorData;
+            bool isCompressed;
+            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed);
+
+            Assert.IsFalse(isCompressed, "file should not be compressed");
+            Assert.IsNotNull(sectorData, "sectorData != null");
+            Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
+        }
+
+
+        [TestMethod]
+        public void ExtractContentFromProtoBufSandbox()
+        {
+            // filename will automatically be concatenated with "PB"
+            const string filename = @".\TestAssets\SANDBOX_0_0_0_.Proto.sbs";
+
+            MyObjectBuilder_Sector sectorData;
+            bool isCompressed;
+            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed);
+
+            Assert.IsFalse(isCompressed, "file should not be compressed");
+            Assert.IsNotNull(sectorData, "sectorData != null");
+            Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
         }
 
         [TestMethod]

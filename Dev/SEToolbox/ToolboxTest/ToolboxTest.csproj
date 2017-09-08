@@ -115,6 +115,9 @@
     <Reference Include="SpaceEngineers.ObjectBuilders">
       <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.dll</HintPath>
     </Reference>
+    <Reference Include="SpaceEngineers.ObjectBuilders.XmlSerializers">
+      <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.XmlSerializers.dll</HintPath>
+    </Reference>
     <Reference Include="VRage">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BinPath)\VRage.dll</HintPath>
@@ -225,6 +228,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\SANDBOX_0_0_0_.sbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestAssets\SANDBOX_0_0_0_.Proto.sbsPB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestAssets\SANDBOX_0_0_0_.XML.sbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\small2_asteroids.vx2">

@@ -13,14 +13,19 @@
         public const string ThumbnailImageFilename = "thumb.jpg";
 
         /// <summary>
-        /// Contains summary of save content.
+        /// Contains summary of save content filename.
         /// </summary>
         public const string SandBoxCheckpointFilename = "Sandbox.sbc";
 
         /// <summary>
-        /// Contains main content.
+        /// Contains Xml serialized main content filename.
         /// </summary>
         public const string SandBoxSectorFilename = "SANDBOX_0_0_0_.sbs";
+
+        /// <summary>
+        /// This is the file extension added to the normal filename for Sanbox files, changing the ".sbs" to ".sbsPB"
+        /// </summary>
+        public const string ProtobuffersExtension = "PB";
 
         // Current set max speed m/s for Ships.
         public const float MaxShipVelocity = 104.375f;
