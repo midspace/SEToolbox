@@ -24,6 +24,8 @@
     {
         #region Fields
 
+        public static ExplorerModel Default { get; private set; }
+
         private bool _isActive;
 
         private bool _isBusy;
@@ -62,6 +64,7 @@
             Structures = new ObservableCollection<IStructureBase>();
             _timer = new Stopwatch();
             SetActiveStatus();
+            Default = this;
         }
 
         #endregion
@@ -441,6 +444,7 @@
         private void LoadSectorDetail()
         {
             Structures.Clear();
+            ConnectedTopBlockCache.Clear();
             SpaceEngineersCore.ManageDeleteVoxelList.Clear();
             ThePlayerCharacter = null;
             _customColors = null;
@@ -1175,6 +1179,34 @@
             Progress = 0;
             ProgressState = TaskbarItemProgressState.None;
             ProgressValue = 0;
+        }
+
+        Dictionary<long, MyObjectBuilder_CubeGrid> ConnectedTopBlockCache = new Dictionary<long, MyObjectBuilder_CubeGrid>();
+
+        public MyObjectBuilder_CubeGrid FindConnectedTopBlock<T>(long topBlockId)
+            where T : MyObjectBuilder_MechanicalConnectionBlock
+        {
+            if (ConnectedTopBlockCache.ContainsKey(topBlockId))
+                return ConnectedTopBlockCache[topBlockId];
+
+            for (int i = 0; i < ActiveWorld.SectorData.SectorObjects.Count; i++)
+            {
+                MyObjectBuilder_CubeGrid grid = ActiveWorld.SectorData.SectorObjects[i] as MyObjectBuilder_CubeGrid;
+                if (grid != null)
+                {
+                    for (int j = 0; j < grid.CubeBlocks.Count; j++)
+                    {
+                        MyObjectBuilder_MechanicalConnectionBlock mechanicalBlock = grid.CubeBlocks[j] as T;
+                        if (mechanicalBlock != null && mechanicalBlock.TopBlockId == topBlockId)
+                        {
+                            ConnectedTopBlockCache[topBlockId] = grid;
+                            return grid;
+                        }
+                    }
+                }
+            }
+            ConnectedTopBlockCache[topBlockId] = null;
+            return null;
         }
     }
 }

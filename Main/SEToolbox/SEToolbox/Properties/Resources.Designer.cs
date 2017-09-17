@@ -257,6 +257,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wheel.
+        /// </summary>
+        public static string ClsCubeGridWheelAttached {
+            get {
+                return ResourceManager.GetString("ClsCubeGridWheelAttached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wheel - Attached {0}.
+        /// </summary>
+        public static string ClsCubeGridWheelDetached {
+            get {
+                return ResourceManager.GetString("ClsCubeGridWheelDetached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application:.
         /// </summary>
         public static string ClsErrorApplication {

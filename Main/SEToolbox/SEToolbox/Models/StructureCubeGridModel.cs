@@ -19,6 +19,7 @@
     using VRage.ObjectBuilders;
     using VRageMath;
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using Res = SEToolbox.Properties.Resources;
 
     [Serializable]
     public class StructureCubeGridModel : StructureBaseModel
@@ -579,14 +580,12 @@
             {
                 if (CubeGrid.CubeBlocks[0] is MyObjectBuilder_Wheel)
                 {
-                    // TODO: cached search of all cubes.
-                    //MyObjectBuilder_MotorSuspension motor = returnedCube as MyObjectBuilder_MotorSuspension
-                    //motor.TopBlockId == CubeGrid.CubeBlocks[0].EntityId;
-                    // Attached or orphan
-                    // list the attachged grid name.
-                    // ie., "Wheel - Attached SmallGrid 1234"
+                    MyObjectBuilder_CubeGrid grid = ExplorerModel.Default.FindConnectedTopBlock<MyObjectBuilder_MotorSuspension>(CubeGrid.CubeBlocks[0].EntityId);
 
-                    Description = "Wheel";
+                    if (grid == null)
+                        Description = Res.ClsCubeGridWheelAttached;
+                    else
+                        Description = string.Format(Res.ClsCubeGridWheelDetached, grid.DisplayName);
                     return;
                 }
             }
