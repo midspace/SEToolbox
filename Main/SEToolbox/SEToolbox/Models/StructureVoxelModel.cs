@@ -294,7 +294,7 @@
 
         public override void InitializeAsync()
         {
-            _asyncWorker = new BackgroundWorker { WorkerSupportsCancellation = true};
+            _asyncWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
             _asyncWorker.DoWork += delegate
             {
                 if (!_isLoadingAsync && (MaterialAssets == null || MaterialAssets.Count == 0))

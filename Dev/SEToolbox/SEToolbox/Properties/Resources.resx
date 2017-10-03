@@ -2769,4 +2769,10 @@ Planet Generator:	{17}</value>
   <data name="CtlCharacterOxygenGasSymbol" xml:space="preserve">
     <value>O₂</value>
   </data>
+  <data name="ClsCubeGridWheelAttached" xml:space="preserve">
+    <value>Wheel</value>
+  </data>
+  <data name="ClsCubeGridWheelDetached" xml:space="preserve">
+    <value>Wheel - Attached {0}</value>
+  </data>
 </root>

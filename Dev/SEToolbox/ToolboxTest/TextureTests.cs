@@ -15,8 +15,8 @@
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;
 
     [TestClass]
-    [DeploymentItem("_placeholder.txt", "TestOutput")]
-    [DeploymentItem("TestOutput\\_placeholder.txt", "TestOutput")]
+    //[DeploymentItem("_placeholder.txt", "TestOutput")]
+    //[DeploymentItem("TestOutput\\_placeholder.txt", "TestOutput")]
     public class TextureTests
     {
         private string _path;
@@ -25,7 +25,7 @@
         public void InitTest()
         {
             SpaceEngineersCore.LoadDefinitions();
-            string path = Path.GetFullPath(".\\TestOutput");
+            _path = Path.GetFullPath(".\\TestOutput");
             //_path = @"D:\Development\GitHub\SEToolbox development\Main\SEToolbox\ToolboxTest\bin\x64\Debug\TestOutput";
 
             if (!Directory.Exists(_path))
@@ -41,6 +41,15 @@
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
+
+            //var ExplosivesComponentPath = Path.GetFullPath(@".\TestAssets\ExplosivesComponent.dds");
+            //var ExplosivesComponentBmp = TexUtil.CreateBitmap(ExplosivesComponentPath);
+            //File.Copy(ExplosivesComponentPath, Path.Combine(_path, "ExplosivesComponent.dds"), true);
+            //ImageTextureUtil.WriteImage(ExplosivesComponentBmp, Path.Combine(_path, @"ExplosivesComponent.png"));
+
+            LoadTextureAndExport(@"C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Textures\Models\Cubes\DoorBlock_cm.dds");
+            LoadTextureAndExport(Path.GetFullPath(@".\TestAssets\ExplosivesComponent.dds"));
+
             var magnesiumOre = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.Ore, "Magnesium");
             var magnesiumOrePath = Path.Combine(contentPath, magnesiumOre.Icons.First());
             Assert.IsTrue(File.Exists(magnesiumOrePath), "Filepath should exist on developer machine");
@@ -50,6 +59,8 @@
             var str = Path.GetFullPath( Path.Combine(_path, "Magnesium_Ore.dds"));
             File.Copy(magnesiumOrePath, Path.Combine(_path, "Magnesium_Ore.dds"), true);
             ImageTextureUtil.WriteImage(magnesiumOreBmp, Path.Combine(_path, @"Magnesium_Ore.png"));
+
+
 
             return;
 
@@ -129,6 +140,14 @@
 
             astronautNormalGlossBmp = TexUtil.CreateBitmap(astronautNormalGlossPath, true);
             ImageTextureUtil.WriteImage(astronautNormalGlossBmp, @".\TestOutput\Astronaut_ng2.png");
+        }
+
+        private void LoadTextureAndExport(string textureFilePath)
+        {
+            string name = Path.GetFileNameWithoutExtension(textureFilePath);
+            var textureFilePathBmp = TexUtil.CreateBitmap(textureFilePath);
+            File.Copy(textureFilePath, Path.Combine(_path, name + ".dds"), true);
+            ImageTextureUtil.WriteImage(textureFilePathBmp, Path.Combine(_path, name + ".png"));
         }
 
         [TestMethod]

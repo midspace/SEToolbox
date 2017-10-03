@@ -12,8 +12,9 @@
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
     using VRage.Game;
-    using VRage.ObjectBuilders;
     using VRageMath;
+    using VRage.ObjectBuilders;
+    using Res = SEToolbox.Properties.Resources;
 
     [Serializable]
     public class StructureVoxelModel : StructureBaseModel
@@ -423,7 +424,7 @@
                     }
                 }
             }
-
+            
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             newAsteroid.Save(tempfilename);
 

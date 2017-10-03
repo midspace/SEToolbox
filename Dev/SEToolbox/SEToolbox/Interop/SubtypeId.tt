@@ -27,7 +27,11 @@ namespace SEToolbox.Interop
 <#
         
 		// Open the file @"C:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content\Data\CubeBlocks.sbc";
-		var appPath = ToolboxUpdater.GetGameRegistryFilePath();
+		string appPath = ToolboxUpdater.GetApplicationFilePath();
+		if (appPath != null)
+			appPath = Path.Combine(appPath, "..");
+		else
+			appPath = ToolboxUpdater.GetGameRegistryFilePath();
 		if (appPath == null)
 		{
 			Write("#warning Could not generate enums, because Space Engineers is not installed on the Developer machine. \r\n\r\n");

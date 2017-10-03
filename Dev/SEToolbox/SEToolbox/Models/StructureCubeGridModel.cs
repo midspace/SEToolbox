@@ -19,6 +19,7 @@
     using VRage.ObjectBuilders;
     using VRageMath;
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using Res = SEToolbox.Properties.Resources;
 
     [Serializable]
     public class StructureCubeGridModel : StructureBaseModel
@@ -95,18 +96,12 @@
 
         public MyObjectBuilder_CubeGrid CubeGrid
         {
-            get
-            {
-                return EntityBase as MyObjectBuilder_CubeGrid;
-            }
+            get { return EntityBase as MyObjectBuilder_CubeGrid; }
         }
 
         public MyCubeSize GridSize
         {
-            get
-            {
-                return CubeGrid.GridSizeEnum;
-            }
+            get { return CubeGrid.GridSizeEnum; }
 
             set
             {
@@ -120,10 +115,7 @@
 
         public bool IsStatic
         {
-            get
-            {
-                return CubeGrid.IsStatic;
-            }
+            get { return CubeGrid.IsStatic; }
 
             set
             {
@@ -137,10 +129,7 @@
 
         public bool Dampeners
         {
-            get
-            {
-                return CubeGrid.DampenersEnabled;
-            }
+            get { return CubeGrid.DampenersEnabled; }
 
             set
             {
@@ -154,10 +143,7 @@
 
         public bool Destructible
         {
-            get
-            {
-                return CubeGrid.DestructibleBlocks;
-            }
+            get { return CubeGrid.DestructibleBlocks; }
 
             set
             {
@@ -172,10 +158,8 @@
 
         public override string DisplayName
         {
-            get
-            {
-                return base.DisplayName;
-            }
+            get { return base.DisplayName; }
+
             set
             {
                 base.DisplayName = value;
@@ -185,10 +169,7 @@
 
         public Point3D Min
         {
-            get
-            {
-                return _min;
-            }
+            get { return _min; }
 
             set
             {
@@ -202,10 +183,7 @@
 
         public Point3D Max
         {
-            get
-            {
-                return _max;
-            }
+            get { return _max; }
 
             set
             {
@@ -219,10 +197,7 @@
 
         public System.Windows.Media.Media3D.Vector3D Scale
         {
-            get
-            {
-                return _scale;
-            }
+            get { return _scale; }
 
             set
             {
@@ -236,10 +211,7 @@
 
         public Size3D Size
         {
-            get
-            {
-                return _size;
-            }
+            get { return _size; }
 
             set
             {
@@ -253,10 +225,7 @@
 
         public int Pilots
         {
-            get
-            {
-                return _pilots;
-            }
+            get { return _pilots; }
 
             set
             {
@@ -270,10 +239,7 @@
 
         public bool IsPiloted
         {
-            get
-            {
-                return Pilots > 0;
-            }
+            get { return Pilots > 0; }
         }
 
         public bool IsDamaged
@@ -296,27 +262,18 @@
 
         public override double LinearVelocity
         {
-            get
-            {
-                return CubeGrid.LinearVelocity.ToVector3().LinearVector();
-            }
+            get { return CubeGrid.LinearVelocity.ToVector3().LinearVector(); }
         }
 
         /// This is not to be taken as an accurate representation.
         public double AngularVelocity
         {
-            get
-            {
-                return CubeGrid.AngularVelocity.ToVector3().LinearVector();
-            }
+            get { return CubeGrid.AngularVelocity.ToVector3().LinearVector(); }
         }
 
         public TimeSpan TimeToProduce
         {
-            get
-            {
-                return _timeToProduce;
-            }
+            get { return _timeToProduce; }
 
             set
             {
@@ -330,18 +287,12 @@
 
         public override int BlockCount
         {
-            get
-            {
-                return CubeGrid.CubeBlocks.Count;
-            }
+            get { return CubeGrid.CubeBlocks.Count; }
         }
 
         public string CockpitOrientation
         {
-            get
-            {
-                return _cockpitOrientation;
-            }
+            get { return _cockpitOrientation; }
 
             set
             {
@@ -358,10 +309,7 @@
         /// </summary>
         public List<CubeAssetModel> CubeAssets
         {
-            get
-            {
-                return _cubeAssets;
-            }
+            get { return _cubeAssets; }
 
             set
             {
@@ -378,10 +326,7 @@
         /// </summary>
         public List<CubeAssetModel> ComponentAssets
         {
-            get
-            {
-                return _componentAssets;
-            }
+            get { return _componentAssets; }
 
             set
             {
@@ -398,10 +343,7 @@
         /// </summary>
         public List<OreAssetModel> IngotAssets
         {
-            get
-            {
-                return _ingotAssets;
-            }
+            get { return _ingotAssets; }
 
             set
             {
@@ -418,10 +360,7 @@
         /// </summary>
         public List<OreAssetModel> OreAssets
         {
-            get
-            {
-                return _oreAssets;
-            }
+            get { return _oreAssets; }
 
             set
             {
@@ -435,10 +374,7 @@
 
         public string ActiveComponentFilter
         {
-            get
-            {
-                return _activeComponentFilter;
-            }
+            get { return _activeComponentFilter; }
 
             set
             {
@@ -452,10 +388,7 @@
 
         public string ComponentFilter
         {
-            get
-            {
-                return _componentFilter;
-            }
+            get { return _componentFilter; }
 
             set
             {
@@ -469,10 +402,7 @@
 
         public ObservableCollection<CubeItemModel> CubeList
         {
-            get
-            {
-                return _cubeList;
-            }
+            get { return _cubeList; }
 
             set
             {
@@ -643,7 +573,21 @@
             {
                 var beaconNames = broadcasters.Where(b => b is MyObjectBuilder_Beacon).Select(b => ((MyObjectBuilder_Beacon)b).CustomName ?? "Beacon").ToArray();
                 var antennaNames = broadcasters.Where(b => b is MyObjectBuilder_RadioAntenna).Select(b => ((MyObjectBuilder_RadioAntenna)b).CustomName ?? "Antenna").ToArray();
-                broadcastNames = String.Join("|", beaconNames.Concat(antennaNames).OrderBy(s => s));
+                broadcastNames = string.Join("|", beaconNames.Concat(antennaNames).OrderBy(s => s));
+            }
+
+            if (CubeGrid.CubeBlocks.Count == 1)
+            {
+                if (CubeGrid.CubeBlocks[0] is MyObjectBuilder_Wheel)
+                {
+                    MyObjectBuilder_CubeGrid grid = ExplorerModel.Default.FindConnectedTopBlock<MyObjectBuilder_MotorSuspension>(CubeGrid.CubeBlocks[0].EntityId);
+
+                    if (grid == null)
+                        Description = Res.ClsCubeGridWheelAttached;
+                    else
+                        Description = string.Format(Res.ClsCubeGridWheelDetached, grid.DisplayName);
+                    return;
+                }
             }
 
             if (string.IsNullOrEmpty(broadcastNames))
@@ -668,7 +612,7 @@
         {
             var worker = new BackgroundWorker();
 
-            worker.DoWork += delegate(object s, DoWorkEventArgs workArgs)
+            worker.DoWork += delegate (object s, DoWorkEventArgs workArgs)
             {
                 lock (Locker)
                 {
@@ -830,7 +774,7 @@
                 if (hierarchyBase != null)
                 {
                     if (hierarchyBase.Children.Any(e => e is MyObjectBuilder_Character))
-                        list.Add((MyObjectBuilder_Cockpit) cube);
+                        list.Add((MyObjectBuilder_Cockpit)cube);
                 }
             }
 

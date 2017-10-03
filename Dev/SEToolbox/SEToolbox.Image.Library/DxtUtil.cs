@@ -376,15 +376,28 @@ namespace SEToolbox.ImageLibrary
             switch (dxgiFormat)
             {
                 case ImageTextureUtil.DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB:
+                    // there is suport to be some sort of SRGB conversion somwhere here, but I'm not sure where precicly and on what values.
+
+                    //ConvertSrgbToRgb888(c0, out r0, out g0, out b0);
+                    //ConvertSrgbToRgb888(c1, out r1, out g1, out b1);
+
+                    var aa = (byte)(255 * D3DX_SRGB_to_FLOAT_inexact(((float)(c0 & 0x000000ff)) / 255));
+                    r0 = (byte)(255 * D3DX_SRGB_to_FLOAT_inexact(((float)(((c0 >> 8) & 0x000000ff))) / 255));
+                    g0 = (byte)(255 * D3DX_SRGB_to_FLOAT_inexact(((float)(c1 & 0x000000ff)) / 255));
+                    b0 = (byte)(255 * D3DX_SRGB_to_FLOAT_inexact(((float)(((c1 >> 8) & 0x000000ff))) / 255));
+
+                    r1 = r0;
+                    g1 = g0;
+                    b1 = b0;
+
                     break;
                 case ImageTextureUtil.DXGI_FORMAT.DXGI_FORMAT_UNKNOWN:
-                    break;
                 default:
+                    ConvertRgb565ToRgb888(c0, out r0, out g0, out b0);
+                    ConvertRgb565ToRgb888(c1, out r1, out g1, out b1);
                     break;
             }
 
-            ConvertRgb565ToRgb888(c0, out r0, out g0, out b0);
-            ConvertRgb565ToRgb888(c1, out r1, out g1, out b1);
 
             uint lookupTable = imageReader.ReadUInt32();
 
@@ -467,6 +480,49 @@ namespace SEToolbox.ImageLibrary
             g = (byte)((temp / 64 + temp) / 64);
             temp = (color & 0x001F) * 255 + 16;
             b = (byte)((temp / 32 + temp) / 32);
+        }
+
+        private static void ConvertSrgbToRgb888(uint color, out byte r, out byte g, out byte b)
+        {
+            if (color > 65536)
+            {
+            }
+            //int temp = (color >> 11) * 255 + 16;
+            //r = (byte)((temp / 32 + temp) / 32);
+            //temp = ((color & 0x07E0) >> 5) * 255 + 32;
+            //g = (byte)((temp / 64 + temp) / 64);
+            //temp = (color & 0x001F) * 255 + 16;
+            //b = (byte)((temp / 32 + temp) / 32);
+
+            r = (byte)(255 * D3DX_SRGB_to_FLOAT_inexact(((float)(color & 0x000000ff)) / 255));
+            g = (byte)(255 * D3DX_SRGB_to_FLOAT_inexact(((float)(((color >> 8) & 0x000000ff))) / 255));
+            b = (byte)(255 * D3DX_SRGB_to_FLOAT_inexact(((float)(((color >> 16) & 0x000000ff))) / 255));
+            var a = (float)(color >> 24) / 255;
+            if (a != 0)
+            {
+            }
+        }
+
+
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ff728749(v=vs.85).aspx
+        // D3DX_DXGIFormatConvert.inl
+        private static float D3DX_SRGB_to_FLOAT_inexact(float val)
+        {
+            if (val < 0.04045f)
+                val /= 12.92f;
+            else
+                val = (float)Math.Pow((val + 0.055f) / 1.055f, 2.4f);
+            return val;
+        }
+
+        // https://gamedevdaily.io/the-srgb-learning-curve-773b7f68cf7a
+        private static float D3DX_FLOAT_to_SRGB(float val)
+        {
+            if (val < 0.0031308f)
+                val *= 12.92f;
+            else
+                val = 1.055f * (float)Math.Pow(val, 1.0f / 2.4f) - 0.055f;
+            return val;
         }
 
         #endregion
