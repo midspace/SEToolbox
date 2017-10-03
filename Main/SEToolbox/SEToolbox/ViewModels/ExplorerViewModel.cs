@@ -1705,12 +1705,12 @@
                         var voxel = (StructureVoxelModel)viewModel.DataModel;
 
                         // note, there aren't any checks for existing files here.
-                        string destinationFile =  Path.Combine(directory, viewModel.DataModel.DisplayName + ".vx2");
+                        string destinationFile = Path.Combine(directory, viewModel.DataModel.DisplayName + ".vx2");
 
                         if (voxel.SourceVoxelFilepath != null && File.Exists(voxel.SourceVoxelFilepath))
-                            File.Copy(voxel.SourceVoxelFilepath, destinationFile);
+                            File.Copy(voxel.SourceVoxelFilepath, destinationFile, true);
                         else
-                            File.Copy(voxel.VoxelFilepath, destinationFile);
+                            File.Copy(voxel.VoxelFilepath, destinationFile, true);
                     }
                 }
 
