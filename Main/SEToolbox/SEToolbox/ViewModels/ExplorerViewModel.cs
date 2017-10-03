@@ -137,6 +137,8 @@
 
         public ICommand ExportPrefabObjectCommand => new DelegateCommand(ExportPrefabObjectExecuted, ExportPrefabObjectCanExecute);
 
+        public ICommand ExportSpawnGroupObjectCommand => new DelegateCommand(ExportSpawnGroupObjectExecuted, ExportSpawnGroupObjectCanExecute);
+
         public ICommand CreateFloatingItemCommand => new DelegateCommand(CreateFloatingItemExecuted, CreateFloatingItemCanExecute);
 
         public ICommand GenerateVoxelFieldCommand => new DelegateCommand(GenerateVoxelFieldExecuted, GenerateVoxelFieldCanExecute);
@@ -718,6 +720,16 @@
         public void ExportPrefabObjectExecuted()
         {
             ExportPrefabObjectToFile(true, Selections.ToArray());
+        }
+
+        public bool ExportSpawnGroupObjectCanExecute()
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void ExportSpawnGroupObjectExecuted()
+        {
+            ExportSpawnGroupObjectToFile(true, Selections.ToArray());
         }
 
         public bool CreateFloatingItemCanExecute()
@@ -1591,6 +1603,136 @@
                 SpaceEngineersApi.WriteSpaceEngineersFile(definition, saveFileDialog.FileName);
             }
         }
+
+        public void ExportSpawnGroupObjectToFile(bool blankOwnerAndMedBays, params IStructureViewBase[] viewModels)
+        {
+            var saveFileDialog = _saveFileDialogFactory();
+            saveFileDialog.Filter = AppConstants.PrefabObjectFilter;
+            saveFileDialog.Title = Res.DialogExportSandboxObjectTitle;
+            saveFileDialog.FileName = "export prefab.sbc";
+            saveFileDialog.OverwritePrompt = true;
+
+            if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
+            {
+                string name = Path.GetFileNameWithoutExtension(saveFileDialog.FileName);
+                string directory = Path.GetDirectoryName(saveFileDialog.FileName);
+
+                var prefabDefinition = new MyObjectBuilder_Definitions();
+                prefabDefinition.Prefabs = new MyObjectBuilder_PrefabDefinition[1];
+                MyObjectBuilder_PrefabDefinition prefab;
+                prefab = new MyObjectBuilder_PrefabDefinition();
+                prefab.Id.TypeId = new MyObjectBuilderType(typeof(MyObjectBuilder_PrefabDefinition));
+                prefab.Id.SubtypeId = name;
+
+                var spawngroupDefinition = new MyObjectBuilder_Definitions();
+                spawngroupDefinition.SpawnGroups = new MyObjectBuilder_SpawnGroupDefinition[1];
+                MyObjectBuilder_SpawnGroupDefinition spawngroup;
+                spawngroup = new MyObjectBuilder_SpawnGroupDefinition();
+                spawngroup.Id.TypeId = new MyObjectBuilderType(typeof(MyObjectBuilder_SpawnGroupDefinition));
+                spawngroup.Id.SubtypeId = name;
+                spawngroup.Icons = new string[] { @"Textures\GUI\Icons\Fake.dds" };
+                spawngroup.IsEncounter = false;
+                spawngroup.IsPirate = false;
+                spawngroup.Frequency = 0.001f;
+
+                var grids = new List<MyObjectBuilder_CubeGrid>();
+                var voxels = new List<MyObjectBuilder_SpawnGroupDefinition.SpawnGroupVoxel>();
+                Vector3 minimum = Vector3.MaxValue;
+
+                foreach (var viewModel in viewModels)
+                {
+                    if (viewModel is StructureCubeGridViewModel)
+                    {
+                        var cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
+
+                        if (blankOwnerAndMedBays)
+                        {
+                            // Call to ToArray() to force Linq to update the value.
+
+                            // Clear Medical room SteamId.
+                            cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.MedicalRoom).Select(c => { ((MyObjectBuilder_MedicalRoom)c).SteamUserId = 0; return c; }).ToArray();
+
+                            // Clear Owners.
+                            cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
+                        }
+
+                        // Remove any pilots.
+                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
+                        {
+                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
+                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
+                            return c;
+                        }).ToArray();
+
+                        grids.Add(cloneEntity);
+
+                        if (minimum.X > cloneEntity.PositionAndOrientation.Value.Position.X)
+                            minimum.X = (float)cloneEntity.PositionAndOrientation.Value.Position.X;
+                        if (minimum.Y > cloneEntity.PositionAndOrientation.Value.Position.Y)
+                            minimum.Y = (float)cloneEntity.PositionAndOrientation.Value.Position.Y;
+                        if (minimum.Z > cloneEntity.PositionAndOrientation.Value.Position.Z)
+                            minimum.Z = (float)cloneEntity.PositionAndOrientation.Value.Position.Z;
+                    }
+                    if (viewModel is StructureVoxelViewModel)
+                    {
+                        if (minimum.X > viewModel.DataModel.PositionAndOrientation.Value.Position.X)
+                            minimum.X = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.X;
+                        if (minimum.Y > viewModel.DataModel.PositionAndOrientation.Value.Position.Y)
+                            minimum.Y = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.Y;
+                        if (minimum.Z > viewModel.DataModel.PositionAndOrientation.Value.Position.Z)
+                            minimum.Z = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.Z;
+                    }
+                }
+
+                if (minimum == Vector3.MaxValue)
+                    minimum = Vector3.Zero;
+
+                prefab.CubeGrids = grids.ToArray();
+                prefabDefinition.Prefabs[0] = prefab;
+
+                foreach (var viewModel in viewModels)
+                {
+                    if (viewModel is StructureVoxelViewModel)
+                    {
+                        Vector3 pos = new Vector3(viewModel.DataModel.PositionAndOrientation.Value.Position.X, viewModel.DataModel.PositionAndOrientation.Value.Position.Y, viewModel.DataModel.PositionAndOrientation.Value.Position.Z);
+                        voxels.Add(new MyObjectBuilder_SpawnGroupDefinition.SpawnGroupVoxel
+                        {
+                            StorageName = viewModel.DataModel.DisplayName,
+                            Offset = pos
+                        });
+
+                        // copy files.
+                        var voxel = (StructureVoxelModel)viewModel.DataModel;
+
+                        // note, there aren't any checks for existing files here.
+                        string destinationFile =  Path.Combine(directory, viewModel.DataModel.DisplayName + ".vx2");
+
+                        if (voxel.SourceVoxelFilepath != null && File.Exists(voxel.SourceVoxelFilepath))
+                            File.Copy(voxel.SourceVoxelFilepath, destinationFile);
+                        else
+                            File.Copy(voxel.VoxelFilepath, destinationFile);
+                    }
+                }
+
+                spawngroup.Prefabs = new MyObjectBuilder_SpawnGroupDefinition.SpawnGroupPrefab[] {
+                    new MyObjectBuilder_SpawnGroupDefinition.SpawnGroupPrefab
+                    {
+                        SubtypeId = name,
+                        Position = Vector3.Zero,
+                        Speed = 0,
+                        PlaceToGridOrigin = true,
+                    }
+                };
+
+                spawngroupDefinition.SpawnGroups[0] = spawngroup;
+                spawngroup.Voxels = voxels.ToArray();
+
+                SpaceEngineersApi.WriteSpaceEngineersFile(prefabDefinition, saveFileDialog.FileName);
+                string spawnGroupFile = Path.Combine(directory, "SpawnGroup " + name + ".sbc");
+                SpaceEngineersApi.WriteSpaceEngineersFile(spawngroupDefinition, spawnGroupFile);
+            }
+        }
+
 
         public void TestCalcCubesModel(params IStructureViewBase[] viewModels)
         {

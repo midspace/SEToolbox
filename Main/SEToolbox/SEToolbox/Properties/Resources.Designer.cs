@@ -5237,7 +5237,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export all ships and stations to a single an prefab .sbc file..
+        ///   Looks up a localized string similar to Export selected ships and stations to a single an prefab .sbc file..
         /// </summary>
         public static string WnExplorerMnuExportPrefabTooltip {
             get {
@@ -5278,6 +5278,24 @@ namespace SEToolbox.Properties {
         public static string WnExplorerMnuExportSandboxWithOwnerTooltip {
             get {
                 return ResourceManager.GetString("WnExplorerMnuExportSandboxWithOwnerTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as Prefab and SpawnGroup.
+        /// </summary>
+        public static string WnExplorerMnuExportSpawnGroup {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuExportSpawnGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export selected ships, stations and asteroids to a single an prefab .sbc file, spawngroup file and asteroids..
+        /// </summary>
+        public static string WnExplorerMnuExportSpawnGroupTooltip {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuExportSpawnGroupTooltip", resourceCulture);
             }
         }
         
