@@ -3108,7 +3108,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify filename to export to.
+        ///   Looks up a localized string similar to Specify filename to export Prefab to (name is embded into files).
         /// </summary>
         public static string DialogExportPrefabObjectTitle {
             get {
@@ -3140,6 +3140,15 @@ namespace SEToolbox.Properties {
         public static string DialogExportSandboxObjectTitle {
             get {
                 return ResourceManager.GetString("DialogExportSandboxObjectTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify filename to export SpawnGroup to (name is embded into files).
+        /// </summary>
+        public static string DialogExportSpawnGroupObjectTitle {
+            get {
+                return ResourceManager.GetString("DialogExportSpawnGroupObjectTitle", resourceCulture);
             }
         }
         

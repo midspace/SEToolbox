@@ -714,7 +714,8 @@
 
         public bool ExportPrefabObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0 &&
+                Selections.Any(e => e is StructureCubeGridViewModel);
         }
 
         public void ExportPrefabObjectExecuted()
@@ -724,7 +725,8 @@
 
         public bool ExportSpawnGroupObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && Selections.Count > 0 &&
+                Selections.Any(e => e is StructureCubeGridViewModel || e is StructureVoxelViewModel);
         }
 
         public void ExportSpawnGroupObjectExecuted()
@@ -1553,7 +1555,7 @@
         {
             var saveFileDialog = _saveFileDialogFactory();
             saveFileDialog.Filter = AppConstants.PrefabObjectFilter;
-            saveFileDialog.Title = Res.DialogExportSandboxObjectTitle;
+            saveFileDialog.Title = Res.DialogExportPrefabObjectTitle;
             saveFileDialog.FileName = "export prefab.sbc";
             saveFileDialog.OverwritePrompt = true;
 
@@ -1606,10 +1608,40 @@
 
         public void ExportSpawnGroupObjectToFile(bool blankOwnerAndMedBays, params IStructureViewBase[] viewModels)
         {
+            string defaultName = null;
+            bool hasGrids = false;
+            bool hasVoxels = false;
+
+            foreach (var viewModel in viewModels)
+            {
+                if (viewModel is StructureCubeGridViewModel)
+                {
+                    hasGrids = true;
+                    defaultName = viewModel.DataModel.DisplayName;
+                    break;
+                }
+            }
+
+            foreach (var viewModel in viewModels)
+            {
+                if (viewModel is StructureVoxelViewModel)
+                {
+                    hasVoxels = true;
+                    if (defaultName == null)
+                    {
+                        defaultName = viewModel.DataModel.DisplayName;
+                        break;
+                    }
+                }
+            }
+
+            defaultName = defaultName.Replace(' ', '_');
+
             var saveFileDialog = _saveFileDialogFactory();
             saveFileDialog.Filter = AppConstants.PrefabObjectFilter;
-            saveFileDialog.Title = Res.DialogExportSandboxObjectTitle;
-            saveFileDialog.FileName = "export prefab.sbc";
+
+            saveFileDialog.Title = Res.DialogExportSpawnGroupObjectTitle;
+            saveFileDialog.FileName = defaultName + ".sbc";
             saveFileDialog.OverwritePrompt = true;
 
             if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
@@ -1635,15 +1667,23 @@
                 spawngroup.IsPirate = false;
                 spawngroup.Frequency = 0.001f;
 
+                Vector3 grid1Position = Vector3.Zero;
+                bool isGrid1PositionSet = false;
+
                 var grids = new List<MyObjectBuilder_CubeGrid>();
-                var voxels = new List<MyObjectBuilder_SpawnGroupDefinition.SpawnGroupVoxel>();
                 Vector3 minimum = Vector3.MaxValue;
 
                 foreach (var viewModel in viewModels)
                 {
                     if (viewModel is StructureCubeGridViewModel)
                     {
-                        var cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
+                        MyObjectBuilder_CubeGrid cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
+
+                        if (!isGrid1PositionSet)
+                        {
+                            grid1Position = new Vector3(cloneEntity.PositionAndOrientation.Value.Position.X, cloneEntity.PositionAndOrientation.Value.Position.Y, cloneEntity.PositionAndOrientation.Value.Position.Z);
+                            isGrid1PositionSet = true;
+                        }
 
                         if (blankOwnerAndMedBays)
                         {
@@ -1690,11 +1730,23 @@
                 prefab.CubeGrids = grids.ToArray();
                 prefabDefinition.Prefabs[0] = prefab;
 
+                var voxels = new List<MyObjectBuilder_SpawnGroupDefinition.SpawnGroupVoxel>();
+
                 foreach (var viewModel in viewModels)
                 {
                     if (viewModel is StructureVoxelViewModel)
                     {
                         Vector3 pos = new Vector3(viewModel.DataModel.PositionAndOrientation.Value.Position.X, viewModel.DataModel.PositionAndOrientation.Value.Position.Y, viewModel.DataModel.PositionAndOrientation.Value.Position.Z);
+
+                        // This is to set up the position values for "spawnAtOrigin", used by the game.
+                        // See Sandbox.Game.World.MyPrefabManager.CreateGridsFromPrefab()
+                        // spawnAtOrigin is only used with the Position of the First grid in the Prefab list.
+                        // This will affect the voxel Offsets in the SpawnGroup.
+                        if (isGrid1PositionSet)
+                        {
+                            pos = pos - grid1Position;
+                        }
+
                         voxels.Add(new MyObjectBuilder_SpawnGroupDefinition.SpawnGroupVoxel
                         {
                             StorageName = viewModel.DataModel.DisplayName,
@@ -1714,20 +1766,26 @@
                     }
                 }
 
-                spawngroup.Prefabs = new MyObjectBuilder_SpawnGroupDefinition.SpawnGroupPrefab[] {
-                    new MyObjectBuilder_SpawnGroupDefinition.SpawnGroupPrefab
-                    {
-                        SubtypeId = name,
-                        Position = Vector3.Zero,
-                        Speed = 0,
-                        PlaceToGridOrigin = true,
-                    }
-                };
+                if (hasGrids)
+                {
+                    spawngroup.Prefabs = new MyObjectBuilder_SpawnGroupDefinition.SpawnGroupPrefab[] {
+                        new MyObjectBuilder_SpawnGroupDefinition.SpawnGroupPrefab
+                        {
+                            SubtypeId = name,
+                            Position = Vector3.Zero,
+                            Speed = 0,
+                        }
+                    };
+
+                    if (hasVoxels)
+                        spawngroup.Prefabs[0].PlaceToGridOrigin = true;
+                    SpaceEngineersApi.WriteSpaceEngineersFile(prefabDefinition, saveFileDialog.FileName);
+                }
 
                 spawngroupDefinition.SpawnGroups[0] = spawngroup;
-                spawngroup.Voxels = voxels.ToArray();
+                if (voxels.Count > 0)
+                    spawngroup.Voxels = voxels.ToArray();
 
-                SpaceEngineersApi.WriteSpaceEngineersFile(prefabDefinition, saveFileDialog.FileName);
                 string spawnGroupFile = Path.Combine(directory, "SpawnGroup " + name + ".sbc");
                 SpaceEngineersApi.WriteSpaceEngineersFile(spawngroupDefinition, spawnGroupFile);
             }
