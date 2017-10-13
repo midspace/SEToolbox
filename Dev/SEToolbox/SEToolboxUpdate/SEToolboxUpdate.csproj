@@ -114,7 +114,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.zh.resx">
+    <EmbeddedResource Include="Properties\Resources.zh-cn.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
