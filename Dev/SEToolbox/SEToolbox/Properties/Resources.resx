@@ -670,7 +670,7 @@ Please update it before running SEToolbox {2} again.</value>
     <value>Sandbox Prefab files</value>
   </data>
   <data name="DialogExportPrefabObjectTitle" xml:space="preserve">
-    <value>Specify filename to export to</value>
+    <value>Specify filename to export Prefab to (name is embded into files)</value>
   </data>
   <data name="VoxelMergeType_UnionMaterialLeftToRight" xml:space="preserve">
     <value>Union Material Left to Right</value>
@@ -755,7 +755,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Export as prefab</value>
   </data>
   <data name="WnExplorerMnuExportPrefabTooltip" xml:space="preserve">
-    <value>Export all ships and stations to a single an prefab .sbc file.</value>
+    <value>Export selected ships and stations to a single an prefab .sbc file.</value>
   </data>
   <data name="WnExplorerMnuExportSandboxWithoutOwner" xml:space="preserve">
     <value>Export without owner and MedBay</value>
@@ -2774,5 +2774,14 @@ Planet Generator:	{17}</value>
   </data>
   <data name="ClsCubeGridWheelDetached" xml:space="preserve">
     <value>Wheel - Attached {0}</value>
+  </data>
+  <data name="WnExplorerMnuExportSpawnGroup" xml:space="preserve">
+    <value>Export as Prefab and SpawnGroup</value>
+  </data>
+  <data name="WnExplorerMnuExportSpawnGroupTooltip" xml:space="preserve">
+    <value>Export selected ships, stations and asteroids to a single an prefab .sbc file, spawngroup file and asteroids.</value>
+  </data>
+  <data name="DialogExportSpawnGroupObjectTitle" xml:space="preserve">
+    <value>Specify filename to export SpawnGroup to (name is embded into files)</value>
   </data>
 </root>

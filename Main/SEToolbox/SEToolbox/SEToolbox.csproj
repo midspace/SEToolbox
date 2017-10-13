@@ -662,7 +662,7 @@
     <EmbeddedResource Include="Properties\MyTexts.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.zh.resx">
+    <EmbeddedResource Include="Properties\Resources.zh-cn.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -723,7 +723,7 @@
     <None Include="Resources\icecube.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SEToolbox_splash copy.png" />
+    <None Include="Resources\SEToolbox_splash_en.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\fit_to_size.png" />
@@ -883,7 +883,7 @@
       <Link>steam_api64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\SEToolbox_splash_zh.png" />
+    <None Include="Resources\SEToolbox_splash_zh-cn.png" />
     <None Include="Resources\hammer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
