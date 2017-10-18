@@ -42,8 +42,6 @@
 
             MyFileSystem.InitUserSpecific(null);
 
-            MyFakes.ENABLE_INFINARIO = false;
-
             SpaceEngineersGame.SetupPerGameSettings();
 
             VRageRender.MyRenderProxy.Initialize(new MyNullRender());

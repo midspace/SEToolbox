@@ -28,6 +28,7 @@
             "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",     // MSIL
             "steam_api64.dll",          // AnyCpu
             "SteamSDK.dll",             // MSIL
+            "VRage.Ansel.dll",          // MSIL    1.181.x requirement
             "VRage.Audio.dll",          // MSIL  1.147.x requirement.
             "VRage.dll",                // AnyCpu
             "VRage.Game.dll",           // AnyCpu
@@ -39,9 +40,7 @@
             "VRage.OpenVRWrapper.dll",  // MSIL
             "VRage.Render.dll",         // AnyCpu
             "VRage.Render11.dll",       // AnyCpu
-            "InfinarioSDK.dll",         // AnyCpu  1.171.x requirement
             "System.Data.SQLite.dll",   // AnyCpu  1.171.x requirement
-            "VRage.Ansel.dll",          // MSIL    1.181.x requirement
         };
 
         //internal static readonly string[] CoreMedievalEngineersFiles = {
