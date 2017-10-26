@@ -41,7 +41,6 @@
             "VRage.Render.dll",         // AnyCpu
             "VRage.Render11.dll",       // AnyCpu
             "System.Data.SQLite.dll",   // AnyCpu  1.171.x requirement
-            "InfinarioSDK.dll",         // AnyCpu  1.171.x requirement
         };
 
         //internal static readonly string[] CoreMedievalEngineersFiles = {

@@ -151,9 +151,6 @@
     <Reference Include="SpaceEngineers.ObjectBuilders">
       <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.dll</HintPath>
     </Reference>
-    <Reference Include="InfinarioSDK">
-      <HintPath>$(BinPath)\InfinarioSDK.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.SQLite">
       <HintPath>$(BinPath)\System.Data.SQLite.dll</HintPath>
     </Reference>
