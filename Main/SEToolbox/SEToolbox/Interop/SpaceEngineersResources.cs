@@ -30,8 +30,9 @@
                     MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
                     loading = false;
                 }
-                catch (InvalidOperationException)
+                catch (Exception)
                 {
+                    // could be InvalidOperationException,NullReferenceException
                     Thread.Sleep(1);
                 }
             }
