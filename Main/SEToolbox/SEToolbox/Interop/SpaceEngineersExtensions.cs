@@ -15,7 +15,6 @@
     using VRage.Game;
     using VRage.Game.ObjectBuilders.Components;
     using VRage.Game.ObjectBuilders.ComponentSystem;
-    using VRage.Voxels;
     using VRage.ObjectBuilders;
     using VRageMath;
 
@@ -571,17 +570,23 @@
 
         public static string GetVoxelDisplayTexture(this MyVoxelMaterialDefinition voxelMaterialDefinition)
         {
-            string texture = null;
-
-            var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
-            if (dx11MaterialDefinition != null)
-            {
-                texture = dx11MaterialDefinition.ColorMetalXZnY;
-                if (texture == null)
-                    texture = dx11MaterialDefinition.NormalGlossXZnY;
-            }
+            string texture = voxelMaterialDefinition.VoxelHandPreview;
             if (texture == null)
-                texture = voxelMaterialDefinition.DiffuseXZ;
+            {
+                var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
+                if (dx11MaterialDefinition != null)
+                {
+                    texture = voxelMaterialDefinition.VoxelHandPreview;
+                    if (texture == null)
+                    {
+                        texture = dx11MaterialDefinition.ColorMetalXZnY;
+                        if (texture == null)
+                            texture = dx11MaterialDefinition.NormalGlossXZnY;
+                    }
+                }
+                if (texture == null)
+                    texture = voxelMaterialDefinition.DiffuseXZ;
+            }
 
             return texture;
         }
