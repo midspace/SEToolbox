@@ -115,7 +115,7 @@
 
         public bool AddItemCanExecute()
         {
-            return true;
+            return _dataModel.IsValid;
         }
 
         public void AddItemExecuted()

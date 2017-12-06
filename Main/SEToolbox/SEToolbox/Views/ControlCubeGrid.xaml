@@ -469,11 +469,15 @@
                                 <!--<TabItem Header="Controls">
                                     --><!-- TODO: Property Editor? --><!--
                                 </TabItem>-->
-                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[0].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[0]}" />
+                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[0].Name, FallbackValue={x:Null}}" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+                                    <StackPanel Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+                                        <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[0]}" />
+                                    </StackPanel>
                                 </TabItem>
-                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[1].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[1].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[1]}" />
+                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[1].Name, FallbackValue={x:Null}}" Visibility="{Binding Path=SelectedCubeItem.Inventory[1].IsValid, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+                                    <StackPanel Visibility="{Binding Path=SelectedCubeItem.Inventory[1].IsValid, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+                                        <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[1]}" />
+                                    </StackPanel>
                                 </TabItem>
                             </TabControl>
                             <StackPanel Grid.Row="2">
