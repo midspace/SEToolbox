@@ -1,7 +1,10 @@
 ﻿namespace SEToolbox.Interop
 {
+    using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
+    using System.Threading;
     using Sandbox.Definitions;
     using SEToolbox.Support;
     using VRage.Game;
@@ -19,7 +22,19 @@
         /// </summary>
         public void LoadDefinitions()
         {
-            MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
+            bool loading = true;
+            while (loading)
+            {
+                try
+                {
+                    MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
+                    loading = false;
+                }
+                catch (InvalidOperationException)
+                {
+                    Thread.Sleep(1);
+                }
+            }
             MaterialIndex = new Dictionary<string, byte>();
         }
 
