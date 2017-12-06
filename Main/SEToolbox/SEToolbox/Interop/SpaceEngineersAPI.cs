@@ -32,10 +32,23 @@
             return outObject;
         }
 
-        public static bool TryReadSpaceEngineersFile<T>(string filename, out T outObject, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
+        public static bool TryReadSpaceEngineersFile<T>(string filename, out T outObject, out bool isCompressed, bool snapshot = false, bool specificExtension = false) where T : MyObjectBuilder_Base
         {
-            string protoBufFile = filename + SpaceEngineersConsts.ProtobuffersExtension;
-            if (File.Exists(protoBufFile))
+            string protoBufFile = null;
+            if (specificExtension)
+            {
+                if ((Path.GetExtension(filename) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase))
+                    protoBufFile = filename;
+            }
+            else
+            {
+                if ((Path.GetExtension(filename) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase))
+                    protoBufFile = filename;
+                else
+                    protoBufFile = filename + SpaceEngineersConsts.ProtobuffersExtension;
+            }
+
+            if (protoBufFile != null && File.Exists(protoBufFile))
             {
                 var tempFilename = protoBufFile;
 
@@ -53,7 +66,16 @@
                     isCompressed = (b1 == 0x1f && b2 == 0x8b);
                 }
 
-                bool retCode = MyObjectBuilderSerializer.DeserializePB<T>(tempFilename, out outObject);
+                bool retCode;
+                try
+                {
+                    retCode = MyObjectBuilderSerializer.DeserializePB<T>(tempFilename, out outObject);
+                }
+                catch (InvalidCastException)
+                {
+                    outObject = null;
+                    return false;
+                }
                 if (retCode && outObject != null)
                 {
                     return true;
@@ -134,7 +156,7 @@
                 {
                     var xmlTextWriter = new XmlTextWriter(sw.BaseStream, null);
                     xmlTextWriter.WriteString("\r\n");
-                    xmlTextWriter.WriteComment(string.Format(" Saved '{0:o}' with SEToolbox version '{1}' ", DateTime.Now, GlobalSettings.GetAppVersion()));
+                    xmlTextWriter.WriteComment($" Saved '{DateTime.Now:o}' with SEToolbox version '{GlobalSettings.GetAppVersion()}' ");
                     xmlTextWriter.Flush();
                 }
             }
