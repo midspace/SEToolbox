@@ -189,6 +189,8 @@
 
         public ICommand ConvertToStationCommand => new DelegateCommand(ConvertToStationExecuted, ConvertToStationCanExecute);
 
+        public ICommand InertiaTensorOnCommand => new DelegateCommand<bool>(InertiaTensorExecuted, InertiaTensorCanExecute);
+
         #endregion
 
         #region Properties
@@ -1069,6 +1071,24 @@
             IsBusy = false;
         }
 
+        public bool InertiaTensorCanExecute(bool state)
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void InertiaTensorExecuted(bool state)
+        {
+            IsBusy = true;
+            int count = SetInertiaTensor(Selections, true);
+            IsBusy = false;
+
+            _dialogService.ShowMessageBox(this, 
+                string.Format(Res.ClsExplorerGridChangesMade, count), 
+                Res.ClsExplorerTitleChangesMade, 
+                System.Windows.MessageBoxButton.OK, 
+                System.Windows.MessageBoxImage.Information);
+        }
+
         #endregion
 
         #region Test command methods
@@ -1386,6 +1406,20 @@
                     ((StructureCubeGridViewModel)structure).ConvertToStationExecuted();
                 }
             }
+        }
+
+        private int SetInertiaTensor(IEnumerable<IStructureViewBase> structures, bool state)
+        {
+            int count = 0;
+            foreach (var structure in structures)
+            {
+                if (structure.DataModel.ClassType == ClassType.SmallShip
+                    || structure.DataModel.ClassType == ClassType.LargeShip)
+                {
+                    count += ((StructureCubeGridViewModel)structure).SetInertiaTensor(state);
+                }
+            }
+            return count;
         }
 
         /// <inheritdoc />

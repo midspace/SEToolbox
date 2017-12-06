@@ -419,6 +419,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There have been {0:#,##0} changes made to the selected grids..
+        /// </summary>
+        public static string ClsExplorerGridChangesMade {
+            get {
+                return ResourceManager.GetString("ClsExplorerGridChangesMade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes have been made.
+        /// </summary>
+        public static string ClsExplorerTitleChangesMade {
+            get {
+                return ResourceManager.GetString("ClsExplorerTitleChangesMade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot export InventoryBag currently.
         /// </summary>
         public static string ClsExportInventoryBag {
@@ -5575,6 +5593,24 @@ namespace SEToolbox.Properties {
         public static string WnExplorerMnuSelectionDelete {
             get {
                 return ResourceManager.GetString("WnExplorerMnuSelectionDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inertia Tensor On.
+        /// </summary>
+        public static string WnExplorerMnuSelectionInertiaTensorOn {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuSelectionInertiaTensorOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All selected ship blocks will have all Inertia Tensor turned On.
+        /// </summary>
+        public static string WnExplorerMnuSelectionInertiaTensorOnTooltip {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuSelectionInertiaTensorOnTooltip", resourceCulture);
             }
         }
         

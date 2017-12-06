@@ -923,6 +923,26 @@
             UpdateGeneralFromEntityBase();
         }
 
+        public int SetInertiaTensor(bool state)
+        {
+            int count = 0;
+
+            foreach (MyObjectBuilder_CubeBlock cube in CubeGrid.CubeBlocks)
+            {
+                MyObjectBuilder_MechanicalConnectionBlock mechanicaBlock = cube as MyObjectBuilder_MechanicalConnectionBlock;
+                if (mechanicaBlock != null)
+                {
+                    if (mechanicaBlock.ShareInertiaTensor != state)
+                    {
+                        count++;
+                        mechanicaBlock.ShareInertiaTensor = state;
+                    }
+                }
+            }
+
+            return count;
+        }
+
         public void ReorientStation()
         {
             var pos = CubeGrid.PositionAndOrientation.Value;

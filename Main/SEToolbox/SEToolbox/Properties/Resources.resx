@@ -2793,4 +2793,16 @@ Planet Generator:	{17}</value>
   <data name="DialogSandboxPrefabBinaryFiles" xml:space="preserve">
     <value>Sandbox Prefab Binary files</value>
   </data>
+  <data name="WnExplorerMnuSelectionInertiaTensorOn" xml:space="preserve">
+    <value>Inertia Tensor On</value>
+  </data>
+  <data name="WnExplorerMnuSelectionInertiaTensorOnTooltip" xml:space="preserve">
+    <value>All selected ship blocks will have all Inertia Tensor turned On</value>
+  </data>
+  <data name="ClsExplorerGridChangesMade" xml:space="preserve">
+    <value>There have been {0:#,##0} changes made to the selected grids.</value>
+  </data>
+  <data name="ClsExplorerTitleChangesMade" xml:space="preserve">
+    <value>Changes have been made</value>
+  </data>
 </root>
