@@ -22,20 +22,10 @@
         /// </summary>
         public void LoadDefinitions()
         {
-            bool loading = true;
-            while (loading)
-            {
-                try
-                {
-                    MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
-                    loading = false;
-                }
-                catch (Exception)
-                {
-                    // could be InvalidOperationException,NullReferenceException
-                    Thread.Sleep(1);
-                }
-            }
+            // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
+            // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
+            MyDefinitionManager.Static.PrepareBaseDefinitions();
+            MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
             MaterialIndex = new Dictionary<string, byte>();
         }
 
@@ -46,6 +36,9 @@
 
         public void LoadDefinitionsAndMods(string applicationContentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
         {
+            // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
+            // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
+            MyDefinitionManager.Static.PrepareBaseDefinitions();
             MyDefinitionManager.Static.LoadData(mods.ToList());
             MaterialIndex = new Dictionary<string, byte>();
         }
