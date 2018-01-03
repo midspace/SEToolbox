@@ -208,9 +208,13 @@ namespace SEToolbox.Interop.Asteroids
             {
                 try
                 {
-                    return ZipTools.IsGzipedFile(filename);
-                }
-                catch
+	                using ( FileStream stream = File.Open( filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite ) )
+	                {
+		                return stream.CheckGZipHeader( );
+	                }
+
+				}
+				catch
                 {
                     return false;
                 }
