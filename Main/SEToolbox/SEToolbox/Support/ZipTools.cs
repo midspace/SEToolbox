@@ -4,9 +4,6 @@
 	using System.IO;
     using System.IO.Compression;
 
-	/// <summary>
-    /// Sourced from: https://github.com/icsharpcode/SharpZipLib/wiki/Zip-Samples
-    /// </summary>
     public static class ZipTools
     {
 	    public static void GZipUncompress(string sourceFilename, string destinationFilename)
