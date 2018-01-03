@@ -191,13 +191,12 @@ namespace SEToolbox.Interop.Asteroids
                 {
                     try
                     {
-                        var msgLength1 = stream.ReadByte();
-                        var msgLength2 = stream.ReadByte();
-                        var msgLength3 = stream.ReadByte();
-                        var msgLength4 = stream.ReadByte();
-                        var b1 = stream.ReadByte();
-                        var b2 = stream.ReadByte();
-                        return (b1 == 0x1f && b2 == 0x8b);
+		                short magicNumber = 0;
+	                    unsafe
+	                    {
+		                    stream.ReadNoAlloc( (byte*) &magicNumber, 4, 2 );
+	                    }
+	                    return magicNumber == 0x1f8b;
                     }
                     catch
                     {
