@@ -100,6 +100,6 @@
             <Button Width="90" Command="{Binding CreateCommand}" Content="{lex:Loc WnImportAsteroidBtnCreate}" IsDefault="True"/>
             <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnImportAsteroidBtnCancel}" IsCancel="True"/>
         </StackPanel>
-        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <controls:BusyIndicator Visibility="{Binding IsBusy, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>
