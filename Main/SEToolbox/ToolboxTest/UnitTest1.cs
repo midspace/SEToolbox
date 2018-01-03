@@ -90,15 +90,6 @@
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
         }
 
-        [TestMethod]
-        public void ExtractZipFileToFolder()
-        {
-            const string filename = @".\TestAssets\Sample World.sbw";
-            const string folder = @".\TestOutput\Sample World";
-
-            ZipTools.MakeClearDirectory(folder);
-            ZipTools.ExtractZipFileToDirectory(filename, folder);
-        }
 
         [TestMethod]
         public void ExtractSandboxFromZip()
@@ -154,18 +145,6 @@
             Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
         }
 
-        [TestMethod]
-        public void ExtractZipAndRepack()
-        {
-            const string filename = @".\TestAssets\Sample World.sbw";
-            const string folder = @".\TestOutput\Sample World";
-
-            ZipTools.MakeClearDirectory(folder);
-            ZipTools.ExtractZipFileToDirectory(filename, folder);
-
-            const string newFilename = @".\TestOutput\New World.sbw";
-            ZipTools.ZipFolder(folder, null, newFilename);
-        }
 
         [TestMethod]
         public void SandboxColorTest()
