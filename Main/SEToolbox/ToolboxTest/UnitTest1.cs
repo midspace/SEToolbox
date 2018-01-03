@@ -97,7 +97,7 @@
             const string folder = @".\TestOutput\Sample World";
 
             ZipTools.MakeClearDirectory(folder);
-            ZipTools.ExtractZipFileToDirectory(filename, null, folder);
+            ZipTools.ExtractZipFileToDirectory(filename, folder);
         }
 
         [TestMethod]
@@ -161,7 +161,7 @@
             const string folder = @".\TestOutput\Sample World";
 
             ZipTools.MakeClearDirectory(folder);
-            ZipTools.ExtractZipFileToDirectory(filename, null, folder);
+            ZipTools.ExtractZipFileToDirectory(filename, folder);
 
             const string newFilename = @".\TestOutput\New World.sbw";
             ZipTools.ZipFolder(folder, null, newFilename);

@@ -24,19 +24,15 @@
             Directory.CreateDirectory(folder);
         }
 
-        public static void ExtractZipFileToDirectory(string archiveFilenameIn, string password, string outFolder)
+        public static void ExtractZipFileToDirectory(string archiveFilenameIn, string outFolder)
         {
             ZipFile zf = null;
             try
             {
                 var fs = File.OpenRead(archiveFilenameIn);
                 zf = new ZipFile(fs);
-                if (!String.IsNullOrEmpty(password))
-                {
-                    zf.Password = password;     // AES encrypted entries are handled automatically
-                }
 
-                foreach (ZipEntry zipEntry in zf)
+	            foreach (ZipEntry zipEntry in zf)
                 {
                     if (!zipEntry.IsFile)
                     {
