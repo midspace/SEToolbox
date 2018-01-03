@@ -835,9 +835,7 @@ namespace SEToolbox.Interop.Asteroids
             // Low memory, fast extract.
             using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read))
             {
-                var reader = new BinaryReader(compressedByteStream);
-                // message Length.
-                reader.ReadInt32();
+	            compressedByteStream.Seek( 4, SeekOrigin.Begin );
 
                 if (File.Exists(destinationFilename))
                     File.Delete(destinationFilename);
@@ -859,9 +857,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read))
             {
-                var reader = new BinaryReader(compressedByteStream);
-                // message Length.
-                reader.ReadInt32();
+				compressedByteStream.Seek( 4, SeekOrigin.Begin );
 
                 // GZipStream requires using. Do not optimize the stream.
                 using (var zip = new GZipStream(compressedByteStream, CompressionMode.Decompress))
