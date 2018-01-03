@@ -92,20 +92,6 @@
 
 
         [TestMethod]
-        public void ExtractSandboxFromZip()
-        {
-            const string filename = @".\TestAssets\Sample World.sbw";
-
-            MyObjectBuilder_Checkpoint checkpoint;
-            using (var stream = ZipTools.ExtractZipFileToSteam(filename, null, SpaceEngineersConsts.SandBoxCheckpointFilename))
-            {
-                checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(stream);
-            }
-
-            Assert.AreEqual("Quad Scissor Doors", checkpoint.SessionName, "Checkpoint SessionName must match!");
-        }
-
-        [TestMethod]
         public void ExtractContentFromCompressedSandbox()
         {
             const string filename = @".\TestAssets\SANDBOX_0_0_0_.sbs";
