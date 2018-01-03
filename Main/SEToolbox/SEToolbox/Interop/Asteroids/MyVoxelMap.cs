@@ -187,7 +187,7 @@ namespace SEToolbox.Interop.Asteroids
             var extension = Path.GetExtension(filename);
             if (extension != null && extension.Equals(V1FileExtension, StringComparison.OrdinalIgnoreCase))
             {
-                using (var stream = File.OpenRead(filename))
+                using ( FileStream stream = File.Open( filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite ))
                 {
                     try
                     {
