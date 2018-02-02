@@ -6,7 +6,6 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using Medieval.Definitions; // DX11 voxel material
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Definitions;
     using SEToolbox.Models;
