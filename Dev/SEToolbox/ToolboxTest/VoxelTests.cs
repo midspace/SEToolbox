@@ -706,7 +706,7 @@
                 Radius = 40
             };
 
-            voxelMap.UpdateVoxelShape(OperationType.Fill, sphereShape1, goldMaterial.Index);
+            voxelMap.UpdateVoxelShape(MyVoxelBase.OperationType.Fill, sphereShape1, goldMaterial.Index);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -740,7 +740,7 @@
                 }
             };
 
-            voxelMap.UpdateVoxelShape(OperationType.Cut, sphereBox, 0);
+            voxelMap.UpdateVoxelShape(MyVoxelBase.OperationType.Cut, sphereBox, 0);
             Dictionary<string, long> assetNameCount2 = voxelMap.RefreshAssets();
 
             Assert.AreEqual(0, voxelMap.VoxCells, "Voxel cells must match.");

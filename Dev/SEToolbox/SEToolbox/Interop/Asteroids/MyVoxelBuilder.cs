@@ -247,7 +247,7 @@
                             oldCache.Resize(cacheSize);
                             // LOD1 is not detailed enough for content information on asteroids.
                             Vector3I maxRange = block + cacheSize - 1;
-                            voxelMap.Storage.ReadRange(oldCache, MyStorageDataTypeFlags.ContentAndMaterial, 0, ref block, ref maxRange);
+                            voxelMap.Storage.ReadRange(oldCache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
 
                             Vector3I p;
                             for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
@@ -297,7 +297,7 @@
 
                                     }
 
-                            voxelMap.Storage.WriteRange(oldCache, MyStorageDataTypeFlags.ContentAndMaterial, ref block, ref maxRange);
+                            voxelMap.Storage.WriteRange(oldCache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
                         }
 
                 #endregion
@@ -322,7 +322,7 @@
                             oldCache.Resize(cacheSize);
                             // LOD1 is not detailed enough for content information on asteroids.
                             Vector3I maxRange = block + cacheSize - 1;
-                            voxelMap.Storage.ReadRange(oldCache, MyStorageDataTypeFlags.ContentAndMaterial, 0, ref block, ref maxRange);
+                            voxelMap.Storage.ReadRange(oldCache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
 
                             var task = new Task(obj =>
                             {
@@ -380,7 +380,7 @@
                                 {
                                     var b = bgw.BaseCoords;
                                     Vector3I mr = bgw.BaseCoords + cacheSize - 1;
-                                    voxelMap.Storage.WriteRange(bgw.VoxelCache, MyStorageDataTypeFlags.ContentAndMaterial, ref b, ref mr);
+                                    voxelMap.Storage.WriteRange(bgw.VoxelCache, MyStorageDataTypeFlags.ContentAndMaterial, b, mr);
 
                                     counter += (long)cellSize * cellSize * cellSize;
                                     var prog = Math.Floor(counter / (decimal)counterTotal * 100);

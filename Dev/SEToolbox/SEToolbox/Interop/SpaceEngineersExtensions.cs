@@ -6,7 +6,6 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using Medieval.Definitions; // DX11 voxel material
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Definitions;
     using SEToolbox.Models;
@@ -586,12 +585,12 @@
             return texture;
         }
 
-        public static void GetMaterialContent(this Sandbox.Engine.Voxels.IMyStorage self, ref Vector3I voxelCoords, out byte material, out byte content)
+        public static void GetMaterialContent(this VRage.Game.Voxels.IMyStorage self, ref Vector3I voxelCoords, out byte material, out byte content)
         {
             MyStorageData myStorageData = new MyStorageData(MyStorageDataTypeFlags.ContentAndMaterial);
             myStorageData.Resize(Vector3I.One);
             myStorageData.ClearMaterials(0);
-            self.ReadRange(myStorageData, MyStorageDataTypeFlags.ContentAndMaterial, 0, ref voxelCoords, ref voxelCoords);
+            self.ReadRange(myStorageData, MyStorageDataTypeFlags.ContentAndMaterial, 0, voxelCoords, voxelCoords);
 
             material = myStorageData.Material(0);
             content = myStorageData.Content(0);

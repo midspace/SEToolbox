@@ -8,7 +8,6 @@
     using System.Linq;
     using System.Reflection;
     using System.Web.UI;
-    using Medieval.Definitions;     // DX11 voxel material
     using Sandbox.Definitions;
     using SEToolbox.Converters;
     using SEToolbox.ImageLibrary;
