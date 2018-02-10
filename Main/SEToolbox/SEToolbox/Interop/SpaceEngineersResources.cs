@@ -1,12 +1,9 @@
 ﻿namespace SEToolbox.Interop
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading;
     using Sandbox.Definitions;
     using SEToolbox.Support;
+    using System.Collections.Generic;
+    using System.Linq;
     using VRage.Game;
     using VRage.ObjectBuilders;
 

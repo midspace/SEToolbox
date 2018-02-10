@@ -26,7 +26,7 @@
         /// This is the file extension added to the normal filename for Sanbox files, changing the ".sbs" to ".sbsPB"
         /// </summary>
         public const string ProtobuffersExtension = "PB";
-        
+
         // Current set max speed m/s for Ships.
         public const float MaxShipVelocity = 104.375f;
 

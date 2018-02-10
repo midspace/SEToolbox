@@ -59,20 +59,11 @@
 
         #region Properties
 
-        public ICommand BrowseVoxelCommand
-        {
-            get { return new DelegateCommand(BrowseVoxelExecuted, BrowseVoxelCanExecute); }
-        }
+        public ICommand BrowseVoxelCommand => new DelegateCommand(BrowseVoxelExecuted, BrowseVoxelCanExecute);
 
-        public ICommand CreateCommand
-        {
-            get { return new DelegateCommand(CreateExecuted, CreateCanExecute); }
-        }
+        public ICommand CreateCommand => new DelegateCommand(CreateExecuted, CreateCanExecute);
 
-        public ICommand CancelCommand
-        {
-            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
-        }
+        public ICommand CancelCommand => new DelegateCommand(CancelExecuted, CancelCanExecute);
 
         /// <summary>
         /// Gets or sets the DialogResult of the View.  If True or False is passed, this initiates the Close().
