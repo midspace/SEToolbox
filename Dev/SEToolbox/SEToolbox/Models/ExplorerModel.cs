@@ -510,21 +510,28 @@
 
         public void SaveEntity(MyObjectBuilder_EntityBase entity, string filename)
         {
-            if (entity is MyObjectBuilder_CubeGrid)
+            bool isBinaryFile = ((Path.GetExtension(filename) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase));
+
+            if (isBinaryFile)
+                SpaceEngineersApi.WriteSpaceEngineersFilePB(entity, filename, false);
+            else
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_CubeGrid)entity, filename);
-            }
-            else if (entity is MyObjectBuilder_Character)
-            {
-                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Character)entity, filename);
-            }
-            else if (entity is MyObjectBuilder_FloatingObject)
-            {
-                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_FloatingObject)entity, filename);
-            }
-            else if (entity is MyObjectBuilder_Meteor)
-            {
-                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Meteor)entity, filename);
+                if (entity is MyObjectBuilder_CubeGrid)
+                {
+                    SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_CubeGrid)entity, filename);
+                }
+                else if (entity is MyObjectBuilder_Character)
+                {
+                    SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Character)entity, filename);
+                }
+                else if (entity is MyObjectBuilder_FloatingObject)
+                {
+                    SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_FloatingObject)entity, filename);
+                }
+                else if (entity is MyObjectBuilder_Meteor)
+                {
+                    SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Meteor)entity, filename);
+                }
             }
         }
 
@@ -543,11 +550,11 @@
                 MyObjectBuilder_Character characterEntity;
                 MyObjectBuilder_Definitions prefabDefinitions;
 
-                if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed))
+                if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed, false, true))
                 {
                     MergeData(cubeEntity, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed, false, true))
                 {
                     if (prefabDefinitions.Prefabs != null)
                     {
@@ -565,17 +572,17 @@
                         }
                     }
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out floatingEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out floatingEntity, out isCompressed, false, true))
                 {
                     var newEntity = AddEntity(floatingEntity);
                     newEntity.EntityId = MergeId(floatingEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out meteorEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out meteorEntity, out isCompressed, false, true))
                 {
                     var newEntity = AddEntity(meteorEntity);
                     newEntity.EntityId = MergeId(meteorEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out characterEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out characterEntity, out isCompressed, false, true))
                 {
                     var newEntity = AddEntity(characterEntity);
                     newEntity.EntityId = MergeId(characterEntity.EntityId, ref idReplacementTable);

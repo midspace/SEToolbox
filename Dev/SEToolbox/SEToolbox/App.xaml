@@ -9,6 +9,9 @@
              Startup="OnStartup" Exit="OnExit" DispatcherUnhandledException="OnDispatcherUnhandledException">
     <Application.Resources>
 
+        <sys:Boolean x:Key="True">True</sys:Boolean>
+        <sys:Boolean x:Key="False">False</sys:Boolean>
+
         <DataTemplate x:Key="HeaderTemplateArrowUp">
             <DockPanel>
                 <TextBlock HorizontalAlignment="Center" Text="{Binding}"/>

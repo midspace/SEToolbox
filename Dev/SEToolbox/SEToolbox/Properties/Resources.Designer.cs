@@ -419,6 +419,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There have been {0:#,##0} changes made to the selected grids..
+        /// </summary>
+        public static string ClsExplorerGridChangesMade {
+            get {
+                return ResourceManager.GetString("ClsExplorerGridChangesMade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes have been made.
+        /// </summary>
+        public static string ClsExplorerTitleChangesMade {
+            get {
+                return ResourceManager.GetString("ClsExplorerTitleChangesMade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot export InventoryBag currently.
         /// </summary>
         public static string ClsExportInventoryBag {
@@ -3317,6 +3335,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sandbox Binary Content files.
+        /// </summary>
+        public static string DialogSandboxBinaryContentFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxBinaryContentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sandbox Content files.
         /// </summary>
         public static string DialogSandboxContentFiles {
@@ -3326,7 +3353,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Space Engineers Sandbox.
+        ///   Looks up a localized string similar to Space Engineers Sandbox files.
         /// </summary>
         public static string DialogSandboxFiles {
             get {
@@ -3335,11 +3362,29 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sandbox Prefab files.
+        ///   Looks up a localized string similar to Sandbox Prefab Binary files.
         /// </summary>
-        public static string DialogSandboxPrefabFiles {
+        public static string DialogSandboxPrefabBinaryFiles {
             get {
-                return ResourceManager.GetString("DialogSandboxPrefabFiles", resourceCulture);
+                return ResourceManager.GetString("DialogSandboxPrefabBinaryFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sandbox Prefab Xml files.
+        /// </summary>
+        public static string DialogSandboxPrefabXmlFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxPrefabXmlFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sandbox Xml Content files.
+        /// </summary>
+        public static string DialogSandboxXmlContentFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxXmlContentFiles", resourceCulture);
             }
         }
         
@@ -5548,6 +5593,24 @@ namespace SEToolbox.Properties {
         public static string WnExplorerMnuSelectionDelete {
             get {
                 return ResourceManager.GetString("WnExplorerMnuSelectionDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inertia Tensor On.
+        /// </summary>
+        public static string WnExplorerMnuSelectionInertiaTensorOn {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuSelectionInertiaTensorOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All selected ship blocks will have all Inertia Tensor turned On.
+        /// </summary>
+        public static string WnExplorerMnuSelectionInertiaTensorOnTooltip {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuSelectionInertiaTensorOnTooltip", resourceCulture);
             }
         }
         

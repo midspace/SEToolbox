@@ -1,9 +1,9 @@
 ﻿namespace SEToolbox.Interop
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Sandbox.Definitions;
     using SEToolbox.Support;
+    using System.Collections.Generic;
+    using System.Linq;
     using VRage.Game;
     using VRage.ObjectBuilders;
 
@@ -19,6 +19,9 @@
         /// </summary>
         public void LoadDefinitions()
         {
+            // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
+            // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
+            MyDefinitionManager.Static.PrepareBaseDefinitions();
             MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
             MaterialIndex = new Dictionary<string, byte>();
         }
@@ -30,6 +33,9 @@
 
         public void LoadDefinitionsAndMods(string applicationContentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
         {
+            // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
+            // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
+            MyDefinitionManager.Static.PrepareBaseDefinitions();
             MyDefinitionManager.Static.LoadData(mods.ToList());
             MaterialIndex = new Dictionary<string, byte>();
         }

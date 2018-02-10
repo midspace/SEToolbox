@@ -60,6 +60,6 @@
                 <Button Grid.Column="3" Width="90" Command="{Binding CloseCommand}" Content="{lex:Loc WnResourceReportBtnClose}" HorizontalAlignment="Right" IsCancel="True"/>
             </Grid>
         </Grid>
-        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <controls:BusyIndicator Visibility="{Binding IsBusy, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

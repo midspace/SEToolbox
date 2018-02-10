@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mid-Space Productions")]
 [assembly: AssemblyProduct("SEToolbox")]
-[assembly: AssemblyCopyright("Copyright © MidSpace 2013-2017")]
+[assembly: AssemblyCopyright("Copyright © MidSpace 2013-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -54,5 +54,5 @@ using System.Windows;
 // First 3 numbers to match the current Space Engineers release.
 // http://forums.keenswh.com/post/about-change-log-6578819
 // Forth number to indicate my own build of SEToolbox to match. Remember to reset it back to 1 every time there is a new release of SpaceEngineers.
-[assembly: AssemblyFileVersion("01.183.300.6")]
+[assembly: AssemblyFileVersion("01.186.29.0")]
 

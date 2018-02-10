@@ -1,5 +1,13 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
+    using SEToolbox.Views;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -15,20 +23,12 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Shell;
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
-    using SEToolbox.Views;
-    using Res = SEToolbox.Properties.Resources;
     using VRage;
     using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
     using WPFLocalizeExtension.Engine;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ExplorerViewModel : BaseViewModel, IDropable, IMainView
     {
@@ -188,6 +188,8 @@
         public ICommand ConvertToShipCommand => new DelegateCommand(ConvertToShipExecuted, ConvertToShipCanExecute);
 
         public ICommand ConvertToStationCommand => new DelegateCommand(ConvertToStationExecuted, ConvertToStationCanExecute);
+
+        public ICommand InertiaTensorOnCommand => new DelegateCommand<bool>(InertiaTensorExecuted, InertiaTensorCanExecute);
 
         #endregion
 
@@ -1069,6 +1071,24 @@
             IsBusy = false;
         }
 
+        public bool InertiaTensorCanExecute(bool state)
+        {
+            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+        }
+
+        public void InertiaTensorExecuted(bool state)
+        {
+            IsBusy = true;
+            int count = SetInertiaTensor(Selections, true);
+            IsBusy = false;
+
+            _dialogService.ShowMessageBox(this, 
+                string.Format(Res.ClsExplorerGridChangesMade, count), 
+                Res.ClsExplorerTitleChangesMade, 
+                System.Windows.MessageBoxButton.OK, 
+                System.Windows.MessageBoxImage.Information);
+        }
+
         #endregion
 
         #region Test command methods
@@ -1388,6 +1408,20 @@
             }
         }
 
+        private int SetInertiaTensor(IEnumerable<IStructureViewBase> structures, bool state)
+        {
+            int count = 0;
+            foreach (var structure in structures)
+            {
+                if (structure.DataModel.ClassType == ClassType.SmallShip
+                    || structure.DataModel.ClassType == ClassType.LargeShip)
+                {
+                    count += ((StructureCubeGridViewModel)structure).SetInertiaTensor(state);
+                }
+            }
+            return count;
+        }
+
         /// <inheritdoc />
         public string CreateUniqueVoxelStorageName(string originalFile)
         {
@@ -1407,7 +1441,7 @@
         public void ImportSandboxObjectFromFile()
         {
             var openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = AppConstants.SandboxObjectFilter;
+            openFileDialog.Filter = AppConstants.SandboxObjectImportFilter;
             openFileDialog.Title = Res.DialogImportSandboxObjectTitle;
             openFileDialog.Multiselect = true;
 
@@ -1434,7 +1468,7 @@
                     var structure = (StructureCharacterViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectExportFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.Description);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1470,7 +1504,7 @@
                     var structure = (StructureFloatingObjectViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectExportFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1485,7 +1519,7 @@
                     var structure = (StructureMeteorViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectExportFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1501,7 +1535,7 @@
 
                     var partname = string.IsNullOrEmpty(structure.DisplayName) ? structure.EntityId.ToString() : structure.DisplayName.Replace("|", "_").Replace("\\", "_").Replace("/", "_");
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectExportFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, partname);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, partname);
                     saveFileDialog.OverwritePrompt = true;
@@ -1561,6 +1595,8 @@
 
             if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
             {
+                bool isBinaryFile = ((Path.GetExtension(saveFileDialog.FileName) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase));
+
                 var definition = new MyObjectBuilder_Definitions();
                 definition.Prefabs = new MyObjectBuilder_PrefabDefinition[1];
                 MyObjectBuilder_PrefabDefinition prefab;
@@ -1602,7 +1638,10 @@
                 prefab.CubeGrids = grids.ToArray();
                 definition.Prefabs[0] = prefab;
 
-                SpaceEngineersApi.WriteSpaceEngineersFile(definition, saveFileDialog.FileName);
+                if (isBinaryFile)
+                    SpaceEngineersApi.WriteSpaceEngineersFilePB(definition, saveFileDialog.FileName, false);
+                else
+                    SpaceEngineersApi.WriteSpaceEngineersFile(definition, saveFileDialog.FileName);
             }
         }
 
@@ -1648,6 +1687,7 @@
             {
                 string name = Path.GetFileNameWithoutExtension(saveFileDialog.FileName);
                 string directory = Path.GetDirectoryName(saveFileDialog.FileName);
+                bool isBinaryFile = ((Path.GetExtension(saveFileDialog.FileName) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase));
 
                 var prefabDefinition = new MyObjectBuilder_Definitions();
                 prefabDefinition.Prefabs = new MyObjectBuilder_PrefabDefinition[1];
@@ -1779,7 +1819,10 @@
 
                     if (hasVoxels)
                         spawngroup.Prefabs[0].PlaceToGridOrigin = true;
-                    SpaceEngineersApi.WriteSpaceEngineersFile(prefabDefinition, saveFileDialog.FileName);
+                    if (isBinaryFile)
+                        SpaceEngineersApi.WriteSpaceEngineersFilePB(prefabDefinition, saveFileDialog.FileName, false);
+                    else
+                        SpaceEngineersApi.WriteSpaceEngineersFile(prefabDefinition, saveFileDialog.FileName);
                 }
 
                 spawngroupDefinition.SpawnGroups[0] = spawngroup;

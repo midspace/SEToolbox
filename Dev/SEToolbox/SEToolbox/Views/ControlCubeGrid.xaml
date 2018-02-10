@@ -469,11 +469,15 @@
                                 <!--<TabItem Header="Controls">
                                     --><!-- TODO: Property Editor? --><!--
                                 </TabItem>-->
-                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[0].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[0]}" />
+                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[0].Name, FallbackValue={x:Null}}" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+                                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Visibility="{Binding Path=SelectedCubeItem.Inventory[0].IsValid, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+                                        <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[0]}" />
+                                    </DockPanel>
                                 </TabItem>
-                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[1].Name}" Visibility="{Binding Path=SelectedCubeItem.Inventory[1].IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[1]}" />
+                                <TabItem Header="{Binding Path=SelectedCubeItem.Inventory[1].Name, FallbackValue={x:Null}}" Visibility="{Binding Path=SelectedCubeItem.Inventory[1].IsValid, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+                                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto"  Visibility="{Binding Path=SelectedCubeItem.Inventory[1].IsValid, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+                                        <views:ControlInventory DataContext="{Binding Path=SelectedCubeItem.Inventory[1]}" />
+                                    </DockPanel>
                                 </TabItem>
                             </TabControl>
                             <StackPanel Grid.Row="2">
@@ -726,6 +730,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <controls:BusyIndicator Visibility="{Binding IsBusy, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

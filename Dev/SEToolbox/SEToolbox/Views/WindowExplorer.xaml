@@ -189,6 +189,7 @@
                     </MenuItem>
                     <MenuItem Header="{lex:Loc WnExplorerMnuSelectionConvertToShip}" Command="{Binding ConvertToShipCommand}" ToolTip="{lex:Loc WnExplorerMnuSelectionConvertToShipTooltip}"/>
                     <MenuItem Header="{lex:Loc WnExplorerMnuSelectionConvertToStation}" Command="{Binding ConvertToStationCommand}" ToolTip="{lex:Loc WnExplorerMnuSelectionConvertToStationTooltip}"/>
+                    <MenuItem Header="{lex:Loc WnExplorerMnuSelectionInertiaTensorOn}" Command="{Binding InertiaTensorOnCommand}" CommandParameter="{StaticResource True}" ToolTip="{lex:Loc WnExplorerMnuSelectionInertiaTensorOnTooltip}"/>
                     <Separator/>
                     <MenuItem Command="{Binding VoxelMergeCommand}" Header="{lex:Loc WnExplorerMnuSelectionMergeAsteroid}" ToolTip="{lex:Loc WnExplorerMnuSelectionMergeAsteroidTooltip}">
                         <MenuItem.Icon>
@@ -497,6 +498,6 @@
                 </Grid>
             </Grid>
         </DockPanel>
-        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <controls:BusyIndicator Visibility="{Binding IsBusy, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

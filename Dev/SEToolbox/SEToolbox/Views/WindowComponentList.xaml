@@ -225,6 +225,6 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <controls:BusyIndicator Visibility="{Binding IsBusy, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

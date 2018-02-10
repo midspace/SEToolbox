@@ -570,7 +570,7 @@ Please specify the location of the Space Engineers Application file.</value>
     <value>..\Resources\flag_usa.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DialogSandboxFiles" xml:space="preserve">
-    <value>Space Engineers Sandbox</value>
+    <value>Space Engineers Sandbox files</value>
   </data>
   <data name="DialogLocateSandboxTitle" xml:space="preserve">
     <value>Specify location of Space Engineers save game</value>
@@ -666,8 +666,8 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="VoxelMergeType_UnionVolumeRightToLeft" xml:space="preserve">
     <value>Union Volume Right to Left</value>
   </data>
-  <data name="DialogSandboxPrefabFiles" xml:space="preserve">
-    <value>Sandbox Prefab files</value>
+  <data name="DialogSandboxPrefabXmlFiles" xml:space="preserve">
+    <value>Sandbox Prefab Xml files</value>
   </data>
   <data name="DialogExportPrefabObjectTitle" xml:space="preserve">
     <value>Specify filename to export Prefab to (name is embded into files)</value>
@@ -2783,5 +2783,26 @@ Planet Generator:	{17}</value>
   </data>
   <data name="DialogExportSpawnGroupObjectTitle" xml:space="preserve">
     <value>Specify filename to export SpawnGroup to (name is embded into files)</value>
+  </data>
+  <data name="DialogSandboxBinaryContentFiles" xml:space="preserve">
+    <value>Sandbox Binary Content files</value>
+  </data>
+  <data name="DialogSandboxXmlContentFiles" xml:space="preserve">
+    <value>Sandbox Xml Content files</value>
+  </data>
+  <data name="DialogSandboxPrefabBinaryFiles" xml:space="preserve">
+    <value>Sandbox Prefab Binary files</value>
+  </data>
+  <data name="WnExplorerMnuSelectionInertiaTensorOn" xml:space="preserve">
+    <value>Inertia Tensor On</value>
+  </data>
+  <data name="WnExplorerMnuSelectionInertiaTensorOnTooltip" xml:space="preserve">
+    <value>All selected ship blocks will have all Inertia Tensor turned On</value>
+  </data>
+  <data name="ClsExplorerGridChangesMade" xml:space="preserve">
+    <value>There have been {0:#,##0} changes made to the selected grids.</value>
+  </data>
+  <data name="ClsExplorerTitleChangesMade" xml:space="preserve">
+    <value>Changes have been made</value>
   </data>
 </root>

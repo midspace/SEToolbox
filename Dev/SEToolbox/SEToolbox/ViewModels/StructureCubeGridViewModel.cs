@@ -498,6 +498,14 @@
             MainViewModel.IsModified = true;
         }
 
+        public int SetInertiaTensor(bool state)
+        {
+            int count = DataModel.SetInertiaTensor(state);
+            if (count > 0)
+                MainViewModel.IsModified = true;
+            return count;
+        }
+
         public bool ReorientStationCanExecute()
         {
             return true;
