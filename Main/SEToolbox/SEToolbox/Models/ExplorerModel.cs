@@ -311,7 +311,7 @@
                     _customColors = new List<int>();
                     foreach (Vector3 hsv in ActiveWorld.Checkpoint.CharacterToolbar.ColorMaskHSVList)
                     {
-                        var rgb = ((SerializableVector3)hsv).ToSandboxDrawingColor();
+                        var rgb = ((SerializableVector3)hsv).FromHsvMaskToPaletteColor();
                         _customColors.Add(((rgb.B << 0x10) | (rgb.G << 8) | rgb.R) & 0xffffff);
                     }
                 }

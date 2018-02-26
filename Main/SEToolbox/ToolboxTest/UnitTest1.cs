@@ -183,13 +183,13 @@
             var hsvList = new List<SerializableVector3>();
             foreach (var color in colors)
             {
-                hsvList.Add(color.ToSandboxHsvColor());
+                hsvList.Add(color.FromPaletteColorToHsvMask());
             }
 
             var rgbList = new List<Color>();
             foreach (var hsv in hsvList)
             {
-                rgbList.Add(hsv.ToSandboxDrawingColor());
+                rgbList.Add(hsv.FromHsvMaskToPaletteColor());
             }
 
             var rgbArray = rgbList.ToArray();
@@ -228,6 +228,44 @@
             Assert.AreEqual(rgb3.R, c3.R, "Red Should Equal");
             Assert.AreEqual(rgb3.B, c3.B, "Blue Should Equal");
             Assert.AreEqual(rgb3.G, c3.G, "Green Should Equal");
+        }
+
+        [TestMethod]
+        public void VRageHSVColorTest()
+        {
+            // hue Slider is 0~360. Stored as 0~1.
+            // saturation Slider is 0~1. Stored as -1~1.
+            // value Slider is 0~1. Stored as -1~1.
+
+            var hsvColors = new Dictionary<string, SerializableVector3>
+            {
+                {"test range 1", new SerializableVector3(0, -1, -1)},
+                {"test range 2", new SerializableVector3(0.5f, 0, 0)},
+                {"test range 3", new SerializableVector3(1, 1, 1)},
+                {"INGAME dark red", new SerializableVector3(0f,0f,0.05f)},
+                {"INGAME dark green", new SerializableVector3(0.333333343f,-0.48f,-0.25f)},
+                {"INGAME dark blue", new SerializableVector3(0.575f,0f,0f)},
+                {"INGAME dark yellow", new SerializableVector3(0.122222222f,-0.1f,0.26f)},
+                {"INGAME dark white", new SerializableVector3(0f,-0.8f,0.4f)},
+                {"INGAME black", new SerializableVector3(0f,-0.96f,-0.5f)},
+                {"INGAME light gray", new SerializableVector3(0f,-0.85f,0.2f)},
+                {"INGAME light red", new SerializableVector3(0f,0.15f,0.25f)},
+                {"INGAME light green", new SerializableVector3(0.333333343f,-0.33f,-0.05f)},
+                {"INGAME light blue", new SerializableVector3(0.575f,0.15f,0.2f)},
+                {"INGAME light yellow", new SerializableVector3(0.122222222f,0.05f,0.46f)},
+                {"INGAME white", new SerializableVector3(0f,-0.8f,0.6f)},
+                {"INGAME dark dark gray", new SerializableVector3(0f,-0.81f,-0.13f)},
+            };
+
+            foreach(var kvp in hsvColors)
+            {
+                string name = kvp.Key;
+                SerializableVector3 storedHsv = kvp.Value;
+                System.Drawing.Color myColor1 = storedHsv.FromHsvMaskToPaletteColor();
+                SerializableVector3 newHsv = myColor1.FromPaletteColorToHsvMask();
+                System.Drawing.Color myColor2 = ((SerializableVector3)newHsv).FromHsvMaskToPaletteColor();
+                Assert.AreEqual(myColor1, myColor2, $"Color '{name}' Should Equal");
+            }
         }
 
         [TestMethod]
