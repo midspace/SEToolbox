@@ -698,7 +698,10 @@
                         {
                             TimeSpan ingotTime;
                             SpaceEngineersApi.AccumulateCubeBlueprintRequirements(kvp.Value.SubtypeId, kvp.Value.Id.TypeId, kvp.Value.Amount, oreRequirements, out ingotTime);
-                            var cd = (MyPhysicalItemDefinition)MyDefinitionManager.Static.GetDefinition(kvp.Value.Id);
+                            MyDefinitionBase mydb = MyDefinitionManager.Static.GetDefinition(kvp.Value.Id);
+                            if (mydb.Id.TypeId.IsNull)
+                                continue;
+                            var cd = (MyPhysicalItemDefinition)mydb;
                             var componentTexture = SpaceEngineersCore.GetDataPathOrDefault(cd.Icons.First(), Path.Combine(contentPath, cd.Icons.First()));
                             var volume = (double)kvp.Value.Amount * cd.Volume * SpaceEngineersConsts.VolumeMultiplyer;
                             var ingotAsset = new OreAssetModel { Name = cd.DisplayNameText, Amount = kvp.Value.Amount, Mass = (double)kvp.Value.Amount * cd.Mass, Volume = volume, Time = ingotTime, TextureFile = componentTexture };
