@@ -697,10 +697,16 @@
             var defaultMaterial = mappedMesh[0].Material; // Use the FaceMaterial from the first Mesh in the object list.
             var faceMaterial = mappedMesh[0].FaceMaterial; // Use the FaceMaterial from the first Mesh in the object list.
 
-            var action = (Action<MyVoxelBuilderArgs>)delegate(MyVoxelBuilderArgs e)
+            var action = (Action<MyVoxelBuilderArgs>)delegate (MyVoxelBuilderArgs e)
             {
-                e.Volume = finalCubic[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z];
-                e.Material = SpaceEngineersCore.Resources.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
+                // the model is only shaped according to it's volumne, not the voxel which is cubic.
+                if (e.CoordinatePoint.X < xCount &&
+                    e.CoordinatePoint.Y < yCount &&
+                    e.CoordinatePoint.Z < zCount)
+                {
+                    e.Volume = finalCubic[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z];
+                    e.Material = SpaceEngineersCore.Resources.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
+                }
             };
 
             var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, defaultMaterial, faceMaterial, action);

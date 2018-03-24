@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.Support
 {
     using System;
+    using System.Linq;
     using System.Reflection;
     using System.Reflection.Emit;
     using System.Runtime.CompilerServices;
@@ -145,6 +146,30 @@
         {
             FieldInfo field = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             return (T)field.GetValue(null);
+        }
+
+        public static object CreateInstance(Type type)
+        {
+            var ctor = type.GetConstructors().First();
+
+            var parameters =
+                from parameter in ctor.GetParameters()
+                select CreateInstance(parameter.ParameterType);
+
+            return Activator.CreateInstance(type, parameters.ToArray());
+        }
+
+        public static void ConstructField(object obj, string fieldName)
+        {
+            if (obj == null)
+                return;
+            Type objectType = obj.GetType();
+            FieldInfo field = objectType.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            if (field == null)
+                return;
+
+            object val = CreateInstance(field.FieldType);
+            field.SetValue(obj, val);
         }
     }
 }

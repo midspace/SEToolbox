@@ -1390,7 +1390,7 @@ namespace SEToolbox.Interop.Asteroids
             var cacheSize = new Vector3I(_storage.Size.X >> 3);
             var cache = new MyStorageData();
             cache.Resize(cacheSize);
-            _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 3, Vector3I.Zero, cacheSize);
+            _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 3, Vector3I.Zero, cacheSize - 1);
 
             var writebufferSize = new Vector3I(8);
             var writebuffer = new MyStorageData();
@@ -1443,7 +1443,7 @@ namespace SEToolbox.Interop.Asteroids
                 {
                     for (curThickness = 0, dataCell.Y = 0; dataCell.Y < cacheSize.Y - 1; dataCell.Y++)
                     {
-                        Vector3I nextCell = dataCell + new Vector3I(0, 0, 1);
+                        Vector3I nextCell = dataCell + new Vector3I(0, 1, 0);
                         if (cache.Content(ref dataCell) != 0 && cache.Content(ref nextCell) != 0)
                         {
                             Vector3I bufferPosition = new Vector3I(dataCell.X << 3, dataCell.Y << 3, dataCell.Z << 3);
@@ -1458,7 +1458,7 @@ namespace SEToolbox.Interop.Asteroids
                     }
                     for (curThickness = 0, dataCell.Y = cacheSize.Y - 1; dataCell.Y > 0; dataCell.Y--)
                     {
-                        Vector3I nextCell = dataCell + new Vector3I(0, 0, -1);
+                        Vector3I nextCell = dataCell + new Vector3I(0, -1, 0);
                         if (cache.Content(ref dataCell) != 0 && cache.Content(ref nextCell) != 0)
                         {
                             Vector3I bufferPosition = new Vector3I(dataCell.X << 3, dataCell.Y << 3, dataCell.Z << 3);

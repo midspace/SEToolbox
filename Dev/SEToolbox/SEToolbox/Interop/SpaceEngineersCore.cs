@@ -75,6 +75,9 @@
 
                 // Assign the instance back to the static.
                 Sandbox.Game.World.MySession.Static = (Sandbox.Game.World.MySession)mySession;
+
+                ReflectionUtil.ConstructField(Sandbox.Game.World.MySession.Static, "m_sessionComponents"); // Required as the above code doesn't populate is during ctor of MySession.
+
                 Sandbox.Game.World.MySession.Static.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
             }
             catch (Exception ex)
