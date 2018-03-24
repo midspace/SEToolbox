@@ -216,7 +216,7 @@
 
             if (bp != null && bp.Results != null && bp.Results.Length > 0)
             {
-                foreach (var item in bp.Prerequisites)
+                foreach (MyBlueprintDefinitionBase.Item item in bp.Prerequisites)
                 {
                     if (requirements.ContainsKey(item.Id.SubtypeName))
                     {
@@ -249,8 +249,8 @@
 
         public static MyBlueprintDefinitionBase GetBlueprint(MyObjectBuilderType resultTypeId, string resultSubTypeId)
         {
-            var bpList = SpaceEngineersCore.Resources.BlueprintDefinitions.Where(b => b.Results != null && b.Results.Any(r => r.Id.TypeId == resultTypeId && r.Id.SubtypeName == resultSubTypeId));
-            return bpList.FirstOrDefault();
+            // Get 'Last' item. Matches SE logic, which uese an array structure, and overrides previous found items of the same result.
+            return SpaceEngineersCore.Resources.BlueprintDefinitions.LastOrDefault(b => b.Results != null && b.Results.Length == 1 && b.Results.Any(r => r.Id.TypeId == resultTypeId && r.Id.SubtypeName == resultSubTypeId));
         }
 
         #endregion

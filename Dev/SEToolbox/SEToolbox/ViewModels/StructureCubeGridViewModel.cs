@@ -971,7 +971,7 @@
                 {
                     MainViewModel.Progress++;
                     if (colorDialog.DrawingColor.HasValue)
-                        cube.UpdateColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
+                        cube.UpdateColor(colorDialog.DrawingColor.Value.FromPaletteColorToHsvMask());
                 }
 
                 MainViewModel.ClearProgress();

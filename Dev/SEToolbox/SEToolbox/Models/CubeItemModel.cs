@@ -320,7 +320,7 @@
 
         public void SetColor(SerializableVector3 vector3)
         {
-            Color = new System.Windows.Media.SolidColorBrush(vector3.ToSandboxMediaColor());
+            Color = new System.Windows.Media.SolidColorBrush(vector3.FromHsvMaskToPaletteMediaColor());
             ColorText = Color.ToString();
             ColorHue = vector3.X;
             ColorSaturation = vector3.Y;

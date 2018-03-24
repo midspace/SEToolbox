@@ -270,53 +270,150 @@
         public static SerializableVector3 RoundToAxis(this SerializableVector3 vector)
         {
             if (Math.Abs(vector.X) > Math.Abs(vector.Y) && Math.Abs(vector.X) > Math.Abs(vector.Z))
-            {
                 return new SerializableVector3(Math.Sign(vector.X), 0, 0);
-            }
 
             if (Math.Abs(vector.Y) > Math.Abs(vector.X) && Math.Abs(vector.Y) > Math.Abs(vector.Z))
-            {
                 return new SerializableVector3(0, Math.Sign(vector.Y), 0);
-            }
 
             if (Math.Abs(vector.Z) > Math.Abs(vector.X) && Math.Abs(vector.Z) > Math.Abs(vector.Y))
-            {
                 return new SerializableVector3(0, 0, Math.Sign(vector.Z));
-            }
 
             return new SerializableVector3();
         }
 
-        // SerializableVector3 stores Color HSV in the range of H=X=0.0 to +1.0, S=Y=-1.0 to +1.0, V=Z=-1.0 to +1.0
-
-        public static System.Drawing.Color ToSandboxDrawingColor(this SerializableVector3 hsv)
+        private static decimal Clamp(decimal value, decimal min, decimal max)
         {
-            var vColor = ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
-            return System.Drawing.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+            value = (value > max) ? max : value;
+            value = (value < min) ? min : value;
+            return value;
         }
 
-        public static System.Windows.Media.Color ToSandboxMediaColor(this SerializableVector3 hsv)
+        /// <summary>
+        /// Converts from Keen's HSV stored format to RGB matching the in game color picker palatte.
+        /// </summary>
+        /// <param name="hsv">the HSV stored value in the range of Hue=X=0.0 to +1.0, Saturation=Y=-1.0 to +1.0, Value=Z=-1.0 to +1.0</param>
+        /// <param name="red">converted red value</param>
+        /// <param name="green">converted green value</param>
+        /// <param name="blue">converted blue value</param>
+        /// <remarks>sourced from wikipedia.</remarks>
+        private static void FromHsvMaskToPaletteColor(SerializableVector3 hsv, out int red, out int green, out int blue)
         {
-            var vColor = ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
-            return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+            // I've used decimal because of floating point aberation during calculations.
+            // This needs to maintain the color accuracy as much as possible.
+            // I'm still not happy with this, as the game color palette picker is not exactly representative of the in game colors, 
+            // and looking through the calculations, the picker is actually ignoring part of the saturation and value.
+            decimal hue = (decimal)hsv.X * 360;
+            decimal saturation = Clamp((decimal)hsv.Y + (decimal)MyColorPickerConstants.SATURATION_DELTA, 0, 1);
+            decimal value = Clamp((decimal)hsv.Z + (decimal)MyColorPickerConstants.VALUE_DELTA - (decimal)MyColorPickerConstants.VALUE_COLORIZE_DELTA, 0, 1);
+
+            decimal chroma = value * saturation;
+            decimal hue1 = hue / 60;
+            decimal x = chroma * (1 - Math.Abs(hue1 % 2 - 1));
+            decimal r1 = 0;
+            decimal g1 = 0;
+            decimal b1 = 0;
+
+            if (hue1 < 0)
+            {
+                // nothing. Need to ignore values less than zero.
+            }
+            else if (hue1 <= 1)
+            {
+                r1 = chroma;
+                g1 = x;
+            }
+            else if (hue1 <= 2)
+            {
+                r1 = x;
+                g1 = chroma;
+            }
+            else if (hue1 <= 3)
+            {
+                g1 = chroma;
+                b1 = x;
+            }
+            else if (hue1 <= 4)
+            {
+                g1 = x;
+                b1 = chroma;
+            }
+            else if (hue1 <= 5)
+            {
+                r1 = x;
+                b1 = chroma;
+            }
+            else if (hue1 <= 6)
+            {
+                r1 = chroma;
+                b1 = x;
+            }
+
+            decimal m = value - chroma;
+
+            // Need to round off (not up or truncate down) values to correct for aberration.
+            red = (int)Math.Round((r1 + m) * 255);
+            green = (int)Math.Round((g1 + m) * 255);
+            blue = (int)Math.Round((b1 + m) * 255);
         }
 
-        public static System.Windows.Media.Color ToSandboxMediaColor(this Vector3 rgb)
+        public static System.Drawing.Color FromHsvMaskToPaletteColor(this SerializableVector3 hsv)
         {
-            var vColor = new Color(rgb);
-            return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+            int r, g, b;
+            FromHsvMaskToPaletteColor(hsv, out r, out g, out b);
+            return System.Drawing.Color.FromArgb(r, g, b);
         }
 
-        public static SerializableVector3 ToSandboxHsvColor(this System.Drawing.Color color)
+        public static System.Windows.Media.Color FromHsvMaskToPaletteMediaColor(this SerializableVector3 hsv)
         {
-            var vColor = ColorExtensions.ColorToHSV(new Color(color.R, color.G, color.B));
-            return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
+            int r, g, b;
+            FromHsvMaskToPaletteColor(hsv, out r, out g, out b);
+            return System.Windows.Media.Color.FromArgb(255, (byte)r, (byte)g, (byte)b);
         }
 
-        public static SerializableVector3 ToSandboxHsvColor(this System.Windows.Media.Color color)
+        /// <summary>
+        /// Converts from RGB matching the in game color picker palatte, to Keen's HSV stored format.
+        /// </summary>
+        /// <param name="r">the System RGB color</param>
+        /// <param name="g">the System RGB color</param>
+        /// <param name="b">the System RGB color</param>
+        /// <returns>the HSV stored value.</returns>
+        /// <remarks>sourced from wikipedia</remarks>
+        private static SerializableVector3 FromPaletteColorToHsvMask(decimal r, decimal g, decimal b)
         {
-            var vColor = ColorExtensions.ColorToHSV(new Color(color.R, color.G, color.B));
-            return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
+            decimal max = Math.Max(r, Math.Max(g, b));
+            decimal min = Math.Min(r, Math.Min(g, b));
+            decimal chroma = max - min;
+
+            decimal hue1 = 0;
+
+            if (chroma == 0)
+                hue1 = 0;
+            else if (max == r)
+                hue1 = ((g - b) / chroma) % 6;
+            else if (max == g)
+                hue1 = ((b - r) / chroma) + 2;
+            else if (max == b)
+                hue1 = ((r - g) / chroma) + 4;
+
+            decimal hue = 60 * hue1;
+            decimal value = max;
+
+            decimal saturation = 0;
+
+            if (value != 0)
+                saturation = chroma / value;
+
+            return new SerializableVector3((float)hue / 360, (float)saturation - MyColorPickerConstants.SATURATION_DELTA, (float)value - MyColorPickerConstants.VALUE_DELTA + MyColorPickerConstants.VALUE_COLORIZE_DELTA);
+        }
+
+        public static SerializableVector3 FromPaletteColorToHsvMask(this System.Drawing.Color color)
+        {
+            return FromPaletteColorToHsvMask((decimal)color.R / 255, (decimal)color.G / 255, (decimal)color.B / 255);
+        }
+
+        public static SerializableVector3 FromPaletteColorToHsvMask(this System.Windows.Media.Color color)
+        {
+            return FromPaletteColorToHsvMask((decimal)color.R / 255, (decimal)color.G / 255, (decimal)color.B / 255);
         }
 
         /// <summary>

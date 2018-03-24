@@ -398,7 +398,7 @@
                                             </controls:SortableGridViewColumn.SortBinding>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Border Width="16" Height="16" Background="{Binding Color}" BorderBrush="Black" BorderThickness="1" ToolTip="{Binding ColorText}" />
+                                                    <Border HorizontalAlignment="Stretch" Height="18" Background="{Binding Color}" BorderBrush="Transparent" BorderThickness="0" ToolTip="{Binding ColorText}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
