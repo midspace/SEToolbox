@@ -918,12 +918,12 @@
         {
             //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("ArmorCorner")).ToList();
             //var corners = viewModel.CubeGrid.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().ToArray();
-            var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.TubeCurvedRotationBlocks.Contains(b.SubtypeName)).ToList();
+            //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.TubeCurvedRotationBlocks.Contains(b.SubtypeName)).ToList();
 
-            foreach (var corner in corners)
-            {
-                Debug.WriteLine("{0}\t = \tAxis24_{1}_{2}", corner.SubtypeName, corner.BlockOrientation.Forward, corner.BlockOrientation.Up);
-            }
+            //foreach (var corner in corners)
+            //{
+            //    Debug.WriteLine("{0}\t = \tAxis24_{1}_{2}", corner.SubtypeName, corner.BlockOrientation.Forward, corner.BlockOrientation.Up);
+            //}
         }
 
         public void TestConvert(StructureCubeGridModel viewModel)

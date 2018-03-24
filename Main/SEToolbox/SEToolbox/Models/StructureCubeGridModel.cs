@@ -1,5 +1,9 @@
 ﻿namespace SEToolbox.Models
 {
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Definitions;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -9,14 +13,11 @@
     using System.Runtime.Serialization;
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Definitions;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
     using VRage;
     using VRage.Game;
     using VRage.Game.ObjectBuilders.Components;
     using VRage.ObjectBuilders;
+    using VRage.Utils;
     using VRageMath;
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using Res = SEToolbox.Properties.Resources;
@@ -1180,125 +1181,14 @@
             return count > 0;
         }
 
-        #region InvalidMirrorBlocks
-
-        // TODO: As yet uncatered for blocks to Mirror.
-        private static readonly SubtypeId[] InvalidMirrorBlocks = new SubtypeId[] {
-            SubtypeId.Window1x2SideLeft,
-            SubtypeId.Window1x2SideRight,
-        };
-
-        private static readonly string[] CornerRotationBlocks = new string[] {
-            "LargeBlockArmorCorner",
-            "LargeBlockArmorCornerRed",
-            "LargeBlockArmorCornerYellow",
-            "LargeBlockArmorCornerBlue",
-            "LargeBlockArmorCornerGreen",
-            "LargeBlockArmorCornerBlack",
-            "LargeBlockArmorCornerWhite",
-            "LargeBlockArmorCornerInv",
-            "LargeBlockArmorCornerInvRed",
-            "LargeBlockArmorCornerInvYellow",
-            "LargeBlockArmorCornerInvBlue",
-            "LargeBlockArmorCornerInvGreen",
-            "LargeBlockArmorCornerInvBlack",
-            "LargeBlockArmorCornerInvWhite",
-            "LargeHeavyBlockArmorCorner",
-            "LargeHeavyBlockArmorCornerRed",
-            "LargeHeavyBlockArmorCornerYellow",
-            "LargeHeavyBlockArmorCornerBlue",
-            "LargeHeavyBlockArmorCornerGreen",
-            "LargeHeavyBlockArmorCornerBlack",
-            "LargeHeavyBlockArmorCornerWhite",
-            "LargeHeavyBlockArmorCornerInv",
-            "LargeHeavyBlockArmorCornerInvRed",
-            "LargeHeavyBlockArmorCornerInvYellow",
-            "LargeHeavyBlockArmorCornerInvBlue",
-            "LargeHeavyBlockArmorCornerInvGreen",
-            "LargeHeavyBlockArmorCornerInvBlack",
-            "LargeHeavyBlockArmorCornerInvWhite",
-            "SmallBlockArmorCorner",
-            "SmallBlockArmorCornerRed",
-            "SmallBlockArmorCornerYellow",
-            "SmallBlockArmorCornerBlue",
-            "SmallBlockArmorCornerGreen",
-            "SmallBlockArmorCornerBlack",
-            "SmallBlockArmorCornerWhite",
-            "SmallBlockArmorCornerInv",
-            "SmallBlockArmorCornerInvRed",
-            "SmallBlockArmorCornerInvYellow",
-            "SmallBlockArmorCornerInvBlue",
-            "SmallBlockArmorCornerInvGreen",
-            "SmallBlockArmorCornerInvBlack",
-            "SmallBlockArmorCornerInvWhite",
-            "SmallHeavyBlockArmorCorner",
-            "SmallHeavyBlockArmorCornerRed",
-            "SmallHeavyBlockArmorCornerYellow",
-            "SmallHeavyBlockArmorCornerBlue",
-            "SmallHeavyBlockArmorCornerGreen",
-            "SmallHeavyBlockArmorCornerBlack",
-            "SmallHeavyBlockArmorCornerWhite",
-            "SmallHeavyBlockArmorCornerInv",
-            "SmallHeavyBlockArmorCornerInvRed",
-            "SmallHeavyBlockArmorCornerInvYellow",
-            "SmallHeavyBlockArmorCornerInvBlue",
-            "SmallHeavyBlockArmorCornerInvGreen",
-            "SmallHeavyBlockArmorCornerInvBlack",
-            "SmallHeavyBlockArmorCornerInvWhite",
-            "LargeRoundArmor_Corner",
-            "LargeRoundArmor_CornerRed",
-            "LargeRoundArmor_CornerYellow",
-            "LargeRoundArmor_CornerBlue",
-            "LargeRoundArmor_CornerGreen",
-            "LargeRoundArmor_CornerBlack",
-            "LargeRoundArmor_CornerWhite",
-            "LargeRoundArmor_CornerInv",
-            "LargeRoundArmor_CornerInvRed",
-            "LargeRoundArmor_CornerInvYellow",
-            "LargeRoundArmor_CornerInvBlue",
-            "LargeRoundArmor_CornerInvGreen",
-            "LargeRoundArmor_CornerInvBlack",
-            "LargeRoundArmor_CornerInvWhite",
-        };
-
-        internal static readonly string[] WindowFlatRotationBlocks = new string[] {
-            "Window1x2Flat",
-            "Window1x2FlatInv",
-            "Window1x1Flat",
-            "Window1x1FlatInv",
-            "Window3x3Flat",
-            "Window3x3FlatInv",
-            "Window2x3Flat",
-            "Window2x3FlatInv",
-        };
-
-        internal static readonly string[] WindowCornerRotationBlocks = new string[] {
-            "Window1x1Face",
-            "Window1x1Inv",
-            "Window1x2Inv",
-            "Window1x2Face",
-        };
-
-        internal static readonly string[] WindowEdgeRotationBlocks = new string[] {
-            "Window1x1Side",
-        };
-
-        internal static readonly string[] TubeCurvedRotationBlocks = new string[] {
-            "ConveyorTubeCurved",
-            "ConveyorTubeCurvedMedium",
-        };
-
-        #endregion
-
         private static IEnumerable<MyObjectBuilder_CubeBlock> MirrorCubes(StructureCubeGridModel viewModel, bool integrate, Mirror xMirror, int xAxis, Mirror yMirror, int yAxis, Mirror zMirror, int zAxis)
         {
             var blocks = new List<MyObjectBuilder_CubeBlock>();
-            SubtypeId outVal;
 
             if (xMirror == Mirror.None && yMirror == Mirror.None && zMirror == Mirror.None)
                 return blocks;
 
-            foreach (var block in viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName == "" || (Enum.TryParse<SubtypeId>(b.SubtypeName, out outVal) && !InvalidMirrorBlocks.Contains(outVal))))
+            foreach (var block in viewModel.CubeGrid.CubeBlocks)
             {
                 var newBlock = block.Clone() as MyObjectBuilder_CubeBlock;
                 newBlock.EntityId = block.EntityId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
@@ -1313,8 +1203,11 @@
                     ((MyObjectBuilder_PistonBase)newBlock).TopBlockId = ((MyObjectBuilder_PistonBase)block).TopBlockId == 0 ? 0 : SpaceEngineersApi.GenerateEntityId(IDType.ENTITY);
                 }
 
-                newBlock.BlockOrientation = MirrorCubeOrientation(block.SubtypeName, block.BlockOrientation, xMirror, yMirror, zMirror);
-                var definition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, viewModel.GridSize, block.SubtypeName);
+                MyCubeBlockDefinition definition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, viewModel.GridSize, block.SubtypeName);
+                MyCubeBlockDefinition mirrorDefinition;
+                MirrorCubeOrientation(definition, block.BlockOrientation, xMirror, yMirror, zMirror, out mirrorDefinition, out newBlock.BlockOrientation);
+
+                newBlock.SubtypeName = mirrorDefinition.Id.SubtypeName;
 
                 if (definition.Size.X == 1 && definition.Size.Y == 1 && definition.Size.Z == 1)
                 {
@@ -1346,577 +1239,135 @@
             return blocks;
         }
 
-        private static readonly Dictionary<OrientType, SerializableBlockOrientation> BaseOrientations = new Dictionary<OrientType, SerializableBlockOrientation>
+        private static void MirrorCubeOrientation(MyCubeBlockDefinition definition, SerializableBlockOrientation orientation, Mirror xMirror, Mirror yMirror, Mirror zMirror, out MyCubeBlockDefinition mirrorDefinition, out SerializableBlockOrientation mirrorOrientation)
         {
-            {OrientType.Axis24_Backward_Down, new SerializableBlockOrientation(Base6Directions.Direction.Backward, Base6Directions.Direction.Down)},
-            {OrientType.Axis24_Backward_Left, new SerializableBlockOrientation(Base6Directions.Direction.Backward, Base6Directions.Direction.Left)},
-            {OrientType.Axis24_Backward_Right, new SerializableBlockOrientation(Base6Directions.Direction.Backward, Base6Directions.Direction.Right)},
-            {OrientType.Axis24_Backward_Up, new SerializableBlockOrientation(Base6Directions.Direction.Backward, Base6Directions.Direction.Up)},
-            {OrientType.Axis24_Down_Backward, new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Backward)},
-            {OrientType.Axis24_Down_Forward, new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Forward)},
-            {OrientType.Axis24_Down_Left, new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Left)},
-            {OrientType.Axis24_Down_Right, new SerializableBlockOrientation(Base6Directions.Direction.Down, Base6Directions.Direction.Right)},
-            {OrientType.Axis24_Forward_Down, new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Down)},
-            {OrientType.Axis24_Forward_Left, new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Left)},
-            {OrientType.Axis24_Forward_Right, new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Right)},
-            {OrientType.Axis24_Forward_Up, new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Up)},
-            {OrientType.Axis24_Left_Backward, new SerializableBlockOrientation(Base6Directions.Direction.Left, Base6Directions.Direction.Backward)},
-            {OrientType.Axis24_Left_Down, new SerializableBlockOrientation(Base6Directions.Direction.Left, Base6Directions.Direction.Down)},
-            {OrientType.Axis24_Left_Forward, new SerializableBlockOrientation(Base6Directions.Direction.Left, Base6Directions.Direction.Forward)},
-            {OrientType.Axis24_Left_Up, new SerializableBlockOrientation(Base6Directions.Direction.Left, Base6Directions.Direction.Up)},
-            {OrientType.Axis24_Right_Backward, new SerializableBlockOrientation(Base6Directions.Direction.Right, Base6Directions.Direction.Backward)},
-            {OrientType.Axis24_Right_Down, new SerializableBlockOrientation(Base6Directions.Direction.Right, Base6Directions.Direction.Down)},
-            {OrientType.Axis24_Right_Forward, new SerializableBlockOrientation(Base6Directions.Direction.Right, Base6Directions.Direction.Forward)},
-            {OrientType.Axis24_Right_Up, new SerializableBlockOrientation(Base6Directions.Direction.Right, Base6Directions.Direction.Up)},
-            {OrientType.Axis24_Up_Backward, new SerializableBlockOrientation(Base6Directions.Direction.Up, Base6Directions.Direction.Backward)},
-            {OrientType.Axis24_Up_Forward, new SerializableBlockOrientation(Base6Directions.Direction.Up, Base6Directions.Direction.Forward)},
-            {OrientType.Axis24_Up_Left, new SerializableBlockOrientation(Base6Directions.Direction.Up, Base6Directions.Direction.Left)},
-            {OrientType.Axis24_Up_Right, new SerializableBlockOrientation(Base6Directions.Direction.Up, Base6Directions.Direction.Right)},
-        };
+            mirrorDefinition = string.IsNullOrEmpty(definition.MirroringBlock) ? definition : SpaceEngineersApi.GetCubeDefinition(definition.Id.TypeId, definition.CubeSize, definition.MirroringBlock);
 
-        private static SerializableBlockOrientation MirrorCubeOrientation(string subtypeName, SerializableBlockOrientation orientation, Mirror xMirror, Mirror yMirror, Mirror zMirror)
-        {
+            Matrix sourceMatrix = Matrix.CreateFromDir(Base6Directions.GetVector(orientation.Forward), Base6Directions.GetVector(orientation.Up));
+            Matrix targetMatrix;
+
+            Vector3 mirrorNormal = Vector3.Zero;
             if (xMirror != Mirror.None)
-            {
-                #region X Symmetry mapping
-
-                if (CornerRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                    }
-                }
-                else if (WindowFlatRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Down_Left];
-                    }
-                }
-                else if (WindowCornerRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                    }
-                }
-                else if (WindowEdgeRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Left_Up];
-                    }
-                }
-                else if (TubeCurvedRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        default: return orientation;
-                    }
-                }
-                else
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Up_Left];
-                    }
-                }
-
-                #endregion
-            }
+                mirrorNormal = Vector3.Right;
             else if (yMirror != Mirror.None)
-            {
-                #region Y Symmetry mapping
-
-                if (CornerRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                    }
-                }
-                else if (WindowFlatRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Down_Left];
-                    }
-                }
-                else if (WindowCornerRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                    }
-                }
-                else if (WindowEdgeRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Right_Down];
-                    }
-                }
-                else if (TubeCurvedRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        default: return orientation;
-                    }
-                }
-                else
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Down_Right];
-                    }
-                }
-
-                #endregion
-            }
+                mirrorNormal = Vector3.Up;
             else if (zMirror != Mirror.None)
+                mirrorNormal = Vector3.Forward;
+
+            MySymmetryAxisEnum blockMirrorAxis = MySymmetryAxisEnum.None;
+            if (MyUtils.IsZero(Math.Abs(Vector3.Dot(sourceMatrix.Right, mirrorNormal)) - 1.0f))
+                blockMirrorAxis = MySymmetryAxisEnum.X;
+            else if (MyUtils.IsZero(Math.Abs(Vector3.Dot(sourceMatrix.Up, mirrorNormal)) - 1.0f))
+                blockMirrorAxis = MySymmetryAxisEnum.Y;
+            else if (MyUtils.IsZero(Math.Abs(Vector3.Dot(sourceMatrix.Forward, mirrorNormal)) - 1.0f))
+                blockMirrorAxis = MySymmetryAxisEnum.Z;
+
+            MySymmetryAxisEnum blockMirrorOption = MySymmetryAxisEnum.None;
+            switch (blockMirrorAxis)
             {
-                #region Z Symmetry mapping
-
-                if (CornerRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                    }
-                }
-                else if (WindowFlatRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Right_Up]; //U
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Up_Left];
-                    }
-                }
-                else if (WindowCornerRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                    }
-                }
-                else if (WindowEdgeRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Right_Up];
-                    }
-                }
-                else if (TubeCurvedRotationBlocks.Contains(subtypeName))
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Up_Right];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        default: return orientation;
-                    }
-                }
-                else
-                {
-                    var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                    switch (cubeType.Key)
-                    {
-                        case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                        case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                        case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                        case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                        case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                        case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                        case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Down_Left];
-                        case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Down_Right];
-                        case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                        case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                        case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                        case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                        case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                        case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Left_Down];
-                        case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                        case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Left_Up];
-                        case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                        case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Right_Down];
-                        case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                        case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Right_Up];
-                        case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                        case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                        case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Up_Left];
-                        case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Up_Right];
-                    }
-                }
-
-                //var cubeType = BaseOrientations.FirstOrDefault(x => x.Value.Forward == orientation.Forward && x.Value.Up == orientation.Up);
-                //switch (cubeType.Key)
-                //{
-                //    case OrientType.Axis24_Backward_Down: return BaseOrientations[OrientType.Axis24_Backward_Down];
-                //    case OrientType.Axis24_Backward_Left: return BaseOrientations[OrientType.Axis24_Backward_Left];
-                //    case OrientType.Axis24_Backward_Right: return BaseOrientations[OrientType.Axis24_Backward_Right];
-                //    case OrientType.Axis24_Backward_Up: return BaseOrientations[OrientType.Axis24_Backward_Up];
-                //    case OrientType.Axis24_Down_Backward: return BaseOrientations[OrientType.Axis24_Down_Backward];
-                //    case OrientType.Axis24_Down_Forward: return BaseOrientations[OrientType.Axis24_Down_Forward];
-                //    case OrientType.Axis24_Down_Left: return BaseOrientations[OrientType.Axis24_Down_Left];
-                //    case OrientType.Axis24_Down_Right: return BaseOrientations[OrientType.Axis24_Down_Right];
-                //    case OrientType.Axis24_Forward_Down: return BaseOrientations[OrientType.Axis24_Forward_Down];
-                //    case OrientType.Axis24_Forward_Left: return BaseOrientations[OrientType.Axis24_Forward_Left];
-                //    case OrientType.Axis24_Forward_Right: return BaseOrientations[OrientType.Axis24_Forward_Right];
-                //    case OrientType.Axis24_Forward_Up: return BaseOrientations[OrientType.Axis24_Forward_Up];
-                //    case OrientType.Axis24_Left_Backward: return BaseOrientations[OrientType.Axis24_Left_Backward];
-                //    case OrientType.Axis24_Left_Down: return BaseOrientations[OrientType.Axis24_Left_Down];
-                //    case OrientType.Axis24_Left_Forward: return BaseOrientations[OrientType.Axis24_Left_Forward];
-                //    case OrientType.Axis24_Left_Up: return BaseOrientations[OrientType.Axis24_Left_Up];
-                //    case OrientType.Axis24_Right_Backward: return BaseOrientations[OrientType.Axis24_Right_Backward];
-                //    case OrientType.Axis24_Right_Down: return BaseOrientations[OrientType.Axis24_Right_Down];
-                //    case OrientType.Axis24_Right_Forward: return BaseOrientations[OrientType.Axis24_Right_Forward];
-                //    case OrientType.Axis24_Right_Up: return BaseOrientations[OrientType.Axis24_Right_Up];
-                //    case OrientType.Axis24_Up_Backward: return BaseOrientations[OrientType.Axis24_Up_Backward];
-                //    case OrientType.Axis24_Up_Forward: return BaseOrientations[OrientType.Axis24_Up_Forward];
-                //    case OrientType.Axis24_Up_Left: return BaseOrientations[OrientType.Axis24_Up_Left];
-                //    case OrientType.Axis24_Up_Right: return BaseOrientations[OrientType.Axis24_Up_Right];
-                //}
-
-                #endregion
+                case MySymmetryAxisEnum.X: blockMirrorOption = definition.SymmetryX; break;
+                case MySymmetryAxisEnum.Y: blockMirrorOption = definition.SymmetryY; break;
+                case MySymmetryAxisEnum.Z: blockMirrorOption = definition.SymmetryZ; break;
+                default: System.Diagnostics.Debug.Assert(false); break;
             }
 
-            return orientation;
+            switch (blockMirrorOption)
+            {
+                case MySymmetryAxisEnum.X:
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.Pi) * sourceMatrix;
+                    break;
+                case MySymmetryAxisEnum.Y:
+                case MySymmetryAxisEnum.YThenOffsetX:
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.Pi) * sourceMatrix;
+                    break;
+                case MySymmetryAxisEnum.Z:
+                case MySymmetryAxisEnum.ZThenOffsetX:
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.Pi) * sourceMatrix;
+                    break;
+                case MySymmetryAxisEnum.HalfX:
+                    targetMatrix = Matrix.CreateRotationX(-MathHelper.PiOver2) * sourceMatrix;
+                    break;
+                case MySymmetryAxisEnum.HalfY:
+                    targetMatrix = Matrix.CreateRotationY(-MathHelper.PiOver2) * sourceMatrix;
+                    break;
+                case MySymmetryAxisEnum.HalfZ:
+                    targetMatrix = Matrix.CreateRotationZ(-MathHelper.PiOver2) * sourceMatrix;
+                    break;
+                case MySymmetryAxisEnum.XHalfY:
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.YHalfY:
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.ZHalfY:
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.XHalfX:
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationX(-MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.YHalfX:
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationX(-MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.ZHalfX:
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationX(-MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.XHalfZ:
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationZ(-MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.YHalfZ:
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationZ(-MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.ZHalfZ:
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationZ(-MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.XMinusHalfZ:
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.YMinusHalfZ:
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.ZMinusHalfZ:
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.XMinusHalfX:
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.YMinusHalfX:
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.ZMinusHalfX:
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.Pi) * sourceMatrix;
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.PiOver2) * targetMatrix;
+                    break;
+                case MySymmetryAxisEnum.MinusHalfX:
+                    targetMatrix = Matrix.CreateRotationX(MathHelper.PiOver2) * sourceMatrix;
+                    break;
+                case MySymmetryAxisEnum.MinusHalfY:
+                    targetMatrix = Matrix.CreateRotationY(MathHelper.PiOver2) * sourceMatrix;
+                    break;
+                case MySymmetryAxisEnum.MinusHalfZ:
+                    targetMatrix = Matrix.CreateRotationZ(MathHelper.PiOver2) * sourceMatrix;
+                    break;
+                default: // or MySymmetryAxisEnum.None
+                    targetMatrix = sourceMatrix;
+                    break;
+            }
+
+            mirrorOrientation = new SerializableBlockOrientation(Base6Directions.GetForward(ref targetMatrix), Base6Directions.GetUp(ref targetMatrix));
         }
 
         #endregion
