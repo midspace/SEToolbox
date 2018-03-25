@@ -231,17 +231,10 @@ namespace SEToolbox.Interop.Asteroids
             if (!map.IsValid)
                 return list;
 
-            //IList<byte> materialAssetList;
-            //Dictionary<byte, long> materialVoxelCells;
-
-            list = map.CountAssets();
+            list = map.RefreshAssets();
             map.Dispose();
 
             return list;
-
-            //materialAssetList = map.CalcVoxelMaterialList();
-            //map.CalculateMaterialCellAssets(out materialAssetList, out materialVoxelCells);
-            //return map.CountAssets(materialVoxelCells);
         }
 
         #region IsVoxelMapFile
@@ -2245,7 +2238,7 @@ namespace SEToolbox.Interop.Asteroids
             return CountAssets();
         }
 
-        public Dictionary<string, long> CountAssets()
+        private Dictionary<string, long> CountAssets()
         {
             var materialDefinitions = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
             var assetNameCount = new Dictionary<string, long>();
