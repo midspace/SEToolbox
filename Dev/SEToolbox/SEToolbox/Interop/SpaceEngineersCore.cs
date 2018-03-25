@@ -68,17 +68,13 @@
                 var ourStart = typeof(SEToolbox.Interop.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(MySyncLayer), typeof(bool) }, null);
                 ReflectionUtil.ReplaceMethod(ourStart, keenStart);
 
-
                 // Create an empty instance of MySession for use by low level code.
-                ConstructorInfo constructorInfo = typeof(Sandbox.Game.World.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[0], null);
-                object mySession = constructorInfo.Invoke(new object[0]);
+                Sandbox.Game.World.MySession mySession = ReflectionUtil.ConstructPrivateClass<Sandbox.Game.World.MySession>(new Type[0], new object[0]);
+                ReflectionUtil.ConstructField(mySession, "m_sessionComponents"); // Required as the above code doesn't populate it during ctor of MySession.
+                mySession.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
 
                 // Assign the instance back to the static.
-                Sandbox.Game.World.MySession.Static = (Sandbox.Game.World.MySession)mySession;
-
-                ReflectionUtil.ConstructField(Sandbox.Game.World.MySession.Static, "m_sessionComponents"); // Required as the above code doesn't populate is during ctor of MySession.
-
-                Sandbox.Game.World.MySession.Static.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
+                Sandbox.Game.World.MySession.Static = mySession;
             }
             catch (Exception ex)
             {

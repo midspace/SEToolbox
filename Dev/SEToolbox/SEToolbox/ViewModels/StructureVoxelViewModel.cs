@@ -360,6 +360,7 @@
 
             var asteroid = new MyVoxelMap();
             asteroid.Load(sourceFile);
+            asteroid.RefreshAssets();
 
             var height = asteroid.BoundingContent.Size.Y + 1;
 
@@ -406,6 +407,7 @@
 
             var asteroid = new MyVoxelMap();
             asteroid.Load(sourceFile);
+            asteroid.RefreshAssets();
 
             var height = asteroid.BoundingContent.Size.Y + 1;
 

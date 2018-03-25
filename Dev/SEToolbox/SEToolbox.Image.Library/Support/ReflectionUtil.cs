@@ -159,6 +159,12 @@
             return Activator.CreateInstance(type, parameters.ToArray());
         }
 
+        public static T ConstructPrivateClass<T>(Type[] argumentTyps, object[] parameters)
+        {
+            ConstructorInfo constructorInfo = typeof(T).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, argumentTyps, null);
+            return (T)constructorInfo.Invoke(parameters);
+        }
+
         public static void ConstructField(object obj, string fieldName)
         {
             if (obj == null)

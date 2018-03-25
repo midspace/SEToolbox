@@ -1125,70 +1125,172 @@ namespace SEToolbox.Interop.Asteroids
 
         #region SetVoxelContentRegion
 
-        [Obsolete]
         public void SetVoxelContentRegion(byte content, int? xMin, int? xMax, int? yMin, int? yMax, int? zMin, int? zMax)
         {
-            for (var x = 0; x < Size.X; x++)
-            {
-                for (var y = 0; y < Size.Y; y++)
-                {
-                    for (var z = 0; z < Size.Z; z++)
-                    {
-                        var coords = new Vector3I(x, y, z);
+            Vector3I block;
 
-                        if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
-                        {
-                            if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
-                            {
-                                SetVoxelContent(content, ref coords);
-                            }
-                        }
-                        else if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue)
-                        {
-                            if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value)
-                            {
-                                SetVoxelContent(content, ref coords);
-                            }
-                        }
-                        else if (xMin.HasValue && xMax.HasValue && zMin.HasValue && zMax.HasValue)
-                        {
-                            if (xMin.Value <= x && x <= xMax.Value && zMin.Value <= z && z <= zMax.Value)
-                            {
-                                SetVoxelContent(content, ref coords);
-                            }
-                        }
-                        else if (yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
-                        {
-                            if (yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
-                            {
-                                SetVoxelContent(content, ref coords);
-                            }
-                        }
-                        else if (xMin.HasValue && xMax.HasValue)
-                        {
-                            if (xMin.Value <= x && x <= xMax.Value)
-                            {
-                                SetVoxelContent(content, ref coords);
-                            }
-                        }
-                        else if (yMin.HasValue && yMax.HasValue)
-                        {
-                            if (yMin.Value <= y && y <= yMax.Value)
-                            {
-                                SetVoxelContent(content, ref coords);
-                            }
-                        }
-                        else if (zMin.HasValue && zMax.HasValue)
-                        {
-                            if (zMin.Value <= z && z <= zMax.Value)
-                            {
-                                SetVoxelContent(content, ref coords);
-                            }
-                        }
+            // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
+            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+                    {
+                        var cacheSize = new Vector3I(64);
+                        var cache = new MyStorageData();
+                        cache.Resize(cacheSize);
+                        // LOD1 is not detailed enough for content information on asteroids.
+                        Vector3I maxRange = block + cacheSize - 1;
+                        _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+
+                        bool changed = false;
+                        Vector3I p;
+                        for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
+                            for (p.Y = 0; p.Y < cacheSize.Y; ++p.Y)
+                                for (p.X = 0; p.X < cacheSize.X; ++p.X)
+                                {
+                                    var coords = p + block;
+
+                                    if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
+                                    {
+                                        if (xMin.Value <= coords.X && coords.X <= xMax.Value && yMin.Value <= coords.Y && coords.Y <= yMax.Value && zMin.Value <= coords.Z && coords.Z <= zMax.Value)
+                                        {
+                                            cache.Content(ref p, content);
+                                            changed = true;
+                                        }
+                                    }
+                                    else if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue)
+                                    {
+                                        if (xMin.Value <= coords.X && coords.X <= xMax.Value && yMin.Value <= coords.Y && coords.Y <= yMax.Value)
+                                        {
+                                            cache.Content(ref p, content);
+                                            changed = true;
+                                        }
+                                    }
+                                    else if (xMin.HasValue && xMax.HasValue && zMin.HasValue && zMax.HasValue)
+                                    {
+                                        if (xMin.Value <= coords.X && coords.X <= xMax.Value && zMin.Value <= coords.Z && coords.Z <= zMax.Value)
+                                        {
+                                            cache.Content(ref p, content);
+                                            changed = true;
+                                        }
+                                    }
+                                    else if (yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
+                                    {
+                                        if (yMin.Value <= coords.Y && coords.Y <= yMax.Value && zMin.Value <= coords.Z && coords.Z <= zMax.Value)
+                                        {
+                                            cache.Content(ref p, content);
+                                            changed = true;
+                                        }
+                                    }
+                                    else if (xMin.HasValue && xMax.HasValue)
+                                    {
+                                        if (xMin.Value <= coords.X && coords.X <= xMax.Value)
+                                        {
+                                            cache.Content(ref p, content);
+                                            changed = true;
+                                        }
+                                    }
+                                    else if (yMin.HasValue && yMax.HasValue)
+                                    {
+                                        if (yMin.Value <= coords.Y && coords.Y <= yMax.Value)
+                                        {
+                                            cache.Content(ref p, content);
+                                            changed = true;
+                                        }
+                                    }
+                                    else if (zMin.HasValue && zMax.HasValue)
+                                    {
+                                        if (zMin.Value <= coords.Z && coords.Z <= zMax.Value)
+                                        {
+                                            cache.Content(ref p, content);
+                                            changed = true;
+                                        }
+                                    }
+                                }
+
+                        if (changed)
+                            _storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
                     }
-                }
-            }
+
+            // TODO: finish code.
+
+            //for (var x = 0; x < Size.X; x++)
+            //{
+            //    for (var y = 0; y < Size.Y; y++)
+            //    {
+            //        for (var z = 0; z < Size.Z; z++)
+            //        {
+            //            var coords = new Vector3I(x, y, z);
+
+          
+            //        }
+            //    }
+            //}
         }
+
+        //[Obsolete]
+        //public void SetVoxelContentRegion(byte content, int? xMin, int? xMax, int? yMin, int? yMax, int? zMin, int? zMax)
+        //{
+        //    for (var x = 0; x < Size.X; x++)
+        //    {
+        //        for (var y = 0; y < Size.Y; y++)
+        //        {
+        //            for (var z = 0; z < Size.Z; z++)
+        //            {
+        //                var coords = new Vector3I(x, y, z);
+
+        //                if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
+        //                {
+        //                    if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
+        //                    {
+        //                        SetVoxelContent(content, ref coords);
+        //                    }
+        //                }
+        //                else if (xMin.HasValue && xMax.HasValue && yMin.HasValue && yMax.HasValue)
+        //                {
+        //                    if (xMin.Value <= x && x <= xMax.Value && yMin.Value <= y && y <= yMax.Value)
+        //                    {
+        //                        SetVoxelContent(content, ref coords);
+        //                    }
+        //                }
+        //                else if (xMin.HasValue && xMax.HasValue && zMin.HasValue && zMax.HasValue)
+        //                {
+        //                    if (xMin.Value <= x && x <= xMax.Value && zMin.Value <= z && z <= zMax.Value)
+        //                    {
+        //                        SetVoxelContent(content, ref coords);
+        //                    }
+        //                }
+        //                else if (yMin.HasValue && yMax.HasValue && zMin.HasValue && zMax.HasValue)
+        //                {
+        //                    if (yMin.Value <= y && y <= yMax.Value && zMin.Value <= z && z <= zMax.Value)
+        //                    {
+        //                        SetVoxelContent(content, ref coords);
+        //                    }
+        //                }
+        //                else if (xMin.HasValue && xMax.HasValue)
+        //                {
+        //                    if (xMin.Value <= x && x <= xMax.Value)
+        //                    {
+        //                        SetVoxelContent(content, ref coords);
+        //                    }
+        //                }
+        //                else if (yMin.HasValue && yMax.HasValue)
+        //                {
+        //                    if (yMin.Value <= y && y <= yMax.Value)
+        //                    {
+        //                        SetVoxelContent(content, ref coords);
+        //                    }
+        //                }
+        //                else if (zMin.HasValue && zMax.HasValue)
+        //                {
+        //                    if (zMin.Value <= z && z <= zMax.Value)
+        //                    {
+        //                        SetVoxelContent(content, ref coords);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         #endregion
 
@@ -1595,7 +1697,6 @@ namespace SEToolbox.Interop.Asteroids
                     }
         }
 
-        [Obsolete]
         public void RemoveMaterial(int? xMin, int? xMax, int? yMin, int? yMax, int? zMin, int? zMax)
         {
             SetVoxelContentRegion(0x00, xMin, xMax, yMin, yMax, zMin, zMax);

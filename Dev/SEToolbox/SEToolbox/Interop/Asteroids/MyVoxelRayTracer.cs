@@ -63,17 +63,19 @@
             //model.Transform = new TranslateTransform3D(-tbounds.X, -tbounds.Y, -tbounds.Z);
 
             // Add 2 to either side, to allow for material padding to expose internal materials.
-            var xMin = (int)Math.Floor(tbounds.X) - 2;
-            var yMin = (int)Math.Floor(tbounds.Y) - 2;
-            var zMin = (int)Math.Floor(tbounds.Z) - 2;
+            const int bufferSize = 2;
+            var xMin = (int)Math.Floor(tbounds.X) - bufferSize;
+            var yMin = (int)Math.Floor(tbounds.Y) - bufferSize;
+            var zMin = (int)Math.Floor(tbounds.Z) - bufferSize;
 
-            var xMax = (int)Math.Ceiling(tbounds.X + tbounds.SizeX) + 2;
-            var yMax = (int)Math.Ceiling(tbounds.Y + tbounds.SizeY) + 2;
-            var zMax = (int)Math.Ceiling(tbounds.Z + tbounds.SizeZ) + 2;
+            var xMax = (int)Math.Ceiling(tbounds.X + tbounds.SizeX) + bufferSize;
+            var yMax = (int)Math.Ceiling(tbounds.Y + tbounds.SizeY) + bufferSize;
+            var zMax = (int)Math.Ceiling(tbounds.Z + tbounds.SizeZ) + bufferSize;
 
-            var xCount = (xMax - xMin).RoundUpToNearest(64);
-            var yCount = (yMax - yMin).RoundUpToNearest(64);
-            var zCount = (zMax - zMin).RoundUpToNearest(64);
+            // TODO: should not rounnd up the array size, as this really isn't required, and it increases the calculation time.
+            var xCount = (xMax - xMin); //.RoundUpToNearest(64);
+            var yCount = (yMax - yMin); //.RoundUpToNearest(64);
+            var zCount = (zMax - zMin); //.RoundUpToNearest(64);
 
             Debug.WriteLine("Approximate Size: {0}x{1}x{2}", Math.Ceiling(tbounds.X + tbounds.SizeX) - Math.Floor(tbounds.X), Math.Ceiling(tbounds.Y + tbounds.SizeY) - Math.Floor(tbounds.Y), Math.Ceiling(tbounds.Z + tbounds.SizeZ) - Math.Floor(tbounds.Z));
             Debug.WriteLine("Bounds Size: {0}x{1}x{2}", xCount, yCount, zCount);
@@ -699,6 +701,8 @@
 
             var action = (Action<MyVoxelBuilderArgs>)delegate (MyVoxelBuilderArgs e)
             {
+                // TODO: need to center the finalCubic structure within the voxel Volume.
+
                 // the model is only shaped according to it's volumne, not the voxel which is cubic.
                 if (e.CoordinatePoint.X < xCount &&
                     e.CoordinatePoint.Y < yCount &&
