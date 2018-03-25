@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using System.Windows;
     using System.Windows.Input;
@@ -14,12 +13,10 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
-    using VRageMath;
     using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using VRage;
     using VRage.Game;
     using VRage.ObjectBuilders;
-    using VRage.Voxels;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -570,98 +567,7 @@
 
         private bool ExtractStationIntersect(bool tightIntersection)
         {
-            // Make a shortlist of station Entities in the bounding box of the asteroid.
-            var asteroidWorldAABB = new BoundingBoxD(DataModel.ContentBounds.Min + DataModel.PositionAndOrientation.Value.Position, DataModel.ContentBounds.Max + DataModel.PositionAndOrientation.Value.Position);
-            var stations = MainViewModel.GetIntersectingEntities(asteroidWorldAABB).Where(e => e.ClassType == ClassType.LargeStation).Cast<StructureCubeGridModel>().ToList();
-
-            if (stations.Count == 0)
-                return false;
-
-            var modified = false;
-            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
-            var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile);
-
-            var total = stations.Sum(s => s.CubeGrid.CubeBlocks.Count);
-            MainViewModel.ResetProgress(0, total);
-
-            // Search through station entities cubes for intersection with this voxel.
-            foreach (var station in stations)
-            {
-                var quaternion = station.PositionAndOrientation.Value.ToQuaternion();
-
-                foreach (var cube in station.CubeGrid.CubeBlocks)
-                {
-                    MainViewModel.IncrementProgress();
-
-                    var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, station.CubeGrid.GridSizeEnum, cube.SubtypeName);
-
-                    var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
-                    var min = cube.Min.ToVector3() * station.CubeGrid.GridSizeEnum.ToLength();
-                    var max = (cube.Min + orientSize) * station.CubeGrid.GridSizeEnum.ToLength();
-                    var p1 = Vector3D.Transform(min, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
-                    var p2 = Vector3D.Transform(max, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
-                    var cubeWorldAABB = new BoundingBoxD(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
-
-                    // find worldAABB of block.
-                    if (asteroidWorldAABB.Intersects(cubeWorldAABB))
-                    {
-                        Vector3I block;
-                        Vector3D position = DataModel.PositionAndOrientation.Value.Position;
-
-                        // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-                        for (block.Z = 0; block.Z < asteroid.Storage.Size.Z; block.Z += 64)
-                            for (block.Y = 0; block.Y < asteroid.Storage.Size.Y; block.Y += 64)
-                                for (block.X = 0; block.X < asteroid.Storage.Size.X; block.X += 64)
-                                {
-                                    var cacheSize = new Vector3I(64);
-                                    var cache = new MyStorageData();
-                                    cache.Resize(cacheSize);
-                                    // LOD1 is not detailed enough for content information on asteroids.
-                                    Vector3I maxRange = block + cacheSize - 1;
-                                    asteroid.Storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
-
-                                    bool changed = false;
-                                    Vector3I p;
-                                    for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
-                                        for (p.Y = 0; p.Y < cacheSize.Y; ++p.Y)
-                                            for (p.X = 0; p.X < cacheSize.X; ++p.X)
-                                            {
-                                                BoundingBoxD voxelCellBox = new BoundingBoxD(position + p + block, position + p + block + 1);
-                                                ContainmentType contains = cubeWorldAABB.Contains(voxelCellBox);
-                                                
-                                                // TODO: finish tightIntersection. Will require high interpretation of voxel content volumes.
-
-                                                if (contains == ContainmentType.Contains || contains == ContainmentType.Intersects)
-                                                {
-                                                    cache.Content(ref p, 0);
-                                                    changed = true;
-                                                }
-                                            }
-
-                                    if (changed)
-                                    { 
-                                        asteroid.Storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
-                                        modified = true;
-                                    }
-                                }
-
-                    }
-                }
-            }
-
-            MainViewModel.ClearProgress();
-
-            if (modified)
-            {
-                var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
-                asteroid.Save(tempfilename);
-                // replaces the existing asteroid file, as it is still the same size and dimentions.
-                DataModel.UpdateNewSource(asteroid, tempfilename);
-                DataModel.MaterialAssets = null;
-                DataModel.InitializeAsync();
-            }
-            return modified;
+            return DataModel.ExtractStationIntersect(MainViewModel, tightIntersection);
         }
 
         #endregion
