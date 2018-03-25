@@ -1210,21 +1210,6 @@ namespace SEToolbox.Interop.Asteroids
                         if (changed)
                             _storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
                     }
-
-            // TODO: finish code.
-
-            //for (var x = 0; x < Size.X; x++)
-            //{
-            //    for (var y = 0; y < Size.Y; y++)
-            //    {
-            //        for (var z = 0; z < Size.Z; z++)
-            //        {
-            //            var coords = new Vector3I(x, y, z);
-
-          
-            //        }
-            //    }
-            //}
         }
 
         //[Obsolete]

@@ -19,6 +19,7 @@
     using VRage;
     using VRage.Game;
     using VRage.ObjectBuilders;
+    using VRage.Voxels;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -605,25 +606,46 @@
                     // find worldAABB of block.
                     if (asteroidWorldAABB.Intersects(cubeWorldAABB))
                     {
-                        var pointMin = new Vector3I(cubeWorldAABB.Min - DataModel.PositionAndOrientation.Value.Position);
-                        var pointMax = new Vector3I(cubeWorldAABB.Max - DataModel.PositionAndOrientation.Value.Position);
+                        Vector3I block;
+                        Vector3D position = DataModel.PositionAndOrientation.Value.Position;
 
-                        Vector3I coords;
-                        for (coords.Z = pointMin.Z; coords.Z <= pointMax.Z; coords.Z++)
-                        {
-                            for (coords.Y = pointMin.Y; coords.Y <= pointMax.Y; coords.Y++)
-                            {
-                                for (coords.X = pointMin.X; coords.X <= pointMax.X; coords.X++)
+                        // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
+                        for (block.Z = 0; block.Z < asteroid.Storage.Size.Z; block.Z += 64)
+                            for (block.Y = 0; block.Y < asteroid.Storage.Size.Y; block.Y += 64)
+                                for (block.X = 0; block.X < asteroid.Storage.Size.X; block.X += 64)
                                 {
-                                    if (coords.X >= 0 && coords.Y >= 0 && coords.Z >= 0 && coords.X < asteroid.Size.X && coords.Y < asteroid.Size.Y && coords.Z < asteroid.Size.Z)
-                                    {
-                                        asteroid.SetVoxelContent(0, ref coords);
+                                    var cacheSize = new Vector3I(64);
+                                    var cache = new MyStorageData();
+                                    cache.Resize(cacheSize);
+                                    // LOD1 is not detailed enough for content information on asteroids.
+                                    Vector3I maxRange = block + cacheSize - 1;
+                                    asteroid.Storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+
+                                    bool changed = false;
+                                    Vector3I p;
+                                    for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
+                                        for (p.Y = 0; p.Y < cacheSize.Y; ++p.Y)
+                                            for (p.X = 0; p.X < cacheSize.X; ++p.X)
+                                            {
+                                                BoundingBoxD voxelCellBox = new BoundingBoxD(position + p + block, position + p + block + 1);
+                                                ContainmentType contains = cubeWorldAABB.Contains(voxelCellBox);
+                                                
+                                                // TODO: finish tightIntersection. Will require high interpretation of voxel content volumes.
+
+                                                if (contains == ContainmentType.Contains || contains == ContainmentType.Intersects)
+                                                {
+                                                    cache.Content(ref p, 0);
+                                                    changed = true;
+                                                }
+                                            }
+
+                                    if (changed)
+                                    { 
+                                        asteroid.Storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
+                                        modified = true;
                                     }
                                 }
-                            }
-                        }
 
-                        modified = true;
                     }
                 }
             }
@@ -636,6 +658,8 @@
                 asteroid.Save(tempfilename);
                 // replaces the existing asteroid file, as it is still the same size and dimentions.
                 DataModel.UpdateNewSource(asteroid, tempfilename);
+                DataModel.MaterialAssets = null;
+                DataModel.InitializeAsync();
             }
             return modified;
         }
