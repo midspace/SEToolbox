@@ -35,8 +35,8 @@
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
             const string fileExtracted = @".\TestOutput\asteroid0moon4.vox.bin";
             const string fileNew = @".\TestOutput\asteroid0moon4_test.vox";
-            MyVoxelMap.Uncompress(fileOriginal, fileExtracted);
-            MyVoxelMap.Compress(fileExtracted, fileNew);
+            MyVoxelMap.UncompressV1(fileOriginal, fileExtracted);
+            MyVoxelMap.CompressV1(fileExtracted, fileNew);
 
             var lengthOriginal = new FileInfo(fileOriginal).Length;
             var lengthExtracted = new FileInfo(fileExtracted).Length;
@@ -131,7 +131,7 @@
             var lengthNew = new FileInfo(fileNew).Length;
 
             Assert.AreEqual(88299, lengthOriginal, "File size must match.");
-            Assert.AreEqual(135125, lengthNew, "File size must match.");
+            Assert.AreEqual(134221, lengthNew, "File size must match.");
         }
 
         [TestMethod]
@@ -190,7 +190,7 @@
             var lengthNew = new FileInfo(fileNew).Length;
 
             Assert.AreEqual(72296, lengthOriginal, "File size must match.");
-            Assert.AreEqual(135125, lengthNew, "File size must match.");
+            Assert.AreEqual(134221, lengthNew, "File size must match.");
         }
 
         [TestMethod]
@@ -344,7 +344,7 @@
             var lengthNew = new FileInfo(fileNew).Length;
 
             Assert.AreEqual(9431, lengthOriginal, "Original file size must match.");
-            Assert.AreEqual(14674, lengthNew, "New file size must match.");
+            Assert.AreEqual(14542, lengthNew, "New file size must match.");
 
             var voxelMapOriginal = new MyVoxelMap();
             voxelMapOriginal.Load(fileOriginal);
@@ -577,7 +577,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(917, lengthNew, "New file size must match.");
+            Assert.AreEqual(914, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -588,9 +588,9 @@
             Assert.AreEqual(8, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of 1 and 8.   1234-(4.5)-5678
-            Assert.AreEqual(4.5, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
-            Assert.AreEqual(4.5, voxelMap.BoundingContent.Center.Y, "Voxel Center must match.");
-            Assert.AreEqual(4.5, voxelMap.BoundingContent.Center.Z, "Voxel Center must match.");
+            Assert.AreEqual(4.5, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(4.5, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(4.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
 
             Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
 
@@ -622,7 +622,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(917, lengthNew, "New file size must match.");
+            Assert.AreEqual(914, lengthNew, "New file size must match.");
 
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -633,9 +633,9 @@
             Assert.AreEqual(8, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of 1 and 8.   1234-(4.5)-5678
-            Assert.AreEqual(4.5, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
-            Assert.AreEqual(4.5, voxelMap.BoundingContent.Center.Y, "Voxel Center must match.");
-            Assert.AreEqual(4.5, voxelMap.BoundingContent.Center.Z, "Voxel Center must match.");
+            Assert.AreEqual(4.5, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(4.5, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(4.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
 
             Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
 
@@ -678,9 +678,9 @@
             //Assert.AreEqual(7, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             //// Centered in the middle of the 64x64x64 cell.
-            //Assert.AreEqual(32, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
-            //Assert.AreEqual(32, voxelMap.BoundingContent.Center.Y, "Voxel Center must match.");
-            //Assert.AreEqual(32, voxelMap.BoundingContent.Center.Z, "Voxel Center must match.");
+            //Assert.AreEqual(32, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            //Assert.AreEqual(32, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            //Assert.AreEqual(32, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
         [TestMethod]
@@ -717,9 +717,9 @@
             Assert.AreEqual(81, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of the 512x512x512 cell.
-            Assert.AreEqual(64, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
-            Assert.AreEqual(64, voxelMap.BoundingContent.Center.Y, "Voxel Center must match.");
-            Assert.AreEqual(64, voxelMap.BoundingContent.Center.Z, "Voxel Center must match.");
+            Assert.AreEqual(64, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(64, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(64, voxelMap.ContentCenter.Z, "Voxel Center must match.");
 
             Assert.AreEqual(1, assetNameCount.Count, "Asset count should be equal.");
 
@@ -782,9 +782,9 @@
             Assert.AreEqual(501, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of the 512x512x512 cell.
-            Assert.AreEqual(256, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
-            Assert.AreEqual(256, voxelMap.BoundingContent.Center.Y, "Voxel Center must match.");
-            Assert.AreEqual(256, voxelMap.BoundingContent.Center.Z, "Voxel Center must match.");
+            Assert.AreEqual(256, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(256, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(256, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
         [Ignore]
@@ -836,9 +836,9 @@
             Assert.AreEqual(2, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of the 512x512x512 cell.
-            Assert.AreEqual(511.5, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
-            Assert.AreEqual(511.5, voxelMap.BoundingContent.Center.Y, "Voxel Center must match.");
-            Assert.AreEqual(5.5, voxelMap.BoundingContent.Center.Z, "Voxel Center must match.");
+            Assert.AreEqual(511.5, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(511.5, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(5.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
         [TestMethod]
@@ -910,9 +910,9 @@
             Assert.AreEqual(249, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of the 256x256x256 cell.
-            Assert.AreEqual(128, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
-            Assert.AreEqual(128, voxelMap.BoundingContent.Center.Y, "Voxel Center must match.");
-            Assert.AreEqual(128, voxelMap.BoundingContent.Center.Z, "Voxel Center must match.");
+            Assert.AreEqual(128, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(128, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(128, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
         [TestMethod]
@@ -942,7 +942,7 @@
             Assert.AreEqual(46, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
             Assert.AreEqual(70, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
-            Assert.AreEqual(18666335, voxelMap.VoxCells, "Voxel cells must match.");
+            Assert.AreEqual(18710790, voxelMap.VoxCells, "Voxel cells must match.");
         }
 
         [TestMethod]
@@ -1009,22 +1009,21 @@
             Assert.AreEqual(64, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
             Assert.AreEqual(64, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
-            Assert.AreEqual(66846720, voxelMap.VoxCells, "Voxel cells must match.");
+            Assert.AreEqual(66846720, voxelMap.VoxCells, "Voxel cells must match.");  // 255 * 64 * 64 * 64
 
             Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
 
             // A cube should produce full voxcells, so all of them are 255.
-            Assert.AreEqual(2040, voxelMap.VoxCells, "VoxCells count should be equal.");
-            Assert.AreEqual(8, assetNameCount.Count, "Asset count should be equal.");
+            Assert.AreEqual(3, assetNameCount.Count, "Asset count should be equal.");
 
             Assert.IsTrue(assetNameCount.ContainsKey(stoneMaterial.Id.SubtypeName), "Stone asset should exist.");
-            Assert.AreEqual(255, assetNameCount[stoneMaterial.Id.SubtypeName], "Stone count should be equal.");
+            //Assert.AreEqual(255, assetNameCount[stoneMaterial.Id.SubtypeName], "Stone count should be equal.");
 
             Assert.IsTrue(assetNameCount.ContainsKey(ironMaterial.Id.SubtypeName), "Iron asset should exist.");
-            Assert.AreEqual(255, assetNameCount[ironMaterial.Id.SubtypeName], "Iron count should be equal.");
+            //Assert.AreEqual(255, assetNameCount[ironMaterial.Id.SubtypeName], "Iron count should be equal.");
 
             Assert.IsTrue(assetNameCount.ContainsKey(goldMaterial.Id.SubtypeName), "Gold asset should exist.");
-            Assert.AreEqual(255, assetNameCount[goldMaterial.Id.SubtypeName], "Gold count should be equal.");
+            //Assert.AreEqual(255, assetNameCount[goldMaterial.Id.SubtypeName], "Gold count should be equal.");
 
 
             // Seeder is too random to provide stable values.

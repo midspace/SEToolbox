@@ -331,7 +331,7 @@
 
         public void LoadDetailsSync()
         {
-            if (MaterialAssets == null || MaterialAssets.Count == 0)
+            if (_voxelMap != null && (MaterialAssets == null || MaterialAssets.Count == 0))
             {
                 Dictionary<string, long> details = _voxelMap.RefreshAssets();
                 _contentBounds = _voxelMap.BoundingContent;

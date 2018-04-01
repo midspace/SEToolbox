@@ -57,11 +57,11 @@
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(2133, voxelFileLength, "File size must match.");
+            Assert.AreEqual(7380, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(64, 64, 64), voxelMap.Size, "Voxel Bounding size must match.");
-            Assert.AreEqual(new Vector3I(25, 25, 25), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
+            Assert.AreEqual(new Vector3I(27, 27, 27), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
 
-            Assert.AreEqual(2031782, voxelMap.VoxCells, "Voxel cells must match.");
+            Assert.AreEqual(2035523, voxelMap.VoxCells, "Voxel cells must match.");
         }
 
         [TestMethod]
@@ -98,11 +98,11 @@
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(2020, voxelFileLength, "File size must match.");
+            Assert.AreEqual(7413, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(64, 64, 64), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(26, 26, 26), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
 
-            Assert.AreEqual(2043244, voxelMap.VoxCells, "Voxel cells must match.");
+            Assert.AreEqual(2047046, voxelMap.VoxCells, "Voxel cells must match.");
         }
 
         [TestMethod]
