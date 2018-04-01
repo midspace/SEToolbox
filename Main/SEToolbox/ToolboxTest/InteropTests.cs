@@ -51,15 +51,15 @@
             Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsFalse(isCompressed, "Sandbox content should not be compressed");
-            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrids[0].CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
         [TestMethod]
-        public void LoadSandbox_Compressed_BaseEasyStart()
+        public void LoadSandbox_Binary_BaseEasyStart()
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\LargeShipRed.sbc");
+            var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\LargeShipRed.sbcPB");
             Assert.IsTrue(File.Exists(baseEasyStart1Path), "Sandbox content file should exist");
 
             MyObjectBuilder_Definitions prefabDefinitions;
@@ -68,8 +68,8 @@
 
             Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
-            Assert.IsTrue(isCompressed, "Sandbox content should be compressed");
-            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+            Assert.IsFalse(isCompressed, "Sandbox content should be compressed");
+            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrids[0].CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
         [TestMethod]

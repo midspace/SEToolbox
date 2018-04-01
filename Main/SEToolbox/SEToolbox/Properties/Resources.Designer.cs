@@ -2718,7 +2718,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Center:.
+        ///   Looks up a localized string similar to Volume center:.
         /// </summary>
         public static string CtlVoxelCenter {
             get {

@@ -1755,7 +1755,7 @@ Planet Generator:	{17}</value>
     <value>{0} × {1} × {2} blocks</value>
   </data>
   <data name="CtlVoxelCenter" xml:space="preserve">
-    <value>Center:</value>
+    <value>Volume center:</value>
   </data>
   <data name="CtlVoxelColMaterial" xml:space="preserve">
     <value>Material</value>
