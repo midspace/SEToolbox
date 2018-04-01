@@ -59,7 +59,7 @@
             var voxelFileLength = new FileInfo(asteroidFile).Length;
             Assert.AreEqual(2133, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(64, 64, 64), voxelMap.Size, "Voxel Bounding size must match.");
-            Assert.AreEqual(new Vector3I(25, 25, 25), voxelMap.BoundingContent.SizeInt() + 1, "Voxel Content size must match.");
+            Assert.AreEqual(new Vector3I(25, 25, 25), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
 
             Assert.AreEqual(2031782, voxelMap.VoxCells, "Voxel cells must match.");
         }
@@ -100,7 +100,7 @@
             var voxelFileLength = new FileInfo(asteroidFile).Length;
             Assert.AreEqual(2020, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(64, 64, 64), voxelMap.Size, "Voxel Bounding size must match.");
-            Assert.AreEqual(new Vector3I(26, 26, 26), voxelMap.BoundingContent.SizeInt() + 1, "Voxel Content size must match.");
+            Assert.AreEqual(new Vector3I(26, 26, 26), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
 
             Assert.AreEqual(2043244, voxelMap.VoxCells, "Voxel cells must match.");
         }
@@ -228,9 +228,9 @@
             Assert.IsTrue(voxelMap.Size.Y > 0, "Voxel Size must be greater than zero.");
             Assert.IsTrue(voxelMap.Size.Z > 0, "Voxel Size must be greater than zero.");
 
-            Assert.IsTrue(voxelMap.BoundingContent.SizeInt().X > 0, "Voxel ContentSize must be greater than zero.");
-            Assert.IsTrue(voxelMap.BoundingContent.SizeInt().Y > 0, "Voxel ContentSize must be greater than zero.");
-            Assert.IsTrue(voxelMap.BoundingContent.SizeInt().Z > 0, "Voxel ContentSize must be greater than zero.");
+            Assert.IsTrue(voxelMap.BoundingContent.Size.X > 0, "Voxel ContentSize must be greater than zero.");
+            Assert.IsTrue(voxelMap.BoundingContent.Size.Y > 0, "Voxel ContentSize must be greater than zero.");
+            Assert.IsTrue(voxelMap.BoundingContent.Size.Z > 0, "Voxel ContentSize must be greater than zero.");
 
             Assert.IsTrue(voxelMap.VoxCells > 0, "voxCells must be greater than zero.");
         }

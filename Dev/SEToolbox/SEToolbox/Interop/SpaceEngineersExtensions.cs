@@ -226,6 +226,11 @@
             return new Vector3D(vector.X, vector.Y, vector.Z);
         }
 
+        public static BoundingBoxD ToBoundingBoxD(this BoundingBoxI box)
+        {
+            return new BoundingBoxD(box.Min, box.Max);
+        }
+
         public static SerializableVector3 RoundOff(this SerializableVector3 vector, float roundTo)
         {
             return new SerializableVector3((float)Math.Round(vector.X / roundTo, 0, MidpointRounding.ToEven) * roundTo, (float)Math.Round(vector.Y / roundTo, 0, MidpointRounding.ToEven) * roundTo, (float)Math.Round(vector.Z / roundTo, 0, MidpointRounding.ToEven) * roundTo);

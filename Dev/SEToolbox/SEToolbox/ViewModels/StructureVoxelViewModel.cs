@@ -1,5 +1,10 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -7,16 +12,10 @@
     using System.Text;
     using System.Windows;
     using System.Windows.Input;
-
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
-    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
     using VRage;
     using VRage.Game;
     using VRage.ObjectBuilders;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -363,7 +362,7 @@
             var height = asteroid.BoundingContent.Size.Y + 1;
 
             // remove the Top half.
-            asteroid.RemoveMaterial((int)Math.Round(asteroid.BoundingContent.Center.X, 0), asteroid.Size.X, (int)Math.Round(asteroid.BoundingContent.Center.Y, 0), asteroid.Size.Y, 0, (int)Math.Round(asteroid.BoundingContent.Center.Z, 0));
+            asteroid.RemoveMaterial((int)Math.Round(asteroid.ContentCenter.X, 0), asteroid.Size.X, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, 0, (int)Math.Round(asteroid.ContentCenter.Z, 0));
 
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
@@ -410,7 +409,7 @@
             var height = asteroid.BoundingContent.Size.Y + 1;
 
             // remove the Top half.
-            asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.BoundingContent.Center.Y, 0), asteroid.Size.Y, null, null);
+            asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, null, null);
 
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);

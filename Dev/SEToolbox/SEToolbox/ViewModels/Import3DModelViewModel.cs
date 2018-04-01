@@ -564,7 +564,7 @@
                 Up = Up.ToVector3()
             };
 
-            IsValidModel = voxelMap.BoundingContent.Size.Volume > 0f;
+            IsValidModel = voxelMap.BoundingContent.Size.Volume() > 0;
 
             return entity;
         }

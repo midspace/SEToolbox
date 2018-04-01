@@ -69,9 +69,7 @@ namespace SEToolbox.Interop.Asteroids
         //[Obsolete]
         //private Vector3D _positionLeftBottomCorner;
 
-        private BoundingBoxD _boundingContent;
-
-        private MyStorageBase _storage;
+        private BoundingBoxI _boundingContent;
 
         private Dictionary<byte, long> _assetCount;
 
@@ -87,7 +85,33 @@ namespace SEToolbox.Interop.Asteroids
         // TODO: WeightedCenter.  Center of mass, as opposed to center by dimension.
         // public Vector3 WeightedCenter { get; private set; }
 
-        public BoundingBoxD BoundingContent { get { return _boundingContent; } }
+        public BoundingBoxI BoundingContent => _boundingContent;
+
+        /// <summary>
+        /// The BoundingContent + 1 around all sides.
+        /// This allows operations for copying the voxel correctly.
+        /// The volume itself, plus 1 extra layer surrounding the volume which affects the visual appearance at lower LODs.
+        /// </summary>
+        public BoundingBoxI InflatedBoundingContent
+        {
+            get
+            {
+                BoundingBoxI content = _boundingContent;
+
+                content.Inflate(1);
+                if (content.Min.X < 0) content.Min.X = 0;
+                if (content.Min.Y < 0) content.Min.Y = 0;
+                if (content.Min.Z < 0) content.Min.Z = 0;
+
+                if (content.Max.X >= Size.X) content.Max.X = Size.X - 1;
+                if (content.Max.Y >= Size.Y) content.Max.Y = Size.Y - 1;
+                if (content.Max.Z >= Size.Z) content.Max.Z = Size.Z - 1;
+
+                return content;
+            }
+        }
+
+        public Vector3D ContentCenter => _boundingContent.ToBoundingBoxD().Center;
 
         //public byte VoxelMaterial { get; private set; }
 
@@ -103,30 +127,31 @@ namespace SEToolbox.Interop.Asteroids
 
         public override void Init(MyObjectBuilder_EntityBase builder, IMyStorage storage)
         {
-            _storage = (MyStorageBase)storage;
+            m_storage = (MyStorageBase)storage;
         }
 
         public override Sandbox.Game.Entities.MyVoxelBase RootVoxel => this;
 
         public override IMyStorage Storage
         {
-            get { return _storage; }
-            set { _storage = (MyStorageBase)value; }
+            get { return m_storage; }
+            set { m_storage = value; }
         }
 
         public void Create(Vector3I size, string materialName)
         {
-            if (_storage != null)
-                _storage.Close();
+            if (m_storage != null)
+                m_storage.Close();
 
-            _storage = new MyOctreeStorage(null, size);
-            _storage.Geometry.Init(_storage);
+            var octreeStorage = new MyOctreeStorage(null, size);
+            octreeStorage.Geometry.Init(octreeStorage);
             byte materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
+            m_storage = octreeStorage;
             OverwriteAllMaterials(materialIndex);
 
             IsValid = true;
-            Size = _storage.Size;
-            _boundingContent = new BoundingBoxD();
+            Size = octreeStorage.Size;
+            _boundingContent = new BoundingBoxI();
             VoxCells = 0;
         }
 
@@ -137,20 +162,20 @@ namespace SEToolbox.Interop.Asteroids
             //Storage.OverwriteAllMaterials(voxelMaterial);
 
             Vector3I block;
+            var cacheSize = new Vector3I(64);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
                         var cache = new MyStorageData();
                         cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
-                        _storage.ReadRange(cache, MyStorageDataTypeFlags.Material, 0, block, maxRange);
+                        m_storage.ReadRange(cache, MyStorageDataTypeFlags.Material, 0, block, maxRange);
                         cache.BlockFillMaterial(Vector3I.Zero, cacheSize - 1, materialIndex);
-                        _storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, maxRange);
+                        m_storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, maxRange);
                     }
         }
 
@@ -290,15 +315,15 @@ namespace SEToolbox.Interop.Asteroids
         {
             try
             {
-                _storage = MyStorageBase.LoadFromFile(filename);
+                m_storage = MyStorageBase.LoadFromFile(filename);
                 IsValid = true;
                 //CalcVoxelCells();
-                Size = _storage.Size;
+                Size = m_storage.Size;
             }
             catch (Exception ex)
             {
                 Size = Vector3I.Zero;
-                _boundingContent = new BoundingBoxD();
+                _boundingContent = new BoundingBoxI();
                 VoxCells = 0;
                 IsValid = false;
                 DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptAsteroidFile, filename), ex);
@@ -687,7 +712,7 @@ namespace SEToolbox.Interop.Asteroids
             //Debug.Write("Compressing.");
 
             byte[] array;
-            _storage.Save(out array);
+            m_storage.Save(out array);
 
             File.WriteAllBytes(filename, array);
 
@@ -1121,18 +1146,18 @@ namespace SEToolbox.Interop.Asteroids
         public void SetVoxelContentRegion(byte content, int? xMin, int? xMax, int? yMin, int? yMax, int? zMin, int? zMax)
         {
             Vector3I block;
+            var cacheSize = new Vector3I(64);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
                         var cache = new MyStorageData();
                         cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
-                        _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+                        m_storage.ReadRange(cache, MyStorageDataTypeFlags.Content, 0, block, maxRange);
 
                         bool changed = false;
                         Vector3I p;
@@ -1201,7 +1226,7 @@ namespace SEToolbox.Interop.Asteroids
                                 }
 
                         if (changed)
-                            _storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
+                            m_storage.WriteRange(cache, MyStorageDataTypeFlags.Content, block, maxRange);
                     }
         }
 
@@ -1372,18 +1397,18 @@ namespace SEToolbox.Interop.Asteroids
         {
             var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             Vector3I block;
+            var cacheSize = new Vector3I(64);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
                         var cache = new MyStorageData();
                         cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
-                        _storage.ReadRange(cache, MyStorageDataTypeFlags.Material, 0, block, maxRange);
+                        m_storage.ReadRange(cache, MyStorageDataTypeFlags.Material, 0, block, maxRange);
 
                         Vector3I p;
                         for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
@@ -1393,7 +1418,7 @@ namespace SEToolbox.Interop.Asteroids
                                     cache.Material(ref p, materialIndex);
                                 }
 
-                        _storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, maxRange);
+                        m_storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, maxRange);
                     }
         }
 
@@ -1410,23 +1435,23 @@ namespace SEToolbox.Interop.Asteroids
         {
             var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             Vector3I block;
+            var cacheSize = new Vector3I(64);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
 
                         if (block.X == 0 || block.Y == 0 || block.Z == 0 ||
-                            block.X + cacheSize.X == _storage.Size.X - 1 || block.Z + cacheSize.Y == _storage.Size.Y - 1 ||
-                            block.Z + cacheSize.Z == _storage.Size.Z - 1)
+                            block.X + cacheSize.X == m_storage.Size.X - 1 || block.Z + cacheSize.Y == m_storage.Size.Y - 1 ||
+                            block.Z + cacheSize.Z == m_storage.Size.Z - 1)
                         {
                             var cache = new MyStorageData();
                             cache.Resize(cacheSize);
                             // LOD1 is not detailed enough for content information on asteroids.
                             Vector3I maxRange = block + cacheSize - 1;
-                            _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+                            m_storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
 
                             bool changed = false;
                             Vector3I p;
@@ -1436,7 +1461,7 @@ namespace SEToolbox.Interop.Asteroids
                                     {
                                         var min = p + block;
                                         if (min.X == 0 || min.Y == 0 || min.Z == 0 ||
-                                            min.X == _storage.Size.X - 1 || min.Y == _storage.Size.Y - 1 || min.Z == _storage.Size.Z - 1)
+                                            min.X == m_storage.Size.X - 1 || min.Y == m_storage.Size.Y - 1 || min.Z == m_storage.Size.Z - 1)
                                         {
                                             if (cache.Material(ref p) != materialIndex)
                                             {
@@ -1447,7 +1472,7 @@ namespace SEToolbox.Interop.Asteroids
                                     }
 
                             if (changed)
-                                _storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
+                                m_storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
                         }
                     }
         }
@@ -1467,19 +1492,19 @@ namespace SEToolbox.Interop.Asteroids
             var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
 
             // read the asteroid in chunks of 8 to simulate datacells.
-            var cacheSize = new Vector3I(_storage.Size.X >> 3);
+            var cacheSize = new Vector3I(m_storage.Size.X >> 3);
             var cache = new MyStorageData();
             cache.Resize(cacheSize);
-            _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 3, Vector3I.Zero, cacheSize - 1);
+            m_storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 3, Vector3I.Zero, cacheSize - 1);
 
             var writebufferSize = new Vector3I(8);
             var writebuffer = new MyStorageData();
             writebuffer.Resize(writebufferSize);
 
             Vector3I dataCell;
-            for (dataCell.X = 0; dataCell.X < cacheSize.X; dataCell.X ++)
+            for (dataCell.X = 0; dataCell.X < cacheSize.X; dataCell.X++)
             {
-                for (dataCell.Y = 0; dataCell.Y < cacheSize.Y; dataCell.Y ++)
+                for (dataCell.Y = 0; dataCell.Y < cacheSize.Y; dataCell.Y++)
                 {
                     for (curThickness = 0, dataCell.Z = 0; dataCell.Z < cacheSize.Z - 1; dataCell.Z++)
                     {
@@ -1490,9 +1515,9 @@ namespace SEToolbox.Interop.Asteroids
                             Vector3I bufferPosition = new Vector3I(dataCell.X << 3, dataCell.Y << 3, dataCell.Z << 3);
                             var maxRange = bufferPosition + writebufferSize - 1;
                             writebuffer.ClearMaterials(0);
-                            _storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
+                            m_storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
                             writebuffer.BlockFillMaterial(Vector3I.Zero, writebufferSize - 1, materialIndex);
-                            _storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
+                            m_storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
 
                             if ((targtThickness > 0 && ++curThickness >= targtThickness) || cache.Content(ref nextCell) == 255)
                                 break;
@@ -1506,9 +1531,9 @@ namespace SEToolbox.Interop.Asteroids
                             Vector3I bufferPosition = new Vector3I(dataCell.X << 3, dataCell.Y << 3, dataCell.Z << 3);
                             var maxRange = bufferPosition + writebufferSize - 1;
                             writebuffer.ClearMaterials(0);
-                            _storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
+                            m_storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
                             writebuffer.BlockFillMaterial(Vector3I.Zero, writebufferSize - 1, materialIndex);
-                            _storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
+                            m_storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
 
                             if ((targtThickness > 0 && ++curThickness >= targtThickness) || cache.Content(ref nextCell) == 255)
                                 break;
@@ -1529,9 +1554,9 @@ namespace SEToolbox.Interop.Asteroids
                             Vector3I bufferPosition = new Vector3I(dataCell.X << 3, dataCell.Y << 3, dataCell.Z << 3);
                             var maxRange = bufferPosition + writebufferSize - 1;
                             writebuffer.ClearMaterials(0);
-                            _storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
+                            m_storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
                             writebuffer.BlockFillMaterial(Vector3I.Zero, writebufferSize - 1, materialIndex);
-                            _storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
+                            m_storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
                             if ((targtThickness > 0 && ++curThickness >= targtThickness) || cache.Content(ref nextCell) == 255)
                                 break;
                         }
@@ -1544,9 +1569,9 @@ namespace SEToolbox.Interop.Asteroids
                             Vector3I bufferPosition = new Vector3I(dataCell.X << 3, dataCell.Y << 3, dataCell.Z << 3);
                             var maxRange = bufferPosition + writebufferSize - 1;
                             writebuffer.ClearMaterials(0);
-                            _storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
+                            m_storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
                             writebuffer.BlockFillMaterial(Vector3I.Zero, writebufferSize - 1, materialIndex);
-                            _storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
+                            m_storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
                             if ((targtThickness > 0 && ++curThickness >= targtThickness) || cache.Content(ref nextCell) == 255)
                                 break;
                         }
@@ -1566,9 +1591,9 @@ namespace SEToolbox.Interop.Asteroids
                             Vector3I bufferPosition = new Vector3I(dataCell.X << 3, dataCell.Y << 3, dataCell.Z << 3);
                             var maxRange = bufferPosition + writebufferSize - 1;
                             writebuffer.ClearMaterials(0);
-                            _storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
+                            m_storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
                             writebuffer.BlockFillMaterial(Vector3I.Zero, writebufferSize - 1, materialIndex);
-                            _storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
+                            m_storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
                             if ((targtThickness > 0 && ++curThickness >= targtThickness) || cache.Content(ref nextCell) == 255)
                                 break;
                         }
@@ -1581,9 +1606,9 @@ namespace SEToolbox.Interop.Asteroids
                             Vector3I bufferPosition = new Vector3I(dataCell.X << 3, dataCell.Y << 3, dataCell.Z << 3);
                             var maxRange = bufferPosition + writebufferSize - 1;
                             writebuffer.ClearMaterials(0);
-                            _storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
+                            m_storage.ReadRange(writebuffer, MyStorageDataTypeFlags.Material, 0, bufferPosition, maxRange);
                             writebuffer.BlockFillMaterial(Vector3I.Zero, writebufferSize - 1, materialIndex);
-                            _storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
+                            m_storage.WriteRange(writebuffer, MyStorageDataTypeFlags.Material, bufferPosition, maxRange);
                             if ((targtThickness > 0 && ++curThickness >= targtThickness) || cache.Content(ref nextCell) == 255)
                                 break;
                         }
@@ -1596,44 +1621,44 @@ namespace SEToolbox.Interop.Asteroids
 
         #region RemoveContent
 
-        [Obsolete]
-        public void RemoveContent()
-        {
-            Vector3I cellCoord;
+        //[Obsolete]
+        //public void RemoveContent()
+        //{
+        //    Vector3I cellCoord;
 
-            for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
-            {
-                for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
-                {
-                    for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
-                    {
-                        var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
+        //    for (cellCoord.X = 0; cellCoord.X < _dataCellsCount.X; cellCoord.X++)
+        //    {
+        //        for (cellCoord.Y = 0; cellCoord.Y < _dataCellsCount.Y; cellCoord.Y++)
+        //        {
+        //            for (cellCoord.Z = 0; cellCoord.Z < _dataCellsCount.Z; cellCoord.Z++)
+        //            {
+        //                var voxelCell = _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z];
 
-                        if (voxelCell == null)
-                        {
-                            var newCell = new MyVoxelContentCell();
-                            _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
-                            newCell.SetToEmpty();
-                        }
-                        else if (voxelCell.CellType == MyVoxelCellType.MIXED)
-                        {
-                            // A mixed cell.
-                            Vector3I voxelCoordInCell;
-                            for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
-                            {
-                                for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
-                                {
-                                    for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
-                                    {
-                                        voxelCell.SetVoxelContent(0x00, ref voxelCoordInCell);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //                if (voxelCell == null)
+        //                {
+        //                    var newCell = new MyVoxelContentCell();
+        //                    _voxelContentCells[cellCoord.X][cellCoord.Y][cellCoord.Z] = newCell;
+        //                    newCell.SetToEmpty();
+        //                }
+        //                else if (voxelCell.CellType == MyVoxelCellType.MIXED)
+        //                {
+        //                    // A mixed cell.
+        //                    Vector3I voxelCoordInCell;
+        //                    for (voxelCoordInCell.X = 0; voxelCoordInCell.X < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.X++)
+        //                    {
+        //                        for (voxelCoordInCell.Y = 0; voxelCoordInCell.Y < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Y++)
+        //                        {
+        //                            for (voxelCoordInCell.Z = 0; voxelCoordInCell.Z < MyVoxelConstants.VOXEL_DATA_CELL_SIZE_IN_VOXELS; voxelCoordInCell.Z++)
+        //                            {
+        //                                voxelCell.SetVoxelContent(0x00, ref voxelCoordInCell);
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         public void RemoveContent(string materialName, string replaceFillMaterial)
         {
@@ -1642,18 +1667,18 @@ namespace SEToolbox.Interop.Asteroids
             if (!string.IsNullOrEmpty(replaceFillMaterial))
                 replaceMaterialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(replaceFillMaterial);
             Vector3I block;
+            var cacheSize = new Vector3I(64);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
                         var cache = new MyStorageData();
                         cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
-                        _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+                        m_storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
 
                         bool changed = false;
                         Vector3I p;
@@ -1671,7 +1696,7 @@ namespace SEToolbox.Interop.Asteroids
                                 }
 
                         if (changed)
-                            _storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
+                            m_storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
                     }
         }
 
@@ -1690,18 +1715,18 @@ namespace SEToolbox.Interop.Asteroids
             var replaceMaterialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(replaceFillMaterial);
 
             Vector3I block;
+            var cacheSize = new Vector3I(64);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
                         var cache = new MyStorageData();
                         cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
-                        _storage.ReadRange(cache, MyStorageDataTypeFlags.Material, 0, block, maxRange);
+                        m_storage.ReadRange(cache, MyStorageDataTypeFlags.Material, 0, block, maxRange);
 
                         bool changed = false;
                         Vector3I p;
@@ -1717,7 +1742,7 @@ namespace SEToolbox.Interop.Asteroids
                                 }
 
                         if (changed)
-                            _storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, maxRange);
+                            m_storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, maxRange);
                     }
         }
 
@@ -1732,15 +1757,15 @@ namespace SEToolbox.Interop.Asteroids
             if (!IsValid)
             {
                 _assetCount = new Dictionary<byte, long>();
-                _boundingContent = new BoundingBoxD();
+                _boundingContent = new BoundingBoxI();
                 VoxCells = sum;
                 return;
             }
 
-            if (_storage.DataProvider is MyPlanetStorageProvider)
+            if (m_storage.DataProvider is MyPlanetStorageProvider)
             {
                 _assetCount = new Dictionary<byte, long>();
-                _boundingContent = new BoundingBoxD(Vector3D.Zero, _storage.Size.ToVector3D());
+                _boundingContent = new BoundingBoxI(Vector3I.Zero, m_storage.Size);
                 VoxCells = sum;
                 return;
             }
@@ -1748,19 +1773,19 @@ namespace SEToolbox.Interop.Asteroids
             Vector3I min = Vector3I.MaxValue;
             Vector3I max = Vector3I.MinValue;
             Vector3I block;
+            var cacheSize = new Vector3I(64);
             Dictionary<byte, long> assetCount = new Dictionary<byte, long>();
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
                         var cache = new MyStorageData();
                         cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
-                        _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+                        m_storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
 
                         Vector3I p;
                         for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
@@ -1786,9 +1811,9 @@ namespace SEToolbox.Interop.Asteroids
             _assetCount = assetCount;
 
             if (min == Vector3I.MaxValue && max == Vector3I.MinValue)
-                _boundingContent = new BoundingBoxD();
+                _boundingContent = new BoundingBoxI();
             else
-                _boundingContent = new BoundingBoxD(min, max - 1);
+                _boundingContent = new BoundingBoxI(min, max - 1);
             VoxCells = sum;
 
             //new MyOctreeStorage()
@@ -1908,19 +1933,19 @@ namespace SEToolbox.Interop.Asteroids
                 return null;
 
             Vector3I block;
+            var cacheSize = new Vector3I(64);
             var voxelMaterialList = new List<byte>();
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
                         var cache = new MyStorageData();
                         cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
-                        _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+                        m_storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
 
                         Vector3I p;
                         for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
@@ -1944,19 +1969,19 @@ namespace SEToolbox.Interop.Asteroids
                 return;
 
             Vector3I block;
+            var cacheSize = new Vector3I(64);
             int index = 0;
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < _storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < _storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < _storage.Size.X; block.X += 64)
+            for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cacheSize = new Vector3I(64);
                         var cache = new MyStorageData();
                         cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
-                        _storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+                        m_storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
 
                         Vector3I p;
                         for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
@@ -1971,7 +1996,7 @@ namespace SEToolbox.Interop.Asteroids
                                     }
                                 }
 
-                        _storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, maxRange);
+                        m_storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, maxRange);
                     }
         }
 
@@ -2431,8 +2456,8 @@ namespace SEToolbox.Interop.Asteroids
         {
             if (disposing)
             {
-                if (_storage != null)
-                    _storage.Close();
+                if (m_storage != null)
+                    m_storage.Close();
             }
         }
 

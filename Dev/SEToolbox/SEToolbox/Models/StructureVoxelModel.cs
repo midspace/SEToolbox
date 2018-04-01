@@ -25,7 +25,8 @@
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
-        private BoundingBoxD _contentBounds;
+        private BoundingBoxI _contentBounds;
+        private BoundingBoxI _inflatedContentBounds;
         private long _voxCells;
 
         [NonSerialized]
@@ -167,7 +168,7 @@
         [XmlIgnore]
         public Vector3I ContentSize
         {
-            get { return _contentBounds.SizeInt() + 1; } // Content size
+            get { return _contentBounds.Size + 1; } // Content size
         }
 
         /// <summary>
@@ -175,7 +176,7 @@
         /// So Min and Max values are both inclusive.
         /// </summary>
         [XmlIgnore]
-        public BoundingBoxD ContentBounds
+        public BoundingBoxI ContentBounds
         {
             get { return _contentBounds; }
 
@@ -188,6 +189,9 @@
                 }
             }
         }
+
+        [XmlIgnore]
+        public BoundingBoxI InflatedContentBounds => _inflatedContentBounds;
 
         [XmlIgnore]
         public long VoxCells
@@ -301,26 +305,12 @@
             _asyncWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
             _asyncWorker.DoWork += delegate
             {
-                if (!_isLoadingAsync && (MaterialAssets == null || MaterialAssets.Count == 0))
+                if (!_isLoadingAsync)
                 {
                     _isLoadingAsync = true;
 
                     IsBusy = true;
-
-                    Dictionary<string, long> details;
-
-                    details = _voxelMap.RefreshAssets();
-                    _contentBounds = _voxelMap.BoundingContent;
-                    _voxCells = _voxelMap.VoxCells;
-                    Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
-
-                    var sum = details.Values.ToList().Sum();
-                    var list = new List<VoxelMaterialAssetModel>();
-
-                    foreach (var kvp in details)
-                        list.Add(new VoxelMaterialAssetModel { MaterialName = kvp.Key, Volume = (double)kvp.Value / 255, Percent = (double)kvp.Value / (double)sum });
-
-                    MaterialAssets = list;
+                    LoadDetailsSync();
                     IsBusy = false;
 
                     _isLoadingAsync = false;
@@ -337,6 +327,26 @@
             };
 
             _asyncWorker.RunWorkerAsync();
+        }
+
+        public void LoadDetailsSync()
+        {
+            if (MaterialAssets == null || MaterialAssets.Count == 0)
+            {
+                Dictionary<string, long> details = _voxelMap.RefreshAssets();
+                _contentBounds = _voxelMap.BoundingContent;
+                _inflatedContentBounds = _voxelMap.InflatedBoundingContent;
+                _voxCells = _voxelMap.VoxCells;
+                Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
+
+                var sum = details.Values.ToList().Sum();
+                var list = new List<VoxelMaterialAssetModel>();
+
+                foreach (var kvp in details)
+                    list.Add(new VoxelMaterialAssetModel {MaterialName = kvp.Key, Volume = (double) kvp.Value/255, Percent = (double) kvp.Value/(double) sum});
+
+                MaterialAssets = list;
+            }
         }
 
         public override void CancelAsync()
@@ -361,7 +371,7 @@
                 RaisePropertyChanged(() => Size);
                 RaisePropertyChanged(() => ContentSize);
                 RaisePropertyChanged(() => IsValid);
-                Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+                Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
                 WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
             }
         }
@@ -369,7 +379,7 @@
         public override void RecalcPosition(Vector3D playerPosition)
         {
             base.RecalcPosition(playerPosition);
-            Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+            Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
             WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }
 
@@ -387,14 +397,14 @@
             RaisePropertyChanged(() => Size);
             RaisePropertyChanged(() => ContentSize);
             RaisePropertyChanged(() => IsValid);
-            Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+            Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
             WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }
 
         public bool ExtractStationIntersect(IMainView mainViewModel, bool tightIntersection)
         {
             // Make a shortlist of station Entities in the bounding box of the asteroid.
-            var asteroidWorldAABB = new BoundingBoxD(ContentBounds.Min + PositionAndOrientation.Value.Position, ContentBounds.Max + PositionAndOrientation.Value.Position);
+            var asteroidWorldAABB = new BoundingBoxD((Vector3D)ContentBounds.Min + PositionAndOrientation.Value.Position, (Vector3D)ContentBounds.Max + PositionAndOrientation.Value.Position);
             var stations = mainViewModel.GetIntersectingEntities(asteroidWorldAABB).Where(e => e.ClassType == ClassType.LargeStation).Cast<StructureCubeGridModel>().ToList();
 
             if (stations.Count == 0)
@@ -430,6 +440,7 @@
                     if (asteroidWorldAABB.Intersects(cubeWorldAABB))
                     {
                         Vector3I block;
+                        var cacheSize = new Vector3I(64);
                         Vector3D position = PositionAndOrientation.Value.Position;
 
                         // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
@@ -437,12 +448,11 @@
                             for (block.Y = 0; block.Y < asteroid.Storage.Size.Y; block.Y += 64)
                                 for (block.X = 0; block.X < asteroid.Storage.Size.X; block.X += 64)
                                 {
-                                    var cacheSize = new Vector3I(64);
                                     var cache = new MyStorageData();
                                     cache.Resize(cacheSize);
                                     // LOD1 is not detailed enough for content information on asteroids.
                                     Vector3I maxRange = block + cacheSize - 1;
-                                    asteroid.Storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
+                                    asteroid.Storage.ReadRange(cache, MyStorageDataTypeFlags.Content, 0, block, maxRange);
 
                                     bool changed = false;
                                     Vector3I p;
@@ -464,7 +474,7 @@
 
                                     if (changed)
                                     {
-                                        asteroid.Storage.WriteRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, block, maxRange);
+                                        asteroid.Storage.WriteRange(cache, MyStorageDataTypeFlags.Content, block, maxRange);
                                         modified = true;
                                     }
                                 }

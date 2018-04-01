@@ -301,9 +301,9 @@
             Assert.AreEqual(128, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(128, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(48, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(112, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(48, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(48, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(112, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(48, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             Assert.AreEqual(30909925, voxelMap.VoxCells, "Voxel cells must match.");
         }
@@ -583,9 +583,9 @@
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(8, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(8, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(8, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(8, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(8, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(8, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of 1 and 8.   1234-(4.5)-5678
             Assert.AreEqual(4.5, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
@@ -628,9 +628,9 @@
             Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(8, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(8, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(8, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(8, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(8, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(8, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of 1 and 8.   1234-(4.5)-5678
             Assert.AreEqual(4.5, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
@@ -673,9 +673,9 @@
             //Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
             //Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            //Assert.AreEqual(7, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            //Assert.AreEqual(7, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            //Assert.AreEqual(7, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            //Assert.AreEqual(7, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            //Assert.AreEqual(7, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            //Assert.AreEqual(7, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             //// Centered in the middle of the 64x64x64 cell.
             //Assert.AreEqual(32, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
@@ -712,9 +712,9 @@
 
             Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
 
-            Assert.AreEqual(81, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(81, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(81, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(81, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(81, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(81, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of the 512x512x512 cell.
             Assert.AreEqual(64, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
@@ -777,9 +777,9 @@
             Assert.AreEqual(512, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(512, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(501, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(501, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(501, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(501, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(501, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(501, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of the 512x512x512 cell.
             Assert.AreEqual(256, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
@@ -787,6 +787,7 @@
             Assert.AreEqual(256, voxelMap.BoundingContent.Center.Z, "Voxel Center must match.");
         }
 
+        [Ignore]
         [TestMethod]
         public void VoxelGenerateSpikeWall()
         {
@@ -830,9 +831,9 @@
             Assert.AreEqual(1024, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(1022, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(1022, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(2, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(1022, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(1022, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(2, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of the 512x512x512 cell.
             Assert.AreEqual(511.5, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
@@ -904,9 +905,9 @@
             Assert.AreEqual(256, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(256, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(249, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(249, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(249, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(249, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(249, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(249, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of the 256x256x256 cell.
             Assert.AreEqual(128, voxelMap.BoundingContent.Center.X, "Voxel Center must match.");
@@ -937,9 +938,9 @@
 
             voxelMap.Save(voxelFile);
 
-            Assert.AreEqual(50, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(46, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(70, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(50, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(46, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(70, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             Assert.AreEqual(18666335, voxelMap.VoxCells, "Voxel cells must match.");
         }
@@ -1004,9 +1005,9 @@
             Assert.AreEqual(128, voxelMap.Size.Y, "Voxel Bounding size must match.");
             Assert.AreEqual(128, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(64, voxelMap.BoundingContent.SizeInt().X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(64, voxelMap.BoundingContent.SizeInt().Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(64, voxelMap.BoundingContent.SizeInt().Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(64, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(64, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(64, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             Assert.AreEqual(66846720, voxelMap.VoxCells, "Voxel cells must match.");
 
@@ -1094,8 +1095,9 @@
             Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
         }
 
+        [Ignore]
         [TestMethod]
-        public void VoxelRebuild1()
+        public void VoxelGenerateSpikeCubeLarge()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");

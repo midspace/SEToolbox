@@ -559,16 +559,19 @@
                     // Figure out where the Character is facing, and plant the new construct centered in front of the Character, but "BuildDistance" units out in front.
                     var lookVector = (VRageMath.Vector3D)_dataModel.CharacterPosition.Forward.ToVector3();
                     lookVector.Normalize();
-                    VRageMath.Vector3D? boundingIntersectPoint = voxelMap.BoundingContent.IntersectsRayAt(voxelMap.BoundingContent.Center, -lookVector * 5000d);
+
+                    BoundingBoxD content = voxelMap.BoundingContent.ToBoundingBoxD();
+
+                    VRageMath.Vector3D? boundingIntersectPoint = content.IntersectsRayAt(content.Center, -lookVector * 5000d);
 
                     if (!boundingIntersectPoint.HasValue)
                     {
-                        boundingIntersectPoint = voxelMap.BoundingContent.Center;
+                        boundingIntersectPoint = content.Center;
                     }
 
-                    var distance = VRageMath.Vector3D.Distance(boundingIntersectPoint.Value, voxelMap.BoundingContent.Center) + (float)BuildDistance;
+                    var distance = VRageMath.Vector3D.Distance(boundingIntersectPoint.Value, content.Center) + (float)BuildDistance;
                     VRageMath.Vector3D vector = lookVector * distance;
-                    position = VRageMath.Vector3D.Add(_dataModel.CharacterPosition.Position, vector) - voxelMap.BoundingContent.Center;
+                    position = VRageMath.Vector3D.Add(_dataModel.CharacterPosition.Position, vector) - content.Center;
                 }
 
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)
@@ -585,7 +588,7 @@
                     Up = up
                 };
 
-                IsValidEntity = voxelMap.BoundingContent.Size.Volume > 0f;
+                IsValidEntity = voxelMap.BoundingContent.Size.Volume() > 0;
 
                 NewEntity = entity;
 

@@ -23,7 +23,7 @@
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
-        private BoundingBoxD _contentBounds;
+        private Vector3D _contentCenter;
 
         [NonSerialized]
         private BackgroundWorker _asyncWorker;
@@ -312,8 +312,8 @@
                     // TODO: planet details
                     
                     _voxelMap.RefreshAssets();
-                    _contentBounds = _voxelMap.BoundingContent;
-                    Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+                    _contentCenter = _voxelMap.ContentCenter;
+                    Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
 
                     IsBusy = false;
 
@@ -342,11 +342,11 @@
                 _voxelMap.Load(filename);
 
                 Size = _voxelMap.Size;
-                _contentBounds = _voxelMap.BoundingContent;
+                _contentCenter = _voxelMap.ContentCenter;
                 IsValid = _voxelMap.IsValid;
                 RaisePropertyChanged(() => Size);
                 RaisePropertyChanged(() => IsValid);
-                Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+                Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
                 WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
             }
         }
@@ -354,7 +354,7 @@
         public override void RecalcPosition(Vector3D playerPosition)
         {
             base.RecalcPosition(playerPosition);
-            Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+            Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
             WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }
 
