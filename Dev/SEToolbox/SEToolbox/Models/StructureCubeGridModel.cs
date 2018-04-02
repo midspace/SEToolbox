@@ -1367,6 +1367,7 @@
                     break;
             }
 
+            // Note, the Base6Directions methods call GetDirection(), which rounds off the vector, which should prevent floating point errors creeping in.
             mirrorOrientation = new SerializableBlockOrientation(Base6Directions.GetForward(ref targetMatrix), Base6Directions.GetUp(ref targetMatrix));
         }
 

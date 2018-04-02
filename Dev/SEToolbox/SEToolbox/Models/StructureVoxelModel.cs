@@ -401,6 +401,80 @@
             WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }
 
+        public void RotateAsteroid(Quaternion quaternion)
+        {
+            var sourceFile = SourceVoxelFilepath ?? VoxelFilepath;
+
+            var asteroid = new MyVoxelMap();
+            asteroid.Load(sourceFile);
+
+            var newAsteroid = new MyVoxelMap();
+            var newSize = asteroid.Size;
+            newAsteroid.Create(newSize, SpaceEngineersCore.Resources.GetDefaultMaterialIndex());
+
+            Vector3I block;
+            var halfSize = asteroid.Storage.Size / 2;
+            
+            // Don't use anything smaller than 64 for smaller voxels, as it trashes the cache.
+            var cacheSize = new Vector3I(64); 
+            var halfCacheSize = new Vector3I(32); // This should only be used for the Transform, not the cache.
+
+            // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
+            for (block.Z = 0; block.Z < asteroid.Storage.Size.Z; block.Z += 64)
+                for (block.Y = 0; block.Y < asteroid.Storage.Size.Y; block.Y += 64)
+                    for (block.X = 0; block.X < asteroid.Storage.Size.X; block.X += 64)
+                    {
+                        #region source voxel
+
+                        var cache = new MyStorageData();
+                        cache.Resize(cacheSize);
+                        // LOD1 is not detailed enough for content information on asteroids.
+                        asteroid.Storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, block + cacheSize - 1);
+
+                        #endregion
+
+                        #region target Voxel
+
+                        // the block is a cubiod. The entire space needs to rotate, to be able to gauge where the new block position starts from.
+                        var newBlockMin = Vector3I.Transform(block - halfSize, quaternion) + halfSize;
+                        var newBlockMax = Vector3I.Transform(block + 64 - halfSize, quaternion) + halfSize;
+                        var newBlock = Vector3I.Min(newBlockMin, newBlockMax);
+
+                        var newCache = new MyStorageData();
+                        newCache.Resize(cacheSize);
+                        newAsteroid.Storage.ReadRange(newCache, MyStorageDataTypeFlags.ContentAndMaterial, 0, newBlock, newBlock + cacheSize - 1);
+
+                        #endregion
+
+                        bool changed = false;
+                        Vector3I p;
+                        for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
+                            for (p.Y = 0; p.Y < cacheSize.Y; ++p.Y)
+                                for (p.X = 0; p.X < cacheSize.X; ++p.X)
+                                {
+                                    byte volume = cache.Content(ref p);
+                                    byte cellMaterial = cache.Material(ref p);
+
+                                    var newP1 = Vector3I.Transform(p - halfCacheSize, quaternion) + halfCacheSize;
+                                    var newP2 = Vector3I.Transform(p + 1 - halfCacheSize, quaternion) + halfCacheSize;
+                                    var newP = Vector3I.Min(newP1, newP2);
+
+                                    newCache.Content(ref newP, volume);
+                                    newCache.Material(ref newP, cellMaterial);
+                                    changed = true;
+                                }
+
+                        if (changed)
+                            newAsteroid.Storage.WriteRange(newCache, MyStorageDataTypeFlags.ContentAndMaterial, newBlock, newBlock + cacheSize - 1);
+                    }
+
+
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
+            newAsteroid.Save(tempfilename);
+
+            SourceVoxelFilepath = tempfilename;
+        }
+
         public bool ExtractStationIntersect(IMainView mainViewModel, bool tightIntersection)
         {
             // Make a shortlist of station Entities in the bounding box of the asteroid.
@@ -495,78 +569,6 @@
                 InitializeAsync();
             }
             return modified;
-        }
-
-        public void RotateAsteroid(Quaternion quaternion)
-        {
-            var sourceFile = SourceVoxelFilepath ?? VoxelFilepath;
-
-            var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile);
-
-            var newAsteroid = new MyVoxelMap();
-            var newSize = asteroid.Size;
-            newAsteroid.Create(newSize, SpaceEngineersCore.Resources.GetDefaultMaterialName());
-
-            Vector3I block;
-            var halfSize = asteroid.Storage.Size / 2;
-            var cacheSize = new Vector3I(64);
-            var halfCacheSize = new Vector3I(32);
-
-            // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
-            for (block.Z = 0; block.Z < asteroid.Storage.Size.Z; block.Z += 64)
-                for (block.Y = 0; block.Y < asteroid.Storage.Size.Y; block.Y += 64)
-                    for (block.X = 0; block.X < asteroid.Storage.Size.X; block.X += 64)
-                    {
-                        #region source voxel
-
-                        var cache = new MyStorageData();
-                        cache.Resize(cacheSize);
-                        // LOD1 is not detailed enough for content information on asteroids.
-                        asteroid.Storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, block + cacheSize - 1);
-
-                        #endregion
-
-                        #region target Voxel
-
-                        // the block is a cubiod. The entire space needs to rotate, to be able to gauge where the new block position starts from.
-                        var newBlockMin = Vector3I.Transform(block - halfSize, quaternion) + halfSize;
-                        var newBlockMax = Vector3I.Transform(block + 64 - halfSize, quaternion) + halfSize;
-                        var newBlock = Vector3I.Min(newBlockMin, newBlockMax);
-
-                        var newCache = new MyStorageData();
-                        newCache.Resize(cacheSize);
-                        newAsteroid.Storage.ReadRange(newCache, MyStorageDataTypeFlags.ContentAndMaterial, 0, newBlock, newBlock + cacheSize - 1);
-
-                        #endregion
-
-                        bool changed = false;
-                        Vector3I p;
-                        for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
-                            for (p.Y = 0; p.Y < cacheSize.Y; ++p.Y)
-                                for (p.X = 0; p.X < cacheSize.X; ++p.X)
-                                {
-                                    byte volume = cache.Content(ref p);
-                                    byte cellMaterial = cache.Material(ref p);
-
-                                    var newP1 = Vector3I.Transform(p - halfCacheSize, quaternion) + halfCacheSize;
-                                    var newP2 = Vector3I.Transform(p + 1 - halfCacheSize, quaternion) + halfCacheSize;
-                                    var newP = Vector3I.Min(newP1, newP2);
-
-                                    newCache.Content(ref newP, volume);
-                                    newCache.Material(ref newP, cellMaterial);
-                                    changed = true;
-                                }
-
-                        if (changed)
-                            newAsteroid.Storage.WriteRange(newCache, MyStorageDataTypeFlags.ContentAndMaterial, newBlock, newBlock + cacheSize - 1);
-                    }
-
-
-            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
-            newAsteroid.Save(tempfilename);
-
-            SourceVoxelFilepath = tempfilename;
         }
 
         #endregion

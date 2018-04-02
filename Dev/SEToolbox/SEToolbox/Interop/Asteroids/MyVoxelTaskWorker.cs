@@ -1,6 +1,5 @@
 ﻿namespace SEToolbox.Interop.Asteroids
 {
-    //using VRageRender.Voxels;
     using VRage.Voxels;
     using VRageMath;
 

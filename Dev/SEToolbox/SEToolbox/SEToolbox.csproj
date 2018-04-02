@@ -240,11 +240,7 @@
     <Compile Include="Interop\Asteroids\MyVoxelTaskWorker.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilder.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilderArgs.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelConstants.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelContentCell.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelContentCellContent.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelMap.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelMaterialCell.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelRayTracer.cs" />
     <Compile Include="Interop\BlueprintRequirement.cs" />
     <Compile Include="Interop\ContentDataPath.cs" />

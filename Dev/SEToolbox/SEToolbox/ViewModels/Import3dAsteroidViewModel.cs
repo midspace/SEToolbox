@@ -495,7 +495,7 @@
                 if (geometry != null)
                     geometeries.Add(geometry);
             }
-            meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), InsideStockMaterial.Value, InsideStockMaterial.Value));
+            meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), InsideStockMaterial.MaterialIndex, InsideStockMaterial.MaterialIndex));
 
             #region handle dialogs and process the conversion
 
@@ -561,7 +561,6 @@
                     lookVector.Normalize();
 
                     BoundingBoxD content = voxelMap.BoundingContent.ToBoundingBoxD();
-
                     VRageMath.Vector3D? boundingIntersectPoint = content.IntersectsRayAt(content.Center, -lookVector * 5000d);
 
                     if (!boundingIntersectPoint.HasValue)

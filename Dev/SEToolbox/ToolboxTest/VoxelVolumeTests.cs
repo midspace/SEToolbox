@@ -47,7 +47,7 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Index, stoneMaterial.Index));
             }
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
@@ -57,8 +57,8 @@
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(7380, voxelFileLength, "File size must match.");
-            Assert.AreEqual(new Vector3I(64, 64, 64), voxelMap.Size, "Voxel Bounding size must match.");
+            Assert.AreEqual(7377, voxelFileLength, "File size must match.");
+            Assert.AreEqual(new Vector3I(32, 32, 32), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(27, 27, 27), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
 
             Assert.AreEqual(2035523, voxelMap.VoxCells, "Voxel cells must match.");
@@ -88,7 +88,7 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Index, stoneMaterial.Index));
             }
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
@@ -98,8 +98,8 @@
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(7413, voxelFileLength, "File size must match.");
-            Assert.AreEqual(new Vector3I(64, 64, 64), voxelMap.Size, "Voxel Bounding size must match.");
+            Assert.AreEqual(7408, voxelFileLength, "File size must match.");
+            Assert.AreEqual(new Vector3I(32, 32, 32), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(26, 26, 26), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
 
             Assert.AreEqual(2047046, voxelMap.VoxCells, "Voxel cells must match.");
@@ -128,7 +128,7 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Index, stoneMaterial.Index));
             }
 
             bool doCancel = false;
@@ -211,7 +211,7 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, "Stone_01", "Stone_01"));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Index, stoneMaterial.Index));
             }
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,

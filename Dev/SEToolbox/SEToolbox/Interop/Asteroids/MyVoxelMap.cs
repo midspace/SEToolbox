@@ -1,15 +1,4 @@
-﻿//===================================================================================
-// Voxel Methods/Classes for Space Engineers.
-// Based on the Miner-Wars-2081 Mod Kit.
-// Copyright (c) Keen Software House a. s.
-// This code is expressly licenced, and should not be used in any application without 
-// the permission of Keen Software House.
-// See http://www.keenswh.com/about.html
-// All rights reserved.
-//===================================================================================
-
-
-namespace SEToolbox.Interop.Asteroids
+﻿namespace SEToolbox.Interop.Asteroids
 {
     using Sandbox.Engine.Voxels;
     using SEToolbox.Interop;
@@ -44,7 +33,6 @@ namespace SEToolbox.Interop.Asteroids
         #region properties
 
         public new Vector3I Size { get; private set; }
-
 
         public BoundingBoxI BoundingContent => _boundingContent;
 
@@ -97,14 +85,12 @@ namespace SEToolbox.Interop.Asteroids
             set { m_storage = value; }
         }
 
-        public void Create(Vector3I size, string materialName)
+        public void Create(Vector3I size, byte materialIndex)
         {
-            if (m_storage != null)
-                m_storage.Close();
+            m_storage?.Close();
 
             var octreeStorage = new MyOctreeStorage(null, size);
             octreeStorage.Geometry.Init(octreeStorage);
-            byte materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             m_storage = octreeStorage;
             OverwriteAllMaterials(materialIndex);
 
@@ -116,14 +102,14 @@ namespace SEToolbox.Interop.Asteroids
 
         private void OverwriteAllMaterials(byte materialIndex)
         {
-            // does not work
-            //MyVoxelMaterialDefinition voxelMaterial = MyDefinitionManager.Static.GetVoxelMaterialDefinition(materialName);
-            //Storage.OverwriteAllMaterials(voxelMaterial);
+            // For some reason the cacheSize will NOT work at the same size of the storage when less than 64.
+            // This can be seen by trying to read the material, update and write back, then read again to verify.
+            // Trying to adjust the size in BlockFillMaterial will only lead to memory corruption.
+            // Normally I wouldn't recommend usig an oversized cache, but in this case it should not be an issue as we are changing the material for the entire voxel space.
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size * 2);
 
             Vector3I block;
-            var cacheSize = new Vector3I(64);
-
-            // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
+            // read the asteroid in chunks to avoid the Arithmetic overflow issue.
             for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
                 for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
                     for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
@@ -160,8 +146,6 @@ namespace SEToolbox.Interop.Asteroids
         /// <summary>
         /// check for Magic Number: 1f 8b
         /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
         public static bool IsVoxelMapFile(string filename)
         {
             var extension = Path.GetExtension(filename);
@@ -397,7 +381,7 @@ namespace SEToolbox.Interop.Asteroids
         public void SetVoxelContentRegion(byte content, int? xMin, int? xMax, int? yMin, int? yMax, int? zMin, int? zMax)
         {
             Vector3I block;
-            var cacheSize = new Vector3I(64);
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
             for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
@@ -487,16 +471,17 @@ namespace SEToolbox.Interop.Asteroids
         /// <summary>
         /// Set a material for a random voxel cell and possibly nearest ones to it.
         /// </summary>
-        /// <param name="materialName">material name</param>
+        /// <param name="materialIndex">material name</param>
         /// <param name="radius">radius in voxels, defaults to zero, meaning only a random grid.</param>
-        public void SeedMaterialSphere(byte material, byte radius = 0)
+        public void SeedMaterialSphere(byte materialIndex, byte radius = 0)
         {
             var fullCells = new List<Vector3I>();
             Vector3I block;
             //var cacheSize = new Vector3I(64 >> 3); 
             var cacheSize = new Vector3I(1);
-
+            
             // Using 8 to replicate the size of DataCell.
+            // TODO: determine if there is an issue because the cache is undersized. The cache in OverwriteAllMaterials had to be doubled in size to avoid issue when < 64 but it is at LOD0.
             for (block.Z = 0; block.Z < m_storage.Size.Z >> 3; block.Z += 1)
                 for (block.Y = 0; block.Y < m_storage.Size.Y >> 3; block.Y += 1)
                     for (block.X = 0; block.X < m_storage.Size.X >> 3; block.X += 1)
@@ -506,6 +491,8 @@ namespace SEToolbox.Interop.Asteroids
                         m_storage.ReadRange(cache, MyStorageDataTypeFlags.Content, 3, block, block + cacheSize - 1);
 
                         Vector3I p = Vector3I.Zero;
+
+                        // Unless volume is read, the call to ComputeContentConstitution() causes the fullCells list to not clear properly.
                         byte volume = cache.Content(ref p);
 
                         //if (volume > 0)
@@ -543,7 +530,7 @@ namespace SEToolbox.Interop.Asteroids
                     //    continue;
                     //}
 
-                    cache.BlockFillMaterial(Vector3I.Zero, cache.Size3D, material);
+                    cache.BlockFillMaterial(Vector3I.Zero, cache.Size3D, materialIndex);
                     m_storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, block + cacheSize - 1);
                     continue;
                 }
@@ -565,7 +552,7 @@ namespace SEToolbox.Interop.Asteroids
                     //    continue;
                     //}
 
-                    cache.BlockFillMaterial(Vector3I.Zero, cache.Size3D, material);
+                    cache.BlockFillMaterial(Vector3I.Zero, cache.Size3D, materialIndex);
                     m_storage.WriteRange(cache, MyStorageDataTypeFlags.Material, block, block + cacheSize - 1);
                 }
             }
@@ -629,7 +616,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             Vector3I block;
-            var cacheSize = new Vector3I(64);
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
             for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
@@ -660,13 +647,11 @@ namespace SEToolbox.Interop.Asteroids
         /// <summary>
         /// Changes all the min and max face materials to a default to overcome the the hiding rare ore inside of nonrare ore.
         /// </summary>
-        /// <param name="materialName"></param>
         [Obsolete("This is no longer required, as the voxel's no longer take their 'surface' texture from the outer most cell.")]
-        public void ForceVoxelFaceMaterial(string materialName)
+        public void ForceVoxelFaceMaterial(byte materialIndex)
         {
-            var materialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(materialName);
             Vector3I block;
-            var cacheSize = new Vector3I(64);
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
             for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
@@ -859,7 +844,7 @@ namespace SEToolbox.Interop.Asteroids
             if (!string.IsNullOrEmpty(replaceFillMaterial))
                 replaceMaterialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(replaceFillMaterial);
             Vector3I block;
-            var cacheSize = new Vector3I(64);
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
             for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
@@ -907,7 +892,7 @@ namespace SEToolbox.Interop.Asteroids
             var replaceMaterialIndex = SpaceEngineersCore.Resources.GetMaterialIndex(replaceFillMaterial);
 
             Vector3I block;
-            var cacheSize = new Vector3I(64);
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
             for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
@@ -965,7 +950,7 @@ namespace SEToolbox.Interop.Asteroids
             Vector3I min = Vector3I.MaxValue;
             Vector3I max = Vector3I.MinValue;
             Vector3I block;
-            var cacheSize = new Vector3I(64);
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
             Dictionary<byte, long> assetCount = new Dictionary<byte, long>();
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
@@ -1019,7 +1004,7 @@ namespace SEToolbox.Interop.Asteroids
                 return null;
 
             Vector3I block;
-            var cacheSize = new Vector3I(64);
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
             var voxelMaterialList = new List<byte>();
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
@@ -1055,7 +1040,7 @@ namespace SEToolbox.Interop.Asteroids
                 return;
 
             Vector3I block;
-            var cacheSize = new Vector3I(64);
+            var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
             int index = 0;
 
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
@@ -1149,8 +1134,7 @@ namespace SEToolbox.Interop.Asteroids
         {
             if (disposing)
             {
-                if (m_storage != null)
-                    m_storage.Close();
+                m_storage?.Close();
             }
         }
 

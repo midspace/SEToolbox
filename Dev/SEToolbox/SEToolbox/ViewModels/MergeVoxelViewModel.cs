@@ -160,6 +160,7 @@
             // calculate smallest allowable size for contents of both.
             const int paddCells = 3;
 
+            // Force a calculation of the ContentBounds, as multi select in the ListView doesn't necessarily make it happen, or make it happen fast enough.
             SelectionLeft.LoadDetailsSync();
             SelectionRight.LoadDetailsSync();
 
@@ -177,7 +178,7 @@
                     var max = Vector3D.Max(SelectionLeft.WorldAABB.Min + SelectionLeft.InflatedContentBounds.Max - offsetPosLeft, SelectionRight.WorldAABB.Min + SelectionRight.InflatedContentBounds.Max - offsetPosRight) + paddCells;
                     posOffset = new Vector3D(minLeft.X < minRight.X ? offsetPosLeft.X : offsetPosRight.X, minLeft.Y < minRight.Y ? offsetPosLeft.Y : offsetPosRight.Y, minLeft.Z < minRight.Z ? offsetPosLeft.Z : offsetPosRight.Z);
                     var size = (max - min).RoundToVector3I();
-                    asteroidSize = new Vector3I(size.X.RoundUpToNearest(64), size.Y.RoundUpToNearest(64), size.Z.RoundUpToNearest(64));
+                    asteroidSize = MyVoxelBuilder.CalcRequiredSize(size);
                     break;
                 case VoxelMergeType.UnionMaterialLeftToRight:
                     min = SelectionRight.WorldAABB.Min - offsetPosRight;
@@ -203,7 +204,7 @@
 
             // Prepare new asteroid.
             var newAsteroid = new MyVoxelMap();
-            newAsteroid.Create(asteroidSize, SpaceEngineersCore.Resources.GetDefaultMaterialName());
+            newAsteroid.Create(asteroidSize, SpaceEngineersCore.Resources.GetDefaultMaterialIndex());
             if (string.IsNullOrEmpty(MergeFileName))
                 MergeFileName = "merge";
             var filename = MainViewModel.CreateUniqueVoxelStorageName(MergeFileName);
@@ -478,6 +479,9 @@
 
         #endregion
 
+        /// <summary>
+        /// Creates a list of points around the specified point (within a 3x3x3 grid), but only when they are within the bounds.
+        /// </summary>
         private Vector3I[] CreateTestPoints(Vector3I point, Vector3I max)
         {
             List<Vector3I> points = new CacheList<Vector3I>();

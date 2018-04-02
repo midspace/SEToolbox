@@ -69,7 +69,6 @@
   * Set/Reset Ship Vector. (specify Direction and specify Speed)
   * Replace user specified blocks with other user blocks (ie., by Armor light/heavy/color.)
   * Set Ship direction at specific object (calc correct center of object).
-  * Finish Mirror calculations for final 2 window cubes.
   * Resize ship small<->large.
   * Subsystem editor.
 
@@ -113,6 +112,7 @@ Completed:
 - Report of all in world assets.
   * Breakdown of all ores in untouched (in asteroid), unused (ore and ingot), used (component, tool, cube), npc (ore, ingot, component, tool, cube).
   * Counts of components, tools, cubes  (npc and non-npc).
+- Finish Mirror calculations for final 2 window cubes.
 
 ========--------~~~~~~~~
 

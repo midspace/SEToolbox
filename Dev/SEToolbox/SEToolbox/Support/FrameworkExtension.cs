@@ -213,35 +213,9 @@
             return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
-        public static double RoundUpToNearest(this double value, int scale)
-        {
-            return Math.Ceiling(value / scale) * scale;
-        }
-
-        public static int RoundUpToNearest(this int value, int scale)
-        {
-            return (int)(Math.Ceiling((double)value / scale) * scale);
-        }
-
         public static byte RoundUpToNearest(this byte value, int scale)
         {
             return (byte)(Math.Min(0xff, Math.Ceiling((double)value / scale) * scale));
-        }
-
-        public static double RoundUpToCube(this double value)
-        {
-            int baseVal = 1;
-            while (baseVal < value)
-                baseVal = baseVal * 2;
-            return baseVal;
-        }
-
-        public static int RoundUpToCube(this int value)
-        {
-            int baseVal = 1;
-            while (baseVal < value)
-                baseVal = baseVal * 2;
-            return baseVal;
         }
 
         #region GetHitControl

@@ -354,7 +354,9 @@
             var quaternion = Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2);
             var o = positionAndOrientation.ToQuaternion() * quaternion;
             var on = Quaternion.Normalize(o);
-            var p = new MyPositionAndOrientation(on.ToMatrix());
+            Matrix m = on.ToMatrix();
+            m = Matrix.Round(ref m);
+            var p = new MyPositionAndOrientation(m);
 
             var quaternion2 = QuaternionD.CreateFromYawPitchRoll(0, 0, -Math.PI / 2);
             var o2 = positionAndOrientation.ToQuaternionD() * quaternion2;

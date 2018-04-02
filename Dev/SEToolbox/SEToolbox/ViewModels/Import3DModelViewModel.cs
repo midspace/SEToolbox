@@ -552,7 +552,7 @@
 
             var baseMaterial = SpaceEngineersCore.Resources.VoxelMaterialDefinitions.FirstOrDefault(m => m.IsRare == false) ?? SpaceEngineersCore.Resources.VoxelMaterialDefinitions.FirstOrDefault();
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, Filename, OutsideStockMaterial.Value, baseMaterial.Id.SubtypeName, InsideStockMaterial.Value != null, InsideStockMaterial.Value, ModelTraceVoxel.ThinSmoothed, multiplier, transform, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, Filename, OutsideStockMaterial.MaterialIndex.Value, baseMaterial.Index, InsideStockMaterial.Value != null, InsideStockMaterial.MaterialIndex, ModelTraceVoxel.ThinSmoothed, multiplier, transform, MainViewModel.ResetProgress, MainViewModel.IncrementProgress);
             voxelMap.Save(SourceFile);
 
             MainViewModel.ClearProgress();

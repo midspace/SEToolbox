@@ -1,22 +1,17 @@
 ﻿namespace ToolboxTest
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Sandbox.Engine.Voxels;
+    using Sandbox.Game.Entities;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Models.Asteroids;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Sandbox.Definitions;
-    using Sandbox.Engine.Voxels;
-    using Sandbox.Game.Entities;
-    using Sandbox.ModAPI;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Models.Asteroids;
-    using SEToolbox.Support;
-    using VRage.Game.ModAPI;
-    using VRage.ModAPI;
-    using VRage.Voxels;
     using VRageMath;
     using MyVoxelMap = SEToolbox.Interop.Asteroids.MyVoxelMap;
 
@@ -567,37 +562,39 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold.vx2";
+            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold_single.vx2";
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, 8, 8, 8, goldMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, false, 0);
+            int size = 8;
+            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, size, size, size, goldMaterial.Index, stoneMaterial.Index, false, 0);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
             voxelMap.Save(fileNew);
 
             var lengthNew = new FileInfo(fileNew).Length;
+            Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
 
-            Assert.AreEqual(914, lengthNew, "New file size must match.");
+            Assert.AreEqual(909, lengthNew, "New file size must match.");
 
-            Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
-            Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
-            Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
+            Assert.AreEqual(16, voxelMap.Size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(16, voxelMap.Size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(16, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(8, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(8, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(8, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(size, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(size, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(size, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of 1 and 8.   1234-(4.5)-5678
             Assert.AreEqual(4.5, voxelMap.ContentCenter.X, "Voxel Center must match.");
             Assert.AreEqual(4.5, voxelMap.ContentCenter.Y, "Voxel Center must match.");
             Assert.AreEqual(4.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
 
-            Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
 
-            Assert.AreEqual(130560, voxelMap.VoxCells, "VoxCells count should be equal.");
+            long voxels = (long)size * size * size * 255;
+            Assert.AreEqual(voxels, voxelMap.VoxCells, "VoxCells count should be equal.");
             Assert.AreEqual(1, assetNameCount.Count, "Asset count should be equal.");
             Assert.IsTrue(assetNameCount.ContainsKey("Gold_01"), "Gold_01 asset should exist.");
-            Assert.AreEqual(130560, assetNameCount["Gold_01"], "Gold_01 count should be equal.");
+            Assert.AreEqual(voxels, assetNameCount["Gold_01"], "Gold_01 count should be equal.");
         }
 
         [TestMethod]
@@ -612,37 +609,38 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold.vx2";
+            const string fileNew = @".\TestOutput\test_cube_solid_8x8x8_gold_multi.vx2";
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(true, 8, 8, 8, goldMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, false, 0);
+            int size = 8;
+            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(true, size, size, size, goldMaterial.Index, stoneMaterial.Index, false, 0);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
             voxelMap.Save(fileNew);
 
             var lengthNew = new FileInfo(fileNew).Length;
+            Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
 
-            Assert.AreEqual(914, lengthNew, "New file size must match.");
+            Assert.AreEqual(909, lengthNew, "New file size must match.");
 
-            Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");
-            Assert.AreEqual(64, voxelMap.Size.Y, "Voxel Bounding size must match.");
-            Assert.AreEqual(64, voxelMap.Size.Z, "Voxel Bounding size must match.");
+            Assert.AreEqual(16, voxelMap.Size.X, "Voxel Bounding size must match.");
+            Assert.AreEqual(16, voxelMap.Size.Y, "Voxel Bounding size must match.");
+            Assert.AreEqual(16, voxelMap.Size.Z, "Voxel Bounding size must match.");
 
-            Assert.AreEqual(8, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
-            Assert.AreEqual(8, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
-            Assert.AreEqual(8, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
+            Assert.AreEqual(size, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
+            Assert.AreEqual(size, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
+            Assert.AreEqual(size, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
 
             // Centered in the middle of 1 and 8.   1234-(4.5)-5678
             Assert.AreEqual(4.5, voxelMap.ContentCenter.X, "Voxel Center must match.");
             Assert.AreEqual(4.5, voxelMap.ContentCenter.Y, "Voxel Center must match.");
             Assert.AreEqual(4.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
 
-            Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
-
-            Assert.AreEqual(130560, voxelMap.VoxCells, "VoxCells count should be equal.");
+            long voxels = (long)size * size * size * 255;
+            Assert.AreEqual(voxels, voxelMap.VoxCells, "VoxCells count should be equal.");
             Assert.AreEqual(1, assetNameCount.Count, "Asset count should be equal.");
             Assert.IsTrue(assetNameCount.ContainsKey("Gold_01"), "Gold_01 asset should exist.");
-            Assert.AreEqual(130560, assetNameCount["Gold_01"], "Gold_01 count should be equal.");
+            Assert.AreEqual(voxels, assetNameCount["Gold_01"], "Gold_01 count should be equal.");
         }
 
         [TestMethod]
@@ -659,7 +657,7 @@
 
             const string fileNew = @".\TestOutput\test_sphere_solid_7_gold.vx2";
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(false, 4, goldMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, false, 0);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(false, 4, goldMaterial.Index, stoneMaterial.Index, false, 0);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -697,8 +695,8 @@
 
             Vector3I size = new Vector3I(128, 128, 128);
             var voxelMap = new MyVoxelMap();
-            var actualSize = new Vector3I(size.X.RoundUpToCube(), size.Y.RoundUpToCube(), size.Z.RoundUpToCube());
-            voxelMap.Create(actualSize, stoneMaterial.Id.SubtypeName);
+            var actualSize = MyVoxelBuilder.CalcRequiredSize(size);
+            voxelMap.Create(actualSize, stoneMaterial.Index);
 
             MyShapeSphere sphereShape1 = new MyShapeSphere
             {
@@ -760,7 +758,7 @@
 
             const string fileNew = @".\TestOutput\test_sphere_solid_499_gold.vx2";
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, 250, goldMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, false, 0);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, 250, goldMaterial.Index, stoneMaterial.Index, false, 0);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -816,7 +814,7 @@
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Id.SubtypeName, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -890,7 +888,7 @@
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Id.SubtypeName, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -932,7 +930,7 @@
 
             var transform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), 0, 0, 180);
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, modelFile, goldMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, true, stoneMaterial.Id.SubtypeName, ModelTraceVoxel.ThinSmoothed, 0.766, transform);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidFromModel(true, modelFile, goldMaterial.Index, stoneMaterial.Index, true, stoneMaterial.Index, ModelTraceVoxel.ThinSmoothed, 0.766, transform);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -941,6 +939,10 @@
             Assert.AreEqual(50, voxelMap.BoundingContent.Size.X + 1, "Voxel Content size must match.");
             Assert.AreEqual(46, voxelMap.BoundingContent.Size.Y + 1, "Voxel Content size must match.");
             Assert.AreEqual(70, voxelMap.BoundingContent.Size.Z + 1, "Voxel Content size must match.");
+
+            Assert.AreEqual(30.5, voxelMap.ContentCenter.X, "Voxel Center must match.");
+            Assert.AreEqual(28.5, voxelMap.ContentCenter.Y, "Voxel Center must match.");
+            Assert.AreEqual(40.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
 
             Assert.AreEqual(18710790, voxelMap.VoxCells, "Voxel cells must match.");
         }
@@ -959,10 +961,10 @@
                 voxelMap.Load(filename);
                 watch.Stop();
 
-                Debug.WriteLine(string.Format("Filename:\t{0}.vx2", name));
-                Debug.WriteLine("Load Time:\t{0}", watch.Elapsed);
-                Debug.WriteLine("Valid:\t{0}", voxelMap.IsValid);
-                Debug.WriteLine("Bounding Size:\t{0} × {1} × {2} blocks", voxelMap.Size.X, voxelMap.Size.Y, voxelMap.Size.Z);
+                Debug.WriteLine($"Filename:\t{name}.vx2");
+                Debug.WriteLine($"Load Time:\t{watch.Elapsed}");
+                Debug.WriteLine($"Valid:\t{voxelMap.IsValid}");
+                Debug.WriteLine($"Bounding Size:\t{voxelMap.Size.X} × {voxelMap.Size.Y} × {voxelMap.Size.Z} blocks");
                 Debug.WriteLine("");
             }
         }
@@ -982,7 +984,7 @@
             var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Gold"));
             Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, 64, 64, 64, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, false, 0);
+            var voxelMap = MyVoxelBuilder.BuildAsteroidCube(false, 64, 64, 64, stoneMaterial.Index, stoneMaterial.Index, false, 0);
             //var voxelMap = MyVoxelBuilder.BuildAsteroidSphere(true, 64, stoneMaterial.Id.SubtypeName, stoneMaterial.Id.SubtypeName, false, 0);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
@@ -1077,7 +1079,7 @@
                 e.Volume = 0xFF;
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[06].Id.SubtypeName, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[06].Index, null, action);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -1144,7 +1146,7 @@
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Id.SubtypeName, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 

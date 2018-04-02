@@ -152,6 +152,11 @@
             return MyDefinitionManager.Static.GetDefaultVoxelMaterialDefinition().Id.SubtypeName;
         }
 
+        public byte GetDefaultMaterialIndex()
+        {
+            return MyDefinitionManager.Static.GetDefaultVoxelMaterialDefinition().Index;
+        }
+
         public T CreateNewObject<T>()
             where T : MyObjectBuilder_Base
         {

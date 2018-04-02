@@ -1,7 +1,7 @@
-﻿using SEToolbox.Interop;
-
-namespace SEToolbox.Models
+﻿namespace SEToolbox.Models
 {
+    using SEToolbox.Interop;
+
     public class MaterialSelectionModel : BaseModel
     {
         private string _displayName;
@@ -42,10 +42,7 @@ namespace SEToolbox.Models
             }
         }
 
-        public byte MaterialIndex
-        {
-            get { return SpaceEngineersCore.Resources.GetMaterialIndex(_value); }
-        }
+        public byte? MaterialIndex => _value == null ? (byte?)null : SpaceEngineersCore.Resources.GetMaterialIndex(_value);
 
         public bool IsRare
         {

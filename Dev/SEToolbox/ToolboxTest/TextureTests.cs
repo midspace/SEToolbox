@@ -47,7 +47,9 @@
             //File.Copy(ExplosivesComponentPath, Path.Combine(_path, "ExplosivesComponent.dds"), true);
             //ImageTextureUtil.WriteImage(ExplosivesComponentBmp, Path.Combine(_path, @"ExplosivesComponent.png"));
 
-            LoadTextureAndExport(@"C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Content\Textures\Models\Cubes\DoorBlock_cm.dds");
+            
+            var doorTextureFile = Path.Combine(contentPath, @"Textures\Models\Cubes\DoorBlock_cm.dds");
+            LoadTextureAndExport(doorTextureFile);
             LoadTextureAndExport(Path.GetFullPath(@".\TestAssets\ExplosivesComponent.dds"));
 
             var magnesiumOre = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.Ore, "Magnesium");

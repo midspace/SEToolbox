@@ -7,7 +7,6 @@
     using System.Threading.Tasks;
     using System.Windows.Media.Media3D;
 
-    using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRageMath;
 
@@ -28,15 +27,8 @@
             var faceMaterials = new List<byte>();
             foreach (var mesh in mappedMesh)
             {
-                if (string.IsNullOrEmpty(mesh.Material))
-                    materials.Add(0xff); // represent empty materials.
-                else
-                    materials.Add(SpaceEngineersCore.Resources.GetMaterialIndex(mesh.Material));
-
-                if (string.IsNullOrEmpty(mesh.FaceMaterial))
-                    faceMaterials.Add(0xff); // represent empty materials.
-                else
-                    faceMaterials.Add(SpaceEngineersCore.Resources.GetMaterialIndex(mesh.FaceMaterial));
+                materials.Add(mesh.MaterialIndex ?? SpaceEngineersConsts.EmptyVoxelMaterial);
+                faceMaterials.Add(mesh.FaceMaterialIndex ?? SpaceEngineersConsts.EmptyVoxelMaterial);
             }
 
             // How far to check in from the proposed Volumetric edge.
@@ -72,10 +64,10 @@
             var yMax = (int)Math.Ceiling(tbounds.Y + tbounds.SizeY) + bufferSize;
             var zMax = (int)Math.Ceiling(tbounds.Z + tbounds.SizeZ) + bufferSize;
 
-            // TODO: should not rounnd up the array size, as this really isn't required, and it increases the calculation time.
-            var xCount = (xMax - xMin); //.RoundUpToNearest(64);
-            var yCount = (yMax - yMin); //.RoundUpToNearest(64);
-            var zCount = (zMax - zMin); //.RoundUpToNearest(64);
+            // Do not rounnd up the array size, as this really isn't required, and it increases the calculation time.
+            var xCount = (xMax - xMin);
+            var yCount = (yMax - yMin);
+            var zCount = (zMax - zMin);
 
             Debug.WriteLine("Approximate Size: {0}x{1}x{2}", Math.Ceiling(tbounds.X + tbounds.SizeX) - Math.Floor(tbounds.X), Math.Ceiling(tbounds.Y + tbounds.SizeY) - Math.Floor(tbounds.Y), Math.Ceiling(tbounds.Z + tbounds.SizeZ) - Math.Floor(tbounds.Z));
             Debug.WriteLine("Bounds Size: {0}x{1}x{2}", xCount, yCount, zCount);
@@ -100,8 +92,7 @@
 
             if (checkCancel != null && checkCancel.Invoke())
             {
-                if (complete != null)
-                    complete.Invoke();
+                complete?.Invoke();
                 return null;
             }
 
@@ -142,14 +133,14 @@
                     startOffset = 0.5f;
                     endOffset = 0.5f;
                     volumeOffset = 0.5f;
-                    roundFunc = delegate(double d) { return (int)Math.Round(d, 0); };
+                    roundFunc = delegate (double d) { return (int)Math.Round(d, 0); };
                 }
                 else if (traceType == TraceType.Even)
                 {
                     startOffset = 0.0f;
                     endOffset = 1.0f;
                     volumeOffset = 1.0f;
-                    roundFunc = delegate(double d) { return (int)Math.Floor(d); };
+                    roundFunc = delegate (double d) { return (int)Math.Floor(d); };
                 }
 
                 #region X ray trace
@@ -166,8 +157,7 @@
                         {
                             if (checkCancel != null && checkCancel.Invoke())
                             {
-                                if (complete != null)
-                                    complete.Invoke();
+                                complete?.Invoke();
                                 return null;
                             }
 
@@ -652,8 +642,7 @@
 
                 if (checkCancel != null && checkCancel.Invoke())
                 {
-                    if (complete != null)
-                        complete.Invoke();
+                    complete?.Invoke();
                     return null;
                 }
 
@@ -683,40 +672,40 @@
                 }
 
                 #endregion
+
             } // end models
 
             #endregion
 
             if (checkCancel != null && checkCancel.Invoke())
             {
-                if (complete != null)
-                    complete.Invoke();
+                complete?.Invoke();
                 return null;
             }
 
             var size = new Vector3I(xCount, yCount, zCount);
             // TODO: at the moment the Mesh list is not complete, so the faceMaterial setting is kind of vague.
-            var defaultMaterial = mappedMesh[0].Material; // Use the FaceMaterial from the first Mesh in the object list.
-            var faceMaterial = mappedMesh[0].FaceMaterial; // Use the FaceMaterial from the first Mesh in the object list.
+            var defaultMaterial = mappedMesh[0].MaterialIndex; // Use the FaceMaterial from the first Mesh in the object list.
+            var faceMaterial = mappedMesh[0].FaceMaterialIndex; // Use the FaceMaterial from the first Mesh in the object list.
 
             var action = (Action<MyVoxelBuilderArgs>)delegate (MyVoxelBuilderArgs e)
             {
-                // TODO: need to center the finalCubic structure within the voxel Volume.
+                // center the finalCubic structure within the voxel Volume.
+                Vector3I pointOffset = (e.Size - size) / 2;
 
-                // the model is only shaped according to it's volumne, not the voxel which is cubic.
-                if (e.CoordinatePoint.X < xCount &&
-                    e.CoordinatePoint.Y < yCount &&
-                    e.CoordinatePoint.Z < zCount)
+                // the model is only shaped according to its volume, not the voxel which is cubic.
+                if (e.CoordinatePoint.X >= pointOffset.X && e.CoordinatePoint.X < pointOffset.X + xCount &&
+                    e.CoordinatePoint.Y >= pointOffset.Y && e.CoordinatePoint.Y < pointOffset.Y + yCount &&
+                    e.CoordinatePoint.Z >= pointOffset.Z && e.CoordinatePoint.Z < pointOffset.Z + zCount)
                 {
-                    e.Volume = finalCubic[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z];
-                    e.Material = SpaceEngineersCore.Resources.GetMaterialName(finalMater[e.CoordinatePoint.X][e.CoordinatePoint.Y][e.CoordinatePoint.Z]);
+                    e.Volume = finalCubic[e.CoordinatePoint.X - pointOffset.X][e.CoordinatePoint.Y - pointOffset.Y][e.CoordinatePoint.Z - pointOffset.Z];
+                    e.MaterialIndex = finalMater[e.CoordinatePoint.X - pointOffset.X][e.CoordinatePoint.Y - pointOffset.Y][e.CoordinatePoint.Z - pointOffset.Z];
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, defaultMaterial, faceMaterial, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, defaultMaterial.Value, faceMaterial, action);
 
-            if (complete != null)
-                complete.Invoke();
+            complete?.Invoke();
 
             return voxelMap;
         }
@@ -727,16 +716,16 @@
 
         public class MyMeshModel
         {
-            public MyMeshModel(MeshGeometry3D[] geometery, string material, string faceMaterial)
+            public MyMeshModel(MeshGeometry3D[] geometery, byte? materialIndex, byte? faceMaterialIndex)
             {
                 Geometery = geometery;
-                Material = material;
-                FaceMaterial = faceMaterial;
+                MaterialIndex = materialIndex;
+                FaceMaterialIndex = faceMaterialIndex;
             }
 
             public MeshGeometry3D[] Geometery { get; set; }
-            public string Material { get; set; }
-            public string FaceMaterial { get; set; }
+            public byte? MaterialIndex { get; set; }
+            public byte? FaceMaterialIndex { get; set; }
         }
 
         public class GeometeryDetail
@@ -746,13 +735,13 @@
             {
             }
 
-            public GeometeryDetail(Int32[] triangles, Point3D[] positions)
+            public GeometeryDetail(int[] triangles, Point3D[] positions)
             {
                 Triangles = triangles;
                 Positions = positions;
             }
 
-            public Int32[] Triangles { get; set; }
+            public int[] Triangles { get; set; }
             public Point3D[] Positions { get; set; }
         }
 
@@ -768,8 +757,8 @@
                     Face = MeshFace.Farside;
             }
 
-            public Point3D Point { get; private set; }
-            public MeshFace Face { get; private set; }
+            public Point3D Point { get; }
+            public MeshFace Face { get; }
         }
 
         private class RayTracerTaskWorker
@@ -788,10 +777,10 @@
 
             #region properties
 
-            public int ModelIdx { get; private set; }
-            public int X { get; private set; }
-            public int Y { get; private set; }
-            public int Z { get; private set; }
+            public int ModelIdx { get; }
+            public int X { get; }
+            public int Y { get; }
+            public int Z { get; }
 
             #endregion
         }

@@ -1,19 +1,15 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Xml.Serialization;
-
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Support;
+    using System;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using VRage.Game;
-    using VRageMath;
     using VRage.ObjectBuilders;
+    using VRageMath;
 
     [Serializable]
     public class StructurePlanetModel : StructureBaseModel
