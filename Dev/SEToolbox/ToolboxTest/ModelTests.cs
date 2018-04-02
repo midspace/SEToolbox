@@ -19,6 +19,8 @@
             SpaceEngineersCore.LoadDefinitions();
         }
 
+        // This is ignored because this hasn't been implemented in the Toolbox as yet.
+        [Ignore]
         [TestMethod]
         public void BaseModel1LoadSave()
         {
@@ -45,6 +47,8 @@
             Assert.IsTrue(originalBytes.SequenceEqual(newBytes), "Bytestream content must equal");
         }
 
+        // This is ignored because this hasn't been implemented in the Toolbox as yet.
+        [Ignore]
         [TestMethod]
         public void CustomModel1LoadSave()
         {

@@ -57,7 +57,7 @@
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(7377, voxelFileLength, "File size must match.");
+            Assert.AreEqual(7550, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(32, 32, 32), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(27, 27, 27), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
 
@@ -98,7 +98,7 @@
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(7408, voxelFileLength, "File size must match.");
+            Assert.AreEqual(7568, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(32, 32, 32), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(26, 26, 26), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
 
