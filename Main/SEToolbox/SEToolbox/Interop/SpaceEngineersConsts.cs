@@ -27,6 +27,8 @@
         /// </summary>
         public const string ProtobuffersExtension = "PB";
 
+        public const byte EmptyVoxelMaterial = 0xff;
+
         // Current set max speed m/s for Ships.
         public const float MaxShipVelocity = 104.375f;
 

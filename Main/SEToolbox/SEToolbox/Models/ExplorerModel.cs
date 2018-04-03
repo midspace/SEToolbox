@@ -382,9 +382,7 @@
                         if (Path.GetExtension(voxel.SourceVoxelFilepath).Equals(MyVoxelMap.V1FileExtension, StringComparison.OrdinalIgnoreCase))
                         {
                             // Convert between formats.
-                            var voxelmap = new MyVoxelMap();
-                            voxelmap.Load(voxel.SourceVoxelFilepath, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
-                            voxelmap.Save(voxel.VoxelFilepath);
+                            MyVoxelMap.UpdateFileFormat(voxel.SourceVoxelFilepath, voxel.VoxelFilepath);
                         }
                         else
                         {

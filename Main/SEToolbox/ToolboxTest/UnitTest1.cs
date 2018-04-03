@@ -34,7 +34,7 @@
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateTempFiles()
         {
             for (var i = 0; i < 10; i++)
@@ -49,7 +49,7 @@
             TempfileUtil.Dispose();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void TestImageOptimizer1()
         {
             var filename = Path.GetFullPath(@".\TestAssets\7242630_orig.jpg");
@@ -58,7 +58,7 @@
             bmp.Save(outputFileTest, ImageFormat.Png);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void TestImageOptimizer2()
         {
             var filename = Path.GetFullPath(@".\TestAssets\7242630_scale432.png");
@@ -67,7 +67,7 @@
             bmp.Save(outputFileTest, ImageFormat.Png);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void TestXmlCompacter1()
         {
             var filenameSource = Path.GetFullPath(@".\TestAssets\test.xml");
@@ -82,7 +82,7 @@
             Assert.AreEqual(1510, newFileSize, "new file size");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LocateSpaceEngineersApplication()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
@@ -90,7 +90,7 @@
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractZipFileToFolder()
         {
             const string filename = @".\TestAssets\Sample World.sbw";
@@ -100,7 +100,7 @@
             ZipTools.ExtractZipFileToDirectory(filename, null, folder);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractSandboxFromZip()
         {
             const string filename = @".\TestAssets\Sample World.sbw";
@@ -114,7 +114,7 @@
             Assert.AreEqual("Quad Scissor Doors", checkpoint.SessionName, "Checkpoint SessionName must match!");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromCompressedSandbox()
         {
             const string filename = @".\TestAssets\SANDBOX_0_0_0_.sbs";
@@ -124,7 +124,7 @@
             ZipTools.GZipUncompress(filename, xmlfilename);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromXmlSandbox()
         {
             const string filename = @".\TestAssets\SANDBOX_0_0_0_.XML.sbs";
@@ -139,7 +139,7 @@
         }
 
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromProtoBufSandbox()
         {
             // filename will automatically be concatenated with "PB"
@@ -154,7 +154,7 @@
             Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractZipAndRepack()
         {
             const string filename = @".\TestAssets\Sample World.sbw";
@@ -167,7 +167,7 @@
             ZipTools.ZipFolder(folder, null, newFilename);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void SandboxColorTest()
         {
             var colors = new Color[]
@@ -202,7 +202,7 @@
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VRageColorTest()
         {
             var c1 = Color.FromArgb(255, 255, 255);
@@ -230,7 +230,7 @@
             Assert.AreEqual(rgb3.G, c3.G, "Green Should Equal");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VRageHSVColorTest()
         {
             // hue Slider is 0~360. Stored as 0~1.
@@ -268,7 +268,7 @@
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void SingleConversionTest()
         {
             Single f1 = -17.6093254f;
@@ -289,7 +289,7 @@
             Assert.AreEqual(f3, g3, "Should Equal");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void BoundingBoxIntersectKeen()
         {
             var point = new VRageMath.Vector3D(5d, 3.5d, 4d);
@@ -302,7 +302,7 @@
             Assert.AreEqual(0, f, "Should Equal");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void BoundingBoxIntersectCustom()
         {
             var point = new VRageMath.Vector3D(5d, 3.5d, 4d);
@@ -314,7 +314,7 @@
             Assert.AreEqual(new VRageMath.Vector3D(4.9176489098920966d, 3.5151384795308953d, 6.00000000000319d), p.Value, "Should Equal");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void CubeRotate()
         {
             var positionOrientation = new MyPositionAndOrientation(new Vector3D(10, 10, 10), Vector3.Backward, Vector3.Up);
@@ -342,7 +342,7 @@
         /// This test is critical for rotation a station. For some reason, 
         /// if the rotation is not exactly 1, or 0, then there is an issue placing cubes on the station.
         /// </summary>
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void Rotation()
         {
             var positionAndOrientation = new MyPositionAndOrientation(

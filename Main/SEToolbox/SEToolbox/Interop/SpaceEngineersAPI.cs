@@ -375,9 +375,9 @@
         private static void AddLanguage(MyLanguagesEnum id, string cultureName, string subcultureName = null, string displayName = null, float guiTextScale = 1f, bool isCommunityLocalized = true)
         {
             // Create an empty instance of LanguageDescription.
-            ConstructorInfo constructorInfo = typeof(MyTexts.LanguageDescription).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new Type[] { typeof(MyLanguagesEnum), typeof(string), typeof(string), typeof(string), typeof(float), typeof(bool) }, null);
-            MyTexts.LanguageDescription languageDescription = (MyTexts.LanguageDescription)constructorInfo.Invoke(new object[] { id, displayName, cultureName, subcultureName, guiTextScale, isCommunityLocalized });
+            MyTexts.LanguageDescription languageDescription = ReflectionUtil.ConstructPrivateClass<MyTexts.LanguageDescription>(
+                new Type[] { typeof(MyLanguagesEnum), typeof(string), typeof(string), typeof(string), typeof(float), typeof(bool) },
+                new object[] { id, displayName, cultureName, subcultureName, guiTextScale, isCommunityLocalized });
 
             Dictionary<MyLanguagesEnum, MyTexts.LanguageDescription> m_languageIdToLanguage = typeof(MyTexts).GetStaticField<Dictionary<MyLanguagesEnum, MyTexts.LanguageDescription>>("m_languageIdToLanguage");
             Dictionary<string, MyLanguagesEnum> m_cultureToLanguageId = typeof(MyTexts).GetStaticField<Dictionary<string, MyLanguagesEnum>>("m_cultureToLanguageId");

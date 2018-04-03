@@ -18,7 +18,7 @@
             SpaceEngineersCore.LoadDefinitions();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ApiInterop()
         {
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Large, "");
@@ -36,7 +36,7 @@
             Assert.IsNull(d4, "Must be null");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LoadSandbox_Fighter()
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
@@ -54,7 +54,7 @@
             Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrids[0].CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LoadSandbox_Binary_BaseEasyStart()
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
@@ -72,7 +72,7 @@
             Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrids[0].CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RotateComponent()
         {
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust)), MyCubeSize.Large, "LargeBlockLargeThrust");

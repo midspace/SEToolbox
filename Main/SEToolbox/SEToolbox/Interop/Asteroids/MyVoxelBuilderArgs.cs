@@ -5,22 +5,32 @@
 
     public class MyVoxelBuilderArgs : EventArgs
     {
-        private readonly Vector3I _size;
-        private readonly Vector3I _coordinatePoint;
-
-        public MyVoxelBuilderArgs(Vector3I size, Vector3I coordinatePoint, string material, byte volume, byte indestructible)
+        public MyVoxelBuilderArgs(Vector3I size, Vector3I coordinatePoint, byte materialIndex, byte volume)
         {
-            this._size = size;
-            this._coordinatePoint = coordinatePoint;
-            this.Material = material;
-            this.Volume = volume;
-            this.Indestructible = indestructible;
+            Size = size;
+            CoordinatePoint = coordinatePoint;
+            MaterialIndex = materialIndex;
+            Volume = volume;
         }
 
-        public Vector3I Size { get { return this._size; } }
-        public Vector3I CoordinatePoint { get { return this._coordinatePoint; } }
-        public string Material { get; set; }
+        /// <summary>
+        /// The size of the Voxel Storage.
+        /// </summary>
+        public Vector3I Size { get; }
+
+        /// <summary>
+        /// The currently selected Voxel Coordinate in local space.
+        /// </summary>
+        public Vector3I CoordinatePoint { get; }
+
+        /// <summary>
+        /// The Material to be applied. It may already be set with the existing material.
+        /// </summary>
+        public byte MaterialIndex { get; set; }
+
+        /// <summary>
+        /// The Volume to be applied. It may already be set with the existing Volume.
+        /// </summary>
         public byte Volume { get; set; }
-        public byte Indestructible { get; set; }
     }
 }

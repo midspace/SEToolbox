@@ -151,7 +151,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TypeLoaderTests.cs" />
     <Compile Include="VoxelVolumeTests.cs" />
     <Compile Include="TextureTests.cs" />
     <Compile Include="InteropTests.cs" />
@@ -201,6 +200,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\AsteroidV1Format.vx2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestAssets\AsteroidV3Format.vx2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\buddha-fixed-bottom.stl">

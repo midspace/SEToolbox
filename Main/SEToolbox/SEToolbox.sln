@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.targets = global.targets
 		..\..\readme.txt = ..\..\readme.txt
 		SEToolbox.snk = SEToolbox.snk
+		TestSettings1.runsettings = TestSettings1.runsettings
+		TestSettings1.testsettings = TestSettings1.testsettings
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildScripts", "BuildScripts", "{D520F47E-25A7-4151-8BBC-91AFFC202F4D}"
@@ -42,9 +44,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildScripts", "BuildScript
 		BuildScripts\Build.proj = BuildScripts\Build.proj
 		BuildScripts\Microsoft.Build.targets = BuildScripts\Microsoft.Build.targets
 		BuildScripts\SEToolbox.targets = BuildScripts\SEToolbox.targets
+		TestSettings1.testsettings = TestSettings1.testsettings
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64

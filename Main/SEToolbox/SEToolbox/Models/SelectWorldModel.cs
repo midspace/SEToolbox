@@ -184,7 +184,6 @@
             // Ignore any other base Save paths without the LastLoaded file.
             if (Directory.Exists(lastLoadedPath))
             {
-                bool isCompressed;
                 var savePaths = Directory.GetDirectories(lastLoadedPath);
 
                 // Still check every potential game world path.

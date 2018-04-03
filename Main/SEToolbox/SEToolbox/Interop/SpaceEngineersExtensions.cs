@@ -14,6 +14,7 @@
     using VRage.Game;
     using VRage.Game.ObjectBuilders.Components;
     using VRage.Game.ObjectBuilders.ComponentSystem;
+    using VRage.Voxels;
     using VRage.ObjectBuilders;
     using VRageMath;
 
@@ -223,6 +224,11 @@
         public static Vector3D ToVector3D(this Vector3I vector)
         {
             return new Vector3D(vector.X, vector.Y, vector.Z);
+        }
+
+        public static BoundingBoxD ToBoundingBoxD(this BoundingBoxI box)
+        {
+            return new BoundingBoxD(box.Min, box.Max);
         }
 
         public static SerializableVector3 RoundOff(this SerializableVector3 vector, float roundTo)
@@ -487,18 +493,18 @@
 
         public static Vector3D Transform(this Vector3D value, QuaternionD rotation)
         {
-            double num = (double)(rotation.X + rotation.X);
-            double num2 = (double)(rotation.Y + rotation.Y);
-            double num3 = (double)(rotation.Z + rotation.Z);
-            double num4 = (double)rotation.W * num;
-            double num5 = (double)rotation.W * num2;
-            double num6 = (double)rotation.W * num3;
-            double num7 = (double)rotation.X * num;
-            double num8 = (double)rotation.X * num2;
-            double num9 = (double)rotation.X * num3;
-            double num10 = (double)rotation.Y * num2;
-            double num11 = (double)rotation.Y * num3;
-            double num12 = (double)rotation.Z * num3;
+            double num = (rotation.X + rotation.X);
+            double num2 = (rotation.Y + rotation.Y);
+            double num3 = (rotation.Z + rotation.Z);
+            double num4 = rotation.W * num;
+            double num5 = rotation.W * num2;
+            double num6 = rotation.W * num3;
+            double num7 = rotation.X * num;
+            double num8 = rotation.X * num2;
+            double num9 = rotation.X * num3;
+            double num10 = rotation.Y * num2;
+            double num11 = rotation.Y * num3;
+            double num12 = rotation.Z * num3;
             double x = value.X * (1.0 - num10 - num12) + value.Y * (num8 - num6) + value.Z * (num9 + num5);
             double y = value.X * (num8 + num6) + value.Y * (1.0 - num7 - num12) + value.Z * (num11 - num4);
             double z = value.X * (num9 - num5) + value.Y * (num11 + num4) + value.Z * (1.0 - num7 - num10);
@@ -686,5 +692,24 @@
 
             return texture;
         }
+
+        public static void GetMaterialContent(this VRage.Game.Voxels.IMyStorage self, ref Vector3I voxelCoords, out byte material, out byte content)
+        {
+            MyStorageData myStorageData = new MyStorageData(MyStorageDataTypeFlags.ContentAndMaterial);
+            myStorageData.Resize(Vector3I.One);
+            myStorageData.ClearMaterials(0);
+            self.ReadRange(myStorageData, MyStorageDataTypeFlags.ContentAndMaterial, 0, voxelCoords, voxelCoords);
+
+            material = myStorageData.Material(0);
+            content = myStorageData.Content(0);
+        }
+
+        public static int Max(int a, int b, int c, int d)
+        {
+            int abMax = a > b ? a : b;
+            int cdMax = c > d ? c : d;
+            return abMax > cdMax ? abMax : cdMax;
+        }
+
     }
 }

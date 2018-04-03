@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using Support;
 
     /// <summary>
     /// A very simple service locator.
@@ -94,17 +94,9 @@
             private static object CreateInstance(Type type)
             {
                 if (services.ContainsKey(type))
-                {
                     return services[type].ServiceImplementation;
-                }
 
-                var ctor = type.GetConstructors().First();
-
-                var parameters =
-                    from parameter in ctor.GetParameters()
-                    select CreateInstance(parameter.ParameterType);
-
-                return Activator.CreateInstance(type, parameters.ToArray());
+                return ReflectionUtil.CreateInstance(type);
             }
         }
     }

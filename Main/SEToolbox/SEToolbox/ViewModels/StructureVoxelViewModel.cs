@@ -1,24 +1,21 @@
 ﻿namespace SEToolbox.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Windows;
-    using System.Windows.Input;
-
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
-    using VRageMath;
-    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Input;
     using VRage;
     using VRage.Game;
     using VRage.ObjectBuilders;
+    using IDType = VRage.MyEntityIdentifier.ID_OBJECT_TYPE;
 
     public class StructureVoxelViewModel : StructureBaseViewModel<StructureVoxelModel>
     {
@@ -239,16 +236,16 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+            asteroid.Load(sourceFile);
 
-            var cellCount = asteroid.SumVoxelCells();
+            var cellCount = asteroid.VoxCells;
 
             // TODO: regenerate the materials inside of the asteroid randomly.
 
 
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
-            DataModel.SourceVoxelFilepath = tempfilename;
+            DataModel.UpdateNewSource(asteroid, tempfilename);
 
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
@@ -268,13 +265,13 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+            asteroid.Load(sourceFile);
 
             asteroid.ForceShellMaterial(materialName, 2);
 
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
-            DataModel.SourceVoxelFilepath = tempfilename;
+            DataModel.UpdateNewSource(asteroid, tempfilename);
 
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
@@ -294,14 +291,13 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+            asteroid.Load(sourceFile);
 
             asteroid.ForceBaseMaterial(materialName, materialName);
-            asteroid.ForceVoxelFaceMaterial(SpaceEngineersCore.Resources.GetDefaultMaterialName());
 
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
-            DataModel.SourceVoxelFilepath = tempfilename;
+            DataModel.UpdateNewSource(asteroid, tempfilename);
 
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
@@ -326,19 +322,20 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+            asteroid.Load(sourceFile);
 
             if (string.IsNullOrEmpty(materialName))
             {
                 asteroid.RemoveContent(SelectedMaterialAsset.MaterialName, null);
-                DataModel.VoxCells = asteroid.SumVoxelCells();
+                DataModel.VoxCells = asteroid.VoxCells;
             }
             else
                 asteroid.ReplaceMaterial(SelectedMaterialAsset.MaterialName, materialName);
 
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
-            DataModel.SourceVoxelFilepath = tempfilename;
+
+            DataModel.UpdateNewSource(asteroid, tempfilename);
 
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
@@ -359,12 +356,13 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+            asteroid.Load(sourceFile);
+            asteroid.RefreshAssets();
 
             var height = asteroid.BoundingContent.Size.Y + 1;
 
             // remove the Top half.
-            asteroid.RemoveMaterial((int)Math.Round(asteroid.BoundingContent.Center.X, 0), asteroid.Size.X, (int)Math.Round(asteroid.BoundingContent.Center.Y, 0), asteroid.Size.Y, 0, (int)Math.Round(asteroid.BoundingContent.Center.Z, 0));
+            asteroid.RemoveMaterial((int)Math.Round(asteroid.ContentCenter.X, 0), asteroid.Size.X, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, 0, (int)Math.Round(asteroid.ContentCenter.Z, 0));
 
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
@@ -388,7 +386,7 @@
             };
 
             var structure = MainViewModel.AddEntity(newEntity);
-            ((StructureVoxelModel)structure).SourceVoxelFilepath = tempfilename; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+            ((StructureVoxelModel)structure).UpdateNewSource(asteroid, tempfilename); // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
 
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
@@ -405,12 +403,13 @@
             var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
 
             var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
+            asteroid.Load(sourceFile);
+            asteroid.RefreshAssets();
 
             var height = asteroid.BoundingContent.Size.Y + 1;
 
             // remove the Top half.
-            asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.BoundingContent.Center.Y, 0), asteroid.Size.Y, null, null);
+            asteroid.RemoveMaterial(null, null, (int)Math.Round(asteroid.ContentCenter.Y, 0), asteroid.Size.Y, null, null);
 
             var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
             asteroid.Save(tempfilename);
@@ -434,7 +433,7 @@
             };
 
             var structure = MainViewModel.AddEntity(newEntity);
-            ((StructureVoxelModel)structure).SourceVoxelFilepath = tempfilename; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+            ((StructureVoxelModel)structure).UpdateNewSource(asteroid, tempfilename); // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
 
             MainViewModel.IsModified = true;
             MainViewModel.IsBusy = false;
@@ -567,75 +566,7 @@
 
         private bool ExtractStationIntersect(bool tightIntersection)
         {
-            // Make a shortlist of station Entities in the bounding box of the asteroid.
-            var asteroidWorldAABB = new BoundingBoxD(DataModel.ContentBounds.Min + DataModel.PositionAndOrientation.Value.Position, DataModel.ContentBounds.Max + DataModel.PositionAndOrientation.Value.Position);
-            var stations = MainViewModel.GetIntersectingEntities(asteroidWorldAABB).Where(e => e.ClassType == ClassType.LargeStation).Cast<StructureCubeGridModel>().ToList();
-
-            if (stations.Count == 0)
-                return false;
-
-            var modified = false;
-            var sourceFile = DataModel.SourceVoxelFilepath ?? DataModel.VoxelFilepath;
-            var asteroid = new MyVoxelMap();
-            asteroid.Load(sourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), true);
-
-            var total = stations.Sum(s => s.CubeGrid.CubeBlocks.Count);
-            MainViewModel.ResetProgress(0, total);
-
-            // Search through station entities cubes for intersection with this voxel.
-            foreach (var station in stations)
-            {
-                var quaternion = station.PositionAndOrientation.Value.ToQuaternion();
-
-                foreach (var cube in station.CubeGrid.CubeBlocks)
-                {
-                    MainViewModel.IncrementProgress();
-
-                    var definition = SpaceEngineersApi.GetCubeDefinition(cube.TypeId, station.CubeGrid.GridSizeEnum, cube.SubtypeName);
-
-                    var orientSize = definition.Size.Transform(cube.BlockOrientation).Abs();
-                    var min = cube.Min.ToVector3() * station.CubeGrid.GridSizeEnum.ToLength();
-                    var max = (cube.Min + orientSize) * station.CubeGrid.GridSizeEnum.ToLength();
-                    var p1 = Vector3D.Transform(min, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
-                    var p2 = Vector3D.Transform(max, quaternion) + station.PositionAndOrientation.Value.Position - (station.CubeGrid.GridSizeEnum.ToLength() / 2);
-                    var cubeWorldAABB = new BoundingBoxD(Vector3.Min(p1, p2), Vector3.Max(p1, p2));
-
-                    // find worldAABB of block.
-                    if (asteroidWorldAABB.Intersects(cubeWorldAABB))
-                    {
-                        var pointMin = new Vector3I(cubeWorldAABB.Min - DataModel.PositionAndOrientation.Value.Position);
-                        var pointMax = new Vector3I(cubeWorldAABB.Max - DataModel.PositionAndOrientation.Value.Position);
-
-                        Vector3I coords;
-                        for (coords.Z = pointMin.Z; coords.Z <= pointMax.Z; coords.Z++)
-                        {
-                            for (coords.Y = pointMin.Y; coords.Y <= pointMax.Y; coords.Y++)
-                            {
-                                for (coords.X = pointMin.X; coords.X <= pointMax.X; coords.X++)
-                                {
-                                    if (coords.X >= 0 && coords.Y >= 0 && coords.Z >= 0 && coords.X < asteroid.Size.X && coords.Y < asteroid.Size.Y && coords.Z < asteroid.Size.Z)
-                                    {
-                                        asteroid.SetVoxelContent(0, ref coords);
-                                    }
-                                }
-                            }
-                        }
-
-                        modified = true;
-                    }
-                }
-            }
-
-            MainViewModel.ClearProgress();
-
-            if (modified)
-            {
-                var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
-                asteroid.Save(tempfilename);
-                // replaces the existing asteroid file, as it is still the same size and dimentions.
-                DataModel.SourceVoxelFilepath = tempfilename;
-            }
-            return modified;
+            return DataModel.ExtractStationIntersect(MainViewModel, tightIntersection);
         }
 
         #endregion

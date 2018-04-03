@@ -308,12 +308,12 @@
                 switch (AsteroidFillType)
                 {
                     case Support.AsteroidFillType.None:
-                        asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value, false);
+                        asteroid.Load(voxelDesign.VoxelFile.SourceFilename);
                         tempSourcefilename = voxelDesign.VoxelFile.SourceFilename;
                         break;
 
                     case AsteroidFillType.ByteFiller:
-                        asteroid.Load(voxelDesign.VoxelFile.SourceFilename, voxelDesign.MainMaterial.Value, false);
+                        asteroid.Load(voxelDesign.VoxelFile.SourceFilename);
                         var filler = new AsteroidByteFiller();
                         filler.FillAsteroid(asteroid, voxelDesign);
                         tempSourcefilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
@@ -339,7 +339,7 @@
                 var y = radius * Math.Sin(latitude);
 
                 var center = new Vector3D(CenterPositionX, CenterPositionY, CenterPositionZ);
-                var position = center + new Vector3D(x, y, z) - asteroid.BoundingContent.Center;
+                Vector3D position = center + new Vector3D(x, y, z) - asteroid.ContentCenter;
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)
                 {
                     EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),

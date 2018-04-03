@@ -792,7 +792,9 @@
                 for (var i = 0; i < newEntities.Length; i++)
                 {
                     var structure = _dataModel.AddEntity(newEntities[i]);
-                    ((StructureVoxelModel)structure).SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                    StructureVoxelModel voxelModel = (StructureVoxelModel)structure;
+                    voxelModel.SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                    voxelModel.InitializeAsync();
                     Progress++;
                 }
                 _selectNewStructure = false;
