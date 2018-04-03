@@ -49,7 +49,7 @@
 
         // This is ignored because this hasn't been implemented in the Toolbox as yet.
         [Ignore]
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void CustomModel1LoadSave()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
@@ -73,7 +73,8 @@
             Assert.IsTrue(originalBytes.SequenceEqual(newBytes), "Bytestream content must equal");
         }
 
-        //[TestMethod]
+        [Ignore]
+        [TestMethod]
         public void LoadModelFailures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();

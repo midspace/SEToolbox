@@ -22,13 +22,13 @@
             SpaceEngineersCore.LoadDefinitions();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelConvertToVolmeticOdd()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
 
-            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Stone"));
-            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+            var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(5, 5, 5);
@@ -47,30 +47,38 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Index, stoneMaterial.Index));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, goldMaterial.Index, goldMaterial.Index));
             }
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
                 ResetProgress, IncrementProgress, null, CompleteProgress);
             voxelMap.Save(asteroidFile);
 
+            Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
+
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(7550, voxelFileLength, "File size must match.");
+            Assert.AreEqual(12894, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(32, 32, 32), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(27, 27, 27), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
+            Assert.AreEqual(new VRageMath.Vector3D(16, 16, 16), voxelMap.ContentCenter, "Voxel Content Center must match.");
 
             Assert.AreEqual(2035523, voxelMap.VoxCells, "Voxel cells must match.");
+
+            Assert.AreEqual(1, assetNameCount.Count, "Asset count should be equal.");
+            Assert.IsTrue(assetNameCount.ContainsKey(goldMaterial.Id.SubtypeName), $"{goldMaterial.Id.SubtypeName} asset should exist.");
+            Assert.AreEqual(2035523, assetNameCount[goldMaterial.Id.SubtypeName], $"{goldMaterial.Id.SubtypeName} count should be equal.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelConvertToVolmeticEven()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
 
-            var stoneMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Stone"));
-            Assert.IsNotNull(stoneMaterial, "Stone material should exist.");
+            // Use anything except for stone for testing, as Stone is a default material, and it shouldn't show up in the test.
+            var goldMaterial = materials.FirstOrDefault(m => m.Id.SubtypeName.Contains("Gold"));
+            Assert.IsNotNull(goldMaterial, "Gold material should exist.");
 
             var modelFile = @".\TestAssets\Sphere_Gold.3ds";
             var scale = new ScaleTransform3D(5, 5, 5);
@@ -88,24 +96,31 @@
                 var geometry = gm.Geometry as MeshGeometry3D;
 
                 if (geometry != null)
-                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, stoneMaterial.Index, stoneMaterial.Index));
+                    meshes.Add(new MyVoxelRayTracer.MyMeshModel(new[] { geometry }, goldMaterial.Index, goldMaterial.Index));
             }
 
             var voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, traceType, traceCount, traceDirection,
                 ResetProgress, IncrementProgress, CheckCancel, CompleteProgress);
             voxelMap.Save(asteroidFile);
 
+            Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
+
             Assert.IsTrue(File.Exists(asteroidFile), "Generated file must exist");
 
             var voxelFileLength = new FileInfo(asteroidFile).Length;
-            Assert.AreEqual(7568, voxelFileLength, "File size must match.");
+            Assert.AreEqual(13073, voxelFileLength, "File size must match.");
             Assert.AreEqual(new Vector3I(32, 32, 32), voxelMap.Size, "Voxel Bounding size must match.");
             Assert.AreEqual(new Vector3I(26, 26, 26), voxelMap.BoundingContent.Size + 1, "Voxel Content size must match.");
+            Assert.AreEqual(new VRageMath.Vector3D(15.5, 15.5, 15.5), voxelMap.ContentCenter, "Voxel Content Center must match.");
 
             Assert.AreEqual(2047046, voxelMap.VoxCells, "Voxel cells must match.");
+
+            Assert.AreEqual(1, assetNameCount.Count, "Asset count should be equal.");
+            Assert.IsTrue(assetNameCount.ContainsKey(goldMaterial.Id.SubtypeName), $"{goldMaterial.Id.SubtypeName} asset should exist.");
+            Assert.AreEqual(2047046, assetNameCount[goldMaterial.Id.SubtypeName], $"{goldMaterial.Id.SubtypeName} count should be equal.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelConvertToVolmeticCancel()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -154,7 +169,9 @@
             Assert.IsNull(voxelMap, "Asteroid must not exist.");
         }
 
-        //[TestMethod]
+        // This was set up to test various things, including memory usage in x86. It's no longer required, but still a good test base.
+        [Ignore]
+        [TestMethod]
         public void VoxelConvertToVolmeticMisc()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;

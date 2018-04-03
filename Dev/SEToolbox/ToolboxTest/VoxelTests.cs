@@ -24,7 +24,7 @@
             SpaceEngineersCore.LoadDefinitions();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelCompressionV1()
         {
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
@@ -42,7 +42,7 @@
             Assert.AreEqual(9428, lengthNew, "File size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelMaterials()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -50,7 +50,7 @@
             Assert.IsTrue(materials.Count > 0, "Materials should exist. Has the developer got Space Engineers installed?");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelLoadSaveVox()
         {
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
@@ -70,7 +70,7 @@
             Assert.AreEqual(9431, lengthNew, "File size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelLoadSaveVx2V1()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -129,7 +129,7 @@
             Assert.AreEqual(134221, lengthNew, "File size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelLoadSaveVx2V2()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -188,7 +188,7 @@
             Assert.AreEqual(134221, lengthNew, "File size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelLoadSaveVx2V3()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -247,7 +247,7 @@
             Assert.AreEqual(145351, lengthNew, "File size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelLoadStock()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -277,7 +277,7 @@
             Assert.AreEqual(109192, lengthOriginal, "File size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelDetails()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -303,7 +303,7 @@
             Assert.AreEqual(30909925, voxelMap.VoxCells, "Voxel cells must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelMaterialIndexes()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -318,7 +318,7 @@
             //Assert.AreEqual(0xFF, SpaceEngineersCore.Resources.GetMaterialIndex("blaggg"), "Material index should not exist.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelMaterialChanges()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -366,7 +366,7 @@
             Assert.AreEqual(10654637, assetNameCountNew["Gold_01"], "Gold_01 count should be equal.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelMaterialAssets_FixedSize()
         {
             const string fileOriginal = @".\TestAssets\test_cube2x2x2.vx2";
@@ -384,7 +384,7 @@
             Assert.AreEqual(2040, assetNameCount["Stone_02"], "Stone_02 count should be equal.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelMaterialAssets_FixedSize_MixedContent()
         {
             const string fileOriginal = @".\TestAssets\test_cube_mixed_2x2x2.vx2";
@@ -424,7 +424,7 @@
             Assert.AreEqual(255, assetNameCount["Magnesium_01"], "Magnesium_01 count should be equal.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelMaterialAssetsRandom()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -502,7 +502,7 @@
             Assert.IsTrue(assetNameCount["Uraninite_01"] > 0.24 * voxelMap.VoxCells, "Uraninite_01 count should be equal.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelMaterialAssetsGenerateFixed()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -550,7 +550,7 @@
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelGenerateBoxSmall()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -597,7 +597,7 @@
             Assert.AreEqual(voxels, assetNameCount["Gold_01"], "Gold_01 count should be equal.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelGenerateBoxSmallMultiThread()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -643,7 +643,7 @@
             Assert.AreEqual(voxels, assetNameCount["Gold_01"], "Gold_01 count should be equal.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelGenerateSphereSmall()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -681,7 +681,7 @@
             //Assert.AreEqual(32, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelGenerateShape()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -744,7 +744,7 @@
             Assert.AreEqual(0, voxelMap.VoxCells, "Voxel cells must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelGenerateSphereLarge()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -840,7 +840,7 @@
             Assert.AreEqual(5.5, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelGenerateSpikeCube()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -914,7 +914,7 @@
             Assert.AreEqual(128, voxelMap.ContentCenter.Z, "Voxel Center must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void Voxel3DImportStl()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -948,7 +948,7 @@
             Assert.AreEqual(18710790, voxelMap.VoxCells, "Voxel cells must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LoadAllVoxelFiles()
         {
             var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), "VoxelMaps"), "*.vx2");
@@ -1045,7 +1045,7 @@
             //var lengthNew = new FileInfo(fileNew).Length;
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void FetchVoxelV2DetailPreview()
         {
             const string fileOriginal = @".\TestAssets\DeformedSphereWithHoles_64x128x64.vx2";
@@ -1057,7 +1057,7 @@
             Assert.AreEqual(128, size.Z, "Voxel Bounding size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void FetchVoxelV1DetailPreview()
         {
             const string fileOriginal = @".\TestAssets\asteroid0moon4.vox";
@@ -1069,7 +1069,7 @@
             Assert.AreEqual(64, size.Z, "Voxel Bounding size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VoxelMaterialAssets_FilledVolume()
         {
             var materials = SpaceEngineersCore.Resources.VoxelMaterialDefinitions;
@@ -1159,7 +1159,7 @@
             voxelMap.Save(fileNew);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LoadLoader()
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();

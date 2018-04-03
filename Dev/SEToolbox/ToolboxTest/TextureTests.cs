@@ -32,7 +32,7 @@
                 Directory.CreateDirectory(_path);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LoadComponentTextures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
@@ -228,7 +228,7 @@
             ImageTextureUtil.WriteImage(astronautNormalSpecularBmp, @".\TestOutput\Astronaut_ns.png");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void CreateMenuTextures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
@@ -251,7 +251,7 @@
             ImageTextureUtil.WriteImage(bmp, @".\TestOutput\Menu_SmallBlockLandingGear.png");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ReadBackgroundTextures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
@@ -282,7 +282,7 @@
             ImageTextureUtil.WriteImage(backgroundBmp, @".\TestOutput\BackgroundCube5_32.png");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void CreateBackgroundPreview()
         {
             const int size = 128;
@@ -330,17 +330,19 @@
             ImageTextureUtil.WriteImage(result, string.Format(@".\TestOutput\BackgroundCube_{0}.png", size));
         }
 
-        //[TestMethod]
-        //public void LoadAllCubeTextures()
-        //{
-        //    var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"Textures\Models\Cubes"), "*.dds");
+        // this is ignored, as it really isn't a unit test. It simply extracts game textures.
+        [Ignore]
+        [TestMethod]
+        public void LoadAllCubeTextures()
+        {
+            var files = Directory.GetFiles(Path.Combine(ToolboxUpdater.GetApplicationContentPath(), @"Textures\Models\Cubes"), "*.dds");
 
-        //    foreach (var filename in files)
-        //    {
-        //        var outputFilename = Path.Combine(@".\TestOutput", Path.GetFileNameWithoutExtension( filename) + ".png");
-        //        var imageBitmap = TexUtil.CreateBitmap(filename);
-        //        ImageTextureUtil.WriteImage(imageBitmap, outputFilename);
-        //    }
-        //}
+            foreach (var filename in files)
+            {
+                var outputFilename = Path.Combine(@".\TestOutput", Path.GetFileNameWithoutExtension(filename) + ".png");
+                var imageBitmap = TexUtil.CreateBitmap(filename);
+                ImageTextureUtil.WriteImage(imageBitmap, outputFilename);
+            }
+        }
     }
 }
