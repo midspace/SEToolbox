@@ -189,6 +189,7 @@
             voxelMap.Create(buildSize, materialIndex);
             ProcessAsteroid(voxelMap, multiThread, materialIndex, func, true);
 
+            // This should no longer be required.
             //if (faceMaterialIndex != null)
             //{
             //    voxelMap.ForceVoxelFaceMaterial(faceMaterialIndex.Value);

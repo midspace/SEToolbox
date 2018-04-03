@@ -53,7 +53,7 @@
 
             VRageRender.MyRenderProxy.Initialize(new MyNullRender());
             // We create a whole instance of MySandboxGame!
-            // If this is causing an exception, then there is a missing depdancy.
+            // If this is causing an exception, then there is a missing dependency.
             MySandboxGame gameTemp = new MySandboxGame(null);
           
             // creating MySandboxGame will reset the CurrentUICulture, so I have to reapply it.
