@@ -9,7 +9,7 @@ Created by Mid-Space productions. Est. 1993
 ---
 
 The **[Space Engineers Game](http://www.spaceengineersgame.com/)** is Copyright Keen Software House.
-For more details on the game, please vist the following links.
+For more details on the game, please visit the following links.
 * [www.spaceengineersgame.com](http://www.spaceengineersgame.com/)
 * [Steam store](http://store.steampowered.com/app/244850/)
 * [Keen Software House](http://www.keenswh.com/about.html)
@@ -21,7 +21,7 @@ For more details on the game, please vist the following links.
 
 * [Download the latest version](https://github.com/midspace/SEToolbox/releases/latest).
 * Details on [Installation/Runtime requirements](https://github.com/midspace/SEToolbox/wiki/System-Requirements).
-* We invite you to ask questions at the offical KeenSWH forum, on the [SEToolbox thread](http://forums.keenswh.com/threads/6638984/).
+* We invite you to ask questions at the official KeenSWH forum, on the [SEToolbox thread](http://forums.keenswh.com/threads/6638984/).
 
 Before asking any question please read the [documentation (FAQ)](https://github.com/midspace/SEToolbox/wiki) first as your question may have already been answered.
 

@@ -3135,7 +3135,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify filename to export Prefab to (name is embded into files).
+        ///   Looks up a localized string similar to Specify filename to export Prefab to (name is embedded into files).
         /// </summary>
         public static string DialogExportPrefabObjectTitle {
             get {
@@ -3171,7 +3171,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify filename to export SpawnGroup to (name is embded into files).
+        ///   Looks up a localized string similar to Specify filename to export SpawnGroup to (name is embedded into files).
         /// </summary>
         public static string DialogExportSpawnGroupObjectTitle {
             get {
@@ -3566,7 +3566,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occured while loading a save file..
+        ///   Looks up a localized string similar to An error occurred while loading a save file..
         /// </summary>
         public static string ErrorLoadSaveGameFileError {
             get {
@@ -3584,7 +3584,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified file &apos;{0}&apos; is corrupt and does not apper to be a valid compressed archive file..
+        ///   Looks up a localized string similar to The specified file &apos;{0}&apos; is corrupt and does not appear to be a valid compressed archive file..
         /// </summary>
         public static string Exception_CorruptZipFile {
             get {
@@ -5751,7 +5751,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Joins 2 foriegn parts to form a new ship..
+        ///   Looks up a localized string similar to Joins 2 foreign parts to form a new ship..
         /// </summary>
         public static string WnExplorerMnuSelectionMergeShipTooltip {
             get {
@@ -5778,7 +5778,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejoins 2 parts from a broken ship back togeather..
+        ///   Looks up a localized string similar to Rejoins 2 parts from a broken ship back together..
         /// </summary>
         public static string WnExplorerMnuSelectionRejoinShipTooltip {
             get {
