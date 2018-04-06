@@ -2805,4 +2805,41 @@ Planet Generator:	{17}</value>
   <data name="ClsExplorerTitleChangesMade" xml:space="preserve">
     <value>Changes have been made</value>
   </data>
+  <data name="ErrorLoadFileError" xml:space="preserve">
+    <value>Failed to load file: {0}
+Reason: {1}</value>
+  </data>
+  <data name="ErrorLoadSaveGameFileError" xml:space="preserve">
+    <value>An error occured while loading a save file.</value>
+  </data>
+  <data name="WnErrorDialogBtnClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WnErrorDialogBtnCopy" xml:space="preserve">
+    <value>Copy text</value>
+  </data>
+  <data name="WnErrorDialogBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnErrorDialogLabelDescription" xml:space="preserve">
+    <value>Error Text:</value>
+  </data>
+  <data name="WnErrorDialogTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ClsReportError" xml:space="preserve">
+    <value>Error:</value>
+  </data>
+  <data name="ErrorDirectoryNotFound" xml:space="preserve">
+    <value>Specified directory does not exist.</value>
+  </data>
+  <data name="ErrorGameNotFound" xml:space="preserve">
+    <value>Specified save game could not be found.</value>
+  </data>
+  <data name="ErrorInvalidSaveLabel" xml:space="preserve">
+    <value> # Invalid Save # </value>
+  </data>
+  <data name="ErrorStackLabel" xml:space="preserve">
+    <value>Stack:</value>
+  </data>
 </root>

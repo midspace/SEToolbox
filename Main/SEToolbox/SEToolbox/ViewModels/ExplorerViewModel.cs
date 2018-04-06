@@ -420,9 +420,7 @@
             {
                 _dataModel.BeginLoad();
                 _dataModel.ActiveWorld = model.SelectedWorld;
-                ActiveWorld.LoadCheckpoint();
                 ActiveWorld.LoadDefinitionsAndMods();
-                ActiveWorld.LoadSector();
                 _dataModel.ParseSandBox();
                 _dataModel.EndLoad();
             }
@@ -430,7 +428,7 @@
 
         public bool SaveCanExecute()
         {
-            return _dataModel.ActiveWorld != null &&
+            return _dataModel.ActiveWorld != null  && _dataModel.ActiveWorld.IsValid &&
                 ((_dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && _dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
                 || ((_dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || _dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired)
                     && ToolboxUpdater.IsRuningElevated()));
@@ -446,7 +444,7 @@
 
         public bool SaveAsCanExecute()
         {
-            return _dataModel.ActiveWorld != null &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid &&
                 _dataModel.ActiveWorld.SaveType != SaveWorldType.Custom &&
                 ((_dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && _dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
                 || ((_dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || _dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired)
@@ -467,7 +465,7 @@
 
         public bool ClearCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ClearExecuted()
@@ -485,16 +483,39 @@
             // TODO: check is save directory is still valid.
 
             _dataModel.BeginLoad();
+            string errorInformation;
 
             // Reload Checkpoint file.
-            ActiveWorld.LoadCheckpoint();
+            if (!ActiveWorld.LoadCheckpoint(out errorInformation))
+            {
+                // leave world in Invalid state, allowing Reload to be called again.
+                ActiveWorld.IsValid = false;
+
+                var model = new ErrorDialogModel();
+                model.Load(Res.ErrorLoadSaveGameFileError, errorInformation, false);
+                var loadVm = new ErrorDialogViewModel(this, model);
+                _dialogService.ShowDialog<WindowErrorDialog>(this, loadVm);
+
+                _dataModel.ParseSandBox();
+                _dataModel.EndLoad();
+                return;
+            }
 
             // Reload Definitions, Mods, and clear out Materials, Textures.
             ActiveWorld.LoadDefinitionsAndMods();
             Converters.DDSConverter.ClearCache();
 
             // Load Sector file.
-            ActiveWorld.LoadSector();
+            if (!ActiveWorld.LoadSector(out errorInformation))
+            {
+                // leave world in Invalid state, allowing Reload to be called again.
+                ActiveWorld.IsValid = false;
+
+                var model = new ErrorDialogModel();
+                model.Load(Res.ErrorLoadSaveGameFileError, errorInformation, false);
+                var loadVm = new ErrorDialogViewModel(this, model);
+                _dialogService.ShowDialog<WindowErrorDialog>(this, loadVm);
+            }
 
             _dataModel.ParseSandBox();
             _dataModel.EndLoad();
@@ -502,12 +523,12 @@
 
         public bool IsActiveCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public bool ImportVoxelCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportVoxelExecuted()
@@ -532,7 +553,7 @@
 
         public bool ImportImageCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportImageExecuted()
@@ -561,7 +582,7 @@
 
         public bool ImportModelCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportModelExecuted()
@@ -595,7 +616,7 @@
 
         public bool ImportAsteroidModelCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportAsteroidModelExecuted()
@@ -626,7 +647,7 @@
 
         public bool ImportSandboxObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportSandboxObjectExecuted()
@@ -649,7 +670,7 @@
 
         public bool WorldReportCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void WorldReportExecuted()
@@ -672,7 +693,7 @@
 
         public bool ViewSandboxCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ViewSandboxExecuted()
@@ -685,7 +706,7 @@
         }
         public bool OpenWorkshopCanExecute()
         {
-            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.WorkshopId.HasValue &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && _dataModel.ActiveWorld.WorkshopId.HasValue &&
                    _dataModel.ActiveWorld.WorkshopId.Value != 0;
         }
 
@@ -696,7 +717,7 @@
 
         public bool ExportSandboxObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ExportSandboxObjectExecuted()
@@ -706,7 +727,7 @@
 
         public bool ExportBasicSandboxObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ExportBasicSandboxObjectExecuted()
@@ -716,7 +737,7 @@
 
         public bool ExportPrefabObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0 &&
                 Selections.Any(e => e is StructureCubeGridViewModel);
         }
 
@@ -727,7 +748,7 @@
 
         public bool ExportSpawnGroupObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0 &&
                 Selections.Any(e => e is StructureCubeGridViewModel || e is StructureVoxelViewModel);
         }
 
@@ -738,7 +759,7 @@
 
         public bool CreateFloatingItemCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void CreateFloatingItemExecuted()
@@ -767,7 +788,7 @@
 
         public bool GenerateVoxelFieldCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void GenerateVoxelFieldExecuted()
@@ -915,7 +936,7 @@
 
         public bool DeleteObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void DeleteObjectExecuted()
@@ -925,7 +946,7 @@
 
         public bool CopyObjectGpsCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count == 1;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 1;
         }
 
         public void CopyObjectGpsExecuted()
@@ -944,7 +965,7 @@
 
         public bool GroupMoveCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 1;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 1;
         }
 
         public void GroupMoveExecuted()
@@ -965,7 +986,7 @@
 
         public bool RejoinShipCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 2 &&
                 ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
                 (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.SmallShip));
         }
@@ -979,7 +1000,7 @@
 
         public bool JoinShipPartsCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 2 &&
                 ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
                 (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.SmallShip));
         }
@@ -993,7 +1014,7 @@
 
         public bool VoxelMergeCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 2 &&
                 ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel && Selections[0].DataModel.IsValid) ||
                 (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel && Selections[0].DataModel.IsValid));
         }
@@ -1026,7 +1047,7 @@
 
         public bool RepairShipsCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void RepairShipsExecuted()
@@ -1038,7 +1059,7 @@
 
         public bool ResetVelocityCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ResetVelocityExecuted()
@@ -1051,7 +1072,7 @@
 
         public bool ConvertToShipCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ConvertToShipExecuted()
@@ -1063,7 +1084,7 @@
 
         public bool ConvertToStationCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ConvertToStationExecuted()
@@ -1075,7 +1096,7 @@
 
         public bool InertiaTensorCanExecute(bool state)
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void InertiaTensorExecuted(bool state)
@@ -1097,7 +1118,7 @@
 
         public bool Test1CanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void Test1Executed()
@@ -1123,7 +1144,7 @@
 
         public bool Test2CanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void Test2Executed()
@@ -1134,7 +1155,7 @@
 
         public bool Test3CanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void Test3Executed()
@@ -1170,7 +1191,7 @@
 
         public bool Test4CanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void Test4Executed()
@@ -1180,7 +1201,7 @@
 
         public bool Test5CanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void Test5Executed()
@@ -1190,7 +1211,7 @@
 
         public bool Test6CanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void Test6Executed()

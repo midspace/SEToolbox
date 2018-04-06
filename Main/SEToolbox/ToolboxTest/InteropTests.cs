@@ -46,7 +46,8 @@
 
             MyObjectBuilder_Definitions prefabDefinitions;
             bool isCompressed;
-            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(fighterPath, out prefabDefinitions, out isCompressed);
+            string errorInformation;
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(fighterPath, out prefabDefinitions, out isCompressed, out errorInformation);
 
             Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
@@ -64,7 +65,8 @@
 
             MyObjectBuilder_Definitions prefabDefinitions;
             bool isCompressed;
-            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(baseEasyStart1Path, out prefabDefinitions, out isCompressed);
+            string errorInformation;
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(baseEasyStart1Path, out prefabDefinitions, out isCompressed, out errorInformation);
 
             Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");

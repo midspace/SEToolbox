@@ -186,4 +186,12 @@
         None,
         ByteFiller
     }
+
+    public enum ReportType
+    {
+        Unknown,
+        Text,
+        Html,
+        Xml
+    }
 }

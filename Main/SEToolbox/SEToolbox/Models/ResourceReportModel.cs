@@ -24,6 +24,16 @@
 
     public class ResourceReportModel : BaseModel
     {
+        private const string CssStyle = @"
+body { background-color: #F6F6FA }
+b { font-family: Arial, Helvetica, sans-serif; }
+p { font-family: Arial, Helvetica, sans-serif; }
+h1,h2,h3 { font-family: Arial, Helvetica, sans-serif; }
+table { background-color: #FFFFFF; }
+table tr td { font-family: Arial, Helvetica, sans-serif; font-size: small; line-height: normal; color: #000000; }
+table thead td { background-color: #BABDD6; font-weight: bold; Color: #000000; }
+td.right { text-align: right; }";
+
         #region Fields
 
         private bool _isBusy;
@@ -147,10 +157,7 @@
             }
         }
 
-        public string SaveName
-        {
-            get { return _saveName; }
-        }
+        public string SaveName => _saveName;
 
         public bool IsReportReady
         {
@@ -246,6 +253,22 @@
         #endregion
 
         #region methods
+
+        internal static ReportType GetReportType(string reportExtension)
+        {
+            reportExtension = reportExtension?.ToUpper() ?? string.Empty;
+
+            if (reportExtension == ".TXT")
+                return ReportType.Text;
+
+            if (reportExtension == ".HTM" || reportExtension == ".HTML")
+                return ReportType.Html;
+
+            if (reportExtension == ".XML")
+                return ReportType.Xml;
+
+            return ReportType.Unknown;
+        }
 
         public void Load(string saveName, IList<IStructureBase> entities)
         {
@@ -825,6 +848,19 @@
 
         #endregion
 
+        #region CreateReport
+
+        internal string CreateReport(ReportType reportType)
+        {
+            switch (reportType)
+            {
+                case ReportType.Text: return CreateTextReport();
+                case ReportType.Html: return CreateHtmlReport();
+                case ReportType.Xml: return CreateXmlReport();
+            }
+            return string.Empty;
+        }
+
         #region CreateTextReport
 
         internal string CreateTextReport()
@@ -952,16 +988,7 @@
             {
                 #region header
 
-                writer.BeginDocument(string.Format("{0} - {1}", Res.ClsReportTitle, _saveName),
-                    @"
-body { background-color: #F6F6FA }
-b { font-family: Arial, Helvetica, sans-serif; }
-p { font-family: Arial, Helvetica, sans-serif; }
-h1,h2,h3 { font-family: Arial, Helvetica, sans-serif; }
-table { background-color: #FFFFFF; }
-table tr td { font-family: Arial, Helvetica, sans-serif; font-size: small; line-height: normal; color: #000000; }
-table thead td { background-color: #BABDD6; font-weight: bold; Color: #000000; }
-td.right { text-align: right; }");
+                writer.BeginDocument($"{Res.ClsReportTitle} - {_saveName}", CssStyle);
 
                 #endregion
 
@@ -1353,6 +1380,82 @@ td.right { text-align: right; }");
 
         #endregion
 
+        #region CreateErrorReport
+
+        internal string CreateErrorReport(ReportType reportType, string errorContent)
+        {
+            _generatedDate = DateTime.Now;
+            switch (reportType)
+            {
+                case ReportType.Text: return CreateTextErrorReport(errorContent);
+                case ReportType.Html: return CreateHtmlErrorReport(errorContent);
+                case ReportType.Xml: return CreateXmlErrorReport(errorContent);
+            }
+            return string.Empty;
+        }
+
+        internal string CreateTextErrorReport(string errorContent)
+        {
+            var bld = new StringBuilder();
+
+            bld.AppendLine(Res.ClsReportTitle);
+            bld.AppendFormat("{0} {1}\r\n", Res.ClsReportDate, _generatedDate);
+            bld.AppendFormat("{0} {1}\r\n", Res.ClsReportError, errorContent);
+            bld.AppendLine();
+            return bld.ToString();
+        }
+
+        internal string CreateHtmlErrorReport(string errorContent)
+        {
+            var stringWriter = new StringWriter();
+
+            // Put HtmlTextWriter in using block because it needs to call Dispose.
+            using (var writer = new HtmlTextWriter(stringWriter))
+            {
+                #region header
+
+                writer.BeginDocument($"{Res.ClsReportTitle} - {_saveName}", CssStyle);
+
+                #endregion
+
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.ClsReportTitle);
+
+                writer.RenderElement(HtmlTextWriterTag.P, "{0} {1}", Res.ClsReportDate, _generatedDate);
+                writer.RenderElement(HtmlTextWriterTag.P, "{0} {1}", Res.ClsReportError, errorContent);
+
+                writer.EndDocument();
+            }
+
+            return stringWriter.ToString();
+        }
+
+        internal string CreateXmlErrorReport(string errorContent)
+        {
+            var settingsDestination = new XmlWriterSettings
+            {
+                Indent = true, // Set indent to false to compress.
+                Encoding = new UTF8Encoding(false)   // codepage 65001 without signature. Removes the Byte Order Mark from the start of the file.
+            };
+
+            var stringWriter = new StringWriter();
+
+            using (var xmlWriter = XmlWriter.Create(stringWriter, settingsDestination))
+            {
+                xmlWriter.WriteStartElement("report");
+                xmlWriter.WriteAttributeString("title", Res.ClsReportTitle);
+                xmlWriter.WriteAttributeFormat("date", "{0:o}", _generatedDate);
+                xmlWriter.WriteAttributeString("error", errorContent);
+
+                xmlWriter.WriteEndElement();
+            }
+
+            return stringWriter.ToString();
+        }
+
+        #endregion
+
+        #endregion
+
         #region GenerateOfflineReport
 
         /// <summary>
@@ -1374,21 +1477,18 @@ td.right { text-align: right; }");
 
             if (argList.Count < 2)
             {
+                // this terminates the application.
                 Environment.Exit(2);
-                return;
             }
 
             var findSession = argList[0].ToUpper();
             var reportFile = argList[1];
-            var reportExtension = Path.GetExtension(reportFile).ToUpper();
+            ReportType reportType = GetReportType(Path.GetExtension(reportFile));
 
-            if (reportExtension != ".HTM" &&
-                reportExtension != ".HTML" &&
-                reportExtension != ".TXT" &&
-                reportExtension != ".XML")
+            if (reportType == ReportType.Unknown)
             {
+                // this terminates the application.
                 Environment.Exit(1);
-                return;
             }
 
             if (File.Exists(findSession))
@@ -1396,42 +1496,55 @@ td.right { text-align: right; }");
                 findSession = Path.GetDirectoryName(findSession);
             }
 
+            var model = new ResourceReportModel();
             WorldResource world;
+            string errorInformation;
 
             if (Directory.Exists(findSession))
             {
-                world = SelectWorldModel.LoadSession(findSession);
+                if (!SelectWorldModel.LoadSession(findSession, out world, out errorInformation))
+                {
+                    // Cannot write out to Console because app is WinForm.
+                    // Known workarounds do not work with Windows 8/10.
+
+                    File.WriteAllText(reportFile, model.CreateErrorReport(reportType, errorInformation));
+
+                    // this terminates the application.
+                    Environment.Exit(3);
+                }
             }
             else
             {
-                world = SelectWorldModel.FindSaveSession(SpaceEngineersConsts.BaseLocalPath.SavesPath, findSession);
-            }
+                if (!SelectWorldModel.FindSaveSession(SpaceEngineersConsts.BaseLocalPath.SavesPath, findSession, out world, out errorInformation))
+                {
+                    // Cannot write out to Console because app is WinForm.
+                    // Known workarounds do not work with Windows 8/10.
 
-            if (world == null)
-            {
-                Environment.Exit(3);
-                return;
+                    File.WriteAllText(reportFile, model.CreateErrorReport(reportType, errorInformation));
+
+                    // this terminates the application.
+                    Environment.Exit(3);
+                }
             }
 
             baseModel.ActiveWorld = world;
             baseModel.ActiveWorld.LoadDefinitionsAndMods();
-            baseModel.ActiveWorld.LoadSector(true);
+            if (!baseModel.ActiveWorld.LoadSector(out errorInformation, true))
+            {
+                File.WriteAllText(reportFile, model.CreateErrorReport(reportType, errorInformation));
+
+                // this terminates the application.
+                Environment.Exit(3);
+            }
             baseModel.ParseSandBox();
 
-            var model = new ResourceReportModel();
             model.Load(baseModel.ActiveWorld.Savename, baseModel.Structures);
             model.GenerateReport();
             TempfileUtil.Dispose();
 
-            if (reportExtension == ".HTM" || reportExtension == ".HTML")
-                File.WriteAllText(reportFile, model.CreateHtmlReport());
+            File.WriteAllText(reportFile, model.CreateReport(reportType));
 
-            if (reportExtension == ".TXT")
-                File.WriteAllText(reportFile, model.CreateTextReport());
-
-            if (reportExtension == ".XML")
-                File.WriteAllText(reportFile, model.CreateXmlReport());
-
+            // no errors returned.
             Environment.Exit(0);
         }
 

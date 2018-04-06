@@ -21,12 +21,19 @@
             var statusNormal = true;
             var missingFiles = false;
             var saveAfterScan = false;
+            string errorInformation;
 
             // repair will use the WorldResource, thus it won't have access to the wrapper classes.
             // Any repair must be on the raw XML or raw serialized classes.
 
             var repairWorld = world;
-            repairWorld.LoadCheckpoint();
+
+            if (!repairWorld.LoadCheckpoint(out errorInformation))
+            {
+                statusNormal = false;
+                str.AppendLine(errorInformation);
+                missingFiles = true;
+            }
 
             var xDoc = repairWorld.LoadSectorXml();
 
@@ -126,7 +133,13 @@
             }
 
             repairWorld.LoadDefinitionsAndMods();
-            repairWorld.LoadSector();
+
+            if (!repairWorld.LoadSector(out errorInformation))
+            {
+                statusNormal = false;
+                str.AppendLine(errorInformation);
+                missingFiles = true;
+            }
 
             if (repairWorld.Checkpoint == null)
             {
