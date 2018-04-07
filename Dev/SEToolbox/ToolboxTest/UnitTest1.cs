@@ -27,8 +27,10 @@
             {
                 SpaceEngineersCore.LoadDefinitions();
             }
+#pragma warning disable 168
             // For debugging tests.
             catch (Exception ex)
+#pragma warning restore 168
             {
                 throw;
             }
@@ -131,8 +133,10 @@
 
             MyObjectBuilder_Sector sectorData;
             bool isCompressed;
-            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed);
+            string errorInformation;
+            bool ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed, out errorInformation);
 
+            Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsFalse(isCompressed, "file should not be compressed");
             Assert.IsNotNull(sectorData, "sectorData != null");
             Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
@@ -147,8 +151,10 @@
 
             MyObjectBuilder_Sector sectorData;
             bool isCompressed;
-            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed);
+            string errorInformation;
+            bool ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed, out errorInformation);
 
+            Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsFalse(isCompressed, "file should not be compressed");
             Assert.IsNotNull(sectorData, "sectorData != null");
             Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");

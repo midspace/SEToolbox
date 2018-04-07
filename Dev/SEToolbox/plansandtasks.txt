@@ -49,7 +49,7 @@
   * Exit Pilot from ship to Astronaut.
 
 - Asteroid:
-  * Detect multiple objects in 3D import and allow assigning material to individal parts somehow.
+  * Detect multiple objects in 3D import and allow assigning material to individual parts somehow.
   * Replace Asteroid/Voxel.
   * Rotate Asteroid/Voxel (not supported by sandbox currently, but procedural voxel rotation could be accomplished.)
   * Dialog to Generate box/sphere asteroid (size, hollow shell size, material).
@@ -85,7 +85,7 @@ Completed:
 - Repair ship.
 - Import Asteroid/Voxel.
 - Link to open Workshop ID.
-- Add collection for temporary files, to allow cleanup during shutdown.
+- Add collection for temporary files, to allow clean-up during shutdown.
 - Improve Import 3D Model:
   * Recode Poly2Vox to VisualC CLR to integrate with app, and enhance. Replaced Poly2Vox with HelixToolkit.
 - Switch Jetpack on/off.
@@ -139,8 +139,8 @@ Offical file extensions in use.
 Localization
   http://www.spaceengineersgame.com/localization.html
 
-Unoffical file extensions.
-".sbo" Sand Box Object. I made this one up for import and export of ships (MyObjectBuilder_CubeGrid).  .sbc seemed like it would conflict with the other offical extensions.
+Unofficial file extensions.
+".sbo" Sand Box Object. I made this one up for import and export of ships (MyObjectBuilder_CubeGrid).  .sbc seemed like it would conflict with the other official extensions.
   Though looking at content assets, prefab fighters use the ".sbc" extension which are MyObjectBuilder_CubeGrid, so I will change this now.
   Have now removed this file extension from use.
 
@@ -150,8 +150,8 @@ Sectors have the same size as in Miner Wars: 50x50x50km. It would take a couple 
 http://spaceengineerswiki.com/index.php?title=FAQs
 
 
-My experiments turning 3D models into in-game ships
-http://forums.keenswh.com/post/my-experiments-turning-3d-models-into-ingame-ships-6588883?&trail=15
+Thread: My experiments turning 3D models into in-game ships
+https://forum.keenswh.com/threads/6588883/
 
 
 Python v3.1.5 documentation » The Python Standard Library »

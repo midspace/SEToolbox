@@ -447,7 +447,7 @@
             ThePlayerCharacter = null;
             _customColors = null;
 
-            if (ActiveWorld.SectorData != null && ActiveWorld.Checkpoint != null)
+            if (ActiveWorld?.SectorData != null && ActiveWorld?.Checkpoint != null)
             {
                 foreach (var entityBase in ActiveWorld.SectorData.SectorObjects)
                 {
@@ -544,17 +544,18 @@
             foreach (var filename in filenames)
             {
                 bool isCompressed;
+                string errorInformation;
                 MyObjectBuilder_CubeGrid cubeEntity;
                 MyObjectBuilder_FloatingObject floatingEntity;
                 MyObjectBuilder_Meteor meteorEntity;
                 MyObjectBuilder_Character characterEntity;
                 MyObjectBuilder_Definitions prefabDefinitions;
 
-                if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed, false, true))
+                if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed, out errorInformation, false, true))
                 {
                     MergeData(cubeEntity, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed, false, true))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed, out errorInformation, false, true))
                 {
                     if (prefabDefinitions.Prefabs != null)
                     {
@@ -572,17 +573,17 @@
                         }
                     }
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out floatingEntity, out isCompressed, false, true))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out floatingEntity, out isCompressed, out errorInformation, false, true))
                 {
                     var newEntity = AddEntity(floatingEntity);
                     newEntity.EntityId = MergeId(floatingEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out meteorEntity, out isCompressed, false, true))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out meteorEntity, out isCompressed, out errorInformation, false, true))
                 {
                     var newEntity = AddEntity(meteorEntity);
                     newEntity.EntityId = MergeId(meteorEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out characterEntity, out isCompressed, false, true))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out characterEntity, out isCompressed, out errorInformation, false, true))
                 {
                     var newEntity = AddEntity(characterEntity);
                     newEntity.EntityId = MergeId(characterEntity.EntityId, ref idReplacementTable);
@@ -664,7 +665,7 @@
                                 // theoretically with the Hierarchy structure, there could be more than one character attached to a single cube.
                                 // thus, more than 1 pilot.
                                 var pilots = cockpit.GetHierarchyCharacters();
-                                if (pilots.First() == entity)
+                                if (pilots.Count > 0 && pilots.First() == entity)
                                 {
                                     cockpit.Pilot = null;
                                     cockpit.RemoveHierarchyCharacter(pilots.First());

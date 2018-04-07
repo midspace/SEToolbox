@@ -1,15 +1,14 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
+    using SEToolbox.Converters;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using SEToolbox.Converters;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
-    using VRage.Game;
+    using Res = SEToolbox.Properties.Resources;
 
     public class SelectWorldModel : BaseModel
     {
@@ -192,8 +191,7 @@
                     var saveResource = LoadSaveFromPath(savePath, userName, saveType, dataPath);
 
                     // This should still allow Games to be copied into the Save path manually.
-
-                    saveResource.LoadCheckpoint();
+                    saveResource.LoadWorldInfo();
                     list.Add(saveResource);
                 }
             }
@@ -205,7 +203,7 @@
         {
             var saveResource = new WorldResource
             {
-                GroupDescription = string.Format("{0}: {1}", new EnumToResouceConverter().Convert(saveType, typeof(string), null, CultureInfo.CurrentUICulture), userName),
+                GroupDescription = $"{new EnumToResouceConverter().Convert(saveType, typeof (string), null, CultureInfo.CurrentUICulture)}: {userName}",
                 SaveType = saveType,
                 Savename = Path.GetFileName(savePath),
                 UserName = userName,
@@ -216,7 +214,7 @@
             return saveResource;
         }
 
-        internal static WorldResource FindSaveSession(string baseSavePath, string findSession)
+        internal static bool FindSaveSession(string baseSavePath, string findSession, out WorldResource saveResource, out string errorInformation)
         {
             if (Directory.Exists(baseSavePath))
             {
@@ -232,7 +230,7 @@
                         // Still check every potential game world path.
                         foreach (var savePath in savePaths)
                         {
-                            var saveResource = new WorldResource
+                            saveResource = new WorldResource
                             {
                                 Savename = Path.GetFileName(savePath),
                                 UserName = Path.GetFileName(userPath),
@@ -240,27 +238,28 @@
                                 DataPath = UserDataPath.FindFromSavePath(savePath)
                             };
 
-                            saveResource.LoadCheckpoint();
-
-                            if (saveResource.Savename.ToUpper() == findSession || saveResource.SessionName.ToUpper() == findSession)
+                            saveResource.LoadWorldInfo();
+                            if (saveResource.IsValid && (saveResource.Savename.ToUpper() == findSession || saveResource.SessionName.ToUpper() == findSession))
                             {
-                                return saveResource;
+                                return saveResource.LoadCheckpoint(out errorInformation);
                             }
                         }
                     }
                 }
             }
 
-            return null;
+            saveResource = null;
+            errorInformation = Res.ErrorGameNotFound;
+            return false;
         }
 
-        internal static WorldResource LoadSession(string savePath)
+        internal static bool LoadSession(string savePath, out WorldResource saveResource, out string errorInformation)
         {
             if (Directory.Exists(savePath))
             {
                 var userPath = Path.GetDirectoryName(savePath);
 
-                var saveResource = new WorldResource
+                saveResource = new WorldResource
                 {
                     Savename = Path.GetFileName(savePath),
                     UserName = Path.GetFileName(userPath),
@@ -268,12 +267,12 @@
                     DataPath = UserDataPath.FindFromSavePath(savePath)
                 };
 
-                saveResource.LoadCheckpoint();
-
-                return saveResource;
+                return saveResource.LoadCheckpoint(out errorInformation);
             }
 
-            return null;
+            saveResource = null;
+            errorInformation = Res.ErrorDirectoryNotFound;
+            return false;
         }
 
         #endregion

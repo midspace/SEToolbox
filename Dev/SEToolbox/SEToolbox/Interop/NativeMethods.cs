@@ -6,7 +6,9 @@
 
     internal static class NativeMethods
     {
-        [DllImport("user32.dll", EntryPoint = "GetKeyState", CharSet = CharSet.Auto, ExactSpelling = true)]
+        private const string User32Library = "user32.dll";
+
+        [DllImport(User32Library, EntryPoint = "GetKeyState", CharSet = CharSet.Auto, ExactSpelling = true)]
         private static extern short _GetKeyState(int keyCode);
 
         internal static KeyStates GetKeyState(Keys key)

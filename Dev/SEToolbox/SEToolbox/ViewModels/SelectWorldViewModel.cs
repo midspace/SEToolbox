@@ -13,6 +13,7 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
     using SEToolbox.Support;
+    using Views;
     using Res = SEToolbox.Properties.Resources;
 
     public class SelectWorldViewModel : BaseViewModel
@@ -50,45 +51,21 @@
 
         #region command Properties
 
-        public ICommand LoadCommand
-        {
-            get { return new DelegateCommand(LoadExecuted, LoadCanExecute); }
-        }
+        public ICommand LoadCommand => new DelegateCommand(LoadExecuted, LoadCanExecute);
 
-        public ICommand RefreshCommand
-        {
-            get { return new DelegateCommand(RefreshExecuted, RefreshCanExecute); }
-        }
+        public ICommand RefreshCommand => new DelegateCommand(RefreshExecuted, RefreshCanExecute);
 
-        public ICommand CancelCommand
-        {
-            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
-        }
+        public ICommand CancelCommand => new DelegateCommand(CancelExecuted, CancelCanExecute);
 
-        public ICommand RepairCommand
-        {
-            get { return new DelegateCommand(RepairExecuted, RepairCanExecute); }
-        }
+        public ICommand RepairCommand => new DelegateCommand(RepairExecuted, RepairCanExecute);
 
-        public ICommand BrowseCommand
-        {
-            get { return new DelegateCommand(BrowseExecuted, BrowseCanExecute); }
-        }
+        public ICommand BrowseCommand => new DelegateCommand(BrowseExecuted, BrowseCanExecute);
 
-        public ICommand OpenFolderCommand
-        {
-            get { return new DelegateCommand(OpenFolderExecuted, OpenFolderCanExecute); }
-        }
+        public ICommand OpenFolderCommand => new DelegateCommand(OpenFolderExecuted, OpenFolderCanExecute);
 
-        public ICommand OpenWorkshopCommand
-        {
-            get { return new DelegateCommand(OpenWorkshopExecuted, OpenWorkshopCanExecute); }
-        }
+        public ICommand OpenWorkshopCommand => new DelegateCommand(OpenWorkshopExecuted, OpenWorkshopCanExecute);
 
-        public ICommand ZoomThumbnailCommand
-        {
-            get { return new DelegateCommand(ZoomThumbnailExecuted, ZoomThumbnailCanExecute); }
-        }
+        public ICommand ZoomThumbnailCommand => new DelegateCommand(ZoomThumbnailExecuted, ZoomThumbnailCanExecute);
 
         #endregion
 
@@ -155,7 +132,25 @@
 
         public void LoadExecuted()
         {
-            CloseResult = true;
+            IsBusy = true;
+            string errorInformation;
+            // Preload to world before cloasing dialog.
+            if (_dataModel.SelectedWorld.LoadCheckpoint(out errorInformation))
+            {
+                if (_dataModel.SelectedWorld.LoadSector(out errorInformation))
+                {
+                    IsBusy = false;
+                    CloseResult = true;
+                    return;
+                }
+            }
+
+            IsBusy = false;
+            SystemSounds.Beep.Play();
+            var model = new ErrorDialogModel();
+            model.Load(Res.ErrorLoadSaveGameFileError, errorInformation, true);
+            var loadVm = new ErrorDialogViewModel(this, model);
+            _dialogService.ShowDialog<WindowErrorDialog>(this, loadVm);
         }
 
         public bool RefreshCanExecute()
@@ -211,6 +206,7 @@
 
             if (_dialogService.ShowOpenFileDialog(this, openFileDialog) == DialogResult.OK)
             {
+                IsBusy = true;
                 var savePath = Path.GetDirectoryName(openFileDialog.FileName);
                 var userName = Environment.UserName;
                 var saveType = SaveWorldType.Custom;
@@ -231,17 +227,24 @@
                 var dp = UserDataPath.FindFromSavePath(savePath);
 
                 var saveResource = _dataModel.LoadSaveFromPath(savePath, userName, saveType, dp);
-                saveResource.LoadCheckpoint();
+                string errorInformation;
+                if (saveResource.LoadCheckpoint(out errorInformation))
+                {
+                    if (saveResource.LoadSector(out errorInformation))
+                    {
+                        SelectedWorld = saveResource;
+                        IsBusy = false;
+                        CloseResult = true;
+                        return;
+                    }
+                }
 
-                if (saveResource.IsValid)
-                {
-                    SelectedWorld = saveResource;
-                    CloseResult = true;
-                }
-                else
-                {
-                    SystemSounds.Beep.Play();
-                }
+                IsBusy = false;
+                SystemSounds.Beep.Play();
+                var model = new ErrorDialogModel();
+                model.Load(Res.ErrorLoadSaveGameFileError, errorInformation, true);
+                var loadVm = new ErrorDialogViewModel(this, model);
+                _dialogService.ShowDialog<WindowErrorDialog>(this, loadVm);
             }
         }
 

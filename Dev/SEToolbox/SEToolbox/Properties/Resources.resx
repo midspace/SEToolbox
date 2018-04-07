@@ -607,7 +607,7 @@ Please update it before running SEToolbox {2} again.</value>
     <value>Cannot run with old version of Space Engineers</value>
   </data>
   <data name="Exception_CorruptZipFile" xml:space="preserve">
-    <value>The specified file '{0}' is corrupt and does not apper to be a valid compressed archive file.</value>
+    <value>The specified file '{0}' is corrupt and does not appear to be a valid compressed archive file.</value>
   </data>
   <data name="TraceDirection_X" xml:space="preserve">
     <value>X axis</value>
@@ -670,7 +670,7 @@ Please update it before running SEToolbox {2} again.</value>
     <value>Sandbox Prefab Xml files</value>
   </data>
   <data name="DialogExportPrefabObjectTitle" xml:space="preserve">
-    <value>Specify filename to export Prefab to (name is embded into files)</value>
+    <value>Specify filename to export Prefab to (name is embedded into files)</value>
   </data>
   <data name="VoxelMergeType_UnionMaterialLeftToRight" xml:space="preserve">
     <value>Union Material Left to Right</value>
@@ -848,7 +848,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Merge 2 Ships into 1</value>
   </data>
   <data name="WnExplorerMnuSelectionMergeShipTooltip" xml:space="preserve">
-    <value>Joins 2 foriegn parts to form a new ship.</value>
+    <value>Joins 2 foreign parts to form a new ship.</value>
   </data>
   <data name="WnExplorerMnuSelectionMove" xml:space="preserve">
     <value>Group Move</value>
@@ -857,7 +857,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Rejoin Ship</value>
   </data>
   <data name="WnExplorerMnuSelectionRejoinShipTooltip" xml:space="preserve">
-    <value>Rejoins 2 parts from a broken ship back togeather.</value>
+    <value>Rejoins 2 parts from a broken ship back together.</value>
   </data>
   <data name="WnExplorerMnuSelectionRepair" xml:space="preserve">
     <value>Repair</value>
@@ -2020,7 +2020,7 @@ Planet Generator:	{17}</value>
   </data>
   <data name="WnImportImageLabelImage" xml:space="preserve">
     <value>Image:</value>
-    <comment>Specify file for imaage</comment>
+    <comment>Specify file for image</comment>
   </data>
   <data name="WnImportImageLabelNewHeight" xml:space="preserve">
     <value>Height:</value>
@@ -2782,7 +2782,7 @@ Planet Generator:	{17}</value>
     <value>Export selected ships, stations and asteroids to a single an prefab .sbc file, spawngroup file and asteroids.</value>
   </data>
   <data name="DialogExportSpawnGroupObjectTitle" xml:space="preserve">
-    <value>Specify filename to export SpawnGroup to (name is embded into files)</value>
+    <value>Specify filename to export SpawnGroup to (name is embedded into files)</value>
   </data>
   <data name="DialogSandboxBinaryContentFiles" xml:space="preserve">
     <value>Sandbox Binary Content files</value>
@@ -2804,5 +2804,42 @@ Planet Generator:	{17}</value>
   </data>
   <data name="ClsExplorerTitleChangesMade" xml:space="preserve">
     <value>Changes have been made</value>
+  </data>
+  <data name="ErrorLoadFileError" xml:space="preserve">
+    <value>Failed to load file: {0}
+Reason: {1}</value>
+  </data>
+  <data name="ErrorLoadSaveGameFileError" xml:space="preserve">
+    <value>An error occurred while loading a save file.</value>
+  </data>
+  <data name="WnErrorDialogBtnClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WnErrorDialogBtnCopy" xml:space="preserve">
+    <value>Copy text</value>
+  </data>
+  <data name="WnErrorDialogBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnErrorDialogLabelDescription" xml:space="preserve">
+    <value>Error Text:</value>
+  </data>
+  <data name="WnErrorDialogTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ClsReportError" xml:space="preserve">
+    <value>Error:</value>
+  </data>
+  <data name="ErrorDirectoryNotFound" xml:space="preserve">
+    <value>Specified directory does not exist.</value>
+  </data>
+  <data name="ErrorGameNotFound" xml:space="preserve">
+    <value>Specified save game could not be found.</value>
+  </data>
+  <data name="ErrorInvalidSaveLabel" xml:space="preserve">
+    <value> # Invalid Save # </value>
+  </data>
+  <data name="ErrorStackLabel" xml:space="preserve">
+    <value>Stack:</value>
   </data>
 </root>

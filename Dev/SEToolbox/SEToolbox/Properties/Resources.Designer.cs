@@ -743,6 +743,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error:.
+        /// </summary>
+        public static string ClsReportError {
+            get {
+                return ResourceManager.GetString("ClsReportError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Components.
         /// </summary>
         public static string ClsReportHeaderAllComponents {
@@ -3126,7 +3135,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify filename to export Prefab to (name is embded into files).
+        ///   Looks up a localized string similar to Specify filename to export Prefab to (name is embedded into files).
         /// </summary>
         public static string DialogExportPrefabObjectTitle {
             get {
@@ -3162,7 +3171,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify filename to export SpawnGroup to (name is embded into files).
+        ///   Looks up a localized string similar to Specify filename to export SpawnGroup to (name is embedded into files).
         /// </summary>
         public static string DialogExportSpawnGroupObjectTitle {
             get {
@@ -3520,7 +3529,62 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified file &apos;{0}&apos; is corrupt and does not apper to be a valid compressed archive file..
+        ///   Looks up a localized string similar to Specified directory does not exist..
+        /// </summary>
+        public static string ErrorDirectoryNotFound {
+            get {
+                return ResourceManager.GetString("ErrorDirectoryNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specified save game could not be found..
+        /// </summary>
+        public static string ErrorGameNotFound {
+            get {
+                return ResourceManager.GetString("ErrorGameNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  # Invalid Save # .
+        /// </summary>
+        public static string ErrorInvalidSaveLabel {
+            get {
+                return ResourceManager.GetString("ErrorInvalidSaveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load file: {0}
+        ///Reason: {1}.
+        /// </summary>
+        public static string ErrorLoadFileError {
+            get {
+                return ResourceManager.GetString("ErrorLoadFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while loading a save file..
+        /// </summary>
+        public static string ErrorLoadSaveGameFileError {
+            get {
+                return ResourceManager.GetString("ErrorLoadSaveGameFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack:.
+        /// </summary>
+        public static string ErrorStackLabel {
+            get {
+                return ResourceManager.GetString("ErrorStackLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified file &apos;{0}&apos; is corrupt and does not appear to be a valid compressed archive file..
         /// </summary>
         public static string Exception_CorruptZipFile {
             get {
@@ -5129,6 +5193,51 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WnErrorDialogBtnClose {
+            get {
+                return ResourceManager.GetString("WnErrorDialogBtnClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy text.
+        /// </summary>
+        public static string WnErrorDialogBtnCopy {
+            get {
+                return ResourceManager.GetString("WnErrorDialogBtnCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string WnErrorDialogBtnOkay {
+            get {
+                return ResourceManager.GetString("WnErrorDialogBtnOkay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error Text:.
+        /// </summary>
+        public static string WnErrorDialogLabelDescription {
+            get {
+                return ResourceManager.GetString("WnErrorDialogLabelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string WnErrorDialogTitle {
+            get {
+                return ResourceManager.GetString("WnErrorDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cubes.
         /// </summary>
         public static string WnExplorerColCubes {
@@ -5642,7 +5751,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Joins 2 foriegn parts to form a new ship..
+        ///   Looks up a localized string similar to Joins 2 foreign parts to form a new ship..
         /// </summary>
         public static string WnExplorerMnuSelectionMergeShipTooltip {
             get {
@@ -5669,7 +5778,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejoins 2 parts from a broken ship back togeather..
+        ///   Looks up a localized string similar to Rejoins 2 parts from a broken ship back together..
         /// </summary>
         public static string WnExplorerMnuSelectionRejoinShipTooltip {
             get {

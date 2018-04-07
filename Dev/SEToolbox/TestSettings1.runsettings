@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>Framework45</TargetFrameworkVersion>
 
     <!-- Path to Test Adapters -->
-    <TestAdaptersPaths> \Temp\foo;%SystemDrive%\Temp\bar</TestAdaptersPaths>
+    <TestAdaptersPaths>\Temp\foo;%SystemDrive%\Temp\bar</TestAdaptersPaths>
   </RunConfiguration>
 
   <!-- Configurations for data collectors -->
