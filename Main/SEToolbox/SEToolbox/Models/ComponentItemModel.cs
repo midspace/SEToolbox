@@ -86,6 +86,8 @@
             return FriendlyName;
         }
 
+        public bool IsMod { get; set; }
+
         #endregion
     }
 }

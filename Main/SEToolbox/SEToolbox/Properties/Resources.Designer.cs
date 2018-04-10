@@ -19,7 +19,7 @@ namespace SEToolbox.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -4923,6 +4923,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string WnComponentsColComponentMod {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string WnComponentsColComponentName {
@@ -4995,6 +5004,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string WnComponentsColCubeMod {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string WnComponentsColCubeName {
@@ -5058,6 +5076,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string WnComponentsColItemMod {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string WnComponentsColItemName {
@@ -5099,6 +5126,15 @@ namespace SEToolbox.Properties {
         public static string WnComponentsColMaterialMineRate {
             get {
                 return ResourceManager.GetString("WnComponentsColMaterialMineRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string WnComponentsColMaterialMod {
+            get {
+                return ResourceManager.GetString("WnComponentsColMaterialMod", resourceCulture);
             }
         }
         

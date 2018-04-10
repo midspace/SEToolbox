@@ -1,5 +1,12 @@
 ﻿namespace SEToolbox.Models
 {
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Definitions;
+    using SEToolbox.ImageLibrary;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -10,13 +17,7 @@
     using System.Text;
     using System.Web.UI;
     using System.Xml;
-    using Sandbox.Common.ObjectBuilders;
-    using Sandbox.Definitions;
-    using SEToolbox.ImageLibrary;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Support;
+    using VRage.FileSystem;
     using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
@@ -1087,14 +1088,18 @@ td.right { text-align: right; }";
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (item.TextureFile != null && File.Exists(item.TextureFile))
+                    if (item.TextureFile != null)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
-                        writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
-                        writer.RenderBeginTag(HtmlTextWriterTag.Img);
-                        writer.RenderEndTag();
+                        string texture = GetTextureToBase64(item.TextureFile, 32, 32);
+                        if (!string.IsNullOrEmpty(texture))
+                        {
+                            writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + texture);
+                            writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
+                            writer.RenderBeginTag(HtmlTextWriterTag.Img);
+                            writer.RenderEndTag();
+                        }
                     }
                     writer.RenderEndTag(); // Td
 
@@ -1114,14 +1119,18 @@ td.right { text-align: right; }";
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (item.TextureFile != null && File.Exists(item.TextureFile))
+                    if (item.TextureFile != null)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
-                        writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
-                        writer.RenderBeginTag(HtmlTextWriterTag.Img);
-                        writer.RenderEndTag();
+                        string texture = GetTextureToBase64(item.TextureFile, 32, 32);
+                        if (!string.IsNullOrEmpty(texture))
+                        {
+                            writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + texture);
+                            writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
+                            writer.RenderBeginTag(HtmlTextWriterTag.Img);
+                            writer.RenderEndTag();
+                        }
                     }
                     writer.RenderEndTag(); // Td
 
@@ -1143,14 +1152,18 @@ td.right { text-align: right; }";
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
-                    if (item.TextureFile != null && File.Exists(item.TextureFile))
+                    if (item.TextureFile != null)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + ImageTextureUtil.GetTextureToBase64(item.TextureFile, 32, 32));
-                        writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
-                        writer.RenderBeginTag(HtmlTextWriterTag.Img);
-                        writer.RenderEndTag();
+                        string texture = GetTextureToBase64(item.TextureFile, 32, 32);
+                        if (!string.IsNullOrEmpty(texture))
+                        {
+                            writer.AddAttribute(HtmlTextWriterAttribute.Src, "data:image/png;base64," + texture);
+                            writer.AddAttribute(HtmlTextWriterAttribute.Width, "32");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Height, "32");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Alt, Path.GetFileNameWithoutExtension(item.TextureFile));
+                            writer.RenderBeginTag(HtmlTextWriterTag.Img);
+                            writer.RenderEndTag();
+                        }
                     }
                     writer.RenderEndTag(); // Td
 
@@ -1549,6 +1562,14 @@ td.right { text-align: right; }";
         }
 
         #endregion
+
+        private static string GetTextureToBase64(string filename, int width, int height, bool ignoreAlpha = false)
+        {
+            using (Stream stream = MyFileSystem.OpenRead(filename))
+            {
+                return ImageTextureUtil.GetTextureToBase64(stream, filename, width, height, ignoreAlpha);
+            }
+        }
 
         #region helper classes
 

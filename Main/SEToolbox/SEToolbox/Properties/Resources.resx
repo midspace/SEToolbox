@@ -2842,4 +2842,16 @@ Reason: {1}</value>
   <data name="ErrorStackLabel" xml:space="preserve">
     <value>Stack:</value>
   </data>
+  <data name="WnComponentsColComponentMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="WnComponentsColCubeMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="WnComponentsColItemMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="WnComponentsColMaterialMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
 </root>
