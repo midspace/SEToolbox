@@ -14,10 +14,6 @@
     using Color = System.Drawing.Color;
 
     [TestClass]
-    // TODO: should use DeploymentItem attributes, but this will screw up all file dependant tests.
-    //       It's an all or nothing, approach to get the correct binaries into the tests.
-    //       Also, need some way of getting the Test Settings to sticking to X64 architecture.
-    //[DeploymentItem(@"TestAssets\SANDBOX_0_0_0_.XML.sbs", "TestAssets")]
     public class UnitTest1
     {
         [TestInitialize]

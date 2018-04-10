@@ -10,13 +10,18 @@
 
     public static class DxtUtilTexture
     {
-        internal static Bitmap DecompressDxt5TextureToBitmap(byte[] imageData, int width, int height, bool ignoreAlpha, ImageTextureUtil.DXGI_FORMAT dxgiFormat)
+        internal static Bitmap DecompressTextureToBitmap(byte[] imageData, int width, int height, bool ignoreAlpha, uint fourCC, ImageTextureUtil.DXGI_FORMAT dxgiFormat)
         {
             using (var imageStream = new MemoryStream(imageData))
             {
-                var pixelColors = DxtUtil.DecompressDxt5(imageStream, width, height, dxgiFormat);
-                //var pixelColors = DxtUtil.DecompressDxt3(imageStream, width, height);
-                //var pixelColors = DxtUtil.DecompressDxt1(imageStream, width, height);
+                byte[] pixelColors;
+
+                if (fourCC == (uint)ImageTextureUtil.DDS_FOURCC.DXT1)
+                    pixelColors = DxtUtil.DecompressDxt1(imageStream, width, height);
+                else if (fourCC == (uint)ImageTextureUtil.DDS_FOURCC.DXT3)
+                    pixelColors = DxtUtil.DecompressDxt3(imageStream, width, height);
+                else
+                    pixelColors = DxtUtil.DecompressDxt5(imageStream, width, height, dxgiFormat);
 
                 // Copy the pixel colors into a byte array
                 const int bytesPerPixel = 4;
@@ -45,12 +50,18 @@
             }
         }
 
-        internal static ImageSource DecompressDxt5TextureToImageSource(byte[] imageData, int width, int height, bool ignoreAlpha, IPixelEffect effect, ImageTextureUtil.DXGI_FORMAT dxgiFormat)
+        internal static ImageSource DecompressTextureToImageSource(byte[] imageData, int width, int height, bool ignoreAlpha, IPixelEffect effect, uint fourCC, ImageTextureUtil.DXGI_FORMAT dxgiFormat)
         {
             using (var imageStream = new MemoryStream(imageData))
             {
-                var pixelColors = DxtUtil.DecompressDxt5(imageStream, width, height, dxgiFormat);
-                //var pixelColors = DxtUtil.DecompressDxt3(imageStream, width, height);
+                byte[] pixelColors;
+
+                if (fourCC == (uint)ImageTextureUtil.DDS_FOURCC.DXT1)
+                    pixelColors = DxtUtil.DecompressDxt1(imageStream, width, height);
+                else if (fourCC == (uint)ImageTextureUtil.DDS_FOURCC.DXT3)
+                    pixelColors = DxtUtil.DecompressDxt3(imageStream, width, height);
+                else
+                    pixelColors = DxtUtil.DecompressDxt5(imageStream, width, height, dxgiFormat);
 
                 // Copy the pixel colors into a byte array
                 const int bytesPerPixel = 4;

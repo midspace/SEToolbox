@@ -15,8 +15,6 @@
     using TexUtil = SEToolbox.ImageLibrary.ImageTextureUtil;
 
     [TestClass]
-    //[DeploymentItem("_placeholder.txt", "TestOutput")]
-    //[DeploymentItem("TestOutput\\_placeholder.txt", "TestOutput")]
     public class TextureTests
     {
         private string _path;
@@ -26,13 +24,12 @@
         {
             SpaceEngineersCore.LoadDefinitions();
             _path = Path.GetFullPath(".\\TestOutput");
-            //_path = @"D:\Development\GitHub\SEToolbox development\Main\SEToolbox\ToolboxTest\bin\x64\Debug\TestOutput";
 
             if (!Directory.Exists(_path))
                 Directory.CreateDirectory(_path);
         }
 
-        [TestMethod, TestCategory("UnitTest")]
+        [TestMethod, TestCategory("UnitTest"), TestCategory("DX9")]
         public void LoadComponentTextures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
@@ -42,119 +39,107 @@
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
 
-            //var ExplosivesComponentPath = Path.GetFullPath(@".\TestAssets\ExplosivesComponent.dds");
-            //var ExplosivesComponentBmp = TexUtil.CreateBitmap(ExplosivesComponentPath);
-            //File.Copy(ExplosivesComponentPath, Path.Combine(_path, "ExplosivesComponent.dds"), true);
-            //ImageTextureUtil.WriteImage(ExplosivesComponentBmp, Path.Combine(_path, @"ExplosivesComponent.png"));
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Cubes\DoorBlock_cm.dds"));
 
-            
-            var doorTextureFile = Path.Combine(contentPath, @"Textures\Models\Cubes\DoorBlock_cm.dds");
-            LoadTextureAndExport(doorTextureFile);
-            LoadTextureAndExport(Path.GetFullPath(@".\TestAssets\ExplosivesComponent.dds"));
+
+            TestLoadTextureAndExport(Path.GetFullPath(@".\TestAssets\ExplosivesComponent.dds"));
+
 
             var magnesiumOre = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.Ore, "Magnesium");
-            var magnesiumOrePath = Path.Combine(contentPath, magnesiumOre.Icons.First());
-            Assert.IsTrue(File.Exists(magnesiumOrePath), "Filepath should exist on developer machine");
             Assert.IsTrue(magnesiumOre is MyPhysicalItemDefinition, "Type should match");
-            var magnesiumOreBmp = TexUtil.CreateBitmap(magnesiumOrePath);
+            TestLoadTextureAndExport(Path.Combine(contentPath, magnesiumOre.Icons.First()));
 
-            var str = Path.GetFullPath( Path.Combine(_path, "Magnesium_Ore.dds"));
-            File.Copy(magnesiumOrePath, Path.Combine(_path, "Magnesium_Ore.dds"), true);
-            ImageTextureUtil.WriteImage(magnesiumOreBmp, Path.Combine(_path, @"Magnesium_Ore.png"));
-
-
-
-            return;
 
             var goldIngot = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.Ingot, "Gold");
-            var goldIngotPath = Path.Combine(contentPath, goldIngot.Icons.First());
-            Assert.IsTrue(File.Exists(goldIngotPath), "Filepath should exist on developer machine");
             Assert.IsTrue(goldIngot is MyPhysicalItemDefinition, "Type should match");
-            var goldIngotBmp = TexUtil.CreateBitmap(goldIngotPath);
-            ImageTextureUtil.WriteImage(goldIngotBmp, @".\TestOutput\Gold_Ingot.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, goldIngot.Icons.First()));
+
 
             var ammoMagazine = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.AmmoMagazine, "NATO_5p56x45mm");
-            var ammoMagazinePath = Path.Combine(contentPath, ammoMagazine.Icons.First());
-            Assert.IsTrue(File.Exists(ammoMagazinePath), "Filepath should exist on developer machine");
             Assert.IsTrue(ammoMagazine is MyAmmoMagazineDefinition, "Type should match");
-            var ammoMagazineBmp = TexUtil.CreateBitmap(ammoMagazinePath);
-            ImageTextureUtil.WriteImage(ammoMagazineBmp, @".\TestOutput\NATO_5p56x45mm.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, ammoMagazine.Icons.First()));
+
 
             var steelPlate = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.Component, "SteelPlate");
-            var steelPlatePath = Path.Combine(contentPath, steelPlate.Icons.First());
-            Assert.IsTrue(File.Exists(steelPlatePath), "Filepath should exist on developer machine");
             Assert.IsTrue(steelPlate is MyComponentDefinition, "Type should match");
-            var steelPlateBmp = TexUtil.CreateBitmap(steelPlatePath);
-            ImageTextureUtil.WriteImage(steelPlateBmp, @".\TestOutput\SteelPlate.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, steelPlate.Icons.First()));
+            
 
             var smallBlockLandingGear = MyDefinitionManager.Static.GetDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_LandingGear)), "SmallBlockLandingGear");
-            var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icons.First());
-            Assert.IsTrue(File.Exists(smallBlockLandingGearPath), "Filepath should exist on developer machine");
             Assert.IsTrue(smallBlockLandingGear is MyCubeBlockDefinition, "Type should match");
-            var smallBlockLandingGearBmp = TexUtil.CreateBitmap(smallBlockLandingGearPath);
-            ImageTextureUtil.WriteImage(smallBlockLandingGearBmp, @".\TestOutput\SmallBlockLandingGear.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, smallBlockLandingGear.Icons.First()));
 
-            var gridItemPath = Path.Combine(contentPath, @"Textures\GUI\Controls\grid_item.dds");
-            Assert.IsTrue(File.Exists(gridItemPath), "Filepath should exist on developer machine");
-            var gridBmp = TexUtil.CreateBitmap(gridItemPath);
-            ImageTextureUtil.WriteImage(gridBmp, @".\TestOutput\grid_item.png");
 
-            var sunPath = Path.Combine(contentPath, @"Textures\BackgroundCube\Prerender\Sun.dds");
-            Assert.IsTrue(File.Exists(sunPath), "Filepath should exist on developer machine");
-            var sunBmp = TexUtil.CreateBitmap(sunPath);
-            ImageTextureUtil.WriteImage(sunBmp, @".\TestOutput\sun.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\GUI\Controls\grid_item.dds"));
 
-            var goldPath = Path.Combine(contentPath, @"Textures\Voxels\Gold_01_ForAxisXZ_cm.dds");
-            Assert.IsTrue(File.Exists(goldPath), "Filepath should exist on developer machine");
-            var goldBmp = TexUtil.CreateBitmap(goldPath);
-            ImageTextureUtil.WriteImage(goldBmp, @".\TestOutput\gold.png");
 
-            var siliconPath = Path.Combine(contentPath, @"Textures\Voxels\Silicon_01_ForAxisXZ_cm.dds");
-            Assert.IsTrue(File.Exists(siliconPath), "Filepath should exist on developer machine");
-            var siliconBmp = TexUtil.CreateBitmap(siliconPath);
-            ImageTextureUtil.WriteImage(siliconBmp, @".\TestOutput\silicon.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\BackgroundCube\Prerender\Sun.dds"));
 
-            var platinumPath = Path.Combine(contentPath, @"Textures\Voxels\Platinum_01_ForAxisXZ_cm.dds");
-            Assert.IsTrue(File.Exists(platinumPath), "Filepath should exist on developer machine");
-            var platinumBmp = TexUtil.CreateBitmap(platinumPath);
-            ImageTextureUtil.WriteImage(platinumBmp, @".\TestOutput\platinum.png");
 
-            var medicalMetallicPath = Path.Combine(contentPath, @"Textures\Models\Cubes\large_medical_room_cm.dds");
-            Assert.IsTrue(File.Exists(medicalMetallicPath), "Filepath should exist on developer machine");
-            var medicalMetallicBmp = TexUtil.CreateBitmap(medicalMetallicPath);
-            ImageTextureUtil.WriteImage(medicalMetallicBmp, @".\TestOutput\large_medical_room_cm.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Voxels\Gold_01_ForAxisXZ_cm.dds"));
 
-            medicalMetallicBmp = TexUtil.CreateBitmap(medicalMetallicPath, true);
-            ImageTextureUtil.WriteImage(medicalMetallicBmp, @".\TestOutput\large_medical_room.png");
 
-            var astronautMetallicPath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_cm.dds");
-            Assert.IsTrue(File.Exists(astronautMetallicPath), "Filepath should exist on developer machine");
-            var astronautMetallicBmp = TexUtil.CreateBitmap(astronautMetallicPath);
-            ImageTextureUtil.WriteImage(astronautMetallicBmp, @".\TestOutput\Astronaut_cm.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Voxels\Silicon_01_ForAxisXZ_cm.dds"));
 
-            astronautMetallicBmp = TexUtil.CreateBitmap(astronautMetallicPath, true);
-            ImageTextureUtil.WriteImage(astronautMetallicBmp, @".\TestOutput\Astronaut_me2.png");
 
-            var astronautNormalGlossPath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_ng.dds");
-            Assert.IsTrue(File.Exists(astronautNormalGlossPath), "Filepath should exist on developer machine");
-            var astronautNormalGlossBmp = TexUtil.CreateBitmap(astronautNormalGlossPath);
-            ImageTextureUtil.WriteImage(astronautNormalGlossBmp, @".\TestOutput\Astronaut_ng.png");
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Voxels\Platinum_01_ForAxisXZ_cm.dds"));
 
-            astronautNormalGlossBmp = TexUtil.CreateBitmap(astronautNormalGlossPath, true);
-            ImageTextureUtil.WriteImage(astronautNormalGlossBmp, @".\TestOutput\Astronaut_ng2.png");
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_cm.dds"));
+
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_cm.dds"), true);
+
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_ng.dds"));
+
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_ng.dds"), true);
         }
 
-        private void LoadTextureAndExport(string textureFilePath)
+        [TestMethod, TestCategory("UnitTest"), TestCategory("DX10")]
+        public void LoadComponentTexturesDx10PremultipliedAlpha()
         {
-            string name = Path.GetFileNameWithoutExtension(textureFilePath);
-            var textureFilePathBmp = TexUtil.CreateBitmap(textureFilePath);
+            var location = ToolboxUpdater.GetApplicationFilePath();
+            Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
+            Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
+
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\GUI\Icons\Cubes\AdvancedMotor.dds"));
+        }
+
+        [TestMethod, TestCategory("UnitTest"), TestCategory("DX11")]
+        public void LoadComponentTexturesDx11()
+        {
+            var location = ToolboxUpdater.GetApplicationFilePath();
+            Assert.IsNotNull(location, "Space Engineers should be installed on developer machine");
+            Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
+
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Cubes\large_medical_room_cm.dds"));
+
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Cubes\large_medical_room_cm.dds"), true);
+        }
+
+        private void TestLoadTextureAndExport(string textureFilePath, bool ignoreAlpha = false)
+        {
+            Assert.IsTrue(File.Exists(textureFilePath), $"Filepath {textureFilePath} should exist on developer machine.");
+
+            string name = Path.GetFileNameWithoutExtension(textureFilePath) + (ignoreAlpha ? "_alpha" : "");
+
+            var textureFilePathBmp = TexUtil.CreateBitmap(textureFilePath, ignoreAlpha);
+            Assert.IsNotNull(textureFilePathBmp, $"Texture for {name} should not be null.");
+
             File.Copy(textureFilePath, Path.Combine(_path, name + ".dds"), true);
             ImageTextureUtil.WriteImage(textureFilePathBmp, Path.Combine(_path, name + ".png"));
         }
 
-        // This is ignore because the DX10 texture are not yet supported. Ie. It's doesn't work, and it hasn't been fixed yet.
-        [Ignore]
-        [TestMethod]
+        [TestMethod, TestCategory("DX10")]
         public void PixelEffectTextures()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
@@ -167,7 +152,6 @@
 
             var medicalMetallicPath = Path.Combine(contentPath, @"Textures\Models\Cubes\large_medical_room_cm.dds"); // "32bpp RGBA"
             Assert.IsTrue(File.Exists(medicalMetallicPath), "Filepath should exist on developer machine");
-            // TODO: load the "32bpp RGBA" Dx10 texture.
             var medicalMetallicBmp = TexUtil.CreateBitmap(medicalMetallicPath);
             ImageTextureUtil.WriteImage(medicalMetallicBmp, @".\TestOutput\large_medical_room_cm.png");
 
@@ -204,10 +188,10 @@
 
             // ----
 
-            var astronautMaskEmissivePath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_me.dds");
+            var astronautMaskEmissivePath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_cm.dds");
             Assert.IsTrue(File.Exists(astronautMaskEmissivePath), "Filepath should exist on developer machine");
             var astronautMaskEmissiveBmp = TexUtil.CreateBitmap(astronautMaskEmissivePath);
-            ImageTextureUtil.WriteImage(astronautMaskEmissiveBmp, @".\TestOutput\Astronaut_me.png");
+            ImageTextureUtil.WriteImage(astronautMaskEmissiveBmp, @".\TestOutput\Astronaut_cm.png");
 
             effect = new AlphaPixelEffect();
             var astronautMaskEmissiveAlphaBmp = effect.Quantize(astronautMaskEmissiveBmp);
@@ -222,10 +206,10 @@
 
             // ----
 
-            var astronautNormalSpecularPath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_ns.dds");
+            var astronautNormalSpecularPath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_ng.dds");
             Assert.IsTrue(File.Exists(astronautNormalSpecularPath), "Filepath should exist on developer machine");
             var astronautNormalSpecularBmp = TexUtil.CreateBitmap(astronautNormalSpecularPath);
-            ImageTextureUtil.WriteImage(astronautNormalSpecularBmp, @".\TestOutput\Astronaut_ns.png");
+            ImageTextureUtil.WriteImage(astronautNormalSpecularBmp, @".\TestOutput\Astronaut_ng.png");
         }
 
         [TestMethod, TestCategory("UnitTest")]
