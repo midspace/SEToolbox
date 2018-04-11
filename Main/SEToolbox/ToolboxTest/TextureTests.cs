@@ -42,7 +42,7 @@
             TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Cubes\DoorBlock_cm.dds"));
 
 
-            TestLoadTextureAndExport(Path.GetFullPath(@".\TestAssets\ExplosivesComponent.dds"));
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\GUI\Icons\Cubes\ExplosivesComponent.dds"));
 
 
             var magnesiumOre = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.Ore, "Magnesium");
@@ -108,6 +108,8 @@
 
 
             TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\GUI\Icons\Cubes\AdvancedMotor.dds"));
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\GUI\Icons\component\ExplosivesComponent.dds"));
         }
 
         [TestMethod, TestCategory("UnitTest"), TestCategory("DX11")]
