@@ -4,10 +4,13 @@
     using System.Collections.Generic;
     using System.Drawing.Imaging;
     using System.IO;
+    using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage;
+    using VRage.Compression;
+    using VRage.FileSystem;
     using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
@@ -89,27 +92,57 @@
         }
 
         [TestMethod, TestCategory("UnitTest")]
-        public void ExtractZipFileToFolder()
-        {
-            const string filename = @".\TestAssets\Sample World.sbw";
-            const string folder = @".\TestOutput\Sample World";
-
-            ZipTools.MakeClearDirectory(folder);
-            ZipTools.ExtractZipFileToDirectory(filename, null, folder);
-        }
-
-        [TestMethod, TestCategory("UnitTest")]
         public void ExtractSandboxFromZip()
         {
             const string filename = @".\TestAssets\Sample World.sbw";
 
             MyObjectBuilder_Checkpoint checkpoint;
-            using (var stream = ZipTools.ExtractZipFileToSteam(filename, null, SpaceEngineersConsts.SandBoxCheckpointFilename))
+
+            using (MyZipArchive archive = MyZipArchive.OpenOnFile(filename))
             {
-                checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(stream);
+                MyZipFileInfo fileInfo = archive.GetFile(SpaceEngineersConsts.SandBoxCheckpointFilename);
+                checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(fileInfo.GetStream());
             }
 
             Assert.AreEqual("Quad Scissor Doors", checkpoint.SessionName, "Checkpoint SessionName must match!");
+        }
+
+        // We're not using the zip-extract to folder currently.
+        [Ignore]
+        [TestMethod]
+        public void ExtractZipFileToFolder()
+        {
+            const string filename = @".\TestAssets\Sample World.sbw";
+            const string folder = @".\TestOutput\Sample World";
+
+            Assert.IsTrue(File.Exists(filename), "Source file must exist");
+
+            ZipTools.MakeClearDirectory(folder);
+
+            // Keen's API doesn't know difference between file and folder.
+            MyZipArchive.ExtractToDirectory(filename, folder);
+
+            Assert.IsTrue(File.Exists(Path.Combine(folder, SpaceEngineersConsts.SandBoxCheckpointFilename)), "Destination file must exist");
+        }
+
+        // We're not using the zip-pack from folder currently.
+        [Ignore]
+        [TestMethod]
+        public void ExtractZipAndRepack()
+        {
+            const string filename = @".\TestAssets\Sample World.sbw";
+            const string folder = @".\TestOutput\Sample World Repack";
+
+            ZipTools.MakeClearDirectory(folder);
+
+            // Keen's API doesn't know difference between file and folder.
+            MyZipArchive.ExtractToDirectory(filename, folder);
+
+            const string newFilename = @".\TestOutput\New World.sbw";
+
+            MyZipArchive.CreateFromDirectory(folder, newFilename, DeflateOptionEnum.Maximum, false);
+
+            Assert.IsTrue(File.Exists(newFilename), "Destination file must exist");
         }
 
         [TestMethod, TestCategory("UnitTest")]
@@ -138,7 +171,6 @@
             Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
         }
 
-
         [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromProtoBufSandbox()
         {
@@ -154,19 +186,6 @@
             Assert.IsFalse(isCompressed, "file should not be compressed");
             Assert.IsNotNull(sectorData, "sectorData != null");
             Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
-        }
-
-        [TestMethod, TestCategory("UnitTest")]
-        public void ExtractZipAndRepack()
-        {
-            const string filename = @".\TestAssets\Sample World.sbw";
-            const string folder = @".\TestOutput\Sample World";
-
-            ZipTools.MakeClearDirectory(folder);
-            ZipTools.ExtractZipFileToDirectory(filename, null, folder);
-
-            const string newFilename = @".\TestOutput\New World.sbw";
-            ZipTools.ZipFolder(folder, null, newFilename);
         }
 
         [TestMethod, TestCategory("UnitTest")]
