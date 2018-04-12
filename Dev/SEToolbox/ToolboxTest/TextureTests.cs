@@ -42,7 +42,7 @@
             TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Cubes\DoorBlock_cm.dds"));
 
 
-            TestLoadTextureAndExport(Path.GetFullPath(@".\TestAssets\ExplosivesComponent.dds"));
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\GUI\Icons\Cubes\ExplosivesComponent.dds"));
 
 
             var magnesiumOre = MyDefinitionManager.Static.GetDefinition(SpaceEngineersTypes.Ore, "Magnesium");
@@ -108,6 +108,8 @@
 
 
             TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\GUI\Icons\Cubes\AdvancedMotor.dds"));
+
+            TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\GUI\Icons\component\ExplosivesComponent.dds"));
         }
 
         [TestMethod, TestCategory("UnitTest"), TestCategory("DX11")]
@@ -126,13 +128,32 @@
             TestLoadTextureAndExport(Path.Combine(contentPath, @"Textures\Models\Cubes\large_medical_room_cm.dds"), true);
         }
 
+        private Bitmap TestLoadTexture(string textureFilePath, int depthSlice = 0, int width = -1, int height = -1, bool ignoreAlpha = false)
+        {
+            Assert.IsTrue(File.Exists(textureFilePath), $"Filepath {textureFilePath} should exist on developer machine.");
+
+            string name = Path.GetFileNameWithoutExtension(textureFilePath) + (ignoreAlpha ? "_alpha" : "");
+            Bitmap textureFilePathBmp;
+            using (var stream = File.OpenRead(textureFilePath))
+            {
+                textureFilePathBmp = TexUtil.CreateBitmap(stream, textureFilePath, depthSlice, width, height, ignoreAlpha);
+            }
+            Assert.IsNotNull(textureFilePathBmp, $"Texture for {name} should not be null.");
+
+            return textureFilePathBmp;
+        }
+
+
         private void TestLoadTextureAndExport(string textureFilePath, bool ignoreAlpha = false)
         {
             Assert.IsTrue(File.Exists(textureFilePath), $"Filepath {textureFilePath} should exist on developer machine.");
 
             string name = Path.GetFileNameWithoutExtension(textureFilePath) + (ignoreAlpha ? "_alpha" : "");
-
-            var textureFilePathBmp = TexUtil.CreateBitmap(textureFilePath, ignoreAlpha);
+            Bitmap textureFilePathBmp;
+            using (var stream = File.OpenRead(textureFilePath))
+            {
+                textureFilePathBmp = TexUtil.CreateBitmap(stream, textureFilePath, ignoreAlpha: ignoreAlpha);
+            }
             Assert.IsNotNull(textureFilePathBmp, $"Texture for {name} should not be null.");
 
             File.Copy(textureFilePath, Path.Combine(_path, name + ".dds"), true);
@@ -152,10 +173,10 @@
 
             var medicalMetallicPath = Path.Combine(contentPath, @"Textures\Models\Cubes\large_medical_room_cm.dds"); // "32bpp RGBA"
             Assert.IsTrue(File.Exists(medicalMetallicPath), "Filepath should exist on developer machine");
-            var medicalMetallicBmp = TexUtil.CreateBitmap(medicalMetallicPath);
+            var medicalMetallicBmp = TestLoadTexture(medicalMetallicPath);
             ImageTextureUtil.WriteImage(medicalMetallicBmp, @".\TestOutput\large_medical_room_cm.png");
 
-            var medicalMetallicBmp2 = TexUtil.CreateBitmap(medicalMetallicPath, true);
+            var medicalMetallicBmp2 = TestLoadTexture(medicalMetallicPath, ignoreAlpha: true);
             ImageTextureUtil.WriteImage(medicalMetallicBmp2, @".\TestOutput\large_medical_room_cm_full.png");
             
             IPixelEffect effect = new AlphaPixelEffect();
@@ -172,10 +193,10 @@
 
             var largeThrustMetallicPath = Path.Combine(contentPath, @"Textures\Models\Cubes\large_thrust_large_cm.dds"); // "32bpp RGBA"
             Assert.IsTrue(File.Exists(largeThrustMetallicPath), "Filepath should exist on developer machine");
-            var largeThrustMetallicBmp = TexUtil.CreateBitmap(largeThrustMetallicPath);
+            var largeThrustMetallicBmp = TestLoadTexture(largeThrustMetallicPath);
             ImageTextureUtil.WriteImage(largeThrustMetallicBmp, @".\TestOutput\large_thrust_large_me.png");
 
-            var largeThrustMetallicBmp2 = TexUtil.CreateBitmap(largeThrustMetallicPath, true);
+            var largeThrustMetallicBmp2 = TestLoadTexture(largeThrustMetallicPath, ignoreAlpha: true);
             ImageTextureUtil.WriteImage(largeThrustMetallicBmp2, @".\TestOutput\large_thrust_large_me_full.png");
 
             effect = new AlphaPixelEffect();
@@ -190,14 +211,14 @@
 
             var astronautMaskEmissivePath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_cm.dds");
             Assert.IsTrue(File.Exists(astronautMaskEmissivePath), "Filepath should exist on developer machine");
-            var astronautMaskEmissiveBmp = TexUtil.CreateBitmap(astronautMaskEmissivePath);
+            var astronautMaskEmissiveBmp = TestLoadTexture(astronautMaskEmissivePath);
             ImageTextureUtil.WriteImage(astronautMaskEmissiveBmp, @".\TestOutput\Astronaut_cm.png");
 
             effect = new AlphaPixelEffect();
             var astronautMaskEmissiveAlphaBmp = effect.Quantize(astronautMaskEmissiveBmp);
             ImageTextureUtil.WriteImage(astronautMaskEmissiveAlphaBmp, @".\TestOutput\Astronaut_me_alpha.png");
 
-            var astronautMaskEmissiveBmp2 = TexUtil.CreateBitmap(astronautMaskEmissivePath, true);
+            var astronautMaskEmissiveBmp2 = TestLoadTexture(astronautMaskEmissivePath, ignoreAlpha: true);
             ImageTextureUtil.WriteImage(astronautMaskEmissiveBmp2, @".\TestOutput\Astronaut_me_full.png");
 
             effect = new EmissivePixelEffect(255);
@@ -208,7 +229,7 @@
 
             var astronautNormalSpecularPath = Path.Combine(contentPath, @"Textures\Models\Characters\Astronaut\Astronaut_ng.dds");
             Assert.IsTrue(File.Exists(astronautNormalSpecularPath), "Filepath should exist on developer machine");
-            var astronautNormalSpecularBmp = TexUtil.CreateBitmap(astronautNormalSpecularPath);
+            var astronautNormalSpecularBmp = TestLoadTexture(astronautNormalSpecularPath);
             ImageTextureUtil.WriteImage(astronautNormalSpecularBmp, @".\TestOutput\Astronaut_ng.png");
         }
 
@@ -225,11 +246,11 @@
             var smallBlockLandingGearPath = Path.Combine(contentPath, smallBlockLandingGear.Icons.First());
             Assert.IsTrue(File.Exists(smallBlockLandingGearPath), "Filepath should exist on developer machine");
             Assert.IsTrue(smallBlockLandingGear is MyCubeBlockDefinition, "Type should match");
-            var smallBlockLandingGearBmp = TexUtil.CreateBitmap(smallBlockLandingGearPath);
+            var smallBlockLandingGearBmp = TestLoadTexture(smallBlockLandingGearPath);
 
             var gridItemPath = Path.Combine(contentPath, @"Textures\GUI\Controls\grid_item.dds");
             Assert.IsTrue(File.Exists(gridItemPath), "Filepath should exist on developer machine");
-            var gridBmp = TexUtil.CreateBitmap(gridItemPath);
+            var gridBmp = TestLoadTexture(gridItemPath);
 
             var bmp = ImageTextureUtil.MergeImages(gridBmp, smallBlockLandingGearBmp, Brushes.Black);
             ImageTextureUtil.WriteImage(bmp, @".\TestOutput\Menu_SmallBlockLandingGear.png");
@@ -247,22 +268,22 @@
             var backgroundPath = Path.Combine(contentPath, @"Textures\BackgroundCube\Final\BackgroundCube.dds");
             Assert.IsTrue(File.Exists(backgroundPath), "Filepath should exist on developer machine");
 
-            var backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 0, -1, -1 );
+            var backgroundBmp = TestLoadTexture(backgroundPath, 0, -1, -1 );
             ImageTextureUtil.WriteImage(backgroundBmp, @".\TestOutput\BackgroundCube0_Full.png");
 
-            backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 1, 1024, 1024);
+            backgroundBmp = TestLoadTexture(backgroundPath, 1, 1024, 1024);
             ImageTextureUtil.WriteImage(backgroundBmp, @".\TestOutput\BackgroundCube1_1024.png");
 
-            backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 2, 512, 512);
+            backgroundBmp = TestLoadTexture(backgroundPath, 2, 512, 512);
             ImageTextureUtil.WriteImage(backgroundBmp, @".\TestOutput\BackgroundCube2_512.png");
 
-            backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 3, 128, 128);
+            backgroundBmp = TestLoadTexture(backgroundPath, 3, 128, 128);
             ImageTextureUtil.WriteImage(backgroundBmp, @".\TestOutput\BackgroundCube3_128.png");
 
-            backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 4, 64, 64);
+            backgroundBmp = TestLoadTexture(backgroundPath, 4, 64, 64);
             ImageTextureUtil.WriteImage(backgroundBmp, @".\TestOutput\BackgroundCube4_64.png");
 
-            backgroundBmp = TexUtil.CreateBitmap(backgroundPath, 5, 32, 32);
+            backgroundBmp = TestLoadTexture(backgroundPath, 5, 32, 32);
             ImageTextureUtil.WriteImage(backgroundBmp, @".\TestOutput\BackgroundCube5_32.png");
         }
 
@@ -300,12 +321,12 @@
                     graphics.FillRectangle(Brushes.Black, size * 3, size * 1, size, size);
                 }
 
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 0, size, size, ignoreAlpha), size * 2, size * 1, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 1, size, size, ignoreAlpha), size * 0, size * 1, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 2, size, size, ignoreAlpha), size * 1, size * 0, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 3, size, size, ignoreAlpha), size * 1, size * 2, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 4, size, size, ignoreAlpha), size * 1, size * 1, size, size);
-                graphics.DrawImage(TexUtil.CreateBitmap(backgroundPath, 5, size, size, ignoreAlpha), size * 3, size * 1, size, size);
+                graphics.DrawImage(TestLoadTexture(backgroundPath, 0, size, size, ignoreAlpha), size * 2, size * 1, size, size);
+                graphics.DrawImage(TestLoadTexture(backgroundPath, 1, size, size, ignoreAlpha), size * 0, size * 1, size, size);
+                graphics.DrawImage(TestLoadTexture(backgroundPath, 2, size, size, ignoreAlpha), size * 1, size * 0, size, size);
+                graphics.DrawImage(TestLoadTexture(backgroundPath, 3, size, size, ignoreAlpha), size * 1, size * 2, size, size);
+                graphics.DrawImage(TestLoadTexture(backgroundPath, 4, size, size, ignoreAlpha), size * 1, size * 1, size, size);
+                graphics.DrawImage(TestLoadTexture(backgroundPath, 5, size, size, ignoreAlpha), size * 3, size * 1, size, size);
 
                 // Approximate position of local Sun and light source.
                 graphics.FillEllipse(Brushes.White, size * 1 + (int)(size * 0.7), size * 2 + (int)(size * 0.93), (int)(size * 0.06), (int)(size * 0.06));
@@ -324,7 +345,7 @@
             foreach (var filename in files)
             {
                 var outputFilename = Path.Combine(@".\TestOutput", Path.GetFileNameWithoutExtension(filename) + ".png");
-                var imageBitmap = TexUtil.CreateBitmap(filename);
+                var imageBitmap = TestLoadTexture(filename);
                 ImageTextureUtil.WriteImage(imageBitmap, outputFilename);
             }
         }

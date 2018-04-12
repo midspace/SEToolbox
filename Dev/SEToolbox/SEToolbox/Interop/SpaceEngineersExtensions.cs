@@ -672,23 +672,21 @@
 
         public static string GetVoxelDisplayTexture(this MyVoxelMaterialDefinition voxelMaterialDefinition)
         {
-            string texture = voxelMaterialDefinition.VoxelHandPreview;
-            if (texture == null)
+            string texture = null;
+            var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
+            if (dx11MaterialDefinition != null)
             {
-                var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
-                if (dx11MaterialDefinition != null)
-                {
-                    texture = voxelMaterialDefinition.VoxelHandPreview;
-                    if (texture == null)
-                    {
-                        texture = dx11MaterialDefinition.ColorMetalXZnY;
-                        if (texture == null)
-                            texture = dx11MaterialDefinition.NormalGlossXZnY;
-                    }
-                }
+                texture = dx11MaterialDefinition.ColorMetalXZnY;
                 if (texture == null)
-                    texture = voxelMaterialDefinition.DiffuseXZ;
+                    texture = dx11MaterialDefinition.NormalGlossXZnY;
             }
+            if (texture == null)
+                texture = voxelMaterialDefinition.DiffuseXZ;
+
+            if (texture == null)
+                // The VoxelHandPreview texture is oddly shaped, and not suitable for SEToolbox.
+                // It is a texture of last resort.
+                texture = voxelMaterialDefinition.VoxelHandPreview;
 
             return texture;
         }

@@ -10,6 +10,7 @@
     using System.Windows.Media.Imaging;
 
     using SEToolbox.ImageLibrary;
+    using VRage.FileSystem;
 
     public class DDSConverter : IValueConverter
     {
@@ -58,14 +59,17 @@
                 {
                     // TODO: rescale the bitmap to specified width/height.
                     var bitmapImage = new BitmapImage();
-                    var bitmap = (Bitmap)Image.FromFile(filename, true);
-                    using (var ms = new MemoryStream())
+                    using (Stream textureStream = MyFileSystem.OpenRead(filename))
                     {
-                        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        bitmapImage.BeginInit();
-                        bitmapImage.StreamSource = ms;
-                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapImage.EndInit();
+                        var bitmap = (Bitmap)Image.FromStream(textureStream, true);
+                        using (var ms = new MemoryStream())
+                        {
+                            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                            bitmapImage.BeginInit();
+                            bitmapImage.StreamSource = ms;
+                            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmapImage.EndInit();
+                        }
                     }
                     Cache.Add(name, bitmapImage);
                     return bitmapImage;
@@ -75,7 +79,11 @@
 
             if (extension == ".dds")
             {
-                var image = ImageTextureUtil.CreateImage(filename, 0, width, height, noAlpha);
+                ImageSource image;
+                using (Stream textureStream = MyFileSystem.OpenRead(filename))
+                {
+                    image = ImageTextureUtil.CreateImage(textureStream, 0, width, height, noAlpha);
+                }
                 Cache.Add(name, image);
                 return image;
             }

@@ -82,6 +82,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </controls:SortableGridViewColumn>
+                                    <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColCubeMod}" Width="50" DisplayMemberBinding="{Binding IsMod, Converter={StaticResource EnumToResouceConverter}}" />
                                 </GridView>
                             </ListView.View>
                         </controls:SortableListView>
@@ -143,6 +144,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </controls:SortableGridViewColumn>
+                                <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColComponentMod}" Width="50" DisplayMemberBinding="{Binding IsMod, Converter={StaticResource EnumToResouceConverter}}" />
                             </GridView>
                         </ListView.View>
                     </controls:SortableListView>
@@ -185,6 +187,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </controls:SortableGridViewColumn>
+                                <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColItemMod}" Width="50" DisplayMemberBinding="{Binding IsMod, Converter={StaticResource EnumToResouceConverter}}" />
                             </GridView>
                         </ListView.View>
                     </controls:SortableListView>
@@ -211,6 +214,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </controls:SortableGridViewColumn>
+                                <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColMaterialMod}" Width="50" DisplayMemberBinding="{Binding IsMod, Converter={StaticResource EnumToResouceConverter}}" />
                             </GridView>
                         </ListView.View>
                     </controls:SortableListView>

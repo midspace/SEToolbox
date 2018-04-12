@@ -151,7 +151,7 @@
             var extension = Path.GetExtension(filename);
             if (extension != null && extension.Equals(V1FileExtension, StringComparison.InvariantCultureIgnoreCase))
             {
-                using (var stream = File.OpenRead(filename))
+                using (FileStream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     try
                     {
@@ -279,7 +279,7 @@
         /// Saves the asteroid to the specified filename.
         /// </summary>
         /// <param name="filename">the file extension indicates the version of file been saved.</param>
-        public void Save(string filename)
+        public new void Save(string filename)
         {
             Debug.Write("Saving binary.");
 

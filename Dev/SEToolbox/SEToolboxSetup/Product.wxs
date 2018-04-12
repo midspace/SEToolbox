@@ -59,6 +59,7 @@
               <RemoveFile Id="file0B63627F3DDC47E58FB0BCCB65B110BC" Name="steam_api64.dll" On="install"/>
               <RemoveFile Id="file26225324B8BC443AB0B4DE7161E48FCF" Name="SteamSDK.dll" On="install"/>
               <RemoveFile Id="fileEA4AE319577E449E9D1DF59BC1B6D3F0" Name="VRage.dll" On="install"/>
+              <RemoveFile Id="file19B8CCCE91F040CCB983B44C7334821A" Name="VRage.Ansel.dll" On="install"/>
               <RemoveFile Id="file34F2B15981F041C7A1EB6FCF29C72BC1" Name="VRage.Audio.dll" On="install"/>
               <RemoveFile Id="file0F16284F3E2D4C5CA5402B757C4951D1" Name="VRage.Game.dll" On="install"/>
               <RemoveFile Id="fukeD6616ECAB0004D46AE4DBA393C53F0ED" Name="VRage.Game.XmlSerializers.dll" On="install"/>
@@ -70,6 +71,10 @@
               <RemoveFile Id="file992F750DB5744F849111CEA39D0CB16F" Name="VRage.Render.dll" On="install"/>
               <RemoveFile Id="fileFCCDCA64927F4EEDB783F6D983838557" Name="VRage.Render11.dll" On="install"/>
               <RemoveFile Id="file907C5A94D3964E7C86FF6FD07B8A46EA" Name="System.Data.SQLite.dll" On="install"/>
+
+              <!--Obsolete. To be removed in the future. Retained temporarily for the installer to cleanup. -->
+              <RemoveFile Id="file4CCC1D5F89354510910F24ECF6734F72" Name="ICSharpCode.SharpZipLib.dll" On="install"/>
+
 
               <RegistryKey Root="HKLM" Key="Software\MidSpace\SEToolbox">
                 <RegistryValue Id="SEToolboxRegInstallDir" Type="string" Name="InstallDir" Value="[APPLICATIONFOLDER]" />
@@ -140,9 +145,6 @@
       <!-- Third party dependancies -->
       <Component Id="comp5B10E5BF2D0D4C9EAF44EDE183D113EF">
         <File Id="fileAD5B37B3F8524F6594A80B1BF9660D69" Source="$(var.SEToolbox.TargetDir)HelixToolkit.Wpf.dll"/>
-      </Component>
-      <Component Id="compEDC13D521AB34560924EFE013C7BCC58">
-        <File Id="file4CCC1D5F89354510910F24ECF6734F72" Source="$(var.SEToolbox.TargetDir)ICSharpCode.SharpZipLib.dll"/>
       </Component>
       <Component Id="comp5F8887E0899A41C3BD1CEDFFC18A4FD1">
         <File Id="file1E207785088F43BABB001B75AA97C567" Source="$(var.SEToolbox.TargetDir)log4net.dll"/>

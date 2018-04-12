@@ -288,6 +288,8 @@
 
         #region CreateImage
 
+        // For WPF display.
+
         public static ImageSource CreateImage(string filename, bool ignoreAlpha = false, IPixelEffect effect = null)
         {
             return CreateImage(filename, 0, -1, -1, ignoreAlpha, effect);
@@ -308,32 +310,54 @@
             }
             else if (extension == ".dds")
             {
-                uint fourCC;
-                DXGI_FORMAT dxgiFormat;
-                var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC, out dxgiFormat);
-                if (pixelChannel == null)
-                    return null;
-                try
+                using (var stream = File.OpenRead(filename))
                 {
-                    return DxtUtilTexture.DecompressTextureToImageSource(pixelChannel, width, height, ignoreAlpha, effect, fourCC, dxgiFormat);
+                    return CreateImage(stream, depthSlice, width, height, ignoreAlpha, effect);
                 }
-                catch { return null; }
             }
 
             return null;
+        }
+
+        public static ImageSource CreateImage(Stream stream, int depthSlice, int width, int height, bool ignoreAlpha = false, IPixelEffect effect = null)
+        {
+            if (stream == null)
+                return null;
+
+            uint fourCC = 0;
+            DXGI_FORMAT dxgiFormat;
+            var pixelChannel = ReadTextureFile(stream, depthSlice, ref width, ref height, out fourCC, out dxgiFormat);
+            if (pixelChannel == null)
+                return null;
+            try
+            {
+                return DxtUtilTexture.DecompressTextureToImageSource(pixelChannel, width, height, ignoreAlpha, effect, fourCC, dxgiFormat);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         #endregion
 
         #region CreateBitmap
 
-        public static Bitmap CreateBitmap(string filename, bool ignoreAlpha = false)
-        {
-            return CreateBitmap(filename, 0, -1, -1, ignoreAlpha);
-        }
+        // For export to Report.
 
-        public static Bitmap CreateBitmap(string filename, int depthSlice, int width, int height, bool ignoreAlpha = false)
+        //public static Bitmap CreateBitmap(string filename, bool ignoreAlpha = false)
+        //{
+        //    using (var stream = File.OpenRead(filename))
+        //    {
+        //        return CreateBitmap(stream, filename, 0, -1, -1, ignoreAlpha);
+        //    }
+        //}
+
+        public static Bitmap CreateBitmap(Stream stream, string filename, int depthSlice = 0, int width = -1, int height = -1, bool ignoreAlpha = false)
         {
+            if (stream == null)
+                return null;
+
             var extension = Path.GetExtension(filename)?.ToLower();
 
             if (extension == ".png")
@@ -343,9 +367,9 @@
             }
             if (extension == ".dds")
             {
-                uint fourCC;
+                uint fourCC = 0;
                 DXGI_FORMAT dxgiFormat;
-                var pixelChannel = ReadTextureFile(filename, depthSlice, ref width, ref height, out fourCC, out dxgiFormat);
+                var pixelChannel = ReadTextureFile(stream, depthSlice, ref width, ref height, out fourCC, out dxgiFormat);
                 if (pixelChannel == null)
                     return null;
                 try
@@ -360,9 +384,9 @@
             return null;
         }
 
-        public static string GetTextureToBase64(string filename, int width, int height, bool ignoreAlpha = false)
+        public static string GetTextureToBase64(Stream stream, string filename, int width, int height, bool ignoreAlpha = false)
         {
-            using (var bmp = CreateBitmap(filename, 0, width, height, ignoreAlpha))
+            using (var bmp = CreateBitmap(stream, filename, 0, width, height, ignoreAlpha))
             {
                 var converter = new ImageConverter();
                 return Convert.ToBase64String((byte[])converter.ConvertTo(bmp, typeof(byte[])));
@@ -373,137 +397,129 @@
 
         #region ReadTextureFile
 
-        private static byte[] ReadTextureFile(string filename, int depthSlice, ref int width, ref int height, out uint fourCC, out DXGI_FORMAT dxgiFormat)
+        private static byte[] ReadTextureFile(Stream stream, int depthSlice, ref int width, ref int height, out uint fourCC, out DXGI_FORMAT dxgiFormat)
         {
             dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
-            if (!File.Exists(filename))
+
+            var reader = new BinaryReader(stream);
+            try
             {
-                fourCC = 0;
-                return null;
-            }
-
-            using (var stream = File.OpenRead(filename))
-            {
-                var reader = new BinaryReader(stream);
-                try
-                {
-                    var magicNumber = reader.ReadUInt32();
-                    if (magicNumber != 0x20534444)
-                    {
-                        fourCC = 0;
-                        return null;
-                    }
-
-                    var header = MarshalTo<DDS_HEADER>(reader.ReadBytes(DDS_HEADER.SizeInBytes));
-                    fourCC = header.ddspf.dwFourCC;
-
-                    UInt32 bytesPerPixel;
-                    UInt32 dwPitchOrLinearSize;
-
-                    var slices = 1;
-                    if (((DDSCAPS2)header.dwCaps2 & DDSCAPS2.DDSCAPS2_CUBEMAP) != 0)
-                        slices = 6;
-
-                    bytesPerPixel = header.dwPitchOrLinearSize / (header.dwWidth * header.dwHeight);
-
-                    var c = header.dwCaps2;
-                    var mipCount = (int)header.dwMipMapCount;
-                    if (mipCount == 0)
-                        mipCount = 1;
-
-                    if (header.ddspf.dwFlags == (uint)PixelFormatFlags.FourCC && fourCC == (uint)DDS_FOURCC.DX10)
-                    {
-                        DDS_HEADER_DXT10 dx10Header = MarshalTo<DDS_HEADER_DXT10>(reader.ReadBytes(DDS_HEADER_DXT10.SizeInBytes));
-                        dxgiFormat = dx10Header.dxgiFormat;
-
-                        switch (dx10Header.dxgiFormat)
-                        {
-                            case DXGI_FORMAT.DXGI_FORMAT_BC1_TYPELESS:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC2_TYPELESS:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM_SRGB:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC3_TYPELESS:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC4_TYPELESS:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC4_SNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC5_TYPELESS:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC5_SNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC6H_TYPELESS:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC6H_UF16:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC6H_SF16:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC7_TYPELESS:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB:
-                                // The block-size is 8 bytes for DXT1, BC1, and BC4 formats, and 16 bytes for other block-compressed formats.
-                                UInt32 blockSize = 8;
-                                // For block-compressed formats, compute the pitch as:
-                                dwPitchOrLinearSize = Math.Max(1, ((header.dwWidth + 3) / 4)) * blockSize;
-                                break;
-
-                            case DXGI_FORMAT.DXGI_FORMAT_R8G8_B8G8_UNORM:
-                            case DXGI_FORMAT.DXGI_FORMAT_G8R8_G8B8_UNORM:
-                                //For R8G8_B8G8, G8R8_G8B8, legacy UYVY-packed, and legacy YUY2-packed formats, compute the pitch as:
-                                dwPitchOrLinearSize = ((header.dwWidth + 1) >> 1) * 4;
-                                break;
-
-                            default:
-                                //case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
-                                // For other formats, compute the pitch as:
-                                bytesPerPixel = header.ddspf.dwSize;
-                                dwPitchOrLinearSize = (header.dwWidth * bytesPerPixel + 7) / 8;
-                                break;
-                        }
-                        //bytesPerPixel = BitsPerPixel(dx10Header.dxgiFormat);
-                    }
-
-                    if (bytesPerPixel == 0)
-                    {
-                        width = (int)header.dwWidth;
-                        height = (int)header.dwHeight;
-                        int size = (int)(reader.BaseStream.Length - reader.BaseStream.Position);
-                        return reader.ReadBytes(size);
-                    }
-
-                    for (var slice = 0; slice < slices; slice++)
-                    {
-                        uint w = header.dwWidth == 0 ? 1 : header.dwWidth;
-                        uint h = header.dwHeight == 0 ? 1 : header.dwHeight;
-
-                        for (var map = 0; map < mipCount; map++)
-                        {
-                            var size = (int)(bytesPerPixel * w * h);
-                            if (depthSlice == slice && ((width <= 0 && height <= 0) || (w == width && h == height)))
-                            {
-                                width = (int)w;
-                                height = (int)h;
-                                return reader.ReadBytes(size);
-                            }
-                            else
-                            {
-                                reader.BaseStream.Seek(size, SeekOrigin.Current);
-                            }
-
-                            w = w >> 1;
-                            h = h >> 1;
-                            if (w == 0) w = 1;
-                            if (h == 0) h = 1;
-                        }
-
-                        reader.BaseStream.Seek(27, SeekOrigin.Current);
-                    }
-
-                    return null;
-                }
-                catch
+                var magicNumber = reader.ReadUInt32();
+                if (magicNumber != 0x20534444)
                 {
                     fourCC = 0;
                     return null;
                 }
+
+                var header = MarshalTo<DDS_HEADER>(reader.ReadBytes(DDS_HEADER.SizeInBytes));
+                fourCC = header.ddspf.dwFourCC;
+
+                UInt32 bytesPerPixel;
+                UInt32 dwPitchOrLinearSize;
+
+                var slices = 1;
+                if (((DDSCAPS2)header.dwCaps2 & DDSCAPS2.DDSCAPS2_CUBEMAP) != 0)
+                    slices = 6;
+
+                bytesPerPixel = header.dwPitchOrLinearSize / (header.dwWidth * header.dwHeight);
+
+                var c = header.dwCaps2;
+                var mipCount = (int)header.dwMipMapCount;
+                if (mipCount == 0)
+                    mipCount = 1;
+
+                if (header.ddspf.dwFlags == (uint)PixelFormatFlags.FourCC && fourCC == (uint)DDS_FOURCC.DX10)
+                {
+                    DDS_HEADER_DXT10 dx10Header = MarshalTo<DDS_HEADER_DXT10>(reader.ReadBytes(DDS_HEADER_DXT10.SizeInBytes));
+                    dxgiFormat = dx10Header.dxgiFormat;
+
+                    switch (dx10Header.dxgiFormat)
+                    {
+                        case DXGI_FORMAT.DXGI_FORMAT_BC1_TYPELESS:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC2_TYPELESS:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM_SRGB:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC3_TYPELESS:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC4_TYPELESS:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC4_SNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC5_TYPELESS:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC5_SNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC6H_TYPELESS:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC6H_UF16:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC6H_SF16:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC7_TYPELESS:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB:
+                            // The block-size is 8 bytes for DXT1, BC1, and BC4 formats, and 16 bytes for other block-compressed formats.
+                            UInt32 blockSize = 8;
+                            // For block-compressed formats, compute the pitch as:
+                            dwPitchOrLinearSize = Math.Max(1, ((header.dwWidth + 3) / 4)) * blockSize;
+                            break;
+
+                        case DXGI_FORMAT.DXGI_FORMAT_R8G8_B8G8_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_G8R8_G8B8_UNORM:
+                            //For R8G8_B8G8, G8R8_G8B8, legacy UYVY-packed, and legacy YUY2-packed formats, compute the pitch as:
+                            dwPitchOrLinearSize = ((header.dwWidth + 1) >> 1) * 4;
+                            break;
+
+                        default:
+                            //case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                            // For other formats, compute the pitch as:
+                            bytesPerPixel = header.ddspf.dwSize;
+                            dwPitchOrLinearSize = (header.dwWidth * bytesPerPixel + 7) / 8;
+                            break;
+                    }
+                    //bytesPerPixel = BitsPerPixel(dx10Header.dxgiFormat);
+                }
+
+                if (bytesPerPixel == 0)
+                {
+                    width = (int)header.dwWidth;
+                    height = (int)header.dwHeight;
+                    int size = (int)(reader.BaseStream.Length - reader.BaseStream.Position);
+                    return reader.ReadBytes(size);
+                }
+
+                for (var slice = 0; slice < slices; slice++)
+                {
+                    uint w = header.dwWidth == 0 ? 1 : header.dwWidth;
+                    uint h = header.dwHeight == 0 ? 1 : header.dwHeight;
+
+                    for (var map = 0; map < mipCount; map++)
+                    {
+                        var size = (int)(bytesPerPixel * w * h);
+                        if (depthSlice == slice && ((width <= 0 && height <= 0) || (w == width && h == height)))
+                        {
+                            width = (int)w;
+                            height = (int)h;
+                            return reader.ReadBytes(size);
+                        }
+                        else
+                        {
+                            reader.BaseStream.Seek(size, SeekOrigin.Current);
+                        }
+
+                        w = w >> 1;
+                        h = h >> 1;
+                        if (w == 0) w = 1;
+                        if (h == 0) h = 1;
+                    }
+
+                    reader.BaseStream.Seek(27, SeekOrigin.Current);
+                }
+
+                return null;
+            }
+            catch
+            {
+                fourCC = 0;
+                return null;
             }
         }
 
