@@ -166,7 +166,9 @@
         public bool Load(string[] args)
         {
             // Fetch the game version and store, so it can be retrieved during crash if the toolbox makes it this far.
-            GlobalSettings.Default.SEVersion = SpaceEngineersConsts.GetSEVersion();
+            Version gameVersion = SpaceEngineersConsts.GetSEVersion();
+            bool newVersion = GlobalSettings.Default.SEVersion != gameVersion;
+            GlobalSettings.Default.SEVersion = gameVersion;
 
             // Test the Space Engineers version to make sure users are using an version that is new enough for SEToolbox to run with!
             // This is usually because a user has not updated a manual install of a Dedicated Server, or their Steam did not update properly.
@@ -175,6 +177,13 @@
                 MessageBox.Show(string.Format(Res.DialogOldSEVersionMessage, SpaceEngineersConsts.GetSEVersion(), GlobalSettings.Default.SEBinPath, GlobalSettings.GetAppVersion()), Res.DialogOldSEVersionTitle, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 Application.Current.Shutdown();
                 return false;
+            }
+
+            // the /B argument indicates the SEToolboxUpdate had started SEToolbox after fetching updated game binaries.
+            if (newVersion && args.Any(a => a.Equals("/B", StringComparison.OrdinalIgnoreCase) || a.Equals("-B", StringComparison.OrdinalIgnoreCase)))
+            {
+                // Reset the counter used to indicate if the game binaries have updated.
+                GlobalSettings.Default.TimesStartedLastGameUpdate = null;
             }
 
             // Force pre-loading of any Space Engineers resources.
@@ -209,6 +218,18 @@
                 if (GlobalSettings.Default.WindowHeight.HasValue) eWindow.Height = GlobalSettings.Default.WindowHeight.Value;
                 if (GlobalSettings.Default.WindowState.HasValue) eWindow.WindowState = GlobalSettings.Default.WindowState.Value;
             };
+
+            if (!GlobalSettings.Default.TimesStartedTotal.HasValue)
+                GlobalSettings.Default.TimesStartedTotal = 0;
+            GlobalSettings.Default.TimesStartedTotal++;
+            if (!GlobalSettings.Default.TimesStartedLastReset.HasValue)
+                GlobalSettings.Default.TimesStartedLastReset = 0;
+            GlobalSettings.Default.TimesStartedLastReset++;
+            if (!GlobalSettings.Default.TimesStartedLastGameUpdate.HasValue)
+                GlobalSettings.Default.TimesStartedLastGameUpdate = 0;
+            GlobalSettings.Default.TimesStartedLastGameUpdate++;
+            GlobalSettings.Default.Save();
+
             eWindow.ShowDialog();
 
             return true;

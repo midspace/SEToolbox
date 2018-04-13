@@ -401,6 +401,33 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Times started since game update:.
+        /// </summary>
+        public static string ClsErrorTimesStartedLastGameUpdate {
+            get {
+                return ResourceManager.GetString("ClsErrorTimesStartedLastGameUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Times started since last reset:.
+        /// </summary>
+        public static string ClsErrorTimesStartedLastReset {
+            get {
+                return ResourceManager.GetString("ClsErrorTimesStartedLastReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Times started total:.
+        /// </summary>
+        public static string ClsErrorTimesStartedTotal {
+            get {
+                return ResourceManager.GetString("ClsErrorTimesStartedTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unhandled Exception.
         /// </summary>
         public static string ClsErrorUnhandled {

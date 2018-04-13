@@ -2854,4 +2854,13 @@ Reason: {1}</value>
   <data name="WnComponentsColMaterialMod" xml:space="preserve">
     <value>Mod</value>
   </data>
+  <data name="ClsErrorTimesStartedLastGameUpdate" xml:space="preserve">
+    <value>Times started since game update:</value>
+  </data>
+  <data name="ClsErrorTimesStartedLastReset" xml:space="preserve">
+    <value>Times started since last reset:</value>
+  </data>
+  <data name="ClsErrorTimesStartedTotal" xml:space="preserve">
+    <value>Times started total:</value>
+  </data>
 </root>
