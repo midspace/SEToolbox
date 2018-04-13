@@ -196,6 +196,11 @@
                 IsValid = true;
                 Size = m_storage.Size;
             }
+            catch (FileNotFoundException)
+            {
+                // this exception may hide a dll dependancy from the game that is required, so it needs to be rethrown.
+                throw;
+            }
             catch (Exception ex)
             {
                 Size = Vector3I.Zero;

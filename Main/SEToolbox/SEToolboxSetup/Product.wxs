@@ -53,6 +53,9 @@
               <RemoveFile Id="file9BC4F4C590AF4888B721F2301140EB5A" Name="Sandbox.Game.dll" On="install"/>
               <RemoveFile Id="file882FC5E56A994EC1AFBBCBA50226393C" Name="Sandbox.Graphics.dll" On="install"/>
               <RemoveFile Id="file25850DB516724E6BB45D499D5A4BCF94" Name="SharpDX.dll" On="install"/>
+              <RemoveFile Id="file170AA38F975C47B3A6976B9C5A1983AB" Name="SharpDX.Direct2D1.dll" On="install"/>
+              <RemoveFile Id="file75CA1B95DC784AE9A526AB6F98D747ED" Name="SharpDX.Direct3D11.dll" On="install"/>
+              <RemoveFile Id="file53171AEF32B14464A6BC226D334A3BF6" Name="SharpDX.DXGI.dll" On="install"/>
               <RemoveFile Id="file3941098F688247798E7755FC8B2D18B7" Name="SpaceEngineers.Game.dll" On="install"/>
               <RemoveFile Id="fileA10D59ED71944ED7BD52C144A05A59A3" Name="SpaceEngineers.ObjectBuilders.dll" On="install"/>
               <RemoveFile Id="fileAF60B61F742940E7B68F86C3410E730C" Name="SpaceEngineers.ObjectBuilders.XmlSerializers.dll" On="install"/>
