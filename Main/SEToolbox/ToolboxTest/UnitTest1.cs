@@ -416,5 +416,15 @@
             Assert.AreEqual(up.Y, p.Up.Y, "Up.Y Should Equal");
             Assert.AreEqual(up.Z, p.Up.Z, "Up.Z Should Equal");
         }
+
+        /// <summary>
+        /// This test to to verify that the webpage and RegEx pattern for finding the version and url of the current version of SEToolbox still works.
+        /// </summary>
+        [TestMethod, TestCategory("UnitTest")]
+        public void CheckCurrentVersion()
+        {
+            ApplicationRelease update = CodeRepositoryReleases.CheckForUpdates(CodeRepositoryType.GitHub, SEToolbox.Properties.Resources.GlobalUpdatesUrl);
+            Assert.IsNotNull(update);
+        }
     }
 }
