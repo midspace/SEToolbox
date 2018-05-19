@@ -584,9 +584,9 @@
                     MyObjectBuilder_CubeGrid grid = ExplorerModel.Default.FindConnectedTopBlock<MyObjectBuilder_MotorSuspension>(CubeGrid.CubeBlocks[0].EntityId);
 
                     if (grid == null)
-                        Description = Res.ClsCubeGridWheelAttached;
+                        Description = Res.ClsCubeGridWheelDetached;
                     else
-                        Description = string.Format(Res.ClsCubeGridWheelDetached, grid.DisplayName);
+                        Description = string.Format(Res.ClsCubeGridWheelAttached, grid.DisplayName);
                     return;
                 }
             }

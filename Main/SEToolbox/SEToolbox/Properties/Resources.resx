@@ -734,10 +734,10 @@ Distance:		{1:#,##0.0} m</value>
     <value>Craft/Objects</value>
   </data>
   <data name="WnExplorerContextCopyGps" xml:space="preserve">
-    <value>Copy GPS</value>
+    <value>Copy _GPS</value>
   </data>
   <data name="WnExplorerContextDelete" xml:space="preserve">
-    <value>Delete</value>
+    <value>_Delete</value>
   </data>
   <data name="WnExplorerMnuCreate" xml:space="preserve">
     <value>_Create</value>
@@ -2770,10 +2770,10 @@ Planet Generator:	{17}</value>
     <value>O₂</value>
   </data>
   <data name="ClsCubeGridWheelAttached" xml:space="preserve">
-    <value>Wheel</value>
+    <value>Wheel - Attached {0}</value>
   </data>
   <data name="ClsCubeGridWheelDetached" xml:space="preserve">
-    <value>Wheel - Attached {0}</value>
+    <value>Wheel</value>
   </data>
   <data name="WnExplorerMnuExportSpawnGroup" xml:space="preserve">
     <value>Export as Prefab and SpawnGroup</value>
@@ -2862,5 +2862,17 @@ Reason: {1}</value>
   </data>
   <data name="ClsErrorTimesStartedTotal" xml:space="preserve">
     <value>Times started total:</value>
+  </data>
+  <data name="WnExplorerContextSelectConnector" xml:space="preserve">
+    <value>Select all _Connector joined grids</value>
+  </data>
+  <data name="WnExplorerContextSelectMechanical" xml:space="preserve">
+    <value>Select all _Mechanical joined grids</value>
+  </data>
+  <data name="WnExplorerContextSelectMechanicalConnector" xml:space="preserve">
+    <value>Select all M_echanical and Connector joined grids</value>
+  </data>
+  <data name="WnExplorerMnuJoinedGrids" xml:space="preserve">
+    <value>_Joined Grids</value>
   </data>
 </root>

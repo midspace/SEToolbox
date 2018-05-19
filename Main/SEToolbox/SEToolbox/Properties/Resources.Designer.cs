@@ -257,7 +257,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wheel.
+        ///   Looks up a localized string similar to Wheel - Attached {0}.
         /// </summary>
         public static string ClsCubeGridWheelAttached {
             get {
@@ -266,7 +266,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wheel - Attached {0}.
+        ///   Looks up a localized string similar to Wheel.
         /// </summary>
         public static string ClsCubeGridWheelDetached {
             get {
@@ -5400,7 +5400,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy GPS.
+        ///   Looks up a localized string similar to Copy _GPS.
         /// </summary>
         public static string WnExplorerContextCopyGps {
             get {
@@ -5409,11 +5409,38 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete.
+        ///   Looks up a localized string similar to _Delete.
         /// </summary>
         public static string WnExplorerContextDelete {
             get {
                 return ResourceManager.GetString("WnExplorerContextDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all _Connector joined grids.
+        /// </summary>
+        public static string WnExplorerContextSelectConnector {
+            get {
+                return ResourceManager.GetString("WnExplorerContextSelectConnector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all _Mechanical joined grids.
+        /// </summary>
+        public static string WnExplorerContextSelectMechanical {
+            get {
+                return ResourceManager.GetString("WnExplorerContextSelectMechanical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all M_echanical and Connector joined grids.
+        /// </summary>
+        public static string WnExplorerContextSelectMechanicalConnector {
+            get {
+                return ResourceManager.GetString("WnExplorerContextSelectMechanicalConnector", resourceCulture);
             }
         }
         
@@ -5648,6 +5675,15 @@ namespace SEToolbox.Properties {
         public static string WnExplorerMnuImportSandboxTooltip {
             get {
                 return ResourceManager.GetString("WnExplorerMnuImportSandboxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Joined Grids.
+        /// </summary>
+        public static string WnExplorerMnuJoinedGrids {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuJoinedGrids", resourceCulture);
             }
         }
         

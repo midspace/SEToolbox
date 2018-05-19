@@ -36,9 +36,9 @@
 
         private StructureCharacterModel _thePlayerCharacter;
 
-        ///// <summary>
-        ///// Collection of <see cref="IStructureBase"/> objects that represent the builds currently configured.
-        ///// </summary>
+        /// <summary>
+        /// Collection of <see cref="IStructureBase"/> objects that represent the builds currently configured.
+        /// </summary>
         private ObservableCollection<IStructureBase> _structures;
 
         private bool _showProgress;
@@ -54,6 +54,8 @@
         private double _maximumProgress;
 
         private List<int> _customColors;
+
+        private Dictionary<long, GridEntityNode> GridEntityNodes = new Dictionary<long, GridEntityNode>();
 
         #endregion
 
@@ -1213,6 +1215,195 @@
             }
             ConnectedTopBlockCache[topBlockId] = null;
             return null;
+        }
+
+        private class CubeEntityNode
+        {
+            public long EntityId;
+            public MyObjectBuilder_CubeBlock Entity;
+
+            public MyObjectBuilder_CubeGrid RemoteParentEntity;
+            public long RemoteParentEntityId;
+            public long RemoteEntityId;
+            public MyObjectBuilder_CubeBlock RemoteEntity;
+            public GridConnectionType GridConnectionType;
+        }
+
+        private class GridEntityNode
+        {
+            public long ParentEntityId;
+            public MyObjectBuilder_CubeGrid ParentEntity;
+            public Dictionary<long, CubeEntityNode> CubeEntityNodes = new Dictionary<long, CubeEntityNode>();
+        }
+
+        public void BuildGridEntityNodes()
+        {
+            GridEntityNodes.Clear();
+
+            // Build the main list of entities
+            for (int i = 0; i < Structures.Count; i++)
+            {
+                StructureCubeGridModel gridModel = Structures[i] as StructureCubeGridModel;
+                if (gridModel != null)
+                {
+                    GridEntityNode gridEntityNode = new GridEntityNode { ParentEntityId = gridModel.EntityId, ParentEntity = gridModel.CubeGrid };
+                    GridEntityNodes.Add(gridModel.EntityId, gridEntityNode);
+
+                    for (int j = 0; j < gridModel.CubeGrid.CubeBlocks.Count; j++)
+                    {
+                        MyObjectBuilder_CubeBlock block = gridModel.CubeGrid.CubeBlocks[j];
+
+                        // MyObjectBuilder_Wheel
+                        MyObjectBuilder_Wheel wheel = block as MyObjectBuilder_Wheel;
+                        if (wheel != null)
+                        {
+                            gridEntityNode.CubeEntityNodes.Add(block.EntityId, new CubeEntityNode { GridConnectionType = GridConnectionType.Mechanical, EntityId = block.EntityId, Entity = block });
+                            continue;
+                        }
+
+                        // MyObjectBuilder_MotorRotor, MyObjectBuilder_MotorAdvancedRotor, MyObjectBuilder_PistonTop
+                        MyObjectBuilder_AttachableTopBlockBase rotor = block as MyObjectBuilder_AttachableTopBlockBase;
+                        if (rotor != null)
+                        {
+                            gridEntityNode.CubeEntityNodes.Add(block.EntityId, new CubeEntityNode { GridConnectionType = GridConnectionType.Mechanical, EntityId = block.EntityId, Entity = block, RemoteEntityId = rotor.ParentEntityId });
+                            continue;
+                        }
+
+                        // MyObjectBuilder_MotorSuspension,  MyObjectBuilder_MotorStator, MyObjectBuilder_MotorAdvancedStator, MyObjectBuilder_ExtendedPistonBase
+                        MyObjectBuilder_MechanicalConnectionBlock mechanicalConnection = block as MyObjectBuilder_MechanicalConnectionBlock;
+                        if (mechanicalConnection != null)
+                        {
+                            gridEntityNode.CubeEntityNodes.Add(block.EntityId, new CubeEntityNode { GridConnectionType = GridConnectionType.Mechanical, EntityId = block.EntityId, Entity = block, RemoteEntityId = mechanicalConnection?.TopBlockId.Value ?? 0 });
+                            continue;
+                        }
+
+                        MyObjectBuilder_ShipConnector shipConnector = block as MyObjectBuilder_ShipConnector;
+                        if (shipConnector != null && shipConnector.MasterToSlaveTransform != null)
+                        {
+                            // checking MasterToSlaveTransform is the only method to determine if a ShipConnector is locked (~ MyShipConnectorStatus.Connected), as ConnectedEntityId could still be non-zero when the ShipConnector is ready to lock (~ MyShipConnectorStatus.Connectable).
+                            gridEntityNode.CubeEntityNodes.Add(block.EntityId, new CubeEntityNode { GridConnectionType = GridConnectionType.ConnectorLock, EntityId = block.EntityId, Entity = block, RemoteEntityId = shipConnector.ConnectedEntityId });
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            // Crosscheck the remote entities.
+            for (int i = 0; i < Structures.Count; i++)
+            {
+                StructureCubeGridModel gridModel = Structures[i] as StructureCubeGridModel;
+                if (gridModel != null)
+                {
+                    for (int j = 0; j < gridModel.CubeGrid.CubeBlocks.Count; j++)
+                    {
+                        MyObjectBuilder_CubeBlock block = gridModel.CubeGrid.CubeBlocks[j];
+
+                        // MyObjectBuilder_Wheel
+                        MyObjectBuilder_Wheel wheel = block as MyObjectBuilder_Wheel;
+                        if (wheel != null)
+                        {
+                            foreach (var kvp in GridEntityNodes)
+                            {
+                                KeyValuePair<long, CubeEntityNode> node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.RemoteEntityId == wheel.EntityId);
+                                if (node.Value != null)
+                                {
+                                    node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                    node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                    node.Value.RemoteEntity = block;
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+
+                        // MyObjectBuilder_MotorRotor, MyObjectBuilder_MotorAdvancedRotor, MyObjectBuilder_PistonTop
+                        MyObjectBuilder_AttachableTopBlockBase rotor = block as MyObjectBuilder_AttachableTopBlockBase;
+                        if (rotor != null)
+                        {
+                            foreach (var kvp in GridEntityNodes)
+                            {
+                                KeyValuePair<long, CubeEntityNode> node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.RemoteEntityId == rotor.EntityId);
+                                if (node.Value != null)
+                                {
+                                    node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                    node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                    node.Value.RemoteEntity = block;
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+
+                        // MyObjectBuilder_MotorSuspension,  MyObjectBuilder_MotorStator, MyObjectBuilder_MotorAdvancedStator, MyObjectBuilder_ExtendedPistonBase
+                        MyObjectBuilder_MechanicalConnectionBlock mechanicalConnection = block as MyObjectBuilder_MechanicalConnectionBlock;
+                        if (mechanicalConnection != null)
+                        {
+                            long topBlockId = mechanicalConnection?.TopBlockId.Value ?? 0;
+
+                            foreach (var kvp in GridEntityNodes)
+                            {
+                                KeyValuePair<long, CubeEntityNode> node;
+                                if (topBlockId != 0)
+                                {
+                                    // reverse check on wheel, as MyObjectBuilder_Wheel (as of 1.186) doesn't have a property to indicate the suspension it is attached to.
+                                    node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.EntityId == topBlockId);
+                                    if (node.Value != null)
+                                    {
+                                        node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                        node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                        node.Value.RemoteEntityId = block.EntityId;
+                                        node.Value.RemoteEntity = block;
+                                    }
+                                }
+
+                                node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.RemoteEntityId == mechanicalConnection.EntityId);
+                                if (node.Value != null)
+                                {
+                                    node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                    node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                    node.Value.RemoteEntity = block;
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+
+                        MyObjectBuilder_ShipConnector shipConnector = block as MyObjectBuilder_ShipConnector;
+                        if (shipConnector != null)
+                        {
+                            foreach (var kvp in GridEntityNodes)
+                            {
+                                KeyValuePair<long, CubeEntityNode> node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.RemoteEntityId == shipConnector.EntityId);
+                                if (node.Value != null)
+                                {
+                                    node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                    node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                    node.Value.RemoteEntity = block;
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        public List<MyObjectBuilder_CubeGrid> GetConnectedGridNodes(StructureCubeGridModel structureCubeGrid, GridConnectionType minimumConnectionType)
+        {
+            List<MyObjectBuilder_CubeGrid> list = new List<MyObjectBuilder_CubeGrid>();
+            GridEntityNode parentNode = GridEntityNodes[structureCubeGrid.EntityId];
+            if (parentNode != null)
+            {
+                IEnumerable<MyObjectBuilder_CubeGrid> remoteEntities = parentNode.CubeEntityNodes.Where(e => minimumConnectionType.HasFlag(e.Value.GridConnectionType)).Select(e => e.Value.RemoteParentEntity);
+                foreach (MyObjectBuilder_CubeGrid cubeGrid in remoteEntities)
+                {
+                    if (cubeGrid != null && !list.Contains(cubeGrid))
+                        list.Add(cubeGrid);
+                }
+            }
+            return list;
         }
     }
 }
