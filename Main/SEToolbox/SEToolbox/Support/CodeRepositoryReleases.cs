@@ -7,7 +7,7 @@
 
     using SEToolbox.Controls;
 
-    public enum CodeRepositoryType { CodePlex, GitHub }
+    public enum CodeRepositoryType { None, GitHub }
 
     /// <summary>
     /// Extracts the GitHub website information to determine the version of the current release.
@@ -18,11 +18,6 @@
         /// search for html in the form:  <h1 class="release-title"><a href="/midspace/SEToolbox/releases/tag/v1.117.002.1">SEToolbox 01.117.002 Release 1</a></h1>
         /// </summary>
         const string GitHubPattern = @"\<h1\s+class\s*=\s*\""[^""]*release\-title[^""]*\""\>\s*\<a\s+href\s*=\s*(?:""(?<url>[^""]|.*?)"")\s*\>\s*(?<title>(?:[^\<\>\""]*?))\s(?<version>[^\<\>\""]*)\<\/a\>";
-
-        /// <summary>
-        /// search for html in the form:  <h1 class="page_title wordwrap">SEToolbox 01.025.021 Release 2</h1> 
-        /// </summary>
-        const string  CodePlexPattern = @"\<h1 class=\""(?:[^\""]*)\""\>(?<title>(?:[^\<\>\""]*?))\s(?<version>[^\<\>\""]*)\<\/h1\>";
 
         #region CheckForUpdates
 
@@ -73,13 +68,11 @@
                 if (string.IsNullOrEmpty(webContent))
                     return null;
 
-                // link should be in the form "http://setoolbox.codeplex.com/releases/view/120855"
+                // link should be in the form "https://github.com/midspace/SEToolbox/releases/tag/v1.186.500.3"
                 link = webclient.ResponseUri == null ? null : webclient.ResponseUri.AbsoluteUri;
             }
 
             string pattern = "";
-            if (repositoryType == CodeRepositoryType.CodePlex)
-                pattern = CodePlexPattern;
             if (repositoryType == CodeRepositoryType.GitHub)
                 pattern = GitHubPattern;
 
