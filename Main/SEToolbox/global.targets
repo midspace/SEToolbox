@@ -6,7 +6,6 @@
   <!-- Copy this PropertyGroup into "user.targets" and modify the "MainPath" to indicate the path to SpaceEngineers in the Steam directory. -->
   <PropertyGroup>
     <MainPath>c:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers</MainPath>
-    <BinPathx86>$(MainPath)\Bin</BinPathx86>
     <BinPathx64>$(MainPath)\Bin64</BinPathx64>
     <BinPath>$(BinPathx64)</BinPath>
   </PropertyGroup>
@@ -23,11 +22,6 @@
     <When Condition=" '$(Platform.StartsWith(&quot;x64&quot;))' == 'true' ">
       <PropertyGroup>
         <BinPath>$(BinPathx64)</BinPath>
-      </PropertyGroup>
-    </When>
-    <When Condition=" '$(Platform.StartsWith(&quot;x86&quot;))' == 'true' ">
-      <PropertyGroup>
-        <BinPath>$(BinPathx86)</BinPath>
       </PropertyGroup>
     </When>
   </Choose>
