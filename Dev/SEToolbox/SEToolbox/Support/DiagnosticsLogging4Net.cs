@@ -46,6 +46,9 @@
             diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorIsAdmin, ToolboxUpdater.IsRuningElevated());
             diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorCurrentUICulture, CultureInfo.CurrentUICulture.IetfLanguageTag);
             diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorCurrentCulture, CultureInfo.CurrentCulture.IetfLanguageTag);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorTimesStartedTotal, GlobalSettings.Default.TimesStartedTotal);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorTimesStartedLastReset, GlobalSettings.Default.TimesStartedLastReset);
+            diagReport.AppendFormat("{0} {1}\r\n", Res.ClsErrorTimesStartedLastGameUpdate, GlobalSettings.Default.TimesStartedLastGameUpdate);
             diagReport.AppendFormat("\r\n");
 
             diagReport.AppendFormat("{0}\r\n", Res.ClsErrorFiles);

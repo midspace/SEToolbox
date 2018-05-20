@@ -147,10 +147,7 @@
 
             IsBusy = false;
             SystemSounds.Beep.Play();
-            var model = new ErrorDialogModel();
-            model.Load(Res.ErrorLoadSaveGameFileError, errorInformation, true);
-            var loadVm = new ErrorDialogViewModel(this, model);
-            _dialogService.ShowDialog<WindowErrorDialog>(this, loadVm);
+            _dialogService.ShowErrorDialog(this, Res.ErrorLoadSaveGameFileError, errorInformation, true);
         }
 
         public bool RefreshCanExecute()
@@ -241,10 +238,7 @@
 
                 IsBusy = false;
                 SystemSounds.Beep.Play();
-                var model = new ErrorDialogModel();
-                model.Load(Res.ErrorLoadSaveGameFileError, errorInformation, true);
-                var loadVm = new ErrorDialogViewModel(this, model);
-                _dialogService.ShowDialog<WindowErrorDialog>(this, loadVm);
+                _dialogService.ShowErrorDialog(this, Res.ErrorLoadSaveGameFileError, errorInformation, true);
             }
         }
 

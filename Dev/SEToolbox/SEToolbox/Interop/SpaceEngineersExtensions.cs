@@ -579,25 +579,64 @@
             return list;
         }
 
-        public static void RemoveHierarchyCharacter(this MyObjectBuilder_CubeBlock cube, MyObjectBuilder_Character character)
+        /// <summary>
+        /// Removes all sign of a pilot/characrter from a cockpit cube.
+        /// </summary>
+        /// <param name="cockpit">The specific cube.</param>
+        /// <param name="character">Specific character to remove, if required, otherwise ANY chararcter will be removed.</param>
+        /// <returns>Returns true if a character was removed.</returns>
+        public static bool RemoveHierarchyCharacter(this MyObjectBuilder_Cockpit cockpit, MyObjectBuilder_Character character = null)
         {
-            if (character == null)
-                return;
+            bool retValue = false;
 
-            MyObjectBuilder_Cockpit cockpit = cube as MyObjectBuilder_Cockpit;
-
-            var hierarchyBase = cockpit?.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase")?.Component as MyObjectBuilder_HierarchyComponentBase;
-            if (hierarchyBase != null)
+            MyObjectBuilder_ComponentContainer.ComponentData hierarchyComponentBase = cockpit.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase");
+            var hierarchyBase = hierarchyComponentBase?.Component as MyObjectBuilder_HierarchyComponentBase;
+            if (hierarchyBase != null && hierarchyBase.Children.Count > 0)
             {
-                for (int i = 0 ; i < hierarchyBase.Children.Count; i++)
+                for (int i = 0; i < hierarchyBase.Children.Count; i++)
                 {
-                    if (hierarchyBase.Children[i] == character)
+                    if (character != null && hierarchyBase.Children[i] == character)
                     {
+                        retValue = true;
                         hierarchyBase.Children.RemoveAt(i);
-                        return;
+                        i--;
+                        break;
+                    }
+
+                    if (character == null && hierarchyBase.Children[i] is MyObjectBuilder_Character)
+                    {
+                        retValue = true;
+                        hierarchyBase.Children.RemoveAt(i);
+                        i--;
                     }
                 }
+
+                if (hierarchyBase.Children.Count == 0)
+                {
+                    cockpit.ComponentContainer.Components.Remove(hierarchyComponentBase);
+                }
             }
+
+            if (retValue)
+            {
+                cockpit.ClearPilotAndAutopilot();
+                cockpit.PilotRelativeWorld = null; // This should also clear Pilot.
+                cockpit.Pilot = null;
+            }
+
+            return retValue;
+        }
+
+        /// <summary>
+        /// Remove all pilots, co-pilots and any other character entities from consoles, cockpits and passenger seats.
+        /// </summary>
+        public static void RemoveHierarchyCharacter(this MyObjectBuilder_CubeGrid cubeGrid)
+        {
+            cubeGrid.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
+            {
+                ((MyObjectBuilder_Cockpit)c).RemoveHierarchyCharacter();
+                return c;
+            }).ToArray();
         }
 
         public static ObservableCollection<InventoryEditorModel> GetInventory(this MyObjectBuilder_ComponentContainer componentContainer, MyCubeBlockDefinition definition = null)
@@ -708,6 +747,5 @@
             int cdMax = c > d ? c : d;
             return abMax > cdMax ? abMax : cdMax;
         }
-
     }
 }

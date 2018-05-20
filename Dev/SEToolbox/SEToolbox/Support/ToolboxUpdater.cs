@@ -23,6 +23,9 @@
             "Sandbox.Game.dll",         // MSIL
             "Sandbox.Graphics.dll",     // MSIL
             "SharpDX.dll",              // AnyCpu
+            "SharpDX.Direct2D1.dll",    // AnyCpu   Required to load Planets.
+            "SharpDX.Direct3D11.dll",   // AnyCpu   Required to load Planets.
+            "SharpDX.DXGI.dll",         // AnyCpu   Required to load Planets.
             "SpaceEngineers.Game.dll",  // MSIL
             "SpaceEngineers.ObjectBuilders.dll",                    // MSIL
             "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",     // MSIL

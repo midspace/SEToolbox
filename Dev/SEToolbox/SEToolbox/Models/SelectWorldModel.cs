@@ -159,12 +159,12 @@
 
                 foreach (var instancePath in instancePaths)
                 {
-                    var lastLoadedPath = Path.Combine(instancePath, "Saves");
+                    var lastLoadedPath = Path.Combine(instancePath, SpaceEngineersConsts.SavesFolder);
 
                     if (Directory.Exists(lastLoadedPath))
                     {
                         var instanceName = Path.GetFileName(instancePath);
-                        var dataPath = new UserDataPath(instancePath, "Saves", "Mods");
+                        var dataPath = new UserDataPath(instancePath, SpaceEngineersConsts.SavesFolder, SpaceEngineersConsts.ModsFolder, SpaceEngineersConsts.BlueprintsFolder);
                         list.AddRange(FindSaveFiles(lastLoadedPath, instanceName, SaveWorldType.DedicatedServerService, dataPath));
                     }
                 }

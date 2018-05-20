@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
+        xmlns:support="clr-namespace:SEToolbox.Support"
         xmlns:views="clr-namespace:SEToolbox.Views"
         xmlns:vm="clr-namespace:SEToolbox.ViewModels"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
@@ -135,6 +136,11 @@
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="{lex:Loc WnExplorerMnuExportBlueprint}" Command="{Binding ExportBlueprintCommand}" ToolTip="{lex:Loc WnExplorerMnuExportBlueprintTooltip}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=export}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Header="{lex:Loc WnExplorerMnuCreate}" Command="{Binding IsActiveCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                     <MenuItem.Icon>
@@ -159,6 +165,29 @@
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
                         </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="{lex:Loc WnExplorerMnuJoinedGrids}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}"/>
+                        </MenuItem.Icon>
+                        <MenuItem.Items>
+                            <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextSelectMechanical}" Command="{Binding SelectJoinedGridsCommand}" CommandParameter="{x:Static support:GridConnectionType.Mechanical}" >
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextSelectConnector}" Command="{Binding SelectJoinedGridsCommand}" CommandParameter="{x:Static support:GridConnectionType.ConnectorLock}" >
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextSelectMechanicalConnector}"  Command="{Binding SelectJoinedGridsCommand}" CommandParameter="{x:Static support:GridConnectionType.ConnectorLock_Mechanical}" >
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem.Items>
                     </MenuItem>
                     <Separator/>
                     <MenuItem Command="{Binding GroupMoveCommand}" Header="{lex:Loc WnExplorerMnuSelectionMove}">
@@ -430,6 +459,21 @@
                                         <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextCopyGps}" Command="{Binding CopyObjectGpsCommand}">
                                             <MenuItem.Icon>
                                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=target}" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextSelectMechanical}" Command="{Binding SelectJoinedGridsCommand}" CommandParameter="{x:Static support:GridConnectionType.Mechanical}" >
+                                            <MenuItem.Icon>
+                                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextSelectConnector}" Command="{Binding SelectJoinedGridsCommand}" CommandParameter="{x:Static support:GridConnectionType.ConnectorLock}" >
+                                            <MenuItem.Icon>
+                                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="{lex:Loc SEToolbox:Resources:WnExplorerContextSelectMechanicalConnector}"  Command="{Binding SelectJoinedGridsCommand}" CommandParameter="{x:Static support:GridConnectionType.ConnectorLock_Mechanical}" >
+                                            <MenuItem.Icon>
+                                                <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
                                             </MenuItem.Icon>
                                         </MenuItem>
                                     </ContextMenu>
