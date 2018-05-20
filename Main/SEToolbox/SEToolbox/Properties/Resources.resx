@@ -755,7 +755,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Export as prefab</value>
   </data>
   <data name="WnExplorerMnuExportPrefabTooltip" xml:space="preserve">
-    <value>Export selected ships and stations to a single an prefab .sbc file.</value>
+    <value>Export selected ships and stations to a single prefab .sbc file.</value>
   </data>
   <data name="WnExplorerMnuExportSandboxWithoutOwner" xml:space="preserve">
     <value>Export without owner and MedBay</value>
@@ -2779,7 +2779,7 @@ Planet Generator:	{17}</value>
     <value>Export as Prefab and SpawnGroup</value>
   </data>
   <data name="WnExplorerMnuExportSpawnGroupTooltip" xml:space="preserve">
-    <value>Export selected ships, stations and asteroids to a single an prefab .sbc file, spawngroup file and asteroids.</value>
+    <value>Export selected ships, stations and asteroids to a single prefab .sbc file, spawngroup file and asteroids.</value>
   </data>
   <data name="DialogExportSpawnGroupObjectTitle" xml:space="preserve">
     <value>Specify filename to export SpawnGroup to (name is embedded into files)</value>
@@ -2874,5 +2874,44 @@ Reason: {1}</value>
   </data>
   <data name="WnExplorerMnuJoinedGrids" xml:space="preserve">
     <value>_Joined Grids</value>
+  </data>
+  <data name="WnBlueprintDialogBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnBlueprintDialogBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnBlueprintDialogLabelDescription" xml:space="preserve">
+    <value>Please enter a name for the blueprint. If the name already exists in your local blueprint folder, you will be prompted to overwrite it.</value>
+  </data>
+  <data name="WnBlueprintDialogLabelName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="WnBlueprintSaveDialogTitle" xml:space="preserve">
+    <value>Save Blueprint</value>
+  </data>
+  <data name="WnExplorerMnuExportBlueprint" xml:space="preserve">
+    <value>Export as Blueprint</value>
+  </data>
+  <data name="WnExplorerMnuExportBlueprintTooltip" xml:space="preserve">
+    <value>Export selected ships and stations to a local Blueprint.</value>
+  </data>
+  <data name="ErrorInvalidBlueprintCharactersUsed" xml:space="preserve">
+    <value>The blueprint name contains invalid characters. Please remove any symbols before continuing.</value>
+  </data>
+  <data name="ErrorInvalidBlueprintExists" xml:space="preserve">
+    <value>A blueprint of that name already exists. Do you wish to overwrite it?</value>
+  </data>
+  <data name="ErrorInvalidBlueprintExistsTitle" xml:space="preserve">
+    <value>Blueprint exists</value>
+  </data>
+  <data name="ErrorInvalidBlueprintNameTitle" xml:space="preserve">
+    <value>Invalid Blueprint Name</value>
+  </data>
+  <data name="ErrorNoBlueprintPath" xml:space="preserve">
+    <value>The Blueprints path does not exist under this profile (Dedicated Server or Service).</value>
+  </data>
+  <data name="ErrorNoBlueprintPathTitle" xml:space="preserve">
+    <value>Cannot Save Blueprint</value>
   </data>
 </root>

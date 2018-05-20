@@ -25,6 +25,7 @@
     using System.Windows.Shell;
     using VRage;
     using VRage.Game;
+    using VRage.Game.ObjectBuilders.Components;
     using VRage.ObjectBuilders;
     using VRageMath;
     using WPFLocalizeExtension.Engine;
@@ -138,6 +139,8 @@
         public ICommand ExportPrefabObjectCommand => new DelegateCommand(ExportPrefabObjectExecuted, ExportPrefabObjectCanExecute);
 
         public ICommand ExportSpawnGroupObjectCommand => new DelegateCommand(ExportSpawnGroupObjectExecuted, ExportSpawnGroupObjectCanExecute);
+
+        public ICommand ExportBlueprintCommand => new DelegateCommand(ExportBlueprintExecuted, ExportBlueprintCanExecute);
 
         public ICommand CreateFloatingItemCommand => new DelegateCommand(CreateFloatingItemExecuted, CreateFloatingItemCanExecute);
 
@@ -490,10 +493,7 @@
                 // leave world in Invalid state, allowing Reload to be called again.
                 ActiveWorld.IsValid = false;
 
-                var model = new ErrorDialogModel();
-                model.Load(Res.ErrorLoadSaveGameFileError, errorInformation, false);
-                var loadVm = new ErrorDialogViewModel(this, model);
-                _dialogService.ShowDialog<WindowErrorDialog>(this, loadVm);
+                _dialogService.ShowErrorDialog(this, Res.ErrorLoadSaveGameFileError, errorInformation, false);
 
                 _dataModel.ParseSandBox();
                 _dataModel.EndLoad();
@@ -510,10 +510,7 @@
                 // leave world in Invalid state, allowing Reload to be called again.
                 ActiveWorld.IsValid = false;
 
-                var model = new ErrorDialogModel();
-                model.Load(Res.ErrorLoadSaveGameFileError, errorInformation, false);
-                var loadVm = new ErrorDialogViewModel(this, model);
-                _dialogService.ShowDialog<WindowErrorDialog>(this, loadVm);
+                _dialogService.ShowErrorDialog(this, Res.ErrorLoadSaveGameFileError, errorInformation, false);
             }
 
             _dataModel.ParseSandBox();
@@ -754,6 +751,17 @@
         public void ExportSpawnGroupObjectExecuted()
         {
             ExportSpawnGroupObjectToFile(true, Selections.ToArray());
+        }
+
+        public bool ExportBlueprintCanExecute()
+        {
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0 &&
+                Selections.Any(e => e is StructureCubeGridViewModel);
+        }
+
+        public void ExportBlueprintExecuted()
+        {
+            ExportBlueprintToFile(Selections.ToArray());
         }
 
         public bool CreateFloatingItemCanExecute()
@@ -1638,13 +1646,8 @@
                             cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
                         }
 
-                        // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
-                        {
-                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
-                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
-                            return c;
-                        }).ToArray();
+                        // Remove all pilots.
+                        cloneEntity.RemoveHierarchyCharacter();
 
                         _dataModel.SaveEntity(cloneEntity, saveFileDialog.FileName);
                     }
@@ -1666,7 +1669,6 @@
                 }
             }
         }
-
 
         public void ExportPrefabObjectToFile(bool blankOwnerAndMedBays, params IStructureViewBase[] viewModels)
         {
@@ -1706,13 +1708,8 @@
                             cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
                         }
 
-                        // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
-                        {
-                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
-                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
-                            return c;
-                        }).ToArray();
+                        // Remove all pilots.
+                        cloneEntity.RemoveHierarchyCharacter();
 
                         grids.Add(cloneEntity);
                     }
@@ -1819,13 +1816,8 @@
                             cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
                         }
 
-                        // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
-                        {
-                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
-                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
-                            return c;
-                        }).ToArray();
+                        // Remove all pilots.
+                        cloneEntity.RemoveHierarchyCharacter();
 
                         grids.Add(cloneEntity);
 
@@ -1917,6 +1909,99 @@
             }
         }
 
+        public void ExportBlueprintToFile(params IStructureViewBase[] viewModels)
+        {
+            string localBlueprintsFolder = null;
+            if (string.IsNullOrEmpty(_dataModel.ActiveWorld.DataPath.BlueprintsPath))
+            {
+                // There is no blueprints under Dedicated Server, so cannot find the blueprint folder to save to.
+                _dialogService.ShowMessageBox(this, Res.ErrorNoBlueprintPath, Res.ErrorNoBlueprintPathTitle, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Hand);
+                return;
+            }
+            localBlueprintsFolder = Path.Combine(_dataModel.ActiveWorld.DataPath.BlueprintsPath, SpaceEngineersConsts.LocalBlueprintsSubFolder);
+
+            var model = new BlueprintDialogModel();
+            model.BlueprintName = viewModels[0].DataModel.DisplayName;
+            model.Load(Res.WnBlueprintSaveDialogTitle, true, localBlueprintsFolder);
+            var loadVm = new BlueprintDialogViewModel(this, model, _dialogService);
+            var result = _dialogService.ShowDialog<WindowBlueprintDialog>(this, loadVm);
+
+            if (result == true)
+            {
+                var blueprintDefinition = new MyObjectBuilder_Definitions();
+                blueprintDefinition.ShipBlueprints = new MyObjectBuilder_ShipBlueprintDefinition[1];
+                MyObjectBuilder_ShipBlueprintDefinition prefab;
+                prefab = new MyObjectBuilder_ShipBlueprintDefinition();
+                prefab.Id.TypeId = new MyObjectBuilderType(typeof(MyObjectBuilder_ShipBlueprintDefinition));
+                prefab.Id.SubtypeId = model.BlueprintName;
+                prefab.DisplayName = "SEToolbox Export";  // Appears as AuthorName in game for the highlighted blueprint.
+                //prefab.OwnerSteamId =  ??
+
+                var spawngroupDefinition = new MyObjectBuilder_Definitions();
+                spawngroupDefinition.SpawnGroups = new MyObjectBuilder_SpawnGroupDefinition[1];
+
+                Vector3D grid1Position = new Vector3D(viewModels[0].DataModel.PositionAndOrientation.Value.Position.X, viewModels[0].DataModel.PositionAndOrientation.Value.Position.Y, viewModels[0].DataModel.PositionAndOrientation.Value.Position.Z);
+
+                var grids = new List<MyObjectBuilder_CubeGrid>();
+                Vector3 minimum = Vector3.MaxValue;
+
+                foreach (var viewModel in viewModels)
+                {
+                    if (viewModel is StructureCubeGridViewModel)
+                    {
+                        MyObjectBuilder_CubeGrid cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
+
+                        // move offsets of all grids to origin, based on first selected grid.
+                        MyPositionAndOrientation p = cloneEntity.PositionAndOrientation.Value;
+                        cloneEntity.PositionAndOrientation = new MyPositionAndOrientation
+                        {
+                            Position = p.Position - grid1Position,
+                            Forward = p.Forward,
+                            Up = p.Up
+                        };
+
+                        // Call to ToArray() to force Linq to update the value.
+
+                        // Clear BuiltBy.
+                        cloneEntity.CubeBlocks.Select(c => { c.BuiltBy = 0; return c; }).ToArray();
+
+                        // Remove all pilots.
+                        cloneEntity.RemoveHierarchyCharacter();
+
+                        grids.Add(cloneEntity);
+
+                        if (minimum.X > cloneEntity.PositionAndOrientation.Value.Position.X)
+                            minimum.X = (float)cloneEntity.PositionAndOrientation.Value.Position.X;
+                        if (minimum.Y > cloneEntity.PositionAndOrientation.Value.Position.Y)
+                            minimum.Y = (float)cloneEntity.PositionAndOrientation.Value.Position.Y;
+                        if (minimum.Z > cloneEntity.PositionAndOrientation.Value.Position.Z)
+                            minimum.Z = (float)cloneEntity.PositionAndOrientation.Value.Position.Z;
+                    }
+                    if (viewModel is StructureVoxelViewModel)
+                    {
+                        if (minimum.X > viewModel.DataModel.PositionAndOrientation.Value.Position.X)
+                            minimum.X = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.X;
+                        if (minimum.Y > viewModel.DataModel.PositionAndOrientation.Value.Position.Y)
+                            minimum.Y = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.Y;
+                        if (minimum.Z > viewModel.DataModel.PositionAndOrientation.Value.Position.Z)
+                            minimum.Z = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.Z;
+                    }
+                }
+
+                if (minimum == Vector3.MaxValue)
+                    minimum = Vector3.Zero;
+
+                prefab.CubeGrids = grids.ToArray();
+                blueprintDefinition.ShipBlueprints[0] = prefab;
+
+                string blueprintPath = Path.Combine(localBlueprintsFolder, model.BlueprintName);
+                if (!Directory.Exists(blueprintPath))
+                    Directory.CreateDirectory(blueprintPath);
+
+                SpaceEngineersApi.WriteSpaceEngineersFile(blueprintDefinition, Path.Combine(blueprintPath, "bp.sbc"));
+                SpaceEngineersApi.WriteSpaceEngineersFilePB(blueprintDefinition, Path.Combine(blueprintPath, "bp.sbcPB"), false);
+            }
+        }
 
         public void TestCalcCubesModel(params IStructureViewBase[] viewModels)
         {

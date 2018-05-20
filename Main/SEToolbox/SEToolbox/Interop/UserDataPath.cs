@@ -7,11 +7,13 @@
     {
         #region ctor
 
-        public UserDataPath(string basePath, string savesPathPart, string modsPathPart)
+        public UserDataPath(string basePath, string savesPathPart, string modsPathPart, string blueprintsPathPart)
         {
             DataPath = basePath;
             SavesPath = Path.Combine(basePath, savesPathPart);
             ModsPath = Path.Combine(basePath, modsPathPart);
+            if (blueprintsPathPart != null)
+                BlueprintsPath = Path.Combine(basePath, blueprintsPathPart);
         }
 
         #endregion
@@ -21,6 +23,7 @@
         public string DataPath { get; set; }
         public string SavesPath { get; set; }
         public string ModsPath { get; set; }
+        public string BlueprintsPath { get; set; }
 
         #endregion
 
@@ -34,10 +37,10 @@
         public static UserDataPath FindFromSavePath(string savePath)
         {
             var dp = SpaceEngineersConsts.BaseLocalPath;
-            var basePath = GetPathBase(savePath, "Saves");
+            var basePath = GetPathBase(savePath, SpaceEngineersConsts.SavesFolder);
             if (basePath != null)
             {
-                dp = new UserDataPath(basePath, "Saves", "Mods");
+                dp = new UserDataPath(basePath, SpaceEngineersConsts.SavesFolder, SpaceEngineersConsts.ModsFolder, SpaceEngineersConsts.BlueprintsFolder);
             }
 
             return dp;

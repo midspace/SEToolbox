@@ -54,6 +54,11 @@
 
         public static readonly UserDataPath BaseDedicatedServerServicePath;
 
+        public const string SavesFolder = "Saves";
+        public const string ModsFolder = "Mods";
+        public const string BlueprintsFolder = "Blueprints";
+        public const string LocalBlueprintsSubFolder = "local";
+
         static SpaceEngineersConsts()
         {
             // Don't access the ObjectBuilders from the static ctor, as it will cause issues with the Serializer type loader.
@@ -62,9 +67,9 @@
             //if (GlobalSettings.Default.SEBinPath.Contains("MedievalEngineers", StringComparison.Ordinal))
             //    basePath = "MedievalEngineers";
 
-            BaseLocalPath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath), "Saves", "Mods"); // Followed by .\%SteamuserId%\LastLoaded.sbl
-            BaseDedicatedServerHostPath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + "Dedicated"), "Saves", "Mods"); // Followed by .\LastLoaded.sbl
-            BaseDedicatedServerServicePath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), basePath + "Dedicated"), "", ""); // Followed by .\%instancename%\Saves\LastLoaded.sbl  (.\%instancename%\Mods)
+            BaseLocalPath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath), SavesFolder, ModsFolder, BlueprintsFolder); // Followed by .\%SteamuserId%\LastLoaded.sbl
+            BaseDedicatedServerHostPath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), basePath + "Dedicated"), SavesFolder, ModsFolder, null); // Followed by .\LastLoaded.sbl
+            BaseDedicatedServerServicePath = new UserDataPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), basePath + "Dedicated"), "", "", null); // Followed by .\%instancename%\Saves\LastLoaded.sbl  (.\%instancename%\Mods)
         }
 
         public static Version GetSEVersion()

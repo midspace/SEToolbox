@@ -654,27 +654,27 @@
                 //var x = SectorData.SectorObjects.Where(s => s is MyObjectBuilder_CubeGrid).Cast<MyObjectBuilder_CubeGrid>().
                 //    Where(s => s.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot == entity)).Select(e => e).ToArray();
 
-                foreach (var sectorObject in ActiveWorld.SectorData.SectorObjects)
+                MyObjectBuilder_Character character = entity as MyObjectBuilder_Character;
+                if (character != null)
                 {
-                    if (sectorObject is MyObjectBuilder_CubeGrid)
+                    foreach (var sectorObject in ActiveWorld.SectorData.SectorObjects)
                     {
-                        foreach (var cubeGrid in ((MyObjectBuilder_CubeGrid)sectorObject).CubeBlocks)
+                        if (sectorObject is MyObjectBuilder_CubeGrid)
                         {
-                            if (cubeGrid is MyObjectBuilder_Cockpit)
+                            foreach (var cubeGrid in ((MyObjectBuilder_CubeGrid)sectorObject).CubeBlocks)
                             {
-                                var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
-
-                                // theoretically with the Hierarchy structure, there could be more than one character attached to a single cube.
-                                // thus, more than 1 pilot.
-                                var pilots = cockpit.GetHierarchyCharacters();
-                                if (pilots.Count > 0 && pilots.First() == entity)
+                                if (cubeGrid is MyObjectBuilder_Cockpit)
                                 {
-                                    cockpit.Pilot = null;
-                                    cockpit.RemoveHierarchyCharacter(pilots.First());
+                                    var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
 
-                                    var structure = Structures.FirstOrDefault(s => s.EntityBase == sectorObject) as StructureCubeGridModel;
-                                    structure.Pilots--;
-                                    return true;
+                                    // theoretically with the Hierarchy structure, there could be more than one character attached to a single cube.
+                                    // thus, more than 1 pilot.
+                                    if (cockpit.RemoveHierarchyCharacter(character))
+                                    {
+                                        var structure = Structures.FirstOrDefault(s => s.EntityBase == sectorObject) as StructureCubeGridModel;
+                                        structure.Pilots--;
+                                        return true;
+                                    }
                                 }
                             }
                         }
@@ -814,8 +814,7 @@
                 var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
                 if (cockpit != null)
                 {
-                    cockpit.RemoveHierarchyCharacter(cockpit.Pilot);
-                    cockpit.Pilot = null;  // remove any pilots.
+                    cockpit.RemoveHierarchyCharacter();
                 }
 
                 var motorBase = cubeGrid as MyObjectBuilder_MotorBase;

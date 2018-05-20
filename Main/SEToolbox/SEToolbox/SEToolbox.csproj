@@ -233,6 +233,7 @@
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
     <Compile Include="Models\ChangeOwnerModel.cs" />
+    <Compile Include="Models\BlueprintDialogModel.cs" />
     <Compile Include="Models\ErrorDialogModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\MergeVoxelModel.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="Services\CommandAction.cs" />
     <Compile Include="Services\CommandReference.cs" />
     <Compile Include="Services\ButtonDropDownMenuBehavior.cs" />
+    <Compile Include="Services\DialogExtensions.cs" />
     <Compile Include="Services\FolderBrowserDialogViewModel.cs" />
     <Compile Include="Services\DelegateCommand.cs" />
     <Compile Include="Services\DialogCloser.cs" />
@@ -357,6 +359,7 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
     <Compile Include="ViewModels\ChangeOwnerViewModel.cs" />
+    <Compile Include="ViewModels\BlueprintDialogViewModel.cs" />
     <Compile Include="ViewModels\ErrorDialogViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\MergeVoxelViewModel.cs" />
@@ -425,6 +428,9 @@
     </Compile>
     <Compile Include="Views\ControlInventory.xaml.cs">
       <DependentUpon>ControlInventory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowBlueprintDialog.xaml.cs">
+      <DependentUpon>WindowBlueprintDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowErrorDialog.xaml.cs">
       <DependentUpon>WindowErrorDialog.xaml</DependentUpon>
@@ -546,6 +552,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlInventory.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowBlueprintDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
