@@ -59,20 +59,11 @@
 
         #region Properties
 
-        public ICommand BrowseVoxelCommand
-        {
-            get { return new DelegateCommand(BrowseVoxelExecuted, BrowseVoxelCanExecute); }
-        }
+        public ICommand BrowseVoxelCommand => new DelegateCommand(BrowseVoxelExecuted, BrowseVoxelCanExecute);
 
-        public ICommand CreateCommand
-        {
-            get { return new DelegateCommand(CreateExecuted, CreateCanExecute); }
-        }
+        public ICommand CreateCommand => new DelegateCommand(CreateExecuted, CreateCanExecute);
 
-        public ICommand CancelCommand
-        {
-            get { return new DelegateCommand(CancelExecuted, CancelCanExecute); }
-        }
+        public ICommand CancelCommand => new DelegateCommand(CancelExecuted, CancelCanExecute);
 
         /// <summary>
         /// Gets or sets the DialogResult of the View.  If True or False is passed, this initiates the Close().
@@ -295,21 +286,21 @@
                     SourceFile = stockfile;
                     originalFile = SourceFile;
                     var asteroid = new MyVoxelMap();
-                    asteroid.Load(stockfile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
+                    asteroid.Load(stockfile);
                     asteroidCenter = asteroid.BoundingContent.Center;
-                    asteroidSize = asteroid.BoundingContent.SizeInt() + 1; // Content size
+                    asteroidSize = asteroid.BoundingContent.Size + 1; // Content size
                 }
                 else
                 {
                     var asteroid = new MyVoxelMap();
-                    asteroid.Load(stockfile, StockMaterial.Value);
+                    asteroid.Load(stockfile);
                     asteroid.ForceBaseMaterial(SpaceEngineersCore.Resources.GetDefaultMaterialName(), StockMaterial.Value);
                     SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
                     asteroid.Save(SourceFile);
 
                     originalFile = StockVoxel.SourceFilename;
                     asteroidCenter = asteroid.BoundingContent.Center;
-                    asteroidSize = asteroid.BoundingContent.SizeInt() + 1; // Content size
+                    asteroidSize = asteroid.BoundingContent.Size + 1; // Content size
                 }
             }
             else if (IsFileVoxel)
@@ -317,9 +308,9 @@
                 originalFile = SourceFile;
 
                 var asteroid = new MyVoxelMap();
-                asteroid.Load(SourceFile, SpaceEngineersCore.Resources.GetDefaultMaterialName(), false);
+                asteroid.Load(SourceFile);
                 asteroidCenter = asteroid.BoundingContent.Center;
-                asteroidSize = asteroid.BoundingContent.SizeInt() + 1; // Content size
+                asteroidSize = asteroid.BoundingContent.Size + 1; // Content size
 
                 if (StockMaterial != null && StockMaterial.Value != null)
                 {
@@ -330,18 +321,20 @@
             }
             else if (IsSphere)
             {
-                string material;
-                if (StockMaterial != null && StockMaterial.Value != null)
-                    material = StockMaterial.Value;
+                byte materialIndex;
+                if (StockMaterial?.MaterialIndex != null)
+                    materialIndex = StockMaterial.MaterialIndex.Value;
                 else
-                    material = SpaceEngineersCore.Resources.GetDefaultMaterialName();
+                    materialIndex = SpaceEngineersCore.Resources.GetDefaultMaterialIndex();
 
-                originalFile = string.Format("sphere_{0}_{1}_{2}{3}", material.ToLowerInvariant(), SphereRadius, SphereShellRadius, MyVoxelMap.V2FileExtension);
+                string materialName = SpaceEngineersCore.Resources.GetMaterialName(materialIndex);
 
-                var asteroid = MyVoxelBuilder.BuildAsteroidSphere(SphereRadius > 32, SphereRadius, material, material, SphereShellRadius != 0, SphereShellRadius);
+                originalFile = string.Format("sphere_{0}_{1}_{2}{3}", materialName.ToLowerInvariant(), SphereRadius, SphereShellRadius, MyVoxelMap.V2FileExtension);
+
+                var asteroid = MyVoxelBuilder.BuildAsteroidSphere(SphereRadius > 32, SphereRadius, materialIndex, materialIndex, SphereShellRadius != 0, SphereShellRadius);
                 // TODO: progress bar.
                 asteroidCenter = asteroid.BoundingContent.Center;
-                asteroidSize = asteroid.BoundingContent.SizeInt() + 1; // Content size
+                asteroidSize = asteroid.BoundingContent.Size + 1; // Content size
                 SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
                 asteroid.Save(SourceFile);
             }

@@ -75,26 +75,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="$(SolutionDir)\global.targets" Condition="exists('$(SolutionDir)\global.targets')" />
   </ImportGroup>
@@ -181,12 +161,12 @@
       <Project>{967d61a9-c8f0-4c2a-a784-6cda648ecb19}</Project>
       <Name>SEToolbox.ImageShaders</Name>
     </ProjectReference>
-    <Reference Include="WPFLocalizeExtension, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WpfLocalizeExtension.2.3.2\lib\net35\WPFLocalizeExtension.dll</HintPath>
+    <Reference Include="WPFLocalizeExtension, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFLocalizeExtension.3.1.2\lib\net35\WPFLocalizeExtension.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="XAMLMarkupExtensions, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XAMLMarkupExtensions.1.2.2\lib\net40\XAMLMarkupExtensions.dll</HintPath>
+      <HintPath>..\packages\XAMLMarkupExtensions.1.3.0\lib\net40\XAMLMarkupExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -221,6 +201,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IMainView.cs" />
+    <Compile Include="Interop\MySessionReplacement.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelRayTracerConsts.cs" />
     <Compile Include="Interop\QuaternionD.cs" />
     <Compile Include="Interop\SpaceEngineersTypes.cs" />
@@ -237,11 +218,7 @@
     <Compile Include="Interop\Asteroids\MyVoxelTaskWorker.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilder.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelBuilderArgs.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelConstants.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelContentCell.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelContentCellContent.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelMap.cs" />
-    <Compile Include="Interop\Asteroids\MyVoxelMaterialCell.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelRayTracer.cs" />
     <Compile Include="Interop\BlueprintRequirement.cs" />
     <Compile Include="Interop\ContentDataPath.cs" />
@@ -258,6 +235,8 @@
     <Compile Include="Models\ComponentItemModel.cs" />
     <Compile Include="Models\BindablePoint3DIModel.cs" />
     <Compile Include="Models\ChangeOwnerModel.cs" />
+    <Compile Include="Models\BlueprintDialogModel.cs" />
+    <Compile Include="Models\ErrorDialogModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\MergeVoxelModel.cs" />
     <Compile Include="Models\OwnerModel.cs" />
@@ -316,6 +295,7 @@
     <Compile Include="Services\CommandAction.cs" />
     <Compile Include="Services\CommandReference.cs" />
     <Compile Include="Services\ButtonDropDownMenuBehavior.cs" />
+    <Compile Include="Services\DialogExtensions.cs" />
     <Compile Include="Services\FolderBrowserDialogViewModel.cs" />
     <Compile Include="Services\DelegateCommand.cs" />
     <Compile Include="Services\DialogCloser.cs" />
@@ -381,6 +361,8 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ComponentListViewModel.cs" />
     <Compile Include="ViewModels\ChangeOwnerViewModel.cs" />
+    <Compile Include="ViewModels\BlueprintDialogViewModel.cs" />
+    <Compile Include="ViewModels\ErrorDialogViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\MergeVoxelViewModel.cs" />
     <Compile Include="ViewModels\ProgressCancelViewModel.cs" />
@@ -448,6 +430,12 @@
     </Compile>
     <Compile Include="Views\ControlInventory.xaml.cs">
       <DependentUpon>ControlInventory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowBlueprintDialog.xaml.cs">
+      <DependentUpon>WindowBlueprintDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowErrorDialog.xaml.cs">
+      <DependentUpon>WindowErrorDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowSettings.xaml.cs">
       <DependentUpon>WindowSettings.xaml</DependentUpon>
@@ -566,6 +554,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ControlInventory.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowBlueprintDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowErrorDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

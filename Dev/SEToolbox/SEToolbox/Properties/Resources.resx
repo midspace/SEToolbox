@@ -570,7 +570,7 @@ Please specify the location of the Space Engineers Application file.</value>
     <value>..\Resources\flag_usa.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DialogSandboxFiles" xml:space="preserve">
-    <value>Space Engineers Sandbox</value>
+    <value>Space Engineers Sandbox files</value>
   </data>
   <data name="DialogLocateSandboxTitle" xml:space="preserve">
     <value>Specify location of Space Engineers save game</value>
@@ -607,7 +607,7 @@ Please update it before running SEToolbox {2} again.</value>
     <value>Cannot run with old version of Space Engineers</value>
   </data>
   <data name="Exception_CorruptZipFile" xml:space="preserve">
-    <value>The specified file '{0}' is corrupt and does not apper to be a valid compressed archive file.</value>
+    <value>The specified file '{0}' is corrupt and does not appear to be a valid compressed archive file.</value>
   </data>
   <data name="TraceDirection_X" xml:space="preserve">
     <value>X axis</value>
@@ -666,11 +666,11 @@ Please update it before running SEToolbox {2} again.</value>
   <data name="VoxelMergeType_UnionVolumeRightToLeft" xml:space="preserve">
     <value>Union Volume Right to Left</value>
   </data>
-  <data name="DialogSandboxPrefabFiles" xml:space="preserve">
-    <value>Sandbox Prefab files</value>
+  <data name="DialogSandboxPrefabXmlFiles" xml:space="preserve">
+    <value>Sandbox Prefab Xml files</value>
   </data>
   <data name="DialogExportPrefabObjectTitle" xml:space="preserve">
-    <value>Specify filename to export Prefab to (name is embded into files)</value>
+    <value>Specify filename to export Prefab to (name is embedded into files)</value>
   </data>
   <data name="VoxelMergeType_UnionMaterialLeftToRight" xml:space="preserve">
     <value>Union Material Left to Right</value>
@@ -734,10 +734,10 @@ Distance:		{1:#,##0.0} m</value>
     <value>Craft/Objects</value>
   </data>
   <data name="WnExplorerContextCopyGps" xml:space="preserve">
-    <value>Copy GPS</value>
+    <value>Copy _GPS</value>
   </data>
   <data name="WnExplorerContextDelete" xml:space="preserve">
-    <value>Delete</value>
+    <value>_Delete</value>
   </data>
   <data name="WnExplorerMnuCreate" xml:space="preserve">
     <value>_Create</value>
@@ -755,7 +755,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Export as prefab</value>
   </data>
   <data name="WnExplorerMnuExportPrefabTooltip" xml:space="preserve">
-    <value>Export selected ships and stations to a single an prefab .sbc file.</value>
+    <value>Export selected ships and stations to a single prefab .sbc file.</value>
   </data>
   <data name="WnExplorerMnuExportSandboxWithoutOwner" xml:space="preserve">
     <value>Export without owner and MedBay</value>
@@ -848,7 +848,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Merge 2 Ships into 1</value>
   </data>
   <data name="WnExplorerMnuSelectionMergeShipTooltip" xml:space="preserve">
-    <value>Joins 2 foriegn parts to form a new ship.</value>
+    <value>Joins 2 foreign parts to form a new ship.</value>
   </data>
   <data name="WnExplorerMnuSelectionMove" xml:space="preserve">
     <value>Group Move</value>
@@ -857,7 +857,7 @@ Distance:		{1:#,##0.0} m</value>
     <value>Rejoin Ship</value>
   </data>
   <data name="WnExplorerMnuSelectionRejoinShipTooltip" xml:space="preserve">
-    <value>Rejoins 2 parts from a broken ship back togeather.</value>
+    <value>Rejoins 2 parts from a broken ship back together.</value>
   </data>
   <data name="WnExplorerMnuSelectionRepair" xml:space="preserve">
     <value>Repair</value>
@@ -1755,7 +1755,7 @@ Planet Generator:	{17}</value>
     <value>{0} × {1} × {2} blocks</value>
   </data>
   <data name="CtlVoxelCenter" xml:space="preserve">
-    <value>Center:</value>
+    <value>Volume center:</value>
   </data>
   <data name="CtlVoxelColMaterial" xml:space="preserve">
     <value>Material</value>
@@ -2020,7 +2020,7 @@ Planet Generator:	{17}</value>
   </data>
   <data name="WnImportImageLabelImage" xml:space="preserve">
     <value>Image:</value>
-    <comment>Specify file for imaage</comment>
+    <comment>Specify file for image</comment>
   </data>
   <data name="WnImportImageLabelNewHeight" xml:space="preserve">
     <value>Height:</value>
@@ -2770,18 +2770,148 @@ Planet Generator:	{17}</value>
     <value>O₂</value>
   </data>
   <data name="ClsCubeGridWheelAttached" xml:space="preserve">
-    <value>Wheel</value>
+    <value>Wheel - Attached {0}</value>
   </data>
   <data name="ClsCubeGridWheelDetached" xml:space="preserve">
-    <value>Wheel - Attached {0}</value>
+    <value>Wheel</value>
   </data>
   <data name="WnExplorerMnuExportSpawnGroup" xml:space="preserve">
     <value>Export as Prefab and SpawnGroup</value>
   </data>
   <data name="WnExplorerMnuExportSpawnGroupTooltip" xml:space="preserve">
-    <value>Export selected ships, stations and asteroids to a single an prefab .sbc file, spawngroup file and asteroids.</value>
+    <value>Export selected ships, stations and asteroids to a single prefab .sbc file, spawngroup file and asteroids.</value>
   </data>
   <data name="DialogExportSpawnGroupObjectTitle" xml:space="preserve">
-    <value>Specify filename to export SpawnGroup to (name is embded into files)</value>
+    <value>Specify filename to export SpawnGroup to (name is embedded into files)</value>
+  </data>
+  <data name="DialogSandboxBinaryContentFiles" xml:space="preserve">
+    <value>Sandbox Binary Content files</value>
+  </data>
+  <data name="DialogSandboxXmlContentFiles" xml:space="preserve">
+    <value>Sandbox Xml Content files</value>
+  </data>
+  <data name="DialogSandboxPrefabBinaryFiles" xml:space="preserve">
+    <value>Sandbox Prefab Binary files</value>
+  </data>
+  <data name="WnExplorerMnuSelectionInertiaTensorOn" xml:space="preserve">
+    <value>Inertia Tensor On</value>
+  </data>
+  <data name="WnExplorerMnuSelectionInertiaTensorOnTooltip" xml:space="preserve">
+    <value>All selected ship blocks will have all Inertia Tensor turned On</value>
+  </data>
+  <data name="ClsExplorerGridChangesMade" xml:space="preserve">
+    <value>There have been {0:#,##0} changes made to the selected grids.</value>
+  </data>
+  <data name="ClsExplorerTitleChangesMade" xml:space="preserve">
+    <value>Changes have been made</value>
+  </data>
+  <data name="ErrorLoadFileError" xml:space="preserve">
+    <value>Failed to load file: {0}
+Reason: {1}</value>
+  </data>
+  <data name="ErrorLoadSaveGameFileError" xml:space="preserve">
+    <value>An error occurred while loading a save file.</value>
+  </data>
+  <data name="WnErrorDialogBtnClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WnErrorDialogBtnCopy" xml:space="preserve">
+    <value>Copy text</value>
+  </data>
+  <data name="WnErrorDialogBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnErrorDialogLabelDescription" xml:space="preserve">
+    <value>Error Text:</value>
+  </data>
+  <data name="WnErrorDialogTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ClsReportError" xml:space="preserve">
+    <value>Error:</value>
+  </data>
+  <data name="ErrorDirectoryNotFound" xml:space="preserve">
+    <value>Specified directory does not exist.</value>
+  </data>
+  <data name="ErrorGameNotFound" xml:space="preserve">
+    <value>Specified save game could not be found.</value>
+  </data>
+  <data name="ErrorInvalidSaveLabel" xml:space="preserve">
+    <value> # Invalid Save # </value>
+  </data>
+  <data name="ErrorStackLabel" xml:space="preserve">
+    <value>Stack:</value>
+  </data>
+  <data name="WnComponentsColComponentMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="WnComponentsColCubeMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="WnComponentsColItemMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="WnComponentsColMaterialMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="ClsErrorTimesStartedLastGameUpdate" xml:space="preserve">
+    <value>Times started since game update:</value>
+  </data>
+  <data name="ClsErrorTimesStartedLastReset" xml:space="preserve">
+    <value>Times started since last reset:</value>
+  </data>
+  <data name="ClsErrorTimesStartedTotal" xml:space="preserve">
+    <value>Times started total:</value>
+  </data>
+  <data name="WnExplorerContextSelectConnector" xml:space="preserve">
+    <value>Select all _Connector joined grids</value>
+  </data>
+  <data name="WnExplorerContextSelectMechanical" xml:space="preserve">
+    <value>Select all _Mechanical joined grids</value>
+  </data>
+  <data name="WnExplorerContextSelectMechanicalConnector" xml:space="preserve">
+    <value>Select all M_echanical and Connector joined grids</value>
+  </data>
+  <data name="WnExplorerMnuJoinedGrids" xml:space="preserve">
+    <value>_Joined Grids</value>
+  </data>
+  <data name="WnBlueprintDialogBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnBlueprintDialogBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnBlueprintDialogLabelDescription" xml:space="preserve">
+    <value>Please enter a name for the blueprint. If the name already exists in your local blueprint folder, you will be prompted to overwrite it.</value>
+  </data>
+  <data name="WnBlueprintDialogLabelName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="WnBlueprintSaveDialogTitle" xml:space="preserve">
+    <value>Save Blueprint</value>
+  </data>
+  <data name="WnExplorerMnuExportBlueprint" xml:space="preserve">
+    <value>Export as Blueprint</value>
+  </data>
+  <data name="WnExplorerMnuExportBlueprintTooltip" xml:space="preserve">
+    <value>Export selected ships and stations to a local Blueprint.</value>
+  </data>
+  <data name="ErrorInvalidBlueprintCharactersUsed" xml:space="preserve">
+    <value>The blueprint name contains invalid characters. Please remove any symbols before continuing.</value>
+  </data>
+  <data name="ErrorInvalidBlueprintExists" xml:space="preserve">
+    <value>A blueprint of that name already exists. Do you wish to overwrite it?</value>
+  </data>
+  <data name="ErrorInvalidBlueprintExistsTitle" xml:space="preserve">
+    <value>Blueprint exists</value>
+  </data>
+  <data name="ErrorInvalidBlueprintNameTitle" xml:space="preserve">
+    <value>Invalid Blueprint Name</value>
+  </data>
+  <data name="ErrorNoBlueprintPath" xml:space="preserve">
+    <value>The Blueprints path does not exist under this profile (Dedicated Server or Service).</value>
+  </data>
+  <data name="ErrorNoBlueprintPathTitle" xml:space="preserve">
+    <value>Cannot Save Blueprint</value>
   </data>
 </root>

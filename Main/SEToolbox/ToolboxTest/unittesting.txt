@@ -1,0 +1,7 @@
+﻿
+For testing, remember to:
+1. Set the Configuration to x64.
+2. Set the test settings file to "TestSettings1.runsettings", which is in the Solution folder.
+3. Set the test processor architecture to x64.
+
+Currently tests are running using "vstest.executionengine.exe", which runs from the build folder of the test project.

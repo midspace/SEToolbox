@@ -1,5 +1,10 @@
 ﻿namespace SEToolbox.Models
 {
+    using Microsoft.VisualBasic.FileIO;
+    using Sandbox.Common.ObjectBuilders;
+    using Sandbox.Game.GUI;
+    using SEToolbox.Interop;
+    using SEToolbox.Support;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -7,13 +12,10 @@
     using System.IO.Compression;
     using System.Linq;
     using System.Xml;
-
-    using Microsoft.VisualBasic.FileIO;
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interop;
-    using SEToolbox.Support;
+    using System.Xml.Linq;
+    using VRage.FileSystem;
     using VRage.Game;
-    using VRage.Game.ObjectBuilders.Components;
+    using Res = SEToolbox.Properties.Resources;
 
     public class WorldResource : BaseModel
     {
@@ -29,7 +31,11 @@
         private MyObjectBuilder_Sector _sectorData;
         private bool _compressedSectorFormat;
         private readonly SpaceEngineersResources _resources;
+        private bool _isValid;
         private Version _version;
+        private ulong? _workshopId;
+        private string _sessionName;
+        private DateTime _lastSaveTime;
 
         #endregion
 
@@ -124,6 +130,36 @@
                 if (value != _checkpoint)
                 {
                     _checkpoint = value;
+
+                    _isValid = _checkpoint != null;
+
+                    if (_checkpoint == null)
+                        _version = new Version();
+                    else
+                    {
+                        var str = _checkpoint.AppVersion.ToString(CultureInfo.InvariantCulture);
+                        if (str == "0")
+                            _version = new Version();
+                        else
+                        {
+                            try
+                            {
+                                str = str.Substring(0, str.Length - 6) + "." + str.Substring(str.Length - 6, 3) + "." + str.Substring(str.Length - 3);
+                                _version = new Version(str);
+                            }
+                            catch
+                            {
+                                _version = new Version();
+                            }
+                        }
+                    }
+
+                    WorkshopId = _checkpoint?.WorkshopId;
+
+                    _sessionName = _checkpoint != null ? _checkpoint.SessionName : Res.ErrorInvalidSaveLabel;
+
+                    _lastSaveTime = _checkpoint?.LastSaveTime ?? DateTime.MinValue;
+
                     RaisePropertyChanged(() => Checkpoint, () => SessionName, () => LastSaveTime, () => IsValid);
                 }
             }
@@ -131,39 +167,27 @@
 
         public string SessionName
         {
-            get
-            {
-                if (_checkpoint == null)
-                    return " # Invalid Save # ";
-
-                return _checkpoint.SessionName;
-            }
+            get { return _sessionName; }
 
             set
             {
-                if (value != _checkpoint.SessionName)
+                if (value != _sessionName)
                 {
-                    _checkpoint.SessionName = value;
+                    _sessionName = value;
                     RaisePropertyChanged(() => SessionName);
                 }
             }
         }
 
-        public DateTime? LastSaveTime
+        public DateTime LastSaveTime
         {
-            get
-            {
-                if (_checkpoint == null)
-                    return null;
-
-                return _checkpoint.LastSaveTime;
-            }
+            get { return _lastSaveTime; }
 
             set
             {
-                if (value != _checkpoint.LastSaveTime)
+                if (value != _lastSaveTime)
                 {
-                    _checkpoint.LastSaveTime = value.Value;
+                    _lastSaveTime = value;
                     RaisePropertyChanged(() => LastSaveTime);
                 }
             }
@@ -171,55 +195,49 @@
 
         public Version Version
         {
-            get
+            get { return _version; }
+
+            set
             {
-                if (_version == null && _checkpoint != null)
+                if (value != _version)
                 {
-                    var str = _checkpoint.AppVersion.ToString(CultureInfo.InvariantCulture);
-                    if (str == "0")
-                        _version = new Version();
-                    else
-                    {
-                        try
-                        {
-                            str = str.Substring(0, str.Length - 6) + "." + str.Substring(str.Length - 6, 3) + "." + str.Substring(str.Length - 3);
-                            _version = new Version(str);
-                        }
-                        catch
-                        {
-                            _version = new Version();
-                        }
-                    }
+                    _version = value;
+                    RaisePropertyChanged(() => Version);
                 }
-                return _version;
             }
         }
 
-        public bool IsWorkshopItem
-        {
-            get { return _checkpoint.WorkshopId.HasValue; }
-        }
+        public bool IsWorkshopItem => _workshopId.HasValue;
 
         public ulong? WorkshopId
         {
-            get
-            {
-                if (_checkpoint == null)
-                    return null;
+            get { return _workshopId; }
 
-                return _checkpoint.WorkshopId;
+            set
+            {
+                if (value != _workshopId)
+                {
+                    _workshopId = value;
+                    RaisePropertyChanged(() => WorkshopId);
+                }
             }
         }
 
         public bool IsValid
         {
-            get { return Checkpoint != null; }
+            get { return _isValid; }
+
+            set
+            {
+                if (value != _isValid)
+                {
+                    _isValid = value;
+                    RaisePropertyChanged(() => IsValid);
+                }
+            }
         }
 
-        public string ThumbnailImageFilename
-        {
-            get { return Path.Combine(_savePath, SpaceEngineersConsts.ThumbnailImageFilename); }
-        }
+        public string ThumbnailImageFilename => Path.Combine(_savePath, SpaceEngineersConsts.ThumbnailImageFilename);
 
         public override string ToString()
         {
@@ -254,13 +272,14 @@
         /// <summary>
         /// Loads checkpoint file.
         /// </summary>
-        public void LoadCheckpoint(bool snapshot = false)
+        public bool LoadCheckpoint(out string errorInformation, bool snapshot = false)
         {
             var filename = Path.Combine(Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
 
             MyObjectBuilder_Checkpoint checkpoint;
-            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(filename, out checkpoint, out _compressedCheckpointFormat, snapshot);
+            bool retVal = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(filename, out checkpoint, out _compressedCheckpointFormat, out errorInformation, snapshot);
             Checkpoint = checkpoint;
+            return retVal;
         }
 
         public void LoadDefinitionsAndMods()
@@ -275,13 +294,14 @@
             _resources.LoadDefinitionsAndMods(DataPath.ModsPath, modList);
         }
 
-        public void LoadSector(bool snapshot = false)
+        public bool LoadSector(out string errorInformation, bool snapshot = false)
         {
             var filename = Path.Combine(Savepath, SpaceEngineersConsts.SandBoxSectorFilename);
             MyObjectBuilder_Sector sectorData;
 
-            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out _compressedSectorFormat, snapshot);
+            bool retVal = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out _compressedSectorFormat, out errorInformation, snapshot);
             SectorData = sectorData;
+            return retVal;
         }
 
         public void SaveCheckPoint(bool backupFile)
@@ -419,6 +439,73 @@
             SectorData.AppVersion = SpaceEngineersConsts.GetSEVersionInt();
             SaveCheckPoint(backupFile);
             SaveSector(backupFile);
+        }
+
+        public void LoadWorldInfo()
+        {
+            var filename = Path.Combine(Savepath, SpaceEngineersConsts.SandBoxCheckpointFilename);
+
+            if (!File.Exists(filename))
+            {
+                IsValid = false;
+                SessionName = Res.ErrorInvalidSaveLabel;
+                return;
+            }
+
+            try
+            {
+                XDocument doc;
+                using (var stream = MyFileSystem.OpenRead(filename).UnwrapGZip())
+                {
+                    doc = XDocument.Load(stream);
+                }
+
+                var root = doc.Root;
+                if (root == null)
+                {
+                    IsValid = true;
+                    SessionName = Res.ErrorInvalidSaveLabel;
+                    return;
+                }
+
+                var session = root.Element("SessionName");
+                var lastSaveTime = root.Element("LastSaveTime");
+                var workshopId = root.Element("WorkshopId");
+                var appVersion = root.Element("AppVersion");
+
+                if (session != null) SessionName = MyStatControlText.SubstituteTexts(session.Value);
+                DateTime tempDateTime;
+                if (lastSaveTime != null && DateTime.TryParse(lastSaveTime.Value, out tempDateTime))
+                    LastSaveTime = tempDateTime;
+                else
+                    LastSaveTime = DateTime.MinValue;
+
+                ulong tmp;
+                if (workshopId != null && ulong.TryParse(workshopId.Value, out tmp))
+                    WorkshopId = tmp;
+
+                if (appVersion == null || appVersion.Value == "0")
+                    Version = new Version();
+                else
+                {
+                    try
+                    {
+                        string str = appVersion.Value.Substring(0, appVersion.Value.Length - 6) + "." + appVersion.Value.Substring(appVersion.Value.Length - 6, 3) + "." + appVersion.Value.Substring(appVersion.Value.Length - 3);
+                        Version = new Version(str);
+                    }
+                    catch
+                    {
+                        Version = new Version();
+                    }
+                }
+
+                IsValid = true;
+            }
+            catch
+            {
+                IsValid = false;
+                SessionName = Res.ErrorInvalidSaveLabel;
+            }
         }
 
         #endregion

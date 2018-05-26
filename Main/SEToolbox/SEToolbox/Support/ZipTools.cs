@@ -1,12 +1,19 @@
 ﻿namespace SEToolbox.Support
 {
-	using System.Diagnostics;
-	using System.IO;
+    using System.Diagnostics;
+    using System.IO;
     using System.IO.Compression;
 
     public static class ZipTools
     {
-	    public static void GZipUncompress(string sourceFilename, string destinationFilename)
+        public static void MakeClearDirectory(string folder)
+        {
+            if (Directory.Exists(folder))
+                Directory.Delete(folder, true);
+            Directory.CreateDirectory(folder);
+        }
+
+        public static void GZipUncompress(string sourceFilename, string destinationFilename)
         {
             // Low memory, fast extract.
             using (var compressedByteStream = new FileStream(sourceFilename, FileMode.Open))

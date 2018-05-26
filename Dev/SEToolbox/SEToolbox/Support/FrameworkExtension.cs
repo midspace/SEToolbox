@@ -4,11 +4,13 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Markup;
     using System.Windows.Threading;
+    using Res = SEToolbox.Properties.Resources;
 
     public static class FrameworkExtension
     {
@@ -213,35 +215,9 @@
             return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
-        public static double RoundUpToNearest(this double value, int scale)
-        {
-            return Math.Ceiling(value / scale) * scale;
-        }
-
-        public static int RoundUpToNearest(this int value, int scale)
-        {
-            return (int)(Math.Ceiling((double)value / scale) * scale);
-        }
-
         public static byte RoundUpToNearest(this byte value, int scale)
         {
             return (byte)(Math.Min(0xff, Math.Ceiling((double)value / scale) * scale));
-        }
-
-        public static double RoundUpToCube(this double value)
-        {
-            int baseVal = 1;
-            while (baseVal < value)
-                baseVal = baseVal * 2;
-            return baseVal;
-        }
-
-        public static int RoundUpToCube(this int value)
-        {
-            int baseVal = 1;
-            while (baseVal < value)
-                baseVal = baseVal * 2;
-            return baseVal;
         }
 
         #region GetHitControl
@@ -307,6 +283,33 @@
                 dictionary[key] = value;
             else
                 dictionary.Add(key, value);
+        }
+
+        /// <summary>
+        /// Concatenates the Message portion of each exception and inner exception together into a string, in much the same manner as .ToString() except without the stack.
+        /// </summary>
+        public static string AllMessages(this Exception exception)
+        {
+            Exception ex = exception;
+
+            StringBuilder text = new StringBuilder();
+            text.Append(ex.Message);
+            while (ex.InnerException != null)
+            {
+                text.AppendLine();
+                text.Append(" ---> ");
+                text.AppendLine(ex.InnerException.Message);
+
+                if (ex.InnerException is InvalidOperationException)
+                {
+                    text.AppendLine(Res.ErrorStackLabel);
+                    text.AppendLine(ex.InnerException.StackTrace);
+                }
+
+                ex = ex.InnerException;
+            }
+
+            return text.ToString();
         }
     }
 }

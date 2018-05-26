@@ -10,7 +10,7 @@
     [TestClass]
     public class VolumentricTests
     {
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateModelComplexVolumentric()
         {
             const string modelFile = @".\TestAssets\algos.obj";
@@ -42,7 +42,7 @@
             Assert.AreEqual(188293, cubicCount[CubeType.Interior], "Interior count must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateModelComplexVolumentricHalfScale()
         {
             const string modelFile = @".\TestAssets\algos.obj";
@@ -62,7 +62,7 @@
             Assert.AreEqual(20651, cubicCount[CubeType.Interior], "Interior count must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateModelSimpleThinVolumentric()
         {
             const string modelFile = @".\TestAssets\t25.obj";
@@ -82,7 +82,7 @@
             Assert.AreEqual(4, cubicCount[CubeType.Interior], "Interior count must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateModelSimpleThinSmoothedVolumentric()
         {
             const string modelFile = @".\TestAssets\t25.obj";
@@ -102,7 +102,7 @@
             Assert.AreEqual(4, cubicCount[CubeType.Interior], "Interior count must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateModelSimpleThickVolumentric()
         {
             const string modelFile = @".\TestAssets\t25.obj";
@@ -122,7 +122,7 @@
             Assert.AreEqual(2, cubicCount[CubeType.Interior], "Interior count must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LoadBrokenModel()
         {
             // TODO: finish testing the model.
@@ -138,7 +138,7 @@
             //Assert.AreEqual(3, cubic[0][0].Length, "Array size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateModelSimpleVolumentricFill()
         {
             const string modelFile = @".\TestAssets\t25.obj";
@@ -158,7 +158,7 @@
             Assert.AreEqual(48, cubicCount[CubeType.Interior], "Interior count must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateModelSimpleVolumentricAltFill()
         {
             const string modelFile = @".\TestAssets\t25.obj";
@@ -173,7 +173,7 @@
             //Assert.AreEqual(5, cubic[0][0].Length, "Array size must match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateModelWithMaterial()
         {
             const string modelFile = @".\TestAssets\test.obj";
@@ -210,7 +210,7 @@
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void IntersectionTestPoint0()
         {
             Point3D intersection;
@@ -230,7 +230,7 @@
             Assert.AreEqual(1, normal, "Normal must be 1.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void IntersectionTestPoint1()
         {
             Point3D intersection;
@@ -252,7 +252,7 @@
             Assert.AreEqual(1, normal, "Normal must be 1.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestFace()
         {
             Point3D intersection;
@@ -269,7 +269,7 @@
             Assert.AreEqual(new Point3D(15, 12, 11), intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestFaceReverse()
         {
             Point3D intersection;
@@ -286,7 +286,7 @@
             Assert.AreEqual(new Point3D(15, 12, 11), intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestEdge()
         {
             Point3D intersection;
@@ -303,7 +303,7 @@
             Assert.AreEqual(new Point3D(14, 14, 10.8), intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestEdgeReverse()
         {
             Point3D intersection;
@@ -320,7 +320,7 @@
             Assert.AreEqual(new Point3D(14, 14, 10.8), intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestVertex1()
         {
             Point3D intersection;
@@ -337,7 +337,7 @@
             Assert.AreEqual(p1, intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestVertex2()
         {
             Point3D intersection;
@@ -354,7 +354,7 @@
             Assert.AreEqual(p2, intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestVertex3()
         {
             Point3D intersection;
@@ -371,7 +371,7 @@
             Assert.AreEqual(p3, intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestVertexReverse1()
         {
             Point3D intersection;
@@ -388,7 +388,7 @@
             Assert.AreEqual(p1, intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestVertexReverse2()
         {
             Point3D intersection;
@@ -405,7 +405,7 @@
             Assert.AreEqual(p2, intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestVertexReverse3()
         {
             Point3D intersection;
@@ -422,7 +422,7 @@
             Assert.AreEqual(p3, intersection, "intersection must be match.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestNormalCheck()
         {
             Point3D p1, p2, p3, r1, r2, intersection;
@@ -480,7 +480,7 @@
             Assert.AreEqual(normal, 1, "Normal must be 1.");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RayTestNormalInverseCheck()
         {
             Point3D p1, p2, p3, r1, r2, intersection;

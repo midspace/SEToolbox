@@ -118,7 +118,7 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <Border Visibility="{Binding ZoomThumbnail, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Cursor="Hand" ToolTip="{lex:Loc WnLoadZoomOutTooltip}">
+        <Border Visibility="{Binding ZoomThumbnail, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Cursor="Hand" ToolTip="{lex:Loc WnLoadZoomOutTooltip}">
             <Image Source="{Binding Path=SelectedWorld.ThumbnailImageFilename, Converter={StaticResource NullImageConverter}}" IsHitTestVisible="False"/>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseUp">
@@ -126,6 +126,6 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Border>
-        <controls:BusyIndicator Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <controls:BusyIndicator Visibility="{Binding IsBusy, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Window>

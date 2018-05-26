@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Support
 {
+    using System;
     using System.Collections.Generic;
     using Res = SEToolbox.Properties.Resources;
 
@@ -38,11 +39,22 @@
         };
 
         public static string HtmlFilter => $"{Res.DialogHtmlFiles} (*.htm;*.htm)|*.htm;*.html";
-        public static string ImageFilter => $"{Res.DialogImageFiles} (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|{Res.DialogAllFiles} (*.*)|*.*";
-        public static string ModelFilter => $"{Res.DialogAllSupportedFiles}|*.3ds;*.lwo;*.obj;*.objx;*.stl;*.off|{Res.Dialog3DStudioFiles} (*.3ds)|*.3ds|{Res.DialogLightwaveFiles} (*.lwo)|*.lwo|{Res.DialogWavefrontFiles} (*.obj)|*.obj;*.objx|{Res.DialogStereoLithographyFiles} (*.stl)|*.stl|{Res.DialogOFFFiles} (*.off)|*.off";
-        public static string PrefabObjectFilter => $"{Res.DialogSandboxPrefabFiles} (*.sbc)|*.sbc";
+        public static string ImageFilter => $"{Res.DialogImageFiles} (*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|" +
+                                            $"{Res.DialogAllFiles} (*.*)|*.*";
+        public static string ModelFilter => $"{Res.DialogAllSupportedFiles}|*.3ds;*.lwo;*.obj;*.objx;*.stl;*.off|" +
+                                            $"{Res.Dialog3DStudioFiles} (*.3ds)|*.3ds|" +
+                                            $"{Res.DialogLightwaveFiles} (*.lwo)|*.lwo|" +
+                                            $"{Res.DialogWavefrontFiles} (*.obj)|*.obj;*.objx|" +
+                                            $"{Res.DialogStereoLithographyFiles} (*.stl)|*.stl|" +
+                                            $"{Res.DialogOFFFiles} (*.off)|*.off";
+        public static string PrefabObjectFilter => $"{Res.DialogSandboxPrefabXmlFiles} (*.sbc)|*.sbc|" +
+                                                   $"{Res.DialogSandboxPrefabBinaryFiles} (*.sbcPB)|*.sbcPB";
         public static string SandboxFilter => $"{Res.DialogSandboxFiles} |Sandbox.sbc";
-        public static string SandboxObjectFilter => $"{Res.DialogSandboxContentFiles} (*.sbc)|*.sbc|{Res.DialogXmlFiles} (*.xml)|*.xml|{Res.DialogAllFiles} (*.*)|*.*";
+        public static string SandboxObjectImportFilter => $"{Res.DialogSandboxContentFiles} (*.sbc;*.sbcPB)|*.sbc;*.sbcPB|" +
+                                                          $"{Res.DialogXmlFiles} (*.xml)|*.xml|{Res.DialogAllFiles} (*.*)|*.*";
+        public static string SandboxObjectExportFilter => $"{Res.DialogSandboxXmlContentFiles} (*.sbc)|*.sbc|" +
+                                                          $"{Res.DialogSandboxBinaryContentFiles} (*.sbcPB)|*.sbcPB|" +
+                                                          $"{Res.DialogXmlFiles} (*.xml)|*.xml|{Res.DialogAllFiles} (*.*)|*.*";
         public static string SpaceEngineersApplicationFilter => $"{Res.DialogSpaceEngineersApplicationFiles}|SpaceEngineers*.exe";
         public static string TextFileFilter => $"{Res.DialogTextFiles} (*.txt)|*.txt";
         public static string VoxelAnyFilter => $"{Res.DialogAsteroidFiles} (*.vox;*.vx2)|*.vox;*.vx2|{Res.DialogAllFiles} (*.*)|*.*";
@@ -174,5 +186,36 @@
     {
         None,
         ByteFiller
+    }
+
+    public enum ReportType
+    {
+        Unknown,
+        Text,
+        Html,
+        Xml
+    }
+
+    [Flags]
+    public enum GridConnectionType
+    {
+        None = 0x00,
+
+        /// <summary>
+        /// Landing Gear.
+        /// </summary>
+        GearLock = 0x01,
+
+        /// <summary>
+        /// Connector.
+        /// </summary>
+        ConnectorLock = 0x02,
+
+        /// <summary>
+        /// Piston, Rotor, Suspension/Wheel.
+        /// </summary>
+        Mechanical = 0x04,
+
+        ConnectorLock_Mechanical = ConnectorLock + Mechanical,
     }
 }

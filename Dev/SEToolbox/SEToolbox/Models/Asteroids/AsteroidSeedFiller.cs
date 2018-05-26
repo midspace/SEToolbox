@@ -223,39 +223,41 @@
                  * So we have to do that manually by setting to a usually unused ore (uranium) and then reverting to the one we chose (=old one in case of a flaky roid)
                  */
             //byte oldMaterial = asteroid.VoxelMaterial;
-            asteroid.ForceVoxelFaceMaterial("Uraninite_01");
-            asteroid.ForceVoxelFaceMaterial(properties.MainMaterial.Value);
+
+            // ForceVoxelFaceMaterial should no longer be required.
+            //asteroid.ForceVoxelFaceMaterial("Uraninite_01");
+            //asteroid.ForceVoxelFaceMaterial(properties.MainMaterial.Value);
 
             // Cycle through veins info and add 'spherical' depisits to the voxel cell grid (not voxels themselves)
             int i;
 
             if (properties.FirstVeins > 0)
                 for (i = 0; i < properties.FirstVeins; i++)
-                    asteroid.SeedMaterialSphere(properties.FirstMaterial.Value, (byte)properties.FirstRadius);
+                    asteroid.SeedMaterialSphere(properties.FirstMaterial.MaterialIndex.Value, (byte)properties.FirstRadius);
 
             if (properties.SecondVeins > 0)
                 for (i = 0; i < properties.SecondVeins; i++)
-                    asteroid.SeedMaterialSphere(properties.SecondMaterial.Value, (byte)properties.SecondRadius);
+                    asteroid.SeedMaterialSphere(properties.SecondMaterial.MaterialIndex.Value, (byte)properties.SecondRadius);
 
             if (properties.ThirdVeins > 0)
                 for (i = 0; i < properties.ThirdVeins; i++)
-                    asteroid.SeedMaterialSphere(properties.ThirdMaterial.Value, (byte)properties.ThirdRadius);
+                    asteroid.SeedMaterialSphere(properties.ThirdMaterial.MaterialIndex.Value, (byte)properties.ThirdRadius);
 
             if (properties.FourthVeins > 0)
                 for (i = 0; i < properties.FourthVeins; i++)
-                    asteroid.SeedMaterialSphere(properties.FourthMaterial.Value, (byte)properties.FourthRadius);
+                    asteroid.SeedMaterialSphere(properties.FourthMaterial.MaterialIndex.Value, (byte)properties.FourthRadius);
 
             if (properties.FifthVeins > 0)
                 for (i = 0; i < properties.FifthVeins; i++)
-                    asteroid.SeedMaterialSphere(properties.FifthMaterial.Value, (byte)properties.FifthRadius);
+                    asteroid.SeedMaterialSphere(properties.FifthMaterial.MaterialIndex.Value, (byte)properties.FifthRadius);
 
             if (properties.SixthVeins > 0)
                 for (i = 0; i < properties.SixthVeins; i++)
-                    asteroid.SeedMaterialSphere(properties.SixthMaterial.Value, (byte)properties.SixthRadius);
+                    asteroid.SeedMaterialSphere(properties.SixthMaterial.MaterialIndex.Value, (byte)properties.SixthRadius);
 
             if (properties.SeventhVeins > 0)
                 for (i = 0; i < properties.SeventhVeins; i++)
-                    asteroid.SeedMaterialSphere(properties.SeventhMaterial.Value, (byte)properties.SeventhRadius);
+                    asteroid.SeedMaterialSphere(properties.SeventhMaterial.MaterialIndex.Value, (byte)properties.SeventhRadius);
 
             // Hide the surface materials up to depth of 2 cells.
             asteroid.ForceShellMaterial(properties.MainMaterial.Value, 2);

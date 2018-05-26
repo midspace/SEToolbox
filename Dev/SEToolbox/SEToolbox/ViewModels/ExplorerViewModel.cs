@@ -1,5 +1,13 @@
 ﻿namespace SEToolbox.ViewModels
 {
+    using Sandbox.Common.ObjectBuilders;
+    using SEToolbox.Interfaces;
+    using SEToolbox.Interop;
+    using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Models;
+    using SEToolbox.Services;
+    using SEToolbox.Support;
+    using SEToolbox.Views;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -15,20 +23,13 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Shell;
-    using Sandbox.Common.ObjectBuilders;
-    using SEToolbox.Interfaces;
-    using SEToolbox.Interop;
-    using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Models;
-    using SEToolbox.Services;
-    using SEToolbox.Support;
-    using SEToolbox.Views;
-    using Res = SEToolbox.Properties.Resources;
     using VRage;
     using VRage.Game;
+    using VRage.Game.ObjectBuilders.Components;
     using VRage.ObjectBuilders;
     using VRageMath;
     using WPFLocalizeExtension.Engine;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ExplorerViewModel : BaseViewModel, IDropable, IMainView
     {
@@ -139,6 +140,8 @@
 
         public ICommand ExportSpawnGroupObjectCommand => new DelegateCommand(ExportSpawnGroupObjectExecuted, ExportSpawnGroupObjectCanExecute);
 
+        public ICommand ExportBlueprintCommand => new DelegateCommand(ExportBlueprintExecuted, ExportBlueprintCanExecute);
+
         public ICommand CreateFloatingItemCommand => new DelegateCommand(CreateFloatingItemExecuted, CreateFloatingItemCanExecute);
 
         public ICommand GenerateVoxelFieldCommand => new DelegateCommand(GenerateVoxelFieldExecuted, GenerateVoxelFieldCanExecute);
@@ -173,6 +176,8 @@
 
         public ICommand CopyObjectGpsCommand => new DelegateCommand(CopyObjectGpsExecuted, CopyObjectGpsCanExecute);
 
+        public ICommand SelectJoinedGridsCommand => new DelegateCommand<GridConnectionType>(SelectJoinedGridsExecuted, SelectJoinedGridsCanExecute);
+
         public ICommand GroupMoveCommand => new DelegateCommand(GroupMoveExecuted, GroupMoveCanExecute);
 
         public ICommand RejoinShipCommand => new DelegateCommand(RejoinShipExecuted, RejoinShipCanExecute);
@@ -188,6 +193,8 @@
         public ICommand ConvertToShipCommand => new DelegateCommand(ConvertToShipExecuted, ConvertToShipCanExecute);
 
         public ICommand ConvertToStationCommand => new DelegateCommand(ConvertToStationExecuted, ConvertToStationCanExecute);
+
+        public ICommand InertiaTensorOnCommand => new DelegateCommand<bool>(InertiaTensorExecuted, InertiaTensorCanExecute);
 
         #endregion
 
@@ -248,10 +255,7 @@
 
         public ObservableCollection<IStructureViewBase> Selections
         {
-            get
-            {
-                return _selections;
-            }
+            get { return _selections; }
 
             set
             {
@@ -418,9 +422,7 @@
             {
                 _dataModel.BeginLoad();
                 _dataModel.ActiveWorld = model.SelectedWorld;
-                ActiveWorld.LoadCheckpoint();
                 ActiveWorld.LoadDefinitionsAndMods();
-                ActiveWorld.LoadSector();
                 _dataModel.ParseSandBox();
                 _dataModel.EndLoad();
             }
@@ -428,7 +430,7 @@
 
         public bool SaveCanExecute()
         {
-            return _dataModel.ActiveWorld != null &&
+            return _dataModel.ActiveWorld != null  && _dataModel.ActiveWorld.IsValid &&
                 ((_dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && _dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
                 || ((_dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || _dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired)
                     && ToolboxUpdater.IsRuningElevated()));
@@ -444,7 +446,7 @@
 
         public bool SaveAsCanExecute()
         {
-            return _dataModel.ActiveWorld != null &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid &&
                 _dataModel.ActiveWorld.SaveType != SaveWorldType.Custom &&
                 ((_dataModel.ActiveWorld.SaveType != SaveWorldType.DedicatedServerService && _dataModel.ActiveWorld.SaveType != SaveWorldType.CustomAdminRequired)
                 || ((_dataModel.ActiveWorld.SaveType == SaveWorldType.DedicatedServerService || _dataModel.ActiveWorld.SaveType == SaveWorldType.CustomAdminRequired)
@@ -465,7 +467,7 @@
 
         public bool ClearCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ClearExecuted()
@@ -483,16 +485,33 @@
             // TODO: check is save directory is still valid.
 
             _dataModel.BeginLoad();
+            string errorInformation;
 
             // Reload Checkpoint file.
-            ActiveWorld.LoadCheckpoint();
+            if (!ActiveWorld.LoadCheckpoint(out errorInformation))
+            {
+                // leave world in Invalid state, allowing Reload to be called again.
+                ActiveWorld.IsValid = false;
+
+                _dialogService.ShowErrorDialog(this, Res.ErrorLoadSaveGameFileError, errorInformation, false);
+
+                _dataModel.ParseSandBox();
+                _dataModel.EndLoad();
+                return;
+            }
 
             // Reload Definitions, Mods, and clear out Materials, Textures.
             ActiveWorld.LoadDefinitionsAndMods();
             Converters.DDSConverter.ClearCache();
 
             // Load Sector file.
-            ActiveWorld.LoadSector();
+            if (!ActiveWorld.LoadSector(out errorInformation))
+            {
+                // leave world in Invalid state, allowing Reload to be called again.
+                ActiveWorld.IsValid = false;
+
+                _dialogService.ShowErrorDialog(this, Res.ErrorLoadSaveGameFileError, errorInformation, false);
+            }
 
             _dataModel.ParseSandBox();
             _dataModel.EndLoad();
@@ -500,12 +519,12 @@
 
         public bool IsActiveCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public bool ImportVoxelCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportVoxelExecuted()
@@ -530,7 +549,7 @@
 
         public bool ImportImageCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportImageExecuted()
@@ -559,7 +578,7 @@
 
         public bool ImportModelCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportModelExecuted()
@@ -593,7 +612,7 @@
 
         public bool ImportAsteroidModelCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportAsteroidModelExecuted()
@@ -624,7 +643,7 @@
 
         public bool ImportSandboxObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ImportSandboxObjectExecuted()
@@ -647,7 +666,7 @@
 
         public bool WorldReportCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void WorldReportExecuted()
@@ -670,7 +689,7 @@
 
         public bool ViewSandboxCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void ViewSandboxExecuted()
@@ -683,7 +702,7 @@
         }
         public bool OpenWorkshopCanExecute()
         {
-            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.WorkshopId.HasValue &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && _dataModel.ActiveWorld.WorkshopId.HasValue &&
                    _dataModel.ActiveWorld.WorkshopId.Value != 0;
         }
 
@@ -694,7 +713,7 @@
 
         public bool ExportSandboxObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ExportSandboxObjectExecuted()
@@ -704,7 +723,7 @@
 
         public bool ExportBasicSandboxObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ExportBasicSandboxObjectExecuted()
@@ -714,7 +733,7 @@
 
         public bool ExportPrefabObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0 &&
                 Selections.Any(e => e is StructureCubeGridViewModel);
         }
 
@@ -725,7 +744,7 @@
 
         public bool ExportSpawnGroupObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0 &&
                 Selections.Any(e => e is StructureCubeGridViewModel || e is StructureVoxelViewModel);
         }
 
@@ -734,9 +753,20 @@
             ExportSpawnGroupObjectToFile(true, Selections.ToArray());
         }
 
+        public bool ExportBlueprintCanExecute()
+        {
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0 &&
+                Selections.Any(e => e is StructureCubeGridViewModel);
+        }
+
+        public void ExportBlueprintExecuted()
+        {
+            ExportBlueprintToFile(Selections.ToArray());
+        }
+
         public bool CreateFloatingItemCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void CreateFloatingItemExecuted()
@@ -765,7 +795,7 @@
 
         public bool GenerateVoxelFieldCanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void GenerateVoxelFieldExecuted()
@@ -790,7 +820,9 @@
                 for (var i = 0; i < newEntities.Length; i++)
                 {
                     var structure = _dataModel.AddEntity(newEntities[i]);
-                    ((StructureVoxelModel)structure).SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                    StructureVoxelModel voxelModel = (StructureVoxelModel)structure;
+                    voxelModel.SourceVoxelFilepath = sourceVoxelFiles[i]; // Set the temporary file location of the Source Voxel, as it hasn't been written yet.
+                    voxelModel.InitializeAsync();
                     Progress++;
                 }
                 _selectNewStructure = false;
@@ -911,7 +943,7 @@
 
         public bool DeleteObjectCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void DeleteObjectExecuted()
@@ -921,7 +953,7 @@
 
         public bool CopyObjectGpsCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count == 1;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 1;
         }
 
         public void CopyObjectGpsExecuted()
@@ -938,9 +970,70 @@
             }
         }
 
+        public bool SelectJoinedGridsCanExecute(GridConnectionType minimumConnectionType)
+        {
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
+        }
+
+        public void SelectJoinedGridsExecuted(GridConnectionType minimumConnectionType)
+        {
+            _dataModel.BuildGridEntityNodes();
+
+            Queue<StructureCubeGridModel> searchModels = new Queue<StructureCubeGridModel>();
+            List<IStructureViewBase> newSelectionModels = new List<IStructureViewBase>();
+            List<long> searchedIds = new List<long>();
+
+            for (int i = 0; i < Selections.Count; i++)
+            {
+                StructureCubeGridModel gridModel = Selections[i].DataModel as StructureCubeGridModel;
+                if (gridModel != null)
+                {
+                    searchModels.Enqueue(gridModel);
+                    newSelectionModels.Add(Selections[i]);
+                }
+            }
+
+            while (searchModels.Count > 0)
+            {
+                StructureCubeGridModel gridModel = searchModels.Dequeue();
+
+                if (!searchedIds.Contains(gridModel.EntityId))
+                {
+                    List<MyObjectBuilder_CubeGrid> list = _dataModel.GetConnectedGridNodes(gridModel, minimumConnectionType);
+
+                    foreach (MyObjectBuilder_CubeGrid cubegrid in list)
+                    {
+                        if (!searchedIds.Contains(cubegrid.EntityId))
+                        {
+                            foreach (IStructureViewBase structure in Structures)
+                            {
+                                if (structure.DataModel.EntityId == cubegrid.EntityId)
+                                {
+                                    searchModels.Enqueue((StructureCubeGridModel)structure.DataModel);
+                                    newSelectionModels.Add(structure);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    searchedIds.Add(gridModel.EntityId);
+                }
+            }
+
+            // zero would mean the user selected a floating object or some other object that wasn't a grid, and it was filtered out of the final list.
+            if (newSelectionModels.Count != 0)
+            {
+                Selections.Clear();
+
+                foreach (IStructureViewBase structure in newSelectionModels)
+                    Selections.Add(structure);
+            }
+        }
+
         public bool GroupMoveCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 1;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 1;
         }
 
         public void GroupMoveExecuted()
@@ -961,7 +1054,7 @@
 
         public bool RejoinShipCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 2 &&
                 ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
                 (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.SmallShip));
         }
@@ -975,7 +1068,7 @@
 
         public bool JoinShipPartsCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 2 &&
                 ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.LargeShip) ||
                 (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.SmallShip));
         }
@@ -989,7 +1082,7 @@
 
         public bool VoxelMergeCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count == 2 &&
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 2 &&
                 ((Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel && Selections[0].DataModel.IsValid) ||
                 (Selections[0].DataModel.ClassType == Selections[1].DataModel.ClassType && Selections[0].DataModel.ClassType == ClassType.Voxel && Selections[0].DataModel.IsValid));
         }
@@ -1022,7 +1115,7 @@
 
         public bool RepairShipsCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void RepairShipsExecuted()
@@ -1034,7 +1127,7 @@
 
         public bool ResetVelocityCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ResetVelocityExecuted()
@@ -1047,7 +1140,7 @@
 
         public bool ConvertToShipCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ConvertToShipExecuted()
@@ -1059,7 +1152,7 @@
 
         public bool ConvertToStationCanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void ConvertToStationExecuted()
@@ -1069,13 +1162,31 @@
             IsBusy = false;
         }
 
+        public bool InertiaTensorCanExecute(bool state)
+        {
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
+        }
+
+        public void InertiaTensorExecuted(bool state)
+        {
+            IsBusy = true;
+            int count = SetInertiaTensor(Selections, true);
+            IsBusy = false;
+
+            _dialogService.ShowMessageBox(this, 
+                string.Format(Res.ClsExplorerGridChangesMade, count), 
+                Res.ClsExplorerTitleChangesMade, 
+                System.Windows.MessageBoxButton.OK, 
+                System.Windows.MessageBoxImage.Information);
+        }
+
         #endregion
 
         #region Test command methods
 
         public bool Test1CanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void Test1Executed()
@@ -1101,7 +1212,7 @@
 
         public bool Test2CanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void Test2Executed()
@@ -1112,7 +1223,7 @@
 
         public bool Test3CanExecute()
         {
-            return _dataModel.ActiveWorld != null;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid;
         }
 
         public void Test3Executed()
@@ -1148,7 +1259,7 @@
 
         public bool Test4CanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void Test4Executed()
@@ -1158,7 +1269,7 @@
 
         public bool Test5CanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void Test5Executed()
@@ -1168,7 +1279,7 @@
 
         public bool Test6CanExecute()
         {
-            return _dataModel.ActiveWorld != null && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
         }
 
         public void Test6Executed()
@@ -1388,6 +1499,20 @@
             }
         }
 
+        private int SetInertiaTensor(IEnumerable<IStructureViewBase> structures, bool state)
+        {
+            int count = 0;
+            foreach (var structure in structures)
+            {
+                if (structure.DataModel.ClassType == ClassType.SmallShip
+                    || structure.DataModel.ClassType == ClassType.LargeShip)
+                {
+                    count += ((StructureCubeGridViewModel)structure).SetInertiaTensor(state);
+                }
+            }
+            return count;
+        }
+
         /// <inheritdoc />
         public string CreateUniqueVoxelStorageName(string originalFile)
         {
@@ -1407,7 +1532,7 @@
         public void ImportSandboxObjectFromFile()
         {
             var openFileDialog = _openFileDialogFactory();
-            openFileDialog.Filter = AppConstants.SandboxObjectFilter;
+            openFileDialog.Filter = AppConstants.SandboxObjectImportFilter;
             openFileDialog.Title = Res.DialogImportSandboxObjectTitle;
             openFileDialog.Multiselect = true;
 
@@ -1434,7 +1559,7 @@
                     var structure = (StructureCharacterViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectExportFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.Description);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1470,7 +1595,7 @@
                     var structure = (StructureFloatingObjectViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectExportFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1485,7 +1610,7 @@
                     var structure = (StructureMeteorViewModel)viewModel;
 
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectExportFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, structure.DisplayName);
                     saveFileDialog.FileName = string.Format("{0}_{1}_{2}", structure.ClassType, structure.DisplayName, structure.Description);
                     saveFileDialog.OverwritePrompt = true;
@@ -1501,7 +1626,7 @@
 
                     var partname = string.IsNullOrEmpty(structure.DisplayName) ? structure.EntityId.ToString() : structure.DisplayName.Replace("|", "_").Replace("\\", "_").Replace("/", "_");
                     var saveFileDialog = _saveFileDialogFactory();
-                    saveFileDialog.Filter = AppConstants.SandboxObjectFilter;
+                    saveFileDialog.Filter = AppConstants.SandboxObjectExportFilter;
                     saveFileDialog.Title = string.Format(Res.DialogExportSandboxObjectTitle, structure.ClassType, partname);
                     saveFileDialog.FileName = string.Format("{0}_{1}", structure.ClassType, partname);
                     saveFileDialog.OverwritePrompt = true;
@@ -1521,13 +1646,8 @@
                             cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
                         }
 
-                        // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
-                        {
-                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
-                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
-                            return c;
-                        }).ToArray();
+                        // Remove all pilots.
+                        cloneEntity.RemoveHierarchyCharacter();
 
                         _dataModel.SaveEntity(cloneEntity, saveFileDialog.FileName);
                     }
@@ -1550,7 +1670,6 @@
             }
         }
 
-
         public void ExportPrefabObjectToFile(bool blankOwnerAndMedBays, params IStructureViewBase[] viewModels)
         {
             var saveFileDialog = _saveFileDialogFactory();
@@ -1561,6 +1680,8 @@
 
             if (_dialogService.ShowSaveFileDialog(this, saveFileDialog) == DialogResult.OK)
             {
+                bool isBinaryFile = ((Path.GetExtension(saveFileDialog.FileName) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase));
+
                 var definition = new MyObjectBuilder_Definitions();
                 definition.Prefabs = new MyObjectBuilder_PrefabDefinition[1];
                 MyObjectBuilder_PrefabDefinition prefab;
@@ -1587,13 +1708,8 @@
                             cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
                         }
 
-                        // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
-                        {
-                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
-                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
-                            return c;
-                        }).ToArray();
+                        // Remove all pilots.
+                        cloneEntity.RemoveHierarchyCharacter();
 
                         grids.Add(cloneEntity);
                     }
@@ -1602,7 +1718,10 @@
                 prefab.CubeGrids = grids.ToArray();
                 definition.Prefabs[0] = prefab;
 
-                SpaceEngineersApi.WriteSpaceEngineersFile(definition, saveFileDialog.FileName);
+                if (isBinaryFile)
+                    SpaceEngineersApi.WriteSpaceEngineersFilePB(definition, saveFileDialog.FileName, false);
+                else
+                    SpaceEngineersApi.WriteSpaceEngineersFile(definition, saveFileDialog.FileName);
             }
         }
 
@@ -1648,6 +1767,7 @@
             {
                 string name = Path.GetFileNameWithoutExtension(saveFileDialog.FileName);
                 string directory = Path.GetDirectoryName(saveFileDialog.FileName);
+                bool isBinaryFile = ((Path.GetExtension(saveFileDialog.FileName) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase));
 
                 var prefabDefinition = new MyObjectBuilder_Definitions();
                 prefabDefinition.Prefabs = new MyObjectBuilder_PrefabDefinition[1];
@@ -1696,13 +1816,8 @@
                             cloneEntity.CubeBlocks.Select(c => { c.Owner = 0; c.ShareMode = MyOwnershipShareModeEnum.None; return c; }).ToArray();
                         }
 
-                        // Remove any pilots.
-                        cloneEntity.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
-                        {
-                            ((MyObjectBuilder_Cockpit)c).ClearPilotAndAutopilot();
-                            ((MyObjectBuilder_Cockpit)c).PilotRelativeWorld = null;
-                            return c;
-                        }).ToArray();
+                        // Remove all pilots.
+                        cloneEntity.RemoveHierarchyCharacter();
 
                         grids.Add(cloneEntity);
 
@@ -1779,7 +1894,10 @@
 
                     if (hasVoxels)
                         spawngroup.Prefabs[0].PlaceToGridOrigin = true;
-                    SpaceEngineersApi.WriteSpaceEngineersFile(prefabDefinition, saveFileDialog.FileName);
+                    if (isBinaryFile)
+                        SpaceEngineersApi.WriteSpaceEngineersFilePB(prefabDefinition, saveFileDialog.FileName, false);
+                    else
+                        SpaceEngineersApi.WriteSpaceEngineersFile(prefabDefinition, saveFileDialog.FileName);
                 }
 
                 spawngroupDefinition.SpawnGroups[0] = spawngroup;
@@ -1791,6 +1909,99 @@
             }
         }
 
+        public void ExportBlueprintToFile(params IStructureViewBase[] viewModels)
+        {
+            string localBlueprintsFolder = null;
+            if (string.IsNullOrEmpty(_dataModel.ActiveWorld.DataPath.BlueprintsPath))
+            {
+                // There is no blueprints under Dedicated Server, so cannot find the blueprint folder to save to.
+                _dialogService.ShowMessageBox(this, Res.ErrorNoBlueprintPath, Res.ErrorNoBlueprintPathTitle, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Hand);
+                return;
+            }
+            localBlueprintsFolder = Path.Combine(_dataModel.ActiveWorld.DataPath.BlueprintsPath, SpaceEngineersConsts.LocalBlueprintsSubFolder);
+
+            var model = new BlueprintDialogModel();
+            model.BlueprintName = viewModels[0].DataModel.DisplayName;
+            model.Load(Res.WnBlueprintSaveDialogTitle, true, localBlueprintsFolder);
+            var loadVm = new BlueprintDialogViewModel(this, model, _dialogService);
+            var result = _dialogService.ShowDialog<WindowBlueprintDialog>(this, loadVm);
+
+            if (result == true)
+            {
+                var blueprintDefinition = new MyObjectBuilder_Definitions();
+                blueprintDefinition.ShipBlueprints = new MyObjectBuilder_ShipBlueprintDefinition[1];
+                MyObjectBuilder_ShipBlueprintDefinition prefab;
+                prefab = new MyObjectBuilder_ShipBlueprintDefinition();
+                prefab.Id.TypeId = new MyObjectBuilderType(typeof(MyObjectBuilder_ShipBlueprintDefinition));
+                prefab.Id.SubtypeId = model.BlueprintName;
+                prefab.DisplayName = "SEToolbox Export";  // Appears as AuthorName in game for the highlighted blueprint.
+                //prefab.OwnerSteamId =  ??
+
+                var spawngroupDefinition = new MyObjectBuilder_Definitions();
+                spawngroupDefinition.SpawnGroups = new MyObjectBuilder_SpawnGroupDefinition[1];
+
+                Vector3D grid1Position = new Vector3D(viewModels[0].DataModel.PositionAndOrientation.Value.Position.X, viewModels[0].DataModel.PositionAndOrientation.Value.Position.Y, viewModels[0].DataModel.PositionAndOrientation.Value.Position.Z);
+
+                var grids = new List<MyObjectBuilder_CubeGrid>();
+                Vector3 minimum = Vector3.MaxValue;
+
+                foreach (var viewModel in viewModels)
+                {
+                    if (viewModel is StructureCubeGridViewModel)
+                    {
+                        MyObjectBuilder_CubeGrid cloneEntity = (MyObjectBuilder_CubeGrid)viewModel.DataModel.EntityBase.Clone();
+
+                        // move offsets of all grids to origin, based on first selected grid.
+                        MyPositionAndOrientation p = cloneEntity.PositionAndOrientation.Value;
+                        cloneEntity.PositionAndOrientation = new MyPositionAndOrientation
+                        {
+                            Position = p.Position - grid1Position,
+                            Forward = p.Forward,
+                            Up = p.Up
+                        };
+
+                        // Call to ToArray() to force Linq to update the value.
+
+                        // Clear BuiltBy.
+                        cloneEntity.CubeBlocks.Select(c => { c.BuiltBy = 0; return c; }).ToArray();
+
+                        // Remove all pilots.
+                        cloneEntity.RemoveHierarchyCharacter();
+
+                        grids.Add(cloneEntity);
+
+                        if (minimum.X > cloneEntity.PositionAndOrientation.Value.Position.X)
+                            minimum.X = (float)cloneEntity.PositionAndOrientation.Value.Position.X;
+                        if (minimum.Y > cloneEntity.PositionAndOrientation.Value.Position.Y)
+                            minimum.Y = (float)cloneEntity.PositionAndOrientation.Value.Position.Y;
+                        if (minimum.Z > cloneEntity.PositionAndOrientation.Value.Position.Z)
+                            minimum.Z = (float)cloneEntity.PositionAndOrientation.Value.Position.Z;
+                    }
+                    if (viewModel is StructureVoxelViewModel)
+                    {
+                        if (minimum.X > viewModel.DataModel.PositionAndOrientation.Value.Position.X)
+                            minimum.X = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.X;
+                        if (minimum.Y > viewModel.DataModel.PositionAndOrientation.Value.Position.Y)
+                            minimum.Y = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.Y;
+                        if (minimum.Z > viewModel.DataModel.PositionAndOrientation.Value.Position.Z)
+                            minimum.Z = (float)viewModel.DataModel.PositionAndOrientation.Value.Position.Z;
+                    }
+                }
+
+                if (minimum == Vector3.MaxValue)
+                    minimum = Vector3.Zero;
+
+                prefab.CubeGrids = grids.ToArray();
+                blueprintDefinition.ShipBlueprints[0] = prefab;
+
+                string blueprintPath = Path.Combine(localBlueprintsFolder, model.BlueprintName);
+                if (!Directory.Exists(blueprintPath))
+                    Directory.CreateDirectory(blueprintPath);
+
+                SpaceEngineersApi.WriteSpaceEngineersFile(blueprintDefinition, Path.Combine(blueprintPath, "bp.sbc"));
+                SpaceEngineersApi.WriteSpaceEngineersFilePB(blueprintDefinition, Path.Combine(blueprintPath, "bp.sbcPB"), false);
+            }
+        }
 
         public void TestCalcCubesModel(params IStructureViewBase[] viewModels)
         {

@@ -36,9 +36,9 @@
 
         private StructureCharacterModel _thePlayerCharacter;
 
-        ///// <summary>
-        ///// Collection of <see cref="IStructureBase"/> objects that represent the builds currently configured.
-        ///// </summary>
+        /// <summary>
+        /// Collection of <see cref="IStructureBase"/> objects that represent the builds currently configured.
+        /// </summary>
         private ObservableCollection<IStructureBase> _structures;
 
         private bool _showProgress;
@@ -54,6 +54,8 @@
         private double _maximumProgress;
 
         private List<int> _customColors;
+
+        private Dictionary<long, GridEntityNode> GridEntityNodes = new Dictionary<long, GridEntityNode>();
 
         #endregion
 
@@ -311,7 +313,7 @@
                     _customColors = new List<int>();
                     foreach (Vector3 hsv in ActiveWorld.Checkpoint.CharacterToolbar.ColorMaskHSVList)
                     {
-                        var rgb = ((SerializableVector3)hsv).ToSandboxDrawingColor();
+                        var rgb = ((SerializableVector3)hsv).FromHsvMaskToPaletteColor();
                         _customColors.Add(((rgb.B << 0x10) | (rgb.G << 8) | rgb.R) & 0xffffff);
                     }
                 }
@@ -447,7 +449,7 @@
             ThePlayerCharacter = null;
             _customColors = null;
 
-            if (ActiveWorld.SectorData != null && ActiveWorld.Checkpoint != null)
+            if (ActiveWorld?.SectorData != null && ActiveWorld?.Checkpoint != null)
             {
                 foreach (var entityBase in ActiveWorld.SectorData.SectorObjects)
                 {
@@ -510,21 +512,28 @@
 
         public void SaveEntity(MyObjectBuilder_EntityBase entity, string filename)
         {
-            if (entity is MyObjectBuilder_CubeGrid)
+            bool isBinaryFile = ((Path.GetExtension(filename) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase));
+
+            if (isBinaryFile)
+                SpaceEngineersApi.WriteSpaceEngineersFilePB(entity, filename, false);
+            else
             {
-                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_CubeGrid)entity, filename);
-            }
-            else if (entity is MyObjectBuilder_Character)
-            {
-                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Character)entity, filename);
-            }
-            else if (entity is MyObjectBuilder_FloatingObject)
-            {
-                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_FloatingObject)entity, filename);
-            }
-            else if (entity is MyObjectBuilder_Meteor)
-            {
-                SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Meteor)entity, filename);
+                if (entity is MyObjectBuilder_CubeGrid)
+                {
+                    SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_CubeGrid)entity, filename);
+                }
+                else if (entity is MyObjectBuilder_Character)
+                {
+                    SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Character)entity, filename);
+                }
+                else if (entity is MyObjectBuilder_FloatingObject)
+                {
+                    SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_FloatingObject)entity, filename);
+                }
+                else if (entity is MyObjectBuilder_Meteor)
+                {
+                    SpaceEngineersApi.WriteSpaceEngineersFile((MyObjectBuilder_Meteor)entity, filename);
+                }
             }
         }
 
@@ -537,17 +546,18 @@
             foreach (var filename in filenames)
             {
                 bool isCompressed;
+                string errorInformation;
                 MyObjectBuilder_CubeGrid cubeEntity;
                 MyObjectBuilder_FloatingObject floatingEntity;
                 MyObjectBuilder_Meteor meteorEntity;
                 MyObjectBuilder_Character characterEntity;
                 MyObjectBuilder_Definitions prefabDefinitions;
 
-                if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed))
+                if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed, out errorInformation, false, true))
                 {
                     MergeData(cubeEntity, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed, out errorInformation, false, true))
                 {
                     if (prefabDefinitions.Prefabs != null)
                     {
@@ -565,17 +575,17 @@
                         }
                     }
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out floatingEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out floatingEntity, out isCompressed, out errorInformation, false, true))
                 {
                     var newEntity = AddEntity(floatingEntity);
                     newEntity.EntityId = MergeId(floatingEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out meteorEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out meteorEntity, out isCompressed, out errorInformation, false, true))
                 {
                     var newEntity = AddEntity(meteorEntity);
                     newEntity.EntityId = MergeId(meteorEntity.EntityId, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out characterEntity, out isCompressed))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out characterEntity, out isCompressed, out errorInformation, false, true))
                 {
                     var newEntity = AddEntity(characterEntity);
                     newEntity.EntityId = MergeId(characterEntity.EntityId, ref idReplacementTable);
@@ -644,27 +654,27 @@
                 //var x = SectorData.SectorObjects.Where(s => s is MyObjectBuilder_CubeGrid).Cast<MyObjectBuilder_CubeGrid>().
                 //    Where(s => s.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Pilot == entity)).Select(e => e).ToArray();
 
-                foreach (var sectorObject in ActiveWorld.SectorData.SectorObjects)
+                MyObjectBuilder_Character character = entity as MyObjectBuilder_Character;
+                if (character != null)
                 {
-                    if (sectorObject is MyObjectBuilder_CubeGrid)
+                    foreach (var sectorObject in ActiveWorld.SectorData.SectorObjects)
                     {
-                        foreach (var cubeGrid in ((MyObjectBuilder_CubeGrid)sectorObject).CubeBlocks)
+                        if (sectorObject is MyObjectBuilder_CubeGrid)
                         {
-                            if (cubeGrid is MyObjectBuilder_Cockpit)
+                            foreach (var cubeGrid in ((MyObjectBuilder_CubeGrid)sectorObject).CubeBlocks)
                             {
-                                var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
-
-                                // theoretically with the Hierarchy structure, there could be more than one character attached to a single cube.
-                                // thus, more than 1 pilot.
-                                var pilots = cockpit.GetHierarchyCharacters();
-                                if (pilots.First() == entity)
+                                if (cubeGrid is MyObjectBuilder_Cockpit)
                                 {
-                                    cockpit.Pilot = null;
-                                    cockpit.RemoveHierarchyCharacter(pilots.First());
+                                    var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
 
-                                    var structure = Structures.FirstOrDefault(s => s.EntityBase == sectorObject) as StructureCubeGridModel;
-                                    structure.Pilots--;
-                                    return true;
+                                    // theoretically with the Hierarchy structure, there could be more than one character attached to a single cube.
+                                    // thus, more than 1 pilot.
+                                    if (cockpit.RemoveHierarchyCharacter(character))
+                                    {
+                                        var structure = Structures.FirstOrDefault(s => s.EntityBase == sectorObject) as StructureCubeGridModel;
+                                        structure.Pilots--;
+                                        return true;
+                                    }
                                 }
                             }
                         }
@@ -804,8 +814,7 @@
                 var cockpit = cubeGrid as MyObjectBuilder_Cockpit;
                 if (cockpit != null)
                 {
-                    cockpit.RemoveHierarchyCharacter(cockpit.Pilot);
-                    cockpit.Pilot = null;  // remove any pilots.
+                    cockpit.RemoveHierarchyCharacter();
                 }
 
                 var motorBase = cubeGrid as MyObjectBuilder_MotorBase;
@@ -909,12 +918,12 @@
         {
             //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => b.SubtypeName.Contains("ArmorCorner")).ToList();
             //var corners = viewModel.CubeGrid.CubeBlocks.OfType<MyObjectBuilder_CubeBlock>().ToArray();
-            var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.TubeCurvedRotationBlocks.Contains(b.SubtypeName)).ToList();
+            //var corners = viewModel.CubeGrid.CubeBlocks.Where(b => StructureCubeGridModel.TubeCurvedRotationBlocks.Contains(b.SubtypeName)).ToList();
 
-            foreach (var corner in corners)
-            {
-                Debug.WriteLine("{0}\t = \tAxis24_{1}_{2}", corner.SubtypeName, corner.BlockOrientation.Forward, corner.BlockOrientation.Up);
-            }
+            //foreach (var corner in corners)
+            //{
+            //    Debug.WriteLine("{0}\t = \tAxis24_{1}_{2}", corner.SubtypeName, corner.BlockOrientation.Forward, corner.BlockOrientation.Up);
+            //}
         }
 
         public void TestConvert(StructureCubeGridModel viewModel)
@@ -1205,6 +1214,195 @@
             }
             ConnectedTopBlockCache[topBlockId] = null;
             return null;
+        }
+
+        private class CubeEntityNode
+        {
+            public long EntityId;
+            public MyObjectBuilder_CubeBlock Entity;
+
+            public MyObjectBuilder_CubeGrid RemoteParentEntity;
+            public long RemoteParentEntityId;
+            public long RemoteEntityId;
+            public MyObjectBuilder_CubeBlock RemoteEntity;
+            public GridConnectionType GridConnectionType;
+        }
+
+        private class GridEntityNode
+        {
+            public long ParentEntityId;
+            public MyObjectBuilder_CubeGrid ParentEntity;
+            public Dictionary<long, CubeEntityNode> CubeEntityNodes = new Dictionary<long, CubeEntityNode>();
+        }
+
+        public void BuildGridEntityNodes()
+        {
+            GridEntityNodes.Clear();
+
+            // Build the main list of entities
+            for (int i = 0; i < Structures.Count; i++)
+            {
+                StructureCubeGridModel gridModel = Structures[i] as StructureCubeGridModel;
+                if (gridModel != null)
+                {
+                    GridEntityNode gridEntityNode = new GridEntityNode { ParentEntityId = gridModel.EntityId, ParentEntity = gridModel.CubeGrid };
+                    GridEntityNodes.Add(gridModel.EntityId, gridEntityNode);
+
+                    for (int j = 0; j < gridModel.CubeGrid.CubeBlocks.Count; j++)
+                    {
+                        MyObjectBuilder_CubeBlock block = gridModel.CubeGrid.CubeBlocks[j];
+
+                        // MyObjectBuilder_Wheel
+                        MyObjectBuilder_Wheel wheel = block as MyObjectBuilder_Wheel;
+                        if (wheel != null)
+                        {
+                            gridEntityNode.CubeEntityNodes.Add(block.EntityId, new CubeEntityNode { GridConnectionType = GridConnectionType.Mechanical, EntityId = block.EntityId, Entity = block });
+                            continue;
+                        }
+
+                        // MyObjectBuilder_MotorRotor, MyObjectBuilder_MotorAdvancedRotor, MyObjectBuilder_PistonTop
+                        MyObjectBuilder_AttachableTopBlockBase rotor = block as MyObjectBuilder_AttachableTopBlockBase;
+                        if (rotor != null)
+                        {
+                            gridEntityNode.CubeEntityNodes.Add(block.EntityId, new CubeEntityNode { GridConnectionType = GridConnectionType.Mechanical, EntityId = block.EntityId, Entity = block, RemoteEntityId = rotor.ParentEntityId });
+                            continue;
+                        }
+
+                        // MyObjectBuilder_MotorSuspension,  MyObjectBuilder_MotorStator, MyObjectBuilder_MotorAdvancedStator, MyObjectBuilder_ExtendedPistonBase
+                        MyObjectBuilder_MechanicalConnectionBlock mechanicalConnection = block as MyObjectBuilder_MechanicalConnectionBlock;
+                        if (mechanicalConnection != null)
+                        {
+                            gridEntityNode.CubeEntityNodes.Add(block.EntityId, new CubeEntityNode { GridConnectionType = GridConnectionType.Mechanical, EntityId = block.EntityId, Entity = block, RemoteEntityId = mechanicalConnection?.TopBlockId.Value ?? 0 });
+                            continue;
+                        }
+
+                        MyObjectBuilder_ShipConnector shipConnector = block as MyObjectBuilder_ShipConnector;
+                        if (shipConnector != null && shipConnector.MasterToSlaveTransform != null)
+                        {
+                            // checking MasterToSlaveTransform is the only method to determine if a ShipConnector is locked (~ MyShipConnectorStatus.Connected), as ConnectedEntityId could still be non-zero when the ShipConnector is ready to lock (~ MyShipConnectorStatus.Connectable).
+                            gridEntityNode.CubeEntityNodes.Add(block.EntityId, new CubeEntityNode { GridConnectionType = GridConnectionType.ConnectorLock, EntityId = block.EntityId, Entity = block, RemoteEntityId = shipConnector.ConnectedEntityId });
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            // Crosscheck the remote entities.
+            for (int i = 0; i < Structures.Count; i++)
+            {
+                StructureCubeGridModel gridModel = Structures[i] as StructureCubeGridModel;
+                if (gridModel != null)
+                {
+                    for (int j = 0; j < gridModel.CubeGrid.CubeBlocks.Count; j++)
+                    {
+                        MyObjectBuilder_CubeBlock block = gridModel.CubeGrid.CubeBlocks[j];
+
+                        // MyObjectBuilder_Wheel
+                        MyObjectBuilder_Wheel wheel = block as MyObjectBuilder_Wheel;
+                        if (wheel != null)
+                        {
+                            foreach (var kvp in GridEntityNodes)
+                            {
+                                KeyValuePair<long, CubeEntityNode> node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.RemoteEntityId == wheel.EntityId);
+                                if (node.Value != null)
+                                {
+                                    node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                    node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                    node.Value.RemoteEntity = block;
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+
+                        // MyObjectBuilder_MotorRotor, MyObjectBuilder_MotorAdvancedRotor, MyObjectBuilder_PistonTop
+                        MyObjectBuilder_AttachableTopBlockBase rotor = block as MyObjectBuilder_AttachableTopBlockBase;
+                        if (rotor != null)
+                        {
+                            foreach (var kvp in GridEntityNodes)
+                            {
+                                KeyValuePair<long, CubeEntityNode> node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.RemoteEntityId == rotor.EntityId);
+                                if (node.Value != null)
+                                {
+                                    node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                    node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                    node.Value.RemoteEntity = block;
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+
+                        // MyObjectBuilder_MotorSuspension,  MyObjectBuilder_MotorStator, MyObjectBuilder_MotorAdvancedStator, MyObjectBuilder_ExtendedPistonBase
+                        MyObjectBuilder_MechanicalConnectionBlock mechanicalConnection = block as MyObjectBuilder_MechanicalConnectionBlock;
+                        if (mechanicalConnection != null)
+                        {
+                            long topBlockId = mechanicalConnection?.TopBlockId.Value ?? 0;
+
+                            foreach (var kvp in GridEntityNodes)
+                            {
+                                KeyValuePair<long, CubeEntityNode> node;
+                                if (topBlockId != 0)
+                                {
+                                    // reverse check on wheel, as MyObjectBuilder_Wheel (as of 1.186) doesn't have a property to indicate the suspension it is attached to.
+                                    node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.EntityId == topBlockId);
+                                    if (node.Value != null)
+                                    {
+                                        node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                        node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                        node.Value.RemoteEntityId = block.EntityId;
+                                        node.Value.RemoteEntity = block;
+                                    }
+                                }
+
+                                node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.RemoteEntityId == mechanicalConnection.EntityId);
+                                if (node.Value != null)
+                                {
+                                    node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                    node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                    node.Value.RemoteEntity = block;
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+
+                        MyObjectBuilder_ShipConnector shipConnector = block as MyObjectBuilder_ShipConnector;
+                        if (shipConnector != null)
+                        {
+                            foreach (var kvp in GridEntityNodes)
+                            {
+                                KeyValuePair<long, CubeEntityNode> node = kvp.Value.CubeEntityNodes.FirstOrDefault(e => e.Value.RemoteEntityId == shipConnector.EntityId);
+                                if (node.Value != null)
+                                {
+                                    node.Value.RemoteParentEntity = gridModel.CubeGrid;
+                                    node.Value.RemoteParentEntityId = gridModel.CubeGrid.EntityId;
+                                    node.Value.RemoteEntity = block;
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        public List<MyObjectBuilder_CubeGrid> GetConnectedGridNodes(StructureCubeGridModel structureCubeGrid, GridConnectionType minimumConnectionType)
+        {
+            List<MyObjectBuilder_CubeGrid> list = new List<MyObjectBuilder_CubeGrid>();
+            GridEntityNode parentNode = GridEntityNodes[structureCubeGrid.EntityId];
+            if (parentNode != null)
+            {
+                IEnumerable<MyObjectBuilder_CubeGrid> remoteEntities = parentNode.CubeEntityNodes.Where(e => minimumConnectionType.HasFlag(e.Value.GridConnectionType)).Select(e => e.Value.RemoteParentEntity);
+                foreach (MyObjectBuilder_CubeGrid cubeGrid in remoteEntities)
+                {
+                    if (cubeGrid != null && !list.Contains(cubeGrid))
+                        list.Add(cubeGrid);
+                }
+            }
+            return list;
         }
     }
 }

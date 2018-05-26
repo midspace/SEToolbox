@@ -162,12 +162,9 @@
         {
             var properties = (AsteroidByteFillProperties)fillProperties;
 
-            IList<byte> baseAssets;
-            Dictionary<byte, long> materialVoxelCells;
+            IList<byte> baseAssets = asteroid.CalcVoxelMaterialList();
 
-            asteroid.CalculateMaterialCellAssets(out baseAssets, out materialVoxelCells);
-
-            var distribution = new List<double> { Double.NaN };
+            var distribution = new List<double> { double.NaN };
             var materialSelection = new List<byte> { SpaceEngineersCore.Resources.GetMaterialIndex(properties.MainMaterial.Value) };
 
             if (properties.SecondPercent > 0)
@@ -218,7 +215,7 @@
             }
 
             newDistributiuon.Shuffle();
-            asteroid.SetMaterialAssets(newDistributiuon);
+            asteroid.SetVoxelMaterialList(newDistributiuon);
             //asteroid.ForceVoxelFaceMaterial(_dataModel.BaseMaterial.DisplayName);
         }
     }

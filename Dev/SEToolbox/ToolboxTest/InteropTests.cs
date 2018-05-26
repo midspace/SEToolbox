@@ -18,7 +18,7 @@
             SpaceEngineersCore.LoadDefinitions();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ApiInterop()
         {
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_GravityGenerator)), MyCubeSize.Large, "");
@@ -36,7 +36,7 @@
             Assert.IsNull(d4, "Must be null");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LoadSandbox_Fighter()
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
@@ -46,33 +46,35 @@
 
             MyObjectBuilder_Definitions prefabDefinitions;
             bool isCompressed;
-            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(fighterPath, out prefabDefinitions, out isCompressed);
+            string errorInformation;
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(fighterPath, out prefabDefinitions, out isCompressed, out errorInformation);
 
             Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsFalse(isCompressed, "Sandbox content should not be compressed");
-            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrids[0].CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
-        [TestMethod]
-        public void LoadSandbox_Compressed_BaseEasyStart()
+        [TestMethod, TestCategory("UnitTest")]
+        public void LoadSandbox_Binary_BaseEasyStart()
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\LargeShipRed.sbc");
+            var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\LargeShipRed.sbcPB");
             Assert.IsTrue(File.Exists(baseEasyStart1Path), "Sandbox content file should exist");
 
             MyObjectBuilder_Definitions prefabDefinitions;
             bool isCompressed;
-            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(baseEasyStart1Path, out prefabDefinitions, out isCompressed);
+            string errorInformation;
+            var ret = SpaceEngineersApi.TryReadSpaceEngineersFile(baseEasyStart1Path, out prefabDefinitions, out isCompressed, out errorInformation);
 
             Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
-            Assert.IsTrue(isCompressed, "Sandbox content should be compressed");
-            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+            Assert.IsFalse(isCompressed, "Sandbox content should be compressed");
+            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrids[0].CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void RotateComponent()
         {
             var d1 = SpaceEngineersApi.GetCubeDefinition(new MyObjectBuilderType(typeof(MyObjectBuilder_Thrust)), MyCubeSize.Large, "LargeBlockLargeThrust");

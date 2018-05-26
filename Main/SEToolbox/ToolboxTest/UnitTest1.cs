@@ -4,20 +4,19 @@
     using System.Collections.Generic;
     using System.Drawing.Imaging;
     using System.IO;
+    using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage;
+    using VRage.Compression;
+    using VRage.FileSystem;
     using VRage.Game;
     using VRage.ObjectBuilders;
     using VRageMath;
     using Color = System.Drawing.Color;
 
     [TestClass]
-    // TODO: should use DeploymentItem attributes, but this will screw up all file dependant tests.
-    //       It's an all or nothing, approach to get the correct binaries into the tests.
-    //       Also, need some way of getting the Test Settings to sticking to X64 architecture.
-    //[DeploymentItem(@"TestAssets\SANDBOX_0_0_0_.XML.sbs", "TestAssets")]
     public class UnitTest1
     {
         [TestInitialize]
@@ -27,14 +26,16 @@
             {
                 SpaceEngineersCore.LoadDefinitions();
             }
+#pragma warning disable 168
             // For debugging tests.
             catch (Exception ex)
+#pragma warning restore 168
             {
                 throw;
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void GenerateTempFiles()
         {
             for (var i = 0; i < 10; i++)
@@ -49,7 +50,7 @@
             TempfileUtil.Dispose();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void TestImageOptimizer1()
         {
             var filename = Path.GetFullPath(@".\TestAssets\7242630_orig.jpg");
@@ -58,7 +59,7 @@
             bmp.Save(outputFileTest, ImageFormat.Png);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void TestImageOptimizer2()
         {
             var filename = Path.GetFullPath(@".\TestAssets\7242630_scale432.png");
@@ -67,7 +68,7 @@
             bmp.Save(outputFileTest, ImageFormat.Png);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void TestXmlCompacter1()
         {
             var filenameSource = Path.GetFullPath(@".\TestAssets\test.xml");
@@ -82,7 +83,7 @@
             Assert.AreEqual(1510, newFileSize, "new file size");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void LocateSpaceEngineersApplication()
         {
             var location = ToolboxUpdater.GetApplicationFilePath();
@@ -90,8 +91,61 @@
             Assert.IsTrue(Directory.Exists(location), "Filepath should exist on developer machine");
         }
 
+        [TestMethod, TestCategory("UnitTest")]
+        public void ExtractSandboxFromZip()
+        {
+            const string filename = @".\TestAssets\Sample World.sbw";
 
+            MyObjectBuilder_Checkpoint checkpoint;
+
+            using (MyZipArchive archive = MyZipArchive.OpenOnFile(filename))
+            {
+                MyZipFileInfo fileInfo = archive.GetFile(SpaceEngineersConsts.SandBoxCheckpointFilename);
+                checkpoint = SpaceEngineersApi.ReadSpaceEngineersFile<MyObjectBuilder_Checkpoint>(fileInfo.GetStream());
+            }
+
+            Assert.AreEqual("Quad Scissor Doors", checkpoint.SessionName, "Checkpoint SessionName must match!");
+        }
+
+        // We're not using the zip-extract to folder currently.
+        [Ignore]
         [TestMethod]
+        public void ExtractZipFileToFolder()
+        {
+            const string filename = @".\TestAssets\Sample World.sbw";
+            const string folder = @".\TestOutput\Sample World";
+
+            Assert.IsTrue(File.Exists(filename), "Source file must exist");
+
+            ZipTools.MakeClearDirectory(folder);
+
+            // Keen's API doesn't know difference between file and folder.
+            MyZipArchive.ExtractToDirectory(filename, folder);
+
+            Assert.IsTrue(File.Exists(Path.Combine(folder, SpaceEngineersConsts.SandBoxCheckpointFilename)), "Destination file must exist");
+        }
+
+        // We're not using the zip-pack from folder currently.
+        [Ignore]
+        [TestMethod]
+        public void ExtractZipAndRepack()
+        {
+            const string filename = @".\TestAssets\Sample World.sbw";
+            const string folder = @".\TestOutput\Sample World Repack";
+
+            ZipTools.MakeClearDirectory(folder);
+
+            // Keen's API doesn't know difference between file and folder.
+            MyZipArchive.ExtractToDirectory(filename, folder);
+
+            const string newFilename = @".\TestOutput\New World.sbw";
+
+            MyZipArchive.CreateFromDirectory(folder, newFilename, DeflateOptionEnum.Maximum, false);
+
+            Assert.IsTrue(File.Exists(newFilename), "Destination file must exist");
+        }
+
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromCompressedSandbox()
         {
             const string filename = @".\TestAssets\SANDBOX_0_0_0_.sbs";
@@ -101,22 +155,23 @@
             ZipTools.GZipUncompress(filename, xmlfilename);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromXmlSandbox()
         {
             const string filename = @".\TestAssets\SANDBOX_0_0_0_.XML.sbs";
 
             MyObjectBuilder_Sector sectorData;
             bool isCompressed;
-            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed);
+            string errorInformation;
+            bool ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed, out errorInformation);
 
+            Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsFalse(isCompressed, "file should not be compressed");
             Assert.IsNotNull(sectorData, "sectorData != null");
             Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
         }
 
-
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromProtoBufSandbox()
         {
             // filename will automatically be concatenated with "PB"
@@ -124,15 +179,16 @@
 
             MyObjectBuilder_Sector sectorData;
             bool isCompressed;
-            SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed);
+            string errorInformation;
+            bool ret = SpaceEngineersApi.TryReadSpaceEngineersFile<MyObjectBuilder_Sector>(filename, out sectorData, out isCompressed, out errorInformation);
 
+            Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsFalse(isCompressed, "file should not be compressed");
             Assert.IsNotNull(sectorData, "sectorData != null");
             Assert.IsTrue(sectorData.SectorObjects.Count > 0, "sectorData should be more than 0");
         }
 
-
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void SandboxColorTest()
         {
             var colors = new Color[]
@@ -148,13 +204,13 @@
             var hsvList = new List<SerializableVector3>();
             foreach (var color in colors)
             {
-                hsvList.Add(color.ToSandboxHsvColor());
+                hsvList.Add(color.FromPaletteColorToHsvMask());
             }
 
             var rgbList = new List<Color>();
             foreach (var hsv in hsvList)
             {
-                rgbList.Add(hsv.ToSandboxDrawingColor());
+                rgbList.Add(hsv.FromHsvMaskToPaletteColor());
             }
 
             var rgbArray = rgbList.ToArray();
@@ -167,7 +223,7 @@
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void VRageColorTest()
         {
             var c1 = Color.FromArgb(255, 255, 255);
@@ -195,7 +251,45 @@
             Assert.AreEqual(rgb3.G, c3.G, "Green Should Equal");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
+        public void VRageHSVColorTest()
+        {
+            // hue Slider is 0~360. Stored as 0~1.
+            // saturation Slider is 0~1. Stored as -1~1.
+            // value Slider is 0~1. Stored as -1~1.
+
+            var hsvColors = new Dictionary<string, SerializableVector3>
+            {
+                {"test range 1", new SerializableVector3(0, -1, -1)},
+                {"test range 2", new SerializableVector3(0.5f, 0, 0)},
+                {"test range 3", new SerializableVector3(1, 1, 1)},
+                {"INGAME dark red", new SerializableVector3(0f,0f,0.05f)},
+                {"INGAME dark green", new SerializableVector3(0.333333343f,-0.48f,-0.25f)},
+                {"INGAME dark blue", new SerializableVector3(0.575f,0f,0f)},
+                {"INGAME dark yellow", new SerializableVector3(0.122222222f,-0.1f,0.26f)},
+                {"INGAME dark white", new SerializableVector3(0f,-0.8f,0.4f)},
+                {"INGAME black", new SerializableVector3(0f,-0.96f,-0.5f)},
+                {"INGAME light gray", new SerializableVector3(0f,-0.85f,0.2f)},
+                {"INGAME light red", new SerializableVector3(0f,0.15f,0.25f)},
+                {"INGAME light green", new SerializableVector3(0.333333343f,-0.33f,-0.05f)},
+                {"INGAME light blue", new SerializableVector3(0.575f,0.15f,0.2f)},
+                {"INGAME light yellow", new SerializableVector3(0.122222222f,0.05f,0.46f)},
+                {"INGAME white", new SerializableVector3(0f,-0.8f,0.6f)},
+                {"INGAME dark dark gray", new SerializableVector3(0f,-0.81f,-0.13f)},
+            };
+
+            foreach(var kvp in hsvColors)
+            {
+                string name = kvp.Key;
+                SerializableVector3 storedHsv = kvp.Value;
+                System.Drawing.Color myColor1 = storedHsv.FromHsvMaskToPaletteColor();
+                SerializableVector3 newHsv = myColor1.FromPaletteColorToHsvMask();
+                System.Drawing.Color myColor2 = ((SerializableVector3)newHsv).FromHsvMaskToPaletteColor();
+                Assert.AreEqual(myColor1, myColor2, $"Color '{name}' Should Equal");
+            }
+        }
+
+        [TestMethod, TestCategory("UnitTest")]
         public void SingleConversionTest()
         {
             Single f1 = -17.6093254f;
@@ -216,7 +310,7 @@
             Assert.AreEqual(f3, g3, "Should Equal");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void BoundingBoxIntersectKeen()
         {
             var point = new VRageMath.Vector3D(5d, 3.5d, 4d);
@@ -229,7 +323,7 @@
             Assert.AreEqual(0, f, "Should Equal");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void BoundingBoxIntersectCustom()
         {
             var point = new VRageMath.Vector3D(5d, 3.5d, 4d);
@@ -241,7 +335,7 @@
             Assert.AreEqual(new VRageMath.Vector3D(4.9176489098920966d, 3.5151384795308953d, 6.00000000000319d), p.Value, "Should Equal");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void CubeRotate()
         {
             var positionOrientation = new MyPositionAndOrientation(new Vector3D(10, 10, 10), Vector3.Backward, Vector3.Up);
@@ -269,7 +363,7 @@
         /// This test is critical for rotation a station. For some reason, 
         /// if the rotation is not exactly 1, or 0, then there is an issue placing cubes on the station.
         /// </summary>
-        [TestMethod]
+        [TestMethod, TestCategory("UnitTest")]
         public void Rotation()
         {
             var positionAndOrientation = new MyPositionAndOrientation(
@@ -281,7 +375,9 @@
             var quaternion = Quaternion.CreateFromYawPitchRoll(0, 0, -VRageMath.MathHelper.PiOver2);
             var o = positionAndOrientation.ToQuaternion() * quaternion;
             var on = Quaternion.Normalize(o);
-            var p = new MyPositionAndOrientation(on.ToMatrix());
+            Matrix m = on.ToMatrix();
+            m = Matrix.Round(ref m);
+            var p = new MyPositionAndOrientation(m);
 
             var quaternion2 = QuaternionD.CreateFromYawPitchRoll(0, 0, -Math.PI / 2);
             var o2 = positionAndOrientation.ToQuaternionD() * quaternion2;
@@ -319,6 +415,16 @@
             Assert.AreEqual(up.X, p.Up.X, "Up.X Should Equal");
             Assert.AreEqual(up.Y, p.Up.Y, "Up.Y Should Equal");
             Assert.AreEqual(up.Z, p.Up.Z, "Up.Z Should Equal");
+        }
+
+        /// <summary>
+        /// This test to to verify that the webpage and RegEx pattern for finding the version and url of the current version of SEToolbox still works.
+        /// </summary>
+        [TestMethod, TestCategory("UnitTest")]
+        public void CheckCurrentVersion()
+        {
+            ApplicationRelease update = CodeRepositoryReleases.CheckForUpdates(CodeRepositoryType.GitHub, SEToolbox.Properties.Resources.GlobalUpdatesUrl);
+            Assert.IsNotNull(update);
         }
     }
 }

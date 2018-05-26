@@ -86,11 +86,11 @@
 
         public System.Windows.Media.Brush Color
         {
-            get { return new System.Windows.Media.SolidColorBrush(DataModel.Color.ToSandboxMediaColor()); }
+            get { return new System.Windows.Media.SolidColorBrush(DataModel.Color.FromHsvMaskToPaletteMediaColor()); }
 
             set
             {
-                DataModel.Color = ((System.Windows.Media.SolidColorBrush)value).Color.ToSandboxHsvColor();
+                DataModel.Color = ((System.Windows.Media.SolidColorBrush)value).Color.FromPaletteColorToHsvMask();
                 MainViewModel.IsModified = true;
             }
         }

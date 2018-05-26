@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Support
 {
+    using System;
     using System.Collections.Generic;
     using Res = SEToolbox.Properties.Resources;
 
@@ -185,5 +186,36 @@
     {
         None,
         ByteFiller
+    }
+
+    public enum ReportType
+    {
+        Unknown,
+        Text,
+        Html,
+        Xml
+    }
+
+    [Flags]
+    public enum GridConnectionType
+    {
+        None = 0x00,
+
+        /// <summary>
+        /// Landing Gear.
+        /// </summary>
+        GearLock = 0x01,
+
+        /// <summary>
+        /// Connector.
+        /// </summary>
+        ConnectorLock = 0x02,
+
+        /// <summary>
+        /// Piston, Rotor, Suspension/Wheel.
+        /// </summary>
+        Mechanical = 0x04,
+
+        ConnectorLock_Mechanical = ConnectorLock + Mechanical,
     }
 }

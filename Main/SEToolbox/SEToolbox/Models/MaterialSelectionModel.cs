@@ -1,5 +1,7 @@
 ﻿namespace SEToolbox.Models
 {
+    using SEToolbox.Interop;
+
     public class MaterialSelectionModel : BaseModel
     {
         private string _displayName;
@@ -14,10 +16,7 @@
 
         public string DisplayName
         {
-            get
-            {
-                return _displayName;
-            }
+            get { return _displayName; }
 
             set
             {
@@ -31,10 +30,7 @@
 
         public string Value
         {
-            get
-            {
-                return _value;
-            }
+            get { return _value; }
 
             set
             {
@@ -46,12 +42,11 @@
             }
         }
 
+        public byte? MaterialIndex => _value == null ? (byte?)null : SpaceEngineersCore.Resources.GetMaterialIndex(_value);
+
         public bool IsRare
         {
-            get
-            {
-                return _isRare;
-            }
+            get { return _isRare; }
 
             set
             {
@@ -65,10 +60,7 @@
 
         public float MinedRatio
         {
-            get
-            {
-                return _minedRatio;
-            }
+            get { return _minedRatio; }
 
             set
             {

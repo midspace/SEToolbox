@@ -19,7 +19,7 @@ namespace SEToolbox.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -257,7 +257,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wheel.
+        ///   Looks up a localized string similar to Wheel - Attached {0}.
         /// </summary>
         public static string ClsCubeGridWheelAttached {
             get {
@@ -266,7 +266,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wheel - Attached {0}.
+        ///   Looks up a localized string similar to Wheel.
         /// </summary>
         public static string ClsCubeGridWheelDetached {
             get {
@@ -401,6 +401,33 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Times started since game update:.
+        /// </summary>
+        public static string ClsErrorTimesStartedLastGameUpdate {
+            get {
+                return ResourceManager.GetString("ClsErrorTimesStartedLastGameUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Times started since last reset:.
+        /// </summary>
+        public static string ClsErrorTimesStartedLastReset {
+            get {
+                return ResourceManager.GetString("ClsErrorTimesStartedLastReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Times started total:.
+        /// </summary>
+        public static string ClsErrorTimesStartedTotal {
+            get {
+                return ResourceManager.GetString("ClsErrorTimesStartedTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unhandled Exception.
         /// </summary>
         public static string ClsErrorUnhandled {
@@ -415,6 +442,24 @@ namespace SEToolbox.Properties {
         public static string ClsErrorVersion {
             get {
                 return ResourceManager.GetString("ClsErrorVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There have been {0:#,##0} changes made to the selected grids..
+        /// </summary>
+        public static string ClsExplorerGridChangesMade {
+            get {
+                return ResourceManager.GetString("ClsExplorerGridChangesMade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes have been made.
+        /// </summary>
+        public static string ClsExplorerTitleChangesMade {
+            get {
+                return ResourceManager.GetString("ClsExplorerTitleChangesMade", resourceCulture);
             }
         }
         
@@ -721,6 +766,15 @@ namespace SEToolbox.Properties {
         public static string ClsReportDate {
             get {
                 return ResourceManager.GetString("ClsReportDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error:.
+        /// </summary>
+        public static string ClsReportError {
+            get {
+                return ResourceManager.GetString("ClsReportError", resourceCulture);
             }
         }
         
@@ -2700,7 +2754,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Center:.
+        ///   Looks up a localized string similar to Volume center:.
         /// </summary>
         public static string CtlVoxelCenter {
             get {
@@ -3108,7 +3162,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify filename to export Prefab to (name is embded into files).
+        ///   Looks up a localized string similar to Specify filename to export Prefab to (name is embedded into files).
         /// </summary>
         public static string DialogExportPrefabObjectTitle {
             get {
@@ -3144,7 +3198,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify filename to export SpawnGroup to (name is embded into files).
+        ///   Looks up a localized string similar to Specify filename to export SpawnGroup to (name is embedded into files).
         /// </summary>
         public static string DialogExportSpawnGroupObjectTitle {
             get {
@@ -3317,6 +3371,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sandbox Binary Content files.
+        /// </summary>
+        public static string DialogSandboxBinaryContentFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxBinaryContentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sandbox Content files.
         /// </summary>
         public static string DialogSandboxContentFiles {
@@ -3326,7 +3389,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Space Engineers Sandbox.
+        ///   Looks up a localized string similar to Space Engineers Sandbox files.
         /// </summary>
         public static string DialogSandboxFiles {
             get {
@@ -3335,11 +3398,29 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sandbox Prefab files.
+        ///   Looks up a localized string similar to Sandbox Prefab Binary files.
         /// </summary>
-        public static string DialogSandboxPrefabFiles {
+        public static string DialogSandboxPrefabBinaryFiles {
             get {
-                return ResourceManager.GetString("DialogSandboxPrefabFiles", resourceCulture);
+                return ResourceManager.GetString("DialogSandboxPrefabBinaryFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sandbox Prefab Xml files.
+        /// </summary>
+        public static string DialogSandboxPrefabXmlFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxPrefabXmlFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sandbox Xml Content files.
+        /// </summary>
+        public static string DialogSandboxXmlContentFiles {
+            get {
+                return ResourceManager.GetString("DialogSandboxXmlContentFiles", resourceCulture);
             }
         }
         
@@ -3475,7 +3556,116 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified file &apos;{0}&apos; is corrupt and does not apper to be a valid compressed archive file..
+        ///   Looks up a localized string similar to Specified directory does not exist..
+        /// </summary>
+        public static string ErrorDirectoryNotFound {
+            get {
+                return ResourceManager.GetString("ErrorDirectoryNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specified save game could not be found..
+        /// </summary>
+        public static string ErrorGameNotFound {
+            get {
+                return ResourceManager.GetString("ErrorGameNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The blueprint name contains invalid characters. Please remove any symbols before continuing..
+        /// </summary>
+        public static string ErrorInvalidBlueprintCharactersUsed {
+            get {
+                return ResourceManager.GetString("ErrorInvalidBlueprintCharactersUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A blueprint of that name already exists. Do you wish to overwrite it?.
+        /// </summary>
+        public static string ErrorInvalidBlueprintExists {
+            get {
+                return ResourceManager.GetString("ErrorInvalidBlueprintExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blueprint exists.
+        /// </summary>
+        public static string ErrorInvalidBlueprintExistsTitle {
+            get {
+                return ResourceManager.GetString("ErrorInvalidBlueprintExistsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Blueprint Name.
+        /// </summary>
+        public static string ErrorInvalidBlueprintNameTitle {
+            get {
+                return ResourceManager.GetString("ErrorInvalidBlueprintNameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  # Invalid Save # .
+        /// </summary>
+        public static string ErrorInvalidSaveLabel {
+            get {
+                return ResourceManager.GetString("ErrorInvalidSaveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load file: {0}
+        ///Reason: {1}.
+        /// </summary>
+        public static string ErrorLoadFileError {
+            get {
+                return ResourceManager.GetString("ErrorLoadFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while loading a save file..
+        /// </summary>
+        public static string ErrorLoadSaveGameFileError {
+            get {
+                return ResourceManager.GetString("ErrorLoadSaveGameFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Blueprints path does not exist under this profile (Dedicated Server or Service)..
+        /// </summary>
+        public static string ErrorNoBlueprintPath {
+            get {
+                return ResourceManager.GetString("ErrorNoBlueprintPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot Save Blueprint.
+        /// </summary>
+        public static string ErrorNoBlueprintPathTitle {
+            get {
+                return ResourceManager.GetString("ErrorNoBlueprintPathTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack:.
+        /// </summary>
+        public static string ErrorStackLabel {
+            get {
+                return ResourceManager.GetString("ErrorStackLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified file &apos;{0}&apos; is corrupt and does not appear to be a valid compressed archive file..
         /// </summary>
         public static string Exception_CorruptZipFile {
             get {
@@ -4724,6 +4914,51 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string WnBlueprintDialogBtnCancel {
+            get {
+                return ResourceManager.GetString("WnBlueprintDialogBtnCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string WnBlueprintDialogBtnOkay {
+            get {
+                return ResourceManager.GetString("WnBlueprintDialogBtnOkay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a name for the blueprint. If the name already exists in your local blueprint folder, you will be prompted to overwrite it..
+        /// </summary>
+        public static string WnBlueprintDialogLabelDescription {
+            get {
+                return ResourceManager.GetString("WnBlueprintDialogLabelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name:.
+        /// </summary>
+        public static string WnBlueprintDialogLabelName {
+            get {
+                return ResourceManager.GetString("WnBlueprintDialogLabelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Blueprint.
+        /// </summary>
+        public static string WnBlueprintSaveDialogTitle {
+            get {
+                return ResourceManager.GetString("WnBlueprintSaveDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change Built By.
         /// </summary>
         public static string WnChangeBuiltByTitle {
@@ -4814,6 +5049,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string WnComponentsColComponentMod {
+            get {
+                return ResourceManager.GetString("WnComponentsColComponentMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string WnComponentsColComponentName {
@@ -4886,6 +5130,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string WnComponentsColCubeMod {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubeMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string WnComponentsColCubeName {
@@ -4949,6 +5202,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string WnComponentsColItemMod {
+            get {
+                return ResourceManager.GetString("WnComponentsColItemMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string WnComponentsColItemName {
@@ -4990,6 +5252,15 @@ namespace SEToolbox.Properties {
         public static string WnComponentsColMaterialMineRate {
             get {
                 return ResourceManager.GetString("WnComponentsColMaterialMineRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string WnComponentsColMaterialMod {
+            get {
+                return ResourceManager.GetString("WnComponentsColMaterialMod", resourceCulture);
             }
         }
         
@@ -5080,6 +5351,51 @@ namespace SEToolbox.Properties {
         public static string WnComponentsTitle {
             get {
                 return ResourceManager.GetString("WnComponentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WnErrorDialogBtnClose {
+            get {
+                return ResourceManager.GetString("WnErrorDialogBtnClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy text.
+        /// </summary>
+        public static string WnErrorDialogBtnCopy {
+            get {
+                return ResourceManager.GetString("WnErrorDialogBtnCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string WnErrorDialogBtnOkay {
+            get {
+                return ResourceManager.GetString("WnErrorDialogBtnOkay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error Text:.
+        /// </summary>
+        public static string WnErrorDialogLabelDescription {
+            get {
+                return ResourceManager.GetString("WnErrorDialogLabelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string WnErrorDialogTitle {
+            get {
+                return ResourceManager.GetString("WnErrorDialogTitle", resourceCulture);
             }
         }
         
@@ -5183,7 +5499,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy GPS.
+        ///   Looks up a localized string similar to Copy _GPS.
         /// </summary>
         public static string WnExplorerContextCopyGps {
             get {
@@ -5192,11 +5508,38 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete.
+        ///   Looks up a localized string similar to _Delete.
         /// </summary>
         public static string WnExplorerContextDelete {
             get {
                 return ResourceManager.GetString("WnExplorerContextDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all _Connector joined grids.
+        /// </summary>
+        public static string WnExplorerContextSelectConnector {
+            get {
+                return ResourceManager.GetString("WnExplorerContextSelectConnector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all _Mechanical joined grids.
+        /// </summary>
+        public static string WnExplorerContextSelectMechanical {
+            get {
+                return ResourceManager.GetString("WnExplorerContextSelectMechanical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all M_echanical and Connector joined grids.
+        /// </summary>
+        public static string WnExplorerContextSelectMechanicalConnector {
+            get {
+                return ResourceManager.GetString("WnExplorerContextSelectMechanicalConnector", resourceCulture);
             }
         }
         
@@ -5237,6 +5580,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export as Blueprint.
+        /// </summary>
+        public static string WnExplorerMnuExportBlueprint {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuExportBlueprint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export selected ships and stations to a local Blueprint..
+        /// </summary>
+        public static string WnExplorerMnuExportBlueprintTooltip {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuExportBlueprintTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export as prefab.
         /// </summary>
         public static string WnExplorerMnuExportPrefab {
@@ -5246,7 +5607,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export selected ships and stations to a single an prefab .sbc file..
+        ///   Looks up a localized string similar to Export selected ships and stations to a single prefab .sbc file..
         /// </summary>
         public static string WnExplorerMnuExportPrefabTooltip {
             get {
@@ -5300,7 +5661,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export selected ships, stations and asteroids to a single an prefab .sbc file, spawngroup file and asteroids..
+        ///   Looks up a localized string similar to Export selected ships, stations and asteroids to a single prefab .sbc file, spawngroup file and asteroids..
         /// </summary>
         public static string WnExplorerMnuExportSpawnGroupTooltip {
             get {
@@ -5435,6 +5796,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Joined Grids.
+        /// </summary>
+        public static string WnExplorerMnuJoinedGrids {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuJoinedGrids", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Options.
         /// </summary>
         public static string WnExplorerMnuOptions {
@@ -5552,6 +5922,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inertia Tensor On.
+        /// </summary>
+        public static string WnExplorerMnuSelectionInertiaTensorOn {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuSelectionInertiaTensorOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All selected ship blocks will have all Inertia Tensor turned On.
+        /// </summary>
+        public static string WnExplorerMnuSelectionInertiaTensorOnTooltip {
+            get {
+                return ResourceManager.GetString("WnExplorerMnuSelectionInertiaTensorOnTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Merge 2 Asteroids into 1.
         /// </summary>
         public static string WnExplorerMnuSelectionMergeAsteroid {
@@ -5579,7 +5967,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Joins 2 foriegn parts to form a new ship..
+        ///   Looks up a localized string similar to Joins 2 foreign parts to form a new ship..
         /// </summary>
         public static string WnExplorerMnuSelectionMergeShipTooltip {
             get {
@@ -5606,7 +5994,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejoins 2 parts from a broken ship back togeather..
+        ///   Looks up a localized string similar to Rejoins 2 parts from a broken ship back together..
         /// </summary>
         public static string WnExplorerMnuSelectionRejoinShipTooltip {
             get {

@@ -91,10 +91,7 @@
         [XmlIgnore]
         public bool IsValid
         {
-            get
-            {
-                return _isValid;
-            }
+            get { return _isValid; }
 
             set
             {

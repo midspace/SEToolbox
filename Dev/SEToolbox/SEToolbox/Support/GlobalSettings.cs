@@ -15,11 +15,6 @@
         public static GlobalSettings Default = new GlobalSettings();
 
         /// <summary>
-        /// Temporary store for Game Version.
-        /// </summary>
-        public Version SEVersion;
-
-        /// <summary>
         /// Temporary property to reprompt user to game installation path.
         /// </summary>
         public bool PromptUser;
@@ -44,6 +39,11 @@
 
         #region properties
         
+        /// <summary>
+        /// Temporary store for Game Version.
+        /// </summary>
+        public Version SEVersion { get; set; }
+
         /// <summary>
         /// Application binary path.
         /// </summary>
@@ -86,6 +86,21 @@
         /// </summary>
         public string CustomVoxelPath { get; set; }
 
+        /// <summary>
+        /// Counter for the number times successfully started up SEToolbox, total.
+        /// </summary>
+        public int? TimesStartedTotal { get; set; }
+
+        /// <summary>
+        /// Counter for the number times successfully started up SEToolbox, since the last reset.
+        /// </summary>
+        public int? TimesStartedLastReset { get; set; }
+
+        /// <summary>
+        /// Counter for the number times successfully started up SEToolbox, since the last game update.
+        /// </summary>
+        public int? TimesStartedLastGameUpdate { get; set; }
+
         #endregion
 
         #region methods
@@ -94,6 +109,7 @@
         {
             var key = Registry.CurrentUser.OpenSubKey(BaseKey, true) ?? Registry.CurrentUser.CreateSubKey(BaseKey);
 
+            UpdateValue(key, "SEVersion", SEVersion);
             UpdateValue(key, "SEBinPath", SEBinPath);
             UpdateValue(key, "CustomUserSavePaths", CustomUserSavePaths);
             UpdateValue(key, "LanguageCode", LanguageCode);
@@ -106,6 +122,9 @@
             UpdateValue(key, "UseCustomResource", UseCustomResource);
             UpdateValue(key, "IgnoreUpdateVersion", IgnoreUpdateVersion);
             UpdateValue(key, "CustomVoxelPath", CustomVoxelPath);
+            UpdateValue(key, "TimesStartedTotal", TimesStartedTotal);
+            UpdateValue(key, "TimesStartedLastReset", TimesStartedLastReset);
+            UpdateValue(key, "TimesStartedLastGameUpdate", TimesStartedLastGameUpdate);
         }
 
         public void Load()
@@ -118,6 +137,7 @@
                 return;
             }
 
+            SEVersion = ReadValue<Version>(key, "SEVersion", null);
             SEBinPath = ReadValue<string>(key, "SEBinPath", null);
             LanguageCode = ReadValue<string>(key, "LanguageCode", CultureInfo.CurrentUICulture.IetfLanguageTag);
             CustomUserSavePaths = ReadValue<string>(key, "CustomUserSavePaths", null);
@@ -130,6 +150,9 @@
             UseCustomResource = ReadValue<bool?>(key, "UseCustomResource", true);
             IgnoreUpdateVersion = ReadValue<string>(key, "IgnoreUpdateVersion", null);
             CustomVoxelPath = ReadValue<string>(key, "CustomVoxelPath", null);
+            TimesStartedTotal = ReadValue<int?>(key, "TimesStartedTotal", null);
+            TimesStartedLastReset = ReadValue<int?>(key, "TimesStartedLastReset", null);
+            TimesStartedLastGameUpdate = ReadValue<int?>(key, "TimesStartedLastGameUpdate", null);
 
             if (WindowTop.HasValue && (int.MinValue > WindowTop || WindowTop > int.MaxValue))
                 WindowTop = null;
@@ -146,6 +169,7 @@
         /// </summary>
         public void Reset()
         {
+            SEVersion = null;
             SEBinPath = null;
             LanguageCode = CultureInfo.CurrentUICulture.IetfLanguageTag;  // Display language (only applied on multi lingual deployment of Windows OS).
             CustomUserSavePaths = null;
@@ -157,6 +181,9 @@
             AlwaysCheckForUpdates = true;
             IgnoreUpdateVersion = null;
             CustomVoxelPath = null;
+            // don't reset TimesStartedTotal.
+            TimesStartedLastReset = null;
+            // don't reset TimesStartedLastGameUpdate.
         }
 
         public static Version GetAppVersion(bool ignoreBuildRevision = false)

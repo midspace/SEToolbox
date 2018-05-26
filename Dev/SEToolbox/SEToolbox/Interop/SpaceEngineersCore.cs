@@ -53,7 +53,7 @@
 
             VRageRender.MyRenderProxy.Initialize(new MyNullRender());
             // We create a whole instance of MySandboxGame!
-            // If this is causing an exception, then there is a missing depdancy.
+            // If this is causing an exception, then there is a missing dependency.
             MySandboxGame gameTemp = new MySandboxGame(null);
           
             // creating MySandboxGame will reset the CurrentUICulture, so I have to reapply it.
@@ -61,36 +61,25 @@
             SpaceEngineersApi.LoadLocalization();
             MyStorageBase.UseStorageCache = false;
 
-            try
-            {
-                // Replace the private constructor on MySession, so we can create it without getting involed with Havok and other depdancies.
-                var keenStart = typeof(Sandbox.Game.World.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(MySyncLayer), typeof(bool) }, null);
-                var ourStart = typeof(SEToolbox.Interop.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(MySyncLayer), typeof(bool) }, null);
-                ReflectionUtil.ReplaceMethod(ourStart, keenStart);
+            #region MySession creation
 
+            // Replace the private constructor on MySession, so we can create it without getting involed with Havok and other depdancies.
+            var keenStart = typeof(Sandbox.Game.World.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(MySyncLayer), typeof(bool) }, null);
+            var ourStart = typeof(SEToolbox.Interop.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(MySyncLayer), typeof(bool) }, null);
+            ReflectionUtil.ReplaceMethod(ourStart, keenStart);
 
-                // Create an empty instance of MySession for use by low level code.
-                ConstructorInfo constructorInfo = typeof(Sandbox.Game.World.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[0], null);
-                object mySession = constructorInfo.Invoke(new object[0]);
+            // Create an empty instance of MySession for use by low level code.
+            Sandbox.Game.World.MySession mySession = ReflectionUtil.ConstructPrivateClass<Sandbox.Game.World.MySession>(new Type[0], new object[0]);
+            ReflectionUtil.ConstructField(mySession, "m_sessionComponents"); // Required as the above code doesn't populate it during ctor of MySession.
+            mySession.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
 
-                // Assign the instance back to the static.
-                Sandbox.Game.World.MySession.Static = (Sandbox.Game.World.MySession)mySession;
-                Sandbox.Game.World.MySession.Static.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
-            }
-            catch (Exception ex)
-            {
-                Debugger.Break();
-            }
+            // Assign the instance back to the static.
+            Sandbox.Game.World.MySession.Static = mySession;
 
-            try
-            {
-                Sandbox.Game.GameSystems.MyHeightMapLoadingSystem.Static = new MyHeightMapLoadingSystem();
-                Sandbox.Game.GameSystems.MyHeightMapLoadingSystem.Static.LoadData();
-            }
-            catch (Exception ex)
-            {
-                Debugger.Break();
-            }
+            Sandbox.Game.GameSystems.MyHeightMapLoadingSystem.Static = new MyHeightMapLoadingSystem();
+            Sandbox.Game.GameSystems.MyHeightMapLoadingSystem.Static.LoadData();
+
+            #endregion
 
             _stockDefinitions = new SpaceEngineersResources();
             _stockDefinitions.LoadDefinitions();

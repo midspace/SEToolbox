@@ -243,5 +243,5 @@ FakesAssemblies/
 *.vsprops
 user.targets
 
-#Nothing in the .vs folder belongs in git
-.vs/
+# Nothing in the .vs folder belongs in git
+.vs

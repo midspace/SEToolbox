@@ -498,6 +498,14 @@
             MainViewModel.IsModified = true;
         }
 
+        public int SetInertiaTensor(bool state)
+        {
+            int count = DataModel.SetInertiaTensor(state);
+            if (count > 0)
+                MainViewModel.IsModified = true;
+            return count;
+        }
+
         public bool ReorientStationCanExecute()
         {
             return true;
@@ -963,7 +971,7 @@
                 {
                     MainViewModel.Progress++;
                     if (colorDialog.DrawingColor.HasValue)
-                        cube.UpdateColor(colorDialog.DrawingColor.Value.ToSandboxHsvColor());
+                        cube.UpdateColor(colorDialog.DrawingColor.Value.FromPaletteColorToHsvMask());
                 }
 
                 MainViewModel.ClearProgress();

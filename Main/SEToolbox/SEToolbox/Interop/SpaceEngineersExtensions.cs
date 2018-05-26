@@ -6,7 +6,6 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using Medieval.Definitions; // DX11 voxel material
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Definitions;
     using SEToolbox.Models;
@@ -15,6 +14,7 @@
     using VRage.Game;
     using VRage.Game.ObjectBuilders.Components;
     using VRage.Game.ObjectBuilders.ComponentSystem;
+    using VRage.Voxels;
     using VRage.ObjectBuilders;
     using VRageMath;
 
@@ -226,6 +226,11 @@
             return new Vector3D(vector.X, vector.Y, vector.Z);
         }
 
+        public static BoundingBoxD ToBoundingBoxD(this BoundingBoxI box)
+        {
+            return new BoundingBoxD(box.Min, box.Max);
+        }
+
         public static SerializableVector3 RoundOff(this SerializableVector3 vector, float roundTo)
         {
             return new SerializableVector3((float)Math.Round(vector.X / roundTo, 0, MidpointRounding.ToEven) * roundTo, (float)Math.Round(vector.Y / roundTo, 0, MidpointRounding.ToEven) * roundTo, (float)Math.Round(vector.Z / roundTo, 0, MidpointRounding.ToEven) * roundTo);
@@ -270,53 +275,150 @@
         public static SerializableVector3 RoundToAxis(this SerializableVector3 vector)
         {
             if (Math.Abs(vector.X) > Math.Abs(vector.Y) && Math.Abs(vector.X) > Math.Abs(vector.Z))
-            {
                 return new SerializableVector3(Math.Sign(vector.X), 0, 0);
-            }
 
             if (Math.Abs(vector.Y) > Math.Abs(vector.X) && Math.Abs(vector.Y) > Math.Abs(vector.Z))
-            {
                 return new SerializableVector3(0, Math.Sign(vector.Y), 0);
-            }
 
             if (Math.Abs(vector.Z) > Math.Abs(vector.X) && Math.Abs(vector.Z) > Math.Abs(vector.Y))
-            {
                 return new SerializableVector3(0, 0, Math.Sign(vector.Z));
-            }
 
             return new SerializableVector3();
         }
 
-        // SerializableVector3 stores Color HSV in the range of H=X=0.0 to +1.0, S=Y=-1.0 to +1.0, V=Z=-1.0 to +1.0
-
-        public static System.Drawing.Color ToSandboxDrawingColor(this SerializableVector3 hsv)
+        private static decimal Clamp(decimal value, decimal min, decimal max)
         {
-            var vColor = ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
-            return System.Drawing.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+            value = (value > max) ? max : value;
+            value = (value < min) ? min : value;
+            return value;
         }
 
-        public static System.Windows.Media.Color ToSandboxMediaColor(this SerializableVector3 hsv)
+        /// <summary>
+        /// Converts from Keen's HSV stored format to RGB matching the in game color picker palatte.
+        /// </summary>
+        /// <param name="hsv">the HSV stored value in the range of Hue=X=0.0 to +1.0, Saturation=Y=-1.0 to +1.0, Value=Z=-1.0 to +1.0</param>
+        /// <param name="red">converted red value</param>
+        /// <param name="green">converted green value</param>
+        /// <param name="blue">converted blue value</param>
+        /// <remarks>sourced from wikipedia.</remarks>
+        private static void FromHsvMaskToPaletteColor(SerializableVector3 hsv, out int red, out int green, out int blue)
         {
-            var vColor = ColorExtensions.HSVtoColor(new Vector3(hsv.X, (hsv.Y + 1f) / 2f, (hsv.Z + 1f) / 2f));
-            return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+            // I've used decimal because of floating point aberation during calculations.
+            // This needs to maintain the color accuracy as much as possible.
+            // I'm still not happy with this, as the game color palette picker is not exactly representative of the in game colors, 
+            // and looking through the calculations, the picker is actually ignoring part of the saturation and value.
+            decimal hue = (decimal)hsv.X * 360;
+            decimal saturation = Clamp((decimal)hsv.Y + (decimal)MyColorPickerConstants.SATURATION_DELTA, 0, 1);
+            decimal value = Clamp((decimal)hsv.Z + (decimal)MyColorPickerConstants.VALUE_DELTA - (decimal)MyColorPickerConstants.VALUE_COLORIZE_DELTA, 0, 1);
+
+            decimal chroma = value * saturation;
+            decimal hue1 = hue / 60;
+            decimal x = chroma * (1 - Math.Abs(hue1 % 2 - 1));
+            decimal r1 = 0;
+            decimal g1 = 0;
+            decimal b1 = 0;
+
+            if (hue1 < 0)
+            {
+                // nothing. Need to ignore values less than zero.
+            }
+            else if (hue1 <= 1)
+            {
+                r1 = chroma;
+                g1 = x;
+            }
+            else if (hue1 <= 2)
+            {
+                r1 = x;
+                g1 = chroma;
+            }
+            else if (hue1 <= 3)
+            {
+                g1 = chroma;
+                b1 = x;
+            }
+            else if (hue1 <= 4)
+            {
+                g1 = x;
+                b1 = chroma;
+            }
+            else if (hue1 <= 5)
+            {
+                r1 = x;
+                b1 = chroma;
+            }
+            else if (hue1 <= 6)
+            {
+                r1 = chroma;
+                b1 = x;
+            }
+
+            decimal m = value - chroma;
+
+            // Need to round off (not up or truncate down) values to correct for aberration.
+            red = (int)Math.Round((r1 + m) * 255);
+            green = (int)Math.Round((g1 + m) * 255);
+            blue = (int)Math.Round((b1 + m) * 255);
         }
 
-        public static System.Windows.Media.Color ToSandboxMediaColor(this Vector3 rgb)
+        public static System.Drawing.Color FromHsvMaskToPaletteColor(this SerializableVector3 hsv)
         {
-            var vColor = new Color(rgb);
-            return System.Windows.Media.Color.FromArgb(vColor.A, vColor.R, vColor.G, vColor.B);
+            int r, g, b;
+            FromHsvMaskToPaletteColor(hsv, out r, out g, out b);
+            return System.Drawing.Color.FromArgb(r, g, b);
         }
 
-        public static SerializableVector3 ToSandboxHsvColor(this System.Drawing.Color color)
+        public static System.Windows.Media.Color FromHsvMaskToPaletteMediaColor(this SerializableVector3 hsv)
         {
-            var vColor = ColorExtensions.ColorToHSV(new Color(color.R, color.G, color.B));
-            return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
+            int r, g, b;
+            FromHsvMaskToPaletteColor(hsv, out r, out g, out b);
+            return System.Windows.Media.Color.FromArgb(255, (byte)r, (byte)g, (byte)b);
         }
 
-        public static SerializableVector3 ToSandboxHsvColor(this System.Windows.Media.Color color)
+        /// <summary>
+        /// Converts from RGB matching the in game color picker palatte, to Keen's HSV stored format.
+        /// </summary>
+        /// <param name="r">the System RGB color</param>
+        /// <param name="g">the System RGB color</param>
+        /// <param name="b">the System RGB color</param>
+        /// <returns>the HSV stored value.</returns>
+        /// <remarks>sourced from wikipedia</remarks>
+        private static SerializableVector3 FromPaletteColorToHsvMask(decimal r, decimal g, decimal b)
         {
-            var vColor = ColorExtensions.ColorToHSV(new Color(color.R, color.G, color.B));
-            return new SerializableVector3(vColor.X, vColor.Y * 2f - 1f, vColor.Z * 2f - 1f);
+            decimal max = Math.Max(r, Math.Max(g, b));
+            decimal min = Math.Min(r, Math.Min(g, b));
+            decimal chroma = max - min;
+
+            decimal hue1 = 0;
+
+            if (chroma == 0)
+                hue1 = 0;
+            else if (max == r)
+                hue1 = ((g - b) / chroma) % 6;
+            else if (max == g)
+                hue1 = ((b - r) / chroma) + 2;
+            else if (max == b)
+                hue1 = ((r - g) / chroma) + 4;
+
+            decimal hue = 60 * hue1;
+            decimal value = max;
+
+            decimal saturation = 0;
+
+            if (value != 0)
+                saturation = chroma / value;
+
+            return new SerializableVector3((float)hue / 360, (float)saturation - MyColorPickerConstants.SATURATION_DELTA, (float)value - MyColorPickerConstants.VALUE_DELTA + MyColorPickerConstants.VALUE_COLORIZE_DELTA);
+        }
+
+        public static SerializableVector3 FromPaletteColorToHsvMask(this System.Drawing.Color color)
+        {
+            return FromPaletteColorToHsvMask((decimal)color.R / 255, (decimal)color.G / 255, (decimal)color.B / 255);
+        }
+
+        public static SerializableVector3 FromPaletteColorToHsvMask(this System.Windows.Media.Color color)
+        {
+            return FromPaletteColorToHsvMask((decimal)color.R / 255, (decimal)color.G / 255, (decimal)color.B / 255);
         }
 
         /// <summary>
@@ -391,18 +493,18 @@
 
         public static Vector3D Transform(this Vector3D value, QuaternionD rotation)
         {
-            double num = (double)(rotation.X + rotation.X);
-            double num2 = (double)(rotation.Y + rotation.Y);
-            double num3 = (double)(rotation.Z + rotation.Z);
-            double num4 = (double)rotation.W * num;
-            double num5 = (double)rotation.W * num2;
-            double num6 = (double)rotation.W * num3;
-            double num7 = (double)rotation.X * num;
-            double num8 = (double)rotation.X * num2;
-            double num9 = (double)rotation.X * num3;
-            double num10 = (double)rotation.Y * num2;
-            double num11 = (double)rotation.Y * num3;
-            double num12 = (double)rotation.Z * num3;
+            double num = (rotation.X + rotation.X);
+            double num2 = (rotation.Y + rotation.Y);
+            double num3 = (rotation.Z + rotation.Z);
+            double num4 = rotation.W * num;
+            double num5 = rotation.W * num2;
+            double num6 = rotation.W * num3;
+            double num7 = rotation.X * num;
+            double num8 = rotation.X * num2;
+            double num9 = rotation.X * num3;
+            double num10 = rotation.Y * num2;
+            double num11 = rotation.Y * num3;
+            double num12 = rotation.Z * num3;
             double x = value.X * (1.0 - num10 - num12) + value.Y * (num8 - num6) + value.Z * (num9 + num5);
             double y = value.X * (num8 + num6) + value.Y * (1.0 - num7 - num12) + value.Z * (num11 - num4);
             double z = value.X * (num9 - num5) + value.Y * (num11 + num4) + value.Z * (1.0 - num7 - num10);
@@ -477,25 +579,64 @@
             return list;
         }
 
-        public static void RemoveHierarchyCharacter(this MyObjectBuilder_CubeBlock cube, MyObjectBuilder_Character character)
+        /// <summary>
+        /// Removes all sign of a pilot/characrter from a cockpit cube.
+        /// </summary>
+        /// <param name="cockpit">The specific cube.</param>
+        /// <param name="character">Specific character to remove, if required, otherwise ANY chararcter will be removed.</param>
+        /// <returns>Returns true if a character was removed.</returns>
+        public static bool RemoveHierarchyCharacter(this MyObjectBuilder_Cockpit cockpit, MyObjectBuilder_Character character = null)
         {
-            if (character == null)
-                return;
+            bool retValue = false;
 
-            MyObjectBuilder_Cockpit cockpit = cube as MyObjectBuilder_Cockpit;
-
-            var hierarchyBase = cockpit?.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase")?.Component as MyObjectBuilder_HierarchyComponentBase;
-            if (hierarchyBase != null)
+            MyObjectBuilder_ComponentContainer.ComponentData hierarchyComponentBase = cockpit.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase");
+            var hierarchyBase = hierarchyComponentBase?.Component as MyObjectBuilder_HierarchyComponentBase;
+            if (hierarchyBase != null && hierarchyBase.Children.Count > 0)
             {
-                for (int i = 0 ; i < hierarchyBase.Children.Count; i++)
+                for (int i = 0; i < hierarchyBase.Children.Count; i++)
                 {
-                    if (hierarchyBase.Children[i] == character)
+                    if (character != null && hierarchyBase.Children[i] == character)
                     {
+                        retValue = true;
                         hierarchyBase.Children.RemoveAt(i);
-                        return;
+                        i--;
+                        break;
+                    }
+
+                    if (character == null && hierarchyBase.Children[i] is MyObjectBuilder_Character)
+                    {
+                        retValue = true;
+                        hierarchyBase.Children.RemoveAt(i);
+                        i--;
                     }
                 }
+
+                if (hierarchyBase.Children.Count == 0)
+                {
+                    cockpit.ComponentContainer.Components.Remove(hierarchyComponentBase);
+                }
             }
+
+            if (retValue)
+            {
+                cockpit.ClearPilotAndAutopilot();
+                cockpit.PilotRelativeWorld = null; // This should also clear Pilot.
+                cockpit.Pilot = null;
+            }
+
+            return retValue;
+        }
+
+        /// <summary>
+        /// Remove all pilots, co-pilots and any other character entities from consoles, cockpits and passenger seats.
+        /// </summary>
+        public static void RemoveHierarchyCharacter(this MyObjectBuilder_CubeGrid cubeGrid)
+        {
+            cubeGrid.CubeBlocks.Where(c => c.TypeId == SpaceEngineersTypes.Cockpit).Select(c =>
+            {
+                ((MyObjectBuilder_Cockpit)c).RemoveHierarchyCharacter();
+                return c;
+            }).ToArray();
         }
 
         public static ObservableCollection<InventoryEditorModel> GetInventory(this MyObjectBuilder_ComponentContainer componentContainer, MyCubeBlockDefinition definition = null)
@@ -570,25 +711,41 @@
 
         public static string GetVoxelDisplayTexture(this MyVoxelMaterialDefinition voxelMaterialDefinition)
         {
-            string texture = voxelMaterialDefinition.VoxelHandPreview;
-            if (texture == null)
+            string texture = null;
+            var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
+            if (dx11MaterialDefinition != null)
             {
-                var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
-                if (dx11MaterialDefinition != null)
-                {
-                    texture = voxelMaterialDefinition.VoxelHandPreview;
-                    if (texture == null)
-                    {
-                        texture = dx11MaterialDefinition.ColorMetalXZnY;
-                        if (texture == null)
-                            texture = dx11MaterialDefinition.NormalGlossXZnY;
-                    }
-                }
+                texture = dx11MaterialDefinition.ColorMetalXZnY;
                 if (texture == null)
-                    texture = voxelMaterialDefinition.DiffuseXZ;
+                    texture = dx11MaterialDefinition.NormalGlossXZnY;
             }
+            if (texture == null)
+                texture = voxelMaterialDefinition.DiffuseXZ;
+
+            if (texture == null)
+                // The VoxelHandPreview texture is oddly shaped, and not suitable for SEToolbox.
+                // It is a texture of last resort.
+                texture = voxelMaterialDefinition.VoxelHandPreview;
 
             return texture;
+        }
+
+        public static void GetMaterialContent(this VRage.Game.Voxels.IMyStorage self, ref Vector3I voxelCoords, out byte material, out byte content)
+        {
+            MyStorageData myStorageData = new MyStorageData(MyStorageDataTypeFlags.ContentAndMaterial);
+            myStorageData.Resize(Vector3I.One);
+            myStorageData.ClearMaterials(0);
+            self.ReadRange(myStorageData, MyStorageDataTypeFlags.ContentAndMaterial, 0, voxelCoords, voxelCoords);
+
+            material = myStorageData.Material(0);
+            content = myStorageData.Content(0);
+        }
+
+        public static int Max(int a, int b, int c, int d)
+        {
+            int abMax = a > b ? a : b;
+            int cdMax = c > d ? c : d;
+            return abMax > cdMax ? abMax : cdMax;
         }
     }
 }

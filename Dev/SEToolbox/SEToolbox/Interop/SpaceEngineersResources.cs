@@ -1,9 +1,9 @@
 ﻿namespace SEToolbox.Interop
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Sandbox.Definitions;
     using SEToolbox.Support;
+    using System.Collections.Generic;
+    using System.Linq;
     using VRage.Game;
     using VRage.ObjectBuilders;
 
@@ -19,6 +19,9 @@
         /// </summary>
         public void LoadDefinitions()
         {
+            // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
+            // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
+            MyDefinitionManager.Static.PrepareBaseDefinitions();
             MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
             MaterialIndex = new Dictionary<string, byte>();
         }
@@ -30,6 +33,9 @@
 
         public void LoadDefinitionsAndMods(string applicationContentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
         {
+            // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
+            // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
+            MyDefinitionManager.Static.PrepareBaseDefinitions();
             MyDefinitionManager.Static.LoadData(mods.ToList());
             MaterialIndex = new Dictionary<string, byte>();
         }
@@ -46,28 +52,8 @@
 
         public string GetDataPathOrDefault(string key, string defaultValue)
         {
-            //if (key != null && _contentDataPaths.ContainsKey(key.ToLower()))
-            //{
-            //    if (_contentDataPaths[key.ToLower()].AbsolutePath != null)
-            //        return _contentDataPaths[key.ToLower()].AbsolutePath;
-
-            //    if (_contentDataPaths[key.ToLower()].ZipFilePath != null)
-            //    {
-            //        var tempContentFile = TempfileUtil.NewFilename(Path.GetExtension(defaultValue));
-            //        try
-            //        {
-            //            ZipTools.ExtractZipFileToFile(_contentDataPaths[key.ToLower()].ZipFilePath, null, _contentDataPaths[key.ToLower()].ReferencePath, tempContentFile);
-            //            return tempContentFile;
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            // ignore errors, keep on trucking just like SE.
-            //            // write event log warning of any files not loaded.
-            //            DiagnosticsLogging.LogWarning(string.Format(Res.ExceptionState_CorruptModFile, _contentDataPaths[key.ToLower()].ZipFilePath), ex);
-            //            return defaultValue;
-            //        }
-            //    }
-            //}
+            // TODO: this code is obsolete and needs to be cleaned up.
+            // #31 https://github.com/midspace/SEToolbox/commit/354fd4cba31d1d8accac4c8188189dd1b114209b#diff-816c9c8868fbb3625db0cc45485797ef
 
             return defaultValue;
         }
@@ -144,6 +130,11 @@
         public string GetDefaultMaterialName()
         {
             return MyDefinitionManager.Static.GetDefaultVoxelMaterialDefinition().Id.SubtypeName;
+        }
+
+        public byte GetDefaultMaterialIndex()
+        {
+            return MyDefinitionManager.Static.GetDefaultVoxelMaterialDefinition().Index;
         }
 
         public T CreateNewObject<T>()

@@ -339,7 +339,7 @@
                 var y = radius * Math.Sin(latitude);
 
                 var center = new Vector3D(CenterPositionX, CenterPositionY, CenterPositionZ);
-                var position = center + new Vector3D(x, y, z) - asteroid.BoundingContent.Center;
+                Vector3D position = center + new Vector3D(x, y, z) - asteroid.ContentCenter;
                 var entity = new MyObjectBuilder_VoxelMap(position, filename)
                 {
                     EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),

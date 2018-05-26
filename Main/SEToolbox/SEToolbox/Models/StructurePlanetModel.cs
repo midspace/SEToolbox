@@ -1,19 +1,15 @@
 ﻿namespace SEToolbox.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Xml.Serialization;
-
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
-    using SEToolbox.Support;
+    using System;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using VRage.Game;
-    using VRageMath;
     using VRage.ObjectBuilders;
+    using VRageMath;
 
     [Serializable]
     public class StructurePlanetModel : StructureBaseModel
@@ -23,10 +19,13 @@
         private string _sourceVoxelFilepath;
         private string _voxelFilepath;
         private Vector3I _size;
-        private BoundingBoxD _contentBounds;
+        private Vector3D _contentCenter;
 
         [NonSerialized]
         private BackgroundWorker _asyncWorker;
+
+        [NonSerialized]
+        private MyVoxelMap _voxelMap;
 
         [NonSerialized]
         private bool _isLoadingAsync;
@@ -307,9 +306,10 @@
 
 
                     // TODO: planet details
-
-
-
+                    
+                    _voxelMap.RefreshAssets();
+                    _contentCenter = _voxelMap.ContentCenter;
+                    Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
 
                     IsBusy = false;
 
@@ -332,14 +332,17 @@
 
         private void ReadVoxelDetails(string filename)
         {
-            if (filename != null && File.Exists(filename))
+            if (filename != null && File.Exists(filename) && _voxelMap == null)
             {
-                long voxCells;
+                _voxelMap = new MyVoxelMap();
+                _voxelMap.Load(filename);
 
-                MyVoxelMap.GetPreview(filename, out _size, out _contentBounds, out voxCells, out _isValid);
+                Size = _voxelMap.Size;
+                _contentCenter = _voxelMap.ContentCenter;
+                IsValid = _voxelMap.IsValid;
                 RaisePropertyChanged(() => Size);
                 RaisePropertyChanged(() => IsValid);
-                Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+                Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
                 WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
             }
         }
@@ -347,7 +350,7 @@
         public override void RecalcPosition(Vector3D playerPosition)
         {
             base.RecalcPosition(playerPosition);
-            Center = new Vector3D(_contentBounds.Center.X + 0.5f + PositionX, _contentBounds.Center.Y + 0.5f + PositionY, _contentBounds.Center.Z + 0.5f + PositionZ);
+            Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
             WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }
 

@@ -16,6 +16,9 @@
     using VRage.ObjectBuilders;
     using VRage.Utils;
     using VRageMath;
+    using VRage.FileSystem;
+    using System.Xml.Serialization;
+    using Res = SEToolbox.Properties.Resources;
 
     /// <summary>
     /// Helper api for accessing and interacting with Space Engineers content.
@@ -32,10 +35,24 @@
             return outObject;
         }
 
-        public static bool TryReadSpaceEngineersFile<T>(string filename, out T outObject, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
+        /// <returns>True if it sucessfully deserialized the file.</returns>
+        public static bool TryReadSpaceEngineersFile<T>(string filename, out T outObject, out bool isCompressed, out string errorInformation, bool snapshot = false, bool specificExtension = false) where T : MyObjectBuilder_Base
         {
-            string protoBufFile = filename + SpaceEngineersConsts.ProtobuffersExtension;
-            if (File.Exists(protoBufFile))
+            string protoBufFile = null;
+            if (specificExtension)
+            {
+                if ((Path.GetExtension(filename) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase))
+                    protoBufFile = filename;
+            }
+            else
+            {
+                if ((Path.GetExtension(filename) ?? string.Empty).EndsWith(SpaceEngineersConsts.ProtobuffersExtension, StringComparison.OrdinalIgnoreCase))
+                    protoBufFile = filename;
+                else
+                    protoBufFile = filename + SpaceEngineersConsts.ProtobuffersExtension;
+            }
+
+            if (protoBufFile != null && File.Exists(protoBufFile))
             {
                 var tempFilename = protoBufFile;
 
@@ -53,18 +70,31 @@
                     isCompressed = (b1 == 0x1f && b2 == 0x8b);
                 }
 
-                bool retCode = MyObjectBuilderSerializer.DeserializePB<T>(tempFilename, out outObject);
+                bool retCode;
+                try
+                {
+                    // A failure to load here, will only mean it falls back to try and read the xml file instead.
+                    // So a file corruption could easily have been covered up.
+                    retCode = MyObjectBuilderSerializer.DeserializePB<T>(tempFilename, out outObject);
+                }
+                catch (InvalidCastException ex)
+                {
+                    outObject = null;
+                    errorInformation = string.Format(Res.ErrorLoadFileError, filename, ex.AllMessages());
+                    return false;
+                }
                 if (retCode && outObject != null)
                 {
+                    errorInformation = null;
                     return true;
                 }
-                return TryReadSpaceEngineersFileXml(filename, out outObject, out isCompressed, snapshot);
+                return TryReadSpaceEngineersFileXml(filename, out outObject, out isCompressed, out errorInformation, snapshot);
             }
 
-            return TryReadSpaceEngineersFileXml(filename, out outObject, out isCompressed, snapshot);
+            return TryReadSpaceEngineersFileXml(filename, out outObject, out isCompressed, out errorInformation, snapshot);
         }
 
-        private static bool TryReadSpaceEngineersFileXml<T>(string filename, out T outObject, out bool isCompressed, bool snapshot = false) where T : MyObjectBuilder_Base
+        private static bool TryReadSpaceEngineersFileXml<T>(string filename, out T outObject, out bool isCompressed, out string errorInformation, bool snapshot = false) where T : MyObjectBuilder_Base
         {
             isCompressed = false;
 
@@ -86,9 +116,10 @@
                     isCompressed = (b1 == 0x1f && b2 == 0x8b);
                 }
 
-                return MyObjectBuilderSerializer.DeserializeXML<T>(tempFilename, out outObject);
+                return DeserializeXml<T>(tempFilename, out outObject, out errorInformation);
             }
 
+            errorInformation = null;
             outObject = null;
             return false;
         }
@@ -134,7 +165,7 @@
                 {
                     var xmlTextWriter = new XmlTextWriter(sw.BaseStream, null);
                     xmlTextWriter.WriteString("\r\n");
-                    xmlTextWriter.WriteComment(string.Format(" Saved '{0:o}' with SEToolbox version '{1}' ", DateTime.Now, GlobalSettings.GetAppVersion()));
+                    xmlTextWriter.WriteComment($" Saved '{DateTime.Now:o}' with SEToolbox version '{GlobalSettings.GetAppVersion()}' ");
                     xmlTextWriter.Flush();
                 }
             }
@@ -146,6 +177,42 @@
             where T : MyObjectBuilder_Base
         {
             return MyObjectBuilderSerializer.SerializePB(filename, compress, myObject);
+        }
+
+        /// <returns>True if it sucessfully deserialized the file.</returns>
+        public static bool DeserializeXml<T>(string filename, out T objectBuilder, out string errorInformation) where T : MyObjectBuilder_Base
+        {
+            bool result = false;
+            objectBuilder = null;
+            errorInformation = null;
+
+            using (var fileStream = MyFileSystem.OpenRead(filename))
+            {
+                if (fileStream != null)
+                    using (var readStream = fileStream.UnwrapGZip())
+                    {
+                        if (readStream != null)
+                        {
+                            try
+                            {
+                                XmlSerializer serializer = MyXmlSerializerManager.GetSerializer(typeof(T));
+
+                                XmlReaderSettings settings = new XmlReaderSettings { CheckCharacters = true };
+                                MyXmlTextReader xmlReader = new MyXmlTextReader(readStream, settings);
+
+                                objectBuilder = (T)serializer.Deserialize(xmlReader);
+                                result = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                objectBuilder = null;
+                                errorInformation = string.Format(Res.ErrorLoadFileError, filename, ex.AllMessages());
+                            }
+                        }
+                    }
+            }
+
+            return result;
         }
 
         #endregion
@@ -194,7 +261,7 @@
 
             if (bp != null && bp.Results != null && bp.Results.Length > 0)
             {
-                foreach (var item in bp.Prerequisites)
+                foreach (MyBlueprintDefinitionBase.Item item in bp.Prerequisites)
                 {
                     if (requirements.ContainsKey(item.Id.SubtypeName))
                     {
@@ -227,8 +294,8 @@
 
         public static MyBlueprintDefinitionBase GetBlueprint(MyObjectBuilderType resultTypeId, string resultSubTypeId)
         {
-            var bpList = SpaceEngineersCore.Resources.BlueprintDefinitions.Where(b => b.Results != null && b.Results.Any(r => r.Id.TypeId == resultTypeId && r.Id.SubtypeName == resultSubTypeId));
-            return bpList.FirstOrDefault();
+            // Get 'Last' item. Matches SE logic, which uese an array structure, and overrides previous found items of the same result.
+            return SpaceEngineersCore.Resources.BlueprintDefinitions.LastOrDefault(b => b.Results != null && b.Results.Length == 1 && b.Results.Any(r => r.Id.TypeId == resultTypeId && r.Id.SubtypeName == resultSubTypeId));
         }
 
         #endregion
@@ -353,9 +420,9 @@
         private static void AddLanguage(MyLanguagesEnum id, string cultureName, string subcultureName = null, string displayName = null, float guiTextScale = 1f, bool isCommunityLocalized = true)
         {
             // Create an empty instance of LanguageDescription.
-            ConstructorInfo constructorInfo = typeof(MyTexts.LanguageDescription).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new Type[] { typeof(MyLanguagesEnum), typeof(string), typeof(string), typeof(string), typeof(float), typeof(bool) }, null);
-            MyTexts.LanguageDescription languageDescription = (MyTexts.LanguageDescription)constructorInfo.Invoke(new object[] { id, displayName, cultureName, subcultureName, guiTextScale, isCommunityLocalized });
+            MyTexts.LanguageDescription languageDescription = ReflectionUtil.ConstructPrivateClass<MyTexts.LanguageDescription>(
+                new Type[] { typeof(MyLanguagesEnum), typeof(string), typeof(string), typeof(string), typeof(float), typeof(bool) },
+                new object[] { id, displayName, cultureName, subcultureName, guiTextScale, isCommunityLocalized });
 
             Dictionary<MyLanguagesEnum, MyTexts.LanguageDescription> m_languageIdToLanguage = typeof(MyTexts).GetStaticField<Dictionary<MyLanguagesEnum, MyTexts.LanguageDescription>>("m_languageIdToLanguage");
             Dictionary<string, MyLanguagesEnum> m_cultureToLanguageId = typeof(MyTexts).GetStaticField<Dictionary<string, MyLanguagesEnum>>("m_cultureToLanguageId");
