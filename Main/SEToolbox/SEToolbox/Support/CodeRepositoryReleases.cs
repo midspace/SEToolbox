@@ -21,7 +21,7 @@
 
         #region CheckForUpdates
 
-        public static ApplicationRelease CheckForUpdates(CodeRepositoryType repositoryType,  string updatesUrl)
+        public static ApplicationRelease CheckForUpdates(CodeRepositoryType repositoryType,  string updatesUrl, Version currentVersion)
         {
             if (GlobalSettings.Default.AlwaysCheckForUpdates.HasValue && !GlobalSettings.Default.AlwaysCheckForUpdates.Value)
                 return null;
@@ -32,7 +32,6 @@
                 return null;
 #endif
 
-            var currentVersion = GlobalSettings.GetAppVersion();
             string webContent;
             string link;
 

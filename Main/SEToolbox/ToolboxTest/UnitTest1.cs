@@ -423,7 +423,7 @@
         [TestMethod, TestCategory("UnitTest")]
         public void CheckCurrentVersion()
         {
-            ApplicationRelease update = CodeRepositoryReleases.CheckForUpdates(CodeRepositoryType.GitHub, SEToolbox.Properties.Resources.GlobalUpdatesUrl);
+            ApplicationRelease update = CodeRepositoryReleases.CheckForUpdates(CodeRepositoryType.GitHub, SEToolbox.Properties.Resources.GlobalUpdatesUrl, new Version());
             Assert.IsNotNull(update);
         }
     }
