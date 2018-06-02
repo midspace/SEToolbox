@@ -841,72 +841,34 @@
 
         public bool ConvertFromLightToHeavyArmor()
         {
-            var count = 0;
+            bool changes = false;
             foreach (var cube in CubeGrid.CubeBlocks)
-            {
-                if (cube.SubtypeName.StartsWith("LargeBlockArmor"))
-                {
-                    var newSubTypeName = cube.SubtypeName.Replace("LargeBlockArmor", "LargeHeavyBlockArmor");
-                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
-                    {
-                        cube.SubtypeName = newSubTypeName;
-                        count++;
-                    }
-                }
-                else if (cube.SubtypeName.StartsWith("SmallBlockArmor"))
-                {
-                    var newSubTypeName = cube.SubtypeName.Replace("SmallBlockArmor", "SmallHeavyBlockArmor");
-                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
-                    {
-                        cube.SubtypeName = newSubTypeName;
-                        count++;
-                    }
-                }
-            }
+                changes |= CubeItemModel.ConvertFromLightToHeavyArmor(cube);
 
-            if (count > 0)
+            if (changes)
             {
                 IsSubsSystemNotReady = true;
                 IsConstructionNotReady = true;
                 UpdateGeneralFromEntityBase();
                 InitializeAsync();
             }
-            return count > 0;
+            return changes;
         }
 
         public bool ConvertFromHeavyToLightArmor()
         {
-            var count = 0;
+            bool changes = false;
             foreach (var cube in CubeGrid.CubeBlocks)
-            {
-                if (cube.SubtypeName.StartsWith("LargeHeavyBlockArmor"))
-                {
-                    var newSubTypeName = cube.SubtypeName.Replace("LargeHeavyBlockArmor", "LargeBlockArmor");
-                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
-                    {
-                        cube.SubtypeName = newSubTypeName;
-                        count++;
-                    }
-                }
-                else if (cube.SubtypeName.StartsWith("SmallHeavyBlockArmor"))
-                {
-                    var newSubTypeName = cube.SubtypeName.Replace("SmallHeavyBlockArmor", "SmallBlockArmor");
-                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
-                    {
-                        cube.SubtypeName = newSubTypeName;
-                        count++;
-                    }
-                }
-            }
+                changes |= CubeItemModel.ConvertFromHeavyToLightArmor(cube);
 
-            if (count > 0)
+            if (changes)
             {
                 IsSubsSystemNotReady = true;
                 IsConstructionNotReady = true;
                 UpdateGeneralFromEntityBase();
                 InitializeAsync();
             }
-            return count > 0;
+            return changes;
         }
 
         public void ConvertToFramework(float value)

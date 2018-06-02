@@ -214,6 +214,16 @@
             _dataModel.UpdateBuildPercent(buildPercent);
         }
 
+        public bool ConvertFromLightToHeavyArmor()
+        {
+            return CubeItemModel.ConvertFromLightToHeavyArmor(_dataModel.Cube);
+        }
+
+        public bool ConvertFromHeavyToLightArmor()
+        {
+            return CubeItemModel.ConvertFromHeavyToLightArmor(_dataModel.Cube);
+        }
+
         public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyCubeBlockDefinition definition)
         {
             return _dataModel.CreateCube(typeId, subTypeId, definition);

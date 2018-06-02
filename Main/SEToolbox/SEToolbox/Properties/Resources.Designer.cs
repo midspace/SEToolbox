@@ -1625,6 +1625,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To specified value.
+        /// </summary>
+        public static string CtlCubeMnuConvertFrameworkValue {
+            get {
+                return ResourceManager.GetString("CtlCubeMnuConvertFrameworkValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotate.
         /// </summary>
         public static string CtlCubeMnuConvertRotate {
@@ -1765,15 +1774,6 @@ namespace SEToolbox.Properties {
         public static string CtlCubeMnuDeleteCube {
             get {
                 return ResourceManager.GetString("CtlCubeMnuDeleteCube", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Framework.
-        /// </summary>
-        public static string CtlCubeMnuFrameworkCube {
-            get {
-                return ResourceManager.GetString("CtlCubeMnuFrameworkCube", resourceCulture);
             }
         }
         

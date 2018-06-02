@@ -2,6 +2,7 @@
 {
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Definitions;
     using SEToolbox.Interop;
@@ -345,6 +346,90 @@
             BuildPercent = Cube.BuildPercent;
         }
 
+        public static bool ConvertFromLightToHeavyArmor(MyObjectBuilder_CubeBlock cube)
+        {
+            if (cube.SubtypeName.StartsWith("LargeBlockArmor"))
+            {
+                var newSubTypeName = cube.SubtypeName.Replace("LargeBlockArmor", "LargeHeavyBlockArmor");
+                if (cube.SubtypeName != newSubTypeName && SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
+                {
+                    cube.SubtypeName = newSubTypeName;
+                    return true;
+                }
+            }
+            else if (cube.SubtypeName.StartsWith("Large") && (cube.SubtypeName.EndsWith("HalfArmorBlock") || cube.SubtypeName.EndsWith("HalfSlopeArmorBlock")))
+            {
+                var newSubTypeName = cube.SubtypeName.Replace("LargeHalf", "LargeHeavyHalf");
+                if (cube.SubtypeName != newSubTypeName && SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
+                {
+                    cube.SubtypeName = newSubTypeName;
+                    return true;
+                }
+            }
+            else if (cube.SubtypeName.StartsWith("SmallBlockArmor"))
+            {
+                var newSubTypeName = cube.SubtypeName.Replace("SmallBlockArmor", "SmallHeavyBlockArmor");
+                if (cube.SubtypeName != newSubTypeName && SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
+                {
+                    cube.SubtypeName = newSubTypeName;
+                    return true;
+                }
+            }
+            else if (!cube.SubtypeName.StartsWith("Large") && (cube.SubtypeName.EndsWith("HalfArmorBlock") || cube.SubtypeName.EndsWith("HalfSlopeArmorBlock")))
+            {
+                var newSubTypeName = Regex.Replace(cube.SubtypeName, "^(Half)(.*)", "HeavyHalf$2", RegexOptions.IgnoreCase);
+                if (cube.SubtypeName != newSubTypeName && SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
+                {
+                    cube.SubtypeName = newSubTypeName;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool ConvertFromHeavyToLightArmor(MyObjectBuilder_CubeBlock cube)
+        {
+            if (cube.SubtypeName.StartsWith("LargeHeavyBlockArmor"))
+            {
+                var newSubTypeName = cube.SubtypeName.Replace("LargeHeavyBlockArmor", "LargeBlockArmor");
+                if (cube.SubtypeName != newSubTypeName && SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
+                {
+                    cube.SubtypeName = newSubTypeName;
+                    return true;
+                }
+            }
+            else if (cube.SubtypeName.StartsWith("Large") && (cube.SubtypeName.EndsWith("HalfArmorBlock") || cube.SubtypeName.EndsWith("HalfSlopeArmorBlock")))
+            {
+                var newSubTypeName = cube.SubtypeName.Replace("LargeHeavyHalf", "LargeHalf");
+                if (cube.SubtypeName != newSubTypeName && SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
+                {
+                    cube.SubtypeName = newSubTypeName;
+                    return true;
+                }
+            }
+            else if (cube.SubtypeName.StartsWith("SmallHeavyBlockArmor"))
+            {
+                var newSubTypeName = cube.SubtypeName.Replace("SmallHeavyBlockArmor", "SmallBlockArmor");
+                if (cube.SubtypeName != newSubTypeName && SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
+                {
+                    cube.SubtypeName = newSubTypeName;
+                    return true;
+                }
+            }
+            else if (!cube.SubtypeName.StartsWith("Large") && (cube.SubtypeName.EndsWith("HalfArmorBlock") || cube.SubtypeName.EndsWith("HalfSlopeArmorBlock")))
+            {
+                var newSubTypeName = Regex.Replace(cube.SubtypeName, "^(HeavyHalf)(.*)", "Half$2", RegexOptions.IgnoreCase);
+                if (cube.SubtypeName != newSubTypeName && SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
+                {
+                    cube.SubtypeName = newSubTypeName;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public MyObjectBuilder_CubeBlock CreateCube(MyObjectBuilderType typeId, string subTypeId, MyCubeBlockDefinition definition)
         {
             var newCube = SpaceEngineersCore.Resources.CreateNewObject<MyObjectBuilder_CubeBlock>(typeId, subTypeId);
@@ -354,6 +439,11 @@
             newCube.EntityId = Cube.EntityId;
             newCube.IntegrityPercent = Cube.IntegrityPercent;
             newCube.Min = Cube.Min;
+            newCube.BuiltBy = Cube.BuiltBy;
+            newCube.Owner = Cube.Owner;
+            newCube.ShareMode = Cube.ShareMode;
+            newCube.DeformationRatio = Cube.DeformationRatio;
+            newCube.BlockGeneralDamageModifier = Cube.BlockGeneralDamageModifier;
 
             SetProperties(newCube, definition);
 

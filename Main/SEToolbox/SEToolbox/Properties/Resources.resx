@@ -1315,8 +1315,8 @@ Distance:		{1:#,##0.0} m</value>
   <data name="CtlCubeMnuDeleteCube" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="CtlCubeMnuFrameworkCube" xml:space="preserve">
-    <value>Framework</value>
+  <data name="CtlCubeMnuConvertFrameworkValue" xml:space="preserve">
+    <value>To specified value</value>
   </data>
   <data name="CtlCubeMnuOwnerCube" xml:space="preserve">
     <value>Owner</value>

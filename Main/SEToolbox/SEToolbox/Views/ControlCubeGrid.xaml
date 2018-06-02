@@ -71,7 +71,7 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>
-                        <MenuItem Header="{lex:Loc CtlCubeMnuConvert}" Command="{Binding ConvertCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                        <MenuItem Header="{lex:Loc CtlCubeMnuConvert}" Command="{Binding ConvertGridCommand}" Style="{StaticResource ToolBarTopMenuitem}">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
                             </MenuItem.Icon>
@@ -79,37 +79,37 @@
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=shield}" />
                                 </MenuItem.Icon>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorHeavy}" Command="{Binding ConvertToHeavyArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorHeavyTooltip}"/>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorLight}" Command="{Binding ConvertToLightArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorLightTooltip}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorHeavy}" Command="{Binding ConvertGridToHeavyArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorHeavyTooltip}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorLight}" Command="{Binding ConvertGridToLightArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorLightTooltip}"/>
                                 <Separator/>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorCorner}" Command="{Binding ConvertToCornerArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorCornerTooltip}"/>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorRound}" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorRoundTooltip}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorCorner}" Command="{Binding ConvertGridToCornerArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorCornerTooltip}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorRound}" Command="{Binding ConvertGridToRoundArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorRoundTooltip}"/>
                             </MenuItem>
                             <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework}" Command="{Binding FrameworkCommand}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
                                 </MenuItem.Icon>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework0}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework0Tooltip}">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework0}" Command="{Binding ConvertGridToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework0Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>0.005</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework25}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework25Tooltip}">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework25}" Command="{Binding ConvertGridToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework25Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>0.25</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework50}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework50Tooltip}">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework50}" Command="{Binding ConvertGridToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework50Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>0.50</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework75}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework75Tooltip}">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework75}" Command="{Binding ConvertGridToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework75Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>0.75</s:Double>
                                     </MenuItem.CommandParameter>
                                 </MenuItem>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework100}" Command="{Binding ConvertToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework100Tooltip}">
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework100}" Command="{Binding ConvertGridToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework100Tooltip}">
                                     <MenuItem.CommandParameter>
                                         <s:Double>1.00</s:Double>
                                     </MenuItem.CommandParameter>
@@ -345,6 +345,53 @@
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=delete2}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
+                            <MenuItem Header="{lex:Loc CtlCubeMnuConvert}" Command="{Binding ConvertCubesCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=transform}" />
+                                </MenuItem.Icon>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmor}">
+                                    <MenuItem.Icon>
+                                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=shield}" />
+                                    </MenuItem.Icon>
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorHeavy}" Command="{Binding ConvertCubeToHeavyArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorHeavyTooltip}"/>
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorLight}" Command="{Binding ConvertCubeToLightArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorLightTooltip}"/>
+                                </MenuItem>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework}" Command="{Binding ConvertGridFrameworkCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
+                                    </MenuItem.Icon>
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuConvertFrameworkValue}" Command="{Binding ConvertCubeToFrameworkDialogCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework0}" Command="{Binding ConvertCubeToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework0Tooltip}">
+                                        <MenuItem.CommandParameter>
+                                            <s:Double>0.005</s:Double>
+                                        </MenuItem.CommandParameter>
+                                    </MenuItem>
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework25}" Command="{Binding ConvertCubeToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework25Tooltip}">
+                                        <MenuItem.CommandParameter>
+                                            <s:Double>0.25</s:Double>
+                                        </MenuItem.CommandParameter>
+                                    </MenuItem>
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework50}" Command="{Binding ConvertCubeToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework50Tooltip}">
+                                        <MenuItem.CommandParameter>
+                                            <s:Double>0.50</s:Double>
+                                        </MenuItem.CommandParameter>
+                                    </MenuItem>
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework75}" Command="{Binding ConvertCubeToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework75Tooltip}">
+                                        <MenuItem.CommandParameter>
+                                            <s:Double>0.75</s:Double>
+                                        </MenuItem.CommandParameter>
+                                    </MenuItem>
+                                    <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework100}" Command="{Binding ConvertCubeToFrameworkCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertFramework100Tooltip}">
+                                        <MenuItem.CommandParameter>
+                                            <s:Double>1.00</s:Double>
+                                        </MenuItem.CommandParameter>
+                                    </MenuItem>
+                                </MenuItem>
+                            </MenuItem>
                             <MenuItem Command="{Binding ReplaceCubesCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuReplaceCube}" Style="{StaticResource ToolBarTopMenuitem}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=selection_replace}"/>
@@ -353,11 +400,6 @@
                             <MenuItem Command="{Binding ColorCubesCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuColorCube}" Style="{StaticResource ToolBarTopMenuitem}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=colors}"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Command="{Binding FrameworkCubesCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuFrameworkCube}" Style="{StaticResource ToolBarTopMenuitem}">
-                                <MenuItem.Icon>
-                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Command="{Binding SetOwnerCommand}" Header="{lex:Loc SEToolbox:Resources:CtlCubeMnuOwnerCube}" Style="{StaticResource ToolBarTopMenuitem}">
@@ -490,7 +532,7 @@
                         </Grid>
                     </Grid>
                   
-                    <controls:BusyIndicator Visibility="{Binding IsSubsSystemNotReady, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <controls:BusyIndicator Visibility="{Binding IsSubsSystemNotReady, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </TabItem>
             <TabItem Header="{lex:Loc CtlCubeTabConstruction}">
@@ -726,7 +768,7 @@
                             </controls:SortableListView>
                         </Grid>
                     </ScrollViewer>
-                    <controls:BusyIndicator Visibility="{Binding IsConstructionNotReady, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <controls:BusyIndicator Visibility="{Binding IsConstructionNotReady, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </TabItem>
         </TabControl>
