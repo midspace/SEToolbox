@@ -23,8 +23,9 @@
                    $(BuildDir)WPFLocalizeExtension.dll;
                    $(BuildDir)XAMLMarkupExtensions.dll"
       Exclude=""/>
-      <ResourceFiles-zh Include="$(BuildDir)/zh/*" Exclude=""/>
       <!-- Add additional languages here. -->
+      <ResourceFiles-de Include="$(BuildDir)/de/*" Exclude=""/>
+      <!--<ResourceFiles-zh Include="$(BuildDir)/zh-CN/*" Exclude=""/>-->
     </ItemGroup>
 
     <Message Text="@#@#@#@#@# Inside After Compile Configuration #@#@#@#@#@#"/>
@@ -41,18 +42,20 @@
     <!--         Copy the Control folder structure into the build output     -->
     <Copy SourceFiles="@(EditorFiles)" DestinationFolder="$(BinariesRoot)" SkipUnchangedFiles="false"></Copy>
 
+    <Copy SourceFiles="@(ResourceFiles-de)" DestinationFolder="$(BinariesRoot)/de" SkipUnchangedFiles="false"></Copy>
     <!-- ### Uncomment to package satellite language resources into .zip ### -->
     <!--
-    <Copy SourceFiles="@(ResourceFiles-zh)" DestinationFolder="$(BinariesRoot)/zh" SkipUnchangedFiles="false"></Copy>
+    <Copy SourceFiles="@(ResourceFiles-zh)" DestinationFolder="$(BinariesRoot)/zh-CN" SkipUnchangedFiles="false"></Copy>
     -->
     <!-- Add additional languages here. -->
+    <Copy SourceFiles="@(ResourceFiles-de)" DestinationFolder="$(BinariesRoot)/de" SkipUnchangedFiles="false"></Copy>
     
     <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/en-us/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-en.msi" SkipUnchangedFiles="false"></Copy>
+    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/de-de/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-de.msi" SkipUnchangedFiles="false"></Copy>
     <!-- ### Uncomment to copy localized .MSI build. ### -->
     <!--
-    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/de-de/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-de.msi" SkipUnchangedFiles="false"></Copy>
-    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/cs-cz/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-cz.msi" SkipUnchangedFiles="false"></Copy>
     <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/zh-cn/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-zh.msi" SkipUnchangedFiles="false"></Copy>
+    <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/cs-cz/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-cz.msi" SkipUnchangedFiles="false"></Copy>
     -->
     <!-- Add additional languages here. -->
   </Target>

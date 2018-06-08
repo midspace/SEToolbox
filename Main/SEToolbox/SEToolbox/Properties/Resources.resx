@@ -2716,7 +2716,8 @@ Planet Generator:	{17}</value>
     <value>Space Engineers Component Item Report</value>
   </data>
   <data name="ValidationInvalidCharacters" xml:space="preserve">
-    <value>Illegal characters or</value>
+    <value>Illegal characters or {0}</value>
+    <comment>Range validation message will return exception in {0}</comment>
   </data>
   <data name="ValidationInvalidRange" xml:space="preserve">
     <value>Please enter a value in the range:</value>

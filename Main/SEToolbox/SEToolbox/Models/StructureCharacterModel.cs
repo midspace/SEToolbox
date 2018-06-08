@@ -278,16 +278,19 @@
         public override void UpdateGeneralFromEntityBase()
         {
             ClassType = ClassType.Character;
+            // TODO #21
             string dead = Character.MovementState == MyCharacterMovementEnum.Died ? " | dead" : "";
 
             if (string.IsNullOrEmpty(Character.DisplayName))
             {
+                // TODO: #21 localize
                 Description = "NPC";
                 DisplayName = Character.CharacterModel + dead;
                 Mass = SpaceEngineersConsts.PlayerMass; // no idea what a body weighs.
             }
             else
             {
+                // TODO: #21 localize
                 Description = "Player";
                 DisplayName = Character.DisplayName + dead;
                 Mass = SpaceEngineersConsts.PlayerMass;

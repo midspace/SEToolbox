@@ -651,6 +651,9 @@
     <EmbeddedResource Include="Properties\MyTexts.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.de.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.zh-cn.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -883,6 +886,7 @@
   -->
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)\SEToolboxUpdate.exe" DestinationFolder="$(TargetDir)" />
-    <!--    <Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)\zh" DestinationFolder="$(TargetDir)\zh" />-->
+    <Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)de\SEToolboxUpdate.resources.dll" DestinationFolder="$(TargetDir)de" />
+    <!--<Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)zh-cn\SEToolboxUpdate.resources.dll" DestinationFolder="$(TargetDir)zh-cn" />-->
   </Target>
 </Project>

@@ -17,5 +17,5 @@
   <String Id="ProductServerDlgEnterServer">ProductServerDlgEnterServer</String>
   <String Id="ProductServerDlgTitle">ProductServerDlgTitle</String>
 
-  <String Id="LaunchProductOnFinish">Launch Application when finished</String>
+  <String Id="LaunchProductOnFinish">完成后启动应用程序</String>
 </WixLocalization>

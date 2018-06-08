@@ -93,6 +93,7 @@
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            // TODO: #21 localize
             throw new NotSupportedException(string.Format("{0} does not support converting back.", GetType().FullName));
         }
 

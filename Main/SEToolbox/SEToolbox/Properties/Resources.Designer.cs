@@ -4760,7 +4760,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Illegal characters or.
+        ///   Looks up a localized string similar to Illegal characters or {0}.
         /// </summary>
         public static string ValidationInvalidCharacters {
             get {

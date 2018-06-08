@@ -22,7 +22,7 @@
             }
             catch (Exception e)
             {
-                return new ValidationResult(false, Res.ValidationInvalidCharacters + " " + e.Message);
+                return new ValidationResult(false, string.Format(Res.ValidationInvalidCharacters, e.Message));
             }
 
             if ((parseValue < Min) || (parseValue > Max))
