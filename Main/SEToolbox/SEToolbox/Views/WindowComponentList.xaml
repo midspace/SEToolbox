@@ -51,7 +51,7 @@
                                     <GridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColCubeName}" DisplayMemberBinding="{Binding FriendlyName}"/>
                                     <GridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColCubeType}" DisplayMemberBinding="{Binding TypeIdString}"/>
                                     <GridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColCubeSubType}" DisplayMemberBinding="{Binding SubtypeId}"/>
-                                    <GridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColCubeSize}" DisplayMemberBinding="{Binding CubeSize}" Width="85"/>
+                                    <GridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColCubeSize}" DisplayMemberBinding="{Binding CubeSize, Converter={StaticResource EnumToResouceConverter}}" Width="85"/>
                                     <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColCubeAccessible}" Width="80" DisplayMemberBinding="{Binding Accessible, Converter={StaticResource EnumToResouceConverter}}" />
                                     <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:WnComponentsColCubeDimention}" Width="80">
                                         <GridViewColumn.CellTemplate>

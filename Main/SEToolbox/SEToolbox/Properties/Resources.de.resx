@@ -117,12 +117,455 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AsteroidFillType_None" xml:space="preserve">
+    <value>Keine Änderung</value>
+  </data>
   <data name="Boolean_False" xml:space="preserve">
     <value>Nein</value>
-    <comment>No</comment>
   </data>
   <data name="Boolean_True" xml:space="preserve">
     <value>Ja</value>
-    <comment>Yes</comment>
+  </data>
+  <data name="BtBrowseAppTip" xml:space="preserve">
+    <value>Anwendung suchen</value>
+  </data>
+  <data name="ClassType_FloatingObject" xml:space="preserve">
+    <value>Schwebendes Objekt</value>
+  </data>
+  <data name="ClassType_LargeShip" xml:space="preserve">
+    <value>Großes Schiff</value>
+  </data>
+  <data name="ClassType_LargeStation" xml:space="preserve">
+    <value>Große Station</value>
+  </data>
+  <data name="ClassType_SmallShip" xml:space="preserve">
+    <value>Kleines Schiff</value>
+  </data>
+  <data name="ClassType_SmallStation" xml:space="preserve">
+    <value>Kleine Station</value>
+  </data>
+  <data name="ClsCubeGridWheelDetached" xml:space="preserve">
+    <value>Reifen</value>
+  </data>
+  <data name="ClsErrorBinCachePath" xml:space="preserve">
+    <value>BinCachePath:</value>
+  </data>
+  <data name="ClsErrorFiles" xml:space="preserve">
+    <value>Dateien:</value>
+  </data>
+  <data name="ClsRepairFoundSetPlayer" xml:space="preserve">
+    <value>* Found and Set new active Player.</value>
+  </data>
+  <data name="ClsRepairReplacedBlockGroup" xml:space="preserve">
+    <value>* Replaced BlockGroup item.</value>
+  </data>
+  <data name="ClsRepairSavedChanges" xml:space="preserve">
+    <value>* Änderungen gespeichert</value>
+  </data>
+  <data name="ClsReportColOreName" xml:space="preserve">
+    <value>Erz Name</value>
+  </data>
+  <data name="CtlCharacterBattery" xml:space="preserve">
+    <value>Batterie:</value>
+  </data>
+  <data name="CtlCharacterHealth" xml:space="preserve">
+    <value>Gesundheit:</value>
+  </data>
+  <data name="CtlCharacterHydrogen" xml:space="preserve">
+    <value>Wasserstoff</value>
+  </data>
+  <data name="CtlCharacterInventoryTab" xml:space="preserve">
+    <value>Inventar:</value>
+  </data>
+  <data name="CtlCharacterMnuResetSpeed" xml:space="preserve">
+    <value>Geschwindigkeit zurücksetzen</value>
+  </data>
+  <data name="CtlCharacterPlayer" xml:space="preserve">
+    <value>Spieler:</value>
+  </data>
+  <data name="CtlCharacterSuitColor" xml:space="preserve">
+    <value>Anzugfarbe:</value>
+  </data>
+  <data name="CtlCharacterSuitLight" xml:space="preserve">
+    <value>Licht:</value>
+  </data>
+  <data name="CtlCubeColBuiltBy" xml:space="preserve">
+    <value>Gebaut von</value>
+  </data>
+  <data name="CtlCubeColColor" xml:space="preserve">
+    <value>Farbe</value>
+  </data>
+  <data name="CtlCubeColComponentTime" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
+  <data name="CtlCubeColComponentVolume" xml:space="preserve">
+    <value>Volumen</value>
+  </data>
+  <data name="CtlCubeColIngots" xml:space="preserve">
+    <value>Barren</value>
+  </data>
+  <data name="CtlCubeColOwner" xml:space="preserve">
+    <value>Besitzer</value>
+  </data>
+  <data name="CtlCubeMnuConvertToShip" xml:space="preserve">
+    <value>Zu Schiff</value>
+  </data>
+  <data name="CtlCubeMnuConvertToStation" xml:space="preserve">
+    <value>Zu Station</value>
+  </data>
+  <data name="CtlCubeMnuOptimize" xml:space="preserve">
+    <value>Optimieren</value>
+  </data>
+  <data name="CtlCubeMnuReplaceCube" xml:space="preserve">
+    <value>Ersetzen</value>
+  </data>
+  <data name="CtlCubeMnuSpeed" xml:space="preserve">
+    <value>Geschwindigkeit</value>
+  </data>
+  <data name="CtlCubeMnuSpeedReverse" xml:space="preserve">
+    <value>Geschwindigkeit umkehren</value>
+  </data>
+  <data name="CtlCubeTxtBlocks" xml:space="preserve">
+    <value>Blöcke</value>
+  </data>
+  <data name="CtlCubeTxtCockpitOrient" xml:space="preserve">
+    <value>Cockpit Ausrichtung</value>
+  </data>
+  <data name="CtlCubeTxtDistance" xml:space="preserve">
+    <value>Entfernung:</value>
+  </data>
+  <data name="CtlCubeTxtSize" xml:space="preserve">
+    <value>Größe:</value>
+  </data>
+  <data name="CtlCubeTxtSpeed" xml:space="preserve">
+    <value>Geschwindigkeit:</value>
+  </data>
+  <data name="CtlGridBlockSizeValue" xml:space="preserve">
+    <value>{0} × {1} × {2} Blöcke</value>
+  </data>
+  <data name="CtlGridTimeToProdValue" xml:space="preserve">
+    <value>{0:dd} Tage, {0:hh} Stunden, {0:mm\:ss\.ff}</value>
+  </data>
+  <data name="CtlInventoryBtnAdd" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
+  <data name="CtlInventoryColVolume" xml:space="preserve">
+    <value>Volumen (L)</value>
+  </data>
+  <data name="CtlMeteorType" xml:space="preserve">
+    <value>Art:</value>
+  </data>
+  <data name="CtlUnsavedStateTitle" xml:space="preserve">
+    <value>Nicht gesichert</value>
+  </data>
+  <data name="CtlVoxelBoundingSizeValue" xml:space="preserve">
+    <value>{0} × {1} × {2} blocks</value>
+  </data>
+  <data name="CtlVoxelMnuExtract" xml:space="preserve">
+    <value>Extrahieren</value>
+  </data>
+  <data name="CtlVoxelMnuRemoveMaterial" xml:space="preserve">
+    <value>Löschen/Entfernen</value>
+  </data>
+  <data name="DialogAllFiles" xml:space="preserve">
+    <value>Alle Dateien</value>
+  </data>
+  <data name="DialogAllSupportedFiles" xml:space="preserve">
+    <value>Alle unterstützen Dateien</value>
+  </data>
+  <data name="DialogAsteroidFiles" xml:space="preserve">
+    <value>Asteroiden Datei</value>
+  </data>
+  <data name="DialogHtmlFiles" xml:space="preserve">
+    <value>Html Dateien</value>
+  </data>
+  <data name="DialogImageFiles" xml:space="preserve">
+    <value>Bilddatei</value>
+  </data>
+  <data name="DialogImportImageTitle" xml:space="preserve">
+    <value>Bild zum importieren auswählen</value>
+  </data>
+  <data name="DialogImportModelTitle" xml:space="preserve">
+    <value>Modell zum importieren auswählen</value>
+  </data>
+  <data name="DialogImportVoxelTitle" xml:space="preserve">
+    <value>Asteroid zum importieren auswählen</value>
+  </data>
+  <data name="DialogNewVersionTitle" xml:space="preserve">
+    <value>Neue Version verfügbar</value>
+  </data>
+  <data name="DialogOFFFiles" xml:space="preserve">
+    <value>Aus</value>
+  </data>
+  <data name="DialogOldSEVersionTitle" xml:space="preserve">
+    <value>Nicht kompatibel mit alter Version von Space Engineers.</value>
+  </data>
+  <data name="DialogTextFiles" xml:space="preserve">
+    <value>Text Dateien</value>
+  </data>
+  <data name="DialogXmlFiles" xml:space="preserve">
+    <value>XML Dateien</value>
+  </data>
+  <data name="ExceptionState_NoApplication" xml:space="preserve">
+    <value>Space Engineers Installation nicht gefunden. Du musst Space Engineers auf deinem Computer installert haben um SEToolbox zu verwenden.</value>
+  </data>
+  <data name="ExceptionState_NoDirectory" xml:space="preserve">
+    <value>Das Space Engineers Verzeichnis ("{0}") wurde nicht gefunden. Du musst Space Engineers auf deinem Computer installert haben um SEToolbox zu verwenden.</value>
+  </data>
+  <data name="GlobalDocumentationUrl" xml:space="preserve">
+    <value>https://github.com/midspace/SEToolbox/wiki</value>
+  </data>
+  <data name="GlobalHomepageUrl" xml:space="preserve">
+    <value>https://github.com/midspace/SEToolbox</value>
+  </data>
+  <data name="GlobalSupportUrl" xml:space="preserve">
+    <value>https://github.com/midspace/SEToolbox/issues</value>
+  </data>
+  <data name="GlobalTimeDays" xml:space="preserve">
+    <value>Tage</value>
+  </data>
+  <data name="GlobalUpdatesUrl" xml:space="preserve">
+    <value>https://github.com/midspace/SEToolbox/releases/latest</value>
+  </data>
+  <data name="ImportModelClassType_LargeShip" xml:space="preserve">
+    <value>großes Schiff</value>
+  </data>
+  <data name="ImportModelClassType_SmallShip" xml:space="preserve">
+    <value>kleines Schiff</value>
+  </data>
+  <data name="InventoryBagDetail" xml:space="preserve">
+    <value>Art: {0} Entfernung: {1:#,##0.0} m</value>
+  </data>
+  <data name="SaveWorldType_Custom" xml:space="preserve">
+    <value>Benutzerdefiniert</value>
+  </data>
+  <data name="SaveWorldType_Local" xml:space="preserve">
+    <value>Lokaler Benutzer</value>
+  </data>
+  <data name="TraceDirection_X" xml:space="preserve">
+    <value>X Achse</value>
+  </data>
+  <data name="TraceDirection_XY" xml:space="preserve">
+    <value>X+Y Achse</value>
+  </data>
+  <data name="TraceDirection_XYZ" xml:space="preserve">
+    <value>Alle 3 Achsen</value>
+  </data>
+  <data name="TraceDirection_XZ" xml:space="preserve">
+    <value>X+Z Achse</value>
+  </data>
+  <data name="TraceDirection_Y" xml:space="preserve">
+    <value>Y Achse</value>
+  </data>
+  <data name="TraceDirection_YZ" xml:space="preserve">
+    <value>Y+Z Achse</value>
+  </data>
+  <data name="TraceDirection_Z" xml:space="preserve">
+    <value>Z Achse</value>
+  </data>
+  <data name="WnAboutBtnClose" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="WnAboutTxtCreatedBy" xml:space="preserve">
+    <value>Erstellt von:</value>
+  </data>
+  <data name="WnChangeOwnerBtnChange" xml:space="preserve">
+    <value>Ändern</value>
+  </data>
+  <data name="WnChangeOwnerTitle" xml:space="preserve">
+    <value>Besitzer ändern</value>
+  </data>
+  <data name="WnComponentsColComponentBuildTime" xml:space="preserve">
+    <value>Bauzeit</value>
+  </data>
+  <data name="WnComponentsColMaterialOreName" xml:space="preserve">
+    <value>Erz Name</value>
+  </data>
+  <data name="WnComponentsColValue" xml:space="preserve">
+    <value>Wert</value>
+  </data>
+  <data name="WnExplorerColCubes" xml:space="preserve">
+    <value>Blöcke</value>
+  </data>
+  <data name="WnExplorerColCubesTooltip" xml:space="preserve">
+    <value>Anzahl der Blöcke</value>
+  </data>
+  <data name="WnExplorerColDescription" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="WnExplorerColDistance" xml:space="preserve">
+    <value>Entfernung</value>
+  </data>
+  <data name="WnExplorerColDistanceTooltip" xml:space="preserve">
+    <value>Entfernung zu Spieler</value>
+  </data>
+  <data name="WnExplorerColMass" xml:space="preserve">
+    <value>Masse</value>
+  </data>
+  <data name="WnExplorerColMassTooltip" xml:space="preserve">
+    <value>Masse (kg)</value>
+  </data>
+  <data name="WnExplorerColType" xml:space="preserve">
+    <value>Art</value>
+  </data>
+  <data name="WnExplorerColVelocity" xml:space="preserve">
+    <value>Geschwindigkeit</value>
+  </data>
+  <data name="WnExplorerColVelocityTooltip" xml:space="preserve">
+    <value>Geschwindigkeit des Objekts m/s</value>
+  </data>
+  <data name="WnExplorerContextCopyGps" xml:space="preserve">
+    <value>_GPS kopieren</value>
+  </data>
+  <data name="WnExplorerContextDelete" xml:space="preserve">
+    <value>_Löschen</value>
+  </data>
+  <data name="WnExplorerMnuCreate" xml:space="preserve">
+    <value>_Erstellen</value>
+  </data>
+  <data name="WnExplorerMnuCreateAsteroidField" xml:space="preserve">
+    <value>Asteroidenfeld erstellen</value>
+  </data>
+  <data name="WnExplorerMnuCreateComponent" xml:space="preserve">
+    <value>Komponente/Item erstellen</value>
+  </data>
+  <data name="WnExplorerMnuExport" xml:space="preserve">
+    <value>Exportieren</value>
+  </data>
+  <data name="WnExplorerMnuFile" xml:space="preserve">
+    <value>_Datei</value>
+  </data>
+  <data name="WnExplorerMnuFileOpen" xml:space="preserve">
+    <value>_Öffnen [Ctrl+O]</value>
+  </data>
+  <data name="WnExplorerMnuFileSave" xml:space="preserve">
+    <value>_Speichern (Ctrl+S)</value>
+  </data>
+  <data name="WnExplorerMnuImport" xml:space="preserve">
+    <value>_Importieren</value>
+  </data>
+  <data name="WnExplorerMnuImportImage" xml:space="preserve">
+    <value>Bild</value>
+  </data>
+  <data name="WnExplorerMnuJoinedGrids" xml:space="preserve">
+    <value>_Joined Grids</value>
+  </data>
+  <data name="WnExplorerMnuOptions" xml:space="preserve">
+    <value>_Optionen</value>
+  </data>
+  <data name="WnExplorerMnuOptionsDocumentation" xml:space="preserve">
+    <value>_Dokumentation</value>
+  </data>
+  <data name="WnExplorerMnuOptionsLanguages" xml:space="preserve">
+    <value>_Sprachen</value>
+  </data>
+  <data name="WnExplorerMnuOptionsSettings" xml:space="preserve">
+    <value>_Einstellungen</value>
+  </data>
+  <data name="WnExplorerMnuSelectionDelete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="WnExplorerMnuSelectionRepair" xml:space="preserve">
+    <value>Reparieren</value>
+  </data>
+  <data name="WnExplorerMnuToolCopyGpsTooltip" xml:space="preserve">
+    <value>GPS kopieren</value>
+  </data>
+  <data name="WnExplorerMnuToolOpenTooltip" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
+  <data name="WnExplorerMnuToolSaveTooltip" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="WnExplorerMnuWorld" xml:space="preserve">
+    <value>_Welt</value>
+  </data>
+  <data name="WnGenFloatBtnCreate" xml:space="preserve">
+    <value>Erstellen</value>
+  </data>
+  <data name="WnGenFloatTxtMass" xml:space="preserve">
+    <value>Masse:</value>
+  </data>
+  <data name="WnGenFloatTxtVolume" xml:space="preserve">
+    <value>Volumen:</value>
+  </data>
+  <data name="WnImport3dModelEmpty" xml:space="preserve">
+    <value>Leer</value>
+  </data>
+  <data name="WnImport3dModelLabelNewDepth" xml:space="preserve">
+    <value>Tiefe:</value>
+  </data>
+  <data name="WnImport3dModelLabelNewSizeBlocks" xml:space="preserve">
+    <value>Blöcke</value>
+  </data>
+  <data name="WnImportAsteroidModelTabQualitySpeed" xml:space="preserve">
+    <value>Qualität/Geschwindigkeit</value>
+  </data>
+  <data name="WnImportAsteroidRdoFile" xml:space="preserve">
+    <value>Datei</value>
+  </data>
+  <data name="WnImportAsteroidTxtRadiusTooltip" xml:space="preserve">
+    <value>Radius (m) (1 bis 3000)</value>
+  </data>
+  <data name="WnImportImageGrpNewSize" xml:space="preserve">
+    <value>Neue Größe</value>
+  </data>
+  <data name="WnImportImageGrpOrientation" xml:space="preserve">
+    <value>Ausrichtung</value>
+  </data>
+  <data name="WnImportImageGrpOriginalSize" xml:space="preserve">
+    <value>Original Größe</value>
+  </data>
+  <data name="WnImportImageGrpTransparency" xml:space="preserve">
+    <value>Transparenz</value>
+  </data>
+  <data name="WnImportImageImgOriginalTooltip" xml:space="preserve">
+    <value>Original Abbild</value>
+  </data>
+  <data name="WnImportImageImgPreviewTooltip" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="WnImportImageLabelImage" xml:space="preserve">
+    <value>Bild:</value>
+    <comment>Specify file for image</comment>
+  </data>
+  <data name="WnImportImageLabelNewHeight" xml:space="preserve">
+    <value>Höhe:</value>
+  </data>
+  <data name="WnImportImageLabelNewWidth" xml:space="preserve">
+    <value>Breite:</value>
+  </data>
+  <data name="WnLoadBtnOpen" xml:space="preserve">
+    <value>_Öffnen</value>
+  </data>
+  <data name="WnLoadBtnRepair" xml:space="preserve">
+    <value>_Reparieren</value>
+  </data>
+  <data name="WnLoadColSaved" xml:space="preserve">
+    <value>Gespeichert</value>
+  </data>
+  <data name="WnLocateAppBtnCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="WnLocateAppBtnContinue" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="WnResourceReportBtnHtmlFile" xml:space="preserve">
+    <value>.html Datei</value>
+  </data>
+  <data name="WnResourceReportBtnTextFile" xml:space="preserve">
+    <value>.txt Datei</value>
+  </data>
+  <data name="WnResourceReportBtnXmlFile" xml:space="preserve">
+    <value>.xml Datei</value>
+  </data>
+  <data name="WnSettingsChkCheckForUpdates" xml:space="preserve">
+    <value>Immer</value>
+  </data>
+  <data name="WnSettingsChkCheckForUpdatesTooltip" xml:space="preserve">
+    <value>Prüfe bei Start auf neue Updates.</value>
+  </data>
+  <data name="WnSettingsTitle" xml:space="preserve">
+    <value>Einstellungen</value>
   </data>
 </root>

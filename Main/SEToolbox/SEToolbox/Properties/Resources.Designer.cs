@@ -4379,6 +4379,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Large.
+        /// </summary>
+        public static string MyCubeSize_Large {
+            get {
+                return ResourceManager.GetString("MyCubeSize_Large", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Small.
+        /// </summary>
+        public static string MyCubeSize_Small {
+            get {
+                return ResourceManager.GetString("MyCubeSize_Small", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap navigate_cross {
