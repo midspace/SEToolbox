@@ -712,13 +712,12 @@
         public static string GetVoxelDisplayTexture(this MyVoxelMaterialDefinition voxelMaterialDefinition)
         {
             string texture = null;
-            var dx11MaterialDefinition = voxelMaterialDefinition as MyDx11VoxelMaterialDefinition;
-            if (dx11MaterialDefinition != null)
-            {
-                texture = dx11MaterialDefinition.ColorMetalXZnY;
-                if (texture == null)
-                    texture = dx11MaterialDefinition.NormalGlossXZnY;
-            }
+
+            texture = voxelMaterialDefinition.RenderParams.TextureSets[0].ColorMetalXZnY;
+
+            if (texture == null)
+                texture = voxelMaterialDefinition.RenderParams.TextureSets[0].NormalGlossXZnY;
+
             if (texture == null)
                 texture = voxelMaterialDefinition.DiffuseXZ;
 

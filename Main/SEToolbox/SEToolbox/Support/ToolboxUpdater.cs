@@ -16,34 +16,35 @@
         /// Required dependancies which must be copied for SEToolbox to work.
         /// </summary>
         internal static readonly string[] CoreSpaceEngineersFiles = {
-            "HavokWrapper.dll",         // MSIL
-            "msvcp120.dll",             // SteamSDK dependancy.
-            "msvcr120.dll",             // SteamSDK dependancy.
-            "Sandbox.Common.dll",       // AnyCpu
-            "Sandbox.Game.dll",         // MSIL
-            "Sandbox.Graphics.dll",     // MSIL
-            "SharpDX.dll",              // AnyCpu
-            "SharpDX.Direct2D1.dll",    // AnyCpu   Required to load Planets.
-            "SharpDX.Direct3D11.dll",   // AnyCpu   Required to load Planets.
-            "SharpDX.DXGI.dll",         // AnyCpu   Required to load Planets.
-            "SpaceEngineers.Game.dll",  // MSIL
-            "SpaceEngineers.ObjectBuilders.dll",                    // MSIL
-            "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",     // MSIL
-            "steam_api64.dll",          // AnyCpu
-            "SteamSDK.dll",             // MSIL
-            "VRage.Ansel.dll",          // MSIL    1.181.x requirement
-            "VRage.Audio.dll",          // MSIL  1.147.x requirement.
-            "VRage.dll",                // AnyCpu
-            "VRage.Game.dll",           // AnyCpu
-            "VRage.Game.XmlSerializers.dll",    // AnyCpu
-            "VRage.Input.dll",          // MSIL
-            "VRage.Library.dll",        // AnyCpu
-            "VRage.Math.dll",           // AnyCpu
-            "VRage.Native.dll",         // MSIL
-            "VRage.OpenVRWrapper.dll",  // MSIL
-            "VRage.Render.dll",         // AnyCpu
-            "VRage.Render11.dll",       // AnyCpu
-            "System.Data.SQLite.dll",   // AnyCpu  1.171.x requirement
+            "HavokWrapper.dll",                 // x64
+            "msvcp120.dll",                     // SteamSDK dependancy.
+            "msvcr120.dll",                     // SteamSDK dependancy.
+            "Sandbox.Common.dll",               // AnyCPU
+            "Sandbox.Game.dll",                 // x64
+            "Sandbox.Graphics.dll",             // x64
+            "Sandbox.RenderDirect.dll",         // x64      1.187.x requirement.
+            "SharpDX.dll",                      // AnyCPU
+            "SharpDX.Direct2D1.dll",            // AnyCPU   Required to load Planets.
+            "SharpDX.Direct3D11.dll",           // AnyCPU   Required to load Planets.
+            "SharpDX.DXGI.dll",                 // AnyCPU   Required to load Planets.
+            "SpaceEngineers.Game.dll",          // x64
+            "SpaceEngineers.ObjectBuilders.dll",                    // x64
+            "SpaceEngineers.ObjectBuilders.XmlSerializers.dll",     // x64
+            "steam_api64.dll",                  // x64
+            "Steamworks.NET.dll",               // x64      1.187.x requirement.
+            "VRage.Ansel.dll",                  // x64      1.181.x requirement.
+            "VRage.Audio.dll",                  // MSIL     1.147.x requirement.
+            "VRage.dll",                        // AnyCPU
+            "VRage.Game.dll",                   // x64
+            "VRage.Game.XmlSerializers.dll",    // x64
+            "VRage.Input.dll",                  // x64
+            "VRage.Library.dll",                // AnyCPU
+            "VRage.Math.dll",                   // AnyCPU
+            "VRage.Native.dll",                 // x64
+            "VRage.OpenVRWrapper.dll",          // x64
+            "VRage.Render.dll",                 // AnyCPU
+            "VRage.Render11.dll",               // x64
+            "System.Data.SQLite.dll",           // AnyCPU  1.171.x requirement
         };
 
         //internal static readonly string[] CoreMedievalEngineersFiles = {

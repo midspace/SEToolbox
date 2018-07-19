@@ -52,7 +52,7 @@
             Assert.IsNotNull(prefabDefinitions, "Sandbox content should not be null");
             Assert.IsTrue(ret, "Sandbox content should have been detected");
             Assert.IsFalse(isCompressed, "Sandbox content should not be compressed");
-            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrids[0].CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
+            Assert.IsTrue(prefabDefinitions.Prefabs[0].CubeGrid.CubeBlocks.Count > 10, "Sandbox content should have cube blocks");
         }
 
         [TestMethod, TestCategory("UnitTest")]

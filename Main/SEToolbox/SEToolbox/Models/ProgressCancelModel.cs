@@ -153,8 +153,11 @@
             var incrementTimer = 0;
             _updateTimer.Elapsed += delegate
             {
-                var elapsed = _elapsedTimer.Elapsed;
-                var estimate = new TimeSpan((long)(elapsed.Ticks / (Progress / _maximumProgress)));
+                TimeSpan elapsed = _elapsedTimer.Elapsed;
+                TimeSpan estimate = elapsed;
+                if (Progress > 0)
+                    estimate = new TimeSpan((long)(elapsed.Ticks / (Progress / _maximumProgress)));
+
                 EstimatedTimeLeft = estimate - elapsed;
 
                 if (incrementTimer == 10)
