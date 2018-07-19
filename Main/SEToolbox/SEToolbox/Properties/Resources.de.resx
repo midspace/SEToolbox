@@ -144,8 +144,14 @@
   <data name="ClassType_SmallStation" xml:space="preserve">
     <value>Kleine Station</value>
   </data>
+  <data name="ClsCharacterDead" xml:space="preserve">
+    <value>(tod)</value>
+  </data>
   <data name="ClsCubeGridWheelDetached" xml:space="preserve">
     <value>Reifen</value>
+  </data>
+  <data name="ClsErrorApplication" xml:space="preserve">
+    <value>Anwendung:</value>
   </data>
   <data name="ClsErrorBinCachePath" xml:space="preserve">
     <value>BinCachePath:</value>
@@ -165,8 +171,35 @@
   <data name="ClsReportColOreName" xml:space="preserve">
     <value>Erz Name</value>
   </data>
+  <data name="ClsReportColShip" xml:space="preserve">
+    <value>Schiff</value>
+  </data>
+  <data name="ClsReportColTime" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
+  <data name="ClsReportDate" xml:space="preserve">
+    <value>Datum:</value>
+  </data>
+  <data name="ClsReportError" xml:space="preserve">
+    <value>Fehler:</value>
+  </data>
+  <data name="ClsReportHeaderAllComponents" xml:space="preserve">
+    <value>Alle Komponenten</value>
+  </data>
+  <data name="ClsReportHeaderAllItems" xml:space="preserve">
+    <value>Alle Gegenstände</value>
+  </data>
+  <data name="ClsReportSaveWorld" xml:space="preserve">
+    <value>Sichere Welt:</value>
+  </data>
   <data name="CtlCharacterBattery" xml:space="preserve">
     <value>Batterie:</value>
+  </data>
+  <data name="CtlCharacterBtnSpeed" xml:space="preserve">
+    <value>Geschwindigkeit:</value>
+  </data>
+  <data name="CtlCharacterDistance" xml:space="preserve">
+    <value>Distanz:</value>
   </data>
   <data name="CtlCharacterHealth" xml:space="preserve">
     <value>Gesundheit:</value>
@@ -179,6 +212,9 @@
   </data>
   <data name="CtlCharacterMnuResetSpeed" xml:space="preserve">
     <value>Geschwindigkeit zurücksetzen</value>
+  </data>
+  <data name="CtlCharacterMnuSpeed" xml:space="preserve">
+    <value>Geschwindigkeit</value>
   </data>
   <data name="CtlCharacterPlayer" xml:space="preserve">
     <value>Spieler:</value>
@@ -204,8 +240,23 @@
   <data name="CtlCubeColIngots" xml:space="preserve">
     <value>Barren</value>
   </data>
+  <data name="CtlCubeColIngotTime" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
   <data name="CtlCubeColOwner" xml:space="preserve">
     <value>Besitzer</value>
+  </data>
+  <data name="CtlCubeColX" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="CtlCubeColY" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="CtlCubeColZ" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="CtlCubeMnuColorCube" xml:space="preserve">
+    <value>Farbe</value>
   </data>
   <data name="CtlCubeMnuConvertToShip" xml:space="preserve">
     <value>Zu Schiff</value>
@@ -215,6 +266,9 @@
   </data>
   <data name="CtlCubeMnuOptimize" xml:space="preserve">
     <value>Optimieren</value>
+  </data>
+  <data name="CtlCubeMnuOwnerCube" xml:space="preserve">
+    <value>Besitzer</value>
   </data>
   <data name="CtlCubeMnuReplaceCube" xml:space="preserve">
     <value>Ersetzen</value>
@@ -249,8 +303,17 @@
   <data name="CtlInventoryBtnAdd" xml:space="preserve">
     <value>Hinzufügen</value>
   </data>
+  <data name="CtlInventoryBtnDelete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
   <data name="CtlInventoryColVolume" xml:space="preserve">
     <value>Volumen (L)</value>
+  </data>
+  <data name="CtlMeteorMnuReverseSpeed" xml:space="preserve">
+    <value>Geschwindigkeit umkehren</value>
+  </data>
+  <data name="CtlMeteorMnuSpeed" xml:space="preserve">
+    <value>Geschwindigkeit</value>
   </data>
   <data name="CtlMeteorType" xml:space="preserve">
     <value>Art:</value>
@@ -260,6 +323,9 @@
   </data>
   <data name="CtlVoxelBoundingSizeValue" xml:space="preserve">
     <value>{0} × {1} × {2} blocks</value>
+  </data>
+  <data name="CtlVoxelDistance" xml:space="preserve">
+    <value>Distanz:</value>
   </data>
   <data name="CtlVoxelMnuExtract" xml:space="preserve">
     <value>Extrahieren</value>
@@ -305,6 +371,12 @@
   </data>
   <data name="DialogXmlFiles" xml:space="preserve">
     <value>XML Dateien</value>
+  </data>
+  <data name="DirApplicationName" xml:space="preserve">
+    <value>SEToolbox</value>
+  </data>
+  <data name="DirCompanyName" xml:space="preserve">
+    <value>MidSpace</value>
   </data>
   <data name="ExceptionState_NoApplication" xml:space="preserve">
     <value>Space Engineers Installation nicht gefunden. Du musst Space Engineers auf deinem Computer installert haben um SEToolbox zu verwenden.</value>
@@ -363,14 +435,41 @@
   <data name="TraceDirection_Z" xml:space="preserve">
     <value>Z Achse</value>
   </data>
+  <data name="TraceId_Id1" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="TraceId_Id2" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="TraceId_Id3" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="TraceId_Id4" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="TraceId_Id5" xml:space="preserve">
+    <value>5</value>
+  </data>
   <data name="WnAboutBtnClose" xml:space="preserve">
     <value>Schließen</value>
   </data>
   <data name="WnAboutTxtCreatedBy" xml:space="preserve">
     <value>Erstellt von:</value>
   </data>
+  <data name="WnBlueprintDialogBtnCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="WnBlueprintDialogBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnChangeOwnerBtnCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
   <data name="WnChangeOwnerBtnChange" xml:space="preserve">
     <value>Ändern</value>
+  </data>
+  <data name="WnChangeOwnerLabelPlayer" xml:space="preserve">
+    <value>Spieler:</value>
   </data>
   <data name="WnChangeOwnerTitle" xml:space="preserve">
     <value>Besitzer ändern</value>
@@ -381,8 +480,20 @@
   <data name="WnComponentsColMaterialOreName" xml:space="preserve">
     <value>Erz Name</value>
   </data>
+  <data name="WnComponentsColMaterialRare" xml:space="preserve">
+    <value>Selten</value>
+  </data>
   <data name="WnComponentsColValue" xml:space="preserve">
     <value>Wert</value>
+  </data>
+  <data name="WnErrorDialogBtnClose" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="WnErrorDialogLabelDescription" xml:space="preserve">
+    <value>Fehler Nachricht:</value>
+  </data>
+  <data name="WnErrorDialogTitle" xml:space="preserve">
+    <value>Fehler</value>
   </data>
   <data name="WnExplorerColCubes" xml:space="preserve">
     <value>Blöcke</value>
@@ -489,14 +600,95 @@
   <data name="WnGenFloatTxtVolume" xml:space="preserve">
     <value>Volumen:</value>
   </data>
+  <data name="WnGroupMoveTxtOffsetX" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetXTooltip" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetY" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetYTooltip" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetZ" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnGroupMoveTxtOffsetZTooltip" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleX" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleXTooltip" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleY" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleYTooltip" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleZ" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="WnGroupMoveTxtSingleZTooltip" xml:space="preserve">
+    <value>Z</value>
+  </data>
   <data name="WnImport3dModelEmpty" xml:space="preserve">
     <value>Leer</value>
   </data>
   <data name="WnImport3dModelLabelNewDepth" xml:space="preserve">
     <value>Tiefe:</value>
   </data>
+  <data name="WnImport3dModelLabelNewHeight" xml:space="preserve">
+    <value>Höhe:</value>
+  </data>
   <data name="WnImport3dModelLabelNewSizeBlocks" xml:space="preserve">
     <value>Blöcke</value>
+  </data>
+  <data name="WnImport3dModelPositionX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="WnImport3dModelPositionY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="WnImport3dModelPositionZ" xml:space="preserve">
+    <value>Z:</value>
+  </data>
+  <data name="WnImportAsteroidBtnCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="WnImportAsteroidModelBtnCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="WnImportAsteroidModelBtnCreate" xml:space="preserve">
+    <value>Erstelle</value>
+  </data>
+  <data name="WnImportAsteroidModelGrpOrientation" xml:space="preserve">
+    <value>Ausrichtung</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelFrontDistance" xml:space="preserve">
+    <value>Distanz:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelNewDepth" xml:space="preserve">
+    <value>Tiefe:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelNewHeight" xml:space="preserve">
+    <value>Höhe:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelPositionX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelPositionY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="WnImportAsteroidModelLabelPositionZ" xml:space="preserve">
+    <value>Z:</value>
+  </data>
+  <data name="WnImportAsteroidModelTabProcessing" xml:space="preserve">
+    <value>Bearbeite</value>
   </data>
   <data name="WnImportAsteroidModelTabQualitySpeed" xml:space="preserve">
     <value>Qualität/Geschwindigkeit</value>
@@ -506,6 +698,12 @@
   </data>
   <data name="WnImportAsteroidTxtRadiusTooltip" xml:space="preserve">
     <value>Radius (m) (1 bis 3000)</value>
+  </data>
+  <data name="WnImportImageBtnCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="WnImportImageBtnSetOriginalSize" xml:space="preserve">
+    <value>&gt;</value>
   </data>
   <data name="WnImportImageGrpNewSize" xml:space="preserve">
     <value>Neue Größe</value>
@@ -535,6 +733,18 @@
   <data name="WnImportImageLabelNewWidth" xml:space="preserve">
     <value>Breite:</value>
   </data>
+  <data name="WnImportImageLabelOriginalHeight" xml:space="preserve">
+    <value>Höhe:</value>
+  </data>
+  <data name="WnImportImageLabelPositionX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="WnImportImageLabelPositionY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="WnImportImageLabelPositionZ" xml:space="preserve">
+    <value>Z:</value>
+  </data>
   <data name="WnLoadBtnOpen" xml:space="preserve">
     <value>_Öffnen</value>
   </data>
@@ -550,6 +760,18 @@
   <data name="WnLocateAppBtnContinue" xml:space="preserve">
     <value>Weiter</value>
   </data>
+  <data name="WnProgressTitle" xml:space="preserve">
+    <value>Bearbeiten...</value>
+  </data>
+  <data name="WnProgressTxtTimeCalculating" xml:space="preserve">
+    <value>Berechnen...</value>
+  </data>
+  <data name="WnProgressTxtTimeRemain" xml:space="preserve">
+    <value>Time remaining:</value>
+  </data>
+  <data name="WnResourceReportBtnClose" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
   <data name="WnResourceReportBtnHtmlFile" xml:space="preserve">
     <value>.html Datei</value>
   </data>
@@ -559,6 +781,12 @@
   <data name="WnResourceReportBtnXmlFile" xml:space="preserve">
     <value>.xml Datei</value>
   </data>
+  <data name="WnSelectCubeBtnCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="WnSettingsCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
   <data name="WnSettingsChkCheckForUpdates" xml:space="preserve">
     <value>Immer</value>
   </data>
@@ -567,5 +795,8 @@
   </data>
   <data name="WnSettingsTitle" xml:space="preserve">
     <value>Einstellungen</value>
+  </data>
+  <data name="WnVoxelMergeCancel" xml:space="preserve">
+    <value>Abbrechen</value>
   </data>
 </root>
