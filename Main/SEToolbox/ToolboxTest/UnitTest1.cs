@@ -174,7 +174,7 @@
         [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromProtoBufSandbox()
         {
-            // filename will automatically be concatenated with "PB"
+            // filename will automatically be concatenated with "B1"
             const string filename = @".\TestAssets\SANDBOX_0_0_0_.Proto.sbs";
 
             MyObjectBuilder_Sector sectorData;

@@ -1999,7 +1999,7 @@
                     Directory.CreateDirectory(blueprintPath);
 
                 SpaceEngineersApi.WriteSpaceEngineersFile(blueprintDefinition, Path.Combine(blueprintPath, "bp.sbc"));
-                SpaceEngineersApi.WriteSpaceEngineersFilePB(blueprintDefinition, Path.Combine(blueprintPath, "bp.sbcPB"), false);
+                SpaceEngineersApi.WriteSpaceEngineersFilePB(blueprintDefinition, Path.Combine(blueprintPath, "bp.sbcB1"), false);
             }
         }
 

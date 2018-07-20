@@ -210,7 +210,7 @@
     <None Include="TestAssets\SANDBOX_0_0_0_.sbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestAssets\SANDBOX_0_0_0_.Proto.sbsPB">
+    <None Include="TestAssets\SANDBOX_0_0_0_.Proto.sbsB1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestAssets\SANDBOX_0_0_0_.XML.sbs">
