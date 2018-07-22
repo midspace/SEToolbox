@@ -379,8 +379,11 @@
         public override void RecalcPosition(Vector3D playerPosition)
         {
             base.RecalcPosition(playerPosition);
-            Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
-            WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
+            if (IsValid)
+            {
+                Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
+                WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
+            }
         }
 
         public void UpdateNewSource(MyVoxelMap newMap, string fileName)
