@@ -351,7 +351,7 @@
                 if (File.Exists(sectorBackupFilename))
                     FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
 
-                // The protoBuf .sbsB1 may not exist in older save games.
+                // The protoBuf (.sbsPB, .sbsB1) may not exist in older save games.
                 if (File.Exists(sectorFilename + SpaceEngineersConsts.ProtobuffersExtension))
                     File.Move(sectorFilename + SpaceEngineersConsts.ProtobuffersExtension, sectorBackupFilename);
             }

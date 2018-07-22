@@ -60,7 +60,7 @@
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            var baseEasyStart1Path = Path.Combine(contentPath, @"Data\Prefabs\LargeShipRed.sbcB1");
+            var baseEasyStart1Path = Path.Combine(contentPath, $@"Data\Prefabs\LargeShipRed.sbc{SpaceEngineersConsts.ProtobuffersExtension}");
             Assert.IsTrue(File.Exists(baseEasyStart1Path), "Sandbox content file should exist");
 
             MyObjectBuilder_Definitions prefabDefinitions;

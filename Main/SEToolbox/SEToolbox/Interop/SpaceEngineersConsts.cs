@@ -23,9 +23,9 @@
         public const string SandBoxSectorFilename = "SANDBOX_0_0_0_.sbs";
 
         /// <summary>
-        /// This is the file extension added to the normal filename for Sanbox files, changing the ".sbs" to ".sbsB1"
+        /// This is the file extension added to the normal filename for Sanbox files, changing the ".sbs" to ".sbsPB"
         /// </summary>
-        public const string ProtobuffersExtension = "B1";
+        public readonly static string ProtobuffersExtension = VRage.ObjectBuilders.MyObjectBuilderSerializer.ProtobufferExtension ?? "PB";
 
         public const byte EmptyVoxelMaterial = 0xff;
 
