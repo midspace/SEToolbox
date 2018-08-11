@@ -589,7 +589,7 @@
         {
             bool retValue = false;
 
-            MyObjectBuilder_ComponentContainer.ComponentData hierarchyComponentBase = cockpit.ComponentContainer.Components.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase");
+            MyObjectBuilder_ComponentContainer.ComponentData hierarchyComponentBase = cockpit.ComponentContainer?.Components?.FirstOrDefault(e => e.TypeId == "MyHierarchyComponentBase");
             var hierarchyBase = hierarchyComponentBase?.Component as MyObjectBuilder_HierarchyComponentBase;
             if (hierarchyBase != null && hierarchyBase.Children.Count > 0)
             {
