@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:SEToolbox.Controls"
+             xmlns:commands="clr-namespace:SEToolbox.Services"
              xmlns:converters="clr-namespace:SEToolbox.Converters"
              xmlns:props="clr-namespace:SEToolbox.Properties"
              xmlns:views="clr-namespace:SEToolbox.Views"
@@ -11,7 +12,8 @@
              lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
              lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             commands:DialogService.IsRegisteredView="True">
     <UserControl.Resources>
         <converters:ResouceToImageConverter x:Key="ResouceToImageConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -53,6 +55,11 @@
                         <DockPanel HorizontalAlignment="Stretch" Height="22"/>
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
+                <MenuItem Header="{lex:Loc CtlPlanetMnuRegenerate}" ToolTip="{lex:Loc CtlPlanetMnuRegenerateDetail}" Command="{Binding RegenerateCommand}" Style="{StaticResource ToolBarTopMenuitem}">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=earth}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem HorizontalAlignment="Right" Style="{StaticResource ToolBarTopMenuitem}" ToolTip="{lex:Loc CtlPlanetMnuCopyDetail}" Command="{Binding CopyDetailCommand}">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=copy}" />

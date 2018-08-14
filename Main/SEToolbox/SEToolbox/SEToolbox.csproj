@@ -235,6 +235,7 @@
     <Compile Include="Models\ChangeOwnerModel.cs" />
     <Compile Include="Models\BlueprintDialogModel.cs" />
     <Compile Include="Models\ErrorDialogModel.cs" />
+    <Compile Include="Models\RegeneratePlanetModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\MergeVoxelModel.cs" />
     <Compile Include="Models\OwnerModel.cs" />
@@ -361,6 +362,7 @@
     <Compile Include="ViewModels\ChangeOwnerViewModel.cs" />
     <Compile Include="ViewModels\BlueprintDialogViewModel.cs" />
     <Compile Include="ViewModels\ErrorDialogViewModel.cs" />
+    <Compile Include="ViewModels\RegeneratePlanetViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\MergeVoxelViewModel.cs" />
     <Compile Include="ViewModels\ProgressCancelViewModel.cs" />
@@ -434,6 +436,9 @@
     </Compile>
     <Compile Include="Views\WindowErrorDialog.xaml.cs">
       <DependentUpon>WindowErrorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowRegeneratePlanet.xaml.cs">
+      <DependentUpon>WindowRegeneratePlanet.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowSettings.xaml.cs">
       <DependentUpon>WindowSettings.xaml</DependentUpon>
@@ -560,6 +565,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\WindowErrorDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowRegeneratePlanet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -875,6 +884,7 @@
       <Link>steam_api64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\earth.png" />
     <None Include="Resources\SEToolbox_splash_zh-cn.png" />
     <None Include="Resources\hammer.png" />
   </ItemGroup>

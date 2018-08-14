@@ -1020,6 +1020,12 @@
             OptimizeModel(viewModel);
         }
 
+        public void TestResize(StructurePlanetModel viewModel)
+        {
+            viewModel.RegeneratePlanet(0, 120000);
+            IsModified = true;
+        }
+
         /// <summary>
         /// Copy blocks from ship2 into ship1.
         /// </summary>

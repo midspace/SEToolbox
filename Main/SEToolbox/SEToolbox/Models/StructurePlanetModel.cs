@@ -1,14 +1,19 @@
 ﻿namespace SEToolbox.Models
 {
+    using Sandbox.Definitions;
+    using Sandbox.Engine.Voxels;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
+    using SEToolbox.Support;
     using System;
     using System.ComponentModel;
     using System.IO;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using VRage.Game;
+    using VRage.Game.Voxels;
     using VRage.ObjectBuilders;
+    using VRage.Utils;
     using VRageMath;
 
     [Serializable]
@@ -131,6 +136,21 @@
                 }
             }
         }
+
+        [XmlIgnore]
+        public int Seed
+        {
+            get { return Planet.Seed; }
+            set
+            {
+                if (value != Planet.Seed)
+                {
+                    Planet.Seed = value;
+                    RaisePropertyChanged(() => Seed);
+                }
+            }
+        }
+
 
         [XmlIgnore]
         public float Radius
@@ -351,6 +371,71 @@
         {
             base.RecalcPosition(playerPosition);
             Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
+            WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
+        }
+
+        /// <summary>
+        /// Regenerate the Planet voxel.
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <param name="radius"></param>
+        public void RegeneratePlanet(int seed, float radius)
+        {
+            MyPlanetStorageProvider provider = new MyPlanetStorageProvider();
+            MyPlanetGeneratorDefinition planetDefinition = MyDefinitionManager.Static.GetDefinition<MyPlanetGeneratorDefinition>(MyStringHash.GetOrCompute(Planet.PlanetGenerator));
+            provider.Init(seed, planetDefinition, radius);
+
+            float minHillSize = provider.Radius * planetDefinition.HillParams.Min;
+            float maxHillSize = provider.Radius * planetDefinition.HillParams.Max;
+
+            float atmosphereRadius = planetDefinition.AtmosphereSettings.HasValue && planetDefinition.AtmosphereSettings.Value.Scale > 1f ? 1 + planetDefinition.AtmosphereSettings.Value.Scale : 1.75f;
+            atmosphereRadius *= provider.Radius;
+
+            Planet.Seed = seed;
+            Planet.Radius = radius;
+            Planet.AtmosphereRadius = atmosphereRadius;
+            Planet.MinimumSurfaceRadius = radius + minHillSize;
+            Planet.MaximumHillRadius = radius + maxHillSize;
+
+            provider.Init(Planet.Seed, planetDefinition, radius);
+
+            var asteroid = new MyVoxelMap();
+            asteroid.Storage = new MyOctreeStorage(provider, provider.StorageSize);
+            var tempfilename = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
+            asteroid.Save(tempfilename);
+            //SourceVoxelFilepath = tempfilename;
+            UpdateNewSource(asteroid, tempfilename);
+
+            RaisePropertyChanged(() => Seed);
+            RaisePropertyChanged(() => Radius);
+            RaisePropertyChanged(() => AtmosphereRadius);
+            RaisePropertyChanged(() => MinimumSurfaceRadius);
+            RaisePropertyChanged(() => MaximumHillRadius);
+
+            //Size = _voxelMap.Size;
+            //_contentCenter = _voxelMap.ContentCenter;
+            //IsValid = _voxelMap.IsValid;
+            //RaisePropertyChanged(() => Size);
+            //RaisePropertyChanged(() => IsValid);
+            //Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
+            //WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
+        }
+
+        public void UpdateNewSource(MyVoxelMap newMap, string fileName)
+        {
+            if (_voxelMap != null)
+                _voxelMap.Dispose();
+            _voxelMap = newMap;
+            SourceVoxelFilepath = fileName;
+
+            Size = _voxelMap.Size;
+            //ContentBounds = _voxelMap.BoundingContent;
+            IsValid = _voxelMap.IsValid;
+
+            RaisePropertyChanged(() => Size);
+            //RaisePropertyChanged(() => ContentSize);
+            RaisePropertyChanged(() => IsValid);
+            Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
             WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }
 

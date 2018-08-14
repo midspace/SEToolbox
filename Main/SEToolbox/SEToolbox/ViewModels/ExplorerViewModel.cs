@@ -1279,12 +1279,13 @@
 
         public bool Test6CanExecute()
         {
-            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count > 0;
+            return _dataModel.ActiveWorld != null && _dataModel.ActiveWorld.IsValid && Selections.Count == 1 &&
+                ((Selections[0].DataModel.ClassType == ClassType.Planet && Selections[0].DataModel.IsValid));
         }
 
         public void Test6Executed()
         {
-            _dataModel.TestConvert(Selections[0].DataModel as StructureCubeGridModel);
+            _dataModel.TestResize(Selections[0].DataModel as StructurePlanetModel);
         }
 
         #endregion
