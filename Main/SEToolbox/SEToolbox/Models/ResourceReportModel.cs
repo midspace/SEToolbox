@@ -361,10 +361,13 @@ td.right { text-align: right; }";
 
                                 if (cd != null)
                                 {
-                                    if (ores.ContainsKey(cd.DisplayNameEnum.Value.String))
-                                        ores[cd.DisplayNameEnum.Value.String] += kvp.Value;
+                                    // stock ores require DisplayNameEnum. Modded ores require DisplayNameString.
+                                    string key = cd.DisplayNameEnum != null ? cd.DisplayNameEnum.Value.String : cd.DisplayNameString;
+
+                                    if (ores.ContainsKey(key))
+                                        ores[key] += kvp.Value;
                                     else
-                                        ores.Add(cd.DisplayNameEnum.Value.String, kvp.Value);
+                                        ores.Add(key, kvp.Value);
                                 }
                             }
                         }
