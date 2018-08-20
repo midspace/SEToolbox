@@ -128,7 +128,6 @@
             <TextBlock Grid.Row="14" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetSpawnsFlora}"/>
             <TextBlock Grid.Row="14" Grid.Column="1" VerticalAlignment="Center" Text="{Binding SpawnsFlora}" />
             <TextBlock Grid.Row="15" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetShowGps}"/>
-            <!--<TextBlock Grid.Row="15" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ShowGPS}" />-->
             <CheckBox Grid.Row="15" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding ShowGPS, Mode=TwoWay}" />
             <TextBlock Grid.Row="16" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlPlanetPlanetGenerator}"/>
             <TextBlock Grid.Row="16" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PlanetGenerator}" />
