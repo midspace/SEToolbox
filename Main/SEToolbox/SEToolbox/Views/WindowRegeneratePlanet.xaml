@@ -47,12 +47,12 @@
                 <TextBox.Text>
                     <Binding Path="Diameter" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                         <Binding.ValidationRules>
-                            <converters:RangeRuleDec Min="500" Max="480000"/>
+                            <converters:RangeRuleDec Min="500" Max="4800000"/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-            <Slider Grid.Column="1" Grid.Row="2" Minimum="500" Maximum="480000" Value="{Binding Path=Diameter}" SmallChange="500" LargeChange="10000" />
+            <Slider Grid.Column="1" Grid.Row="2" Minimum="500" Maximum="4800000" Value="{Binding Path=Diameter}" SmallChange="500" LargeChange="10000" />
             <TextBlock Grid.Column="1" Grid.Row="3" Foreground="Red" TextWrapping="WrapWithOverflow" Text="The recommended range is 19000 to 120000. Values outside of that range may incur issues with the planet mesh, like invisible holes and game performance issues." Visibility="{Binding Path=InvalidKeenRange, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}"  />
             <Label />
         </Grid>
