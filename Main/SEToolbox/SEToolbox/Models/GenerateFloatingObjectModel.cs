@@ -298,7 +298,7 @@
                     TextureFile = componentDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icons.First(), Path.Combine(contentPath, componentDefinition.Icons.First())),
                     Volume = componentDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     Accessible = componentDefinition.Public,
-                    Time = bp != null ? TimeSpan.FromSeconds(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
+                    Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
                 });
             }
 
@@ -317,22 +317,6 @@
                     Volume = physicalItemDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = physicalItemDefinition.Public,
-                    Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
-                });
-            }
-
-            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.AmmoMagazineDefinitions)
-            {
-                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeName);
-                list.Add(new ComponentItemModel
-                {
-                    Name = physicalItemDefinition.DisplayNameText,
-                    TypeId = physicalItemDefinition.Id.TypeId,
-                    SubtypeId = physicalItemDefinition.Id.SubtypeName,
-                    Mass = physicalItemDefinition.Mass,
-                    Volume = physicalItemDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
-                    TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
-                    Accessible = !string.IsNullOrEmpty(physicalItemDefinition.Model),
                     Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
                 });
             }
