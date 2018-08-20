@@ -13,3 +13,7 @@ What were you doing with SEToolbox when it happened?
 1. How did this issue get triggered?
 2. Write all of the steps here.
 
+### SEToolbox Event Log
+```
+Paste your event log here.
+```
