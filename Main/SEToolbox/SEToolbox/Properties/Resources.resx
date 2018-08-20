@@ -2963,4 +2963,7 @@ Reason: {1}</value>
   <data name="WnRegeneratePlanetTitle" xml:space="preserve">
     <value>Regenerate Planet</value>
   </data>
+  <data name="CtlPlanetMnuCopyGpsCenter" xml:space="preserve">
+    <value>Copy GPS</value>
+  </data>
 </root>

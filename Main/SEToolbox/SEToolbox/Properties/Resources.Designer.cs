@@ -2574,6 +2574,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy GPS.
+        /// </summary>
+        public static string CtlPlanetMnuCopyGpsCenter {
+            get {
+                return ResourceManager.GetString("CtlPlanetMnuCopyGpsCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Regenerate.
         /// </summary>
         public static string CtlPlanetMnuRegenerate {
