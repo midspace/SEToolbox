@@ -75,7 +75,7 @@
             <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name}"/>
             <Grid Grid.Row="5" Grid.Column="0" HorizontalAlignment="Stretch">
                 <TextBlock Margin="4 0 4 0" Text="{lex:Loc CtlPlanetCenter}"/>
-                <Button Command="{Binding CopyObjectGpsCommand}" ToolTip="{lex:Loc CtlPlanetMnuCopyGpsCenter}" HorizontalAlignment="Right" Margin="0 0 4 0">
+                <Button Command="{Binding CopyCenterGpsCommand}" ToolTip="{lex:Loc CtlPlanetMnuCopyGpsCenter}" HorizontalAlignment="Right" Margin="0 0 4 0">
                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=target}"/>
                 </Button>
             </Grid>
