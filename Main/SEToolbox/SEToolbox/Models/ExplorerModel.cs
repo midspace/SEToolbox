@@ -551,23 +551,38 @@
                 MyObjectBuilder_FloatingObject floatingEntity;
                 MyObjectBuilder_Meteor meteorEntity;
                 MyObjectBuilder_Character characterEntity;
-                MyObjectBuilder_Definitions prefabDefinitions;
+                MyObjectBuilder_Definitions genericDefinitions;
 
                 if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed, out errorInformation, false, true))
                 {
                     MergeData(cubeEntity, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed, out errorInformation, false, true))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out genericDefinitions, out isCompressed, out errorInformation, false, true))
                 {
-                    if (prefabDefinitions.Prefabs != null)
+                    if (genericDefinitions.Prefabs != null)
                     {
-                        foreach (var prefab in prefabDefinitions.Prefabs)
+                        foreach (var prefab in genericDefinitions.Prefabs)
                         {
                             if (prefab.CubeGrid != null)
                                 MergeData(prefab.CubeGrid, ref idReplacementTable);
                             if (prefab.CubeGrids != null)
                             {
                                 foreach (var cubeGrid in prefab.CubeGrids)
+                                {
+                                    MergeData(cubeGrid, ref idReplacementTable);
+                                }
+                            }
+                        }
+                    }
+                    else if (genericDefinitions.ShipBlueprints != null)
+                    {
+                        foreach (var shipBlueprint in genericDefinitions.ShipBlueprints)
+                        {
+                            if (shipBlueprint.CubeGrid != null)
+                                MergeData(shipBlueprint.CubeGrid, ref idReplacementTable);
+                            if (shipBlueprint.CubeGrids != null)
+                            {
+                                foreach (var cubeGrid in shipBlueprint.CubeGrids)
                                 {
                                     MergeData(cubeGrid, ref idReplacementTable);
                                 }
