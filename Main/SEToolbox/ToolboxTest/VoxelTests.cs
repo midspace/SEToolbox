@@ -243,8 +243,8 @@
             var lengthOriginal = new FileInfo(fileOriginal).Length;
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(145351, lengthOriginal, "File size must match.");
-            Assert.AreEqual(145351, lengthNew, "File size must match.");
+            Assert.AreEqual(145351, lengthOriginal, "Original File size must match.");
+            Assert.AreEqual(144914, lengthNew, "New File size must match.");
         }
 
         [TestMethod, TestCategory("UnitTest")]
