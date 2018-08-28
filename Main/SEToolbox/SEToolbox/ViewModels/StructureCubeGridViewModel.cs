@@ -182,7 +182,7 @@
                 if (value != _selections)
                 {
                     _selections = value;
-                    RaisePropertyChanged(() => Selections);
+                    OnPropertyChanged(nameof(Selections));
                 }
             }
         }
@@ -196,7 +196,7 @@
                 if (value != _selectedCubeItem)
                 {
                     _selectedCubeItem = value;
-                    RaisePropertyChanged(() => SelectedCubeItem);
+                    OnPropertyChanged(nameof(SelectedCubeItem));
                 }
             }
         }

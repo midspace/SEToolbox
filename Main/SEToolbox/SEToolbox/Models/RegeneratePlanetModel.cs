@@ -6,9 +6,6 @@
     {
         #region Fields
 
-        private ObservableCollection<ComponentItemModel> _cubeList;
-        private ComponentItemModel _cubeItem;
-
         private int _seed;
         private decimal _diameter;
         private bool _invalidKeenRange;
@@ -19,7 +16,6 @@
 
         public RegeneratePlanetModel()
         {
-            _cubeList = new ObservableCollection<ComponentItemModel>();
         }
 
         #endregion
@@ -35,7 +31,7 @@
                 if (value != _seed)
                 {
                     _seed = value;
-                    RaisePropertyChanged(() => Seed);
+                    OnPropertyChanged(nameof(Seed));
                 }
             }
         }
@@ -49,7 +45,7 @@
                 if (value != _diameter)
                 {
                     _diameter = value;
-                    RaisePropertyChanged(() => Diameter);
+                    OnPropertyChanged(nameof(Diameter));
                     InvalidKeenRange = _diameter < 19000 || _diameter > 120000;
                 }
             }
@@ -64,7 +60,7 @@
                 if (value != _invalidKeenRange)
                 {
                     _invalidKeenRange = value;
-                    RaisePropertyChanged(() => InvalidKeenRange);
+                    OnPropertyChanged(nameof(InvalidKeenRange));
                 }
             }
         }

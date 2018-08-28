@@ -71,7 +71,7 @@
                 if (value != _cube)
                 {
                     _cube = value;
-                    RaisePropertyChanged(() => Cube);
+                    OnPropertyChanged(nameof(Cube));
                 }
             }
         }
@@ -84,7 +84,7 @@
                 if (value != _cube.Owner)
                 {
                     _cube.Owner = value;
-                    RaisePropertyChanged(() => Owner);
+                    OnPropertyChanged(nameof(Owner));
                 }
             }
         }
@@ -97,7 +97,7 @@
                 if (value != _cube.BuiltBy)
                 {
                     _cube.BuiltBy = value;
-                    RaisePropertyChanged(() => BuiltBy);
+                    OnPropertyChanged(nameof(BuiltBy));
                 }
             }
         }
@@ -111,7 +111,7 @@
                 if (value != _typeId)
                 {
                     _typeId = value;
-                    RaisePropertyChanged(() => TypeId);
+                    OnPropertyChanged(nameof(TypeId));
                 }
             }
         }
@@ -125,7 +125,7 @@
                 if (value != _subtypeId)
                 {
                     _subtypeId = value;
-                    RaisePropertyChanged(() => SubtypeId);
+                    OnPropertyChanged(nameof(SubtypeId));
                 }
             }
         }
@@ -139,7 +139,7 @@
                 if (value != _textureFile)
                 {
                     _textureFile = value;
-                    RaisePropertyChanged(() => TextureFile);
+                    OnPropertyChanged(nameof(TextureFile));
                 }
             }
         }
@@ -153,7 +153,7 @@
                 if (value != _cubeSize)
                 {
                     _cubeSize = value;
-                    RaisePropertyChanged(() => CubeSize);
+                    OnPropertyChanged(nameof(CubeSize));
                 }
             }
         }
@@ -167,7 +167,7 @@
                 if (value != _friendlyName)
                 {
                     _friendlyName = value;
-                    RaisePropertyChanged(() => FriendlyName);
+                    OnPropertyChanged(nameof(FriendlyName));
                 }
             }
         }
@@ -181,7 +181,7 @@
                 if (value != _ownerName)
                 {
                     _ownerName = value;
-                    RaisePropertyChanged(() => OwnerName);
+                    OnPropertyChanged(nameof(OwnerName));
                 }
             }
         }
@@ -195,7 +195,7 @@
                 if (value != _builtByName)
                 {
                     _builtByName = value;
-                    RaisePropertyChanged(() => BuiltByName);
+                    OnPropertyChanged(nameof(BuiltByName));
                 }
             }
         }
@@ -209,7 +209,7 @@
                 if (value != _colorText)
                 {
                     _colorText = value;
-                    RaisePropertyChanged(() => ColorText);
+                    OnPropertyChanged(nameof(ColorText));
                 }
             }
         }
@@ -223,7 +223,7 @@
                 if (value != _colorHue)
                 {
                     _colorHue = value;
-                    RaisePropertyChanged(() => ColorHue);
+                    OnPropertyChanged(nameof(ColorHue));
                 }
             }
         }
@@ -237,7 +237,7 @@
                 if (value != _colorSaturation)
                 {
                     _colorSaturation = value;
-                    RaisePropertyChanged(() => ColorSaturation);
+                    OnPropertyChanged(nameof(ColorSaturation));
                 }
             }
         }
@@ -251,7 +251,7 @@
                 if (value != _colorLuminance)
                 {
                     _colorLuminance = value;
-                    RaisePropertyChanged(() => ColorLuminance);
+                    OnPropertyChanged(nameof(ColorLuminance));
                 }
             }
         }
@@ -265,7 +265,7 @@
                 if (value != _position)
                 {
                     _position = value;
-                    RaisePropertyChanged(() => Position);
+                    OnPropertyChanged(nameof(Position));
                 }
             }
         }
@@ -284,7 +284,7 @@
                 if (value != _buildPercent)
                 {
                     _buildPercent = value;
-                    RaisePropertyChanged(() => BuildPercent);
+                    OnPropertyChanged(nameof(BuildPercent));
                 }
             }
         }
@@ -298,7 +298,7 @@
                 if (value != _color)
                 {
                     _color = value;
-                    RaisePropertyChanged(() => Color);
+                    OnPropertyChanged(nameof(Color));
                 }
             }
         }
@@ -312,7 +312,7 @@
                 if (value != _inventory)
                 {
                     _inventory = value;
-                    RaisePropertyChanged(() => Inventory);
+                    OnPropertyChanged(nameof(Inventory));
                 }
             }
         }
@@ -327,10 +327,7 @@
             ColorSaturation = vector3.Y;
             ColorLuminance = vector3.Z;
 
-            RaisePropertyChanged(() => ColorText);
-            RaisePropertyChanged(() => ColorHue);
-            RaisePropertyChanged(() => ColorSaturation);
-            RaisePropertyChanged(() => ColorLuminance);
+            OnPropertyChanged(nameof(ColorText), nameof(ColorHue), nameof(ColorSaturation), nameof(ColorLuminance));
         }
 
         public void UpdateColor(SerializableVector3 vector3)

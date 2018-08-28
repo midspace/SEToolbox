@@ -1,9 +1,7 @@
 ﻿namespace SEToolbox.Models
 {
-    using SEToolbox.Support;
     using System;
     using System.ComponentModel;
-    using System.Linq.Expressions;
 
     [Serializable]
     public class BaseModel : INotifyPropertyChanged
@@ -12,20 +10,17 @@
 
         /// <summary>
         /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
+        /// Use the <see cref="nameof()"/> in conjunction with OnPropertyChanged.
+        /// This will set the property name into a string during compile, which will be faster to execute then a runtime interpretation.
         /// </summary>
-        /// <param name="propertyName">The name of the property that changed.</param>
-        [Obsolete("Use RaisePropertyChanged(() => PropertyName) instead.")]
-        protected void OnPropertyChanged(string propertyName)
+        /// <param name="propertyNames">The name of the property that changed.</param>
+        protected void OnPropertyChanged(params string[] propertyNames)
         {
             if (_propertyChanged != null)
             {
-                _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                foreach (var propertyName in propertyNames)
+                    _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-        }
-
-        public void RaisePropertyChanged(params Expression<Func<object>>[] expression)
-        {
-            _propertyChanged.Raise(expression);
         }
 
         #endregion

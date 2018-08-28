@@ -23,7 +23,7 @@
                 if (value != _displayName)
                 {
                     _displayName = value;
-                    RaisePropertyChanged(() => DisplayName);
+                    OnPropertyChanged(nameof(DisplayName));
                 }
             }
         }
@@ -37,7 +37,7 @@
                 if (value != _value)
                 {
                     _value = value;
-                    RaisePropertyChanged(() => Value);
+                    OnPropertyChanged(nameof(Value));
                 }
             }
         }
@@ -53,7 +53,7 @@
                 if (value != _isRare)
                 {
                     _isRare = value;
-                    RaisePropertyChanged(() => IsRare);
+                    OnPropertyChanged(nameof(IsRare));
                 }
             }
         }
@@ -67,7 +67,7 @@
                 if (value != _minedRatio)
                 {
                     _minedRatio = value;
-                    RaisePropertyChanged(() => MinedRatio);
+                    OnPropertyChanged(nameof(MinedRatio));
                 }
             }
         }

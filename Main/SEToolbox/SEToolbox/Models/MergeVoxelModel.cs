@@ -32,7 +32,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
@@ -50,7 +50,7 @@
                 if (value != _selectionLeft)
                 {
                     _selectionLeft = value;
-                    RaisePropertyChanged(() => SelectionLeft);
+                    OnPropertyChanged(nameof(SelectionLeft));
                 }
             }
         }
@@ -64,7 +64,7 @@
                 if (value != _selectionRight)
                 {
                     _selectionRight = value;
-                    RaisePropertyChanged(() => SelectionRight);
+                    OnPropertyChanged(nameof(SelectionRight));
                 }
             }
         }
@@ -81,7 +81,7 @@
                 if (value != _isValidMerge)
                 {
                     _isValidMerge = value;
-                    RaisePropertyChanged(() => IsValidMerge);
+                    OnPropertyChanged(nameof(IsValidMerge));
                 }
             }
         }
@@ -95,7 +95,7 @@
                 if (value != _sourceFile)
                 {
                     _sourceFile = value;
-                    RaisePropertyChanged(() => SourceFile);
+                    OnPropertyChanged(nameof(SourceFile));
                 }
             }
         }
@@ -109,7 +109,7 @@
                 if (value != _voxelMergeType)
                 {
                     _voxelMergeType = value;
-                    RaisePropertyChanged(() => VoxelMergeType);
+                    OnPropertyChanged(nameof(VoxelMergeType));
                 }
             }
         }
@@ -123,7 +123,7 @@
                 if (value != _mergeFileName)
                 {
                     _mergeFileName = value;
-                    RaisePropertyChanged(() => MergeFileName);
+                    OnPropertyChanged(nameof(MergeFileName));
                 }
             }
         }
@@ -137,7 +137,7 @@
                 if (value != _removeOriginalAsteroids)
                 {
                     _removeOriginalAsteroids = value;
-                    RaisePropertyChanged(() => RemoveOriginalAsteroids);
+                    OnPropertyChanged(nameof(RemoveOriginalAsteroids));
                 }
             }
         }

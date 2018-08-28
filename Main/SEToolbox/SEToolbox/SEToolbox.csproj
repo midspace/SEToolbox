@@ -63,6 +63,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -346,7 +348,6 @@
     <Compile Include="Support\HtmlExtensions.cs" />
     <Compile Include="Support\MeshHelper.cs" />
     <Compile Include="Support\Modelling.cs" />
-    <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\RandomUtil.cs" />
     <Compile Include="Support\Splasher.cs" />
     <Compile Include="Support\TempfileUtil.cs" />

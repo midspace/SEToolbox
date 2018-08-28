@@ -166,7 +166,7 @@
                 if (value != _inventory)
                 {
                     _inventory = value;
-                    RaisePropertyChanged(() => Inventory);
+                    OnPropertyChanged(nameof(Inventory));
                 }
             }
         }

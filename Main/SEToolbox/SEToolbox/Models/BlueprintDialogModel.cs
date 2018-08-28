@@ -22,7 +22,7 @@
                 if (value != _blueprintName)
                 {
                     _blueprintName = value;
-                    RaisePropertyChanged(() => BlueprintName);
+                    OnPropertyChanged(nameof(BlueprintName));
                 }
             }
         }
@@ -36,7 +36,7 @@
                 if (value != _dialogTitle)
                 {
                     _dialogTitle = value;
-                    RaisePropertyChanged(() => DialogTitle);
+                    OnPropertyChanged(nameof(DialogTitle));
                 }
             }
         }
@@ -50,7 +50,7 @@
                 if (value != _checkForExisting)
                 {
                     _checkForExisting = value;
-                    RaisePropertyChanged(() => CheckForExisting);
+                    OnPropertyChanged(nameof(CheckForExisting));
                 }
             }
         }
@@ -64,7 +64,7 @@
                 if (value != _localBlueprintsFolder)
                 {
                     _localBlueprintsFolder = value;
-                    RaisePropertyChanged(() => LocalBlueprintsFolder);
+                    OnPropertyChanged(nameof(LocalBlueprintsFolder));
                 }
             }
         }

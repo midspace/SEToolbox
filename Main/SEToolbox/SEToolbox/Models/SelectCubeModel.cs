@@ -42,7 +42,7 @@
                 if (value != _cubeList)
                 {
                     _cubeList = value;
-                    RaisePropertyChanged(() => CubeList);
+                    OnPropertyChanged(nameof(CubeList));
                 }
             }
         }
@@ -59,7 +59,7 @@
                 if (value != _cubeItem)
                 {
                     _cubeItem = value;
-                    RaisePropertyChanged(() => CubeItem);
+                    OnPropertyChanged(nameof(CubeItem));
                 }
             }
         }

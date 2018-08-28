@@ -68,7 +68,7 @@
                 if (value != _selections)
                 {
                     _selections = value;
-                    RaisePropertyChanged(() => Selections);
+                    OnPropertyChanged(nameof(Selections));
                 }
             }
         }

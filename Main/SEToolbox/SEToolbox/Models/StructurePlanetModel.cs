@@ -82,7 +82,7 @@
                 if (value != Planet.StorageName)
                 {
                     Planet.StorageName = value;
-                    RaisePropertyChanged(() => Name);
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -99,7 +99,7 @@
                 if (value != _sourceVoxelFilepath)
                 {
                     _sourceVoxelFilepath = value;
-                    RaisePropertyChanged(() => SourceVoxelFilepath);
+                    OnPropertyChanged(nameof(SourceVoxelFilepath));
                     ReadVoxelDetails(SourceVoxelFilepath);
                 }
             }
@@ -117,7 +117,7 @@
                 if (value != _voxelFilepath)
                 {
                     _voxelFilepath = value;
-                    RaisePropertyChanged(() => VoxelFilepath);
+                    OnPropertyChanged(nameof(VoxelFilepath));
                 }
             }
         }
@@ -132,7 +132,7 @@
                 if (value != _size)
                 {
                     _size = value;
-                    RaisePropertyChanged(() => Size);
+                    OnPropertyChanged(nameof(Size));
                 }
             }
         }
@@ -146,7 +146,7 @@
                 if (value != Planet.Seed)
                 {
                     Planet.Seed = value;
-                    RaisePropertyChanged(() => Seed);
+                    OnPropertyChanged(nameof(Seed));
                 }
             }
         }
@@ -161,7 +161,7 @@
                 if (value != Planet.Radius)
                 {
                     Planet.Radius = value;
-                    RaisePropertyChanged(() => Radius);
+                    OnPropertyChanged(nameof(Radius));
                 }
             }
         }
@@ -174,7 +174,7 @@
                 if (value != Planet.HasAtmosphere)
                 {
                     Planet.HasAtmosphere = value;
-                    RaisePropertyChanged(() => HasAtmosphere);
+                    OnPropertyChanged(nameof(HasAtmosphere));
                 }
             }
         }
@@ -188,7 +188,7 @@
                 if (value != Planet.AtmosphereRadius)
                 {
                     Planet.AtmosphereRadius = value;
-                    RaisePropertyChanged(() => AtmosphereRadius);
+                    OnPropertyChanged(nameof(AtmosphereRadius));
                 }
             }
         }
@@ -202,7 +202,7 @@
                 if (value != Planet.MinimumSurfaceRadius)
                 {
                     Planet.MinimumSurfaceRadius = value;
-                    RaisePropertyChanged(() => MinimumSurfaceRadius);
+                    OnPropertyChanged(nameof(MinimumSurfaceRadius));
                 }
             }
         }
@@ -216,7 +216,7 @@
                 if (value != Planet.MaximumHillRadius)
                 {
                     Planet.MaximumHillRadius = value;
-                    RaisePropertyChanged(() => MaximumHillRadius);
+                    OnPropertyChanged(nameof(MaximumHillRadius));
                 }
             }
         }
@@ -230,7 +230,7 @@
                 if (value != Planet.GravityFalloff)
                 {
                     Planet.GravityFalloff = value;
-                    RaisePropertyChanged(() => GravityFalloff);
+                    OnPropertyChanged(nameof(GravityFalloff));
                 }
             }
         }
@@ -244,7 +244,7 @@
                 if (value != Planet.SurfaceGravity)
                 {
                     Planet.SurfaceGravity = value;
-                    RaisePropertyChanged(() => SurfaceGravity);
+                    OnPropertyChanged(nameof(SurfaceGravity));
                 }
             }
         }
@@ -258,7 +258,7 @@
                 if (value != Planet.SpawnsFlora)
                 {
                     Planet.SpawnsFlora = value;
-                    RaisePropertyChanged(() => SpawnsFlora);
+                    OnPropertyChanged(nameof(SpawnsFlora));
                 }
             }
         }
@@ -272,7 +272,7 @@
                 if (value != Planet.ShowGPS)
                 {
                     Planet.ShowGPS = value;
-                    RaisePropertyChanged(() => ShowGPS);
+                    OnPropertyChanged(nameof(ShowGPS));
                 }
             }
         }
@@ -286,7 +286,7 @@
                 if (value != Planet.PlanetGenerator)
                 {
                     Planet.PlanetGenerator = value;
-                    RaisePropertyChanged(() => PlanetGenerator);
+                    OnPropertyChanged(nameof(PlanetGenerator));
                 }
             }
         }
@@ -360,8 +360,7 @@
                 Size = _voxelMap.Size;
                 _contentCenter = _voxelMap.ContentCenter;
                 IsValid = _voxelMap.IsValid;
-                RaisePropertyChanged(() => Size);
-                RaisePropertyChanged(() => IsValid);
+                OnPropertyChanged(nameof(Size), nameof(IsValid));
                 Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
                 WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
             }
@@ -406,17 +405,13 @@
             //SourceVoxelFilepath = tempfilename;
             UpdateNewSource(asteroid, tempfilename);
 
-            RaisePropertyChanged(() => Seed);
-            RaisePropertyChanged(() => Radius);
-            RaisePropertyChanged(() => AtmosphereRadius);
-            RaisePropertyChanged(() => MinimumSurfaceRadius);
-            RaisePropertyChanged(() => MaximumHillRadius);
+            OnPropertyChanged(nameof(Seed), nameof(Radius), nameof(AtmosphereRadius), nameof(MinimumSurfaceRadius), nameof(MaximumHillRadius));
 
             //Size = _voxelMap.Size;
             //_contentCenter = _voxelMap.ContentCenter;
             //IsValid = _voxelMap.IsValid;
-            //RaisePropertyChanged(() => Size);
-            //RaisePropertyChanged(() => IsValid);
+            //OnPropertyChanged(nameof(Size);
+            //OnPropertyChanged(nameof(IsValid);
             //Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);
             //WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }
@@ -432,9 +427,9 @@
             //ContentBounds = _voxelMap.BoundingContent;
             IsValid = _voxelMap.IsValid;
 
-            RaisePropertyChanged(() => Size);
-            //RaisePropertyChanged(() => ContentSize);
-            RaisePropertyChanged(() => IsValid);
+            OnPropertyChanged(nameof(Size));
+            //OnPropertyChanged(nameof(ContentSize);
+            OnPropertyChanged(nameof(IsValid));
             Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
             WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }

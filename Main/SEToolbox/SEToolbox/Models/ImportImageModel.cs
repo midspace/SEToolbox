@@ -45,7 +45,7 @@
                 if (value != _filename)
                 {
                     _filename = value;
-                    RaisePropertyChanged(() => Filename);
+                    OnPropertyChanged(nameof(Filename));
                 }
             }
         }
@@ -59,7 +59,7 @@
                 if (value != _isValidImage)
                 {
                     _isValidImage = value;
-                    RaisePropertyChanged(() => IsValidImage);
+                    OnPropertyChanged(nameof(IsValidImage));
                 }
             }
         }
@@ -73,7 +73,7 @@
                 if (value != _originalImageSize)
                 {
                     _originalImageSize = value;
-                    RaisePropertyChanged(() => OriginalImageSize);
+                    OnPropertyChanged(nameof(OriginalImageSize));
                 }
             }
         }
@@ -87,7 +87,7 @@
                 if (value != _newImageSize)
                 {
                     _newImageSize = value;
-                    RaisePropertyChanged(() => NewImageSize);
+                    OnPropertyChanged(nameof(NewImageSize));
                 }
             }
         }
@@ -101,7 +101,7 @@
                 if (value != _position)
                 {
                     _position = value;
-                    RaisePropertyChanged(() => Position);
+                    OnPropertyChanged(nameof(Position));
                 }
             }
         }
@@ -115,7 +115,7 @@
                 if (value != _forward)
                 {
                     _forward = value;
-                    RaisePropertyChanged(() => Forward);
+                    OnPropertyChanged(nameof(Forward));
                 }
             }
         }
@@ -129,7 +129,7 @@
                 if (value != _up)
                 {
                     _up = value;
-                    RaisePropertyChanged(() => Up);
+                    OnPropertyChanged(nameof(Up));
                 }
             }
         }
@@ -143,7 +143,7 @@
                 if (value != _classType)
                 {
                     _classType = value;
-                    RaisePropertyChanged(() => ClassType);
+                    OnPropertyChanged(nameof(ClassType));
                 }
             }
         }
@@ -157,7 +157,7 @@
                 if (value != _armorType)
                 {
                     _armorType = value;
-                    RaisePropertyChanged(() => ArmorType);
+                    OnPropertyChanged(nameof(ArmorType));
                 }
             }
         }
@@ -170,7 +170,7 @@
             {
                 //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
                 _characterPosition = value;
-                RaisePropertyChanged(() => CharacterPosition);
+                OnPropertyChanged(nameof(CharacterPosition));
             }
         }
 
@@ -183,7 +183,7 @@
                 if (value != _alphaLevel)
                 {
                     _alphaLevel = value;
-                    RaisePropertyChanged(() => AlphaLevel);
+                    OnPropertyChanged(nameof(AlphaLevel));
                 }
             }
         }
@@ -197,7 +197,7 @@
                 if (_keyColor != value)
                 {
                     _keyColor = value;
-                    RaisePropertyChanged(() => KeyColor);
+                    OnPropertyChanged(nameof(KeyColor));
                 }
             }
         }
@@ -211,7 +211,7 @@
                 if (value != _isAlphaLevel)
                 {
                     _isAlphaLevel = value;
-                    RaisePropertyChanged(() => IsAlphaLevel);
+                    OnPropertyChanged(nameof(IsAlphaLevel));
                 }
             }
         }
@@ -225,7 +225,7 @@
                 if (value != _isKeyColor)
                 {
                     _isKeyColor = value;
-                    RaisePropertyChanged(() => IsKeyColor);
+                    OnPropertyChanged(nameof(IsKeyColor));
                 }
             }
         }

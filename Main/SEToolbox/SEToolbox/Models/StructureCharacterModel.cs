@@ -62,7 +62,7 @@
                 if (!EqualityComparer<SerializableVector3>.Default.Equals(value, Character.ColorMaskHSV))
                 {
                     Character.ColorMaskHSV = value;
-                    RaisePropertyChanged(() => Color);
+                    OnPropertyChanged(nameof(Color));
                     UpdateGeneralFromEntityBase();
                 }
             }
@@ -81,7 +81,7 @@
                 if (value != Character.LightEnabled)
                 {
                     Character.LightEnabled = value;
-                    RaisePropertyChanged(() => Light);
+                    OnPropertyChanged(nameof(Light));
                 }
             }
         }
@@ -99,7 +99,7 @@
                 if (value != Character.JetpackEnabled)
                 {
                     Character.JetpackEnabled = value;
-                    RaisePropertyChanged(() => JetPack);
+                    OnPropertyChanged(nameof(JetPack));
                 }
             }
         }
@@ -117,7 +117,7 @@
                 if (value != Character.DampenersEnabled)
                 {
                     Character.DampenersEnabled = value;
-                    RaisePropertyChanged(() => Dampeners);
+                    OnPropertyChanged(nameof(Dampeners));
                 }
             }
         }
@@ -135,7 +135,7 @@
                 if (value != Character.Battery.CurrentCapacity)
                 {
                     Character.Battery.CurrentCapacity = value;
-                    RaisePropertyChanged(() => BatteryCapacity);
+                    OnPropertyChanged(nameof(BatteryCapacity));
                 }
             }
         }
@@ -153,7 +153,7 @@
                 if (value != Character.Health)
                 {
                     Character.Health = value;
-                    RaisePropertyChanged(() => Health);
+                    OnPropertyChanged(nameof(Health));
                 }
             }
         }
@@ -173,7 +173,7 @@
             set
             {
                 if (ReplaceGasValue("Oxygen", value))
-                    RaisePropertyChanged(() => OxygenLevel);
+                    OnPropertyChanged(nameof(OxygenLevel));
             }
         }
 
@@ -192,7 +192,7 @@
             set
             {
                 if (ReplaceGasValue("Hydrogen", value))
-                    RaisePropertyChanged(() => HydrogenLevel);
+                    OnPropertyChanged(nameof(HydrogenLevel));
             }
         }
 
@@ -209,7 +209,7 @@
                 if (value != _isPlayer)
                 {
                     _isPlayer = value;
-                    RaisePropertyChanged(() => IsPlayer);
+                    OnPropertyChanged(nameof(IsPlayer));
                 }
             }
         }
@@ -236,7 +236,7 @@
                 if (value != _isPilot)
                 {
                     _isPilot = value;
-                    RaisePropertyChanged(() => IsPilot);
+                    OnPropertyChanged(nameof(IsPilot));
                 }
             }
         }
@@ -254,7 +254,7 @@
                 if (value != _inventory)
                 {
                     _inventory = value;
-                    RaisePropertyChanged(() => Inventory);
+                    OnPropertyChanged(nameof(Inventory));
                 }
             }
         }
@@ -312,13 +312,13 @@
         public void ResetVelocity()
         {
             Character.LinearVelocity = new VRageMath.Vector3(0, 0, 0);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         public void ReverseVelocity()
         {
             Character.LinearVelocity = new VRageMath.Vector3(Character.LinearVelocity.X * -1, Character.LinearVelocity.Y * -1, Character.LinearVelocity.Z * -1);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         private bool ReplaceGasValue(string gasName, float value)

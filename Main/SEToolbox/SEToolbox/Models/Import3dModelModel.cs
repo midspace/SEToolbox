@@ -77,7 +77,7 @@
                 if (value != _filename)
                 {
                     _filename = value;
-                    RaisePropertyChanged(() => Filename);
+                    OnPropertyChanged(nameof(Filename));
                 }
             }
         }
@@ -94,7 +94,7 @@
                 if (value != _model)
                 {
                     _model = value;
-                    RaisePropertyChanged(() => Model);
+                    OnPropertyChanged(nameof(Model));
                 }
             }
         }
@@ -112,7 +112,7 @@
                 if (value != _isValidModel)
                 {
                     _isValidModel = value;
-                    RaisePropertyChanged(() => IsValidModel);
+                    OnPropertyChanged(nameof(IsValidModel));
                 }
             }
         }
@@ -129,7 +129,7 @@
                 if (value != _originalModelSize)
                 {
                     _originalModelSize = value;
-                    RaisePropertyChanged(() => OriginalModelSize);
+                    OnPropertyChanged(nameof(OriginalModelSize));
                 }
             }
         }
@@ -146,7 +146,7 @@
                 if (value != _newModelSize)
                 {
                     _newModelSize = value;
-                    RaisePropertyChanged(() => NewModelSize);
+                    OnPropertyChanged(nameof(NewModelSize));
                 }
             }
         }
@@ -163,7 +163,7 @@
                 if (value != _newModelScale)
                 {
                     _newModelScale = value;
-                    RaisePropertyChanged(() => NewModelScale);
+                    OnPropertyChanged(nameof(NewModelScale));
                 }
             }
         }
@@ -180,7 +180,7 @@
                 if (value != _position)
                 {
                     _position = value;
-                    RaisePropertyChanged(() => Position);
+                    OnPropertyChanged(nameof(Position));
                 }
             }
         }
@@ -197,7 +197,7 @@
                 if (value != _forward)
                 {
                     _forward = value;
-                    RaisePropertyChanged(() => Forward);
+                    OnPropertyChanged(nameof(Forward));
                 }
             }
         }
@@ -214,7 +214,7 @@
                 if (value != _up)
                 {
                     _up = value;
-                    RaisePropertyChanged(() => Up);
+                    OnPropertyChanged(nameof(Up));
                 }
             }
         }
@@ -231,7 +231,7 @@
                 if (value != _traceType)
                 {
                     _traceType = value;
-                    RaisePropertyChanged(() => TraceType);
+                    OnPropertyChanged(nameof(TraceType));
                 }
             }
         }
@@ -248,9 +248,7 @@
                 if (value != _classType)
                 {
                     _classType = value;
-                    RaisePropertyChanged(() => ClassType);
-                    RaisePropertyChanged(() => IsAsteroid);
-                    RaisePropertyChanged(() => IsShip);
+                    OnPropertyChanged(nameof(ClassType), nameof(IsAsteroid), nameof(IsShip));
                 }
             }
         }
@@ -283,7 +281,7 @@
                 if (value != _armorType)
                 {
                     _armorType = value;
-                    RaisePropertyChanged(() => ArmorType);
+                    OnPropertyChanged(nameof(ArmorType));
                 }
             }
         }
@@ -300,7 +298,7 @@
             {
                 //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
                 _characterPosition = value;
-                RaisePropertyChanged(() => CharacterPosition);
+                OnPropertyChanged(nameof(CharacterPosition));
             }
         }
 
@@ -316,7 +314,7 @@
                 if (value != _multipleScale)
                 {
                     _multipleScale = value;
-                    RaisePropertyChanged(() => MultipleScale);
+                    OnPropertyChanged(nameof(MultipleScale));
                 }
             }
         }
@@ -333,7 +331,7 @@
                 if (value != _maxLengthScale)
                 {
                     _maxLengthScale = value;
-                    RaisePropertyChanged(() => MaxLengthScale);
+                    OnPropertyChanged(nameof(MaxLengthScale));
                 }
             }
         }
@@ -350,7 +348,7 @@
                 if (value != _buildDistance)
                 {
                     _buildDistance = value;
-                    RaisePropertyChanged(() => BuildDistance);
+                    OnPropertyChanged(nameof(BuildDistance));
                 }
             }
         }
@@ -367,7 +365,7 @@
                 if (value != _isMultipleScale)
                 {
                     _isMultipleScale = value;
-                    RaisePropertyChanged(() => IsMultipleScale);
+                    OnPropertyChanged(nameof(IsMultipleScale));
                 }
             }
         }
@@ -384,7 +382,7 @@
                 if (value != _isMaxLengthScale)
                 {
                     _isMaxLengthScale = value;
-                    RaisePropertyChanged(() => IsMaxLengthScale);
+                    OnPropertyChanged(nameof(IsMaxLengthScale));
                 }
             }
         }
@@ -418,7 +416,7 @@
                 if (value != _outsideStockMaterial)
                 {
                     _outsideStockMaterial = value;
-                    RaisePropertyChanged(() => OutsideStockMaterial);
+                    OnPropertyChanged(nameof(OutsideStockMaterial));
                 }
             }
         }
@@ -435,7 +433,7 @@
                 if (value != _insideStockMaterial)
                 {
                     _insideStockMaterial = value;
-                    RaisePropertyChanged(() => InsideStockMaterial);
+                    OnPropertyChanged(nameof(InsideStockMaterial));
                 }
             }
         }
@@ -452,7 +450,7 @@
                 if (value != _sourceFile)
                 {
                     _sourceFile = value;
-                    RaisePropertyChanged(() => SourceFile);
+                    OnPropertyChanged(nameof(SourceFile));
                 }
             }
         }
@@ -469,7 +467,7 @@
                 if (value != _fillObject)
                 {
                     _fillObject = value;
-                    RaisePropertyChanged(() => FillObject);
+                    OnPropertyChanged(nameof(FillObject));
                 }
             }
         }

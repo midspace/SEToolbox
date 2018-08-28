@@ -24,7 +24,7 @@
                 if (value != _buildPercent)
                 {
                     _buildPercent = value;
-                    RaisePropertyChanged(() => BuildPercent);
+                    OnPropertyChanged(nameof(BuildPercent));
                 }
             }
         }

@@ -79,7 +79,7 @@
             _dataModel = dataModel;
 
             Selections = new ObservableCollection<IStructureViewBase>();
-            Selections.CollectionChanged += (sender, e) => RaisePropertyChanged(() => IsMultipleSelections);
+            Selections.CollectionChanged += (sender, e) => OnPropertyChanged(nameof(IsMultipleSelections));
 
             Structures = new ObservableCollection<IStructureViewBase>();
             foreach (var item in _dataModel.Structures)
@@ -213,7 +213,7 @@
             set
             {
                 _closeResult = value;
-                RaisePropertyChanged(() => CloseResult);
+                OnPropertyChanged(nameof(CloseResult));
             }
         }
 
@@ -229,7 +229,7 @@
                 if (value != _structures)
                 {
                     _structures = value;
-                    RaisePropertyChanged(() => Structures);
+                    OnPropertyChanged(nameof(Structures));
                 }
             }
         }
@@ -248,7 +248,7 @@
                     _selectedStructure = value;
                     if (_selectedStructure != null && !_ignoreUpdateSelection)
                         _selectedStructure.DataModel.InitializeAsync();
-                    RaisePropertyChanged(() => SelectedStructure);
+                    OnPropertyChanged(nameof(SelectedStructure));
                 }
             }
         }
@@ -262,7 +262,7 @@
                 if (value != _selections)
                 {
                     _selections = value;
-                    RaisePropertyChanged(() => Selections);
+                    OnPropertyChanged(nameof(Selections));
                 }
             }
         }
@@ -373,7 +373,7 @@
                 if (value != _languages)
                 {
                     _languages = value;
-                    RaisePropertyChanged(() => Languages);
+                    OnPropertyChanged(nameof(Languages));
                 }
             }
         }

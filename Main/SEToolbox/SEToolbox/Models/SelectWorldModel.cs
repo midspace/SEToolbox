@@ -55,7 +55,7 @@
                 if (value != _selectedWorld)
                 {
                     _selectedWorld = value;
-                    RaisePropertyChanged(() => SelectedWorld);
+                    OnPropertyChanged(nameof(SelectedWorld));
                 }
             }
         }
@@ -72,7 +72,7 @@
                 if (value != _worlds)
                 {
                     _worlds = value;
-                    RaisePropertyChanged(() => Worlds);
+                    OnPropertyChanged(nameof(Worlds));
                 }
             }
         }
@@ -92,7 +92,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();

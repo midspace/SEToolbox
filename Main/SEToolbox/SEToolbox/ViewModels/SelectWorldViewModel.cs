@@ -82,7 +82,7 @@
                 if (_closeResult != value)
                 {
                     _closeResult = value;
-                    RaisePropertyChanged(() => CloseResult);
+                    OnPropertyChanged(nameof(CloseResult));
                 }
             }
         }
@@ -96,7 +96,7 @@
                 if (_zoomThumbnail != value)
                 {
                     _zoomThumbnail = value;
-                    RaisePropertyChanged(() => ZoomThumbnail);
+                    OnPropertyChanged(nameof(ZoomThumbnail));
                 }
             }
         }

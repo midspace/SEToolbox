@@ -51,7 +51,7 @@
                 if (value != _cubeAssets)
                 {
                     _cubeAssets = value;
-                    RaisePropertyChanged(() => CubeAssets);
+                    OnPropertyChanged(nameof(CubeAssets));
                 }
             }
         }
@@ -71,7 +71,7 @@
                 if (value != _componentAssets)
                 {
                     _componentAssets = value;
-                    RaisePropertyChanged(() => ComponentAssets);
+                    OnPropertyChanged(nameof(ComponentAssets));
                 }
             }
         }
@@ -91,7 +91,7 @@
                 if (value != _itemAssets)
                 {
                     _itemAssets = value;
-                    RaisePropertyChanged(() => ItemAssets);
+                    OnPropertyChanged(nameof(ItemAssets));
                 }
             }
         }
@@ -111,7 +111,7 @@
                 if (value != _materialAssets)
                 {
                     _materialAssets = value;
-                    RaisePropertyChanged(() => MaterialAssets);
+                    OnPropertyChanged(nameof(MaterialAssets));
                 }
             }
         }
@@ -131,7 +131,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
@@ -152,7 +152,7 @@
                 if (value != _selectedCubeAsset)
                 {
                     _selectedCubeAsset = value;
-                    RaisePropertyChanged(() => SelectedCubeAsset);
+                    OnPropertyChanged(nameof(SelectedCubeAsset));
                 }
             }
         }

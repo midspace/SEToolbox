@@ -66,7 +66,7 @@
                 if (value != _filename)
                 {
                     _filename = value;
-                    RaisePropertyChanged(() => Filename);
+                    OnPropertyChanged(nameof(Filename));
                 }
             }
         }
@@ -80,7 +80,7 @@
                 if (value != _sourceFile)
                 {
                     _sourceFile = value;
-                    RaisePropertyChanged(() => SourceFile);
+                    OnPropertyChanged(nameof(SourceFile));
                     if (StockMaterial == null)
                     {
                         StockMaterial = MaterialsCollection[0];
@@ -98,7 +98,7 @@
                 if (value != _isValidVoxelFile)
                 {
                     _isValidVoxelFile = value;
-                    RaisePropertyChanged(() => IsValidVoxelFile);
+                    OnPropertyChanged(nameof(IsValidVoxelFile));
                 }
             }
         }
@@ -112,7 +112,7 @@
                 if (value != _position)
                 {
                     _position = value;
-                    RaisePropertyChanged(() => Position);
+                    OnPropertyChanged(nameof(Position));
                 }
             }
         }
@@ -126,7 +126,7 @@
                 if (value != _forward)
                 {
                     _forward = value;
-                    RaisePropertyChanged(() => Forward);
+                    OnPropertyChanged(nameof(Forward));
                 }
             }
         }
@@ -140,7 +140,7 @@
                 if (value != _up)
                 {
                     _up = value;
-                    RaisePropertyChanged(() => Up);
+                    OnPropertyChanged(nameof(Up));
                 }
             }
         }
@@ -153,7 +153,7 @@
             {
                 //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
                 _characterPosition = value;
-                RaisePropertyChanged(() => CharacterPosition);
+                OnPropertyChanged(nameof(CharacterPosition));
             }
         }
 
@@ -166,7 +166,7 @@
                 if (value != _isStockVoxel)
                 {
                     _isStockVoxel = value;
-                    RaisePropertyChanged(() => IsStockVoxel);
+                    OnPropertyChanged(nameof(IsStockVoxel));
                 }
             }
         }
@@ -180,7 +180,7 @@
                 if (value != _isFileVoxel)
                 {
                     _isFileVoxel = value;
-                    RaisePropertyChanged(() => IsFileVoxel);
+                    OnPropertyChanged(nameof(IsFileVoxel));
                 }
             }
         }
@@ -194,7 +194,7 @@
                 if (value != _isSphere)
                 {
                     _isSphere = value;
-                    RaisePropertyChanged(() => IsSphere);
+                    OnPropertyChanged(nameof(IsSphere));
                 }
             }
         }
@@ -208,7 +208,7 @@
                 if (value != _stockVoxel)
                 {
                     _stockVoxel = value;
-                    RaisePropertyChanged(() => StockVoxel);
+                    OnPropertyChanged(nameof(StockVoxel));
                     IsStockVoxel = true;
                     if (StockMaterial == null)
                     {
@@ -227,7 +227,7 @@
                 if (value != _voxelFileList)
                 {
                     _voxelFileList = value;
-                    RaisePropertyChanged(() => VoxelFileList);
+                    OnPropertyChanged(nameof(VoxelFileList));
                 }
             }
         }
@@ -246,7 +246,7 @@
                 if (value != _stockMaterial)
                 {
                     _stockMaterial = value;
-                    RaisePropertyChanged(() => StockMaterial);
+                    OnPropertyChanged(nameof(StockMaterial));
                 }
             }
         }
@@ -260,7 +260,7 @@
                 if (value != _sphereRadius)
                 {
                     _sphereRadius = value;
-                    RaisePropertyChanged(() => SphereRadius);
+                    OnPropertyChanged(nameof(SphereRadius));
                 }
             }
         }
@@ -274,7 +274,7 @@
                 if (value != _sphereShellRadius)
                 {
                     _sphereShellRadius = value;
-                    RaisePropertyChanged(() => SphereShellRadius);
+                    OnPropertyChanged(nameof(SphereShellRadius));
                 }
             }
         }

@@ -58,7 +58,7 @@
                 if (value != _width)
                 {
                     _width = value;
-                    RaisePropertyChanged(() => Width);
+                    OnPropertyChanged(nameof(Width));
                 }
             }
         }
@@ -75,7 +75,7 @@
                 if (value != _height)
                 {
                     _height = value;
-                    RaisePropertyChanged(() => Height);
+                    OnPropertyChanged(nameof(Height));
                 }
             }
         }
@@ -92,7 +92,7 @@
                 if (value != _depth)
                 {
                     _depth = value;
-                    RaisePropertyChanged(() => Depth);
+                    OnPropertyChanged(nameof(Depth));
                 }
             }
         }

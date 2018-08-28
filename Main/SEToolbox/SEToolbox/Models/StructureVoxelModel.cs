@@ -110,7 +110,7 @@
                 if (value != VoxelMap.StorageName)
                 {
                     VoxelMap.StorageName = value;
-                    RaisePropertyChanged(() => Name);
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -127,7 +127,7 @@
                 if (value != _sourceVoxelFilepath)
                 {
                     _sourceVoxelFilepath = value;
-                    RaisePropertyChanged(() => SourceVoxelFilepath);
+                    OnPropertyChanged(nameof(SourceVoxelFilepath));
                     ReadVoxelDetails(SourceVoxelFilepath);
                 }
             }
@@ -145,7 +145,7 @@
                 if (value != _voxelFilepath)
                 {
                     _voxelFilepath = value;
-                    RaisePropertyChanged(() => VoxelFilepath);
+                    OnPropertyChanged(nameof(VoxelFilepath));
                 }
             }
         }
@@ -160,7 +160,7 @@
                 if (value != _size)
                 {
                     _size = value;
-                    RaisePropertyChanged(() => Size);
+                    OnPropertyChanged(nameof(Size));
                 }
             }
         }
@@ -185,7 +185,7 @@
                 if (value != _contentBounds)
                 {
                     _contentBounds = value;
-                    RaisePropertyChanged(() => ContentBounds);
+                    OnPropertyChanged(nameof(ContentBounds));
                 }
             }
         }
@@ -203,8 +203,7 @@
                 if (value != _voxCells)
                 {
                     _voxCells = value;
-                    RaisePropertyChanged(() => VoxCells);
-                    RaisePropertyChanged(() => Volume);
+                    OnPropertyChanged(nameof(VoxCells), nameof(Volume));
                 }
             }
         }
@@ -228,7 +227,7 @@
                 if (value != _materialAssets)
                 {
                     _materialAssets = value;
-                    RaisePropertyChanged(() => MaterialAssets);
+                    OnPropertyChanged(nameof(MaterialAssets));
                 }
             }
         }
@@ -243,7 +242,7 @@
                 if (value != _selectedMaterialAsset)
                 {
                     _selectedMaterialAsset = value;
-                    RaisePropertyChanged(() => SelectedMaterialAsset);
+                    OnPropertyChanged(nameof(SelectedMaterialAsset));
                 }
             }
         }
@@ -258,7 +257,7 @@
                 if (value != _gameMaterialList)
                 {
                     _gameMaterialList = value;
-                    RaisePropertyChanged(() => GameMaterialList);
+                    OnPropertyChanged(nameof(GameMaterialList));
                 }
             }
         }
@@ -273,7 +272,7 @@
                 if (value != _editMaterialList)
                 {
                     _editMaterialList = value;
-                    RaisePropertyChanged(() => EditMaterialList);
+                    OnPropertyChanged(nameof(EditMaterialList));
                 }
             }
         }
@@ -318,12 +317,7 @@
             };
             _asyncWorker.RunWorkerCompleted += delegate
             {
-                RaisePropertyChanged(() => Size);
-                RaisePropertyChanged(() => ContentSize);
-                RaisePropertyChanged(() => ContentBounds);
-                RaisePropertyChanged(() => Center);
-                RaisePropertyChanged(() => VoxCells);
-                RaisePropertyChanged(() => Volume);
+                OnPropertyChanged(nameof(Size), nameof(ContentSize), nameof(ContentBounds), nameof(Center), nameof(VoxCells), nameof(Volume));
             };
 
             _asyncWorker.RunWorkerAsync();
@@ -368,9 +362,7 @@
                 ContentBounds = _voxelMap.BoundingContent;
                 IsValid = _voxelMap.IsValid;
 
-                RaisePropertyChanged(() => Size);
-                RaisePropertyChanged(() => ContentSize);
-                RaisePropertyChanged(() => IsValid);
+                OnPropertyChanged(nameof(Size), nameof(ContentSize), nameof(IsValid));
                 Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
                 WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
             }
@@ -397,9 +389,7 @@
             ContentBounds = _voxelMap.BoundingContent;
             IsValid = _voxelMap.IsValid;
 
-            RaisePropertyChanged(() => Size);
-            RaisePropertyChanged(() => ContentSize);
-            RaisePropertyChanged(() => IsValid);
+            OnPropertyChanged(nameof(Size), nameof(ContentSize), nameof(IsValid));
             Center = new Vector3D(_voxelMap.ContentCenter.X + 0.5f + PositionX, _voxelMap.ContentCenter.Y + 0.5f + PositionY, _voxelMap.ContentCenter.Z + 0.5f + PositionZ);
             WorldAABB = new BoundingBoxD(PositionAndOrientation.Value.Position, PositionAndOrientation.Value.Position + new Vector3D(Size));
         }

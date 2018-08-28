@@ -128,7 +128,7 @@ td.right { text-align: right; }";
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     SetActiveStatus();
                     if (_isBusy)
                     {
@@ -153,7 +153,7 @@ td.right { text-align: right; }";
                 if (value != _isActive)
                 {
                     _isActive = value;
-                    RaisePropertyChanged(() => IsActive);
+                    OnPropertyChanged(nameof(IsActive));
                 }
             }
         }
@@ -172,7 +172,7 @@ td.right { text-align: right; }";
                 if (value != _isReportReady)
                 {
                     _isReportReady = value;
-                    RaisePropertyChanged(() => IsReportReady);
+                    OnPropertyChanged(nameof(IsReportReady));
                 }
             }
         }
@@ -189,7 +189,7 @@ td.right { text-align: right; }";
                 if (value != _reportHtml)
                 {
                     _reportHtml = value;
-                    RaisePropertyChanged(() => ReportHtml);
+                    OnPropertyChanged(nameof(ReportHtml));
                 }
             }
         }
@@ -206,7 +206,7 @@ td.right { text-align: right; }";
                 if (value != _showProgress)
                 {
                     _showProgress = value;
-                    RaisePropertyChanged(() => ShowProgress);
+                    OnPropertyChanged(nameof(ShowProgress));
                 }
             }
         }
@@ -226,7 +226,7 @@ td.right { text-align: right; }";
 
                     if (!_timer.IsRunning || _timer.ElapsedMilliseconds > 100)
                     {
-                        RaisePropertyChanged(() => Progress);
+                        OnPropertyChanged(nameof(Progress));
                         System.Windows.Forms.Application.DoEvents();
                         _timer.Restart();
                     }
@@ -246,7 +246,7 @@ td.right { text-align: right; }";
                 if (value != _maximumProgress)
                 {
                     _maximumProgress = value;
-                    RaisePropertyChanged(() => MaximumProgress);
+                    OnPropertyChanged(nameof(MaximumProgress));
                 }
             }
         }

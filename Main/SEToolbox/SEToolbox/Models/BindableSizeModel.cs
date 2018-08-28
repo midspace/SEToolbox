@@ -39,7 +39,7 @@
                 if (value != _size.Width)
                 {
                     _size.Width = value;
-                    RaisePropertyChanged(() => Width);
+                    OnPropertyChanged(nameof(Width));
                 }
             }
         }
@@ -56,7 +56,7 @@
                 if (value != _size.Height)
                 {
                     _size.Height = value;
-                    RaisePropertyChanged(() => Height);
+                    OnPropertyChanged(nameof(Height));
                 }
             }
         }
@@ -73,7 +73,7 @@
                 if (value != _size)
                 {
                     _size = value;
-                    RaisePropertyChanged(() => Size, () => Width, () => Height);
+                    OnPropertyChanged(nameof(Size), nameof(Width), nameof(Height));
                 }
             }
         }

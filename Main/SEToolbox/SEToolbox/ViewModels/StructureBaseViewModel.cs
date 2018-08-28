@@ -34,7 +34,7 @@
                 if (value != _isSelected)
                 {
                     _isSelected = value;
-                    RaisePropertyChanged(() => IsSelected);
+                    OnPropertyChanged(nameof(IsSelected));
                 }
             }
         }
@@ -67,7 +67,7 @@
                 if (value != DataModel.EntityId)
                 {
                     DataModel.EntityId = value;
-                    RaisePropertyChanged(() => EntityId);
+                    OnPropertyChanged(nameof(EntityId));
                 }
             }
         }
@@ -85,7 +85,7 @@
                 //if (value != entityBase.PositionAndOrientation)
                 {
                     DataModel.PositionAndOrientation = value;
-                    RaisePropertyChanged(() => PositionAndOrientation);
+                    OnPropertyChanged(nameof(PositionAndOrientation));
                 }
             }
         }
@@ -102,7 +102,7 @@
                 if (value != DataModel.ClassType)
                 {
                     DataModel.ClassType = value;
-                    RaisePropertyChanged(() => ClassType);
+                    OnPropertyChanged(nameof(ClassType));
                 }
             }
         }

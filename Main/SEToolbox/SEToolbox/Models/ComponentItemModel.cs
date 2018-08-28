@@ -28,8 +28,8 @@
                 {
                     _name = value;
                     FriendlyName = SpaceEngineersApi.GetResourceName(_name);
-                    RaisePropertyChanged(() => Name);
-                    RaisePropertyChanged(() => FriendlyName);
+                    OnPropertyChanged(nameof(Name));
+                    OnPropertyChanged(nameof(FriendlyName));
                 }
             }
         }
@@ -67,8 +67,7 @@
                 {
                     _oreName = value;
                     FriendlyOreName = SpaceEngineersApi.GetResourceName(OreName);
-                    RaisePropertyChanged(() => OreName);
-                    RaisePropertyChanged(() => FriendlyOreName);
+                    OnPropertyChanged(nameof(OreName), nameof(FriendlyOreName));
                 }
             }
         }

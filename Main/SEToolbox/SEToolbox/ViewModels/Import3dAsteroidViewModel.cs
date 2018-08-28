@@ -97,7 +97,7 @@
             set
             {
                 _closeResult = value;
-                RaisePropertyChanged(() => CloseResult);
+                OnPropertyChanged(nameof(CloseResult));
             }
         }
 
@@ -113,7 +113,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         Application.DoEvents();
@@ -145,7 +145,7 @@
             set
             {
                 _dataModel.IsValidModel = value;
-                RaisePropertyChanged(() => IsWrongModel);
+                OnPropertyChanged(nameof(IsWrongModel));
             }
         }
 

@@ -51,7 +51,7 @@
                 if (value != _selections)
                 {
                     _selections = value;
-                    RaisePropertyChanged(() => Selections);
+                    OnPropertyChanged(nameof(Selections));
                 }
             }
         }
@@ -71,7 +71,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
@@ -92,7 +92,7 @@
                 if (value != _globalOffsetPositionX)
                 {
                     _globalOffsetPositionX = value;
-                    RaisePropertyChanged(() => GlobalOffsetPositionX);
+                    OnPropertyChanged(nameof(GlobalOffsetPositionX));
                 }
             }
         }
@@ -109,7 +109,7 @@
                 if (value != _globalOffsetPositionY)
                 {
                     _globalOffsetPositionY = value;
-                    RaisePropertyChanged(() => GlobalOffsetPositionY);
+                    OnPropertyChanged(nameof(GlobalOffsetPositionY));
                 }
             }
         }
@@ -126,7 +126,7 @@
                 if (value != _globalOffsetPositionZ)
                 {
                     _globalOffsetPositionZ = value;
-                    RaisePropertyChanged(() => GlobalOffsetPositionZ);
+                    OnPropertyChanged(nameof(GlobalOffsetPositionZ));
                 }
             }
         }
@@ -143,7 +143,7 @@
                 if (value != _isGlobalOffsetPosition)
                 {
                     _isGlobalOffsetPosition = value;
-                    RaisePropertyChanged(() => IsGlobalOffsetPosition);
+                    OnPropertyChanged(nameof(IsGlobalOffsetPosition));
                 }
             }
         }
@@ -160,7 +160,7 @@
                 if (value != _singlePositionX)
                 {
                     _singlePositionX = value;
-                    RaisePropertyChanged(() => SinglePositionX);
+                    OnPropertyChanged(nameof(SinglePositionX));
                 }
             }
         }
@@ -177,7 +177,7 @@
                 if (value != _singlePositionY)
                 {
                     _singlePositionY = value;
-                    RaisePropertyChanged(() => SinglePositionY);
+                    OnPropertyChanged(nameof(SinglePositionY));
                 }
             }
         }
@@ -194,7 +194,7 @@
                 if (value != _singlePositionZ)
                 {
                     _singlePositionZ = value;
-                    RaisePropertyChanged(() => SinglePositionZ);
+                    OnPropertyChanged(nameof(SinglePositionZ));
                 }
             }
         }
@@ -211,7 +211,7 @@
                 if (value != _isSinglePosition)
                 {
                     _isSinglePosition = value;
-                    RaisePropertyChanged(() => IsSinglePosition);
+                    OnPropertyChanged(nameof(IsSinglePosition));
                 }
             }
         }
