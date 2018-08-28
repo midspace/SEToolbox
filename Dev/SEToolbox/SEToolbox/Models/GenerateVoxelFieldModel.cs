@@ -58,7 +58,7 @@
                 if (value != _voxelCollection)
                 {
                     _voxelCollection = value;
-                    RaisePropertyChanged(() => VoxelCollection);
+                    OnPropertyChanged(nameof(VoxelCollection));
                 }
             }
         }
@@ -72,7 +72,7 @@
                 if (value != _minimumRange)
                 {
                     _minimumRange = value;
-                    RaisePropertyChanged(() => MinimumRange);
+                    OnPropertyChanged(nameof(MinimumRange));
                 }
             }
         }
@@ -86,7 +86,7 @@
                 if (value != _maximumRange)
                 {
                     _maximumRange = value;
-                    RaisePropertyChanged(() => MaximumRange);
+                    OnPropertyChanged(nameof(MaximumRange));
                 }
             }
         }
@@ -100,7 +100,7 @@
                 if (value != _voxelFileList)
                 {
                     _voxelFileList = value;
-                    RaisePropertyChanged(() => VoxelFileList);
+                    OnPropertyChanged(nameof(VoxelFileList));
                 }
             }
         }
@@ -126,7 +126,7 @@
                 if (value != _centerPositionX)
                 {
                     _centerPositionX = value;
-                    RaisePropertyChanged(() => CenterPositionX);
+                    OnPropertyChanged(nameof(CenterPositionX));
                 }
             }
         }
@@ -140,7 +140,7 @@
                 if (value != _centerPositionY)
                 {
                     _centerPositionY = value;
-                    RaisePropertyChanged(() => CenterPositionY);
+                    OnPropertyChanged(nameof(CenterPositionY));
                 }
             }
         }
@@ -154,7 +154,7 @@
                 if (value != _centerPositionZ)
                 {
                     _centerPositionZ = value;
-                    RaisePropertyChanged(() => CenterPositionZ);
+                    OnPropertyChanged(nameof(CenterPositionZ));
                 }
             }
         }
@@ -168,7 +168,7 @@
                 if (value != _asteroidFillType)
                 {
                     _asteroidFillType = value;
-                    RaisePropertyChanged(() => AsteroidFillType);
+                    OnPropertyChanged(nameof(AsteroidFillType));
                 }
             }
         }

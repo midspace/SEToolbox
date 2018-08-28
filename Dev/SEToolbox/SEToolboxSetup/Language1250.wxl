@@ -16,4 +16,6 @@
   <String Id="ProductServerDlgDescription">ProductServerDlgDescription</String>
   <String Id="ProductServerDlgEnterServer">ProductServerDlgEnterServer</String>
   <String Id="ProductServerDlgTitle">ProductServerDlgTitle</String>
+
+  <String Id="LaunchProductOnFinish">Spusťte aplikaci po dokončení</String>
 </WixLocalization>

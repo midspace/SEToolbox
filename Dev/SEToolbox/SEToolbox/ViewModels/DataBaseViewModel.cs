@@ -31,7 +31,7 @@
                 if (value != _dataModel)
                 {
                     _dataModel = value;
-                    RaisePropertyChanged(() => DataModel);
+                    OnPropertyChanged(nameof(DataModel));
                 }
             }
         }

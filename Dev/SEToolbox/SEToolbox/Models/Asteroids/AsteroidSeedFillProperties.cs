@@ -23,7 +23,7 @@
                 if (value != _index)
                 {
                     _index = value;
-                    RaisePropertyChanged(() => Index);
+                    OnPropertyChanged(nameof(Index));
                 }
             }
         }
@@ -37,7 +37,7 @@
                 if (value != _voxelFile)
                 {
                     _voxelFile = value;
-                    RaisePropertyChanged(() => VoxelFile);
+                    OnPropertyChanged(nameof(VoxelFile));
                 }
             }
         }
@@ -51,7 +51,7 @@
                 if (value != _mainMaterial)
                 {
                     _mainMaterial = value;
-                    RaisePropertyChanged(() => MainMaterial);
+                    OnPropertyChanged(nameof(MainMaterial));
                 }
             }
         }
@@ -65,7 +65,7 @@
                 if (value != _firstMaterial)
                 {
                     _firstMaterial = value;
-                    RaisePropertyChanged(() => FirstMaterial);
+                    OnPropertyChanged(nameof(FirstMaterial));
                 }
             }
         }
@@ -92,7 +92,7 @@
                 if (value != _secondMaterial)
                 {
                     _secondMaterial = value;
-                    RaisePropertyChanged(() => SecondMaterial);
+                    OnPropertyChanged(nameof(SecondMaterial));
                 }
             }
         }
@@ -118,7 +118,7 @@
                 if (value != _thirdMaterial)
                 {
                     _thirdMaterial = value;
-                    RaisePropertyChanged(() => ThirdMaterial);
+                    OnPropertyChanged(nameof(ThirdMaterial));
                 }
             }
         }
@@ -144,7 +144,7 @@
                 if (value != _fourthMaterial)
                 {
                     _fourthMaterial = value;
-                    RaisePropertyChanged(() => FourthMaterial);
+                    OnPropertyChanged(nameof(FourthMaterial));
                 }
             }
         }
@@ -169,7 +169,7 @@
                 if (value != _fifthMaterial)
                 {
                     _fifthMaterial = value;
-                    RaisePropertyChanged(() => FifthMaterial);
+                    OnPropertyChanged(nameof(FifthMaterial));
                 }
             }
         }
@@ -194,7 +194,7 @@
                 if (value != _sixthMaterial)
                 {
                     _sixthMaterial = value;
-                    RaisePropertyChanged(() => SixthMaterial);
+                    OnPropertyChanged(nameof(SixthMaterial));
                 }
             }
         }
@@ -220,7 +220,7 @@
                 if (value != _seventhMaterial)
                 {
                     _seventhMaterial = value;
-                    RaisePropertyChanged(() => SeventhMaterial);
+                    OnPropertyChanged(nameof(SeventhMaterial));
                 }
             }
         }

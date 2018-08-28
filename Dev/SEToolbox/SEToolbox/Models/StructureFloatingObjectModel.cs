@@ -57,7 +57,7 @@
                 if (value != FloatingObject.Item)
                 {
                     FloatingObject.Item = value;
-                    RaisePropertyChanged(() => Item);
+                    OnPropertyChanged(nameof(Item));
                 }
             }
         }
@@ -75,7 +75,7 @@
                 if (value != _volume)
                 {
                     _volume = value;
-                    RaisePropertyChanged(() => Volume);
+                    OnPropertyChanged(nameof(Volume));
                 }
             }
         }
@@ -93,7 +93,7 @@
                 if (value != _units)
                 {
                     _units = value;
-                    RaisePropertyChanged(() => Units);
+                    OnPropertyChanged(nameof(Units));
                 }
             }
         }

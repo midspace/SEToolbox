@@ -100,7 +100,7 @@
             set
             {
                 _closeResult = value;
-                RaisePropertyChanged(() => CloseResult);
+                OnPropertyChanged(nameof(CloseResult));
             }
         }
 
@@ -177,7 +177,7 @@
                 if (value != _newImage)
                 {
                     _newImage = value;
-                    RaisePropertyChanged(() => NewImage);
+                    OnPropertyChanged(nameof(NewImage));
                 }
             }
         }
@@ -194,7 +194,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         Application.DoEvents();

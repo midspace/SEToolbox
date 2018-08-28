@@ -35,7 +35,7 @@
                 if (value != _playerList)
                 {
                     _playerList = value;
-                    RaisePropertyChanged(() => PlayerList);
+                    OnPropertyChanged(nameof(PlayerList));
                 }
             }
         }
@@ -49,7 +49,7 @@
                 if (value != _selectedPlayer)
                 {
                     _selectedPlayer = value;
-                    RaisePropertyChanged(() => SelectedPlayer);
+                    OnPropertyChanged(nameof(SelectedPlayer));
                 }
             }
         }
@@ -63,7 +63,7 @@
                 if (value != _title)
                 {
                     _title = value;
-                    RaisePropertyChanged(() => Title);
+                    OnPropertyChanged(nameof(Title));
                 }
             }
         }

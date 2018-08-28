@@ -344,9 +344,11 @@ Units:		{4:#,##0.####}</value>
   </data>
   <data name="Boolean_False" xml:space="preserve">
     <value>No</value>
+    <comment>boolean flag No</comment>
   </data>
   <data name="Boolean_True" xml:space="preserve">
     <value>Yes</value>
+    <comment>boolean flag Yes</comment>
   </data>
   <data name="DialogExportReportTitle" xml:space="preserve">
     <value>Specify filename to export 'Component Item Report' to</value>
@@ -611,39 +613,51 @@ Please update it before running SEToolbox {2} again.</value>
   </data>
   <data name="TraceDirection_X" xml:space="preserve">
     <value>X axis</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceDirection_XY" xml:space="preserve">
     <value>X+Y axis</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceDirection_XYZ" xml:space="preserve">
     <value>All 3 axis</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceDirection_XZ" xml:space="preserve">
     <value>X+Z axis</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceDirection_Y" xml:space="preserve">
     <value>Y axis</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceDirection_YZ" xml:space="preserve">
     <value>Y+Z axis</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceDirection_Z" xml:space="preserve">
     <value>Z axis</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceId_Id1" xml:space="preserve">
     <value>1</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceId_Id2" xml:space="preserve">
     <value>2</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceId_Id3" xml:space="preserve">
     <value>3</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceId_Id4" xml:space="preserve">
     <value>4</value>
+    <comment>enum</comment>
   </data>
   <data name="TraceId_Id5" xml:space="preserve">
     <value>5</value>
+    <comment>enum</comment>
   </data>
   <data name="selection" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\selection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -680,9 +694,11 @@ Please update it before running SEToolbox {2} again.</value>
   </data>
   <data name="AsteroidFillType_ByteFiller" xml:space="preserve">
     <value>Crazy mix fill</value>
+    <comment>enum</comment>
   </data>
   <data name="AsteroidFillType_None" xml:space="preserve">
     <value>No change</value>
+    <comment>enum</comment>
   </data>
   <data name="DialogLocationCustomVoxelFolder" xml:space="preserve">
     <value>Specify location of Custom Asteroids</value>
@@ -1315,8 +1331,8 @@ Distance:		{1:#,##0.0} m</value>
   <data name="CtlCubeMnuDeleteCube" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="CtlCubeMnuFrameworkCube" xml:space="preserve">
-    <value>Framework</value>
+  <data name="CtlCubeMnuConvertFrameworkValue" xml:space="preserve">
+    <value>To specified value</value>
   </data>
   <data name="CtlCubeMnuOwnerCube" xml:space="preserve">
     <value>Owner</value>
@@ -2716,7 +2732,8 @@ Planet Generator:	{17}</value>
     <value>Space Engineers Component Item Report</value>
   </data>
   <data name="ValidationInvalidCharacters" xml:space="preserve">
-    <value>Illegal characters or</value>
+    <value>Illegal characters or {0}</value>
+    <comment>Range validation message will return exception in {0}</comment>
   </data>
   <data name="ValidationInvalidRange" xml:space="preserve">
     <value>Please enter a value in the range:</value>
@@ -2913,5 +2930,40 @@ Reason: {1}</value>
   </data>
   <data name="ErrorNoBlueprintPathTitle" xml:space="preserve">
     <value>Cannot Save Blueprint</value>
+  </data>
+  <data name="MyCubeSize_Large" xml:space="preserve">
+    <value>Large</value>
+    <comment>enum Cube grid size</comment>
+  </data>
+  <data name="MyCubeSize_Small" xml:space="preserve">
+    <value>Small</value>
+    <comment>enum Cube grid size</comment>
+  </data>
+  <data name="CtlPlanetMnuRegenerate" xml:space="preserve">
+    <value>Regenerate</value>
+  </data>
+  <data name="CtlPlanetMnuRegenerateDetail" xml:space="preserve">
+    <value>Will remove any voxel changes to the asteroid. Allows changing random seed, and changing size.</value>
+  </data>
+  <data name="earth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\earth.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WnRegeneratePlanetBtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WnRegeneratePlanetBtnOkay" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WnRegeneratePlanetLabelSeed" xml:space="preserve">
+    <value>Seed</value>
+  </data>
+  <data name="WnRegeneratePlanetLabelSize" xml:space="preserve">
+    <value>Meters Size (Diameter)</value>
+  </data>
+  <data name="WnRegeneratePlanetTitle" xml:space="preserve">
+    <value>Regenerate Planet</value>
+  </data>
+  <data name="CtlPlanetMnuCopyGpsCenter" xml:space="preserve">
+    <value>Copy GPS</value>
   </data>
 </root>

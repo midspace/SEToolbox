@@ -27,7 +27,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    RaisePropertyChanged(() => Name, () => DisplayName);
+                    OnPropertyChanged(nameof(Name), nameof(DisplayName));
                 }
             }
         }
@@ -41,7 +41,7 @@
                 if (value != _model)
                 {
                     _model = value;
-                    RaisePropertyChanged(() => Model);
+                    OnPropertyChanged(nameof(Model));
                 }
             }
         }
@@ -55,7 +55,7 @@
                 if (value != _playerId)
                 {
                     _playerId = value;
-                    RaisePropertyChanged(() => PlayerId);
+                    OnPropertyChanged(nameof(PlayerId));
                 }
             }
         }
@@ -69,7 +69,7 @@
                 if (value != _isPlayer)
                 {
                     _isPlayer = value;
-                    RaisePropertyChanged(() => IsPlayer, () => DisplayName);
+                    OnPropertyChanged(nameof(IsPlayer), nameof(DisplayName));
                 }
             }
         }

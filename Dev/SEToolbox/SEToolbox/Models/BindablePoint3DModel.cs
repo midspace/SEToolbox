@@ -74,7 +74,7 @@
                 if (value != _point.X)
                 {
                     _point.X = value;
-                    RaisePropertyChanged(() => X);
+                    OnPropertyChanged(nameof(X));
                 }
             }
         }
@@ -91,7 +91,7 @@
                 if (value != _point.Y)
                 {
                     _point.Y = value;
-                    RaisePropertyChanged(() => Y);
+                    OnPropertyChanged(nameof(Y));
                 }
             }
         }
@@ -108,7 +108,7 @@
                 if (value != _point.Z)
                 {
                     _point.Z = value;
-                    RaisePropertyChanged(() => Z);
+                    OnPropertyChanged(nameof(Z));
                 }
             }
         }
@@ -125,7 +125,7 @@
                 if (value != _point)
                 {
                     _point = value;
-                    RaisePropertyChanged(() => Point3D, () => X, () => Y, () => Z);
+                    OnPropertyChanged(nameof(Point3D), nameof(X), nameof(Y), nameof(Z));
                 }
             }
         }

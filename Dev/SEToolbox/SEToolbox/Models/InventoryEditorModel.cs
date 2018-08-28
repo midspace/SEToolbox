@@ -83,7 +83,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    RaisePropertyChanged(() => Name);
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -98,7 +98,7 @@
                 if (value != _isValid)
                 {
                     _isValid = value;
-                    RaisePropertyChanged(() => IsValid);
+                    OnPropertyChanged(nameof(IsValid));
                 }
             }
         }
@@ -116,7 +116,7 @@
                 if (value != _items)
                 {
                     _items = value;
-                    RaisePropertyChanged(() => Items);
+                    OnPropertyChanged(nameof(Items));
                 }
             }
         }
@@ -134,7 +134,7 @@
                 if (value != _selectedRow)
                 {
                     _selectedRow = value;
-                    RaisePropertyChanged(() => SelectedRow);
+                    OnPropertyChanged(nameof(SelectedRow));
                 }
             }
         }
@@ -152,7 +152,7 @@
                 if (value != _totalVolume)
                 {
                     _totalVolume = value;
-                    RaisePropertyChanged(() => TotalVolume);
+                    OnPropertyChanged(nameof(TotalVolume));
                 }
             }
         }
@@ -170,7 +170,7 @@
                 if (value != _totalMass)
                 {
                     _totalMass = value;
-                    RaisePropertyChanged(() => TotalMass);
+                    OnPropertyChanged(nameof(TotalMass));
                 }
             }
         }
@@ -188,7 +188,7 @@
                 if (value != _maxVolume)
                 {
                     _maxVolume = value;
-                    RaisePropertyChanged(() => MaxVolume);
+                    OnPropertyChanged(nameof(MaxVolume));
                 }
             }
         }

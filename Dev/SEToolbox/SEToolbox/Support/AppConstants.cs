@@ -1,5 +1,6 @@
 ﻿namespace SEToolbox.Support
 {
+    using SEToolbox.Interop;
     using System;
     using System.Collections.Generic;
     using Res = SEToolbox.Properties.Resources;
@@ -48,12 +49,12 @@
                                             $"{Res.DialogStereoLithographyFiles} (*.stl)|*.stl|" +
                                             $"{Res.DialogOFFFiles} (*.off)|*.off";
         public static string PrefabObjectFilter => $"{Res.DialogSandboxPrefabXmlFiles} (*.sbc)|*.sbc|" +
-                                                   $"{Res.DialogSandboxPrefabBinaryFiles} (*.sbcPB)|*.sbcPB";
+                                                   $"{Res.DialogSandboxPrefabBinaryFiles} (*.sbc{SpaceEngineersConsts.ProtobuffersExtension})|*.sbc{SpaceEngineersConsts.ProtobuffersExtension}";
         public static string SandboxFilter => $"{Res.DialogSandboxFiles} |Sandbox.sbc";
-        public static string SandboxObjectImportFilter => $"{Res.DialogSandboxContentFiles} (*.sbc;*.sbcPB)|*.sbc;*.sbcPB|" +
+        public static string SandboxObjectImportFilter => $"{Res.DialogSandboxContentFiles} (*.sbc;*.sbc{SpaceEngineersConsts.ProtobuffersExtension})|*.sbc;*.sbc{SpaceEngineersConsts.ProtobuffersExtension}|" +
                                                           $"{Res.DialogXmlFiles} (*.xml)|*.xml|{Res.DialogAllFiles} (*.*)|*.*";
         public static string SandboxObjectExportFilter => $"{Res.DialogSandboxXmlContentFiles} (*.sbc)|*.sbc|" +
-                                                          $"{Res.DialogSandboxBinaryContentFiles} (*.sbcPB)|*.sbcPB|" +
+                                                          $"{Res.DialogSandboxBinaryContentFiles} (*.sbc{SpaceEngineersConsts.ProtobuffersExtension})|*.sbc{SpaceEngineersConsts.ProtobuffersExtension}|" +
                                                           $"{Res.DialogXmlFiles} (*.xml)|*.xml|{Res.DialogAllFiles} (*.*)|*.*";
         public static string SpaceEngineersApplicationFilter => $"{Res.DialogSpaceEngineersApplicationFiles}|SpaceEngineers*.exe";
         public static string TextFileFilter => $"{Res.DialogTextFiles} (*.txt)|*.txt";

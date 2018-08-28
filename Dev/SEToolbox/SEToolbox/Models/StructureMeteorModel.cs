@@ -57,7 +57,7 @@
                 if (value != Meteor.Item)
                 {
                     Meteor.Item = value;
-                    RaisePropertyChanged(() => Item);
+                    OnPropertyChanged(nameof(Item));
                 }
             }
         }
@@ -75,7 +75,7 @@
                 if (value != Meteor.Integrity)
                 {
                     Meteor.Integrity = value;
-                    RaisePropertyChanged(() => Integrity);
+                    OnPropertyChanged(nameof(Integrity));
                 }
             }
         }
@@ -93,7 +93,7 @@
                 if (value != _volume)
                 {
                     _volume = value;
-                    RaisePropertyChanged(() => Volume);
+                    OnPropertyChanged(nameof(Volume));
                 }
             }
         }
@@ -166,14 +166,14 @@
         {
             Meteor.LinearVelocity = new Vector3(0, 0, 0);
             Meteor.AngularVelocity = new Vector3(0, 0, 0);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         public void ReverseVelocity()
         {
             Meteor.LinearVelocity = new Vector3(Meteor.LinearVelocity.X * -1, Meteor.LinearVelocity.Y * -1, Meteor.LinearVelocity.Z * -1);
             Meteor.AngularVelocity = new Vector3(Meteor.AngularVelocity.X * -1, Meteor.AngularVelocity.Y * -1, Meteor.AngularVelocity.Z * -1);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         public void MaxVelocityAtPlayer(Vector3D playerPosition)
@@ -184,7 +184,7 @@
 
             Meteor.LinearVelocity = v;
             Meteor.AngularVelocity = new Vector3(0, 0, 0);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         #endregion

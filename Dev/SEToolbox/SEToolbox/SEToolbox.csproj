@@ -63,6 +63,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -237,6 +239,7 @@
     <Compile Include="Models\ChangeOwnerModel.cs" />
     <Compile Include="Models\BlueprintDialogModel.cs" />
     <Compile Include="Models\ErrorDialogModel.cs" />
+    <Compile Include="Models\RegeneratePlanetModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\MergeVoxelModel.cs" />
     <Compile Include="Models\OwnerModel.cs" />
@@ -347,7 +350,6 @@
     <Compile Include="Support\HtmlExtensions.cs" />
     <Compile Include="Support\MeshHelper.cs" />
     <Compile Include="Support\Modelling.cs" />
-    <Compile Include="Support\PropertyChangedExtensions.cs" />
     <Compile Include="Support\RandomUtil.cs" />
     <Compile Include="Support\Splasher.cs" />
     <Compile Include="Support\TempfileUtil.cs" />
@@ -363,6 +365,7 @@
     <Compile Include="ViewModels\ChangeOwnerViewModel.cs" />
     <Compile Include="ViewModels\BlueprintDialogViewModel.cs" />
     <Compile Include="ViewModels\ErrorDialogViewModel.cs" />
+    <Compile Include="ViewModels\RegeneratePlanetViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\MergeVoxelViewModel.cs" />
     <Compile Include="ViewModels\ProgressCancelViewModel.cs" />
@@ -436,6 +439,9 @@
     </Compile>
     <Compile Include="Views\WindowErrorDialog.xaml.cs">
       <DependentUpon>WindowErrorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowRegeneratePlanet.xaml.cs">
+      <DependentUpon>WindowRegeneratePlanet.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowSettings.xaml.cs">
       <DependentUpon>WindowSettings.xaml</DependentUpon>
@@ -565,6 +571,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\WindowRegeneratePlanet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\WindowSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -651,6 +661,9 @@
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\MyTexts.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.de.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.zh-cn.resx">
@@ -874,6 +887,7 @@
       <Link>steam_api64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\earth.png" />
     <None Include="Resources\SEToolbox_splash_zh-cn.png" />
     <None Include="Resources\hammer.png" />
   </ItemGroup>
@@ -885,6 +899,7 @@
   -->
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)\SEToolboxUpdate.exe" DestinationFolder="$(TargetDir)" />
-    <!--    <Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)\zh" DestinationFolder="$(TargetDir)\zh" />-->
+    <Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)de\SEToolboxUpdate.resources.dll" DestinationFolder="$(TargetDir)de" />
+    <!--<Copy SourceFiles="$(ProjectDir)..\SEToolboxUpdate\$(OutDir)zh-cn\SEToolboxUpdate.resources.dll" DestinationFolder="$(TargetDir)zh-cn" />-->
   </Target>
 </Project>

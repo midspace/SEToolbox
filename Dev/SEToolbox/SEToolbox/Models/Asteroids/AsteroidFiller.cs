@@ -31,7 +31,7 @@
                 if (value != _index)
                 {
                     _index = value;
-                    RaisePropertyChanged(() => Index);
+                    OnPropertyChanged(nameof(Index));
                 }
             }
         }
@@ -45,7 +45,7 @@
                 if (value != _voxelFile)
                 {
                     _voxelFile = value;
-                    RaisePropertyChanged(() => VoxelFile);
+                    OnPropertyChanged(nameof(VoxelFile));
                 }
             }
         }
@@ -59,7 +59,7 @@
                 if (value != _fillMethod)
                 {
                     _fillMethod = value;
-                    RaisePropertyChanged(() => FillMethod);
+                    OnPropertyChanged(nameof(FillMethod));
                 }
             }
         }

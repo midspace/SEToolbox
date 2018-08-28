@@ -1,0 +1,64 @@
+﻿<Window x:Class="SEToolbox.Views.WindowRegeneratePlanet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:commands="clr-namespace:SEToolbox.Services"
+        xmlns:converters="clr-namespace:SEToolbox.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow"
+        Title="{lex:Loc WnRegeneratePlanetTitle}" Height="240" Width="420" Icon="/SEToolbox;component/app.ico" Style="{StaticResource DefaultWindowStyle}"
+        commands:DialogService.IsRegisteredView="True"
+        commands:DialogCloser.DialogResult="{Binding CloseResult}"
+        FocusManager.FocusedElement="{Binding ElementName=uxInitialElement}">
+    <Window.Resources>
+        <converters:DDSConverter x:Key="DDSConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc WnRegeneratePlanetLabelSeed}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Name="uxInitialElement" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <TextBox.Text>
+                    <Binding Path="Seed" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                        <Binding.ValidationRules>
+                            <converters:RangeRuleI Min="-2147483648" Max="2147483647"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc WnRegeneratePlanetLabelSize}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <TextBox.Text>
+                    <Binding Path="Diameter" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                        <Binding.ValidationRules>
+                            <converters:RangeRuleDec Min="500" Max="4800000"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Slider Grid.Column="1" Grid.Row="2" Minimum="500" Maximum="4800000" Value="{Binding Path=Diameter}" SmallChange="500" LargeChange="10000" />
+            <TextBlock Grid.Column="1" Grid.Row="3" Foreground="Red" TextWrapping="WrapWithOverflow" Text="The recommended range is 19000 to 120000. Values outside of that range may incur issues with the planet mesh, like invisible holes and game performance issues." Visibility="{Binding Path=InvalidKeenRange, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}"  />
+            <Label />
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="28" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8">
+            <Button Width="90" Command="{Binding OkayCommand}" Content="{lex:Loc WnRegeneratePlanetBtnOkay}" IsDefault="True"/>
+            <Button Margin="8,0,0,0" Width="90" Command="{Binding CancelCommand}" Content="{lex:Loc WnRegeneratePlanetBtnCancel}" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

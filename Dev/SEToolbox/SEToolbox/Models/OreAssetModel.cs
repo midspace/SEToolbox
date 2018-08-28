@@ -34,7 +34,7 @@
                 {
                     _name = value;
                     FriendlyName = SpaceEngineersApi.GetResourceName(Name);
-                    RaisePropertyChanged(() => Name);
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -53,7 +53,7 @@
                 if (value != _amount)
                 {
                     _amount = value;
-                    RaisePropertyChanged(() => Amount);
+                    OnPropertyChanged(nameof(Amount));
                 }
             }
         }
@@ -70,7 +70,7 @@
                 if (value != _mass)
                 {
                     _mass = value;
-                    RaisePropertyChanged(() => Mass);
+                    OnPropertyChanged(nameof(Mass));
                 }
             }
         }
@@ -87,7 +87,7 @@
                 if (value != _volume)
                 {
                     _volume = value;
-                    RaisePropertyChanged(() => Volume);
+                    OnPropertyChanged(nameof(Volume));
                 }
             }
         }
@@ -104,7 +104,7 @@
                 if (value != _time)
                 {
                     _time = value;
-                    RaisePropertyChanged(() => Time);
+                    OnPropertyChanged(nameof(Time));
                 }
             }
         }
@@ -121,7 +121,7 @@
                 if (value != _textureFile)
                 {
                     _textureFile = value;
-                    RaisePropertyChanged(() => TextureFile);
+                    OnPropertyChanged(nameof(TextureFile));
                 }
             }
         }

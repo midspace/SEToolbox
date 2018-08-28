@@ -26,7 +26,7 @@
                 if (value != _gameApplicationPath)
                 {
                     _gameApplicationPath = value;
-                    RaisePropertyChanged(() => GameApplicationPath);
+                    OnPropertyChanged(nameof(GameApplicationPath));
                     Validate();
                 }
             }
@@ -41,7 +41,7 @@
                 if (value != _gameBinPath)
                 {
                     _gameBinPath = value;
-                    RaisePropertyChanged(() => GameBinPath);
+                    OnPropertyChanged(nameof(GameBinPath));
                 }
             }
         }
@@ -55,7 +55,7 @@
                 if (value != _isValidApplication)
                 {
                     _isValidApplication = value;
-                    RaisePropertyChanged(() => IsValidApplication);
+                    OnPropertyChanged(nameof(IsValidApplication));
                 }
             }
         }
@@ -69,7 +69,7 @@
                 if (value != _isWrongApplication)
                 {
                     _isWrongApplication = value;
-                    RaisePropertyChanged(() => IsWrongApplication);
+                    OnPropertyChanged(nameof(IsWrongApplication));
                 }
             }
         }

@@ -32,7 +32,7 @@
                 if (value != _item)
                 {
                     _item = value;
-                    RaisePropertyChanged(() => Item);
+                    OnPropertyChanged(nameof(Item));
                 }
             }
         }
@@ -49,7 +49,7 @@
                 if (value != _newPositionX)
                 {
                     _newPositionX = value;
-                    RaisePropertyChanged(() => PositionX);
+                    OnPropertyChanged(nameof(PositionX));
                 }
             }
         }
@@ -66,7 +66,7 @@
                 if (value != _newtPositionY)
                 {
                     _newtPositionY = value;
-                    RaisePropertyChanged(() => PositionY);
+                    OnPropertyChanged(nameof(PositionY));
                 }
             }
         }
@@ -83,7 +83,7 @@
                 if (value != _newPositionZ)
                 {
                     _newPositionZ = value;
-                    RaisePropertyChanged(() => PositionZ);
+                    OnPropertyChanged(nameof(PositionZ));
                 }
             }
         }
@@ -100,7 +100,7 @@
                 if (value != _playerDistance)
                 {
                     _playerDistance = value;
-                    RaisePropertyChanged(() => PlayerDistance);
+                    OnPropertyChanged(nameof(PlayerDistance));
                 }
             }
         }

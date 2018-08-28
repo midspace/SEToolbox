@@ -38,7 +38,7 @@
             set
             {
                 _closeResult = value;
-                RaisePropertyChanged(() => CloseResult);
+                OnPropertyChanged(nameof(CloseResult));
             }
         }
 

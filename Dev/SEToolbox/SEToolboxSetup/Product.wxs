@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.186.500.4" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.187.204.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <!-- DOS 8.3 Format required for cab filenames. -->
     <Media Id="1" Cabinet="SEToolbx.cab" EmbedCab="yes" />
@@ -52,6 +52,7 @@
               <RemoveFile Id="file61275B9FC2AE484BA7A2BDB7459A3647" Name="Sandbox.Common.dll" On="install"/>
               <RemoveFile Id="file9BC4F4C590AF4888B721F2301140EB5A" Name="Sandbox.Game.dll" On="install"/>
               <RemoveFile Id="file882FC5E56A994EC1AFBBCBA50226393C" Name="Sandbox.Graphics.dll" On="install"/>
+              <RemoveFile Id="file350A25B55AB34B0EB1F6C2870FC13297" Name="Sandbox.RenderDirect.dll" On="install"/>
               <RemoveFile Id="file25850DB516724E6BB45D499D5A4BCF94" Name="SharpDX.dll" On="install"/>
               <RemoveFile Id="file170AA38F975C47B3A6976B9C5A1983AB" Name="SharpDX.Direct2D1.dll" On="install"/>
               <RemoveFile Id="file75CA1B95DC784AE9A526AB6F98D747ED" Name="SharpDX.Direct3D11.dll" On="install"/>
@@ -60,7 +61,7 @@
               <RemoveFile Id="fileA10D59ED71944ED7BD52C144A05A59A3" Name="SpaceEngineers.ObjectBuilders.dll" On="install"/>
               <RemoveFile Id="fileAF60B61F742940E7B68F86C3410E730C" Name="SpaceEngineers.ObjectBuilders.XmlSerializers.dll" On="install"/>
               <RemoveFile Id="file0B63627F3DDC47E58FB0BCCB65B110BC" Name="steam_api64.dll" On="install"/>
-              <RemoveFile Id="file26225324B8BC443AB0B4DE7161E48FCF" Name="SteamSDK.dll" On="install"/>
+              <RemoveFile Id="file3825B7010D1546EBBC17BBD388A9CB08" Name="Steamworks.NET.dll" On="install"/>
               <RemoveFile Id="fileEA4AE319577E449E9D1DF59BC1B6D3F0" Name="VRage.dll" On="install"/>
               <RemoveFile Id="file19B8CCCE91F040CCB983B44C7334821A" Name="VRage.Ansel.dll" On="install"/>
               <RemoveFile Id="file34F2B15981F041C7A1EB6FCF29C72BC1" Name="VRage.Audio.dll" On="install"/>
@@ -76,6 +77,7 @@
               <RemoveFile Id="file907C5A94D3964E7C86FF6FD07B8A46EA" Name="System.Data.SQLite.dll" On="install"/>
 
               <!--Obsolete. To be removed in the future. Retained temporarily for the installer to cleanup. -->
+              <RemoveFile Id="file26225324B8BC443AB0B4DE7161E48FCF" Name="SteamSDK.dll" On="install"/>
               <RemoveFile Id="file4CCC1D5F89354510910F24ECF6734F72" Name="ICSharpCode.SharpZipLib.dll" On="install"/>
 
 
@@ -90,9 +92,17 @@
               <Component Id='localeComponentZH' Guid='2598AD91-A20F-4D9B-A465-1C6D3E8CA941'>
                 <CreateFolder />
                 <File Id='localeFileZH' Name='SEToolbox.resources.dll' Source='$(var.SEToolbox.TargetDir)\zh\SEToolbox.resources.dll' DiskId='1' />
+                <File Id='localeFileUpdateZH' Name='SEToolboxUpdate.resources.dll' Source='$(var.SEToolbox.TargetDir)\zh\SEToolboxUpdate.resources.dll' DiskId='1' />
               </Component>
             </Directory>
             -->
+            <Directory Id='localeDirectoryDE' Name='de'>
+              <Component Id='localeComponentDE' Guid='12B7F102-2FCE-40D2-A8D4-DEF002675989'>
+                <CreateFolder />
+                <File Id='localeFileDE' Name='SEToolbox.resources.dll' Source='$(var.SEToolbox.TargetDir)\de\SEToolbox.resources.dll' DiskId='1' />
+                <File Id='localeFileUpdateDE' Name='SEToolboxUpdate.resources.dll' Source='$(var.SEToolbox.TargetDir)\de\SEToolboxUpdate.resources.dll' DiskId='1' />
+              </Component>
+            </Directory>
 
           </Directory>
         </Directory>
@@ -118,7 +128,7 @@
     <Property Id="APPLICATIONFOLDER">
       <RegistrySearch Id='SEToolboxRegistry' Type='raw' Root='HKLM' Key='Software\MidSpace\SEToolbox' Name='InstallDir' />
     </Property>
-    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Application when finished" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.LaunchProductOnFinish)" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
     <Property Id="WixShellExecTarget" Value="[#file184705D6F44643D48E157FDD3FBF37D7]" />
     <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
@@ -211,6 +221,7 @@
       <!--
       <ComponentRef Id="localeComponentZH" />
       -->
+      <ComponentRef Id="localeComponentDE" />
     </Feature>
   </Product>
 

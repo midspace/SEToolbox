@@ -51,7 +51,7 @@
                 if (value != _cubeAssets)
                 {
                     _cubeAssets = value;
-                    RaisePropertyChanged(() => CubeAssets);
+                    OnPropertyChanged(nameof(CubeAssets));
                 }
             }
         }
@@ -71,7 +71,7 @@
                 if (value != _componentAssets)
                 {
                     _componentAssets = value;
-                    RaisePropertyChanged(() => ComponentAssets);
+                    OnPropertyChanged(nameof(ComponentAssets));
                 }
             }
         }
@@ -91,7 +91,7 @@
                 if (value != _itemAssets)
                 {
                     _itemAssets = value;
-                    RaisePropertyChanged(() => ItemAssets);
+                    OnPropertyChanged(nameof(ItemAssets));
                 }
             }
         }
@@ -111,7 +111,7 @@
                 if (value != _materialAssets)
                 {
                     _materialAssets = value;
-                    RaisePropertyChanged(() => MaterialAssets);
+                    OnPropertyChanged(nameof(MaterialAssets));
                 }
             }
         }
@@ -131,7 +131,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
@@ -152,7 +152,7 @@
                 if (value != _selectedCubeAsset)
                 {
                     _selectedCubeAsset = value;
-                    RaisePropertyChanged(() => SelectedCubeAsset);
+                    OnPropertyChanged(nameof(SelectedCubeAsset));
                 }
             }
         }
@@ -280,6 +280,7 @@
             {
                 #region header
 
+                // TODO: #21 localize
                 writer.BeginDocument("Component Item Report",
                    @"
 body { background-color: #E6E6FA }
@@ -293,6 +294,7 @@ td.right { text-align: right; }");
 
                 #region Cubes
 
+                // TODO: #21 localize
                 writer.RenderElement(HtmlTextWriterTag.H1, "Cubes");
                 writer.BeginTable("1", "3", "0",
                     new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)", "Mod" });
@@ -337,6 +339,7 @@ td.right { text-align: right; }");
 
                 #region Components
 
+                // TODO: #21 localize
                 writer.RenderElement(HtmlTextWriterTag.H1, "Components");
                 writer.BeginTable("1", "3", "0",
                     new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)", "Mod" });
@@ -381,6 +384,7 @@ td.right { text-align: right; }");
 
                 #region Items
 
+                // TODO: #21 localize
                 writer.RenderElement(HtmlTextWriterTag.H1, "Items");
                 writer.BeginTable("1", "3", "0",
                     new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)", "Mod" });
@@ -425,6 +429,7 @@ td.right { text-align: right; }");
 
                 #region Materials
 
+                // TODO: #21 localize
                 writer.RenderElement(HtmlTextWriterTag.H1, "Materials");
                 writer.BeginTable("1", "3", "0",
                     new[] { "Texture", "Name", "Ore Name", "Rare", "Mined Ore Ratio", "Mod" });
@@ -503,12 +508,14 @@ td.right { text-align: right; }");
             if (field.FieldType == typeof(SerializableBounds))
             {
                 var bounds = (SerializableBounds)item;
+                // TODO: #21 localize
                 return string.Format("Default:{0}, Min:{1}, max:{2}", bounds.Default, bounds.Min, bounds.Max);
             }
 
             if (field.FieldType == typeof(VRageMath.Vector3))
             {
                 var vector3 = (VRageMath.Vector3)item;
+                // TODO: #21 localize
                 return string.Format("X:{0}, Y:{1}, Z:{2}", vector3.X, vector3.Y, vector3.Z);
             }
 

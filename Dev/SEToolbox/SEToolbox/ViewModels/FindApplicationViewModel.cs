@@ -4,7 +4,6 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.IO;
-    using System.Linq.Expressions;
     using System.Windows.Forms;
     using System.Windows.Input;
 
@@ -79,7 +78,7 @@
             set
             {
                 _closeResult = value;
-                RaisePropertyChanged(() => CloseResult);
+                OnPropertyChanged(nameof(CloseResult));
             }
         }
 
@@ -175,20 +174,17 @@
 
         /// <summary>
         /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
+        /// Use the <see cref="nameof()"/> in conjunction with OnPropertyChanged.
+        /// This will set the property name into a string during compile, which will be faster to execute then a runtime interpretation.
         /// </summary>
-        /// <param name="propertyName">The name of the property that changed.</param>
-        //[Obsolete("Use RaisePropertyChanged(() => PropertyName) instead.")]
-        protected void OnPropertyChanged(string propertyName)
+        /// <param name="propertyNames">The name of the property that changed.</param>
+        protected void OnPropertyChanged(params string[] propertyNames)
         {
             if (PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                foreach (var propertyName in propertyNames)
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-        }
-
-        public void RaisePropertyChanged(params Expression<Func<object>>[] expression)
-        {
-            PropertyChanged.Raise(expression);
         }
 
         #endregion

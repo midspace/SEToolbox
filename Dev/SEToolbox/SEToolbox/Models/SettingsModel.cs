@@ -25,7 +25,7 @@
                 if (value != _seBinPath)
                 {
                     _seBinPath = value;
-                    RaisePropertyChanged(() => SEBinPath);
+                    OnPropertyChanged(nameof(SEBinPath));
                     Validate();
                 }
             }
@@ -40,7 +40,7 @@
                 if (value != _customVoxelPath)
                 {
                     _customVoxelPath = value;
-                    RaisePropertyChanged(() => CustomVoxelPath);
+                    OnPropertyChanged(nameof(CustomVoxelPath));
                     Validate();
                 }
             }
@@ -55,7 +55,7 @@
                 if (value != _alwaysCheckForUpdates)
                 {
                     _alwaysCheckForUpdates = value;
-                    RaisePropertyChanged(() => AlwaysCheckForUpdates);
+                    OnPropertyChanged(nameof(AlwaysCheckForUpdates));
                     Validate();
                 }
             }
@@ -70,7 +70,7 @@
                 if (value != _useCustomResource)
                 {
                     _useCustomResource = value;
-                    RaisePropertyChanged(() => UseCustomResource);
+                    OnPropertyChanged(nameof(UseCustomResource));
                     Validate();
                 }
             }
@@ -86,7 +86,7 @@
                 if (value != _isValid)
                 {
                     _isValid = value;
-                    RaisePropertyChanged(() => IsValid);
+                    OnPropertyChanged(nameof(IsValid));
                 }
             }
         }

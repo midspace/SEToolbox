@@ -21,7 +21,7 @@
                 if (value != _errorDescription)
                 {
                     _errorDescription = value;
-                    RaisePropertyChanged(() => ErrorDescription);
+                    OnPropertyChanged(nameof(ErrorDescription));
                 }
             }
         }
@@ -35,7 +35,7 @@
                 if (value != _errorText)
                 {
                     _errorText = value;
-                    RaisePropertyChanged(() => ErrorText);
+                    OnPropertyChanged(nameof(ErrorText));
                 }
             }
         }
@@ -49,7 +49,7 @@
                 if (value != _canContinue)
                 {
                     _canContinue = value;
-                    RaisePropertyChanged(() => CanContinue);
+                    OnPropertyChanged(nameof(CanContinue));
                 }
             }
         }

@@ -57,7 +57,7 @@
             set
             {
                 _closeResult = value;
-                RaisePropertyChanged(() => CloseResult);
+                OnPropertyChanged(nameof(CloseResult));
             }
         }
 
@@ -76,7 +76,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();

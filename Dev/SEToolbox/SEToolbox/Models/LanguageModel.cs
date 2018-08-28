@@ -22,7 +22,7 @@
                 if (value != _ietfLanguageTag)
                 {
                     _ietfLanguageTag = value;
-                    RaisePropertyChanged(() => IetfLanguageTag);
+                    OnPropertyChanged(nameof(IetfLanguageTag));
                 }
             }
         }
@@ -36,7 +36,7 @@
                 if (value != _imageName)
                 {
                     _imageName = value;
-                    RaisePropertyChanged(() => ImageName);
+                    OnPropertyChanged(nameof(ImageName));
                 }
             }
         }
@@ -61,8 +61,8 @@
                 if (value != _languageName)
                 {
                     _languageName = value;
-                    RaisePropertyChanged(() => LanguageName);
-                    RaisePropertyChanged(() => Name);
+                    OnPropertyChanged(nameof(LanguageName));
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -79,8 +79,8 @@
                 if (value != _nativeName)
                 {
                     _nativeName = value;
-                    RaisePropertyChanged(() => NativeName);
-                    RaisePropertyChanged(() => Name);
+                    OnPropertyChanged(nameof(NativeName));
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }

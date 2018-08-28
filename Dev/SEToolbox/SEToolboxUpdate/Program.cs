@@ -3,9 +3,11 @@
     using SEToolbox.Support;
     using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
     using System.Windows;
     using Res = SEToolboxUpdate.Properties.Resources;
 
@@ -23,6 +25,8 @@
 
         static void Main(string[] args)
         {
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfoByIetfLanguageTag(GlobalSettings.Default.LanguageCode);
+
             // Install.
             if (args.Any(a => a.Equals("/I", StringComparison.OrdinalIgnoreCase) || a.Equals("-I", StringComparison.OrdinalIgnoreCase)))
             {

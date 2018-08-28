@@ -54,7 +54,7 @@
                 if (value != _groupDescription)
                 {
                     _groupDescription = value;
-                    RaisePropertyChanged(() => GroupDescription);
+                    OnPropertyChanged(nameof(GroupDescription));
                 }
             }
         }
@@ -68,7 +68,7 @@
                 if (value != _saveType)
                 {
                     _saveType = value;
-                    RaisePropertyChanged(() => SaveType);
+                    OnPropertyChanged(nameof(SaveType));
                 }
             }
         }
@@ -85,7 +85,7 @@
                 if (value != _userName)
                 {
                     _userName = value;
-                    RaisePropertyChanged(() => UserName);
+                    OnPropertyChanged(nameof(UserName));
                 }
             }
         }
@@ -99,7 +99,7 @@
                 if (value != _saveName)
                 {
                     _saveName = value;
-                    RaisePropertyChanged(() => Savename);
+                    OnPropertyChanged(nameof(Savename));
                 }
             }
         }
@@ -113,7 +113,7 @@
                 if (value != _savePath)
                 {
                     _savePath = value;
-                    RaisePropertyChanged(() => Savepath);
+                    OnPropertyChanged(nameof(Savepath));
                 }
             }
         }
@@ -159,7 +159,7 @@
 
                     _lastSaveTime = _checkpoint?.LastSaveTime ?? DateTime.MinValue;
 
-                    RaisePropertyChanged(() => Checkpoint, () => SessionName, () => LastSaveTime, () => IsValid);
+                    OnPropertyChanged(nameof(Checkpoint), nameof(SessionName), nameof(LastSaveTime), nameof(IsValid));
                 }
             }
         }
@@ -173,7 +173,7 @@
                 if (value != _sessionName)
                 {
                     _sessionName = value;
-                    RaisePropertyChanged(() => SessionName);
+                    OnPropertyChanged(nameof(SessionName));
                 }
             }
         }
@@ -187,7 +187,7 @@
                 if (value != _lastSaveTime)
                 {
                     _lastSaveTime = value;
-                    RaisePropertyChanged(() => LastSaveTime);
+                    OnPropertyChanged(nameof(LastSaveTime));
                 }
             }
         }
@@ -201,7 +201,7 @@
                 if (value != _version)
                 {
                     _version = value;
-                    RaisePropertyChanged(() => Version);
+                    OnPropertyChanged(nameof(Version));
                 }
             }
         }
@@ -217,7 +217,7 @@
                 if (value != _workshopId)
                 {
                     _workshopId = value;
-                    RaisePropertyChanged(() => WorkshopId);
+                    OnPropertyChanged(nameof(WorkshopId));
                 }
             }
         }
@@ -231,7 +231,7 @@
                 if (value != _isValid)
                 {
                     _isValid = value;
-                    RaisePropertyChanged(() => IsValid);
+                    OnPropertyChanged(nameof(IsValid));
                 }
             }
         }
@@ -252,7 +252,7 @@
                 if (value != _sectorData)
                 {
                     _sectorData = value;
-                    RaisePropertyChanged(() => SectorData);
+                    OnPropertyChanged(nameof(SectorData));
                 }
             }
         }
@@ -351,7 +351,7 @@
                 if (File.Exists(sectorBackupFilename))
                     FileSystem.DeleteFile(sectorBackupFilename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
 
-                // The protoBuf .sbsPB may not exist in older save games.
+                // The protoBuf (.sbsPB, .sbsB1) may not exist in older save games.
                 if (File.Exists(sectorFilename + SpaceEngineersConsts.ProtobuffersExtension))
                     File.Move(sectorFilename + SpaceEngineersConsts.ProtobuffersExtension, sectorBackupFilename);
             }

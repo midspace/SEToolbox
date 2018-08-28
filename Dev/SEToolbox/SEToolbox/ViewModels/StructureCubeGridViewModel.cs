@@ -86,15 +86,15 @@
 
         public ICommand MaxVelocityAtPlayerCommand => new DelegateCommand(MaxVelocityAtPlayerExecuted, MaxVelocityAtPlayerCanExecute);
 
-        public ICommand ConvertCommand => new DelegateCommand(ConvertExecuted, ConvertCanExecute);
+        public ICommand ConvertGridCommand => new DelegateCommand(ConvertGridExecuted, ConvertGridCanExecute);
 
-        public ICommand ConvertToHeavyArmorCommand => new DelegateCommand(ConvertToHeavyArmorExecuted, ConvertToHeavyArmorCanExecute);
+        public ICommand ConvertGridToHeavyArmorCommand => new DelegateCommand(ConvertGridToHeavyArmorExecuted, ConvertGridToHeavyArmorCanExecute);
 
-        public ICommand ConvertToLightArmorCommand => new DelegateCommand(ConvertToLightArmorExecuted, ConvertToLightArmorCanExecute);
+        public ICommand ConvertGridToLightArmorCommand => new DelegateCommand(ConvertGridToLightArmorExecuted, ConvertGridToLightArmorCanExecute);
 
-        public ICommand FrameworkCommand => new DelegateCommand(FrameworkExecuted, FrameworkCanExecute);
+        public ICommand ConvertGridFrameworkCommand => new DelegateCommand(ConvertGridFrameworkExecuted, ConvertGridFrameworkCanExecute);
 
-        public ICommand ConvertToFrameworkCommand => new DelegateCommand<double>(ConvertToFrameworkExecuted, ConvertToFrameworkCanExecute);
+        public ICommand ConvertGridToFrameworkCommand => new DelegateCommand<double>(ConvertGridToFrameworkExecuted, ConvertGridToFrameworkCanExecute);
 
         public ICommand ConvertToStationCommand => new DelegateCommand(ConvertToStationExecuted, ConvertToStationCanExecute);
 
@@ -146,11 +146,19 @@
 
         public ICommand DeleteCubesCommand => new DelegateCommand(DeleteCubesExecuted, DeleteCubesCanExecute);
 
+        public ICommand ConvertCubesCommand => new DelegateCommand(ConvertCubesExecuted, ConvertCubesCanExecute);
+
+        public ICommand ConvertCubeToHeavyArmorCommand => new DelegateCommand(ConvertCubeToHeavyArmorExecuted, ConvertCubeToHeavyArmorCanExecute);
+
+        public ICommand ConvertCubeToLightArmorCommand => new DelegateCommand(ConvertCubeToLightArmorExecuted, ConvertCubeToLightArmorCanExecute);
+
+        public ICommand ConvertCubeToFrameworkDialogCommand => new DelegateCommand(ConvertCubeToFrameworkDialogExecuted, ConvertCubeToFrameworkDialogCanExecute);
+
+        public ICommand ConvertCubeToFrameworkCommand => new DelegateCommand<double>(ConvertCubeToFrameworkExecuted, ConvertCubeToFrameworkCanExecute);
+
         public ICommand ReplaceCubesCommand => new DelegateCommand(ReplaceCubesExecuted, ReplaceCubesCanExecute);
 
         public ICommand ColorCubesCommand => new DelegateCommand(ColorCubesExecuted, ColorCubesCanExecute);
-
-        public ICommand FrameworkCubesCommand => new DelegateCommand(FrameworkCubesExecuted, FrameworkCubesCanExecute);
 
         public ICommand SetOwnerCommand => new DelegateCommand(SetOwnerExecuted, SetOwnerCanExecute);
 
@@ -174,7 +182,7 @@
                 if (value != _selections)
                 {
                     _selections = value;
-                    RaisePropertyChanged(() => Selections);
+                    OnPropertyChanged(nameof(Selections));
                 }
             }
         }
@@ -188,7 +196,7 @@
                 if (value != _selectedCubeItem)
                 {
                     _selectedCubeItem = value;
-                    RaisePropertyChanged(() => SelectedCubeItem);
+                    OnPropertyChanged(nameof(SelectedCubeItem));
                 }
             }
         }
@@ -429,21 +437,21 @@
             MainViewModel.IsModified = true;
         }
 
-        public bool ConvertCanExecute()
+        public bool ConvertGridCanExecute()
         {
             return true;
         }
 
-        public void ConvertExecuted()
+        public void ConvertGridExecuted()
         {
         }
 
-        public bool ConvertToHeavyArmorCanExecute()
+        public bool ConvertGridToHeavyArmorCanExecute()
         {
             return true;
         }
 
-        public void ConvertToHeavyArmorExecuted()
+        public void ConvertGridToHeavyArmorExecuted()
         {
             if (DataModel.ConvertFromLightToHeavyArmor())
             {
@@ -451,12 +459,47 @@
             }
         }
 
-        public bool ConvertToLightArmorCanExecute()
+        public bool ConvertCubeToHeavyArmorCanExecute()
+        {
+            return SelectedCubeItem != null;
+        }
+
+        public void ConvertCubeToHeavyArmorExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            MainViewModel.ResetProgress(0, Selections.Count);
+
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+            bool changes = false;
+            foreach (var cubeVm in Selections)
+            {
+                MainViewModel.Progress++;
+                if (cubeVm.ConvertFromLightToHeavyArmor())
+                {
+                    changes = true;
+
+                    var idx = DataModel.CubeGrid.CubeBlocks.IndexOf(cubeVm.Cube);
+                    var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(cubeVm.Cube.TypeId, GridSize, cubeVm.Cube.SubtypeName);
+                    var newCube = cubeVm.CreateCube(cubeVm.Cube.TypeId, cubeVm.Cube.SubtypeName, cubeDefinition);
+                    cubeVm.TextureFile = (cubeDefinition.Icons == null || cubeDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First()));
+
+                    DataModel.CubeGrid.CubeBlocks.RemoveAt(idx);
+                    DataModel.CubeGrid.CubeBlocks.Insert(idx, newCube);
+                }
+            }
+
+            MainViewModel.ClearProgress();
+            if (changes)
+                MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool ConvertGridToLightArmorCanExecute()
         {
             return true;
         }
 
-        public void ConvertToLightArmorExecuted()
+        public void ConvertGridToLightArmorExecuted()
         {
             if (DataModel.ConvertFromHeavyToLightArmor())
             {
@@ -464,27 +507,83 @@
             }
         }
 
-        public bool FrameworkCanExecute()
+        public bool ConvertCubeToLightArmorCanExecute()
+        {
+            return SelectedCubeItem != null;
+        }
+
+        public void ConvertCubeToLightArmorExecuted()
+        {
+            MainViewModel.IsBusy = true;
+            MainViewModel.ResetProgress(0, Selections.Count);
+
+            var contentPath = ToolboxUpdater.GetApplicationContentPath();
+            bool changes = false;
+            foreach (var cubeVm in Selections)
+            {
+                MainViewModel.Progress++;
+                if (cubeVm.ConvertFromHeavyToLightArmor())
+                {
+                    changes = true;
+
+                    var idx = DataModel.CubeGrid.CubeBlocks.IndexOf(cubeVm.Cube);
+                    var cubeDefinition = SpaceEngineersApi.GetCubeDefinition(cubeVm.Cube.TypeId, GridSize, cubeVm.Cube.SubtypeName);
+                    var newCube = cubeVm.CreateCube(cubeVm.Cube.TypeId, cubeVm.Cube.SubtypeName, cubeDefinition);
+                    cubeVm.TextureFile = (cubeDefinition.Icons == null || cubeDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First()));
+
+                    DataModel.CubeGrid.CubeBlocks.RemoveAt(idx);
+                    DataModel.CubeGrid.CubeBlocks.Insert(idx, newCube);
+                }
+            }
+
+            MainViewModel.ClearProgress();
+            if (changes)
+                MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
+        }
+
+        public bool ConvertGridFrameworkCanExecute()
         {
             return true;
         }
 
-        public void FrameworkExecuted()
+        public void ConvertGridFrameworkExecuted()
         {
             // placeholder for menu only.
         }
 
-        public bool ConvertToFrameworkCanExecute(double value)
+        public bool ConvertGridToFrameworkCanExecute(double value)
         {
             return true;
         }
 
-        public void ConvertToFrameworkExecuted(double value)
+        public void ConvertGridToFrameworkExecuted(double value)
         {
             DataModel.ConvertToFramework((float)value);
             MainViewModel.IsModified = true;
             IsSubsSystemNotReady = true;
             DataModel.InitializeAsync();
+        }
+
+        public bool ConvertCubeToFrameworkCanExecute(double value)
+        {
+            return SelectedCubeItem != null;
+        }
+
+        public void ConvertCubeToFrameworkExecuted(double value)
+        {
+            MainViewModel.IsBusy = true;
+            MainViewModel.ResetProgress(0, Selections.Count);
+
+            foreach (var cube in Selections)
+            {
+                MainViewModel.Progress++;
+                cube.UpdateBuildPercent(value);
+            }
+
+            MainViewModel.ClearProgress();
+            MainViewModel.IsModified = true;
+            MainViewModel.IsBusy = false;
         }
 
         public bool ConvertToStationCanExecute()
@@ -906,6 +1005,15 @@
             IsBusy = false;
         }
 
+        public bool ConvertCubesCanExecute()
+        {
+            return SelectedCubeItem != null;
+        }
+
+        public void ConvertCubesExecuted()
+        {
+        }
+
         public bool ReplaceCubesCanExecute()
         {
             return SelectedCubeItem != null;
@@ -982,12 +1090,12 @@
             MainViewModel.CreativeModeColors = colorDialog.CustomColors;
         }
 
-        public bool FrameworkCubesCanExecute()
+        public bool ConvertCubeToFrameworkDialogCanExecute()
         {
             return SelectedCubeItem != null;
         }
 
-        public void FrameworkCubesExecuted()
+        public void ConvertCubeToFrameworkDialogExecuted()
         {
             var model = new FrameworkBuildModel { BuildPercent = SelectedCubeItem.BuildPercent * 100 };
             var loadVm = new FrameworkBuildViewModel(this, model);

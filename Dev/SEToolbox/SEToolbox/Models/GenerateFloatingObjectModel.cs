@@ -57,7 +57,7 @@
             {
                 //if (value != characterPosition) // Unable to check for equivilence, without long statement. And, mostly uncessary.
                 _characterPosition = value;
-                RaisePropertyChanged(() => CharacterPosition);
+                OnPropertyChanged(nameof(CharacterPosition));
             }
         }
 
@@ -73,7 +73,7 @@
                 if (value != _stockItemList)
                 {
                     _stockItemList = value;
-                    RaisePropertyChanged(() => StockItemList);
+                    OnPropertyChanged(nameof(StockItemList));
                 }
             }
         }
@@ -90,7 +90,7 @@
                 if (value != _stockItem)
                 {
                     _stockItem = value;
-                    RaisePropertyChanged(() => StockItem);
+                    OnPropertyChanged(nameof(StockItem));
                     SetMassVolume();
                 }
             }
@@ -108,7 +108,7 @@
                 if (value != _isValidItemToImport)
                 {
                     _isValidItemToImport = value;
-                    RaisePropertyChanged(() => IsValidItemToImport);
+                    OnPropertyChanged(nameof(IsValidItemToImport));
                 }
             }
         }
@@ -125,7 +125,7 @@
                 if (value != _volume)
                 {
                     _volume = value;
-                    RaisePropertyChanged(() => Volume);
+                    OnPropertyChanged(nameof(Volume));
                 }
             }
         }
@@ -142,7 +142,7 @@
                 if (value != _mass)
                 {
                     _mass = value;
-                    RaisePropertyChanged(() => Mass);
+                    OnPropertyChanged(nameof(Mass));
                 }
             }
         }
@@ -159,7 +159,7 @@
                 if (value != _units)
                 {
                     _units = value;
-                    RaisePropertyChanged(() => Units);
+                    OnPropertyChanged(nameof(Units));
                     SetMassVolume();
                 }
             }
@@ -177,7 +177,7 @@
                 if (value != _decimalUnits)
                 {
                     _decimalUnits = value;
-                    RaisePropertyChanged(() => DecimalUnits);
+                    OnPropertyChanged(nameof(DecimalUnits));
                     SetMassVolume();
                 }
             }
@@ -195,7 +195,7 @@
                 if (value != _isDecimal)
                 {
                     _isDecimal = value;
-                    RaisePropertyChanged(() => IsDecimal);
+                    OnPropertyChanged(nameof(IsDecimal));
                 }
             }
         }
@@ -212,7 +212,7 @@
                 if (value != _isInt)
                 {
                     _isInt = value;
-                    RaisePropertyChanged(() => IsInt);
+                    OnPropertyChanged(nameof(IsInt));
                 }
             }
         }
@@ -229,7 +229,7 @@
                 if (value != _isUnique)
                 {
                     _isUnique = value;
-                    RaisePropertyChanged(() => IsUnique);
+                    OnPropertyChanged(nameof(IsUnique));
                 }
             }
         }
@@ -249,7 +249,7 @@
                 if (value != _multiplier)
                 {
                     _multiplier = value;
-                    RaisePropertyChanged(() => Multiplier);
+                    OnPropertyChanged(nameof(Multiplier));
                 }
             }
         }
@@ -269,7 +269,7 @@
                 if (value != _maxFloatingObjects)
                 {
                     _maxFloatingObjects = value;
-                    RaisePropertyChanged(() => MaxFloatingObjects);
+                    OnPropertyChanged(nameof(MaxFloatingObjects));
                 }
             }
         }
@@ -298,7 +298,7 @@
                     TextureFile = componentDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(componentDefinition.Icons.First(), Path.Combine(contentPath, componentDefinition.Icons.First())),
                     Volume = componentDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     Accessible = componentDefinition.Public,
-                    Time = bp != null ? TimeSpan.FromSeconds(TimeSpan.TicksPerSecond * bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
+                    Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
                 });
             }
 
@@ -317,22 +317,6 @@
                     Volume = physicalItemDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
                     TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
                     Accessible = physicalItemDefinition.Public,
-                    Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
-                });
-            }
-
-            foreach (var physicalItemDefinition in SpaceEngineersCore.Resources.AmmoMagazineDefinitions)
-            {
-                var bp = SpaceEngineersApi.GetBlueprint(physicalItemDefinition.Id.TypeId, physicalItemDefinition.Id.SubtypeName);
-                list.Add(new ComponentItemModel
-                {
-                    Name = physicalItemDefinition.DisplayNameText,
-                    TypeId = physicalItemDefinition.Id.TypeId,
-                    SubtypeId = physicalItemDefinition.Id.SubtypeName,
-                    Mass = physicalItemDefinition.Mass,
-                    Volume = physicalItemDefinition.Volume * SpaceEngineersConsts.VolumeMultiplyer,
-                    TextureFile = physicalItemDefinition.Icons == null ? null : SpaceEngineersCore.GetDataPathOrDefault(physicalItemDefinition.Icons.First(), Path.Combine(contentPath, physicalItemDefinition.Icons.First())),
-                    Accessible = !string.IsNullOrEmpty(physicalItemDefinition.Model),
                     Time = bp != null ? TimeSpan.FromSeconds(bp.BaseProductionTimeInSeconds) : (TimeSpan?)null,
                 });
             }

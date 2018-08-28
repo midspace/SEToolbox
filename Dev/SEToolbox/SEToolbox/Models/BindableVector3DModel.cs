@@ -66,7 +66,7 @@
                 if (value != _vector.X)
                 {
                     _vector.X = value;
-                    RaisePropertyChanged(() => X);
+                    OnPropertyChanged(nameof(X));
                 }
             }
         }
@@ -83,7 +83,7 @@
                 if (value != _vector.Y)
                 {
                     _vector.Y = value;
-                    RaisePropertyChanged(() => Y);
+                    OnPropertyChanged(nameof(Y));
                 }
             }
         }
@@ -100,7 +100,7 @@
                 if (value != _vector.Z)
                 {
                     _vector.Z = value;
-                    RaisePropertyChanged(() => Z);
+                    OnPropertyChanged(nameof(Z));
                 }
             }
         }
@@ -117,7 +117,7 @@
                 if (value != _vector)
                 {
                     _vector = value;
-                    RaisePropertyChanged(() => Vector3D, () => X, () => Y, () => Z);
+                    OnPropertyChanged(nameof(Vector3D), nameof(X), nameof(Y), nameof(Z));
                 }
             }
         }

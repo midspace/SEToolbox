@@ -29,7 +29,7 @@
                 if (value != _materialName)
                 {
                     _materialName = value;
-                    RaisePropertyChanged(() => MaterialName);
+                    OnPropertyChanged(nameof(MaterialName));
                 }
             }
         }
@@ -43,7 +43,7 @@
                 if (value != _displayName)
                 {
                     _displayName = value;
-                    RaisePropertyChanged(() => DisplayName);
+                    OnPropertyChanged(nameof(DisplayName));
                 }
             }
         }
@@ -57,7 +57,7 @@
                 if (value != _volume)
                 {
                     _volume = value;
-                    RaisePropertyChanged(() => Volume);
+                    OnPropertyChanged(nameof(Volume));
                 }
             }
         }
@@ -71,7 +71,7 @@
                 if (value != _percent)
                 {
                     _percent = value;
-                    RaisePropertyChanged(() => Percent);
+                    OnPropertyChanged(nameof(Percent));
                 }
             }
         }
@@ -85,7 +85,7 @@
                 if (value != _textureFile)
                 {
                     _textureFile = value;
-                    RaisePropertyChanged(() => TextureFile);
+                    OnPropertyChanged(nameof(TextureFile));
                 }
             }
         }

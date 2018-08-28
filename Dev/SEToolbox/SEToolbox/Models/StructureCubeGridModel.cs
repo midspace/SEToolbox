@@ -109,7 +109,7 @@
                 if (value != CubeGrid.GridSizeEnum)
                 {
                     CubeGrid.GridSizeEnum = value;
-                    RaisePropertyChanged(() => GridSize);
+                    OnPropertyChanged(nameof(GridSize));
                 }
             }
         }
@@ -123,7 +123,7 @@
                 if (value != CubeGrid.IsStatic)
                 {
                     CubeGrid.IsStatic = value;
-                    RaisePropertyChanged(() => IsStatic);
+                    OnPropertyChanged(nameof(IsStatic));
                 }
             }
         }
@@ -137,7 +137,7 @@
                 if (value != CubeGrid.DampenersEnabled)
                 {
                     CubeGrid.DampenersEnabled = value;
-                    RaisePropertyChanged(() => Dampeners);
+                    OnPropertyChanged(nameof(Dampeners));
                 }
             }
         }
@@ -151,7 +151,7 @@
                 if (value != CubeGrid.DestructibleBlocks)
                 {
                     CubeGrid.DestructibleBlocks = value;
-                    RaisePropertyChanged(() => Destructible);
+                    OnPropertyChanged(nameof(Destructible));
                 }
             }
         }
@@ -177,7 +177,7 @@
                 if (value != _min)
                 {
                     _min = value;
-                    RaisePropertyChanged(() => Min);
+                    OnPropertyChanged(nameof(Min));
                 }
             }
         }
@@ -191,7 +191,7 @@
                 if (value != _max)
                 {
                     _max = value;
-                    RaisePropertyChanged(() => Max);
+                    OnPropertyChanged(nameof(Max));
                 }
             }
         }
@@ -205,7 +205,7 @@
                 if (value != _scale)
                 {
                     _scale = value;
-                    RaisePropertyChanged(() => Scale);
+                    OnPropertyChanged(nameof(Scale));
                 }
             }
         }
@@ -219,7 +219,7 @@
                 if (value != _size)
                 {
                     _size = value;
-                    RaisePropertyChanged(() => Size);
+                    OnPropertyChanged(nameof(Size));
                 }
             }
         }
@@ -233,7 +233,7 @@
                 if (value != _pilots)
                 {
                     _pilots = value;
-                    RaisePropertyChanged(() => Pilots);
+                    OnPropertyChanged(nameof(Pilots));
                 }
             }
         }
@@ -281,7 +281,7 @@
                 if (value != _timeToProduce)
                 {
                     _timeToProduce = value;
-                    RaisePropertyChanged(() => TimeToProduce);
+                    OnPropertyChanged(nameof(TimeToProduce));
                 }
             }
         }
@@ -300,7 +300,7 @@
                 if (value != _cockpitOrientation)
                 {
                     _cockpitOrientation = value;
-                    RaisePropertyChanged(() => CockpitOrientation);
+                    OnPropertyChanged(nameof(CockpitOrientation));
                 }
             }
         }
@@ -317,7 +317,7 @@
                 if (value != _cubeAssets)
                 {
                     _cubeAssets = value;
-                    RaisePropertyChanged(() => CubeAssets);
+                    OnPropertyChanged(nameof(CubeAssets));
                 }
             }
         }
@@ -334,7 +334,7 @@
                 if (value != _componentAssets)
                 {
                     _componentAssets = value;
-                    RaisePropertyChanged(() => ComponentAssets);
+                    OnPropertyChanged(nameof(ComponentAssets));
                 }
             }
         }
@@ -351,7 +351,7 @@
                 if (value != _ingotAssets)
                 {
                     _ingotAssets = value;
-                    RaisePropertyChanged(() => IngotAssets);
+                    OnPropertyChanged(nameof(IngotAssets));
                 }
             }
         }
@@ -368,7 +368,7 @@
                 if (value != _oreAssets)
                 {
                     _oreAssets = value;
-                    RaisePropertyChanged(() => OreAssets);
+                    OnPropertyChanged(nameof(OreAssets));
                 }
             }
         }
@@ -382,7 +382,7 @@
                 if (value != _activeComponentFilter)
                 {
                     _activeComponentFilter = value;
-                    RaisePropertyChanged(() => ActiveComponentFilter);
+                    OnPropertyChanged(nameof(ActiveComponentFilter));
                 }
             }
         }
@@ -396,7 +396,7 @@
                 if (value != _componentFilter)
                 {
                     _componentFilter = value;
-                    RaisePropertyChanged(() => ComponentFilter);
+                    OnPropertyChanged(nameof(ComponentFilter));
                 }
             }
         }
@@ -410,7 +410,7 @@
                 if (value != _cubeList)
                 {
                     _cubeList = value;
-                    RaisePropertyChanged(() => CubeList);
+                    OnPropertyChanged(nameof(CubeList));
                 }
             }
         }
@@ -424,7 +424,7 @@
                 if (value != _isSubsSystemNotReady)
                 {
                     _isSubsSystemNotReady = value;
-                    RaisePropertyChanged(() => IsSubsSystemNotReady);
+                    OnPropertyChanged(nameof(IsSubsSystemNotReady));
                 }
             }
         }
@@ -438,7 +438,7 @@
                 if (value != _isConstructionNotReady)
                 {
                     _isConstructionNotReady = value;
-                    RaisePropertyChanged(() => IsConstructionNotReady);
+                    OnPropertyChanged(nameof(IsConstructionNotReady));
                 }
             }
         }
@@ -522,6 +522,7 @@
                 totalMass += cubeMass;
             }
 
+            // TODO: #21 localize
             var cockpitOrientation = "None";
             var cockpits = CubeGrid.CubeBlocks.Where(b => b is MyObjectBuilder_Cockpit).ToArray();
             if (cockpits.Length > 0)
@@ -530,11 +531,13 @@
                 if (cockpits.Length == count)
                 {
                     // All cockpits share the same orientation.
+                    // TODO: #21 localize
                     cockpitOrientation = string.Format("Forward={0} ({1}), Up={2} ({3})", cockpits[0].BlockOrientation.Forward, GetAxisIndicator(cockpits[0].BlockOrientation.Forward), cockpits[0].BlockOrientation.Up, GetAxisIndicator(cockpits[0].BlockOrientation.Up));
                 }
                 else
                 {
                     // multiple cockpits are present, and do not share a common orientation.
+                    // TODO: #21 localize
                     cockpitOrientation = "Mixed";
                 }
             }
@@ -798,34 +801,34 @@
                 // No need to set bones for individual blocks like rounded armor, as this is taken from the definition within the game itself.
             }
 
-            RaisePropertyChanged(() => IsDamaged);
-            RaisePropertyChanged(() => DamageCount);
+            OnPropertyChanged(nameof(IsDamaged));
+            OnPropertyChanged(nameof(DamageCount));
         }
 
         public void ResetLinearVelocity()
         {
             CubeGrid.LinearVelocity = new Vector3(0, 0, 0);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         public void ResetRotationVelocity()
         {
             CubeGrid.AngularVelocity = new Vector3(0, 0, 0);
-            RaisePropertyChanged(() => AngularVelocity);
+            OnPropertyChanged(nameof(AngularVelocity));
         }
 
         public void ResetVelocity()
         {
             CubeGrid.LinearVelocity = new Vector3(0, 0, 0);
             CubeGrid.AngularVelocity = new Vector3(0, 0, 0);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         public void ReverseVelocity()
         {
             CubeGrid.LinearVelocity = new Vector3(CubeGrid.LinearVelocity.X * -1, CubeGrid.LinearVelocity.Y * -1, CubeGrid.LinearVelocity.Z * -1);
             CubeGrid.AngularVelocity = new Vector3(CubeGrid.AngularVelocity.X * -1, CubeGrid.AngularVelocity.Y * -1, CubeGrid.AngularVelocity.Z * -1);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         public void MaxVelocityAtPlayer(VRageMath.Vector3D playerPosition)
@@ -836,77 +839,39 @@
 
             CubeGrid.LinearVelocity = (Vector3)v;
             CubeGrid.AngularVelocity = new VRageMath.Vector3(0, 0, 0);
-            RaisePropertyChanged(() => LinearVelocity);
+            OnPropertyChanged(nameof(LinearVelocity));
         }
 
         public bool ConvertFromLightToHeavyArmor()
         {
-            var count = 0;
+            bool changes = false;
             foreach (var cube in CubeGrid.CubeBlocks)
-            {
-                if (cube.SubtypeName.StartsWith("LargeBlockArmor"))
-                {
-                    var newSubTypeName = cube.SubtypeName.Replace("LargeBlockArmor", "LargeHeavyBlockArmor");
-                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
-                    {
-                        cube.SubtypeName = newSubTypeName;
-                        count++;
-                    }
-                }
-                else if (cube.SubtypeName.StartsWith("SmallBlockArmor"))
-                {
-                    var newSubTypeName = cube.SubtypeName.Replace("SmallBlockArmor", "SmallHeavyBlockArmor");
-                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
-                    {
-                        cube.SubtypeName = newSubTypeName;
-                        count++;
-                    }
-                }
-            }
+                changes |= CubeItemModel.ConvertFromLightToHeavyArmor(cube);
 
-            if (count > 0)
+            if (changes)
             {
                 IsSubsSystemNotReady = true;
                 IsConstructionNotReady = true;
                 UpdateGeneralFromEntityBase();
                 InitializeAsync();
             }
-            return count > 0;
+            return changes;
         }
 
         public bool ConvertFromHeavyToLightArmor()
         {
-            var count = 0;
+            bool changes = false;
             foreach (var cube in CubeGrid.CubeBlocks)
-            {
-                if (cube.SubtypeName.StartsWith("LargeHeavyBlockArmor"))
-                {
-                    var newSubTypeName = cube.SubtypeName.Replace("LargeHeavyBlockArmor", "LargeBlockArmor");
-                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
-                    {
-                        cube.SubtypeName = newSubTypeName;
-                        count++;
-                    }
-                }
-                else if (cube.SubtypeName.StartsWith("SmallHeavyBlockArmor"))
-                {
-                    var newSubTypeName = cube.SubtypeName.Replace("SmallHeavyBlockArmor", "SmallBlockArmor");
-                    if (SpaceEngineersCore.Resources.CubeBlockDefinitions.Any(b => b.Id.TypeId == cube.TypeId && b.Id.SubtypeName == newSubTypeName))
-                    {
-                        cube.SubtypeName = newSubTypeName;
-                        count++;
-                    }
-                }
-            }
+                changes |= CubeItemModel.ConvertFromHeavyToLightArmor(cube);
 
-            if (count > 0)
+            if (changes)
             {
                 IsSubsSystemNotReady = true;
                 IsConstructionNotReady = true;
                 UpdateGeneralFromEntityBase();
                 InitializeAsync();
             }
-            return count > 0;
+            return changes;
         }
 
         public void ConvertToFramework(float value)
@@ -1177,7 +1142,7 @@
             }
 
             UpdateGeneralFromEntityBase();
-            RaisePropertyChanged(() => BlockCount);
+            OnPropertyChanged(nameof(BlockCount));
             return count > 0;
         }
 

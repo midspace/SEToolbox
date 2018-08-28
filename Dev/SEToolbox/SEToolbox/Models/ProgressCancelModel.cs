@@ -49,7 +49,7 @@
                 if (value != _title)
                 {
                     _title = value;
-                    RaisePropertyChanged(() => Title);
+                    OnPropertyChanged(nameof(Title));
                 }
             }
         }
@@ -63,7 +63,7 @@
                 if (value != _subTitle)
                 {
                     _subTitle = value;
-                    RaisePropertyChanged(() => SubTitle);
+                    OnPropertyChanged(nameof(SubTitle));
                 }
             }
         }
@@ -77,7 +77,7 @@
                 if (value != _dialogText)
                 {
                     _dialogText = value;
-                    RaisePropertyChanged(() => DialogText);
+                    OnPropertyChanged(nameof(DialogText));
                 }
             }
         }
@@ -97,7 +97,7 @@
 
                     if (!_progressTimer.IsRunning || _progressTimer.ElapsedMilliseconds > 200)
                     {
-                        RaisePropertyChanged(() => Progress);
+                        OnPropertyChanged(nameof(Progress));
                         System.Windows.Forms.Application.DoEvents();
                         _progressTimer.Restart();
                     }
@@ -117,7 +117,7 @@
                 if (value != _maximumProgress)
                 {
                     _maximumProgress = value;
-                    RaisePropertyChanged(() => MaximumProgress);
+                    OnPropertyChanged(nameof(MaximumProgress));
                 }
             }
         }
@@ -134,7 +134,7 @@
                 if (value != _estimatedTimeLeft)
                 {
                     _estimatedTimeLeft = value;
-                    RaisePropertyChanged(() => EstimatedTimeLeft);
+                    OnPropertyChanged(nameof(EstimatedTimeLeft));
                 }
             }
         }
@@ -153,8 +153,11 @@
             var incrementTimer = 0;
             _updateTimer.Elapsed += delegate
             {
-                var elapsed = _elapsedTimer.Elapsed;
-                var estimate = new TimeSpan((long)(elapsed.Ticks / (Progress / _maximumProgress)));
+                TimeSpan elapsed = _elapsedTimer.Elapsed;
+                TimeSpan estimate = elapsed;
+                if (Progress > 0)
+                    estimate = new TimeSpan((long)(elapsed.Ticks / (Progress / _maximumProgress)));
+
                 EstimatedTimeLeft = estimate - elapsed;
 
                 if (incrementTimer == 10)

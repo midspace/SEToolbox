@@ -24,7 +24,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    RaisePropertyChanged(() => Name);
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -38,7 +38,7 @@
                 if (value != _sourceFilename)
                 {
                     _sourceFilename = value;
-                    RaisePropertyChanged(() => SourceFilename);
+                    OnPropertyChanged(nameof(SourceFilename));
                 }
             }
         }
@@ -52,7 +52,7 @@
                 if (value != _voxelFilename)
                 {
                     _voxelFilename = value;
-                    RaisePropertyChanged(() => VoxelFilename);
+                    OnPropertyChanged(nameof(VoxelFilename));
                 }
             }
         }
@@ -66,7 +66,7 @@
                 if (value != _size)
                 {
                     _size = value;
-                    RaisePropertyChanged(() => Size);
+                    OnPropertyChanged(nameof(Size));
                 }
             }
         }

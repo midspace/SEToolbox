@@ -51,7 +51,7 @@
                 if (value != _x)
                 {
                     _x = value;
-                    RaisePropertyChanged(() => X);
+                    OnPropertyChanged(nameof(X));
                 }
             }
         }
@@ -68,7 +68,7 @@
                 if (value != _y)
                 {
                     _y = value;
-                    RaisePropertyChanged(() => Y);
+                    OnPropertyChanged(nameof(Y));
                 }
             }
         }
@@ -85,7 +85,7 @@
                 if (value != _z)
                 {
                     _z = value;
-                    RaisePropertyChanged(() => Z);
+                    OnPropertyChanged(nameof(Z));
                 }
             }
         }

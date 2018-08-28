@@ -1625,6 +1625,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To specified value.
+        /// </summary>
+        public static string CtlCubeMnuConvertFrameworkValue {
+            get {
+                return ResourceManager.GetString("CtlCubeMnuConvertFrameworkValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotate.
         /// </summary>
         public static string CtlCubeMnuConvertRotate {
@@ -1765,15 +1774,6 @@ namespace SEToolbox.Properties {
         public static string CtlCubeMnuDeleteCube {
             get {
                 return ResourceManager.GetString("CtlCubeMnuDeleteCube", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Framework.
-        /// </summary>
-        public static string CtlCubeMnuFrameworkCube {
-            get {
-                return ResourceManager.GetString("CtlCubeMnuFrameworkCube", resourceCulture);
             }
         }
         
@@ -2570,6 +2570,33 @@ namespace SEToolbox.Properties {
         public static string CtlPlanetMnuCopyDetail {
             get {
                 return ResourceManager.GetString("CtlPlanetMnuCopyDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy GPS.
+        /// </summary>
+        public static string CtlPlanetMnuCopyGpsCenter {
+            get {
+                return ResourceManager.GetString("CtlPlanetMnuCopyGpsCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regenerate.
+        /// </summary>
+        public static string CtlPlanetMnuRegenerate {
+            get {
+                return ResourceManager.GetString("CtlPlanetMnuRegenerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Will remove any voxel changes to the asteroid. Allows changing random seed, and changing size..
+        /// </summary>
+        public static string CtlPlanetMnuRegenerateDetail {
+            get {
+                return ResourceManager.GetString("CtlPlanetMnuRegenerateDetail", resourceCulture);
             }
         }
         
@@ -3548,6 +3575,16 @@ namespace SEToolbox.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap earth {
+            get {
+                object obj = ResourceManager.GetObject("earth", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap error24 {
             get {
                 object obj = ResourceManager.GetObject("error24", resourceCulture);
@@ -4379,6 +4416,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Large.
+        /// </summary>
+        public static string MyCubeSize_Large {
+            get {
+                return ResourceManager.GetString("MyCubeSize_Large", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Small.
+        /// </summary>
+        public static string MyCubeSize_Small {
+            get {
+                return ResourceManager.GetString("MyCubeSize_Small", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap navigate_cross {
@@ -4760,7 +4815,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Illegal characters or.
+        ///   Looks up a localized string similar to Illegal characters or {0}.
         /// </summary>
         public static string ValidationInvalidCharacters {
             get {
@@ -8061,6 +8116,51 @@ namespace SEToolbox.Properties {
         public static string WnProgressTxtTimeRemain {
             get {
                 return ResourceManager.GetString("WnProgressTxtTimeRemain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string WnRegeneratePlanetBtnCancel {
+            get {
+                return ResourceManager.GetString("WnRegeneratePlanetBtnCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string WnRegeneratePlanetBtnOkay {
+            get {
+                return ResourceManager.GetString("WnRegeneratePlanetBtnOkay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seed.
+        /// </summary>
+        public static string WnRegeneratePlanetLabelSeed {
+            get {
+                return ResourceManager.GetString("WnRegeneratePlanetLabelSeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meters Size (Diameter).
+        /// </summary>
+        public static string WnRegeneratePlanetLabelSize {
+            get {
+                return ResourceManager.GetString("WnRegeneratePlanetLabelSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regenerate Planet.
+        /// </summary>
+        public static string WnRegeneratePlanetTitle {
+            get {
+                return ResourceManager.GetString("WnRegeneratePlanetTitle", resourceCulture);
             }
         }
         

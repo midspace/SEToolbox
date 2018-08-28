@@ -90,7 +90,7 @@
                 {
                     _entityBase = value;
                     UpdateGeneralFromEntityBase();
-                    RaisePropertyChanged(() => EntityBase);
+                    OnPropertyChanged(nameof(EntityBase));
                 }
             }
         }
@@ -105,7 +105,7 @@
                 if (value != _entityBase.EntityId)
                 {
                     _entityBase.EntityId = value;
-                    RaisePropertyChanged(() => EntityId);
+                    OnPropertyChanged(nameof(EntityId));
                 }
             }
         }
@@ -121,7 +121,7 @@
                 //if (value != entityBase.PositionAndOrientation)
                 {
                     _entityBase.PositionAndOrientation = value;
-                    RaisePropertyChanged(() => PositionAndOrientation);
+                    OnPropertyChanged(nameof(PositionAndOrientation));
                 }
             }
         }
@@ -138,7 +138,7 @@
                     var pos = _entityBase.PositionAndOrientation.Value;
                     pos.Position.X = value;
                     _entityBase.PositionAndOrientation = pos;
-                    RaisePropertyChanged(() => PositionX);
+                    OnPropertyChanged(nameof(PositionX));
                 }
             }
         }
@@ -155,7 +155,7 @@
                     var pos = _entityBase.PositionAndOrientation.Value;
                     pos.Position.Y = value;
                     _entityBase.PositionAndOrientation = pos;
-                    RaisePropertyChanged(() => PositionY);
+                    OnPropertyChanged(nameof(PositionY));
                 }
             }
         }
@@ -172,7 +172,7 @@
                     var pos = _entityBase.PositionAndOrientation.Value;
                     pos.Position.Z = value;
                     _entityBase.PositionAndOrientation = pos;
-                    RaisePropertyChanged(() => PositionZ);
+                    OnPropertyChanged(nameof(PositionZ));
                 }
             }
         }
@@ -187,7 +187,7 @@
                 if (value != _classType)
                 {
                     _classType = value;
-                    RaisePropertyChanged(() => ClassType);
+                    OnPropertyChanged(nameof(ClassType));
                 }
             }
         }
@@ -202,7 +202,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    RaisePropertyChanged(() => DisplayName);
+                    OnPropertyChanged(nameof(DisplayName));
                 }
             }
         }
@@ -217,7 +217,7 @@
                 if (value != _description)
                 {
                     _description = value;
-                    RaisePropertyChanged(() => Description);
+                    OnPropertyChanged(nameof(Description));
                 }
             }
         }
@@ -232,7 +232,7 @@
                 if (value != _playerDistance)
                 {
                     _playerDistance = value;
-                    RaisePropertyChanged(() => PlayerDistance);
+                    OnPropertyChanged(nameof(PlayerDistance));
                 }
             }
         }
@@ -247,7 +247,7 @@
                 if (value != _mass)
                 {
                     _mass = value;
-                    RaisePropertyChanged(() => Mass);
+                    OnPropertyChanged(nameof(Mass));
                 }
             }
         }
@@ -262,7 +262,7 @@
                 if (value != _blockCount)
                 {
                     _blockCount = value;
-                    RaisePropertyChanged(() => BlockCount);
+                    OnPropertyChanged(nameof(BlockCount));
                 }
             }
         }
@@ -277,7 +277,7 @@
                 if (value != _linearVelocity)
                 {
                     _linearVelocity = value;
-                    RaisePropertyChanged(() => LinearVelocity);
+                    OnPropertyChanged(nameof(LinearVelocity));
                 }
             }
         }
@@ -295,7 +295,7 @@
                 if (value != _center)
                 {
                     _center = value;
-                    RaisePropertyChanged(() => Center);
+                    OnPropertyChanged(nameof(Center));
                 }
             }
         }
@@ -313,7 +313,7 @@
                 if (value != _worldAabb)
                 {
                     _worldAabb = value;
-                    RaisePropertyChanged(() => WorldAABB);
+                    OnPropertyChanged(nameof(WorldAABB));
                 }
             }
         }
@@ -330,7 +330,7 @@
                 if (value != _serializedEntity)
                 {
                     _serializedEntity = value;
-                    RaisePropertyChanged(() => SerializedEntity);
+                    OnPropertyChanged(nameof(SerializedEntity));
                 }
             }
         }
@@ -345,7 +345,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     if (_isBusy)
                     {
                         System.Windows.Forms.Application.DoEvents();
@@ -364,7 +364,7 @@
                 if (value != _isValid)
                 {
                     _isValid = value;
-                    RaisePropertyChanged(() => IsValid);
+                    OnPropertyChanged(nameof(IsValid));
                 }
             }
         }

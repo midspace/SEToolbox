@@ -85,7 +85,7 @@
                 if (value != _structures)
                 {
                     _structures = value;
-                    RaisePropertyChanged(() => Structures);
+                    OnPropertyChanged(nameof(Structures));
                 }
             }
         }
@@ -102,7 +102,7 @@
                 if (value != _thePlayerCharacter)
                 {
                     _thePlayerCharacter = value;
-                    RaisePropertyChanged(() => ThePlayerCharacter);
+                    OnPropertyChanged(nameof(ThePlayerCharacter));
                 }
             }
         }
@@ -116,7 +116,7 @@
                 if (value != SpaceEngineersCore.WorldResource)
                 {
                     SpaceEngineersCore.WorldResource = value;
-                    RaisePropertyChanged(() => ActiveWorld);
+                    OnPropertyChanged(nameof(ActiveWorld));
                 }
             }
         }
@@ -136,7 +136,7 @@
                 if (value != _isActive)
                 {
                     _isActive = value;
-                    RaisePropertyChanged(() => IsActive);
+                    OnPropertyChanged(nameof(IsActive));
                 }
             }
         }
@@ -156,7 +156,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    RaisePropertyChanged(() => IsBusy);
+                    OnPropertyChanged(nameof(IsBusy));
                     SetActiveStatus();
                     if (_isBusy)
                     {
@@ -181,7 +181,7 @@
                 if (value != _isModified)
                 {
                     _isModified = value;
-                    RaisePropertyChanged(() => IsModified);
+                    OnPropertyChanged(nameof(IsModified));
                 }
             }
         }
@@ -201,7 +201,7 @@
                 if (value != _isBaseSaveChanged)
                 {
                     _isBaseSaveChanged = value;
-                    RaisePropertyChanged(() => IsBaseSaveChanged);
+                    OnPropertyChanged(nameof(IsBaseSaveChanged));
                 }
             }
         }
@@ -218,7 +218,7 @@
                 if (value != _showProgress)
                 {
                     _showProgress = value;
-                    RaisePropertyChanged(() => ShowProgress);
+                    OnPropertyChanged(nameof(ShowProgress));
                 }
             }
         }
@@ -239,8 +239,8 @@
 
                     if (!_timer.IsRunning || _timer.ElapsedMilliseconds > 200)
                     {
-                        RaisePropertyChanged(() => Progress);
-                        RaisePropertyChanged(() => ProgressValue);
+                        OnPropertyChanged(nameof(Progress));
+                        OnPropertyChanged(nameof(ProgressValue));
                         System.Windows.Forms.Application.DoEvents();
                         _timer.Restart();
                     }
@@ -260,7 +260,7 @@
                 if (value != _progressState)
                 {
                     _progressState = value;
-                    RaisePropertyChanged(() => ProgressState);
+                    OnPropertyChanged(nameof(ProgressState));
                 }
             }
         }
@@ -277,7 +277,7 @@
                 if (value != _progressValue)
                 {
                     _progressValue = value;
-                    RaisePropertyChanged(() => ProgressValue);
+                    OnPropertyChanged(nameof(ProgressValue));
                 }
             }
         }
@@ -295,7 +295,7 @@
                 if (value != _maximumProgress)
                 {
                     _maximumProgress = value;
-                    RaisePropertyChanged(() => MaximumProgress);
+                    OnPropertyChanged(nameof(MaximumProgress));
                 }
             }
         }
@@ -495,7 +495,7 @@
                 CalcDistances();
             }
 
-            RaisePropertyChanged(() => Structures);
+            OnPropertyChanged(nameof(Structures));
         }
 
         public void CalcDistances()
@@ -551,23 +551,38 @@
                 MyObjectBuilder_FloatingObject floatingEntity;
                 MyObjectBuilder_Meteor meteorEntity;
                 MyObjectBuilder_Character characterEntity;
-                MyObjectBuilder_Definitions prefabDefinitions;
+                MyObjectBuilder_Definitions genericDefinitions;
 
                 if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out cubeEntity, out isCompressed, out errorInformation, false, true))
                 {
                     MergeData(cubeEntity, ref idReplacementTable);
                 }
-                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out prefabDefinitions, out isCompressed, out errorInformation, false, true))
+                else if (SpaceEngineersApi.TryReadSpaceEngineersFile(filename, out genericDefinitions, out isCompressed, out errorInformation, false, true))
                 {
-                    if (prefabDefinitions.Prefabs != null)
+                    if (genericDefinitions.Prefabs != null)
                     {
-                        foreach (var prefab in prefabDefinitions.Prefabs)
+                        foreach (var prefab in genericDefinitions.Prefabs)
                         {
                             if (prefab.CubeGrid != null)
                                 MergeData(prefab.CubeGrid, ref idReplacementTable);
                             if (prefab.CubeGrids != null)
                             {
                                 foreach (var cubeGrid in prefab.CubeGrids)
+                                {
+                                    MergeData(cubeGrid, ref idReplacementTable);
+                                }
+                            }
+                        }
+                    }
+                    else if (genericDefinitions.ShipBlueprints != null)
+                    {
+                        foreach (var shipBlueprint in genericDefinitions.ShipBlueprints)
+                        {
+                            if (shipBlueprint.CubeGrid != null)
+                                MergeData(shipBlueprint.CubeGrid, ref idReplacementTable);
+                            if (shipBlueprint.CubeGrids != null)
+                            {
+                                foreach (var cubeGrid in shipBlueprint.CubeGrids)
                                 {
                                     MergeData(cubeGrid, ref idReplacementTable);
                                 }
@@ -1018,6 +1033,12 @@
             //viewModel.CubeGrid.CubeBlocks.AddRange(newBlocks);
 
             OptimizeModel(viewModel);
+        }
+
+        public void TestResize(StructurePlanetModel viewModel)
+        {
+            viewModel.RegeneratePlanet(0, 120000);
+            IsModified = true;
         }
 
         /// <summary>

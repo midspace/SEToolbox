@@ -6,11 +6,11 @@
     using SEToolbox.Models;
     using SEToolbox.Services;
 
-    public class ChangeOwnerViewModel : BaseViewModel
+    public class RegeneratePlanetViewModel : BaseViewModel
     {
         #region Fields
 
-        private readonly ChangeOwnerModel _dataModel;
+        private readonly RegeneratePlanetModel _dataModel;
         private bool? _closeResult;
         private bool _isBusy;
 
@@ -18,7 +18,7 @@
 
         #region ctor
 
-        public ChangeOwnerViewModel(BaseViewModel parentViewModel, ChangeOwnerModel dataModel)
+        public RegeneratePlanetViewModel(BaseViewModel parentViewModel, RegeneratePlanetModel dataModel)
             : base(parentViewModel)
         {
 
@@ -31,9 +31,9 @@
 
         #region command properties
 
-        public ICommand ChangeCommand
+        public ICommand OkayCommand
         {
-            get { return new DelegateCommand(ChangeExecuted, ChangeCanExecute); }
+            get { return new DelegateCommand(OkayExecuted, OkayCanExecute); }
         }
 
         public ICommand CancelCommand
@@ -50,7 +50,10 @@
         /// </summary>
         public bool? CloseResult
         {
-            get { return _closeResult; }
+            get
+            {
+                return _closeResult;
+            }
 
             set
             {
@@ -64,7 +67,10 @@
         /// </summary>
         public bool IsBusy
         {
-            get { return _isBusy; }
+            get
+            {
+                return _isBusy;
+            }
 
             set
             {
@@ -80,20 +86,22 @@
             }
         }
 
-        public ObservableCollection<OwnerModel> PlayerList
+        public int Seed
         {
-            get { return _dataModel.PlayerList; }
+            get { return _dataModel.Seed; }
+            set { _dataModel.Seed = value; }
         }
 
-        public OwnerModel SelectedPlayer
+        public decimal Diameter
         {
-            get { return _dataModel.SelectedPlayer; }
-            set { _dataModel.SelectedPlayer = value; }
+            get { return _dataModel.Diameter; }
+            set { _dataModel.Diameter = value; }
         }
 
-        public string Title
+        public bool InvalidKeenRange
         {
-            get { return _dataModel.Title; }
+            get { return _dataModel.InvalidKeenRange; }
+            set { _dataModel.InvalidKeenRange = value; }
         }
 
         #endregion
@@ -102,12 +110,12 @@
 
         #region commands
 
-        public bool ChangeCanExecute()
+        public bool OkayCanExecute()
         {
-            return SelectedPlayer != null;
+            return true;
         }
 
-        public void ChangeExecuted()
+        public void OkayExecuted()
         {
             CloseResult = true;
         }

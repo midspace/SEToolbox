@@ -19,9 +19,14 @@
         /// </summary>
         const string GitHubPattern = @"\<h1\s+class\s*=\s*\""[^""]*release\-title[^""]*\""\>\s*\<a\s+href\s*=\s*(?:""(?<url>[^""]|.*?)"")\s*\>\s*(?<title>(?:[^\<\>\""]*?))\s(?<version>[^\<\>\""]*)\<\/a\>";
 
+        /// <summary>
+        /// used to strip out the version from the end segment of the link. https://github.com/midspace/SEToolbox/releases/tag/v1.187.87.6
+        /// </summary>
+        const string GitHubLinkPattern = @"v?(?<version>\d+?\.\d+?\.\d+?\.\d+?)";
+
         #region CheckForUpdates
 
-        public static ApplicationRelease CheckForUpdates(CodeRepositoryType repositoryType,  string updatesUrl)
+        public static ApplicationRelease CheckForUpdates(CodeRepositoryType repositoryType,  string updatesUrl, Version currentVersion)
         {
             if (GlobalSettings.Default.AlwaysCheckForUpdates.HasValue && !GlobalSettings.Default.AlwaysCheckForUpdates.Value)
                 return null;
@@ -32,7 +37,6 @@
                 return null;
 #endif
 
-            var currentVersion = GlobalSettings.GetAppVersion();
             string webContent;
             string link;
 
@@ -74,9 +78,11 @@
 
             string pattern = "";
             if (repositoryType == CodeRepositoryType.GitHub)
-                pattern = GitHubPattern;
+                pattern = GitHubLinkPattern;
 
-            var match = Regex.Match(webContent, pattern);
+            Uri url = new Uri(link);
+
+            var match = Regex.Match(url.Segments[url.Segments.Length - 1], pattern);
 
             if (!match.Success)
                 return null;
