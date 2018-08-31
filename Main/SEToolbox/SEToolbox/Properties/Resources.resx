@@ -2979,4 +2979,10 @@ Reason: {1}</value>
   <data name="CtlCubeTxtPCUToProd" xml:space="preserve">
     <value>PCU to produce:</value>
   </data>
+  <data name="ClsReportColPCU" xml:space="preserve">
+    <value>PCU</value>
+  </data>
+  <data name="ClsReportHeaderTotalCubes" xml:space="preserve">
+    <value>Total Cubes</value>
+  </data>
 </root>

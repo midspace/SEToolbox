@@ -725,6 +725,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string ClsReportColPCU {
+            get {
+                return ResourceManager.GetString("ClsReportColPCU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Position.
         /// </summary>
         public static string ClsReportColPosition {
@@ -820,6 +829,15 @@ namespace SEToolbox.Properties {
         public static string ClsReportHeaderInGameResources {
             get {
                 return ResourceManager.GetString("ClsReportHeaderInGameResources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Cubes.
+        /// </summary>
+        public static string ClsReportHeaderTotalCubes {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderTotalCubes", resourceCulture);
             }
         }
         
