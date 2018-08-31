@@ -45,6 +45,8 @@
 
         private System.Windows.Media.Brush _color;
 
+        private int _pcu;
+
         private ObservableCollection<InventoryEditorModel> _inventory;
 
         #endregion
@@ -303,6 +305,20 @@
             }
         }
 
+        public int PCU
+        {
+            get { return _pcu; }
+
+            set
+            {
+                if (value != _pcu)
+                {
+                    _pcu = value;
+                    OnPropertyChanged(nameof(PCU));
+                }
+            }
+        }
+
         public ObservableCollection<InventoryEditorModel> Inventory
         {
             get { return _inventory; }
@@ -523,6 +539,7 @@
 
             TypeId = definition.Id.TypeId;
             SubtypeId = definition.Id.SubtypeName;
+            PCU = definition.PCU;
 
             if (Inventory == null)
                 Inventory = new ObservableCollection<InventoryEditorModel>();

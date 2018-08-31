@@ -300,6 +300,12 @@
             set { DataModel.TimeToProduce = value; }
         }
 
+        public int PCUToProduce
+        {
+            get { return DataModel.PCUToProduce; }
+            set { DataModel.PCUToProduce = value; }
+        }
+
         public string CockpitOrientation
         {
             get { return DataModel.CockpitOrientation; }
@@ -887,7 +893,7 @@
             {
                 foreach (var mat in CubeAssets)
                 {
-                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} {3}\t{4:hh\\:mm\\:ss\\.ff}\r\n", mat.FriendlyName, mat.Count, mat.Mass, Res.GlobalSIMassKilogram, mat.Time);
+                    cubes.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.00} {3}\t{4:hh\\:mm\\:ss\\.ff}\t{5:#,##0.00}\r\n", mat.FriendlyName, mat.Count, mat.Mass, Res.GlobalSIMassKilogram, mat.Time, mat.PCU);
                 }
             }
 
@@ -930,6 +936,7 @@
                 Mass,
                 BlockCount,
                 PositionAndOrientation.Value.Position.X, PositionAndOrientation.Value.Position.Y, PositionAndOrientation.Value.Position.Z,
+                PCUToProduce,
                 TimeToProduce,
                 cubes.ToString(),
                 components.ToString(),

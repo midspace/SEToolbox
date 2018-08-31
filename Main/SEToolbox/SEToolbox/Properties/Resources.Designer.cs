@@ -1232,6 +1232,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string CtlCubeColCubePCU {
+            get {
+                return ResourceManager.GetString("CtlCubeColCubePCU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cubes.
         /// </summary>
         public static string CtlCubeColCubes {
@@ -1358,6 +1367,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string CtlCubeColPCU {
+            get {
+                return ResourceManager.GetString("CtlCubeColPCU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to X.
         /// </summary>
         public static string CtlCubeColX {
@@ -1396,20 +1414,20 @@ namespace SEToolbox.Properties {
         ///Mass:	{12:#,##0.00} kg
         ///Blocks:	{13:#,##0}
         ///Position:	{14}, {15}, {16}
-        ///Total time to produce:	{17:dd} days, {17:hh} hours, {17:mm\:ss\.ff}
+        ///PCU:	{17:#,##0}
+        ///Total time to produce:	{18:dd} days, {18:hh} hours, {18:mm\:ss\.ff}
         ///
         ///Construction Requirements:
-        ///Cubes	Count	Mass	Time to Produce
-        ///{18}
-        ///
-        ///Components	Count	Mass	Volume	Time to Produce
+        ///Cubes	Count	Mass	Time to Produce	PCU
         ///{19}
         ///
-        ///Ingots	Amount	Mass	Volume	Time to Produce
+        ///Components	Count	Mass	Volume	Time to Produce
         ///{20}
         ///
-        ///Ore	Amount	Mass	Volume
-        ///{21}.
+        ///Ingots	Amount	Mass	Volume	Time to Produce
+        ///{21}
+        ///
+        ///Ore	Amount	 [rest of string was truncated]&quot;;.
         /// </summary>
         public static string CtlCubeDetail {
             get {
@@ -2134,6 +2152,15 @@ namespace SEToolbox.Properties {
         public static string CtlCubeTxtName {
             get {
                 return ResourceManager.GetString("CtlCubeTxtName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PCU to produce:.
+        /// </summary>
+        public static string CtlCubeTxtPCUToProd {
+            get {
+                return ResourceManager.GetString("CtlCubeTxtPCUToProd", resourceCulture);
             }
         }
         
@@ -5199,6 +5226,15 @@ namespace SEToolbox.Properties {
         public static string WnComponentsColCubeName {
             get {
                 return ResourceManager.GetString("WnComponentsColCubeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string WnComponentsColCubePCU {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubePCU", resourceCulture);
             }
         }
         

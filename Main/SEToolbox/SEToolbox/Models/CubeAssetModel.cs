@@ -19,6 +19,8 @@
 
         private TimeSpan _time;
 
+        private int _pcu;
+
         private string _textureFile;
 
         #endregion
@@ -97,6 +99,21 @@
                 }
             }
         }
+
+        public int PCU
+        {
+            get { return _pcu; }
+
+            set
+            {
+                if (value != _pcu)
+                {
+                    _pcu = value;
+                    OnPropertyChanged(nameof(PCU));
+                }
+            }
+        }
+
 
         public string TextureFile
         {

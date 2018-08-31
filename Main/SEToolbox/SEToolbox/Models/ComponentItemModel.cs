@@ -87,6 +87,8 @@
 
         public bool IsMod { get; set; }
 
+        public int PCU { get; set; }
+
         #endregion
     }
 }

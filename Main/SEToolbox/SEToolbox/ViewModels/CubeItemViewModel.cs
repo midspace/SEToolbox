@@ -190,6 +190,12 @@
             set { _dataModel.Color = value; }
         }
 
+        public int PCU
+        {
+            get { return _dataModel.PCU; }
+            set { _dataModel.PCU = value; }
+        }
+
         public ObservableCollection<InventoryEditorViewModel> Inventory
         {
             get { return _inventory.Value; }

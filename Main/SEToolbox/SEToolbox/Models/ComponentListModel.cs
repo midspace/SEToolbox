@@ -191,6 +191,7 @@
                     TextureFile = (cubeDefinition.Icons == null || cubeDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First())),
                     Time = TimeSpan.FromSeconds(cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec),
                     Accessible = cubeDefinition.Public,
+                    PCU = cubeDefinition.PCU,
                     Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeName),
                     CubeSize = cubeDefinition.CubeSize,
                     Size = new BindableSize3DIModel(cubeDefinition.Size),
@@ -297,7 +298,7 @@ td.right { text-align: right; }");
                 // TODO: #21 localize
                 writer.RenderElement(HtmlTextWriterTag.H1, "Cubes");
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)", "Mod" });
+                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "PCU", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)", "Mod" });
 
                 foreach (var asset in CubeAssets)
                 {
@@ -323,6 +324,7 @@ td.right { text-align: right; }");
                     writer.RenderElement(HtmlTextWriterTag.Td, asset.TypeId);
                     writer.RenderElement(HtmlTextWriterTag.Td, asset.SubtypeId);
                     writer.RenderElement(HtmlTextWriterTag.Td, asset.CubeSize);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.PCU);
                     writer.RenderElement(HtmlTextWriterTag.Td, new EnumToResouceConverter().Convert(asset.Accessible, typeof(string), null, CultureInfo.CurrentUICulture));
                     writer.RenderElement(HtmlTextWriterTag.Td, "{0}×{1}×{2}", asset.Size.Width, asset.Size.Height, asset.Size.Depth);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");

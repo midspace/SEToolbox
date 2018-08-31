@@ -451,27 +451,6 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColX}" Width="40" SortBinding="{Binding Position.X}">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.X}" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColY}" Width="40" SortBinding="{Binding Position.Y}">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.Y}" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </controls:SortableGridViewColumn>
-                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColZ}" Width="40" SortBinding="{Binding Position.Z}">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.Z}" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </controls:SortableGridViewColumn>
                                         <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColName}" Width="175" SortBinding="{Binding FriendlyName}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -493,6 +472,34 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColPCU}" Width="40" SortBinding="{Binding PCU}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=PCU, StringFormat='{}{0:#,##0}'}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColX}" Width="40" SortBinding="{Binding Position.X}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.X}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColY}" Width="40" SortBinding="{Binding Position.Y}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.Y}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColZ}" Width="40" SortBinding="{Binding Position.Z}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=Position.Z}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
                                     </GridView>
                                 </ListView.View>
                                 <ListView.InputBindings>
@@ -542,10 +549,6 @@
                             <i:Interaction.Behaviors>
                                 <commands:BubbleScrollBehavior />
                             </i:Interaction.Behaviors>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -554,16 +557,29 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtTimeToProd}"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock.Text>
-                                    <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="CtlGridTimeToProdValue">
-                                        <Binding Path="TimeToProduce"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                            <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
-                            <controls:SortableListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding CubeAssets}" DefaultSortColumn="FriendlyName"
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtPCUToProd}"/>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Path=PCUToProduce, StringFormat='{}{0:#,##0}'}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBlock Margin="4 0 4 0" Text="{lex:Loc CtlCubeTxtTimeToProd}"/>
+                                    <TextBlock VerticalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource I18NFormatter}" ConverterParameter="CtlGridTimeToProdValue">
+                                                <Binding Path="TimeToProduce"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <Separator Grid.Row="1" Grid.Column="0"/>
+                            <controls:SortableListView Grid.Row="2" Grid.Column="0" ItemsSource="{Binding CubeAssets}" DefaultSortColumn="FriendlyName"
                         ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
@@ -605,10 +621,17 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </controls:SortableGridViewColumn>
+                                        <controls:SortableGridViewColumn Header="{lex:Loc SEToolbox:Resources:CtlCubeColCubePCU}" Width="90" SortBinding="{Binding PCU}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Text="{Binding Path=PCU, StringFormat='{}{0:#,##0}'}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </controls:SortableGridViewColumn>
                                     </GridView>
                                 </ListView.View>
                             </controls:SortableListView>
-                            <controls:SortableListView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ComponentAssets}" DefaultSortColumn="FriendlyName"
+                            <controls:SortableListView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding ComponentAssets}" DefaultSortColumn="FriendlyName"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
@@ -663,7 +686,7 @@
                                     </GridView>
                                 </ListView.View>
                             </controls:SortableListView>
-                            <controls:SortableListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding IngotAssets}" DefaultSortColumn="FriendlyName"
+                            <controls:SortableListView Grid.Row="4" Grid.Column="0" ItemsSource="{Binding IngotAssets}" DefaultSortColumn="FriendlyName"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
@@ -718,7 +741,7 @@
                                     </GridView>
                                 </ListView.View>
                             </controls:SortableListView>
-                            <controls:SortableListView Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding OreAssets}" DefaultSortColumn="FriendlyName"
+                            <controls:SortableListView Grid.Row="5" Grid.Column="0" ItemsSource="{Binding OreAssets}" DefaultSortColumn="FriendlyName"
                     ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">
                                 <ListView.View>
                                     <GridView>
