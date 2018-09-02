@@ -539,8 +539,7 @@
                 totalMass += cubeMass;
             }
 
-            // TODO: #21 localize
-            var cockpitOrientation = "None";
+            var cockpitOrientation = Res.ClsCockpitOrientationNone;
             var cockpits = CubeGrid.CubeBlocks.Where(b => b is MyObjectBuilder_Cockpit).ToArray();
             if (cockpits.Length > 0)
             {
@@ -548,14 +547,12 @@
                 if (cockpits.Length == count)
                 {
                     // All cockpits share the same orientation.
-                    // TODO: #21 localize
-                    cockpitOrientation = string.Format("Forward={0} ({1}), Up={2} ({3})", cockpits[0].BlockOrientation.Forward, GetAxisIndicator(cockpits[0].BlockOrientation.Forward), cockpits[0].BlockOrientation.Up, GetAxisIndicator(cockpits[0].BlockOrientation.Up));
+                    cockpitOrientation = $"{Res.ClsCockpitOrientationForward}={cockpits[0].BlockOrientation.Forward} ({GetAxisIndicator(cockpits[0].BlockOrientation.Forward)}), Up={cockpits[0].BlockOrientation.Up} ({GetAxisIndicator(cockpits[0].BlockOrientation.Up)})";
                 }
                 else
                 {
                     // multiple cockpits are present, and do not share a common orientation.
-                    // TODO: #21 localize
-                    cockpitOrientation = "Mixed";
+                    cockpitOrientation = Res.ClsCockpitOrientationMixed;
                 }
             }
             CockpitOrientation = cockpitOrientation;

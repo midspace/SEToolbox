@@ -15,6 +15,7 @@
     using VRage;
     using VRage.FileSystem;
     using VRage.Game;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ComponentListModel : BaseModel
     {
@@ -281,8 +282,7 @@
             {
                 #region header
 
-                // TODO: #21 localize
-                writer.BeginDocument("Component Item Report",
+                writer.BeginDocument(Res.CtlComponentTitleReport,
                    @"
 body { background-color: #E6E6FA }
 h1 { font-family: Arial, Helvetica, sans-serif; }
@@ -295,10 +295,9 @@ td.right { text-align: right; }");
 
                 #region Cubes
 
-                // TODO: #21 localize
-                writer.RenderElement(HtmlTextWriterTag.H1, "Cubes");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.CtlComponentTitleCubes);
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "PCU", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)", "Mod" });
+                    new[] { Res.CtlComponentColIcon, Res.CtlComponentColName, Res.CtlComponentColType, Res.CtlComponentColSubType, Res.CtlComponentColCubeSize, Res.CtlComponentColPCU, Res.CtlComponentColAccessible, Res.CtlComponentColSize, Res.CtlComponentColMass, Res.CtlComponentColBuildTime, Res.CtlComponentColMod });
 
                 foreach (var asset in CubeAssets)
                 {
@@ -341,10 +340,9 @@ td.right { text-align: right; }");
 
                 #region Components
 
-                // TODO: #21 localize
-                writer.RenderElement(HtmlTextWriterTag.H1, "Components");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.CtlComponentTitleComponents);
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)", "Mod" });
+                    new[] { Res.CtlComponentColIcon, Res.CtlComponentColName, Res.CtlComponentColType, Res.CtlComponentColSubType, Res.CtlComponentColAccessible, Res.CtlComponentColMass, Res.CtlComponentColVolume, Res.CtlComponentColBuildTime, Res.CtlComponentColMod });
 
                 foreach (var asset in ComponentAssets)
                 {
@@ -386,10 +384,9 @@ td.right { text-align: right; }");
 
                 #region Items
 
-                // TODO: #21 localize
-                writer.RenderElement(HtmlTextWriterTag.H1, "Items");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.CtlComponentTitleItems);
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)", "Mod" });
+                    new[] { Res.CtlComponentColIcon, Res.CtlComponentColName, Res.CtlComponentColType, Res.CtlComponentColSubType, Res.CtlComponentColAccessible, Res.CtlComponentColMass, Res.CtlComponentColVolume, Res.CtlComponentColBuildTime, Res.CtlComponentColMod });
 
                 foreach (var asset in ItemAssets)
                 {
@@ -431,10 +428,9 @@ td.right { text-align: right; }");
 
                 #region Materials
 
-                // TODO: #21 localize
-                writer.RenderElement(HtmlTextWriterTag.H1, "Materials");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.CtlComponentTitleMaterials);
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Texture", "Name", "Ore Name", "Rare", "Mined Ore Ratio", "Mod" });
+                    new[] { Res.CtlComponentColTexture, Res.CtlComponentColName, Res.CtlComponentColOreName, Res.CtlComponentColRare, Res.CtlComponentColMinedOreRatio, Res.CtlComponentColMod });
 
                 foreach (var asset in MaterialAssets)
                 {
