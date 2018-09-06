@@ -72,27 +72,5 @@
                 }
             }
         }
-
-        /// <summary>
-        /// check for Magic Number: 1f 8b
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static bool IsGzipedFile(string filename)
-        {
-            try
-            {
-                using (FileStream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    var b1 = stream.ReadByte();
-                    var b2 = stream.ReadByte();
-                    return (b1 == 0x1f && b2 == 0x8b);
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
     }
 }

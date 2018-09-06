@@ -9,6 +9,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
     using System.Xml;
     using System.Xml.Linq;
@@ -376,22 +377,24 @@
 
             try
             {
-                if (ZipTools.IsGzipedFile(filename))
-                {
-                    // New file format is compressed.
-                    // These steps could probably be combined, but would have to use a MemoryStream, which has memory limits before it causes performance issues when chunking memory.
-                    // Using a temporary file in this situation has less performance issues as it's moved straight to disk.
-                    var tempFilename = TempfileUtil.NewFilename();
-                    ZipTools.GZipUncompress(filename, tempFilename);
-                    xDoc.Load(tempFilename);
-                    _compressedCheckpointFormat = true;
-                }
-                else
-                {
-                    // Old file format is raw XML.
-                    xDoc.Load(filename);
-                    _compressedCheckpointFormat = false;
-                }
+	            using ( FileStream sectorFile = File.OpenRead( filename ) )
+	            {
+		            if (sectorFile.CheckGZipHeader(  ))
+		            {
+			            using ( GZipStream zippedFile = new GZipStream( sectorFile, CompressionMode.Decompress ) )
+			            {
+				            xDoc.Load(zippedFile);
+			            }
+
+			            _compressedCheckpointFormat = true;
+		            }
+		            else
+		            {
+			            // Old file format is raw XML.
+			            xDoc.Load(filename);
+			            _compressedCheckpointFormat = false;
+		            }
+	            }
             }
             catch
             {
