@@ -3070,4 +3070,13 @@ Reason: {1}</value>
   <data name="ClsCockpitOrientationNone" xml:space="preserve">
     <value>None</value>
   </data>
+  <data name="DialogLatestVersionMessage" xml:space="preserve">
+    <value>You have the latest version of SEToolbox.</value>
+  </data>
+  <data name="DialogNoNewVersionTitle" xml:space="preserve">
+    <value>SEToolbox is up to date</value>
+  </data>
+  <data name="DialogPrereleaseVersionMessage" xml:space="preserve">
+    <value>You are running a prerelease version of SEToolbox.</value>
+  </data>
 </root>

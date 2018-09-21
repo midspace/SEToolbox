@@ -162,6 +162,9 @@
       <Component Id="comp5F8887E0899A41C3BD1CEDFFC18A4FD1">
         <File Id="file1E207785088F43BABB001B75AA97C567" Source="$(var.SEToolbox.TargetDir)log4net.dll"/>
       </Component>
+      <Component Id="comp37F2C1F3120D4F27ACBCD463E74794B1">
+        <File Id="fileF6959F2F15644AE8835534076E469AB3" Source="$(var.SEToolbox.TargetDir)Octokit.dll"/>
+      </Component>
       <Component Id="comp4FF0A2172F244A5FA36AE80475BE0F8E">
         <File Id="file97FBC095E9A34E86AA664F4C5C9967B7" Source="$(var.SEToolbox.TargetDir)System.Windows.Interactivity.dll"/>
       </Component>
@@ -210,6 +213,7 @@
         <RemoveFolder Id="RemoveProgramMenuDir" Directory='COMPANYPROGRAMFOLDER' On='uninstall' />
         <!-- Application registry -->
         <RegistryValue Root="HKCU" Key="Software\!(loc.DirCompanyName)\!(loc.DirApplicationName)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RegistryValue Root="HKCU" Key="Software\!(loc.DirCompanyName)\!(loc.DirApplicationName)" Name="InstallLanguage" Type="string" Value="!(loc.InstallLanguage)" />
       </Component>
     </DirectoryRef>
 

@@ -13,6 +13,7 @@
     <ItemGroup>
       <EditorFiles Include="$(BuildDir)HelixToolkit.Wpf.dll;
                    $(BuildDir)log4net.dll;
+                   $(BuildDir)Octokit.dll;
                    $(BuildDir)SEToolbox.exe;
                    $(BuildDir)SEToolbox.exe.config;
                    $(BuildDir)SEToolbox.ImageLibrary.dll;
@@ -49,7 +50,8 @@
     -->
     <!-- Add additional languages here. -->
     <Copy SourceFiles="@(ResourceFiles-de)" DestinationFolder="$(BinariesRoot)/de" SkipUnchangedFiles="false"></Copy>
-    
+
+    <!-- Make sure the shortname of the .MSI package matches the 'InstallLanguage' defined in each WIX Language file. -->
     <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/en-us/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-en.msi" SkipUnchangedFiles="false"></Copy>
     <Copy SourceFiles="$(SolutionRoot)/SEToolbox/SEToolboxSetup/bin/$(Configuration)/de-de/SEToolboxSetup.msi" DestinationFiles="$(ReleaseRoot)/SEToolboxSetup-$(VersionNumber)-de.msi" SkipUnchangedFiles="false"></Copy>
     <!-- ### Uncomment to copy localized .MSI build. ### -->

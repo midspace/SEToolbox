@@ -3612,6 +3612,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have the latest version of SEToolbox..
+        /// </summary>
+        public static string DialogLatestVersionMessage {
+            get {
+                return ResourceManager.GetString("DialogLatestVersionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lightwave.
         /// </summary>
         public static string DialogLightwaveFiles {
@@ -3667,6 +3676,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SEToolbox is up to date.
+        /// </summary>
+        public static string DialogNoNewVersionTitle {
+            get {
+                return ResourceManager.GetString("DialogNoNewVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OFF.
         /// </summary>
         public static string DialogOFFFiles {
@@ -3691,6 +3709,15 @@ namespace SEToolbox.Properties {
         public static string DialogOldSEVersionTitle {
             get {
                 return ResourceManager.GetString("DialogOldSEVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are running a prerelease version of SEToolbox..
+        /// </summary>
+        public static string DialogPrereleaseVersionMessage {
+            get {
+                return ResourceManager.GetString("DialogPrereleaseVersionMessage", resourceCulture);
             }
         }
         
