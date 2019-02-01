@@ -44,6 +44,8 @@
             "VRage.OpenVRWrapper.dll",          // x64
             "VRage.Render.dll",                 // AnyCPU
             "VRage.Render11.dll",               // x64
+            "VRage.Steam.dll",                  // x64     1.188.x requirement.
+            "Steamworks.NET.dll",               // x64     1.188.x requirement.
             "System.Data.SQLite.dll",           // AnyCPU  1.171.x requirement
         };
 

@@ -4,32 +4,41 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
+    using System.IO;
     using System.Reflection;
     using System.Threading;
     using Sandbox;
     using Sandbox.Engine.Utils;
     using Sandbox.Engine.Voxels;
+    using Sandbox.Game;
     using Sandbox.Game.GameSystems;
     using Sandbox.Game.Multiplayer;
     using SEToolbox.Models;
     using SpaceEngineers.Game;
     using Support;
+    using VRage;
     using VRage.FileSystem;
     using VRage.Game;
+    using VRage.GameServices;
     using VRage.Utils;
     using VRageRender;
+    using MySteamServiceBase = VRage.Steam.MySteamService;
 
     /// <summary>
     /// core interop for loading up Space Engineers content.
     /// </summary>
     public class SpaceEngineersCore
     {
+        protected static readonly uint AppId = 244850;
+
         #region fields
 
         public static SpaceEngineersCore Default = new SpaceEngineersCore();
         private WorldResource _worldResource;
         private readonly SpaceEngineersResources _stockDefinitions;
         private readonly List<string> _manageDeleteVoxelList;
+        protected MyCommonProgramStartup _startup;
+        private MySteamServiceBase _steamService;
 
         #endregion
 
@@ -40,14 +49,26 @@
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             string userDataPath = SpaceEngineersConsts.BaseLocalPath.DataPath;
 
+            MyFileSystem.ExePath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(FastResourceLock)).Location);
+
+            SpaceEngineersGame.SetupBasicGameInfo();
+            _startup = new MyCommonProgramStartup(new string[] { });
+
+            var appDataPath = _startup.GetAppDataPath();
+            MyInitializer.InvokeBeforeRun(AppId, MyPerGameSettings.BasicGameInfo.ApplicationName + "SEToolbox", appDataPath);
+            MyInitializer.InitCheckSum();
+
             MyFileSystem.Reset();
             MyFileSystem.Init(contentPath, userDataPath);
+
+            _steamService = new MySteamService(MySandboxGame.IsDedicated, AppId);
+            MyServiceManager.Instance.AddService<IMyGameService>(_steamService);
+
+            MyFileSystem.InitUserSpecific(_steamService.UserId.ToString());
 
             MyLog.Default = MySandboxGame.Log;
             MySandboxGame.Config = new MyConfig("SpaceEngineers.cfg"); // TODO: Is specific to SE, not configurable to ME.
             MySandboxGame.Config.Load();
-
-            MyFileSystem.InitUserSpecific(null);
 
             SpaceEngineersGame.SetupPerGameSettings();
 
