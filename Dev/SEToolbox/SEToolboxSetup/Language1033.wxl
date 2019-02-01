@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization" Language="1033">
+  <String Id="InstallLanguage">en</String>
   <String Id="ApplicationTitle">Space Engineers Toolbox</String>
   <String Id="ManufacturerName">Mid-Space Productions</String>
   <String Id="ProductName">Space Engineers Toolbox</String>

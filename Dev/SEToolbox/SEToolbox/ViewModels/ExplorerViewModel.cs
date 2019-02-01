@@ -883,7 +883,23 @@
 
         public void OpenUpdatesLinkExecuted()
         {
-            Process.Start(SEToolbox.Properties.Resources.GlobalUpdatesUrl);
+            var update = CodeRepositoryReleases.CheckForUpdates(new Version(), true);
+            if (update.Version == GlobalSettings.GetAppVersion())
+            {
+                MessageBox.Show(Res.DialogLatestVersionMessage, Res.DialogNoNewVersionTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (update.Version < GlobalSettings.GetAppVersion())
+            {
+                MessageBox.Show(Res.DialogPrereleaseVersionMessage, Res.DialogNoNewVersionTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                var dialogResult = MessageBox.Show(string.Format(Res.DialogNewVersionMessage, update.Version), Res.DialogNewVersionTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    Process.Start(SEToolbox.Properties.Resources.GlobalUpdatesUrl);
+                }
+            }
         }
 
         public bool OpenDocumentationLinkCanExecute()

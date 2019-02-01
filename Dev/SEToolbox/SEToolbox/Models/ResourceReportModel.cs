@@ -98,6 +98,10 @@ td.right { text-align: right; }";
 
         private List<ShipContent> _allShips;
 
+        private decimal _totalCubes;
+
+        private int _totalPCU;
+
         #endregion
 
         #region ctor
@@ -319,6 +323,8 @@ td.right { text-align: right; }";
             var accumulateComponents = new SortedDictionary<string, ComponentItemModel>();
             var accumulateCubes = new SortedDictionary<string, ComponentItemModel>();
             var accumulateShips = new List<ShipContent>();
+            _totalCubes = 0;
+            _totalPCU = 0;
 
             ResetProgress(0, _entities.Count);
 
@@ -431,12 +437,22 @@ td.right { text-align: right; }";
                     var ship = entity as StructureCubeGridModel;
                     var isNpc = ship.CubeGrid.CubeBlocks.Any(e => e is MyObjectBuilder_Cockpit && ((MyObjectBuilder_Cockpit)e).Autopilot != null);
 
+                    int pcuToProduce = 0;
+                    
+                    foreach (var block in ship.CubeGrid.CubeBlocks)
+                    {
+                        var cubeBlockDefinition = SpaceEngineersApi.GetCubeDefinition(block.TypeId, ship.CubeGrid.GridSizeEnum, block.SubtypeName);
+                        if (cubeBlockDefinition != null)
+                            pcuToProduce += cubeBlockDefinition.PCU;
+                    }
+
                     var shipContent = new ShipContent()
                     {
                         DisplayName = ship.DisplayName,
                         Position = ship.PositionAndOrientation.Value.Position,
                         EntityId = ship.EntityId,
-                        BlockCount = ship.BlockCount
+                        BlockCount = ship.BlockCount,
+                        PCU = pcuToProduce
                     };
 
                     foreach (MyObjectBuilder_CubeBlock block in ship.CubeGrid.CubeBlocks)
@@ -446,6 +462,7 @@ td.right { text-align: right; }";
                         var blockTime = TimeSpan.Zero;
                         string blockTexture = null;
                         float cubeMass = 0;
+                        int pcu = 0;
 
                         // Unconstructed portion.
                         if (block.ConstructionStockpile != null && block.ConstructionStockpile.Items.Length > 0)
@@ -544,6 +561,7 @@ td.right { text-align: right; }";
 
                             blockTime = TimeSpan.FromSeconds(cubeBlockDefinition.MaxIntegrity / cubeBlockDefinition.IntegrityPointsPerSec * block.BuildPercent);
                             blockTexture = (cubeBlockDefinition.Icons == null || cubeBlockDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icons.First(), Path.Combine(contentPath, cubeBlockDefinition.Icons.First()));
+                            pcu = cubeBlockDefinition.PCU;
                         }
 
                         if (!blockType.Equals(typeof(MyObjectBuilder_CubeBlockDefinition)))
@@ -604,16 +622,19 @@ td.right { text-align: right; }";
                         if (cubeBlockDefinition != null)
                         {
                             var itemsKey = cubeBlockDefinition.DisplayNameText;
+                            _totalCubes += 1;
+                            _totalPCU += pcu;
 
                             if (accumulateCubes.ContainsKey(itemsKey))
                             {
                                 accumulateCubes[itemsKey].Count += 1;
                                 accumulateCubes[itemsKey].Mass += cubeMass;
                                 accumulateCubes[itemsKey].Time += blockTime;
+                                accumulateCubes[itemsKey].PCU += pcu;
                             }
                             else
                             {
-                                accumulateCubes.Add(itemsKey, new ComponentItemModel { Name = cubeBlockDefinition.DisplayNameText, Count = 1, Mass = cubeMass, TypeId = cubeBlockDefinition.Id.TypeId, SubtypeId = cubeBlockDefinition.Id.SubtypeName, TextureFile = blockTexture, Time = blockTime });
+                                accumulateCubes.Add(itemsKey, new ComponentItemModel { Name = cubeBlockDefinition.DisplayNameText, Count = 1, Mass = cubeMass, TypeId = cubeBlockDefinition.Id.TypeId, SubtypeId = cubeBlockDefinition.Id.SubtypeName, TextureFile = blockTexture, Time = blockTime, PCU = pcu });
                             }
                         }
 
@@ -930,11 +951,16 @@ td.right { text-align: right; }";
             bld.AppendLine(Res.ClsReportTextInGameAssets);
 
             bld.AppendLine();
+            bld.AppendLine(Res.ClsReportHeaderTotalCubes);
+            bld.AppendLine($"{Res.ClsReportColCount}\t{Res.ClsReportColPCU}");
+            bld.AppendLine($"{_totalCubes:#,##0}\t{_totalPCU:#,##0}");
+
+            bld.AppendLine();
             bld.AppendLine(Res.ClsReportHeaderAllCubes);
-            bld.AppendFormat("{0}\t{1}\t{2}\t{3}\r\n", Res.ClsReportColCubeName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColTime);
+            bld.AppendLine($"{Res.ClsReportColCubeName}\t{Res.ClsReportColCount}\t{Res.ClsReportColMass} {Res.GlobalSIMassKilogram}\t{Res.ClsReportColTime}\t{Res.ClsReportColPCU}");
             foreach (var item in _allCubes)
             {
-                bld.AppendFormat("{0}\t{1:#,##0}\t{2:#,##0.000}\t{3}\r\n", item.FriendlyName, item.Count, item.Mass, item.Time);
+                bld.AppendLine($"{item.FriendlyName}\t{item.Count:#,##0}\t{item.Mass:#,##0.000}\t{item.Time}\t{item.PCU:#,##0}");
             }
 
             bld.AppendLine();
@@ -1085,8 +1111,18 @@ td.right { text-align: right; }";
                 writer.RenderElement(HtmlTextWriterTag.H2, Res.ClsReportHeaderInGameAssets);
                 writer.RenderElement(HtmlTextWriterTag.P, Res.ClsReportTextInGameAssets);
 
+                writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderTotalCubes);
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColCount, Res.ClsReportColPCU });
+                writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0}", _totalCubes);
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0}", _totalPCU);
+                writer.RenderEndTag(); // Tr
+                writer.EndTable();
+
                 writer.RenderElement(HtmlTextWriterTag.H3, Res.ClsReportHeaderAllCubes);
-                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColIcon, Res.ClsReportColCubeName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColTime });
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColIcon, Res.ClsReportColCubeName, Res.ClsReportColCount, Res.ClsReportColMass + " " + Res.GlobalSIMassKilogram, Res.ClsReportColTime, Res.ClsReportColPCU });
                 foreach (var item in _allCubes)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -1112,6 +1148,8 @@ td.right { text-align: right; }";
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
                     writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0.000}", item.Mass);
                     writer.RenderElement(HtmlTextWriterTag.Td, "{0}", item.Time);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0}", item.PCU);
                     writer.RenderEndTag(); // Tr
                 }
                 writer.EndTable();
@@ -1223,14 +1261,20 @@ td.right { text-align: right; }";
 
                 #region Ship breakdown
 
-                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColShip, Res.ClsReportColEntityId, Res.ClsReportColPosition, Res.ClsReportColBlockCount });
+                writer.BeginTable("1", "3", "0", new[] { Res.ClsReportColShip, Res.ClsReportColEntityId, Res.ClsReportColPosition, Res.ClsReportColBlockCount, Res.ClsReportColPCU });
                 foreach (var ship in _allShips)
                 {
                     writer.RenderBeginTag(HtmlTextWriterTag.Tr);
                     writer.RenderElement(HtmlTextWriterTag.Td, ship.DisplayName);
                     writer.RenderElement(HtmlTextWriterTag.Td, ship.EntityId);
                     writer.RenderElement(HtmlTextWriterTag.Td, "{0},{1},{2}", ship.Position.X, ship.Position.Y, ship.Position.Z);
+
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
                     writer.RenderElement(HtmlTextWriterTag.Td, ship.BlockCount);
+
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
+                    writer.RenderElement(HtmlTextWriterTag.Td, "{0:#,##0}", ship.PCU);
+
 
                     // TODO: more detail.
 
@@ -1327,6 +1371,7 @@ td.right { text-align: right; }";
                     xmlWriter.WriteElementFormat("count", "{0:0}", item.Count);
                     xmlWriter.WriteElementFormat("mass", "{0:0.000}", item.Mass);
                     xmlWriter.WriteElementFormat("time", "{0}", item.Time);
+                    xmlWriter.WriteElementFormat("pcu", "{0}", item.PCU);
                     xmlWriter.WriteEndElement();
                 }
 
@@ -1615,6 +1660,7 @@ td.right { text-align: right; }";
             public Vector3D Position { get; set; }
             public long EntityId { get; set; }
             public int BlockCount { get; set; }
+            public int PCU { get; set; }
             //public decimal Amount { get; set; }
             //public double Mass { get; set; }
             //public double Volume { get; set; }

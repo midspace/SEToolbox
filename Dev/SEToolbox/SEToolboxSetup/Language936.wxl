@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="zh-cn" xmlns="http://schemas.microsoft.com/wix/2006/localization" Language="936">
+  <String Id="InstallLanguage">zh</String>
   <String Id="ApplicationTitle">太空工程师 工具箱</String>
   <String Id="ManufacturerName">Mid-Space Productions</String>
   <String Id="ProductName">太空工程师 工具箱</String>

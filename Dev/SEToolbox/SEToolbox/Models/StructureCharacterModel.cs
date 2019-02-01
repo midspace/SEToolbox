@@ -10,6 +10,7 @@
     using VRage;
     using VRage.Game;
     using VRage.ObjectBuilders;
+    using Res = SEToolbox.Properties.Resources;
 
     [Serializable]
     public class StructureCharacterModel : StructureBaseModel
@@ -278,20 +279,17 @@
         public override void UpdateGeneralFromEntityBase()
         {
             ClassType = ClassType.Character;
-            // TODO #21
-            string dead = Character.MovementState == MyCharacterMovementEnum.Died ? " | dead" : "";
+            string dead = Character.MovementState == MyCharacterMovementEnum.Died ? $" | {Res.ClsCharacterDead}" : "";
 
             if (string.IsNullOrEmpty(Character.DisplayName))
             {
-                // TODO: #21 localize
-                Description = "NPC";
+                Description = Res.ClsCharacterNPC;
                 DisplayName = Character.CharacterModel + dead;
-                Mass = SpaceEngineersConsts.PlayerMass; // no idea what a body weighs.
+                Mass = SpaceEngineersConsts.PlayerMass; // no idea what an npc body weighs.
             }
             else
             {
-                // TODO: #21 localize
-                Description = "Player";
+                Description = Res.ClsCharacterPlayer;
                 DisplayName = Character.DisplayName + dead;
                 Mass = SpaceEngineersConsts.PlayerMass;
             }

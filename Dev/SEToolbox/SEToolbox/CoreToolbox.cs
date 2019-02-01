@@ -225,11 +225,34 @@
             eWindow.Loaded += (sender, e) =>
             {
                 Splasher.CloseSplash();
-                if (GlobalSettings.Default.WindowLeft.HasValue) eWindow.Left = GlobalSettings.Default.WindowLeft.Value;
-                if (GlobalSettings.Default.WindowTop.HasValue) eWindow.Top = GlobalSettings.Default.WindowTop.Value;
-                if (GlobalSettings.Default.WindowWidth.HasValue) eWindow.Width = GlobalSettings.Default.WindowWidth.Value;
-                if (GlobalSettings.Default.WindowHeight.HasValue) eWindow.Height = GlobalSettings.Default.WindowHeight.Value;
-                if (GlobalSettings.Default.WindowState.HasValue) eWindow.WindowState = GlobalSettings.Default.WindowState.Value;
+
+                double left = GlobalSettings.Default.WindowLeft ?? eWindow.Left;
+                double top = GlobalSettings.Default.WindowTop ?? eWindow.Top;
+                double width = GlobalSettings.Default.WindowWidth ?? eWindow.Width;
+                double height = GlobalSettings.Default.WindowHeight ?? eWindow.Height;
+
+                System.Drawing.Rectangle windowRect = new System.Drawing.Rectangle((int)left, (int)top, (int)width, (int)height);
+                bool isInsideDesktop = false;
+
+                foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
+                {
+                    try
+                    {
+                        isInsideDesktop |= screen.Bounds.IntersectsWith(windowRect);
+                    }
+                    catch
+                    {
+                        // some virtual screens have been know to cause issues.
+                    }
+                }
+                if (isInsideDesktop)
+                {
+                    eWindow.Left = left;
+                    eWindow.Top = top;
+                    eWindow.Width = width;
+                    eWindow.Height = height;
+                    if (GlobalSettings.Default.WindowState.HasValue) eWindow.WindowState = GlobalSettings.Default.WindowState.Value;
+                }
             };
 
             if (!GlobalSettings.Default.TimesStartedTotal.HasValue)

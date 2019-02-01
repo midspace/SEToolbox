@@ -81,7 +81,7 @@
                 if (_isPlayer || _playerId == 0)
                     return _name;
 
-                return string.Format("{0} {1}", _name, Res.ClsCharacterDead);
+                return string.Format("{0} ({1})", _name, Res.ClsCharacterDead);
             }
         }
 

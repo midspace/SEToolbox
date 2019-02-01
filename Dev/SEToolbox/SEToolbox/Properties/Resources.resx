@@ -284,20 +284,21 @@ Size:	{9} m × {10} m × {11} m
 Mass:	{12:#,##0.00} kg
 Blocks:	{13:#,##0}
 Position:	{14}, {15}, {16}
-Total time to produce:	{17:dd} days, {17:hh} hours, {17:mm\:ss\.ff}
+PCU:	{17:#,##0}
+Total time to produce:	{18:dd} days, {18:hh} hours, {18:mm\:ss\.ff}
 
 Construction Requirements:
-Cubes	Count	Mass	Time to Produce
-{18}
-
-Components	Count	Mass	Volume	Time to Produce
+Cubes	Count	Mass	Time to Produce	PCU
 {19}
 
-Ingots	Amount	Mass	Volume	Time to Produce
+Components	Count	Mass	Volume	Time to Produce
 {20}
 
+Ingots	Amount	Mass	Volume	Time to Produce
+{21}
+
 Ore	Amount	Mass	Volume
-{21}</value>
+{22}</value>
   </data>
   <data name="document_view" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\document_view.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -2696,7 +2697,8 @@ Planet Generator:	{17}</value>
     <value>Calculating...</value>
   </data>
   <data name="ClsCharacterDead" xml:space="preserve">
-    <value>(dead)</value>
+    <value>dead</value>
+    <comment>Character state.</comment>
   </data>
   <data name="ClsExportInventoryBag" xml:space="preserve">
     <value>Cannot export InventoryBag currently</value>
@@ -2965,5 +2967,116 @@ Reason: {1}</value>
   </data>
   <data name="CtlPlanetMnuCopyGpsCenter" xml:space="preserve">
     <value>Copy GPS</value>
+  </data>
+  <data name="WnComponentsColCubePCU" xml:space="preserve">
+    <value>PCU</value>
+  </data>
+  <data name="CtlCubeColCubePCU" xml:space="preserve">
+    <value>PCU</value>
+  </data>
+  <data name="CtlCubeColPCU" xml:space="preserve">
+    <value>PCU</value>
+  </data>
+  <data name="CtlCubeTxtPCUToProd" xml:space="preserve">
+    <value>PCU to produce:</value>
+  </data>
+  <data name="ClsReportColPCU" xml:space="preserve">
+    <value>PCU</value>
+  </data>
+  <data name="ClsReportHeaderTotalCubes" xml:space="preserve">
+    <value>Total Cubes</value>
+  </data>
+  <data name="CtlComponentColAccessible" xml:space="preserve">
+    <value>Accessible</value>
+  </data>
+  <data name="CtlComponentColBuildTime" xml:space="preserve">
+    <value>Build Time (h:m:s)</value>
+  </data>
+  <data name="CtlComponentColCubeSize" xml:space="preserve">
+    <value>Cube Size</value>
+  </data>
+  <data name="CtlComponentColfk" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CtlComponentColfl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CtlComponentColIcon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="CtlComponentColMass" xml:space="preserve">
+    <value>Mass (Kg)</value>
+  </data>
+  <data name="CtlComponentColMinedOreRatio" xml:space="preserve">
+    <value>Mined Ore Ratio</value>
+  </data>
+  <data name="CtlComponentColMod" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="CtlComponentColName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CtlComponentColOreName" xml:space="preserve">
+    <value>Ore Name</value>
+  </data>
+  <data name="CtlComponentColPCU" xml:space="preserve">
+    <value>PCU</value>
+  </data>
+  <data name="CtlComponentColRare" xml:space="preserve">
+    <value>Rare</value>
+  </data>
+  <data name="CtlComponentColSize" xml:space="preserve">
+    <value>Size (W×H×D)</value>
+  </data>
+  <data name="CtlComponentColSubType" xml:space="preserve">
+    <value>Sub Type Id</value>
+  </data>
+  <data name="CtlComponentColTexture" xml:space="preserve">
+    <value>Texture</value>
+  </data>
+  <data name="CtlComponentColType" xml:space="preserve">
+    <value>Type Id</value>
+  </data>
+  <data name="CtlComponentColVolume" xml:space="preserve">
+    <value>Volume (L)</value>
+  </data>
+  <data name="CtlComponentTitleComponents" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="CtlComponentTitleCubes" xml:space="preserve">
+    <value>Cubes</value>
+  </data>
+  <data name="CtlComponentTitleItems" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="CtlComponentTitleMaterials" xml:space="preserve">
+    <value>Materials</value>
+  </data>
+  <data name="CtlComponentTitleReport" xml:space="preserve">
+    <value>Component Item Report</value>
+  </data>
+  <data name="ClsCharacterNPC" xml:space="preserve">
+    <value>NPC</value>
+  </data>
+  <data name="ClsCharacterPlayer" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="ClsCockpitOrientationForward" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="ClsCockpitOrientationMixed" xml:space="preserve">
+    <value>Mixed</value>
+  </data>
+  <data name="ClsCockpitOrientationNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="DialogLatestVersionMessage" xml:space="preserve">
+    <value>You have the latest version of SEToolbox.</value>
+  </data>
+  <data name="DialogNoNewVersionTitle" xml:space="preserve">
+    <value>SEToolbox is up to date</value>
+  </data>
+  <data name="DialogPrereleaseVersionMessage" xml:space="preserve">
+    <value>You are running a prerelease version of SEToolbox.</value>
   </data>
 </root>

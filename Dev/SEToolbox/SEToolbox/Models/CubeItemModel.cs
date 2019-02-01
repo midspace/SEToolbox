@@ -45,6 +45,8 @@
 
         private System.Windows.Media.Brush _color;
 
+        private int _pcu;
+
         private ObservableCollection<InventoryEditorModel> _inventory;
 
         #endregion
@@ -303,6 +305,20 @@
             }
         }
 
+        public int PCU
+        {
+            get { return _pcu; }
+
+            set
+            {
+                if (value != _pcu)
+                {
+                    _pcu = value;
+                    OnPropertyChanged(nameof(PCU));
+                }
+            }
+        }
+
         public ObservableCollection<InventoryEditorModel> Inventory
         {
             get { return _inventory; }
@@ -462,11 +478,11 @@
                 this.Owner = newOwnerId;
 
                 var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
-                var dead = " " + Res.ClsCharacterDead;
+                var dead = $" ({Res.ClsCharacterDead})";
                 if (SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData != null)
                 {
                     var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
-                    dead = player.Value == null ? " " + Res.ClsCharacterDead : "";
+                    dead = player.Value == null ? $" ({Res.ClsCharacterDead})" : "";
                 }
                 OwnerName = identity == null ? null : identity.DisplayName + dead;
                 return true;
@@ -480,11 +496,11 @@
             this.BuiltBy = newOwnerId;
 
             var identity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == BuiltBy);
-            var dead = " " + Res.ClsCharacterDead;
+            var dead = $" ({Res.ClsCharacterDead})";
             if (SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData != null)
             {
                 var player = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == BuiltBy);
-                dead = player.Value == null ? " " + Res.ClsCharacterDead : "";
+                dead = player.Value == null ? $" ({Res.ClsCharacterDead})" : "";
             }
             BuiltByName = identity == null ? null : identity.DisplayName + dead;
             return true;
@@ -508,21 +524,22 @@
 
             var ownerIdentity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == Owner);
             var buyiltByIdentity = SpaceEngineersCore.WorldResource.Checkpoint.Identities.FirstOrDefault(p => p.PlayerId == BuiltBy);
-            var ownerDead = " " + Res.ClsCharacterDead;
-            var builtByDead = " " + Res.ClsCharacterDead;
+            var ownerDead = $" ({Res.ClsCharacterDead})";
+            var builtByDead = $" ({Res.ClsCharacterDead})";
             if (SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData != null)
             {
                 var ownerPlayer = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == Owner);
-                ownerDead = ownerPlayer.Value == null ? " " + Res.ClsCharacterDead : "";
+                ownerDead = ownerPlayer.Value == null ? $" ({Res.ClsCharacterDead})" : "";
 
                 var builtByPlayer = SpaceEngineersCore.WorldResource.Checkpoint.AllPlayersData.Dictionary.FirstOrDefault(kvp => kvp.Value.IdentityId == BuiltBy);
-                builtByDead = builtByPlayer.Value == null ? " " + Res.ClsCharacterDead : "";
+                builtByDead = builtByPlayer.Value == null ? $" ({Res.ClsCharacterDead})" : "";
             }
             OwnerName = ownerIdentity == null ? null : ownerIdentity.DisplayName + ownerDead;
             BuiltByName = buyiltByIdentity == null ? null : buyiltByIdentity.DisplayName + builtByDead;
 
             TypeId = definition.Id.TypeId;
             SubtypeId = definition.Id.SubtypeName;
+            PCU = definition.PCU;
 
             if (Inventory == null)
                 Inventory = new ObservableCollection<InventoryEditorModel>();

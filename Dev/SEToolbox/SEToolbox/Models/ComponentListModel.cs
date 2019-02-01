@@ -15,6 +15,7 @@
     using VRage;
     using VRage.FileSystem;
     using VRage.Game;
+    using Res = SEToolbox.Properties.Resources;
 
     public class ComponentListModel : BaseModel
     {
@@ -172,7 +173,7 @@
 
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
 
-            foreach (var cubeDefinition in SpaceEngineersCore.Resources.CubeBlockDefinitions)
+            foreach (Sandbox.Definitions.MyCubeBlockDefinition cubeDefinition in SpaceEngineersCore.Resources.CubeBlockDefinitions)
             {
                 var props = new Dictionary<string, string>();
                 var fields = cubeDefinition.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
@@ -185,12 +186,14 @@
                 CubeAssets.Add(new ComponentItemModel
                 {
                     Name = cubeDefinition.DisplayNameText,
+                    Definition = cubeDefinition,
                     TypeId = cubeDefinition.Id.TypeId,
                     TypeIdString = cubeDefinition.Id.TypeId.ToString(),
                     SubtypeId = cubeDefinition.Id.SubtypeName,
                     TextureFile = (cubeDefinition.Icons == null || cubeDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First())),
                     Time = TimeSpan.FromSeconds(cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec),
                     Accessible = cubeDefinition.Public,
+                    PCU = cubeDefinition.PCU,
                     Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeName),
                     CubeSize = cubeDefinition.CubeSize,
                     Size = new BindableSize3DIModel(cubeDefinition.Size),
@@ -280,8 +283,7 @@
             {
                 #region header
 
-                // TODO: #21 localize
-                writer.BeginDocument("Component Item Report",
+                writer.BeginDocument(Res.CtlComponentTitleReport,
                    @"
 body { background-color: #E6E6FA }
 h1 { font-family: Arial, Helvetica, sans-serif; }
@@ -294,10 +296,9 @@ td.right { text-align: right; }");
 
                 #region Cubes
 
-                // TODO: #21 localize
-                writer.RenderElement(HtmlTextWriterTag.H1, "Cubes");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.CtlComponentTitleCubes);
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Cube Size", "Accessible", "Size (W×H×D)", "Mass (Kg)", "Build Time (h:m:s)", "Mod" });
+                    new[] { Res.CtlComponentColIcon, Res.CtlComponentColName, Res.CtlComponentColType, Res.CtlComponentColSubType, Res.CtlComponentColCubeSize, Res.CtlComponentColPCU, Res.CtlComponentColAccessible, Res.CtlComponentColSize, Res.CtlComponentColMass, Res.CtlComponentColBuildTime, Res.CtlComponentColMod });
 
                 foreach (var asset in CubeAssets)
                 {
@@ -323,6 +324,7 @@ td.right { text-align: right; }");
                     writer.RenderElement(HtmlTextWriterTag.Td, asset.TypeId);
                     writer.RenderElement(HtmlTextWriterTag.Td, asset.SubtypeId);
                     writer.RenderElement(HtmlTextWriterTag.Td, asset.CubeSize);
+                    writer.RenderElement(HtmlTextWriterTag.Td, asset.PCU);
                     writer.RenderElement(HtmlTextWriterTag.Td, new EnumToResouceConverter().Convert(asset.Accessible, typeof(string), null, CultureInfo.CurrentUICulture));
                     writer.RenderElement(HtmlTextWriterTag.Td, "{0}×{1}×{2}", asset.Size.Width, asset.Size.Height, asset.Size.Depth);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "right");
@@ -339,10 +341,9 @@ td.right { text-align: right; }");
 
                 #region Components
 
-                // TODO: #21 localize
-                writer.RenderElement(HtmlTextWriterTag.H1, "Components");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.CtlComponentTitleComponents);
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)", "Mod" });
+                    new[] { Res.CtlComponentColIcon, Res.CtlComponentColName, Res.CtlComponentColType, Res.CtlComponentColSubType, Res.CtlComponentColAccessible, Res.CtlComponentColMass, Res.CtlComponentColVolume, Res.CtlComponentColBuildTime, Res.CtlComponentColMod });
 
                 foreach (var asset in ComponentAssets)
                 {
@@ -384,10 +385,9 @@ td.right { text-align: right; }");
 
                 #region Items
 
-                // TODO: #21 localize
-                writer.RenderElement(HtmlTextWriterTag.H1, "Items");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.CtlComponentTitleItems);
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Icon", "Name", "Type Id", "Sub Type Id", "Accessible", "Mass (Kg)", "Volume (L)", "Build Time (h:m:s)", "Mod" });
+                    new[] { Res.CtlComponentColIcon, Res.CtlComponentColName, Res.CtlComponentColType, Res.CtlComponentColSubType, Res.CtlComponentColAccessible, Res.CtlComponentColMass, Res.CtlComponentColVolume, Res.CtlComponentColBuildTime, Res.CtlComponentColMod });
 
                 foreach (var asset in ItemAssets)
                 {
@@ -429,10 +429,9 @@ td.right { text-align: right; }");
 
                 #region Materials
 
-                // TODO: #21 localize
-                writer.RenderElement(HtmlTextWriterTag.H1, "Materials");
+                writer.RenderElement(HtmlTextWriterTag.H1, Res.CtlComponentTitleMaterials);
                 writer.BeginTable("1", "3", "0",
-                    new[] { "Texture", "Name", "Ore Name", "Rare", "Mined Ore Ratio", "Mod" });
+                    new[] { Res.CtlComponentColTexture, Res.CtlComponentColName, Res.CtlComponentColOreName, Res.CtlComponentColRare, Res.CtlComponentColMinedOreRatio, Res.CtlComponentColMod });
 
                 foreach (var asset in MaterialAssets)
                 {

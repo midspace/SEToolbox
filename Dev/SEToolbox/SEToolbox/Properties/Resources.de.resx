@@ -145,7 +145,8 @@
     <value>Kleine Station</value>
   </data>
   <data name="ClsCharacterDead" xml:space="preserve">
-    <value>(tod)</value>
+    <value>tod</value>
+    <comment>Character state.</comment>
   </data>
   <data name="ClsCubeGridWheelDetached" xml:space="preserve">
     <value>Reifen</value>

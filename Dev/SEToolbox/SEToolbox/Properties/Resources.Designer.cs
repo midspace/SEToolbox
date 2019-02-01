@@ -248,11 +248,56 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (dead).
+        ///   Looks up a localized string similar to dead.
         /// </summary>
         public static string ClsCharacterDead {
             get {
                 return ResourceManager.GetString("ClsCharacterDead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC.
+        /// </summary>
+        public static string ClsCharacterNPC {
+            get {
+                return ResourceManager.GetString("ClsCharacterNPC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player.
+        /// </summary>
+        public static string ClsCharacterPlayer {
+            get {
+                return ResourceManager.GetString("ClsCharacterPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forward.
+        /// </summary>
+        public static string ClsCockpitOrientationForward {
+            get {
+                return ResourceManager.GetString("ClsCockpitOrientationForward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mixed.
+        /// </summary>
+        public static string ClsCockpitOrientationMixed {
+            get {
+                return ResourceManager.GetString("ClsCockpitOrientationMixed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string ClsCockpitOrientationNone {
+            get {
+                return ResourceManager.GetString("ClsCockpitOrientationNone", resourceCulture);
             }
         }
         
@@ -725,6 +770,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string ClsReportColPCU {
+            get {
+                return ResourceManager.GetString("ClsReportColPCU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Position.
         /// </summary>
         public static string ClsReportColPosition {
@@ -820,6 +874,15 @@ namespace SEToolbox.Properties {
         public static string ClsReportHeaderInGameResources {
             get {
                 return ResourceManager.GetString("ClsReportHeaderInGameResources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Cubes.
+        /// </summary>
+        public static string ClsReportHeaderTotalCubes {
+            get {
+                return ResourceManager.GetString("ClsReportHeaderTotalCubes", resourceCulture);
             }
         }
         
@@ -1142,6 +1205,213 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accessible.
+        /// </summary>
+        public static string CtlComponentColAccessible {
+            get {
+                return ResourceManager.GetString("CtlComponentColAccessible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build Time (h:m:s).
+        /// </summary>
+        public static string CtlComponentColBuildTime {
+            get {
+                return ResourceManager.GetString("CtlComponentColBuildTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cube Size.
+        /// </summary>
+        public static string CtlComponentColCubeSize {
+            get {
+                return ResourceManager.GetString("CtlComponentColCubeSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CtlComponentColfk {
+            get {
+                return ResourceManager.GetString("CtlComponentColfk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CtlComponentColfl {
+            get {
+                return ResourceManager.GetString("CtlComponentColfl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon.
+        /// </summary>
+        public static string CtlComponentColIcon {
+            get {
+                return ResourceManager.GetString("CtlComponentColIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mass (Kg).
+        /// </summary>
+        public static string CtlComponentColMass {
+            get {
+                return ResourceManager.GetString("CtlComponentColMass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mined Ore Ratio.
+        /// </summary>
+        public static string CtlComponentColMinedOreRatio {
+            get {
+                return ResourceManager.GetString("CtlComponentColMinedOreRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mod.
+        /// </summary>
+        public static string CtlComponentColMod {
+            get {
+                return ResourceManager.GetString("CtlComponentColMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string CtlComponentColName {
+            get {
+                return ResourceManager.GetString("CtlComponentColName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ore Name.
+        /// </summary>
+        public static string CtlComponentColOreName {
+            get {
+                return ResourceManager.GetString("CtlComponentColOreName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string CtlComponentColPCU {
+            get {
+                return ResourceManager.GetString("CtlComponentColPCU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rare.
+        /// </summary>
+        public static string CtlComponentColRare {
+            get {
+                return ResourceManager.GetString("CtlComponentColRare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size (W×H×D).
+        /// </summary>
+        public static string CtlComponentColSize {
+            get {
+                return ResourceManager.GetString("CtlComponentColSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Type Id.
+        /// </summary>
+        public static string CtlComponentColSubType {
+            get {
+                return ResourceManager.GetString("CtlComponentColSubType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Texture.
+        /// </summary>
+        public static string CtlComponentColTexture {
+            get {
+                return ResourceManager.GetString("CtlComponentColTexture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type Id.
+        /// </summary>
+        public static string CtlComponentColType {
+            get {
+                return ResourceManager.GetString("CtlComponentColType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volume (L).
+        /// </summary>
+        public static string CtlComponentColVolume {
+            get {
+                return ResourceManager.GetString("CtlComponentColVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Components.
+        /// </summary>
+        public static string CtlComponentTitleComponents {
+            get {
+                return ResourceManager.GetString("CtlComponentTitleComponents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cubes.
+        /// </summary>
+        public static string CtlComponentTitleCubes {
+            get {
+                return ResourceManager.GetString("CtlComponentTitleCubes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        public static string CtlComponentTitleItems {
+            get {
+                return ResourceManager.GetString("CtlComponentTitleItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Materials.
+        /// </summary>
+        public static string CtlComponentTitleMaterials {
+            get {
+                return ResourceManager.GetString("CtlComponentTitleMaterials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Component Item Report.
+        /// </summary>
+        public static string CtlComponentTitleReport {
+            get {
+                return ResourceManager.GetString("CtlComponentTitleReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Build.
         /// </summary>
         public static string CtlCubeColBuild {
@@ -1228,6 +1498,15 @@ namespace SEToolbox.Properties {
         public static string CtlCubeColCubeMass {
             get {
                 return ResourceManager.GetString("CtlCubeColCubeMass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string CtlCubeColCubePCU {
+            get {
+                return ResourceManager.GetString("CtlCubeColCubePCU", resourceCulture);
             }
         }
         
@@ -1358,6 +1637,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string CtlCubeColPCU {
+            get {
+                return ResourceManager.GetString("CtlCubeColPCU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to X.
         /// </summary>
         public static string CtlCubeColX {
@@ -1396,20 +1684,20 @@ namespace SEToolbox.Properties {
         ///Mass:	{12:#,##0.00} kg
         ///Blocks:	{13:#,##0}
         ///Position:	{14}, {15}, {16}
-        ///Total time to produce:	{17:dd} days, {17:hh} hours, {17:mm\:ss\.ff}
+        ///PCU:	{17:#,##0}
+        ///Total time to produce:	{18:dd} days, {18:hh} hours, {18:mm\:ss\.ff}
         ///
         ///Construction Requirements:
-        ///Cubes	Count	Mass	Time to Produce
-        ///{18}
-        ///
-        ///Components	Count	Mass	Volume	Time to Produce
+        ///Cubes	Count	Mass	Time to Produce	PCU
         ///{19}
         ///
-        ///Ingots	Amount	Mass	Volume	Time to Produce
+        ///Components	Count	Mass	Volume	Time to Produce
         ///{20}
         ///
-        ///Ore	Amount	Mass	Volume
-        ///{21}.
+        ///Ingots	Amount	Mass	Volume	Time to Produce
+        ///{21}
+        ///
+        ///Ore	Amount	 [rest of string was truncated]&quot;;.
         /// </summary>
         public static string CtlCubeDetail {
             get {
@@ -2134,6 +2422,15 @@ namespace SEToolbox.Properties {
         public static string CtlCubeTxtName {
             get {
                 return ResourceManager.GetString("CtlCubeTxtName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PCU to produce:.
+        /// </summary>
+        public static string CtlCubeTxtPCUToProd {
+            get {
+                return ResourceManager.GetString("CtlCubeTxtPCUToProd", resourceCulture);
             }
         }
         
@@ -3315,6 +3612,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have the latest version of SEToolbox..
+        /// </summary>
+        public static string DialogLatestVersionMessage {
+            get {
+                return ResourceManager.GetString("DialogLatestVersionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lightwave.
         /// </summary>
         public static string DialogLightwaveFiles {
@@ -3370,6 +3676,15 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SEToolbox is up to date.
+        /// </summary>
+        public static string DialogNoNewVersionTitle {
+            get {
+                return ResourceManager.GetString("DialogNoNewVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OFF.
         /// </summary>
         public static string DialogOFFFiles {
@@ -3394,6 +3709,15 @@ namespace SEToolbox.Properties {
         public static string DialogOldSEVersionTitle {
             get {
                 return ResourceManager.GetString("DialogOldSEVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are running a prerelease version of SEToolbox..
+        /// </summary>
+        public static string DialogPrereleaseVersionMessage {
+            get {
+                return ResourceManager.GetString("DialogPrereleaseVersionMessage", resourceCulture);
             }
         }
         
@@ -5199,6 +5523,15 @@ namespace SEToolbox.Properties {
         public static string WnComponentsColCubeName {
             get {
                 return ResourceManager.GetString("WnComponentsColCubeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PCU.
+        /// </summary>
+        public static string WnComponentsColCubePCU {
+            get {
+                return ResourceManager.GetString("WnComponentsColCubePCU", resourceCulture);
             }
         }
         

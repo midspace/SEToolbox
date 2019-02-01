@@ -34,6 +34,8 @@
             }
         }
 
+        public object Definition { get; set; }
+
         public MyObjectBuilderType TypeId { get; set; }
 
         public string TypeIdString { get; set; }
@@ -86,6 +88,8 @@
         }
 
         public bool IsMod { get; set; }
+
+        public int PCU { get; set; }
 
         #endregion
     }
