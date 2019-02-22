@@ -815,7 +815,7 @@
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action, null, null);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -889,7 +889,7 @@
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action, null, null);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -1084,7 +1084,7 @@
                 e.Volume = 0xFF;
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[06].Index, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[06].Index, null, action, null, null);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -1152,7 +1152,7 @@
                 }
             };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action, null, null);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 

@@ -1147,23 +1147,21 @@
 
         // mapped from: Sandbox.Game.Entities.MyVoxelBase because it's private.
         // can't be bothered using Reflection.
-        public ulong UpdateVoxelShape(OperationType type, MyShape shape, byte material)
+        public void UpdateVoxelShape(OperationType type, MyShape shape, byte material)
         {
-            ulong result = 0uL;
             switch (type)
             {
                 case OperationType.Fill:
-                    result = MyVoxelGenerator.FillInShape(this, shape, material);
+                    MyVoxelGenerator.FillInShape(this, shape, material);
                     break;
                 case OperationType.Paint:
                     MyVoxelGenerator.PaintInShape(this, shape, material);
                     break;
                 case OperationType.Cut:
                     // MySession.Settings.EnableVoxelDestruction has to be enabled for Shapes to be deleted.
-                    result = MyVoxelGenerator.CutOutShape(this, shape);
+                    MyVoxelGenerator.CutOutShape(this, shape);
                     break;
             }
-            return result;
         }
     }
 }

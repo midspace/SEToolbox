@@ -719,9 +719,6 @@
                 texture = voxelMaterialDefinition.RenderParams.TextureSets[0].NormalGlossXZnY;
 
             if (texture == null)
-                texture = voxelMaterialDefinition.DiffuseXZ;
-
-            if (texture == null)
                 // The VoxelHandPreview texture is oddly shaped, and not suitable for SEToolbox.
                 // It is a texture of last resort.
                 texture = voxelMaterialDefinition.VoxelHandPreview;

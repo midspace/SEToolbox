@@ -75,8 +75,8 @@
             VRageRender.MyRenderProxy.Initialize(new MyNullRender());
             // We create a whole instance of MySandboxGame!
             // If this is causing an exception, then there is a missing dependency.
-            MySandboxGame gameTemp = new MySandboxGame(null);
-          
+            MySandboxGame gameTemp = new MySandboxGame(new string[] { "-skipintro" });
+
             // creating MySandboxGame will reset the CurrentUICulture, so I have to reapply it.
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfoByIetfLanguageTag(GlobalSettings.Default.LanguageCode);
             SpaceEngineersApi.LoadLocalization();
