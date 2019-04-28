@@ -46,3 +46,13 @@ The Space Engineers logo was sourced from spaceengineerswiki.com under creative 
 SEToolbox was started in 2013 soon after Space Engineers was released for Early Access, and has been worked on in my free time.
 There is no requirement for any individual to donate.
 [![](https://www.paypalobjects.com/en_AU/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5V7JL6CDGHCYL)
+
+
+---
+
+### Maintainence only
+
+I [midspace](https://github.com/midspace) have stopped working on Space Engineers related stuff.
+I will only be fixing issues that cause SEToolbox to crash. I won't be adding or enhancing any further features.
+There is a lengthy post [here](https://forum.keenswh.com/threads/7402115/) on the Keen forums about this decision.
+I'm open to other developers taking over, or at least contributing further to SEToolbox.
