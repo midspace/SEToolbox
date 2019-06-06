@@ -19,8 +19,10 @@
             "HavokWrapper.dll",                 // x64
             "msvcp120.dll",                     // SteamSDK dependancy.
             "msvcr120.dll",                     // SteamSDK dependancy.
+            "protobuf-net.dll",                 // 1.191.x requirement.
             "Sandbox.Common.dll",               // AnyCPU
             "Sandbox.Game.dll",                 // x64
+            "Sandbox.Game.XmlSerializers.dll",  // 1.191.x requirement.
             "Sandbox.Graphics.dll",             // x64
             "Sandbox.RenderDirect.dll",         // x64      1.187.x requirement.
             "SharpDX.dll",                      // AnyCPU
@@ -41,10 +43,11 @@
             "VRage.Library.dll",                // AnyCPU
             "VRage.Math.dll",                   // AnyCPU
             "VRage.Native.dll",                 // x64
-            "VRage.OpenVRWrapper.dll",          // x64
+            "VRage.NativeWrapper.dll",          // 1.191.x requirement.
             "VRage.Render.dll",                 // AnyCPU
             "VRage.Render11.dll",               // x64
             "System.Data.SQLite.dll",           // AnyCPU  1.171.x requirement
+            "netstandard.dll",                  // x64     1.191.x requirement
         };
 
         //internal static readonly string[] CoreMedievalEngineersFiles = {

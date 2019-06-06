@@ -73,6 +73,8 @@
             ReflectionUtil.ConstructField(mySession, "m_sessionComponents"); // Required as the above code doesn't populate it during ctor of MySession.
             mySession.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
 
+            VRage.MyVRage.Init(new ToolboxPlatform());
+
             // Assign the instance back to the static.
             Sandbox.Game.World.MySession.Static = mySession;
 

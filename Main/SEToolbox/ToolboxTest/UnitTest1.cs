@@ -125,26 +125,6 @@
             Assert.IsTrue(File.Exists(Path.Combine(folder, SpaceEngineersConsts.SandBoxCheckpointFilename)), "Destination file must exist");
         }
 
-        // We're not using the zip-pack from folder currently.
-        [Ignore]
-        [TestMethod]
-        public void ExtractZipAndRepack()
-        {
-            const string filename = @".\TestAssets\Sample World.sbw";
-            const string folder = @".\TestOutput\Sample World Repack";
-
-            ZipTools.MakeClearDirectory(folder);
-
-            // Keen's API doesn't know difference between file and folder.
-            MyZipArchive.ExtractToDirectory(filename, folder);
-
-            const string newFilename = @".\TestOutput\New World.sbw";
-
-            MyZipArchive.CreateFromDirectory(folder, newFilename, DeflateOptionEnum.Maximum, false);
-
-            Assert.IsTrue(File.Exists(newFilename), "Destination file must exist");
-        }
-
         [TestMethod, TestCategory("UnitTest")]
         public void ExtractContentFromCompressedSandbox()
         {

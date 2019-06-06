@@ -420,11 +420,11 @@
         private static void AddLanguage(MyLanguagesEnum id, string cultureName, string subcultureName = null, string displayName = null, float guiTextScale = 1f, bool isCommunityLocalized = true)
         {
             // Create an empty instance of LanguageDescription.
-            MyTexts.LanguageDescription languageDescription = ReflectionUtil.ConstructPrivateClass<MyTexts.LanguageDescription>(
+            MyTexts.MyLanguageDescription languageDescription = ReflectionUtil.ConstructPrivateClass<MyTexts.MyLanguageDescription>(
                 new Type[] { typeof(MyLanguagesEnum), typeof(string), typeof(string), typeof(string), typeof(float), typeof(bool) },
                 new object[] { id, displayName, cultureName, subcultureName, guiTextScale, isCommunityLocalized });
 
-            Dictionary<MyLanguagesEnum, MyTexts.LanguageDescription> m_languageIdToLanguage = typeof(MyTexts).GetStaticField<Dictionary<MyLanguagesEnum, MyTexts.LanguageDescription>>("m_languageIdToLanguage");
+            Dictionary<MyLanguagesEnum, MyTexts.MyLanguageDescription> m_languageIdToLanguage = typeof(MyTexts).GetStaticField<Dictionary<MyLanguagesEnum, MyTexts.MyLanguageDescription>>("m_languageIdToLanguage");
             Dictionary<string, MyLanguagesEnum> m_cultureToLanguageId = typeof(MyTexts).GetStaticField<Dictionary<string, MyLanguagesEnum>>("m_cultureToLanguageId");
 
             if (!m_languageIdToLanguage.ContainsKey(id))
