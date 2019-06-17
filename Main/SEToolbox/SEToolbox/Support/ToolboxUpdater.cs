@@ -17,8 +17,6 @@
         /// </summary>
         internal static readonly string[] CoreSpaceEngineersFiles = {
             "HavokWrapper.dll",                 // x64
-            "msvcp120.dll",                     // SteamSDK dependancy.
-            "msvcr120.dll",                     // SteamSDK dependancy.
             "protobuf-net.dll",                 // 1.191.x requirement.
             "Sandbox.Common.dll",               // AnyCPU
             "Sandbox.Game.dll",                 // x64
@@ -48,6 +46,13 @@
             "VRage.Render11.dll",               // x64
             "System.Data.SQLite.dll",           // AnyCPU  1.171.x requirement
             "netstandard.dll",                  // x64     1.191.x requirement
+            "System.Memory.dll",                // MSIL     1.191.x requirement for voxels
+            "System.Runtime.CompilerServices.Unsafe.dll",  // MSIL     1.191.x requirement for voxels
+        };
+
+        internal static readonly string[] OptionalSpaceEngineersFiles = {
+            "msvcp120.dll",                     // VRage.Native dependancy.  // testing dropping it these. Keen may have made a mistake by removing them from DS deployment.
+            "msvcr120.dll",                     // VRage.Native dependancy.
         };
 
         //internal static readonly string[] CoreMedievalEngineersFiles = {
@@ -192,6 +197,16 @@
             var appFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             foreach (var filename in CoreSpaceEngineersFiles)
+            {
+                var sourceFile = Path.Combine(baseFilePath, filename);
+
+                if (File.Exists(sourceFile))
+                {
+                    File.Copy(sourceFile, Path.Combine(appFilePath, filename), true);
+                }
+            }
+
+            foreach (var filename in OptionalSpaceEngineersFiles)
             {
                 var sourceFile = Path.Combine(baseFilePath, filename);
 

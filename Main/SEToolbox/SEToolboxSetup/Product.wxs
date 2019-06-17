@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.191.20.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.191.20.2" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <!-- DOS 8.3 Format required for cab filenames. -->
     <Media Id="1" Cabinet="SEToolbx.cab" EmbedCab="yes" />
@@ -47,8 +47,6 @@
               <RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
 
               <RemoveFile Id="fileB618365481BD47F5A21AA2A60F2C9AA4" Name="HavokWrapper.dll" On="install"/>
-              <RemoveFile Id="fileBB8CDBE0025D4F299FF4F0FC84996D5A" Name="msvcp120.dll" On="install"/>
-              <RemoveFile Id="file8F379924D24745828B0013B8E95CAD54" Name="msvcr120.dll" On="install"/>
               <RemoveFile Id="fileB21632CF25FB4FF5BDFD6291AFF251EA" Name="protobuf-net.dll" On="install"/>
               <RemoveFile Id="file61275B9FC2AE484BA7A2BDB7459A3647" Name="Sandbox.Common.dll" On="install"/>
               <RemoveFile Id="file9BC4F4C590AF4888B721F2301140EB5A" Name="Sandbox.Game.dll" On="install"/>
@@ -78,6 +76,12 @@
               <RemoveFile Id="fileFCCDCA64927F4EEDB783F6D983838557" Name="VRage.Render11.dll" On="install"/>
               <RemoveFile Id="file907C5A94D3964E7C86FF6FD07B8A46EA" Name="System.Data.SQLite.dll" On="install"/>
               <RemoveFile Id="fileCC613947DC824B6096558AAF65499872" Name="netstandard.dll" On="install"/>
+              <RemoveFile Id="file0038C98A0ED9448CBBCC6B0E1431B0E4" Name="System.Memory.dll" On="install"/>
+              <RemoveFile Id="file90F8B278BC254F369682B67A11C83189" Name="System.Runtime.CompilerServices.Unsafe.dll" On="install"/>
+
+              <!-- Optional files. As these may not be in the Dedicated Server deployment. -->
+              <RemoveFile Id="fileBB8CDBE0025D4F299FF4F0FC84996D5A" Name="msvcp120.dll" On="install"/>
+              <RemoveFile Id="file8F379924D24745828B0013B8E95CAD54" Name="msvcr120.dll" On="install"/>
 
               <!--Obsolete. To be removed in the future. Retained temporarily for the installer to cleanup. -->
               <RemoveFile Id="file26225324B8BC443AB0B4DE7161E48FCF" Name="SteamSDK.dll" On="install"/>
