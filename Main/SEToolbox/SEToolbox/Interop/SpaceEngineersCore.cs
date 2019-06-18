@@ -75,6 +75,9 @@
 
             VRage.MyVRage.Init(new ToolboxPlatform());
 
+            // change for the Clone() method to use XML cloning instead of Protobuf because of issues with MyObjectBuilder_CubeGrid.Clone()
+            ReflectionUtil.SetFieldValue(typeof(VRage.ObjectBuilders.MyObjectBuilderSerializer), "ENABLE_PROTOBUFFERS_CLONING", false);
+
             // Assign the instance back to the static.
             Sandbox.Game.World.MySession.Static = mySession;
 
