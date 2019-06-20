@@ -3,6 +3,8 @@
     using Octokit;
     using System;
     using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http;
     using System.Text.RegularExpressions;
 
     /// <summary>
@@ -26,7 +28,22 @@
 
             // Accessing GitHub API directly for updates.
             GitHubClient client = new GitHubClient(new ProductHeaderValue("SEToolbox-Updater"));
-            Release latest = client.Repository.Release.GetLatest("midspace", "SEToolbox").Result;
+            Release latest;
+            try
+            {
+                latest = client.Repository.Release.GetLatest("midspace", "SEToolbox").Result;
+            }
+            catch (Exception ex)
+            {
+                // Network connection error.
+                if (ex?.InnerException is HttpRequestException ||
+                    ex?.InnerException?.InnerException is WebException)
+                {
+                    return null;
+                }
+
+                throw;
+            }
 
             var item = new ApplicationRelease { Name = latest.Name, Link = latest.HtmlUrl, Version = GetVersion(latest.TagName) };
             Version ignoreVersion;

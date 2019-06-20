@@ -3079,4 +3079,10 @@ Reason: {1}</value>
   <data name="DialogPrereleaseVersionMessage" xml:space="preserve">
     <value>You are running a prerelease version of SEToolbox.</value>
   </data>
+  <data name="DialogNoNetworkMessage" xml:space="preserve">
+    <value>SEToolbox could not connect to the internet to check for an update. Please check your internet connection or filewall settings before trying again.</value>
+  </data>
+  <data name="DialogNoNetworkTitle" xml:space="preserve">
+    <value>Can not find update</value>
+  </data>
 </root>
