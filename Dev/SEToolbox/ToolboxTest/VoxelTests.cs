@@ -126,7 +126,7 @@
             var lengthNew = new FileInfo(fileNew).Length;
 
             Assert.AreEqual(88299, lengthOriginal, "File size must match.");
-            Assert.AreEqual(134221, lengthNew, "File size must match.");
+            Assert.AreEqual(134301, lengthNew, "File size must match.");
         }
 
         [TestMethod, TestCategory("UnitTest")]
@@ -185,7 +185,7 @@
             var lengthNew = new FileInfo(fileNew).Length;
 
             Assert.AreEqual(72296, lengthOriginal, "File size must match.");
-            Assert.AreEqual(134221, lengthNew, "File size must match.");
+            Assert.AreEqual(134301, lengthNew, "File size must match.");
         }
 
         [TestMethod, TestCategory("UnitTest")]
@@ -244,7 +244,7 @@
             var lengthNew = new FileInfo(fileNew).Length;
 
             Assert.AreEqual(145351, lengthOriginal, "Original File size must match.");
-            Assert.AreEqual(144914, lengthNew, "New File size must match.");
+            Assert.AreEqual(144997, lengthNew, "New File size must match.");
         }
 
         [TestMethod, TestCategory("UnitTest")]
@@ -339,7 +339,7 @@
             var lengthNew = new FileInfo(fileNew).Length;
 
             Assert.AreEqual(9431, lengthOriginal, "Original file size must match.");
-            Assert.AreEqual(14542, lengthNew, "New file size must match.");
+            Assert.AreEqual(14618, lengthNew, "New file size must match.");
 
             var voxelMapOriginal = new MyVoxelMap();
             voxelMapOriginal.Load(fileOriginal);
@@ -574,7 +574,7 @@
             var lengthNew = new FileInfo(fileNew).Length;
             Dictionary<string, long> assetNameCount = voxelMap.RefreshAssets();
 
-            Assert.AreEqual(909, lengthNew, "New file size must match.");
+            Assert.AreEqual(984, lengthNew, "New file size must match.");
 
             Assert.AreEqual(16, voxelMap.Size.X, "Voxel Bounding size must match.");
             Assert.AreEqual(16, voxelMap.Size.Y, "Voxel Bounding size must match.");
@@ -1093,7 +1093,7 @@
 
             var lengthNew = new FileInfo(fileNew).Length;
 
-            Assert.AreEqual(376, lengthNew, "New file size must match.");
+            Assert.AreEqual(437, lengthNew, "New file size must match.");
 
             Assert.AreEqual(66846720, voxelMap.VoxCells, "Voxel Cells must match."); // 255 * 64 * 64 * 64
             Assert.AreEqual(64, voxelMap.Size.X, "Voxel Bounding size must match.");

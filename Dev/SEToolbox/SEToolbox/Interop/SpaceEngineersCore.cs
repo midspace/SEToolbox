@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Reflection;
@@ -10,7 +9,6 @@
     using Sandbox;
     using Sandbox.Engine.Utils;
     using Sandbox.Engine.Voxels;
-    using Sandbox.Game;
     using Sandbox.Game.GameSystems;
     using Sandbox.Game.Multiplayer;
     using SEToolbox.Models;
@@ -52,22 +50,20 @@
 
             MyFileSystem.ExePath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(FastResourceLock)).Location);
 
+            MyLog.Default = MySandboxGame.Log;
             SpaceEngineersGame.SetupBasicGameInfo();
             _startup = new MyCommonProgramStartup(new string[] { });
-
-            var appDataPath = _startup.GetAppDataPath();
-            MyInitializer.InvokeBeforeRun(AppId, MyPerGameSettings.BasicGameInfo.ApplicationName + "SEToolbox", appDataPath);
-            MyInitializer.InitCheckSum();
 
             MyFileSystem.Reset();
             MyFileSystem.Init(contentPath, userDataPath);
 
             _steamService = new MySteamService(MySandboxGame.IsDedicated, AppId);
             MyServiceManager.Instance.AddService<IMyGameService>(_steamService);
+            
+            MyFileSystem.InitUserSpecific(SpaceEngineersWorkshop.MySteam.UserId.ToString()); // This sets the save file/path to load games from.
+            //MyFileSystem.InitUserSpecific(null);
+            //SpaceEngineersWorkshop.MySteam.Dispose();
 
-            MyFileSystem.InitUserSpecific(_steamService.UserId.ToString());
-
-            MyLog.Default = MySandboxGame.Log;
             MySandboxGame.Config = new MyConfig("SpaceEngineers.cfg"); // TODO: Is specific to SE, not configurable to ME.
             MySandboxGame.Config.Load();
 

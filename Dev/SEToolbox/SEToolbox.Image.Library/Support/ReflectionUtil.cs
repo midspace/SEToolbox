@@ -148,6 +148,38 @@
             return (T)field.GetValue(null);
         }
 
+        private static FieldInfo GetFieldInfo(Type type, string fieldName)
+        {
+            FieldInfo fieldInfo;
+            do
+            {
+                fieldInfo = type.GetField(fieldName,
+                       BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                type = type.BaseType;
+            }
+            while (fieldInfo == null && type != null);
+            return fieldInfo;
+        }
+
+        public static void SetFieldValue(Type type, string fieldName, object val)
+        {
+            FieldInfo fieldInfo = GetFieldInfo(type, fieldName);
+            if (fieldInfo == null)
+                throw new ArgumentOutOfRangeException("fieldName",
+                  string.Format("Couldn't find field {0} in type {1}", fieldName, type.FullName));
+            fieldInfo.SetValue(type, val);
+        }
+
+        public static void SetObjectFieldValue(object obj, string fieldName, object val)
+        {
+            Type type = obj.GetType();
+            FieldInfo fieldInfo = GetFieldInfo(type, fieldName);
+            if (fieldInfo == null)
+                throw new ArgumentOutOfRangeException("fieldName",
+                  string.Format("Couldn't find field {0} in type {1}", fieldName, type.FullName));
+            fieldInfo.SetValue(obj, val);
+        }
+
         public static object CreateInstance(Type type)
         {
             var ctor = type.GetConstructors().First();

@@ -289,9 +289,9 @@
             if (_resources == null || Checkpoint == null || Checkpoint.Mods == null)
                 return;
 
-            //var cancelToken = new MyWorkshop.CancelToken();
+            var cancelToken = new MyWorkshop.CancelToken();
             //MyWorkshop.ResultData result = MyWorkshop.DownloadWorldModsBlocking(Checkpoint.Mods, cancelToken);
-            //MyWorkshop.ResultData result = SpaceEngineersWorkshop.DownloadWorldModsBlocking(Checkpoint.Mods, cancelToken);
+            MyWorkshop.ResultData result = SpaceEngineersWorkshop.DownloadWorldModsBlocking(Checkpoint.Mods, cancelToken);
             // TODO: we don't actually need to download the mods.
             // Doing that requires adding a progress bar, counters, etc.,
             // All we need is to have SE validate the existing downloads, and update the private field with the Mod location.
