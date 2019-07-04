@@ -884,7 +884,11 @@
         public void OpenUpdatesLinkExecuted()
         {
             var update = CodeRepositoryReleases.CheckForUpdates(new Version(), true);
-            if (update.Version == GlobalSettings.GetAppVersion())
+            if (update == null)
+            {
+                MessageBox.Show(Res.DialogNoNetworkMessage, Res.DialogNoNetworkTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (update.Version == GlobalSettings.GetAppVersion())
             {
                 MessageBox.Show(Res.DialogLatestVersionMessage, Res.DialogNoNewVersionTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

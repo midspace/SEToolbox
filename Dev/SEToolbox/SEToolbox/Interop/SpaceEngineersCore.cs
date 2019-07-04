@@ -29,7 +29,8 @@
     /// </summary>
     public class SpaceEngineersCore
     {
-        protected static readonly uint AppId = 244850;
+        protected static readonly uint AppId = 244850; // Game
+        //protected static readonly uint AppId = 298740; // Dedicated Server
 
         #region fields
 
@@ -93,6 +94,11 @@
             Sandbox.Game.World.MySession mySession = ReflectionUtil.ConstructPrivateClass<Sandbox.Game.World.MySession>(new Type[0], new object[0]);
             ReflectionUtil.ConstructField(mySession, "m_sessionComponents"); // Required as the above code doesn't populate it during ctor of MySession.
             mySession.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
+
+            VRage.MyVRage.Init(new ToolboxPlatform());
+
+            // change for the Clone() method to use XML cloning instead of Protobuf because of issues with MyObjectBuilder_CubeGrid.Clone()
+            ReflectionUtil.SetFieldValue(typeof(VRage.ObjectBuilders.MyObjectBuilderSerializer), "ENABLE_PROTOBUFFERS_CLONING", false);
 
             // Assign the instance back to the static.
             Sandbox.Game.World.MySession.Static = mySession;

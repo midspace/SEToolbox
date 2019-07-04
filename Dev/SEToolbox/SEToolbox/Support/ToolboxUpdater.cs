@@ -17,10 +17,10 @@
         /// </summary>
         internal static readonly string[] CoreSpaceEngineersFiles = {
             "HavokWrapper.dll",                 // x64
-            "msvcp120.dll",                     // SteamSDK dependancy.
-            "msvcr120.dll",                     // SteamSDK dependancy.
+            "protobuf-net.dll",                 // 1.191.x requirement.
             "Sandbox.Common.dll",               // AnyCPU
             "Sandbox.Game.dll",                 // x64
+            "Sandbox.Game.XmlSerializers.dll",  // 1.191.x requirement.
             "Sandbox.Graphics.dll",             // x64
             "Sandbox.RenderDirect.dll",         // x64      1.187.x requirement.
             "SharpDX.dll",                      // AnyCPU
@@ -41,12 +41,19 @@
             "VRage.Library.dll",                // AnyCPU
             "VRage.Math.dll",                   // AnyCPU
             "VRage.Native.dll",                 // x64
-            "VRage.OpenVRWrapper.dll",          // x64
+            "VRage.NativeWrapper.dll",          // 1.191.x requirement.
             "VRage.Render.dll",                 // AnyCPU
             "VRage.Render11.dll",               // x64
             "VRage.Steam.dll",                  // x64     1.188.x requirement.
             "Steamworks.NET.dll",               // x64     1.188.x requirement.
             "System.Data.SQLite.dll",           // AnyCPU  1.171.x requirement
+            "netstandard.dll",                  // x64     1.191.x requirement
+            "System.Memory.dll",                // MSIL     1.191.x requirement for voxels
+            "System.Runtime.CompilerServices.Unsafe.dll",  // MSIL     1.191.x requirement for voxels
+        };
+        internal static readonly string[] OptionalSpaceEngineersFiles = {
+            "msvcp120.dll",                     // VRage.Native dependancy.  // testing dropping it these. Keen may have made a mistake by removing them from DS deployment.
+            "msvcr120.dll",                     // VRage.Native dependancy.
         };
 
         //internal static readonly string[] CoreMedievalEngineersFiles = {
@@ -191,6 +198,16 @@
             var appFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             foreach (var filename in CoreSpaceEngineersFiles)
+            {
+                var sourceFile = Path.Combine(baseFilePath, filename);
+
+                if (File.Exists(sourceFile))
+                {
+                    File.Copy(sourceFile, Path.Combine(appFilePath, filename), true);
+                }
+            }
+
+            foreach (var filename in OptionalSpaceEngineersFiles)
             {
                 var sourceFile = Path.Combine(baseFilePath, filename);
 

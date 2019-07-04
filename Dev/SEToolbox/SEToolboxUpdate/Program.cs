@@ -209,6 +209,23 @@
                 }
             }
 
+            foreach (var filename in ToolboxUpdater.OptionalSpaceEngineersFiles)
+            {
+                var sourceFile = Path.Combine(baseFilePath, filename);
+
+                try
+                {
+                    if (File.Exists(sourceFile))
+                    {
+                        File.Copy(sourceFile, Path.Combine(appFilePath, filename), true);
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
 

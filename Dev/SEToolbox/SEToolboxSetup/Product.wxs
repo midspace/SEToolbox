@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.189.33.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.191.20.3" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <!-- DOS 8.3 Format required for cab filenames. -->
     <Media Id="1" Cabinet="SEToolbx.cab" EmbedCab="yes" />
@@ -47,10 +47,10 @@
               <RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
 
               <RemoveFile Id="fileB618365481BD47F5A21AA2A60F2C9AA4" Name="HavokWrapper.dll" On="install"/>
-              <RemoveFile Id="fileBB8CDBE0025D4F299FF4F0FC84996D5A" Name="msvcp120.dll" On="install"/>
-              <RemoveFile Id="file8F379924D24745828B0013B8E95CAD54" Name="msvcr120.dll" On="install"/>
+              <RemoveFile Id="fileB21632CF25FB4FF5BDFD6291AFF251EA" Name="protobuf-net.dll" On="install"/>
               <RemoveFile Id="file61275B9FC2AE484BA7A2BDB7459A3647" Name="Sandbox.Common.dll" On="install"/>
               <RemoveFile Id="file9BC4F4C590AF4888B721F2301140EB5A" Name="Sandbox.Game.dll" On="install"/>
+              <RemoveFile Id="fileF53B8732F7FD45BFA790800540A31B31" Name="Sandbox.Game.XmlSerializers.dll" On="install"/>
               <RemoveFile Id="file882FC5E56A994EC1AFBBCBA50226393C" Name="Sandbox.Graphics.dll" On="install"/>
               <RemoveFile Id="file350A25B55AB34B0EB1F6C2870FC13297" Name="Sandbox.RenderDirect.dll" On="install"/>
               <RemoveFile Id="file25850DB516724E6BB45D499D5A4BCF94" Name="SharpDX.dll" On="install"/>
@@ -71,17 +71,24 @@
               <RemoveFile Id="file3B25B4B8D8824BFBBC59FF95EB66E88F" Name="VRage.Library.dll" On="install"/>
               <RemoveFile Id="file97E0990BBDDF40A68ED535BF1D64AF8E" Name="VRage.Math.dll" On="install"/>
               <RemoveFile Id="file7EB6EBCDF35A45D489E0E5C15A781571" Name="VRage.Native.dll" On="install"/>
-              <RemoveFile Id="file80CFE451E8C94A27840BE5E85B4742B2" Name="VRage.OpenVRWrapper.dll" On="install"/>
+              <RemoveFile Id="file9FD225BE9EE341EDA625425997A2258C" Name="VRage.NativeWrapper.dll" On="install"/>
               <RemoveFile Id="file992F750DB5744F849111CEA39D0CB16F" Name="VRage.Render.dll" On="install"/>
               <RemoveFile Id="fileFCCDCA64927F4EEDB783F6D983838557" Name="VRage.Render11.dll" On="install"/>
               <RemoveFile Id="fileB2C8DC3FA94C414C9757A5DFF58B2492" Name="VRage.Steam.dll" On="install"/>
               <RemoveFile Id="file1C025ED2F8164373814381AF0E043492" Name="Steamworks.NET.dll" On="install"/>
               <RemoveFile Id="file907C5A94D3964E7C86FF6FD07B8A46EA" Name="System.Data.SQLite.dll" On="install"/>
+              <RemoveFile Id="fileCC613947DC824B6096558AAF65499872" Name="netstandard.dll" On="install"/>
+              <RemoveFile Id="file0038C98A0ED9448CBBCC6B0E1431B0E4" Name="System.Memory.dll" On="install"/>
+              <RemoveFile Id="file90F8B278BC254F369682B67A11C83189" Name="System.Runtime.CompilerServices.Unsafe.dll" On="install"/>
+
+              <!-- Optional files. As these may not be in the Dedicated Server deployment. -->
+              <RemoveFile Id="fileBB8CDBE0025D4F299FF4F0FC84996D5A" Name="msvcp120.dll" On="install"/>
+              <RemoveFile Id="file8F379924D24745828B0013B8E95CAD54" Name="msvcr120.dll" On="install"/>
 
               <!--Obsolete. To be removed in the future. Retained temporarily for the installer to cleanup. -->
               <RemoveFile Id="file26225324B8BC443AB0B4DE7161E48FCF" Name="SteamSDK.dll" On="install"/>
               <RemoveFile Id="file4CCC1D5F89354510910F24ECF6734F72" Name="ICSharpCode.SharpZipLib.dll" On="install"/>
-
+              <RemoveFile Id="file80CFE451E8C94A27840BE5E85B4742B2" Name="VRage.OpenVRWrapper.dll" On="install"/>
 
               <RegistryKey Root="HKLM" Key="Software\MidSpace\SEToolbox">
                 <RegistryValue Id="SEToolboxRegInstallDir" Type="string" Name="InstallDir" Value="[APPLICATIONFOLDER]" />

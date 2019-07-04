@@ -252,23 +252,23 @@
             double num7 = value.Y * value.W;
             double num8 = value.Y * value.Z;
             double num9 = value.X * value.W;
-            MatrixD result;
-            result.M11 = (1.0d - 2.0d * (num2 + num3));
-            result.M12 = (2.0d * (num4 + num5));
-            result.M13 = (2.0d * (num6 - num7));
-            result.M14 = 0d;
-            result.M21 = (2.0d * (num4 - num5));
-            result.M22 = (1.0d - 2.0d * (num3 + num));
-            result.M23 = (2.0d * (num8 + num9));
-            result.M24 = 0d;
-            result.M31 = (2.0d * (num6 + num7));
-            result.M32 = (2.0d * (num8 - num9));
-            result.M33 = (1.0d - 2.0d * (num2 + num));
-            result.M34 = 0d;
-            result.M41 = 0d;
-            result.M42 = 0d;
-            result.M43 = 0d;
-            result.M44 = 1d;
+            MatrixD result = new MatrixD(
+                (1.0d - 2.0d * (num2 + num3)),
+                (2.0d * (num4 + num5)),
+                (2.0d * (num6 - num7)),
+                0d,
+                (2.0d * (num4 - num5)),
+                (1.0d - 2.0d * (num3 + num)),
+                (2.0d * (num8 + num9)),
+                0d,
+                (2.0d * (num6 + num7)),
+                (2.0d * (num8 - num9)),
+                (1.0d - 2.0d * (num2 + num)),
+                0d,
+                0d,
+                0d,
+                0d,
+                1d);
             return result;
         }
 
@@ -508,10 +508,7 @@
             double x = value.X * (1.0 - num10 - num12) + value.Y * (num8 - num6) + value.Z * (num9 + num5);
             double y = value.X * (num8 + num6) + value.Y * (1.0 - num7 - num12) + value.Z * (num11 - num4);
             double z = value.X * (num9 - num5) + value.Y * (num11 + num4) + value.Z * (1.0 - num7 - num10);
-            Vector3D result;
-            result.X = x;
-            result.Y = y;
-            result.Z = z;
+            Vector3D result = new Vector3D(x, y, z);
             return result;
         }
 

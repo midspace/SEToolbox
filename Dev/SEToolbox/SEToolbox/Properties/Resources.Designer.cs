@@ -3676,6 +3676,24 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SEToolbox could not connect to the internet to check for an update. Please check your internet connection or filewall settings before trying again..
+        /// </summary>
+        public static string DialogNoNetworkMessage {
+            get {
+                return ResourceManager.GetString("DialogNoNetworkMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can not find update.
+        /// </summary>
+        public static string DialogNoNetworkTitle {
+            get {
+                return ResourceManager.GetString("DialogNoNetworkTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SEToolbox is up to date.
         /// </summary>
         public static string DialogNoNewVersionTitle {
