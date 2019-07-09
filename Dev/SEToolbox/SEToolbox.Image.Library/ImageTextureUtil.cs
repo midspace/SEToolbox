@@ -502,7 +502,16 @@
                         }
                         else
                         {
-                            reader.BaseStream.Seek(size, SeekOrigin.Current);
+                            if (stream.CanSeek)
+                            {
+                                reader.BaseStream.Seek(size, SeekOrigin.Current);
+                            }
+                            else
+                            {
+                                // hack for VRage.Compression.MyStreamWrapper
+                                for (int i = 0; i < size; i++)
+                                    reader.BaseStream.ReadByte();
+                            }
                         }
 
                         w = w >> 1;

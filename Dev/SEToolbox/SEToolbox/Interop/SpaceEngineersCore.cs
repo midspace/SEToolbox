@@ -9,6 +9,7 @@
     using Sandbox;
     using Sandbox.Engine.Utils;
     using Sandbox.Engine.Voxels;
+    using Sandbox.Game;
     using Sandbox.Game.GameSystems;
     using Sandbox.Game.Multiplayer;
     using SEToolbox.Models;
@@ -54,9 +55,16 @@
             SpaceEngineersGame.SetupBasicGameInfo();
             _startup = new MyCommonProgramStartup(new string[] { });
 
+            //var appDataPath = _startup.GetAppDataPath();
+            //MyInitializer.InvokeBeforeRun(AppId, MyPerGameSettings.BasicGameInfo.ApplicationName + "SEToolbox", appDataPath);
+            //MyInitializer.InitCheckSum();
+
             MyFileSystem.Reset();
             MyFileSystem.Init(contentPath, userDataPath);
 
+            // This will start the Steam Service, and Steam will think SE is running.
+            // TODO: we don't want to be doing this all the while SEToolbox is running, 
+            // perhaps a once off during load to fetch of mods then disconnect/Dispose.
             _steamService = new MySteamService(MySandboxGame.IsDedicated, AppId);
             MyServiceManager.Instance.AddService<IMyGameService>(_steamService);
             

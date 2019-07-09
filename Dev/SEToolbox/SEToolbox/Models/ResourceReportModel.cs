@@ -1601,6 +1601,10 @@ td.right { text-align: right; }";
 
             model.Load(baseModel.ActiveWorld.Savename, baseModel.Structures);
             model.GenerateReport();
+            if (VRage.Plugins.MyPlugins.Loaded)
+            {
+                VRage.Plugins.MyPlugins.Unload();
+            }
             TempfileUtil.Dispose();
 
             File.WriteAllText(reportFile, model.CreateReport(reportType));

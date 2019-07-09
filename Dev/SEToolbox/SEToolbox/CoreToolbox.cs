@@ -273,6 +273,10 @@
 
         public void Exit()
         {
+            if (VRage.Plugins.MyPlugins.Loaded)
+            {
+                VRage.Plugins.MyPlugins.Unload();
+            }
             TempfileUtil.Dispose();
         }
 

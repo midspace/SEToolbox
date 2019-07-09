@@ -155,10 +155,22 @@
             {
                 fieldInfo = type.GetField(fieldName,
                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+
+                if (fieldInfo == null)
+                {
+                    fieldInfo = type.GetField(GetBackingFieldName(fieldName),
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                }
+
                 type = type.BaseType;
             }
             while (fieldInfo == null && type != null);
             return fieldInfo;
+        }
+
+        private static string GetBackingFieldName(string propertyName)
+        {
+            return string.Format("<{0}>k__BackingField", propertyName);
         }
 
         public static void SetFieldValue(Type type, string fieldName, object val)

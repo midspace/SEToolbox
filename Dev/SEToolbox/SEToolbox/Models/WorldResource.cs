@@ -1,7 +1,6 @@
 ﻿namespace SEToolbox.Models
 {
     using Microsoft.VisualBasic.FileIO;
-    using Sandbox;
     using Sandbox.Common.ObjectBuilders;
     using Sandbox.Engine.Networking;
     using Sandbox.Game.GUI;
@@ -16,7 +15,6 @@
     using System.Xml.Linq;
     using VRage.FileSystem;
     using VRage.Game;
-    using static Sandbox.Engine.Networking.MyWorkshop;
     using Res = SEToolbox.Properties.Resources;
 
     public class WorldResource : BaseModel
@@ -290,17 +288,9 @@
                 return;
 
             var cancelToken = new MyWorkshop.CancelToken();
-            //MyWorkshop.ResultData result = MyWorkshop.DownloadWorldModsBlocking(Checkpoint.Mods, cancelToken);
-            MyWorkshop.ResultData result = SpaceEngineersWorkshop.DownloadWorldModsBlocking(Checkpoint.Mods, cancelToken);
-            // TODO: we don't actually need to download the mods.
-            // Doing that requires adding a progress bar, counters, etc.,
-            // All we need is to have SE validate the existing downloads, and update the private field with the Mod location.
-            // Then the DefinitionManager will do the rest.
-            // The problem I'm having is getting the SteamAPI to either fetch or update from Steam.
+            SpaceEngineersWorkshop.GetModItems(Checkpoint.Mods);
 
             var modList = Checkpoint.Mods.ToArray();
-            for (int i = 0; i < modList.Length; i++)
-                modList[i].FriendlyName = modList[i].Name;
 
             _resources.LoadDefinitionsAndMods(DataPath.ModsPath, modList);
         }
