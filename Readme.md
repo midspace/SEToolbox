@@ -6,6 +6,9 @@ Created by Mid-Space productions. Est. 1993
 
 ![](http://i.imgur.com/429uvwe.jpg)
 
+
+## Currently dead as of 2019-08-23 due to changes in the major game update containing Economy.
+
 ---
 
 The **[Space Engineers Game](http://www.spaceengineersgame.com/)** is Copyright Keen Software House.
@@ -41,8 +44,8 @@ This application contains code expressly licenced to it, and should not be used 
 
 The Space Engineers logo was sourced from spaceengineerswiki.com under creative commons.
 
----
-
+-/-
+/
 SEToolbox was started in 2013 soon after Space Engineers was released for Early Access, and has been worked on in my free time.
 There is no requirement for any individual to donate.
 [![](https://www.paypalobjects.com/en_AU/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5V7JL6CDGHCYL)
