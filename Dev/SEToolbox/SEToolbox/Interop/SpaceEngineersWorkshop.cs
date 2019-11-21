@@ -3,12 +3,13 @@ using Sandbox.Engine.Networking;
 using System.Collections.Generic;
 using VRage;
 using VRage.Game;
+using VRage.GameServices;
 
 namespace SEToolbox.Interop
 {
     public class SpaceEngineersWorkshop : MyWorkshop
     {
-        public static MySteamService MySteam { get => (MySteamService)MyServiceManager.Instance.GetService<VRage.GameServices.IMyGameService>(); }
+        public static IMyGameService MySteam => MyServiceManager.Instance.GetService<IMyGameService>();
 
         public static void GetModItems(List<MyObjectBuilder_Checkpoint.ModItem> mods)
         {

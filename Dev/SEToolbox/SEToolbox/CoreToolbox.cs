@@ -185,7 +185,7 @@
                 // Reset the counter used to indicate if the game binaries have updated.
                 GlobalSettings.Default.TimesStartedLastGameUpdate = null;
             }
-			
+
             //string loadWorld = null;
 
             //foreach (var arg in args)
@@ -194,7 +194,7 @@
             //        continue;
 
             //    string file = Path.GetFileName(arg);
-            //    if (file.Equals("Sandbox.sbc", StringComparison.InvariantCultureIgnoreCase) 
+            //    if (file.Equals("Sandbox.sbc", StringComparison.InvariantCultureIgnoreCase)
             //        || file.Equals("SANDBOX_0_0_0_.sbs", StringComparison.InvariantCultureIgnoreCase))
             //        loadWorld = Path.GetDirectoryName(arg);
             //}
@@ -273,10 +273,10 @@
 
         public void Exit()
         {
-            if (VRage.Plugins.MyPlugins.Loaded)
-            {
-                VRage.Plugins.MyPlugins.Unload();
-            }
+            //if (VRage.Plugins.MyPlugins.Loaded)
+            //{
+            //    VRage.Plugins.MyPlugins.Unload();
+            //}
             TempfileUtil.Dispose();
         }
 

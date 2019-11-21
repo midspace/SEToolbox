@@ -21,7 +21,7 @@
         {
             // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
             // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
-            MyDefinitionManager.Static.PrepareBaseDefinitions();
+            MyDefinitionManager.Static.PreloadDefinitions();
             MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
             MaterialIndex = new Dictionary<string, byte>();
         }
@@ -35,7 +35,7 @@
         {
             // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
             // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
-            MyDefinitionManager.Static.PrepareBaseDefinitions();
+            MyDefinitionManager.Static.PreloadDefinitions();
             MyDefinitionManager.Static.LoadData(mods.ToList());
             MaterialIndex = new Dictionary<string, byte>();
         }

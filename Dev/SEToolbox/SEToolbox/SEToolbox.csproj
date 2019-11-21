@@ -104,6 +104,12 @@
     <Reference Include="HelixToolkit.Wpf">
       <HintPath>..\References\HelixToolkit.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="ProtoBuf.Net">
+      <HintPath>$(BinPath)\ProtoBuf.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="ProtoBuf.Net.Core">
+      <HintPath>$(BinPath)\ProtoBuf.Net.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Sandbox.Common">
       <HintPath>$(BinPath)\Sandbox.Common.dll</HintPath>
     </Reference>
@@ -140,8 +146,8 @@
     <Reference Include="VRage.Math">
       <HintPath>$(BinPath)\VRage.Math.dll</HintPath>
     </Reference>
-    <Reference Include="VRage.Native">
-      <HintPath>$(BinPath)\VRage.Native.dll</HintPath>
+    <Reference Include="VRage.NativeWrapper">
+      <HintPath>$(BinPath)\VRage.NativeWrapper.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Render">
       <HintPath>$(BinPath)\VRage.Render.dll</HintPath>
@@ -198,7 +204,6 @@
     <Compile Include="Interop\SpaceEngineersWorkshop.cs" />
     <Compile Include="Interop\MySessionReplacement.cs" />
     <Compile Include="Interop\Asteroids\MyVoxelRayTracerConsts.cs" />
-    <Compile Include="Interop\MySteamService.cs" />
     <Compile Include="Interop\QuaternionD.cs" />
     <Compile Include="Interop\SpaceEngineersTypes.cs" />
     <Compile Include="Interop\SpaceEngineersResources.cs" />
@@ -684,6 +689,9 @@
     <Resource Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\media_stop.png" />
     <None Include="Resources\navigate_right2.png" />
     <None Include="Resources\navigate_left2.png" />
@@ -709,174 +717,64 @@
     <None Include="Resources\photo_scenery.png" />
     <None Include="Resources\refresh.png" />
     <None Include="Resources\folder.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\copy.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\shield.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\icecube.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\SEToolbox_splash_en.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\fit_to_size.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\package_add.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\form_green_view16.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\screwdriver.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\warning.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\check24.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\error24.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\replace2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\find.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\navigate_cross.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\selection_replace.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\colors.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\book_open2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_great_britain.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_china.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\document_pulse.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_czech_republic.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_denmark.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_germany.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_spain.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_mexico.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_estonia.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_finland.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_france.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_croatia.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_hungary.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_iceland.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_italy.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_lithuania.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_norway.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_poland.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_brazil.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_romania.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_slovakia.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_sweden.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_turkey.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_ukraine.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_russia.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_netherlands.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_catalonia.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\flag_usa.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\add2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\medical_bag.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\battery.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\document.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\first_aid.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\components.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\selection.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Asteroid_model.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\users_back.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\target.png" />
+    <None Include="Resources\earth.png" />
+    <None Include="Resources\SEToolbox_splash_zh-cn.png" />
+    <None Include="Resources\hammer.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(BinPath)\steam_api64.dll">
@@ -890,9 +788,6 @@
     <None Include="steam_appid.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\earth.png" />
-    <None Include="Resources\SEToolbox_splash_zh-cn.png" />
-    <None Include="Resources\hammer.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="log4net">

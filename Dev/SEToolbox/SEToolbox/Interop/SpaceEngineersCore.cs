@@ -5,13 +5,12 @@
     using System.Globalization;
     using System.IO;
     using System.Reflection;
+    using System.Runtime.Serialization;
     using System.Threading;
     using Sandbox;
     using Sandbox.Engine.Utils;
     using Sandbox.Engine.Voxels;
-    using Sandbox.Game;
     using Sandbox.Game.GameSystems;
-    using Sandbox.Game.Multiplayer;
     using SEToolbox.Models;
     using SpaceEngineers.Game;
     using Support;
@@ -19,30 +18,32 @@
     using VRage.FileSystem;
     using VRage.Game;
     using VRage.GameServices;
+    using VRage.Steam;
     using VRage.Utils;
     using VRageRender;
-    using MySteamServiceBase = VRage.Steam.MySteamService;
 
     /// <summary>
     /// core interop for loading up Space Engineers content.
     /// </summary>
     public class SpaceEngineersCore
     {
+        class DerivedGame : MySandboxGame
+        {
+            public DerivedGame(string[] commandlineArgs, IntPtr windowHandle = default)
+                : base(commandlineArgs, windowHandle) { }
+
+            protected override void InitiliazeRender(IntPtr windowHandle) { }
+        }
+
         protected static readonly uint AppId = 244850; // Game
         //protected static readonly uint AppId = 298740; // Dedicated Server
 
-        #region fields
-
-        public static SpaceEngineersCore Default = new SpaceEngineersCore();
+        public static SpaceEngineersCore Default;
         private WorldResource _worldResource;
         private readonly SpaceEngineersResources _stockDefinitions;
         private readonly List<string> _manageDeleteVoxelList;
         protected MyCommonProgramStartup _startup;
-        private MySteamServiceBase _steamService;
-
-        #endregion
-
-        #region ctor
+        private IMyGameService _steamService;
 
         public SpaceEngineersCore()
         {
@@ -63,12 +64,15 @@
             MyFileSystem.Init(contentPath, userDataPath);
 
             // This will start the Steam Service, and Steam will think SE is running.
-            // TODO: we don't want to be doing this all the while SEToolbox is running, 
+            // TODO: we don't want to be doing this all the while SEToolbox is running,
             // perhaps a once off during load to fetch of mods then disconnect/Dispose.
-            _steamService = new MySteamService(MySandboxGame.IsDedicated, AppId);
-            MyServiceManager.Instance.AddService<IMyGameService>(_steamService);
-            
-            MyFileSystem.InitUserSpecific(SpaceEngineersWorkshop.MySteam.UserId.ToString()); // This sets the save file/path to load games from.
+            _steamService = MySteamGameService.Create(MySandboxGame.IsDedicated, AppId);
+            MyServiceManager.Instance.AddService(_steamService);
+
+            IMyUGCService serviceInstance = MySteamUgcService.Create(AppId, _steamService);
+            MyServiceManager.Instance.AddService(serviceInstance);
+
+            MyFileSystem.InitUserSpecific(_steamService.UserId.ToString()); // This sets the save file/path to load games from.
             //MyFileSystem.InitUserSpecific(null);
             //SpaceEngineersWorkshop.MySteam.Dispose();
 
@@ -78,28 +82,26 @@
             SpaceEngineersGame.SetupPerGameSettings();
 
             VRageRender.MyRenderProxy.Initialize(new MyNullRender());
+
+            VRage.MyVRage.Init(new ToolboxPlatform());
+
             // We create a whole instance of MySandboxGame!
             // If this is causing an exception, then there is a missing dependency.
-            MySandboxGame gameTemp = new MySandboxGame(new string[] { "-skipintro" });
+            MySandboxGame gameTemp = new DerivedGame(new string[] { "-skipintro" });
 
             // creating MySandboxGame will reset the CurrentUICulture, so I have to reapply it.
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfoByIetfLanguageTag(GlobalSettings.Default.LanguageCode);
             SpaceEngineersApi.LoadLocalization();
             MyStorageBase.UseStorageCache = false;
 
-            #region MySession creation
-
-            // Replace the private constructor on MySession, so we can create it without getting involed with Havok and other depdancies.
-            var keenStart = typeof(Sandbox.Game.World.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(MySyncLayer), typeof(bool) }, null);
-            var ourStart = typeof(SEToolbox.Interop.MySession).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(MySyncLayer), typeof(bool) }, null);
-            ReflectionUtil.ReplaceMethod(ourStart, keenStart);
-
             // Create an empty instance of MySession for use by low level code.
-            Sandbox.Game.World.MySession mySession = ReflectionUtil.ConstructPrivateClass<Sandbox.Game.World.MySession>(new Type[0], new object[0]);
-            ReflectionUtil.ConstructField(mySession, "m_sessionComponents"); // Required as the above code doesn't populate it during ctor of MySession.
-            mySession.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
+            var mySession = (Sandbox.Game.World.MySession)FormatterServices.GetUninitializedObject(typeof(Sandbox.Game.World.MySession));
 
-            VRage.MyVRage.Init(new ToolboxPlatform());
+            // Required as the above code doesn't populate it during ctor of MySession.
+            ReflectionUtil.ConstructField(mySession, "m_sessionComponents");
+            ReflectionUtil.ConstructField(mySession, "m_sessionComponentsForUpdate");
+
+            mySession.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
 
             // change for the Clone() method to use XML cloning instead of Protobuf because of issues with MyObjectBuilder_CubeGrid.Clone()
             ReflectionUtil.SetFieldValue(typeof(VRage.ObjectBuilders.MyObjectBuilderSerializer), "ENABLE_PROTOBUFFERS_CLONING", false);
@@ -107,30 +109,25 @@
             // Assign the instance back to the static.
             Sandbox.Game.World.MySession.Static = mySession;
 
-            Sandbox.Game.GameSystems.MyHeightMapLoadingSystem.Static = new MyHeightMapLoadingSystem();
-            Sandbox.Game.GameSystems.MyHeightMapLoadingSystem.Static.LoadData();
+            var heightMapLoadingSystem = new MyHeightMapLoadingSystem();
+            mySession.RegisterComponent(heightMapLoadingSystem, heightMapLoadingSystem.UpdateOrder, heightMapLoadingSystem.Priority);
+            heightMapLoadingSystem.LoadData();
 
-            #endregion
+            MyHeightMapLoadingSystem.Static = new MyHeightMapLoadingSystem();
+            MyHeightMapLoadingSystem.Static.LoadData();
 
             _stockDefinitions = new SpaceEngineersResources();
             _stockDefinitions.LoadDefinitions();
             _manageDeleteVoxelList = new List<string>();
         }
 
-        #endregion
-
-        #region LoadDefinitions
-
         /// <summary>
         /// Forces static ctor to load stock defintiions.
         /// </summary>
         public static void LoadDefinitions()
         {
+            Default = new SpaceEngineersCore();
         }
-
-        #endregion
-
-        #region properties
 
         public static SpaceEngineersResources Resources
         {
@@ -172,7 +169,5 @@
         {
             get { return Default._manageDeleteVoxelList; }
         }
-
-        #endregion
     }
 }

@@ -17,14 +17,14 @@
         /// </summary>
         internal static readonly string[] CoreSpaceEngineersFiles = {
             "HavokWrapper.dll",                 // x64
-            "protobuf-net.dll",                 // 1.191.x requirement.
+            "ProtoBuf.Net.dll",                 // 1.192.x requirement.
+            "ProtoBuf.Net.Core.dll",            // 1.192.x requirement.
             "Sandbox.Common.dll",               // AnyCPU
             "Sandbox.Game.dll",                 // x64
             "Sandbox.Game.XmlSerializers.dll",  // 1.191.x requirement.
             "Sandbox.Graphics.dll",             // x64
             "Sandbox.RenderDirect.dll",         // x64      1.187.x requirement.
             "SharpDX.dll",                      // AnyCPU
-            "SharpDX.Direct2D1.dll",            // AnyCPU   Required to load Planets.
             "SharpDX.Direct3D11.dll",           // AnyCPU   Required to load Planets.
             "SharpDX.DXGI.dll",                 // AnyCPU   Required to load Planets.
             "SpaceEngineers.Game.dll",          // x64
@@ -35,22 +35,33 @@
             "VRage.Ansel.dll",                  // x64      1.181.x requirement.
             "VRage.Audio.dll",                  // MSIL     1.147.x requirement.
             "VRage.dll",                        // AnyCPU
+            "VRage.XmlSerializers.dll",
             "VRage.Game.dll",                   // x64
             "VRage.Game.XmlSerializers.dll",    // x64
             "VRage.Input.dll",                  // x64
             "VRage.Library.dll",                // AnyCPU
             "VRage.Math.dll",                   // AnyCPU
+            "VRage.Math.XmlSerializers.dll",
             "VRage.Native.dll",                 // x64
             "VRage.NativeWrapper.dll",          // 1.191.x requirement.
+            "VRage.Network.dll",
             "VRage.Render.dll",                 // AnyCPU
             "VRage.Render11.dll",               // x64
             "VRage.Steam.dll",                  // x64     1.188.x requirement.
             "Steamworks.NET.dll",               // x64     1.188.x requirement.
             "System.Data.SQLite.dll",           // AnyCPU  1.171.x requirement
             "netstandard.dll",                  // x64     1.191.x requirement
+            "System.Buffers.dll",
+            "System.ComponentModel.Annotations.dll",
             "System.Memory.dll",                // MSIL     1.191.x requirement for voxels
+            "System.Numerics.Vectors.dll",
             "System.Runtime.CompilerServices.Unsafe.dll",  // MSIL     1.191.x requirement for voxels
+            "EmptyKeys.UserInterface.dll",
+            "EmptyKeys.UserInterface.Core.dll",
+            "SixLabors.Core.dll",
+            "SixLabors.ImageSharp.dll"
         };
+
         internal static readonly string[] OptionalSpaceEngineersFiles = {
             "msvcp120.dll",                     // VRage.Native dependancy.  // testing dropping it these. Keen may have made a mistake by removing them from DS deployment.
             "msvcr120.dll",                     // VRage.Native dependancy.
