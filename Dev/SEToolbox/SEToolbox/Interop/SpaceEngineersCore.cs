@@ -84,6 +84,7 @@
             VRageRender.MyRenderProxy.Initialize(new MyNullRender());
 
             VRage.MyVRage.Init(new ToolboxPlatform());
+            VRage.MyVRage.Platform.Init();
 
             // We create a whole instance of MySandboxGame!
             // If this is causing an exception, then there is a missing dependency.
@@ -112,9 +113,6 @@
             var heightMapLoadingSystem = new MyHeightMapLoadingSystem();
             mySession.RegisterComponent(heightMapLoadingSystem, heightMapLoadingSystem.UpdateOrder, heightMapLoadingSystem.Priority);
             heightMapLoadingSystem.LoadData();
-
-            MyHeightMapLoadingSystem.Static = new MyHeightMapLoadingSystem();
-            MyHeightMapLoadingSystem.Static.LoadData();
 
             _stockDefinitions = new SpaceEngineersResources();
             _stockDefinitions.LoadDefinitions();

@@ -24,7 +24,8 @@ namespace SEToolbox.Interop
         // When checking content read from 'world' saves however, we will have to rely upon the game data.
 
 <#
-        // Open the file @"C:\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Content\Data\CubeBlocks.sbc";
+        // NOTE: The template will not run unless the solution has been built in AnyCPU configuration
+
         string appPath = ToolboxUpdater.GetApplicationFilePath();
 
         if (appPath != null)

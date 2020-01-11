@@ -64,7 +64,12 @@ namespace SEToolbox.Interop
 
         public event Action<IntPtr> OnSystemProtocolActivated;
 
-        IProtoTypeModel typeModel = new DynamicTypeModel();
+        IProtoTypeModel typeModel;
+
+        public void Init()
+        {
+            typeModel = new DynamicTypeModel();
+        }
 
         public void ApplyRenderSettings(MyRenderDeviceSettings? settings)
         {
@@ -163,11 +168,6 @@ namespace SEToolbox.Interop
 
         public void HideSplashScreen()
         {
-        }
-
-        public void Init()
-        {
-            throw new NotImplementedException();
         }
 
         public void InitAnalytics(string projectId, string version)
@@ -272,7 +272,7 @@ namespace SEToolbox.Interop
         }
     }
 
-    // Internal class copied from SE
+    // Internal class copied from VRage.Platform.Windows
     class DynamicTypeModel : IProtoTypeModel
     {
         public TypeModel Model => m_typeModel;
