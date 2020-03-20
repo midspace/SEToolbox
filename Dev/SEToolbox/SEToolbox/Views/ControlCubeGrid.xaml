@@ -82,10 +82,10 @@
                                 <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorHeavy}" Command="{Binding ConvertGridToHeavyArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorHeavyTooltip}"/>
                                 <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorLight}" Command="{Binding ConvertGridToLightArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorLightTooltip}"/>
                                 <Separator/>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorCorner}" Command="{Binding ConvertGridToCornerArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorCornerTooltip}"/>
-                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorRound}" Command="{Binding ConvertGridToRoundArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorRoundTooltip}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorCorner}" Command="{Binding ConvertToCornerArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorCornerTooltip}"/>
+                                <MenuItem Header="{lex:Loc CtlCubeMnuConvertArmorRound}" Command="{Binding ConvertToRoundArmorCommand}" ToolTip="{lex:Loc CtlCubeMnuConvertArmorRoundTooltip}"/>
                             </MenuItem>
-                            <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework}" Command="{Binding FrameworkCommand}">
+                            <MenuItem Header="{lex:Loc CtlCubeMnuConvertFramework}" Command="{Binding ConvertGridFrameworkCommand}">
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16" Source="{Binding Converter={StaticResource ResouceToImageConverter}, ConverterParameter=cube_molecule}" />
                                 </MenuItem.Icon>

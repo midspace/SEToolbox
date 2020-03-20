@@ -53,6 +53,7 @@
             "netstandard.dll",                  // x64     1.191.x requirement
             "System.Buffers.dll",
             "System.ComponentModel.Annotations.dll",
+            "System.Collections.Immutable.dll", // AnyCPU  1.194.x requirement
             "System.Memory.dll",                // MSIL     1.191.x requirement for voxels
             "System.Numerics.Vectors.dll",
             "System.Runtime.CompilerServices.Unsafe.dll",  // MSIL     1.191.x requirement for voxels
