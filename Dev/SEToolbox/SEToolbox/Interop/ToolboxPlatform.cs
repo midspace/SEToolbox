@@ -46,7 +46,7 @@ namespace SEToolbox.Interop
             typeModel = new DynamicTypeModel();
         }
 
-        public void CreateInput2()
+        public bool CreateInput2()
         {
             throw new NotImplementedException();
         }
