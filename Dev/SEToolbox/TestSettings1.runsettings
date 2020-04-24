@@ -11,7 +11,7 @@
     <TargetPlatform>x64</TargetPlatform>
 
     <!-- Framework35 | [Framework40] | Framework45 -->
-    <TargetFrameworkVersion>Framework45</TargetFrameworkVersion>
+    <TargetFrameworkVersion>Framework472</TargetFrameworkVersion>
 
     <!-- Path to Test Adapters -->
     <TestAdaptersPaths>\Temp\foo;%SystemDrive%\Temp\bar</TestAdaptersPaths>

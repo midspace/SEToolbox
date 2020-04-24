@@ -40,6 +40,7 @@
 
                 // Clear app bin cache.
                 var binCache = ToolboxUpdater.GetBinCachePath();
+
                 if (Directory.Exists(binCache))
                 {
                     try
@@ -63,12 +64,14 @@
             log4net.Config.XmlConfigurator.Configure();
 
             var update = CodeRepositoryReleases.CheckForUpdates(GlobalSettings.GetAppVersion());
+
             if (update != null)
             {
                 var dialogResult = MessageBox.Show(string.Format(Res.DialogNewVersionMessage, update.Version), Res.DialogNewVersionTitle, MessageBoxButton.YesNo, MessageBoxImage.Information);
+
                 if (dialogResult == MessageBoxResult.Yes)
                 {
-                    Process.Start(update.Link);
+                    Process.Start(update.Link); // Opens release URL in browser
                     GlobalSettings.Default.Save();
                     Application.Current.Shutdown();
                     return;

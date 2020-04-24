@@ -127,6 +127,8 @@
         /// </summary>
         public static void LoadDefinitions()
         {
+            typeof(MyTexts).TypeInitializer.Invoke(null, null); // For tests
+
             Default = new SpaceEngineersCore();
         }
 

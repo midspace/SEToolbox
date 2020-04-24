@@ -395,7 +395,7 @@ Apologies for any inconvenience.</value>
   </data>
   <data name="DialogNewVersionMessage" xml:space="preserve">
     <value>A new version of SEToolbox ({0}) is available.
-Would you like to download it now?</value>
+Would you like to download it now? (Open in browser)</value>
   </data>
   <data name="DialogNewVersionTitle" xml:space="preserve">
     <value>New version available</value>

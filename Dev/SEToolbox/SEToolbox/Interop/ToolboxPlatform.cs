@@ -105,7 +105,7 @@ namespace SEToolbox.Interop
 
         public event Action<IntPtr> OnSystemProtocolActivated;
 
-        (string Name, uint Frequency)? m_cpuInfo;
+        (string Name, uint MaxClock, uint Cores) m_cpuInfo;
 
         public string GetAppDataPath()
         {
@@ -117,37 +117,35 @@ namespace SEToolbox.Interop
             throw new NotImplementedException();
         }
 
-        public string GetInfoCPU(out uint frequency)
+        public string GetInfoCPU(out uint frequency, out uint physicalCores)
         {
-            if (m_cpuInfo.HasValue)
+            if (m_cpuInfo.Name == null)
             {
-                string name;
-                (name, frequency) = m_cpuInfo.GetValueOrDefault();
-                return name;
-            }
-
-            frequency = 0u;
-            string cpuName = "";
-
-            try
-            {
-                using (var managementObjectSearcher = new ManagementObjectSearcher("select Name, MaxClockSpeed from Win32_Processor"))
+                try
                 {
-                    foreach (ManagementObject item in managementObjectSearcher.Get())
+                    using (var managementObjectSearcher = new ManagementObjectSearcher("select Name, MaxClockSpeed, NumberOfCores from Win32_Processor"))
                     {
-                        cpuName = item["Name"].ToString();
-                        frequency = (uint)item["MaxClockSpeed"];
+                        foreach (ManagementObject item in managementObjectSearcher.Get())
+                        {
+                            m_cpuInfo.Name = item["Name"].ToString();
+                            m_cpuInfo.Cores = (uint)item["NumberOfCores"];
+                            m_cpuInfo.MaxClock = (uint)item["MaxClockSpeed"];
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                //m_log.WriteLine("Couldn't get cpu info: " + ex);
+                catch (Exception ex)
+                {
+                    //m_log.WriteLine("Couldn't get cpu info: " + ex);
+                    m_cpuInfo.Name = "UnknownCPU";
+                    m_cpuInfo.Cores = 0u;
+                    m_cpuInfo.MaxClock = 0u;
+                }
             }
 
-            m_cpuInfo = (cpuName, frequency);
+            frequency = m_cpuInfo.MaxClock;
+            physicalCores = m_cpuInfo.Cores;
 
-            return cpuName;
+            return m_cpuInfo.Name;
         }
 
         public string GetOsName()

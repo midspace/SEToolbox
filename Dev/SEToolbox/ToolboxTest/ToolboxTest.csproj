@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ToolboxTest</RootNamespace>
     <AssemblyName>ToolboxTest</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -73,7 +73,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="PresentationCore" />
@@ -89,18 +89,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BinPath)\Sandbox.Game.dll</HintPath>
     </Reference>
-    <Reference Include="SteamSDK">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BinPath)\SteamSDK.dll</HintPath>
-    </Reference>
     <Reference Include="SpaceEngineers.ObjectBuilders">
       <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.dll</HintPath>
     </Reference>
     <Reference Include="SpaceEngineers.ObjectBuilders.XmlSerializers">
       <HintPath>$(BinPath)\SpaceEngineers.ObjectBuilders.XmlSerializers.dll</HintPath>
-    </Reference>
-    <Reference Include="netstandard">
-      <HintPath>$(BinPath)\netstandard.dll</HintPath>
     </Reference>
     <Reference Include="VRage">
       <SpecificVersion>False</SpecificVersion>
@@ -170,6 +163,7 @@
     <Content Include="unittesting.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="TestAssets\algos.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -246,7 +240,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations">
+      <Version>4.5.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

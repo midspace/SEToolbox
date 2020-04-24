@@ -31,7 +31,7 @@
             Release latest;
             try
             {
-                latest = client.Repository.Release.GetLatest("midspace", "SEToolbox").Result;
+                latest = client.Repository.Release.GetLatest("mmusu3", "SEToolbox").Result;
             }
             catch (Exception ex)
             {
