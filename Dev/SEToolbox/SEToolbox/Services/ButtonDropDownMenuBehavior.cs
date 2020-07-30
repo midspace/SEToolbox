@@ -2,7 +2,7 @@
 {
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 
     /// <summary>
     /// For enabling DropDown menu on Button

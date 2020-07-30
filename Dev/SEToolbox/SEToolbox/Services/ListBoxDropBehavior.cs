@@ -13,7 +13,7 @@ namespace SEToolbox.Services
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Documents;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 
     /// <summary>
     /// For enabling Drop on ItemsControl

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SEToolbox.Views.WindowLoad"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:controls="clr-namespace:SEToolbox.Controls"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
@@ -9,7 +9,7 @@
         lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
         lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         ResizeMode="CanResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow" Style="{StaticResource DefaultWindowStyle}"
-        Title="{lex:Loc WnLoadTitle}" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="1200" MaxHeight="1024" Icon="/SEToolbox;component/app.ico" 
+        Title="{lex:Loc WnLoadTitle}" Height="400" Width="700" MinWidth="260" MinHeight="200" MaxWidth="1200" MaxHeight="1024" Icon="/SEToolbox;component/app.ico"
         commands:DialogService.IsRegisteredView="True"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         FocusManager.FocusedElement="{Binding ElementName=uxWorldSelectionBox}">

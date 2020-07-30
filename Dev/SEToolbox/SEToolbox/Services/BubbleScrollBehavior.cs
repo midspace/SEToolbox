@@ -2,9 +2,9 @@
 {
     using System.Windows;
     using System.Windows.Input;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 
-    // Used on sub-controls of an expander to bubble the mouse wheel scroll event up 
+    // Used on sub-controls of an expander to bubble the mouse wheel scroll event up
     public sealed class BubbleScrollBehavior : Behavior<UIElement>
     {
         protected override void OnAttached()

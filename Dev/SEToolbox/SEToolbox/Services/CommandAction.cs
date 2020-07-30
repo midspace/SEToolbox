@@ -5,7 +5,7 @@
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Input;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 
     public class CommandAction : TargetedTriggerAction<FrameworkElement>, ICommandSource
     {

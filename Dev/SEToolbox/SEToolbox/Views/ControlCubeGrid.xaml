@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="SEToolbox.Views.ControlCubeGrid"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:converters="clr-namespace:SEToolbox.Converters"
              xmlns:controls="clr-namespace:SEToolbox.Controls"
              xmlns:commands="clr-namespace:SEToolbox.Services"
@@ -12,7 +12,7 @@
              lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
              lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="600"
              commands:DialogService.IsRegisteredView="True">
     <UserControl.Resources>
@@ -538,7 +538,7 @@
                             </StackPanel>
                         </Grid>
                     </Grid>
-                  
+
                     <controls:BusyIndicator Visibility="{Binding IsSubsSystemNotReady, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </TabItem>
@@ -577,7 +577,7 @@
                                     </TextBlock>
                                 </StackPanel>
                             </Grid>
-                            
+
                             <Separator Grid.Row="1" Grid.Column="0"/>
                             <controls:SortableListView Grid.Row="2" Grid.Column="0" ItemsSource="{Binding CubeAssets}" DefaultSortColumn="FriendlyName"
                         ColumnHeaderArrowUpTemplate="{StaticResource HeaderTemplateArrowUp}" ColumnHeaderArrowDownTemplate="{StaticResource HeaderTemplateArrowDown}">

@@ -1,4 +1,4 @@
-﻿// Prism 4.1 
+﻿// Prism 4.1
 // http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=28950
 //
 //===================================================================================
@@ -26,7 +26,7 @@ namespace SEToolbox.Services
     using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 
     /// <summary>
     /// Custom behavior that synchronizes the list in <see cref="ListBox.SelectedItems"/> with a collection.

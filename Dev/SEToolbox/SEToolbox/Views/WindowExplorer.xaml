@@ -6,14 +6,14 @@
         xmlns:support="clr-namespace:SEToolbox.Support"
         xmlns:views="clr-namespace:SEToolbox.Views"
         xmlns:vm="clr-namespace:SEToolbox.ViewModels"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:interfaces="clr-namespace:SEToolbox.Interfaces"
         xmlns:lex="http://wpflocalizeextension.codeplex.com"
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="SEToolbox"
         lex:ResxLocalizationProvider.DefaultDictionary="Resources"
-        Height="600" Width="800" MinHeight="320" MinWidth="480" ResizeMode="CanResizeWithGrip" 
+        Height="600" Width="800" MinHeight="320" MinWidth="480" ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen" Icon="/SEToolbox;component/app.ico"
         commands:DialogCloser.DialogResult="{Binding CloseResult}"
         commands:DialogService.IsRegisteredView="True">
@@ -481,10 +481,10 @@
                             </controls:SortableListView>
                         </TabItem>
                         <!--<TabItem Header="Factions/Owners">
-                            
+
                         </TabItem>-->
                         <!--<TabItem Header="Properties">
-                            
+
                         </TabItem>-->
                     </TabControl>
                 </Grid>

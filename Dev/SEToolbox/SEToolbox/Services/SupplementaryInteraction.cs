@@ -2,13 +2,13 @@
 {
     using System.Collections.Generic;
     using System.Windows;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 
     public class Behaviors : List<Behavior>
     {
     }
 
-    public class Triggers : List<System.Windows.Interactivity.TriggerBase>
+    public class Triggers : List<Microsoft.Xaml.Behaviors.TriggerBase>
     {
     }
 

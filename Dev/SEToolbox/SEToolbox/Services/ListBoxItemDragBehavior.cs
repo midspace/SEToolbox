@@ -9,7 +9,7 @@
     using System.Windows.Data;
     using System.Windows.Forms;
     using System.Windows.Input;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using Binding = System.Windows.Data.Binding;
