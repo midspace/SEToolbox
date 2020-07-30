@@ -191,7 +191,7 @@
                     TypeIdString = cubeDefinition.Id.TypeId.ToString(),
                     SubtypeId = cubeDefinition.Id.SubtypeName,
                     TextureFile = (cubeDefinition.Icons == null || cubeDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First())),
-                    Time = TimeSpan.FromSeconds(cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec),
+                    Time = TimeSpan.FromSeconds(cubeDefinition.IntegrityPointsPerSec != 0 ? cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec : 0),
                     Accessible = cubeDefinition.Public,
                     PCU = cubeDefinition.PCU,
                     Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeName),

@@ -694,7 +694,7 @@
                                     }
                                 }
 
-                                blockTime = TimeSpan.FromSeconds(cubeBlockDefinition.MaxIntegrity / cubeBlockDefinition.IntegrityPointsPerSec);
+                                blockTime = TimeSpan.FromSeconds(cubeBlockDefinition.IntegrityPointsPerSec != 0 ? cubeBlockDefinition.MaxIntegrity / cubeBlockDefinition.IntegrityPointsPerSec : 0);
                                 blockTexture = (cubeBlockDefinition.Icons == null || cubeBlockDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeBlockDefinition.Icons.First(), Path.Combine(contentPath, cubeBlockDefinition.Icons.First()));
                                 pcu = cubeBlockDefinition.PCU;
                                 pcuUsed += cubeBlockDefinition.PCU;
