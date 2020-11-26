@@ -47,14 +47,14 @@
             "VRage.Network.dll",
             "VRage.Render.dll",                 // AnyCPU
             "VRage.Render11.dll",               // x64
+            "VRage.Scripting.dll",              // x64     1.197.x requirement.
             "VRage.Steam.dll",                  // x64     1.188.x requirement.
             "Steamworks.NET.dll",               // x64     1.188.x requirement.
             "System.Data.SQLite.dll",           // AnyCPU  1.171.x requirement
-            "netstandard.dll",                  // x64     1.191.x requirement
             "System.Buffers.dll",
             "System.ComponentModel.Annotations.dll",
             "System.Collections.Immutable.dll", // AnyCPU  1.194.x requirement
-            "System.Memory.dll",                // MSIL     1.191.x requirement for voxels
+            "System.Memory.dll",                // MSIL    1.191.x requirement for voxels
             "System.Numerics.Vectors.dll",
             "System.Runtime.CompilerServices.Unsafe.dll",  // MSIL     1.191.x requirement for voxels
             "EmptyKeys.UserInterface.dll",
@@ -178,9 +178,7 @@
 
             // Validate that all core SE assemblies are present, otherwise it's pointless continuing.
             if (CoreSpaceEngineersFiles.Any(filename => !File.Exists(Path.Combine(filePath, filename))))
-            {
                 return false;
-            }
 
             // Skip checking for the .exe. Not required for the Toolbox currently.
             return true;

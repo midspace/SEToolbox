@@ -385,6 +385,9 @@
                 if (customResourceSet != null)
                 {
                     // Reflection copy of MyTexts.PatchTexts(string resourceFile)
+                    var m_strings = typeof(MyTexts).GetStaticField<Dictionary<MyStringId, string>>("m_strings");
+                    var m_stringBuilders = typeof(MyTexts).GetStaticField<Dictionary<MyStringId, StringBuilder>>("m_stringBuilders");
+
                     foreach (DictionaryEntry dictionaryEntry in customResourceSet)
                     {
                         string text = dictionaryEntry.Key as string;
@@ -392,8 +395,6 @@
                         if (text != null && text2 != null)
                         {
                             MyStringId orCompute = MyStringId.GetOrCompute(text);
-                            Dictionary<MyStringId, string> m_strings = typeof(MyTexts).GetStaticField<Dictionary<MyStringId, string>>("m_strings");
-                            Dictionary<MyStringId, StringBuilder> m_stringBuilders = typeof(MyTexts).GetStaticField<Dictionary<MyStringId, StringBuilder>>("m_stringBuilders");
 
                             m_strings[orCompute] = text2;
                             m_stringBuilders[orCompute] = new StringBuilder(text2);

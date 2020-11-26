@@ -2,11 +2,11 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.194.207.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
+  <Product Id="*" Name="!(loc.ApplicationTitle)" Language="1033" Version="01.197.064.1" Manufacturer="!(loc.ManufacturerName)" UpgradeCode="87c8aa64-1a84-4767-ae17-a4b6b6ee1b89">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <!-- DOS 8.3 Format required for cab filenames. -->
     <Media Id="1" Cabinet="SEToolbx.cab" EmbedCab="yes" />
-    
+
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="WixUIBannerBmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="WixUIDialogBmp.bmp" />
@@ -24,7 +24,7 @@
     <CustomAction Id="Uninstall" Directory="APPLICATIONFOLDER"
                   Execute="deferred" Impersonate="no" Return="ignore"
                   ExeCommand="[APPLICATIONFOLDER]SEToolboxUpdate.exe -u" />
-    
+
     <InstallExecuteSequence>
       <RemoveExistingProducts After="InstallInitialize" />
       <Custom Action='Install' After='InstallFiles'>NOT REMOVE</Custom>
@@ -95,7 +95,7 @@
               </RegistryKey>
             </Component>
 
-            <!-- ### Uncomment to package satellite resource in .MSI  --> 
+            <!-- ### Uncomment to package satellite resource in .MSI  -->
             <!--
             <Directory Id='localeDirectoryZH' Name='zh'>
               <Component Id='localeComponentZH' Guid='2598AD91-A20F-4D9B-A465-1C6D3E8CA941'>
@@ -290,7 +290,7 @@
 
       <Publish Dialog="ProductServerDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
       <Publish Dialog="ProductServerDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg"><![CDATA[WIXUI_SERVERNAME <> ""]]></Publish>
-      
+
       <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="ProductServerDlg">1</Publish>-->
 
       <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">LicenseAccepted = "1"</Publish>

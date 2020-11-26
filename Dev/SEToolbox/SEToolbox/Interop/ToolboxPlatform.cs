@@ -8,6 +8,7 @@ using VRage;
 using VRage.Audio;
 using VRage.Http;
 using VRage.Input;
+using VRage.Scripting;
 using VRage.Serialization;
 using VRageRender;
 
@@ -39,6 +40,8 @@ namespace SEToolbox.Interop
 
         public IMyCrashReporting CrashReporting => throw new NotImplementedException();
 
+        public IVRageScripting Scripting => throw new NotImplementedException();
+
         IProtoTypeModel typeModel;
 
         public void Init()
@@ -67,6 +70,11 @@ namespace SEToolbox.Interop
         }
 
         public IMyAnalytics InitAnalytics(string projectId, string version)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InitScripting(IVRageScripting scripting)
         {
             throw new NotImplementedException();
         }
@@ -105,7 +113,17 @@ namespace SEToolbox.Interop
 
         public bool IsMemoryLimited => throw new NotImplementedException();
 
-        public event Action<IntPtr> OnSystemProtocolActivated;
+        public string ThreeLetterISORegionName => throw new NotImplementedException();
+
+        public string TwoLetterISORegionName => throw new NotImplementedException();
+
+        public string RegionLatitude => throw new NotImplementedException();
+
+        public string RegionLongitude => throw new NotImplementedException();
+
+        public string TempPath => throw new NotImplementedException();
+
+        public event Action<string> OnSystemProtocolActivated;
 
         (string Name, uint MaxClock, uint Cores) m_cpuInfo;
 
@@ -206,6 +224,21 @@ namespace SEToolbox.Interop
         }
 
         public void LogRuntimeInfo(Action<string> log)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnSessionStarted(SessionType sessionType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnSessionUnloaded()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int? GetExperimentalPCULimit(int safePCULimit)
         {
             throw new NotImplementedException();
         }
