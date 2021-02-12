@@ -382,7 +382,7 @@
         {
             MyPlanetStorageProvider provider = new MyPlanetStorageProvider();
             MyPlanetGeneratorDefinition planetDefinition = MyDefinitionManager.Static.GetDefinition<MyPlanetGeneratorDefinition>(MyStringHash.GetOrCompute(Planet.PlanetGenerator));
-            provider.Init(seed, planetDefinition, radius);
+            provider.Init(seed, planetDefinition, radius, true);
 
             float minHillSize = provider.Radius * planetDefinition.HillParams.Min;
             float maxHillSize = provider.Radius * planetDefinition.HillParams.Max;
@@ -396,7 +396,7 @@
             Planet.MinimumSurfaceRadius = radius + minHillSize;
             Planet.MaximumHillRadius = radius + maxHillSize;
 
-            provider.Init(Planet.Seed, planetDefinition, radius);
+            provider.Init(Planet.Seed, planetDefinition, radius, true);
 
             var asteroid = new MyVoxelMap();
             asteroid.Storage = new MyOctreeStorage(provider, provider.StorageSize);

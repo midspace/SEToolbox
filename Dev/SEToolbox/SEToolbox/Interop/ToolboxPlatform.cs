@@ -312,6 +312,11 @@ namespace SEToolbox.Interop
         {
             throw new NotImplementedException();
         }
+
+        public void RequestSuspendWait()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     // Internal class copied from VRage.Platform.Windows

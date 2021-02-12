@@ -288,11 +288,9 @@
                 return;
 
             var cancelToken = new MyWorkshop.CancelToken();
-            SpaceEngineersWorkshop.GetModItems(Checkpoint.Mods);
+            SpaceEngineersWorkshop.GetModItems(Checkpoint.Mods, cancelToken);
 
-            var modList = Checkpoint.Mods.ToArray();
-
-            _resources.LoadDefinitionsAndMods(DataPath.ModsPath, modList);
+            _resources.LoadDefinitionsAndMods(DataPath.ModsPath, Checkpoint.Mods);
         }
 
         public bool LoadSector(out string errorInformation, bool snapshot = false)

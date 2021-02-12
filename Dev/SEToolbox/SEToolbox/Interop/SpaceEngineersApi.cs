@@ -304,12 +304,15 @@
 
         public static MyCubeBlockDefinition GetCubeDefinition(MyObjectBuilderType typeId, MyCubeSize cubeSize, string subtypeName)
         {
-            if (string.IsNullOrEmpty(subtypeName))
-            {
-                return SpaceEngineersCore.Resources.CubeBlockDefinitions.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
-            }
+            var def = MyDefinitionManager.Static.GetCubeBlockDefinition(new MyDefinitionId(typeId, subtypeName));
+            return def != null && def.CubeSize == cubeSize ? def : null;
 
-            return SpaceEngineersCore.Resources.CubeBlockDefinitions.FirstOrDefault(d => d.Id.SubtypeName == subtypeName || (d.Variants != null && d.Variants.Any(v => subtypeName == d.Id.SubtypeName + v.Color)));
+            //if (string.IsNullOrEmpty(subtypeName))
+            //{
+            //    return SpaceEngineersCore.Resources.CubeBlockDefinitions.FirstOrDefault(d => d.CubeSize == cubeSize && d.Id.TypeId == typeId);
+            //}
+
+            //return SpaceEngineersCore.Resources.CubeBlockDefinitions.FirstOrDefault(d => d.Id.SubtypeName == subtypeName || (d.Variants != null && d.Variants.Any(v => subtypeName == d.Id.SubtypeName + v.Color)));
             // Returns null if it doesn't find the required SubtypeId.
         }
 

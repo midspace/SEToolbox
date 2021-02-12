@@ -26,17 +26,17 @@
             MaterialIndex = new Dictionary<string, byte>();
         }
 
-        public void LoadDefinitionsAndMods(string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
+        public void LoadDefinitionsAndMods(string userModspath, List<MyObjectBuilder_Checkpoint.ModItem> mods)
         {
             LoadDefinitionsAndMods(ToolboxUpdater.GetApplicationContentPath(), userModspath, mods);
         }
 
-        public void LoadDefinitionsAndMods(string applicationContentPath, string userModspath, MyObjectBuilder_Checkpoint.ModItem[] mods)
+        public void LoadDefinitionsAndMods(string applicationContentPath, string userModspath, List<MyObjectBuilder_Checkpoint.ModItem> mods)
         {
             // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
             // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
             MyDefinitionManager.Static.PreloadDefinitions();
-            MyDefinitionManager.Static.LoadData(mods.ToList());
+            MyDefinitionManager.Static.LoadData(mods);
             MaterialIndex = new Dictionary<string, byte>();
         }
 

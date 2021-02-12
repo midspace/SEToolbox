@@ -8,8 +8,10 @@
     using System.Runtime.Serialization;
     using System.Threading;
     using Sandbox;
+    using Sandbox.Engine.Networking;
     using Sandbox.Engine.Utils;
     using Sandbox.Engine.Voxels;
+    using Sandbox.Game.Entities.Planet;
     using Sandbox.Game.GameSystems;
     using SEToolbox.Models;
     using SpaceEngineers.Game;
@@ -69,8 +71,9 @@
             _steamService = MySteamGameService.Create(MySandboxGame.IsDedicated, AppId);
             MyServiceManager.Instance.AddService(_steamService);
 
-            IMyUGCService serviceInstance = MySteamUgcService.Create(AppId, _steamService);
-            MyServiceManager.Instance.AddService(serviceInstance);
+            IMyUGCService ugc = MySteamUgcService.Create(AppId, _steamService);
+            //MyServiceManager.Instance.AddService(ugc);
+            MyGameService.WorkshopService.AddAggregate(ugc);
 
             MyFileSystem.InitUserSpecific(_steamService.UserId.ToString()); // This sets the save file/path to load games from.
             //MyFileSystem.InitUserSpecific(null);
@@ -101,7 +104,7 @@
             var mySession = (Sandbox.Game.World.MySession)FormatterServices.GetUninitializedObject(typeof(Sandbox.Game.World.MySession));
 
             // Required as the above code doesn't populate it during ctor of MySession.
-            ReflectionUtil.ConstructField(mySession, "m_creativeTools");
+            ReflectionUtil.ConstructField(mySession, "CreativeTools");
             ReflectionUtil.ConstructField(mySession, "m_sessionComponents");
             ReflectionUtil.ConstructField(mySession, "m_sessionComponentsForUpdate");
 
@@ -116,6 +119,10 @@
             var heightMapLoadingSystem = new MyHeightMapLoadingSystem();
             mySession.RegisterComponent(heightMapLoadingSystem, heightMapLoadingSystem.UpdateOrder, heightMapLoadingSystem.Priority);
             heightMapLoadingSystem.LoadData();
+
+            var planets = new MyPlanets();
+            mySession.RegisterComponent(planets, heightMapLoadingSystem.UpdateOrder, heightMapLoadingSystem.Priority);
+            planets.LoadData();
 
             _stockDefinitions = new SpaceEngineersResources();
             _stockDefinitions.LoadDefinitions();
