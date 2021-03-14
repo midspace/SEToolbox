@@ -195,6 +195,8 @@
                 m_storage = MyStorageBase.LoadFromFile(filename);
                 IsValid = true;
                 Size = m_storage.Size;
+
+                GC.Collect();
             }
             catch (FileNotFoundException)
             {
@@ -234,7 +236,7 @@
                 }
             }
         }
-        
+
         #endregion
 
         #region LoadVoxelSize
@@ -484,7 +486,7 @@
             Vector3I block;
             //var cacheSize = new Vector3I(64 >> 3); 
             var cacheSize = new Vector3I(1);
-            
+
             // Using 8 to replicate the size of DataCell.
             // TODO: determine if there is an issue because the cache is undersized. The cache in OverwriteAllMaterials had to be doubled in size to avoid issue when < 64 but it is at LOD0.
             for (block.Z = 0; block.Z < m_storage.Size.Z >> 3; block.Z += 1)
@@ -507,7 +509,7 @@
                         //    }
                         //}
                         if (cache.ComputeContentConstitution() != MyVoxelContentConstitution.Empty)
-                        // Collect the non-empty cell coordinates
+                            // Collect the non-empty cell coordinates
                             fullCells.Add(block << 3);
                     }
 
@@ -958,37 +960,50 @@
             var cacheSize = Vector3I.Min(new Vector3I(64), m_storage.Size);
             Dictionary<byte, long> assetCount = new Dictionary<byte, long>();
 
+            var cache = new MyStorageData();
+            cache.Resize(cacheSize);
+
             // read the asteroid in chunks of 64 to avoid the Arithmetic overflow issue.
             for (block.Z = 0; block.Z < m_storage.Size.Z; block.Z += 64)
+            {
                 for (block.Y = 0; block.Y < m_storage.Size.Y; block.Y += 64)
+                {
                     for (block.X = 0; block.X < m_storage.Size.X; block.X += 64)
                     {
-                        var cache = new MyStorageData();
-                        cache.Resize(cacheSize);
                         // LOD1 is not detailed enough for content information on asteroids.
                         Vector3I maxRange = block + cacheSize - 1;
                         m_storage.ReadRange(cache, MyStorageDataTypeFlags.ContentAndMaterial, 0, block, maxRange);
 
                         Vector3I p;
+
                         for (p.Z = 0; p.Z < cacheSize.Z; ++p.Z)
+                        {
                             for (p.Y = 0; p.Y < cacheSize.Y; ++p.Y)
+                            {
                                 for (p.X = 0; p.X < cacheSize.X; ++p.X)
                                 {
-                                    var content = cache.Content(ref p);
+                                    byte content = cache.Content(ref p);
+
                                     if (content > 0)
                                     {
                                         min = Vector3I.Min(min, p + block);
                                         max = Vector3I.Max(max, p + block + 1);
 
-                                        var material = cache.Material(ref p);
-                                        if (assetCount.ContainsKey(material))
-                                            assetCount[material] += content;
+                                        byte material = cache.Material(ref p);
+
+                                        if (assetCount.TryGetValue(material, out long c))
+                                            assetCount[material] = c + content;
                                         else
                                             assetCount.Add(material, content);
+
                                         sum += content;
                                     }
                                 }
+                            }
+                        }
                     }
+                }
+            }
 
             _assetCount = assetCount;
 
@@ -996,9 +1011,10 @@
                 _boundingContent = new BoundingBoxI();
             else
                 _boundingContent = new BoundingBoxI(min, max - 1);
+
             VoxCells = sum;
         }
-        
+
         #endregion
 
         #region CalculateMaterialCellAssets
@@ -1077,9 +1093,9 @@
         }
 
         #endregion
-     
+
         #endregion
-        
+
         #region CountAssets
 
         public Dictionary<string, long> RefreshAssets()
@@ -1151,16 +1167,16 @@
         {
             switch (type)
             {
-                case OperationType.Fill:
-                    MyVoxelGenerator.FillInShape(this, shape, material);
-                    break;
-                case OperationType.Paint:
-                    MyVoxelGenerator.PaintInShape(this, shape, material);
-                    break;
-                case OperationType.Cut:
-                    // MySession.Settings.EnableVoxelDestruction has to be enabled for Shapes to be deleted.
-                    MyVoxelGenerator.CutOutShape(this, shape);
-                    break;
+            case OperationType.Fill:
+                MyVoxelGenerator.FillInShape(this, shape, material);
+                break;
+            case OperationType.Paint:
+                MyVoxelGenerator.PaintInShape(this, shape, material);
+                break;
+            case OperationType.Cut:
+                // MySession.Settings.EnableVoxelDestruction has to be enabled for Shapes to be deleted.
+                MyVoxelGenerator.CutOutShape(this, shape);
+                break;
             }
         }
     }

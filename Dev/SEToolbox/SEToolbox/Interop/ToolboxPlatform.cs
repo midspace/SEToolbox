@@ -125,6 +125,8 @@ namespace SEToolbox.Interop
 
         public event Action<string> OnSystemProtocolActivated;
 
+        public event Action OnResuming;
+
         (string Name, uint MaxClock, uint Cores) m_cpuInfo;
 
         public string GetAppDataPath()
@@ -239,6 +241,11 @@ namespace SEToolbox.Interop
         }
 
         public int? GetExperimentalPCULimit(int safePCULimit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DateTime GetNetworkTimeUTC()
         {
             throw new NotImplementedException();
         }

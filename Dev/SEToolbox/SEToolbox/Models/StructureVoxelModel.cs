@@ -75,7 +75,8 @@
                     }
                 }
 
-                ReadVoxelDetails(previewFile);
+                // Has a huge upfront loading cost
+                //ReadVoxelDetails(previewFile);
             }
 
             var materialList = new Dictionary<string, string>();
@@ -325,6 +326,8 @@
 
         public void LoadDetailsSync()
         {
+            ReadVoxelDetails(SourceVoxelFilepath ?? VoxelFilepath);
+
             if (_voxelMap != null && (MaterialAssets == null || MaterialAssets.Count == 0))
             {
                 Dictionary<string, long> details = _voxelMap.RefreshAssets();
