@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using ProtoBuf.Meta;
 using VRage;
+using VRage.Analytics;
 using VRage.Audio;
 using VRage.Http;
 using VRage.Input;
@@ -291,6 +292,11 @@ namespace SEToolbox.Interop
         }
 
         public ulong GetMemoryBudgetForGeneratedTextures()
+        {
+            return 0;
+        }
+
+        public ulong GetMemoryBudgetForVoxelTextureArrays()
         {
             return 0;
         }
