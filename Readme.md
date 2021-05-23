@@ -7,7 +7,9 @@ Created by Mid-Space productions. Est. 1993
 ![](http://i.imgur.com/429uvwe.jpg)
 
 
-## Currently dead as of 2019-08-23 due to changes in the major game update containing Economy.
+```diff
+! Currently dead as of 2019-08-23 due to changes in the major game update containing Economy.
+```
 
 ---
 
@@ -53,9 +55,8 @@ There is no requirement for any individual to donate.
 
 ---
 
-### Maintainence only
+### No longer maintained or updated
 
 I [midspace](https://github.com/midspace) have stopped working on Space Engineers related stuff.
-I will only be fixing issues that cause SEToolbox to crash. I won't be adding or enhancing any further features.
 There is a lengthy post [here](https://forum.keenswh.com/threads/7402115/) on the Keen forums about this decision.
 I'm open to other developers taking over, or at least contributing further to SEToolbox.
