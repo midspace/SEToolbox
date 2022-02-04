@@ -2,6 +2,7 @@
 {
     using Sandbox.Definitions;
     using Sandbox.Engine.Voxels;
+    using Sandbox.Engine.Voxels.Planet;
     using SEToolbox.Interop;
     using SEToolbox.Interop.Asteroids;
     using SEToolbox.Support;
@@ -11,7 +12,6 @@
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using VRage.Game;
-    using VRage.Game.Voxels;
     using VRage.ObjectBuilders;
     using VRage.Utils;
     using VRageMath;
@@ -326,7 +326,7 @@
 
 
                     // TODO: planet details
-                    
+
                     _voxelMap.RefreshAssets();
                     _contentCenter = _voxelMap.ContentCenter;
                     Center = new Vector3D(_contentCenter.X + 0.5f + PositionX, _contentCenter.Y + 0.5f + PositionY, _contentCenter.Z + 0.5f + PositionZ);

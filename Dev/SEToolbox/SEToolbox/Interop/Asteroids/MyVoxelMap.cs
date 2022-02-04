@@ -1,6 +1,7 @@
 ﻿namespace SEToolbox.Interop.Asteroids
 {
     using Sandbox.Engine.Voxels;
+    using Sandbox.Engine.Voxels.Planet;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using System;

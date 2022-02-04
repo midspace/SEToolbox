@@ -1091,23 +1091,24 @@
         private static Dictionary<string, MyModelDummy> ReadDummies(BinaryReader reader)
         {
             var dummies = new Dictionary<string, MyModelDummy>();
-
             var nCount = reader.ReadInt32();
+
             for (var i = 0; i < nCount; ++i)
             {
                 var str = reader.ReadString();
                 var mat = ReadMatrix(reader);
 
-                var dummy = new MyModelDummy { Matrix = mat, CustomData = new Dictionary<string, object>() };
-
+                var customData = new Dictionary<string, object>();
                 var customDataCount = reader.ReadInt32();
+
                 for (var j = 0; j < customDataCount; ++j)
                 {
                     var name = reader.ReadString();
                     var value = reader.ReadString();
-                    dummy.CustomData.Add(name, value);
+                    customData.Add(name, value);
                 }
 
+                var dummy = new MyModelDummy { Matrix = mat, CustomData = customData };
                 dummies.Add(str, dummy);
             }
 
