@@ -9,9 +9,9 @@
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
-    using VRage;
     using VRage.FileSystem;
     using VRage.Game.Voxels;
+    using VRage.Library.Compression;
     using VRage.ObjectBuilders;
     using VRage.Voxels;
     using VRageMath;

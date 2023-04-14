@@ -75,6 +75,11 @@ namespace SEToolbox.Interop
             throw new NotImplementedException();
         }
 
+        public IMyAnalytics InitAnalytics(string projectId, string version, bool idInited)
+        {
+            throw new NotImplementedException();
+        }
+
         public void InitScripting(IVRageScripting scripting)
         {
             throw new NotImplementedException();
