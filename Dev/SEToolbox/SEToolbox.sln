@@ -1,27 +1,21 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolbox", "SEToolbox\SEToolbox.csproj", "{476405E8-27C7-4CD8-B75F-00B8DE0B4BD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolbox", "SEToolbox\SEToolbox.csproj", "{476405E8-27C7-4CD8-B75F-00B8DE0B4BD5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0914D968-2B68-4FB4-8554-7238C7A78969} = {0914D968-2B68-4FB4-8554-7238C7A78969}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{06B6FC47-A535-42AC-8ACA-78DB66F28445}"
-	ProjectSection(SolutionItems) = preProject
-		References\HelixToolkit.Wpf.dll = References\HelixToolkit.Wpf.dll
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolbox.ImageLibrary", "SEToolbox.Image.Library\SEToolbox.ImageLibrary.csproj", "{E78476CB-BC3D-4265-806D-96F09229A449}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolbox.ImageLibrary", "SEToolbox.Image.Library\SEToolbox.ImageLibrary.csproj", "{E78476CB-BC3D-4265-806D-96F09229A449}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxTest", "ToolboxTest\ToolboxTest.csproj", "{394A7651-FCC8-4906-B060-95A5ADB1026D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolboxTest", "ToolboxTest\ToolboxTest.csproj", "{394A7651-FCC8-4906-B060-95A5ADB1026D}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SEToolboxSetup", "SEToolboxSetup\SEToolboxSetup.wixproj", "{671C9C74-A272-4B03-824E-C4A54A17247D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolbox.ImageShaders", "SEToolbox.Image.Shaders\SEToolbox.ImageShaders.csproj", "{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolbox.ImageShaders", "SEToolbox.Image.Shaders\SEToolbox.ImageShaders.csproj", "{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEToolboxUpdate", "SEToolboxUpdate\SEToolboxUpdate.csproj", "{0914D968-2B68-4FB4-8554-7238C7A78969}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolboxUpdate", "SEToolboxUpdate\SEToolboxUpdate.csproj", "{0914D968-2B68-4FB4-8554-7238C7A78969}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{F968BC09-554D-4ED1-8619-78EBBC8A30F2}"
 	ProjectSection(SolutionItems) = preProject
@@ -65,13 +59,13 @@ Global
 		{476405E8-27C7-4CD8-B75F-00B8DE0B4BD5}.Release|x64.Build.0 = Release|x64
 		{E78476CB-BC3D-4265-806D-96F09229A449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E78476CB-BC3D-4265-806D-96F09229A449}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E78476CB-BC3D-4265-806D-96F09229A449}.Debug|x64.ActiveCfg = Debug|x64
-		{E78476CB-BC3D-4265-806D-96F09229A449}.Debug|x64.Build.0 = Debug|x64
+		{E78476CB-BC3D-4265-806D-96F09229A449}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E78476CB-BC3D-4265-806D-96F09229A449}.Debug|x64.Build.0 = Debug|Any CPU
 		{E78476CB-BC3D-4265-806D-96F09229A449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E78476CB-BC3D-4265-806D-96F09229A449}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E78476CB-BC3D-4265-806D-96F09229A449}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{E78476CB-BC3D-4265-806D-96F09229A449}.Release|x64.ActiveCfg = Release|x64
-		{E78476CB-BC3D-4265-806D-96F09229A449}.Release|x64.Build.0 = Release|x64
+		{E78476CB-BC3D-4265-806D-96F09229A449}.Release|x64.ActiveCfg = Release|Any CPU
+		{E78476CB-BC3D-4265-806D-96F09229A449}.Release|x64.Build.0 = Release|Any CPU
 		{394A7651-FCC8-4906-B060-95A5ADB1026D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{394A7651-FCC8-4906-B060-95A5ADB1026D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{394A7651-FCC8-4906-B060-95A5ADB1026D}.Debug|x64.ActiveCfg = Debug|x64
@@ -89,12 +83,12 @@ Global
 		{671C9C74-A272-4B03-824E-C4A54A17247D}.Release|x64.Build.0 = Release|x86
 		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|x64.ActiveCfg = Debug|x64
-		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|x64.Build.0 = Debug|x64
+		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|x64.Build.0 = Debug|Any CPU
 		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Release|Any CPU.Build.0 = Release|Any CPU
-		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Release|x64.ActiveCfg = Release|x64
-		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Release|x64.Build.0 = Release|x64
+		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Release|x64.ActiveCfg = Release|Any CPU
+		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Release|x64.Build.0 = Release|Any CPU
 		{0914D968-2B68-4FB4-8554-7238C7A78969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0914D968-2B68-4FB4-8554-7238C7A78969}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0914D968-2B68-4FB4-8554-7238C7A78969}.Debug|x64.ActiveCfg = Debug|x64
@@ -110,5 +104,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D520F47E-25A7-4151-8BBC-91AFFC202F4D} = {C63940A6-05C8-4EE2-ABE7-35F35BA9F240}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7264B2B2-8A56-46BD-8D00-43C175A029C5}
 	EndGlobalSection
 EndGlobal

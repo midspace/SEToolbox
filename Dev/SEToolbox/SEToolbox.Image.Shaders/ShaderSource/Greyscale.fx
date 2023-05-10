@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------
-// 
+//
 // WPF ShaderEffect HLSL -- GreyscaleEffect
 //
 //--------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ float4 main(float2 uv : TEXCOORD) : COLOR
 
 	float4 srcColor = tex2D(implicitInputSampler, texuv);
 
-	if( srcColor.a == 0 ) 
+	if( srcColor.a == 0 )
 	{
 		finalColor = srcColor;
 	}

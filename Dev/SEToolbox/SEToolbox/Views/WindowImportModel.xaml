@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SEToolbox.Views.WindowImportModel"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:helix="http://helixtoolkit.codeplex.com"
+        xmlns:helix="http://helix-toolkit.org/wpf"
         xmlns:commands="clr-namespace:SEToolbox.Services"
         xmlns:converters="clr-namespace:SEToolbox.Converters"
         xmlns:controls="clr-namespace:SEToolbox.Controls"

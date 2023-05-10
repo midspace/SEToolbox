@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------
-// 
+//
 // WPF ShaderEffect HLSL -- DesaturateEffect
 //
 //--------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ float4 main(float2 uv : TEXCOORD) : COLOR
 
 	float4 srcColor = tex2D(implicitInputSampler, texuv);
 
-	if( srcColor.a == 0 ) 
+	if( srcColor.a == 0 )
 	{
 		finalColor = srcColor;
 	}
@@ -37,19 +37,19 @@ float4 main(float2 uv : TEXCOORD) : COLOR
 	{
 		// Desaturate algorithm.  Replicates the Photoshop Desaturate filter.
 		// However this may not properly take into account the Alpha Channel.
-		
+
 		maxColor = srcColor.r;
 		if (maxColor < srcColor.g)
 			maxColor = srcColor.g;
 		if (maxColor < srcColor.b)
 			maxColor = srcColor.b;
-		
+
 		minColor = srcColor.r;
 		if (minColor > srcColor.g)
 			minColor = srcColor.g;
 		if (minColor > srcColor.b)
 			minColor = srcColor.b;
-			
+
 		float4 luminance = (minColor + maxColor) / 2.00;
 		luminance.a = srcColor.a;
 		finalColor = luminance;

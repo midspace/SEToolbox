@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project>
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
 
@@ -10,9 +9,15 @@
     <BinPath>$(BinPathx64)</BinPath>
   </PropertyGroup>
 
+  <!-- Copy this PropertyGroup into "user.targets" and modify the "FxcPath" to indicate the path to fxc.exe from the Windows SDK. -->
+  <PropertyGroup>
+    <FxcPath>&quot;$(MSBuildProgramFiles32)\Windows Kits\10\bin\10.0.20348.0\x64\fxc.exe&quot;</FxcPath>
+  </PropertyGroup>
+
   <ImportGroup Label="PropertySheets">
     <Import Project="$(SolutionDir)\user.targets" Condition="exists('$(SolutionDir)\user.targets')" />
   </ImportGroup>
+
   <Choose>
     <When Condition=" '$(Platform)' == '' ">
       <PropertyGroup>
