@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolbox.ImageLibrary", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolboxTest", "ToolboxTest\ToolboxTest.csproj", "{394A7651-FCC8-4906-B060-95A5ADB1026D}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SEToolboxSetup", "SEToolboxSetup\SEToolboxSetup.wixproj", "{671C9C74-A272-4B03-824E-C4A54A17247D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolbox.ImageShaders", "SEToolbox.Image.Shaders\SEToolbox.ImageShaders.csproj", "{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolboxUpdate", "SEToolboxUpdate\SEToolboxUpdate.csproj", "{0914D968-2B68-4FB4-8554-7238C7A78969}"
@@ -74,13 +72,6 @@ Global
 		{394A7651-FCC8-4906-B060-95A5ADB1026D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{394A7651-FCC8-4906-B060-95A5ADB1026D}.Release|x64.ActiveCfg = Release|x64
 		{394A7651-FCC8-4906-B060-95A5ADB1026D}.Release|x64.Build.0 = Release|x64
-		{671C9C74-A272-4B03-824E-C4A54A17247D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{671C9C74-A272-4B03-824E-C4A54A17247D}.Debug|x64.ActiveCfg = Debug|x86
-		{671C9C74-A272-4B03-824E-C4A54A17247D}.Release|Any CPU.ActiveCfg = Release|x86
-		{671C9C74-A272-4B03-824E-C4A54A17247D}.Release|Any CPU.Build.0 = Release|x86
-		{671C9C74-A272-4B03-824E-C4A54A17247D}.Release|Any CPU.Deploy.0 = Release|x86
-		{671C9C74-A272-4B03-824E-C4A54A17247D}.Release|x64.ActiveCfg = Release|x86
-		{671C9C74-A272-4B03-824E-C4A54A17247D}.Release|x64.Build.0 = Release|x86
 		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{967D61A9-C8F0-4C2A-A784-6CDA648ECB19}.Debug|x64.ActiveCfg = Debug|Any CPU
