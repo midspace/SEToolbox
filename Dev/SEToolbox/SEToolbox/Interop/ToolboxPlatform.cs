@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Management;
 using System.Security.Cryptography;
 using System.Text;
+using ParallelTasks;
 using ProtoBuf.Meta;
 using VRage;
 using VRage.Analytics;
 using VRage.Audio;
 using VRage.Http;
 using VRage.Input;
+using VRage.Library.Threading;
 using VRage.Scripting;
 using VRage.Serialization;
+using VRage.Utils;
 using VRageRender;
 
 namespace SEToolbox.Interop
@@ -129,11 +132,25 @@ namespace SEToolbox.Interop
 
         public string TempPath => throw new NotImplementedException();
 
+        public int? OptimalHavokThreadCount => throw new NotImplementedException();
+
+        public PrioritizedScheduler.ExplicitWorkerSetup? ExplicitWorkerSetup => null;
+
+        public bool AreEnterBackButtonsSwapped => false;
+
+        public float? ForcedUiRatio => throw new NotImplementedException();
+
         public event Action<string> OnSystemProtocolActivated;
 
         public event Action OnResuming;
+        public event Action OnSuspending;
 
         (string Name, uint MaxClock, uint Cores) m_cpuInfo;
+
+        public string GetRootPath()
+        {
+            throw new NotImplementedException();
+        }
 
         public string GetAppDataPath()
         {
@@ -251,6 +268,36 @@ namespace SEToolbox.Interop
             throw new NotImplementedException();
         }
 
+        public void DebuggerBreak()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CollectGC(int generation, GCCollectionMode mode)
+        {
+            generation = Math.Min(generation, GC.MaxGeneration);
+            GC.Collect(generation, mode);
+        }
+
+        public void CollectGC(int generation, GCCollectionMode mode, bool blocking, bool compacting)
+        {
+            generation = Math.Min(generation, GC.MaxGeneration);
+            GC.Collect(generation, mode, blocking, compacting);
+        }
+
+        public bool OpenUrl(string url, bool predetermined = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISharedCriticalSection CreateSharedCriticalSection(bool spinLock)
+        {
+            if (spinLock)
+                return new MyCriticalSection_SpinLock();
+            else
+                return new MyCriticalSection_Mutex();
+        }
+
         public DateTime GetNetworkTimeUTC()
         {
             throw new NotImplementedException();
@@ -262,6 +309,8 @@ namespace SEToolbox.Interop
         public bool UseParallelRenderInit => throw new NotImplementedException();
 
         public bool IsRenderOutputDebugSupported => throw new NotImplementedException();
+
+        public bool ForceClearGBuffer => throw new NotImplementedException();
 
         public event Action OnResuming;
         public event Action OnSuspending;
@@ -332,6 +381,46 @@ namespace SEToolbox.Interop
         }
 
         public void RequestSuspendWait()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CustomUpdateForDeferredBuffer(object deviceContext, object buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SubmitEmptyCustomContext(object deviceContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FastVSSetConstantBuffer(object deviceContext, int slot, object buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FastGSSetConstantBuffer(object deviceContext, int slot, object buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FastPSSetConstantBuffer(object deviceContext, int slot, object buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FastCSSetConstantBuffer(object deviceContext, int slot, object buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FastVSSetConstantBuffers1(object deviceContext, int slot, object buffer, int offset, int size, ref object constantBindingsCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FastPSSetConstantBuffers1(object deviceContext, int slot, object buffer, int offset, int size, ref object constantBindingsCache)
         {
             throw new NotImplementedException();
         }

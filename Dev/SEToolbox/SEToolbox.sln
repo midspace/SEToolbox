@@ -15,12 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolbox.ImageShaders", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SEToolboxUpdate", "SEToolboxUpdate\SEToolboxUpdate.csproj", "{0914D968-2B68-4FB4-8554-7238C7A78969}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{F968BC09-554D-4ED1-8619-78EBBC8A30F2}"
-	ProjectSection(SolutionItems) = preProject
-		plansandtasks.txt = plansandtasks.txt
-		..\..\readme.txt = ..\..\readme.txt
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C63940A6-05C8-4EE2-ABE7-35F35BA9F240}"
 	ProjectSection(SolutionItems) = preProject
 		global.targets = global.targets

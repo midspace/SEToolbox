@@ -71,6 +71,9 @@
             _steamService = MySteamGameService.Create(MySandboxGame.IsDedicated, AppId);
             MyServiceManager.Instance.AddService(_steamService);
 
+            MyVRage.Init(new ToolboxPlatform());
+            MyVRage.Platform.Init();
+
             IMyUGCService ugc = MySteamUgcService.Create(AppId, _steamService);
             //MyServiceManager.Instance.AddService(ugc);
             MyGameService.WorkshopService.AddAggregate(ugc);
@@ -84,12 +87,9 @@
 
             SpaceEngineersGame.SetupPerGameSettings();
 
-            VRage.MyVRage.Init(new ToolboxPlatform());
-            VRage.MyVRage.Platform.Init();
-
             MySandboxGame.InitMultithreading();
 
-            VRageRender.MyRenderProxy.Initialize(new MyNullRender());
+            MyRenderProxy.Initialize(new MyNullRender());
 
             // We create a whole instance of MySandboxGame!
             // If this is causing an exception, then there is a missing dependency.
