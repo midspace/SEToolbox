@@ -98,7 +98,7 @@
             // creating MySandboxGame will reset the CurrentUICulture, so I have to reapply it.
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfoByIetfLanguageTag(GlobalSettings.Default.LanguageCode);
             SpaceEngineersApi.LoadLocalization();
-            MyStorageBase.UseStorageCache = false;
+            //MyStorageBase.UseStorageCache = false;
 
             // Create an empty instance of MySession for use by low level code.
             var mySession = (Sandbox.Game.World.MySession)FormatterServices.GetUninitializedObject(typeof(Sandbox.Game.World.MySession));

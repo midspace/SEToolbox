@@ -698,8 +698,7 @@
             var actualSize = MyVoxelBuilder.CalcRequiredSize(size);
             voxelMap.Create(actualSize, stoneMaterial.Index);
 
-            MyShapeSphere sphereShape1 = new MyShapeSphere
-            {
+            MyShapeSphere sphereShape1 = new MyShapeSphere {
                 Center = new Vector3D(64, 64, 64),
                 Radius = 40
             };
@@ -728,11 +727,8 @@
             //voxelMap.Save(fileNew);
             //var lengthNew = new FileInfo(fileNew).Length;
 
-
-            MyShapeBox sphereBox = new MyShapeBox()
-            {
-                Boundaries = new BoundingBoxD
-                {
+            MyShapeBox sphereBox = new MyShapeBox() {
+                Boundaries = new BoundingBoxD {
                     Min = new Vector3D(0, 0, 0),
                     Max = new Vector3D(127, 127, 127)
                 }
@@ -797,7 +793,7 @@
 
             var size = new Vector3I(1024, 1024, 64);
 
-            var action = (Action<MyVoxelBuilderArgs>)delegate (MyVoxelBuilderArgs e)
+            void CellAction(ref MyVoxelBuilderArgs e)
             {
                 e.Volume = 0x00;
 
@@ -805,17 +801,14 @@
                     && e.CoordinatePoint.X < size.X - 1 && e.CoordinatePoint.Y < size.Y - 1 && e.CoordinatePoint.Z < size.Z - 1)
                 {
                     if (e.CoordinatePoint.Z == 5 && (e.CoordinatePoint.X % 2 == 0) && (e.CoordinatePoint.Y % 2 == 0))
-                    {
                         e.Volume = 0x92;
-                    }
-                    if (e.CoordinatePoint.Z == 6 && ((e.CoordinatePoint.X + 1) % 2 == 0) && ((e.CoordinatePoint.Y + 1) % 2 == 0))
-                    {
-                        e.Volume = 0x92;
-                    }
-                }
-            };
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
+                    if (e.CoordinatePoint.Z == 6 && ((e.CoordinatePoint.X + 1) % 2 == 0) && ((e.CoordinatePoint.Y + 1) % 2 == 0))
+                        e.Volume = 0x92;
+                }
+            }
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, CellAction);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -854,15 +847,14 @@
 
             var size = new Vector3I(length, length, length);
 
-            int[][] buildparams =
-            {
+            int[][] buildparams = {
                 new[] { min, 0 },
                 new[] { min + 1, 1 },
                 new[] { max, 0 },
                 new[] { max - 1, -1 }
             };
 
-            var action = (Action<MyVoxelBuilderArgs>)delegate (MyVoxelBuilderArgs e)
+            void CellAction(ref MyVoxelBuilderArgs e)
             {
                 e.Volume = 0x00;
 
@@ -874,22 +866,18 @@
                     foreach (int[] t in buildparams)
                     {
                         if (e.CoordinatePoint.X == t[0] && ((e.CoordinatePoint.Z + t[1]) % 2 == 0) && ((e.CoordinatePoint.Y + t[1]) % 2 == 0))
-                        {
                             e.Volume = 0x92;
-                        }
+
                         if (e.CoordinatePoint.Y == t[0] && ((e.CoordinatePoint.X + t[1]) % 2 == 0) && ((e.CoordinatePoint.Z + t[1]) % 2 == 0))
-                        {
                             e.Volume = 0x92;
-                        }
+
                         if (e.CoordinatePoint.Z == t[0] && ((e.CoordinatePoint.X + t[1]) % 2 == 0) && ((e.CoordinatePoint.Y + t[1]) % 2 == 0))
-                        {
                             e.Volume = 0x92;
-                        }
                     }
                 }
-            };
+            }
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, CellAction);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -956,10 +944,13 @@
             foreach (var filename in files)
             {
                 string name = Path.GetFileName(filename);
+
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
+
                 var voxelMap = new MyVoxelMap();
                 voxelMap.Load(filename);
+
                 watch.Stop();
 
                 Debug.WriteLine($"Filename:\t{name}.vx2");
@@ -993,8 +984,7 @@
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
             var filler = new AsteroidSeedFiller();
-            var fillProperties = new AsteroidSeedFillProperties
-            {
+            var fillProperties = new AsteroidSeedFillProperties {
                 MainMaterial = new SEToolbox.Models.MaterialSelectionModel { Value = stoneMaterial.Id.SubtypeName },
                 FirstMaterial = new SEToolbox.Models.MaterialSelectionModel { Value = ironMaterial.Id.SubtypeName },
                 FirstRadius = 3,
@@ -1077,14 +1067,12 @@
 
             const string fileNew = @".\TestOutput\test_filledvolume.vx2";
             const int length = 64;
+
             var size = new Vector3I(length, length, length);
 
-            var action = (Action<MyVoxelBuilderArgs>)delegate (MyVoxelBuilderArgs e)
-            {
-                e.Volume = 0xFF;
-            };
+            void CellAction(ref MyVoxelBuilderArgs e) => e.Volume = 0xFF;
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[06].Index, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[06].Index, null, CellAction);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -1117,15 +1105,14 @@
 
             var size = new Vector3I(length, length, length);
 
-            int[][] buildparams =
-            {
+            int[][] buildparams = {
                 new[] { min, 0 },
                 new[] { min + 1, 1 },
                 new[] { max, 0 },
                 new[] { max - 1, -1 }
             };
 
-            var action = (Action<MyVoxelBuilderArgs>)delegate (MyVoxelBuilderArgs e)
+            void CellAction(ref MyVoxelBuilderArgs e)
             {
                 e.Volume = 0x00;
 
@@ -1137,22 +1124,18 @@
                     foreach (int[] t in buildparams)
                     {
                         if (e.CoordinatePoint.X == t[0] && ((e.CoordinatePoint.Z + t[1]) % 2 == 0) && ((e.CoordinatePoint.Y + t[1]) % 2 == 0))
-                        {
                             e.Volume = 0x92;
-                        }
+
                         if (e.CoordinatePoint.Y == t[0] && ((e.CoordinatePoint.X + t[1]) % 2 == 0) && ((e.CoordinatePoint.Z + t[1]) % 2 == 0))
-                        {
                             e.Volume = 0x92;
-                        }
+
                         if (e.CoordinatePoint.Z == t[0] && ((e.CoordinatePoint.X + t[1]) % 2 == 0) && ((e.CoordinatePoint.Y + t[1]) % 2 == 0))
-                        {
                             e.Volume = 0x92;
-                        }
                     }
                 }
-            };
+            }
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, action);
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, materials[0].Index, null, CellAction);
 
             Assert.IsTrue(voxelMap.IsValid, "Voxel format must be valid.");
 
@@ -1164,8 +1147,8 @@
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             var arabianBorder7AsteroidPath = Path.Combine(contentPath, "VoxelMaps", "Arabian_Border_7.vx2");
+
             VoxelMapLoader.Load(arabianBorder7AsteroidPath);
         }
-
     }
 }

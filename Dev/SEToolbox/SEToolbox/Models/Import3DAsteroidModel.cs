@@ -70,7 +70,7 @@
             TraceDirection = TraceDirection.X;
 
             BeepWhenFinished = true;
-            RunInLowPrioity = true;
+            RunInLowPrioity = false;
         }
 
         #endregion

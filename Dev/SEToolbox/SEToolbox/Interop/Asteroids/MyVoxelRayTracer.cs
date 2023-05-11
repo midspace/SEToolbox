@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Media.Media3D;
 
@@ -12,779 +14,695 @@
 
     public static class MyVoxelRayTracer
     {
-        private static readonly object Locker = new object();
-        private enum MeshFace : byte { Undefined, Nearside, Farside };
-
-        #region ReadModelAsteroidVolmetic
-
-        // For a 1024 cubed asteroid, it takes approximately 6.5Gb of system memory.
-
-        public static MyVoxelMap ReadModelAsteroidVolmetic(Model3DGroup model, IList<MyMeshModel> mappedMesh, ScaleTransform3D scale, Transform3D rotateTransform, TraceType traceType, TraceCount traceCount, TraceDirection traceDirection,
-            Action<double, double> resetProgress, Action incrementProgress, Func<bool> checkCancel, Action complete)
+        enum MeshFace : byte
         {
-            var traceDirectionCount = 0;
-            var materials = new List<byte>();
-            var faceMaterials = new List<byte>();
-            foreach (var mesh in mappedMesh)
+            Undefined,
+            Nearside,
+            Farside
+        }
+
+        static readonly object Locker = new object();
+
+        public static MyVoxelMap GenerateVoxelMapFromModel(Model model, in Matrix3D rotationMatrix, TraceType traceType, TraceCount traceCount, TraceDirection traceDirection,
+            Action<double, double> resetProgress, Action incrementProgress, Action complete, CancellationToken cancellationToken)
+        {
+            var materials = new byte[model.MeshCount];
+            var faceMaterials = new byte[model.MeshCount];
+
+            for (int i = 0; i < model.Meshes.Length; i++)
             {
-                materials.Add(mesh.MaterialIndex ?? SpaceEngineersConsts.EmptyVoxelMaterial);
-                faceMaterials.Add(mesh.FaceMaterialIndex ?? SpaceEngineersConsts.EmptyVoxelMaterial);
+                var mesh = model.Meshes[i];
+                materials[i] = mesh.MaterialIndex ?? SpaceEngineersConsts.EmptyVoxelMaterial;
+                faceMaterials[i] = mesh.FaceMaterialIndex ?? SpaceEngineersConsts.EmptyVoxelMaterial;
             }
-
-            // How far to check in from the proposed Volumetric edge.
-            // This number is just made up, but small enough that it still represents the corner edge of the Volumetric space.
-            // But still large enough that it isn't the exact corner.
-            const double offset = 0.0000045f;
-
-            if (scale.ScaleX > 0 && scale.ScaleY > 0 && scale.ScaleZ > 0 && scale.ScaleX != 1.0f && scale.ScaleY != 1.0f && scale.ScaleZ != 1.0f)
-            {
-                model.TransformScale(scale.ScaleX, scale.ScaleY, scale.ScaleZ);
-            }
-
-            // Attempt to offset the model, so it's only caulated from zero (0) and up, instead of using zero (0) as origin.
-            //model.Transform = new TranslateTransform3D(-model.Bounds.X, -model.Bounds.Y, -model.Bounds.Z);
 
             var tbounds = model.Bounds;
-            Matrix3D? rotate = null;
-            if (rotateTransform != null)
-            {
-                rotate = rotateTransform.Value;
-                tbounds = rotateTransform.TransformBounds(tbounds);
-            }
-
-            //model.Transform = new TranslateTransform3D(-tbounds.X, -tbounds.Y, -tbounds.Z);
 
             // Add 2 to either side, to allow for material padding to expose internal materials.
             const int bufferSize = 2;
-            var xMin = (int)Math.Floor(tbounds.X) - bufferSize;
-            var yMin = (int)Math.Floor(tbounds.Y) - bufferSize;
-            var zMin = (int)Math.Floor(tbounds.Z) - bufferSize;
+            int xMin = (int)Math.Floor(tbounds.X) - bufferSize;
+            int yMin = (int)Math.Floor(tbounds.Y) - bufferSize;
+            int zMin = (int)Math.Floor(tbounds.Z) - bufferSize;
 
-            var xMax = (int)Math.Ceiling(tbounds.X + tbounds.SizeX) + bufferSize;
-            var yMax = (int)Math.Ceiling(tbounds.Y + tbounds.SizeY) + bufferSize;
-            var zMax = (int)Math.Ceiling(tbounds.Z + tbounds.SizeZ) + bufferSize;
+            int xMax = (int)Math.Ceiling(tbounds.X + tbounds.SizeX) + bufferSize;
+            int yMax = (int)Math.Ceiling(tbounds.Y + tbounds.SizeY) + bufferSize;
+            int zMax = (int)Math.Ceiling(tbounds.Z + tbounds.SizeZ) + bufferSize;
+
+            var min = new Vector3I(xMin, yMin, zMin);
+            var max = new Vector3I(xMax, yMax, zMax);
 
             // Do not rounnd up the array size, as this really isn't required, and it increases the calculation time.
-            var xCount = (xMax - xMin);
-            var yCount = (yMax - yMin);
-            var zCount = (zMax - zMin);
+            int xCount = xMax - xMin;
+            int yCount = yMax - yMin;
+            int zCount = zMax - zMin;
 
             Debug.WriteLine("Approximate Size: {0}x{1}x{2}", Math.Ceiling(tbounds.X + tbounds.SizeX) - Math.Floor(tbounds.X), Math.Ceiling(tbounds.Y + tbounds.SizeY) - Math.Floor(tbounds.Y), Math.Ceiling(tbounds.Z + tbounds.SizeZ) - Math.Floor(tbounds.Z));
             Debug.WriteLine("Bounds Size: {0}x{1}x{2}", xCount, yCount, zCount);
 
-            var finalCubic = ArrayHelper.Create<byte>(xCount, yCount, zCount);
-            var finalMater = ArrayHelper.Create<byte>(xCount, yCount, zCount);
+            var finalCubic = new byte[xCount, yCount, zCount];
+            var finalMats = new byte[xCount, yCount, zCount];
 
             if (resetProgress != null)
             {
-                long triangles = (from GeometryModel3D gm in model.Children select gm.Geometry as MeshGeometry3D).Aggregate<MeshGeometry3D, long>(0, (current, g) => current + (g.TriangleIndices.Count / 3));
                 long rays = 0;
 
                 if ((traceDirection & TraceDirection.X) == TraceDirection.X)
-                    rays += ((yMax - yMin) * (zMax - zMin));
+                    rays += yCount * zCount;
                 if ((traceDirection & TraceDirection.Y) == TraceDirection.Y)
-                    rays += ((xMax - xMin) * (zMax - zMin));
+                    rays += xCount * zCount;
                 if ((traceDirection & TraceDirection.Z) == TraceDirection.Z)
-                    rays += ((xMax - xMin) * (yMax - yMin));
+                    rays += xCount * yCount;
 
-                resetProgress.Invoke(0, rays * triangles);
+                resetProgress.Invoke(0, rays * model.NumGeometries);
             }
 
-            if (checkCancel != null && checkCancel.Invoke())
+            if (cancellationToken.IsCancellationRequested)
             {
                 complete?.Invoke();
                 return null;
             }
 
-            #region basic ray trace of every individual triangle.
+            var rotateMatrix = new MatrixD(rotationMatrix.M11, rotationMatrix.M12, rotationMatrix.M13, rotationMatrix.M14,
+                                           rotationMatrix.M21, rotationMatrix.M22, rotationMatrix.M23, rotationMatrix.M24,
+                                           rotationMatrix.M31, rotationMatrix.M32, rotationMatrix.M33, rotationMatrix.M34,
+                                           0, 0, 0, 1);
+
+            int traceDirectionCount = 0;
+
+            // Basic ray trace of every individual triangle.
 
             // Start from the last mesh, which represents the bottom of the UI stack, and overlay each other mesh on top of it.
-            for (var modelIdx = mappedMesh.Count - 1; modelIdx >= 0; modelIdx--)
+            for (int modelIdx = model.Meshes.Length - 1; modelIdx >= 0; modelIdx--)
             {
                 Debug.WriteLine("Model {0}", modelIdx);
 
-                var modelCubic = new byte[xCount][][];
-                var modelMater = new byte[xCount][][];
+                var modelCubic = new byte[xCount, yCount, zCount];
+                var modelMats = new byte[xCount, yCount, zCount];
 
-                for (var x = 0; x < xCount; x++)
-                {
-                    modelCubic[x] = new byte[yCount][];
-                    modelMater[x] = new byte[yCount][];
-                    for (var y = 0; y < yCount; y++)
-                    {
-                        modelCubic[x][y] = new byte[zCount];
-                        modelMater[x][y] = new byte[zCount];
-                    }
-                }
+                var mesh = model.Meshes[modelIdx];
+                var geometries = mesh.Geometeries;
 
-                var meshes = mappedMesh[modelIdx];
-                var threadCounter = 0;
-
-                var geometries = new GeometeryDetail[meshes.Geometery.Length];
-                for (var i = 0; i < meshes.Geometery.Length; i++)
-                    geometries[i] = new GeometeryDetail(meshes.Geometery[i]);
-
-                var startOffset = 0.5f;
-                var endOffset = 0.5f;
-                var volumeOffset = 0.5f;
-                Func<double, int> roundFunc = null;
-                if (traceType == TraceType.Odd)
-                {
-                    startOffset = 0.5f;
-                    endOffset = 0.5f;
-                    volumeOffset = 0.5f;
-                    roundFunc = delegate (double d) { return (int)Math.Round(d, 0); };
-                }
-                else if (traceType == TraceType.Even)
-                {
-                    startOffset = 0.0f;
-                    endOffset = 1.0f;
-                    volumeOffset = 1.0f;
-                    roundFunc = delegate (double d) { return (int)Math.Floor(d); };
-                }
-
-                #region X ray trace
+                byte material = materials[modelIdx];
+                byte faceMat = faceMaterials[modelIdx];
 
                 if ((traceDirection & TraceDirection.X) == TraceDirection.X)
                 {
                     Debug.WriteLine("X Rays");
                     traceDirectionCount++;
-                    threadCounter = (yMax - yMin) * (zMax - zMin);
 
-                    for (var y = yMin; y < yMax; y++)
+                    var rayOffsets = new Vector3[] {
+                        new Vector3(0,     0,     0),
+                        new Vector3(0, -0.5f, -0.5f),
+                        new Vector3(0,  0.5f, -0.5f),
+                        new Vector3(0, -0.5f,  0.5f),
+                        new Vector3(0,  0.5f,  0.5f)
+                    };
+
+                    bool result = TraceRays(geometries, rotateMatrix, traceType, rayOffsets, axis: 0, min, max,
+                        modelCubic, modelMats, traceDirectionCount, material, faceMat, incrementProgress, cancellationToken);
+
+                    if (!result)
                     {
-                        for (var z = zMin; z < zMax; z++)
-                        {
-                            if (checkCancel != null && checkCancel.Invoke())
-                            {
-                                complete?.Invoke();
-                                return null;
-                            }
-
-                            List<Point3D[]> testRays = null;
-                            if (traceType == TraceType.Odd)
-                                testRays = new List<Point3D[]>
-                            {
-                                new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
-                                new [] {new Point3D(xMin, y -0.5f + offset, z -0.5f + offset), new Point3D(xMax, y -0.5f + offset, z -0.5f + offset)},
-                                new [] {new Point3D(xMin, y + 0.5f - offset, z -0.5f + offset), new Point3D(xMax, y + 0.5f - offset, z -0.5f + offset)},
-                                new [] {new Point3D(xMin, y -0.5f + offset, z + 0.5f - offset), new Point3D(xMax, y -0.5f + offset, z + 0.5f - offset)},
-                                new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)}
-                            };
-                            else if (traceType == TraceType.Even)
-                                testRays = new List<Point3D[]>
-                            {
-                                new [] {new Point3D(xMin, y + 0.5f - offset, z + 0.5f - offset), new Point3D(xMax, y + 0.5f - offset, z + 0.5f - offset)},
-                                new [] {new Point3D(xMin, y + offset, z + offset), new Point3D(xMax, y + offset, z + offset)},
-                                new [] {new Point3D(xMin, y + 1.0f - offset, z + offset), new Point3D(xMax, y + 1.0f - offset, z + offset)},
-                                new [] {new Point3D(xMin, y + offset, z + 1.0f - offset), new Point3D(xMax, y + offset, z + 1.0f - offset)},
-                                new [] {new Point3D(xMin, y + 1.0f - offset, z + 1.0f - offset), new Point3D(xMax, y + 1.0f - offset, z + 1.0f - offset)}
-                            };
-
-                            var task = new Task(obj =>
-                            {
-                                var bgw = (RayTracerTaskWorker)obj;
-                                var tracers = new List<Trace>();
-
-                                foreach (var geometery in geometries)
-                                {
-                                    for (var t = 0; t < geometery.Triangles.Length; t += 3)
-                                    {
-                                        if (checkCancel != null && checkCancel.Invoke())
-                                            return;
-
-                                        if (incrementProgress != null)
-                                        {
-                                            lock (Locker)
-                                            {
-                                                incrementProgress.Invoke();
-                                            }
-                                        }
-
-                                        var p1 = geometery.Positions[geometery.Triangles[t]];
-                                        var p2 = geometery.Positions[geometery.Triangles[t + 1]];
-                                        var p3 = geometery.Positions[geometery.Triangles[t + 2]];
-
-                                        if (rotate.HasValue)
-                                        {
-                                            p1 = rotate.Value.Transform(p1);
-                                            p2 = rotate.Value.Transform(p2);
-                                            p3 = rotate.Value.Transform(p3);
-                                        }
-
-                                        foreach (var ray in testRays)
-                                        {
-                                            if ((p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
-                                                (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y) ||
-                                                (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
-                                                (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
-                                                continue;
-
-                                            Point3D intersect;
-                                            int normal;
-                                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
-                                            {
-                                                tracers.Add(new Trace(intersect, normal));
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (tracers.Count > 1)
-                                {
-                                    var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.X).ToArray();
-                                    var startCoord = roundFunc(order[0].Point.X);
-                                    var endCoord = roundFunc(order[order.Length - 1].Point.X);
-                                    var surfaces = 0;
-
-                                    for (var x = startCoord; x <= endCoord; x++)
-                                    {
-                                        var points = order.Where(p => p.Point.X > x - startOffset && p.Point.X < x + endOffset).ToArray();
-                                        var volume = (byte)(0xff / testRays.Count * surfaces);
-
-                                        foreach (var point in points)
-                                        {
-                                            if (point.Face == MeshFace.Farside)
-                                            {
-                                                volume += (byte)(Math.Round(Math.Abs(x + volumeOffset - point.Point.X) * 255 / testRays.Count, 0));
-                                                surfaces++;
-                                            }
-                                            else if (point.Face == MeshFace.Nearside)
-                                            {
-                                                volume -= (byte)(Math.Round(Math.Abs(x + volumeOffset - point.Point.X) * 255 / testRays.Count, 0));
-                                                surfaces--;
-                                            }
-                                        }
-
-                                        // TODO: retest detailed model export.
-                                        //volume = volume.RoundUpToNearest(8);
-
-                                        modelCubic[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = volume;
-                                        modelMater[x - xMin][bgw.Y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
-                                    }
-
-                                    if (faceMaterials[bgw.ModelIdx] != 0xff)
-                                    {
-                                        for (var i = 1; i < 6; i++)
-                                        {
-                                            if (xMin < startCoord - i && modelCubic[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
-                                            {
-                                                modelMater[startCoord - i - xMin][bgw.Y - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
-                                            }
-                                            if (endCoord + i < xMax && modelCubic[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] == 0)
-                                            {
-                                                modelMater[endCoord + i - xMin][bgw.Y - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
-                                            }
-                                        }
-                                    }
-                                }
-
-                                lock (Locker)
-                                {
-                                    threadCounter--;
-                                }
-                            }, new RayTracerTaskWorker(modelIdx, 0, y, z));
-
-                            task.Start();
-                        }
+                        complete?.Invoke();
+                        return null;
                     }
-
-                    // Wait for Multithread parts to finish.
-                    while (threadCounter > 0)
-                    {
-                        System.Windows.Forms.Application.DoEvents();
-                        if (checkCancel != null && checkCancel.Invoke())
-                            break;
-                    }
-
-                    GC.Collect();
                 }
-
-                #endregion
-
-                #region Y rays trace
 
                 if ((traceDirection & TraceDirection.Y) == TraceDirection.Y)
                 {
                     Debug.WriteLine("Y Rays");
                     traceDirectionCount++;
-                    threadCounter = (xMax - xMin) * (zMax - zMin);
 
-                    for (var x = xMin; x < xMax; x++)
+                    var rayOffsets = new Vector3[] {
+                        new Vector3(    0, 0,     0),
+                        new Vector3(-0.5f, 0, -0.5f),
+                        new Vector3( 0.5f, 0, -0.5f),
+                        new Vector3(-0.5f, 0,  0.5f),
+                        new Vector3( 0.5f, 0,  0.5f)
+                    };
+
+                    bool result = TraceRays(geometries, rotateMatrix, traceType, rayOffsets, axis: 1, min, max,
+                        modelCubic, modelMats, traceDirectionCount, material, faceMat, incrementProgress, cancellationToken);
+
+                    if (!result)
                     {
-                        for (var z = zMin; z < zMax; z++)
-                        {
-                            if (checkCancel != null && checkCancel.Invoke())
-                            {
-                                if (complete != null)
-                                    complete.Invoke();
-                                return null;
-                            }
-
-                            List<Point3D[]> testRays = null;
-                            if (traceType == TraceType.Odd)
-                                testRays = new List<Point3D[]>
-                            {
-                                new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
-                                new [] {new Point3D(x -0.5f + offset, yMin, z -0.5f + offset), new Point3D(x -0.5f + offset, yMax, z -0.5f + offset)},
-                                new [] {new Point3D(x + 0.5f - offset, yMin, z -0.5f + offset), new Point3D(x + 0.5f - offset, yMax, z -0.5f + offset)},
-                                new [] {new Point3D(x -0.5f + offset, yMin, z + 0.5f - offset), new Point3D(x -0.5f + offset, yMax, z + 0.5f - offset)},
-                                new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)}
-                            };
-                            else if (traceType == TraceType.Even)
-                                testRays = new List<Point3D[]>
-                            {
-                                new [] {new Point3D(x + 0.5f - offset, yMin, z + 0.5f - offset), new Point3D(x + 0.5f - offset, yMax, z + 0.5f - offset)},
-                                new [] {new Point3D(x + offset, yMin, z + offset), new Point3D(x + offset, yMax, z + offset)},
-                                new [] {new Point3D(x + 1.0f - offset, yMin, z + offset), new Point3D(x + 1.0f - offset, yMax, z + offset)},
-                                new [] {new Point3D(x + offset, yMin, z + 1.0f - offset), new Point3D(x + offset, yMax, z + 1.0f - offset)},
-                                new [] {new Point3D(x + 1.0f - offset, yMin, z + 1.0f - offset), new Point3D(x + 1.0f - offset, yMax, z + 1.0f - offset)}
-                            };
-
-                            var task = new Task(obj =>
-                            {
-                                var bgw = (RayTracerTaskWorker)obj;
-                                var tracers = new List<Trace>();
-
-                                foreach (var geometery in geometries)
-                                {
-                                    for (var t = 0; t < geometery.Triangles.Length; t += 3)
-                                    {
-                                        if (checkCancel != null && checkCancel.Invoke())
-                                            return;
-
-                                        if (incrementProgress != null)
-                                        {
-                                            lock (Locker)
-                                            {
-                                                incrementProgress.Invoke();
-                                            }
-                                        }
-
-                                        var p1 = geometery.Positions[geometery.Triangles[t]];
-                                        var p2 = geometery.Positions[geometery.Triangles[t + 1]];
-                                        var p3 = geometery.Positions[geometery.Triangles[t + 2]];
-
-                                        if (rotate.HasValue)
-                                        {
-                                            p1 = rotate.Value.Transform(p1);
-                                            p2 = rotate.Value.Transform(p2);
-                                            p3 = rotate.Value.Transform(p3);
-                                        }
-
-                                        foreach (var ray in testRays)
-                                        {
-                                            if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
-                                                (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
-                                                (p1.Z < ray[0].Z && p2.Z < ray[0].Z && p3.Z < ray[0].Z) ||
-                                                (p1.Z > ray[0].Z && p2.Z > ray[0].Z && p3.Z > ray[0].Z))
-                                                continue;
-
-                                            Point3D intersect;
-                                            int normal;
-                                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
-                                            {
-                                                tracers.Add(new Trace(intersect, normal));
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (tracers.Count > 1)
-                                {
-                                    var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Y).ToArray();
-                                    var startCoord = roundFunc(order[0].Point.Y);
-                                    var endCoord = roundFunc(order[order.Length - 1].Point.Y);
-                                    var surfaces = 0;
-
-                                    for (var y = startCoord; y <= endCoord; y++)
-                                    {
-                                        var points = order.Where(p => p.Point.Y > y - startOffset && p.Point.Y < y + endOffset).ToArray();
-                                        var volume = (byte)(0xff / testRays.Count * surfaces);
-
-                                        foreach (var point in points)
-                                        {
-                                            if (point.Face == MeshFace.Farside)
-                                            {
-                                                volume += (byte)(Math.Round(Math.Abs(y + volumeOffset - point.Point.Y) * 255 / testRays.Count, 0));
-                                                surfaces++;
-                                            }
-                                            else if (point.Face == MeshFace.Nearside)
-                                            {
-                                                volume -= (byte)(Math.Round(Math.Abs(y + volumeOffset - point.Point.Y) * 255 / testRays.Count, 0));
-                                                surfaces--;
-                                            }
-                                        }
-
-                                        if (traceDirectionCount > 1)
-                                        {
-                                            var prevolumme = modelCubic[bgw.X - xMin][y - yMin][bgw.Z - zMin];
-                                            if (prevolumme != 0)
-                                            {
-                                                // average with the pre-existing X volume.
-                                                volume = (byte)Math.Round(((float)prevolumme + (float)volume) / (float)traceDirectionCount, 0);
-                                            }
-                                        }
-
-                                        //volume = volume.RoundUpToNearest(8);
-
-                                        modelCubic[bgw.X - xMin][y - yMin][bgw.Z - zMin] = volume;
-                                        modelMater[bgw.X - xMin][y - yMin][bgw.Z - zMin] = materials[bgw.ModelIdx];
-                                    }
-
-                                    if (faceMaterials[bgw.ModelIdx] != 0xff)
-                                    {
-                                        for (var i = 1; i < 6; i++)
-                                        {
-                                            if (yMin < startCoord - i && modelCubic[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] == 0)
-                                            {
-                                                modelMater[bgw.X - xMin][startCoord - i - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
-                                            }
-                                            if (endCoord + i < yMax && modelCubic[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] == 0)
-                                            {
-                                                modelMater[bgw.X - xMin][endCoord + i - yMin][bgw.Z - zMin] = faceMaterials[bgw.ModelIdx];
-                                            }
-                                        }
-                                    }
-                                }
-
-                                lock (Locker)
-                                {
-                                    threadCounter--;
-                                }
-                            }, new RayTracerTaskWorker(modelIdx, x, 0, z));
-
-                            task.Start();
-                        }
+                        complete?.Invoke();
+                        return null;
                     }
-
-                    // Wait for Multithread parts to finish.
-                    while (threadCounter > 0)
-                    {
-                        System.Windows.Forms.Application.DoEvents();
-                        if (checkCancel != null && checkCancel.Invoke())
-                            break;
-                    }
-
-                    GC.Collect();
                 }
-
-                #endregion
-
-                #region Z ray trace
 
                 if ((traceDirection & TraceDirection.Z) == TraceDirection.Z)
                 {
                     Debug.WriteLine("Z Rays");
                     traceDirectionCount++;
-                    threadCounter = (xMax - xMin) * (yMax - yMin);
 
-                    for (var x = xMin; x < xMax; x++)
+                    var rayOffsets = new Vector3[] {
+                        new Vector3(    0,     0, 0),
+                        new Vector3(-0.5f, -0.5f, 0),
+                        new Vector3( 0.5f, -0.5f, 0),
+                        new Vector3(-0.5f,  0.5f, 0),
+                        new Vector3( 0.5f,  0.5f, 0)
+                    };
+
+                    bool result = TraceRays(geometries, rotateMatrix, traceType, rayOffsets, axis: 2, min, max,
+                        modelCubic, modelMats, traceDirectionCount, material, faceMat, incrementProgress, cancellationToken);
+
+                    if (!result)
                     {
-                        for (var y = yMin; y < yMax; y++)
-                        {
-                            if (checkCancel != null && checkCancel.Invoke())
-                            {
-                                if (complete != null)
-                                    complete.Invoke();
-                                return null;
-                            }
-
-                            List<Point3D[]> testRays = null;
-                            if (traceType == TraceType.Odd)
-                                testRays = new List<Point3D[]>
-                            {
-                                new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
-                                new [] {new Point3D(x -0.5f + offset, y -0.5f + offset, zMin), new Point3D(x -0.5f + offset, y -0.5f + offset, zMax)},
-                                new [] {new Point3D(x + 0.5f - offset, y -0.5f + offset, zMin), new Point3D(x + 0.5f - offset, y -0.5f + offset, zMax)},
-                                new [] {new Point3D(x -0.5f + offset, y + 0.5f - offset, zMin), new Point3D(x -0.5f + offset, y + 0.5f - offset, zMax)},
-                                new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)}
-                            };
-                            else if (traceType == TraceType.Even)
-                                testRays = new List<Point3D[]>
-                            {
-                                new [] {new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMin), new Point3D(x + 0.5f - offset, y + 0.5f - offset, zMax)},
-                                new [] {new Point3D(x + offset, y + offset, zMin), new Point3D(x + offset, y + offset, zMax)},
-                                new [] {new Point3D(x + 1.0f - offset, y + offset, zMin), new Point3D(x + 1.0f - offset, y + offset, zMax)},
-                                new [] {new Point3D(x + offset, y + 1.0f - offset, zMin), new Point3D(x + offset, y + 1.0f - offset, zMax)},
-                                new [] {new Point3D(x + 1.0f - offset, y + 1.0f - offset, zMin), new Point3D(x + 1.0f - offset, y + 1.0f - offset, zMax)}
-                            };
-
-                            var task = new Task(obj =>
-                            {
-                                var bgw = (RayTracerTaskWorker)obj;
-                                var tracers = new List<Trace>();
-
-                                foreach (var geometery in geometries)
-                                {
-                                    for (var t = 0; t < geometery.Triangles.Length; t += 3)
-                                    {
-                                        if (checkCancel != null && checkCancel.Invoke())
-                                            return;
-
-                                        if (incrementProgress != null)
-                                        {
-                                            lock (Locker)
-                                            {
-                                                incrementProgress.Invoke();
-                                            }
-                                        }
-
-                                        var p1 = geometery.Positions[geometery.Triangles[t]];
-                                        var p2 = geometery.Positions[geometery.Triangles[t + 1]];
-                                        var p3 = geometery.Positions[geometery.Triangles[t + 2]];
-
-                                        if (rotate.HasValue)
-                                        {
-                                            p1 = rotate.Value.Transform(p1);
-                                            p2 = rotate.Value.Transform(p2);
-                                            p3 = rotate.Value.Transform(p3);
-                                        }
-
-                                        foreach (var ray in testRays)
-                                        {
-                                            if ((p1.X < ray[0].X && p2.X < ray[0].X && p3.X < ray[0].X) ||
-                                                (p1.X > ray[0].X && p2.X > ray[0].X && p3.X > ray[0].X) ||
-                                                (p1.Y < ray[0].Y && p2.Y < ray[0].Y && p3.Y < ray[0].Y) ||
-                                                (p1.Y > ray[0].Y && p2.Y > ray[0].Y && p3.Y > ray[0].Y))
-                                                continue;
-
-                                            Point3D intersect;
-                                            int normal;
-                                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, ray[0], ray[1], out intersect, out normal))
-                                            {
-                                                tracers.Add(new Trace(intersect, normal));
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (tracers.Count > 1)
-                                {
-                                    var order = tracers.GroupBy(t => new { t.Point, t.Face }).Select(g => g.First()).OrderBy(k => k.Point.Z).ToArray();
-                                    var startCoord = roundFunc(order[0].Point.Z);
-                                    var endCoord = roundFunc(order[order.Length - 1].Point.Z);
-                                    var surfaces = 0;
-
-                                    for (var z = startCoord; z <= endCoord; z++)
-                                    {
-                                        var points = order.Where(p => p.Point.Z > z - startOffset && p.Point.Z < z + endOffset).ToArray();
-                                        var volume = (byte)(0xff / testRays.Count * surfaces);
-
-                                        foreach (var point in points)
-                                        {
-                                            if (point.Face == MeshFace.Farside)
-                                            {
-                                                volume += (byte)(Math.Round(Math.Abs(z + volumeOffset - point.Point.Z) * 255 / testRays.Count, 0));
-                                                surfaces++;
-                                            }
-                                            else if (point.Face == MeshFace.Nearside)
-                                            {
-                                                volume -= (byte)(Math.Round(Math.Abs(z + volumeOffset - point.Point.Z) * 255 / testRays.Count, 0));
-                                                surfaces--;
-                                            }
-                                        }
-
-                                        if (traceDirectionCount > 1)
-                                        {
-                                            var prevolumme = modelCubic[bgw.X - xMin][bgw.Y - yMin][z - zMin];
-                                            if (prevolumme != 0)
-                                            {
-                                                // average with the pre-existing X and Y volumes.
-                                                volume = (byte)Math.Round((((float)prevolumme * (traceDirectionCount - 1)) + (float)volume) / (float)traceDirectionCount, 0);
-                                            }
-                                        }
-
-                                        //volume = volume.RoundUpToNearest(8);
-
-                                        modelCubic[bgw.X - xMin][bgw.Y - yMin][z - zMin] = volume;
-                                        modelMater[bgw.X - xMin][bgw.Y - yMin][z - zMin] = materials[bgw.ModelIdx];
-                                    }
-
-                                    if (faceMaterials[bgw.ModelIdx] != 0xff)
-                                    {
-                                        for (var i = 1; i < 6; i++)
-                                        {
-                                            if (zMin < startCoord - i && modelCubic[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] == 0)
-                                            {
-                                                modelMater[bgw.X - xMin][bgw.Y - yMin][startCoord - i - zMin] = faceMaterials[bgw.ModelIdx];
-                                            }
-                                            if (endCoord + i < zMax && modelCubic[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] == 0)
-                                            {
-                                                modelMater[bgw.X - xMin][bgw.Y - yMin][endCoord + i - zMin] = faceMaterials[bgw.ModelIdx];
-                                            }
-                                        }
-                                    }
-                                }
-
-                                lock (Locker)
-                                {
-                                    threadCounter--;
-                                }
-                            }, new RayTracerTaskWorker(modelIdx, x, y, 0));
-
-                            task.Start();
-                        }
+                        complete?.Invoke();
+                        return null;
                     }
-
-                    // Wait for Multithread parts to finish.
-                    while (threadCounter > 0)
-                    {
-                        System.Windows.Forms.Application.DoEvents();
-                        if (checkCancel != null && checkCancel.Invoke())
-                            break;
-                    }
-
-                    GC.Collect();
                 }
 
-                #endregion
-
-                if (checkCancel != null && checkCancel.Invoke())
+                if (cancellationToken.IsCancellationRequested)
                 {
                     complete?.Invoke();
                     return null;
                 }
 
-                #region merge individual model results into final
+                // Merge individual model results into final
 
-                for (var x = 0; x < xCount; x++)
+                for (int x = 0; x < xCount; x++)
                 {
-                    for (var y = 0; y < yCount; y++)
+                    for (int y = 0; y < yCount; y++)
                     {
-                        for (var z = 0; z < zCount; z++)
+                        for (int z = 0; z < zCount; z++)
                         {
-                            if (modelMater[x][y][z] == 0xff && modelCubic[x][y][z] != 0)
+                            byte content = modelCubic[x, y, z];
+                            byte mat = modelMats[x, y, z];
+
+                            if (mat == 0xff && content != 0)
                             {
-                                finalCubic[x][y][z] = (byte)Math.Max(finalCubic[x][y][z] - modelCubic[x][y][z], 0);
+                                finalCubic[x, y, z] = (byte)Math.Max(finalCubic[x, y, z] - content, 0);
                             }
-                            else if (modelCubic[x][y][z] != 0)
+                            else if (content != 0)
                             {
-                                finalCubic[x][y][z] = Math.Max(finalCubic[x][y][z], modelCubic[x][y][z]);
-                                finalMater[x][y][z] = modelMater[x][y][z];
+                                finalCubic[x, y, z] = Math.Max(finalCubic[x, y, z], content);
+                                finalMats[x, y, z] = mat;
                             }
-                            else if (finalCubic[x][y][z] == 0 && finalMater[x][y][z] == 0 && modelMater[x][y][z] != 0xff)
+                            else if (finalCubic[x, y, z] == 0 && finalMats[x, y, z] == 0 && mat != 0xff)
                             {
-                                finalMater[x][y][z] = modelMater[x][y][z];
+                                finalMats[x, y, z] = mat;
                             }
                         }
                     }
                 }
 
-                #endregion
+            } // End models
 
-            } // end models
-
-            #endregion
-
-            if (checkCancel != null && checkCancel.Invoke())
+            if (cancellationToken.IsCancellationRequested)
             {
                 complete?.Invoke();
                 return null;
             }
 
             var size = new Vector3I(xCount, yCount, zCount);
-            // TODO: at the moment the Mesh list is not complete, so the faceMaterial setting is kind of vague.
-            var defaultMaterial = mappedMesh[0].MaterialIndex; // Use the FaceMaterial from the first Mesh in the object list.
-            var faceMaterial = mappedMesh[0].FaceMaterialIndex; // Use the FaceMaterial from the first Mesh in the object list.
+            // TODO: At the moment the Mesh list is not complete, so the faceMaterial setting is kind of vague.
+            var defaultMaterial = model.Meshes[0].MaterialIndex; // Use the FaceMaterial from the first Mesh in the object list.
+            var faceMaterial = model.Meshes[0].FaceMaterialIndex; // Use the FaceMaterial from the first Mesh in the object list.
 
-            var action = (Action<MyVoxelBuilderArgs>)delegate (MyVoxelBuilderArgs e)
+            void CellAction(ref MyVoxelBuilderArgs args)
             {
-                // center the finalCubic structure within the voxel Volume.
-                Vector3I pointOffset = (e.Size - size) / 2;
+                // Center the finalCubic structure within the voxel Volume.
+                Vector3I pointOffset = (args.Size - size) / 2;
 
-                // the model is only shaped according to its volume, not the voxel which is cubic.
-                if (e.CoordinatePoint.X >= pointOffset.X && e.CoordinatePoint.X < pointOffset.X + xCount &&
-                    e.CoordinatePoint.Y >= pointOffset.Y && e.CoordinatePoint.Y < pointOffset.Y + yCount &&
-                    e.CoordinatePoint.Z >= pointOffset.Z && e.CoordinatePoint.Z < pointOffset.Z + zCount)
+                // The model is only shaped according to its volume, not the voxel which is cubic.
+                if (args.CoordinatePoint.X >= pointOffset.X && args.CoordinatePoint.X < pointOffset.X + xCount &&
+                    args.CoordinatePoint.Y >= pointOffset.Y && args.CoordinatePoint.Y < pointOffset.Y + yCount &&
+                    args.CoordinatePoint.Z >= pointOffset.Z && args.CoordinatePoint.Z < pointOffset.Z + zCount)
                 {
-                    e.Volume = finalCubic[e.CoordinatePoint.X - pointOffset.X][e.CoordinatePoint.Y - pointOffset.Y][e.CoordinatePoint.Z - pointOffset.Z];
-                    e.MaterialIndex = finalMater[e.CoordinatePoint.X - pointOffset.X][e.CoordinatePoint.Y - pointOffset.Y][e.CoordinatePoint.Z - pointOffset.Z];
-                }
-            };
+                    var coord = args.CoordinatePoint - pointOffset;
 
-            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, defaultMaterial.Value, faceMaterial, action);
+                    args.Volume = finalCubic[coord.X, coord.Y, coord.Z];
+                    args.MaterialIndex = finalMats[coord.X, coord.Y, coord.Z];
+                }
+            }
+
+            var voxelMap = MyVoxelBuilder.BuildAsteroid(true, size, defaultMaterial.Value, faceMaterial, CellAction);
 
             complete?.Invoke();
 
             return voxelMap;
         }
 
-        #endregion
-
-        #region support classes
-
-        public class MyMeshModel
+        static bool TraceRays(MeshGeometery[] geometries, MatrixD rotateMatrix, TraceType traceType, Vector3[] rayOffsets, int axis,
+            Vector3I min, Vector3I max, byte[,,] modelCubic, byte[,,] modelMats, int traceDirectionCount, byte material, byte faceMaterial,
+            Action incrementProgress, CancellationToken cancellationToken)
         {
-            public MyMeshModel(MeshGeometry3D[] geometery, byte? materialIndex, byte? faceMaterialIndex)
+            int xCount = max.X - min.X;
+            int yCount = max.Y - min.Y;
+            int zCount = max.Z - min.Z;
+
+            int iterCount = axis switch {
+                0 => yCount * zCount,
+                1 => xCount * zCount,
+                2 => xCount * yCount,
+                _ => 0,
+            };
+
+            ParallelLoopResult loopResult;
+
+            try
             {
-                Geometery = geometery;
+                var options = new ParallelOptions { CancellationToken = cancellationToken };
+                loopResult = Parallel.For(0, iterCount, options, InitLocalState, IntersectRays, args => { });
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+            catch (AggregateException ag) when (ag.InnerExceptions.All(e => e is OperationCanceledException))
+            {
+                return false;
+            }
+
+            GC.Collect();
+
+            return loopResult.IsCompleted;
+
+            (List<RayHit>, byte, byte) InitLocalState() => (new List<RayHit>(), material, faceMaterial);
+
+            (List<RayHit>, byte, byte) IntersectRays(int loopIndex, ParallelLoopState loopState, (List<RayHit> RayHits, byte Mat, byte FaceMat) args)
+            {
+                int x = 0;
+                int y = 0;
+                int z = 0;
+
+                switch (axis)
+                {
+                case 0:
+                    y = loopIndex / zCount + min.Y;
+                    z = loopIndex % zCount + min.Z;
+                    break;
+                case 1:
+                    x = loopIndex / zCount + min.X;
+                    z = loopIndex % zCount + min.Z;
+                    break;
+                case 2:
+                    x = loopIndex / yCount + min.X;
+                    y = loopIndex % yCount + min.Y;
+                    break;
+                }
+
+                var rayHits = args.RayHits;
+
+                TestRays(geometries, rotateMatrix, traceType, rayOffsets, rayHits, min, max, new Vector3I(x, y, z), axis, incrementProgress, cancellationToken);
+
+                if (rayHits.Count > 1)
+                {
+                    switch (axis)
+                    {
+                    case 0:
+                        AccumVolume<XAxisSelector>(rayHits, traceType, rayOffsets.Length, min, max, x, y, z,
+                            modelCubic, modelMats, traceDirectionCount, args.Mat, args.FaceMat);
+                        break;
+                    case 1:
+                        AccumVolume<YAxisSelector>(rayHits, traceType, rayOffsets.Length, min, max, x, y, z,
+                            modelCubic, modelMats, traceDirectionCount, args.Mat, args.FaceMat);
+                        break;
+                    case 2:
+                        AccumVolume<ZAxisSelector>(rayHits, traceType, rayOffsets.Length, min, max, x, y, z,
+                            modelCubic, modelMats, traceDirectionCount, args.Mat, args.FaceMat);
+                        break;
+                    }
+                }
+
+                rayHits.Clear();
+                return args;
+            }
+        }
+
+        static void TestRays(MeshGeometery[] geometries, MatrixD rotateMatrix, TraceType traceType,
+            Vector3[] rayOffsets, List<RayHit> rayHits, Vector3I min, Vector3I max, Vector3I coord, int axis,
+            Action incrementProgress, CancellationToken cancellationToken)
+        {
+            var axisMask = axis switch {
+                0 => new Vector3(0, 1, 1),
+                1 => new Vector3(1, 0, 1),
+                2 => new Vector3(1, 1, 0),
+                _ => default,
+            };
+
+            Span<VRageMath.Vector3D> maskedOffsets = stackalloc VRageMath.Vector3D[rayOffsets.Length];
+
+            for (int i = 0; i < rayOffsets.Length; i++)
+            {
+                // How far to check in from the proposed Volumetric edge.
+                // This number is just made up, but small enough that it still represents the corner edge of the Volumetric space.
+                // But still large enough that it isn't the exact corner.
+                const double edgeOffset = 0.0000045f;
+
+                var ro = rayOffsets[i];
+
+                var offset = new VRageMath.Vector3D(
+                    ro.X > 0 ? -edgeOffset : edgeOffset,
+                    ro.Y > 0 ? -edgeOffset : edgeOffset,
+                    ro.Z > 0 ? -edgeOffset : edgeOffset);
+
+                if (traceType == TraceType.Even)
+                    offset += 0.5f;
+
+                maskedOffsets[i] = offset * axisMask;
+            }
+
+            var axisMin = min * (Vector3.One - axisMask);
+            var axisMax = max * (Vector3.One - axisMask);
+            var coordF = (Vector3)coord;
+            var coordMin = axisMin + coordF;
+            var coordMax = axisMax + coordF;
+
+            foreach (var geometry in geometries)
+            {
+                for (int t = 0; t < geometry.Triangles.Length; t += 3)
+                {
+                    var p1 = geometry.Positions[geometry.Triangles[t]];
+                    var p2 = geometry.Positions[geometry.Triangles[t + 1]];
+                    var p3 = geometry.Positions[geometry.Triangles[t + 2]];
+
+                    p1 = VRageMath.Vector3D.TransformNormal(p1.ToVector3D(), rotateMatrix).ToPoint3D();
+                    p2 = VRageMath.Vector3D.TransformNormal(p2.ToVector3D(), rotateMatrix).ToPoint3D();
+                    p3 = VRageMath.Vector3D.TransformNormal(p3.ToVector3D(), rotateMatrix).ToPoint3D();
+
+                    for (int i = 0; i < rayOffsets.Length; i++)
+                    {
+                        var ro = rayOffsets[i];
+                        var o = maskedOffsets[i];
+                        var start = (coordMin + ro) + o;
+
+                        if (axis != 0)
+                        {
+                            if ((p1.X < start.X && p2.X < start.X && p3.X < start.X) ||
+                                (p1.X > start.X && p2.X > start.X && p3.X > start.X))
+                                continue;
+                        }
+
+                        if (axis != 1)
+                        {
+                            if ((p1.Y < start.Y && p2.Y < start.Y && p3.Y < start.Y) ||
+                                (p1.Y > start.Y && p2.Y > start.Y && p3.Y > start.Y))
+                                continue;
+                        }
+
+                        if (axis != 2)
+                        {
+                            if ((p1.Z < start.Z && p2.Z < start.Z && p3.Z < start.Z) ||
+                                (p1.Z > start.Z && p2.Z > start.Z && p3.Z > start.Z))
+                                continue;
+                        }
+
+                        var end = (coordMax + ro) + o;
+
+                        Point3D intersect;
+                        int normal;
+
+                        if (MeshHelper.RayIntersectTriangleRound(p1, p2, p3, start.ToPoint3D(), end.ToPoint3D(), out intersect, out normal))
+                            rayHits.Add(new RayHit(intersect, normal, i));
+                    }
+                }
+
+                if (cancellationToken.IsCancellationRequested)
+                    return;
+
+                if (incrementProgress != null)
+                {
+                    lock (Locker)
+                        incrementProgress.Invoke();
+                }
+            }
+        }
+
+        interface IAxisValueSelector
+        {
+            int Axis { get; }
+
+            double GetValue(Point3D point);
+
+            void UpdateRelCoord(ref int x, ref int y, ref int z, int c, int axisMin);
+        }
+
+        const MethodImplOptions Inline = MethodImplOptions.AggressiveInlining;
+
+        struct XAxisSelector : IAxisValueSelector
+        {
+            public int Axis { [MethodImpl(Inline)] get => 0; }
+
+            [MethodImpl(Inline)]
+            public double GetValue(Point3D point) => point.X;
+
+            [MethodImpl(Inline)]
+            public void UpdateRelCoord(ref int x, ref int y, ref int z, int c, int axisMin) { x = c - axisMin; }
+        }
+
+        struct YAxisSelector : IAxisValueSelector
+        {
+            public int Axis { [MethodImpl(Inline)] get => 1; }
+
+            [MethodImpl(Inline)]
+            public double GetValue(Point3D point) => point.Y;
+
+            [MethodImpl(Inline)]
+            public void UpdateRelCoord(ref int x, ref int y, ref int z, int c, int axisMin) { y = c - axisMin; }
+        }
+
+        struct ZAxisSelector : IAxisValueSelector
+        {
+            public int Axis { [MethodImpl(Inline)] get => 2; }
+
+            [MethodImpl(Inline)]
+            public double GetValue(Point3D point) => point.Z;
+
+            [MethodImpl(Inline)]
+            public void UpdateRelCoord(ref int x, ref int y, ref int z, int c, int axisMin) { z = c - axisMin; }
+        }
+
+        static void AccumVolume<TSelector>(List<RayHit> rayHits, TraceType traceType, int testRayCount,
+            Vector3I min, Vector3I max, int x, int y, int z, byte[,,] modelCubic, byte[,,] modelMats,
+            int traceDirectionCount, byte material, byte faceMaterial)
+            where TSelector : struct, IAxisValueSelector
+        {
+            var orderedHits = rayHits.Select(t => (Point: default(TSelector).GetValue(t.Point), t.Face, t.TestRayIndex))
+                                     .Distinct().OrderBy(k => k.Point).ToArray();
+
+            TSelector selector = default;
+
+            int startCoord, endCoord;
+
+            float startOffset = 0.5f;
+            float endOffset = 0.5f;
+            float volumeOffset = 0.5f;
+
+            if (traceType == TraceType.Odd)
+            {
+                startCoord = (int)Math.Round(orderedHits[0].Point);
+                endCoord = (int)Math.Round(orderedHits[orderedHits.Length - 1].Point);
+
+                startOffset = 0.5f;
+                endOffset = 0.5f;
+                volumeOffset = 0.5f;
+            }
+            else// if (traceType == TraceType.Even)
+            {
+                startCoord = (int)Math.Floor(orderedHits[0].Point);
+                endCoord = (int)Math.Floor(orderedHits[orderedHits.Length - 1].Point);
+
+                startOffset = 0.0f;
+                endOffset = 1.0f;
+                volumeOffset = 1.0f;
+            }
+
+            int xRel = x - min.X;
+            int yRel = y - min.Y;
+            int zRel = z - min.Z;
+
+            int axisMin = 0, axisMax = 0;
+
+            switch (selector.Axis)
+            {
+            case 0:
+                axisMin = min.X;
+                axisMax = max.X;
+                break;
+            case 1:
+                axisMin = min.Y;
+                axisMax = max.Y;
+                break;
+            case 2:
+                axisMin = min.Z;
+                axisMax = max.Z;
+                break;
+            }
+
+            double hitWeight = 1.0 / testRayCount;
+            Span<int> surfaceCounts = stackalloc int[testRayCount];
+
+            for (int c = startCoord; c <= endCoord; c++)
+            {
+                double volume = 0;
+
+                for (int i = 0; i < surfaceCounts.Length; i++)
+                    volume += (surfaceCounts[i] > 0 ? 1 : 0) * hitWeight;
+
+                foreach (var hit in orderedHits)
+                {
+                    double p = hit.Point;
+
+                    if (p < c - startOffset || p >= c + endOffset) // Check if the point in this cell
+                        continue;
+
+                    double v = Math.Max(0, c + volumeOffset - p) * hitWeight;
+
+                    if (hit.Face == MeshFace.Farside)
+                    {
+                        if (surfaceCounts[hit.TestRayIndex]++ == 0)
+                            volume += v;
+                    }
+                    else if (hit.Face == MeshFace.Nearside)
+                    {
+                        int sc = surfaceCounts[hit.TestRayIndex] - 1;
+
+                        if (sc == 0)
+                            volume -= v;
+
+                        surfaceCounts[hit.TestRayIndex] = Math.Max(0, sc);
+                    }
+                }
+
+                selector.UpdateRelCoord(ref xRel, ref yRel, ref zRel, c, axisMin);
+
+                if (traceDirectionCount > 1)
+                {
+                    // Average with the pre-existing volume.
+                    double preVolumme = modelCubic[xRel, yRel, zRel] / 255.0;
+                    volume = (preVolumme * ((traceDirectionCount - 1) / (double)traceDirectionCount)) + (volume / (double)traceDirectionCount);
+                }
+
+                modelCubic[xRel, yRel, zRel] = (byte)Math.Round(volume * 255);
+                modelMats[xRel, yRel, zRel] = material;
+            }
+
+            if (faceMaterial == 0xff)
+                return;
+
+            for (int i = 1; i < 6; i++)
+            {
+                int c = startCoord - i;
+
+                if (c > axisMin)
+                {
+                    selector.UpdateRelCoord(ref xRel, ref yRel, ref zRel, c, axisMin);
+
+                    if (modelCubic[xRel, yRel, zRel] == 0)
+                        modelMats[xRel, yRel, zRel] = faceMaterial;
+                }
+
+                c = endCoord + i;
+
+                if (c < axisMax)
+                {
+                    selector.UpdateRelCoord(ref xRel, ref yRel, ref zRel, c, axisMin);
+
+                    if (modelCubic[xRel, yRel, zRel] == 0)
+                        modelMats[xRel, yRel, zRel] = faceMaterial;
+                }
+            }
+        }
+
+        public class Model
+        {
+            public Rect3D Bounds;
+            public long NumGeometries;
+            public ModelMesh[] Meshes;
+
+            public int MeshCount => Meshes.Length;
+
+            public Model(Model3DGroup model, Size3D scale, Matrix3D rotateMatrix, byte? material)
+            {
+                if (scale.X > 0 && scale.Y > 0 && scale.Z > 0
+                    && scale.X != 1.0 && scale.Y != 1.0 && scale.Z != 1.0)
+                {
+                    model.TransformScale(scale.X, scale.Y, scale.Z);
+                }
+
+                var bounds = model.Bounds;
+
+                // Attempt to offset the model, so it's only caulated from zero (0) and up, instead of using zero (0) as origin.
+                //model.Transform = new TranslateTransform3D(-bounds.X, -bounds.Y, -bounds.Z);
+
+                if (!rotateMatrix.IsIdentity)
+                    bounds = new MatrixTransform3D(rotateMatrix).TransformBounds(bounds);
+
+                Bounds = bounds;
+
+                //model.Transform = new TranslateTransform3D(-bounds.X, -bounds.Y, -bounds.Z);
+
+                var geometries = new List<MeshGeometery>();
+
+                foreach (var c in model.Children)
+                {
+                    var gm = (GeometryModel3D)c;
+
+                    if (gm.Geometry is MeshGeometry3D g)
+                        geometries.Add(new MeshGeometery(g));
+                }
+
+                // TODO: If this is only ever used with one mesh then remove the MeshGeometry concept
+                Meshes = new ModelMesh[] { new ModelMesh(geometries.ToArray(), material, material) };
+                NumGeometries = geometries.Count;
+            }
+        }
+
+        public class ModelMesh
+        {
+            public MeshGeometery[] Geometeries { get; set; }
+            public byte? MaterialIndex { get; set; }
+            public byte? FaceMaterialIndex { get; set; }
+
+            public ModelMesh(MeshGeometery[] geometeries, byte? materialIndex, byte? faceMaterialIndex)
+            {
+                Geometeries = geometeries;
                 MaterialIndex = materialIndex;
                 FaceMaterialIndex = faceMaterialIndex;
             }
-
-            public MeshGeometry3D[] Geometery { get; set; }
-            public byte? MaterialIndex { get; set; }
-            public byte? FaceMaterialIndex { get; set; }
         }
 
-        public class GeometeryDetail
+        public class MeshGeometery
         {
-            public GeometeryDetail(MeshGeometry3D meshGeometry) :
-                this(meshGeometry.TriangleIndices.ToArray(), meshGeometry.Positions.ToArray())
-            {
-            }
+            public int[] Triangles { get; set; }
+            public Point3D[] Positions { get; set; }
 
-            public GeometeryDetail(int[] triangles, Point3D[] positions)
+            public MeshGeometery(MeshGeometry3D meshGeometry)
+                : this(meshGeometry.TriangleIndices.ToArray(), meshGeometry.Positions.ToArray()) { }
+
+            public MeshGeometery(int[] triangles, Point3D[] positions)
             {
                 Triangles = triangles;
                 Positions = positions;
             }
-
-            public int[] Triangles { get; set; }
-            public Point3D[] Positions { get; set; }
         }
 
-        private class Trace
+        struct RayHit : IEquatable<RayHit>
         {
-            public Trace(Point3D point, int normal)
+            public Point3D Point;
+            public MeshFace Face;
+            public int TestRayIndex;
+
+            public RayHit(Point3D point, int normal, int testRayIndex)
             {
                 Point = point;
                 Face = MeshFace.Undefined;
+
                 if (normal == 1)
                     Face = MeshFace.Nearside;
                 else if (normal == -1)
                     Face = MeshFace.Farside;
+
+                TestRayIndex = testRayIndex;
             }
 
-            public Point3D Point { get; }
-            public MeshFace Face { get; }
-        }
-
-        private class RayTracerTaskWorker
-        {
-            #region ctor
-
-            public RayTracerTaskWorker(int modelIdx, int x, int y, int z)
+            public bool Equals(RayHit other)
             {
-                ModelIdx = modelIdx;
-                X = x;
-                Y = y;
-                Z = z;
+                return Point == other.Point && Face == other.Face && TestRayIndex == other.TestRayIndex;
             }
-
-            #endregion
-
-            #region properties
-
-            public int ModelIdx { get; }
-            public int X { get; }
-            public int Y { get; }
-            public int Z { get; }
-
-            #endregion
         }
-
-        #endregion
     }
 }

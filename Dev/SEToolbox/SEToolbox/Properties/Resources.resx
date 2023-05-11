@@ -1769,7 +1769,7 @@ Planet Generator:	{17}</value>
     <value>Bounding Size:</value>
   </data>
   <data name="CtlVoxelBoundingSizeValue" xml:space="preserve">
-    <value>{0} × {1} × {2} blocks</value>
+    <value>{0} × {1} × {2} voxels</value>
   </data>
   <data name="CtlVoxelCenter" xml:space="preserve">
     <value>Volume center:</value>

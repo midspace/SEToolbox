@@ -223,7 +223,7 @@
             var r1 = new Point3D(0, 0, -10);
             var r2 = new Point3D(0, 0, +10);
 
-            var ret = MeshHelper.RayIntersetTriangle(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangle(p1, p2, p3, r1, r2, out intersection, out normal);
 
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(new Point3D(0, 0, 0), intersection, "Point must be match.");
@@ -245,7 +245,7 @@
                     new Point3D(1, 1, -10), new Point3D(1, 1, +10)
                 };
 
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, rays, out intersection, out normal);
 
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(new Point3D(1, 1, 0), intersection, "Point must be match.");
@@ -264,7 +264,7 @@
 
             var r1 = new Point3D(15, 12, 0);
             var r2 = new Point3D(15, 12, 20);
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(new Point3D(15, 12, 11), intersection, "intersection must be match.");
         }
@@ -281,7 +281,7 @@
 
             var r1 = new Point3D(15, 12, 0);
             var r2 = new Point3D(15, 12, 20);
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(new Point3D(15, 12, 11), intersection, "intersection must be match.");
         }
@@ -298,7 +298,7 @@
 
             var r1 = new Point3D(14, 14, 0);
             var r2 = new Point3D(14, 14, 20);
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(new Point3D(14, 14, 10.8), intersection, "intersection must be match.");
         }
@@ -315,7 +315,7 @@
 
             var r1 = new Point3D(14, 14, 0);
             var r2 = new Point3D(14, 14, 20);
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(new Point3D(14, 14, 10.8), intersection, "intersection must be match.");
         }
@@ -332,7 +332,7 @@
             var r1 = new Point3D(p1.X, p1.Y, 0);
             var r2 = new Point3D(p1.X, p1.Y, 20);
 
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(p1, intersection, "intersection must be match.");
         }
@@ -349,7 +349,7 @@
             var r1 = new Point3D(p2.X, p2.Y, 0);
             var r2 = new Point3D(p2.X, p2.Y, 20);
 
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(p2, intersection, "intersection must be match.");
         }
@@ -366,7 +366,7 @@
             var r1 = new Point3D(p3.X, p3.Y, 0);
             var r2 = new Point3D(p3.X, p3.Y, 20);
 
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(p3, intersection, "intersection must be match.");
         }
@@ -383,7 +383,7 @@
             var r1 = new Point3D(p1.X, p1.Y, 0);
             var r2 = new Point3D(p1.X, p1.Y, 20);
 
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(p1, intersection, "intersection must be match.");
         }
@@ -400,7 +400,7 @@
             var r1 = new Point3D(p2.X, p2.Y, 0);
             var r2 = new Point3D(p2.X, p2.Y, 20);
 
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(p2, intersection, "intersection must be match.");
         }
@@ -417,7 +417,7 @@
             var r1 = new Point3D(p3.X, p3.Y, 0);
             var r2 = new Point3D(p3.X, p3.Y, 20);
 
-            var ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            var ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(p3, intersection, "intersection must be match.");
         }
@@ -435,21 +435,21 @@
             p1 = new Point3D(10, 10, 10);
             p2 = new Point3D(15, 15, 11);
             p3 = new Point3D(20, 10, 12);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, 1, "Normal must be 1.");
 
             p1 = new Point3D(10, 10, -990);
             p2 = new Point3D(15, 15, 11);
             p3 = new Point3D(20, 10, 1012);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, 1, "Normal must be 1.");
 
             p1 = new Point3D(10, 10, 1010);
             p2 = new Point3D(15, 15, 11);
             p3 = new Point3D(20, 10, -990);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, 1, "Normal must be 1.");
 
@@ -461,21 +461,21 @@
             p3 = new Point3D(10, 10, 10);
             p2 = new Point3D(15, 15, 11);
             p1 = new Point3D(20, 10, 12);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, 1, "Normal must be 1.");
 
             p3 = new Point3D(10, 10, -990);
             p2 = new Point3D(15, 15, 11);
             p1 = new Point3D(20, 10, 1012);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, 1, "Normal must be 1.");
 
             p3 = new Point3D(10, 10, 1010);
             p2 = new Point3D(15, 15, 11);
             p1 = new Point3D(20, 10, -990);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, 1, "Normal must be 1.");
         }
@@ -493,21 +493,21 @@
             p1 = new Point3D(10, 10, 10);
             p2 = new Point3D(15, 15, 11);
             p3 = new Point3D(20, 10, 12);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, -1, "Normal must be -1.");
 
             p1 = new Point3D(10, 10, -990);
             p2 = new Point3D(15, 15, 11);
             p3 = new Point3D(20, 10, 1012);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, -1, "Normal must be -1.");
 
             p1 = new Point3D(10, 10, 1010);
             p2 = new Point3D(15, 15, 11);
             p3 = new Point3D(20, 10, -990);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, -1, "Normal must be -1.");
 
@@ -519,21 +519,21 @@
             p3 = new Point3D(10, 10, 10);
             p2 = new Point3D(15, 15, 11);
             p1 = new Point3D(20, 10, 12);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, -1, "Normal must be -1.");
 
             p3 = new Point3D(10, 10, -990);
             p2 = new Point3D(15, 15, 11);
             p1 = new Point3D(20, 10, 1012);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, -1, "Normal must be -1.");
 
             p3 = new Point3D(10, 10, 1010);
             p2 = new Point3D(15, 15, 11);
             p1 = new Point3D(20, 10, -990);
-            ret = MeshHelper.RayIntersetTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
+            ret = MeshHelper.RayIntersectTriangleRound(p1, p2, p3, r1, r2, out intersection, out normal);
             Assert.AreEqual(true, ret, "ret must be true.");
             Assert.AreEqual(normal, -1, "Normal must be -1.");
         }

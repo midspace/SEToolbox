@@ -3069,7 +3069,7 @@ namespace SEToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} × {1} × {2} blocks.
+        ///   Looks up a localized string similar to {0} × {1} × {2} voxels.
         /// </summary>
         public static string CtlVoxelBoundingSizeValue {
             get {

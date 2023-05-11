@@ -1,9 +1,8 @@
 ﻿namespace SEToolbox.Interop.Asteroids
 {
-    using System;
     using VRageMath;
 
-    public class MyVoxelBuilderArgs : EventArgs
+    public struct MyVoxelBuilderArgs
     {
         public MyVoxelBuilderArgs(Vector3I size, Vector3I coordinatePoint, byte materialIndex, byte volume)
         {
@@ -33,4 +32,6 @@
         /// </summary>
         public byte Volume { get; set; }
     }
+
+    public delegate void VoxelBuilderAction(ref MyVoxelBuilderArgs args);
 }

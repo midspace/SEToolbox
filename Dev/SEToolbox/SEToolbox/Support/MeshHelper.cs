@@ -104,7 +104,7 @@
             }
         }
 
-        public static bool RayIntersetTriangle(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection, out int norm)
+        public static bool RayIntersectTriangle(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection, out int norm)
         {
             // http://gamedev.stackexchange.com/questions/5585/line-triangle-intersection-last-bits
 
@@ -176,26 +176,28 @@
             return true;
         }
 
-        public static bool RayIntersetTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D[] rays, out Point3D intersection, out int norm)
+        public static bool RayIntersectTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D[] rays, out Point3D intersection, out int norm)
         {
             for (var i = 0; i < rays.Length; i += 2)
             {
-                if (RayIntersetTriangleRound(p1, p2, p3, rays[i], rays[i + 1], out intersection, out norm)) // Ray
+                if (RayIntersectTriangleRound(p1, p2, p3, rays[i], rays[i + 1], out intersection, out norm)) // Ray
                     return true;
-                if (RayIntersetTriangleRound(p1, p2, p3, rays[i + 1], rays[i], out intersection, out norm)) // Reverse Ray
+                if (RayIntersectTriangleRound(p1, p2, p3, rays[i + 1], rays[i], out intersection, out norm)) // Reverse Ray
                     return true;
             }
+
             intersection = default(Point3D);
             norm = 0;
             return false;
         }
 
-        public static bool RayIntersetTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection, out int norm)
+        public static bool RayIntersectTriangleRound(Point3D p1, Point3D p2, Point3D p3, Point3D r1, Point3D r2, out Point3D intersection, out int norm)
         {
             // http://gamedev.stackexchange.com/questions/5585/line-triangle-intersection-last-bits
 
             intersection = default(Point3D);
             norm = 0;
+
             const int rounding = 14;
 
             // Find Triangle Normal

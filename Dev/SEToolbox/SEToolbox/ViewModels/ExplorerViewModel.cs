@@ -682,9 +682,19 @@
             return _dataModel.ActiveWorld != null;
         }
 
+        static void StartShellProcess(string fileName, string arguments)
+        {
+            Process.Start(new ProcessStartInfo(fileName, arguments) { UseShellExecute = true });
+        }
+
+        static void StartShellProcess(string fileName)
+        {
+            Process.Start(new ProcessStartInfo(fileName) { UseShellExecute = true });
+        }
+
         public void OpenFolderExecuted()
         {
-            Process.Start("Explorer", string.Format("\"{0}\"", _dataModel.ActiveWorld.Savepath));
+            StartShellProcess("Explorer", string.Format("\"{0}\"", _dataModel.ActiveWorld.Savepath));
         }
 
         public bool ViewSandboxCanExecute()
@@ -708,7 +718,7 @@
 
         public void OpenWorkshopExecuted()
         {
-            Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", _dataModel.ActiveWorld.WorkshopId.Value), null);
+            StartShellProcess(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", _dataModel.ActiveWorld.WorkshopId.Value));
         }
 
         public bool ExportSandboxObjectCanExecute()
@@ -884,6 +894,7 @@
         public void OpenUpdatesLinkExecuted()
         {
             var update = CodeRepositoryReleases.CheckForUpdates(new Version(), true);
+
             if (update == null)
             {
                 MessageBox.Show(Res.DialogNoNetworkMessage, Res.DialogNoNetworkTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -899,9 +910,10 @@
             else
             {
                 var dialogResult = MessageBox.Show(string.Format(Res.DialogNewVersionMessage, update.Version), Res.DialogNewVersionTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
                 if (dialogResult == DialogResult.Yes)
                 {
-                    Process.Start(SEToolbox.Properties.Resources.GlobalUpdatesUrl);
+                    StartShellProcess(Res.GlobalUpdatesUrl);
                 }
             }
         }
@@ -913,7 +925,7 @@
 
         public void OpenDocumentationLinkExecuted()
         {
-            Process.Start(SEToolbox.Properties.Resources.GlobalDocumentationUrl);
+            StartShellProcess(Res.GlobalDocumentationUrl);
         }
 
         public bool OpenSupportLinkCanExecute()
@@ -923,7 +935,7 @@
 
         public void OpenSupportLinkExecuted()
         {
-            Process.Start(SEToolbox.Properties.Resources.GlobalSupportUrl);
+            StartShellProcess(Res.GlobalSupportUrl);
         }
 
         public bool LanguageCanExecute()

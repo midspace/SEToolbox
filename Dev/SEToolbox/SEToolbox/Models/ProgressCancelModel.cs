@@ -150,23 +150,15 @@
             _elapsedTimer = new Stopwatch();
 
             _updateTimer = new Timer(1000);
-            var incrementTimer = 0;
             _updateTimer.Elapsed += delegate
             {
                 TimeSpan elapsed = _elapsedTimer.Elapsed;
                 TimeSpan estimate = elapsed;
+
                 if (Progress > 0)
                     estimate = new TimeSpan((long)(elapsed.Ticks / (Progress / _maximumProgress)));
 
                 EstimatedTimeLeft = estimate - elapsed;
-
-                if (incrementTimer == 10)
-                {
-                    _updateTimer.Interval = 5000;
-                    incrementTimer++;
-                }
-                else
-                    incrementTimer++;
             };
 
             _elapsedTimer.Restart();

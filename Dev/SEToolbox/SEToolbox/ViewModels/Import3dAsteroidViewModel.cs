@@ -1,10 +1,12 @@
 ﻿namespace SEToolbox.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media.Media3D;
@@ -470,6 +472,7 @@
             var filename = MainViewModel.CreateUniqueVoxelStorageName(filenamepart + MyVoxelMap.V2FileExtension);
 
             double multiplier;
+
             if (IsMultipleScale)
             {
                 multiplier = MultipleScale;
@@ -479,64 +482,57 @@
                 multiplier = MaxLengthScale / Math.Max(Math.Max(OriginalModelSize.Height, OriginalModelSize.Width), OriginalModelSize.Depth);
             }
 
-            var scale = new ScaleTransform3D(multiplier, multiplier, multiplier);
-            var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90);
+            var scale = new Size3D(multiplier, multiplier, multiplier);
+            var rotateTransform = MeshHelper.TransformVector(new System.Windows.Media.Media3D.Vector3D(0, 0, 0), -RotateRoll, RotateYaw - 90, RotatePitch + 90).Value;
+
             SourceFile = TempfileUtil.NewFilename(MyVoxelMap.V2FileExtension);
 
             var model = MeshHelper.Load(Filename, ignoreErrors: true);
 
-            var meshes = new List<MyVoxelRayTracer.MyMeshModel>();
-            var geometeries = new List<MeshGeometry3D>();
-            foreach (var model3D in model.Children)
-            {
-                var gm = (GeometryModel3D)model3D;
-                var geometry = gm.Geometry as MeshGeometry3D;
-
-                if (geometry != null)
-                    geometeries.Add(geometry);
-            }
-            meshes.Add(new MyVoxelRayTracer.MyMeshModel(geometeries.ToArray(), InsideStockMaterial.MaterialIndex, InsideStockMaterial.MaterialIndex));
-
             #region handle dialogs and process the conversion
 
-            var doCancel = false;
+            var cts = new CancellationTokenSource();
 
-            var progressModel = new ProgressCancelModel { Title = Res.WnProgressTitle, SubTitle = Res.WnProgressTitle, DialogText = Res.WnProgressTxtTimeRemain + " " + Res.WnProgressTxtTimeCalculating };
+            var progressModel = new ProgressCancelModel {
+                Title = Res.WnProgressTitle,
+                SubTitle = Res.WnProgressTitle,
+                DialogText = Res.WnProgressTxtTimeRemain + " " + Res.WnProgressTxtTimeCalculating
+            };
+
             var progressVm = new ProgressCancelViewModel(this, progressModel);
-            progressVm.CloseRequested += delegate(object sender, EventArgs e)
-            {
-                doCancel = true;
-            };
-
-            var cancelFunc = (Func<bool>)delegate
-            {
-                return doCancel;
-            };
+            progressVm.CloseRequested += (sender, e) => cts.Cancel();
 
             var completedAction = (Action)delegate
             {
                 progressVm.Close();
             };
 
-            MyVoxelMap voxelMap = null;
+            Task<MyVoxelMap> voxelMapTask = null;
 
-            var action = (Action)delegate
+            void GenerateAsteroidAsync()
             {
-                voxelMap = MyVoxelRayTracer.ReadModelAsteroidVolmetic(model, meshes, scale, rotateTransform, TraceType, TraceCount, TraceDirection,
-                    progressModel.ResetProgress, progressModel.IncrementProgress, cancelFunc, completedAction);
-            };
+                var info = new MyVoxelRayTracer.Model(model, scale, rotateTransform, InsideStockMaterial.MaterialIndex);
+
+                voxelMapTask = Task.Factory.StartNew(() =>
+                {
+                    return MyVoxelRayTracer.GenerateVoxelMapFromModel(info, rotateTransform, TraceType, TraceCount, TraceDirection,
+                        progressModel.ResetProgress, progressModel.IncrementProgress, completedAction, cts.Token);
+                }, TaskCreationOptions.LongRunning);
+            }
 
             if (RunInLowPrioity)
-                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.Idle;
+                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
 
-            _dialogService.ShowDialog<WindowProgressCancel>(this, progressVm, action);
+            _dialogService.ShowDialog<WindowProgressCancel>(this, progressVm, GenerateAsteroidAsync);
 
             if (RunInLowPrioity)
-                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal;
+                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
 
             #endregion
 
-            if (doCancel || voxelMap == null)
+            var voxelMap = voxelMapTask.IsCanceled ? null : voxelMapTask.Result;
+
+            if (cts.IsCancellationRequested || voxelMap == null)
             {
                 IsValidEntity = false;
                 NewEntity = null;
@@ -573,29 +569,26 @@
                     position = VRageMath.Vector3D.Add(_dataModel.CharacterPosition.Position, vector) - content.Center;
                 }
 
-                var entity = new MyObjectBuilder_VoxelMap(position, filename)
-                {
+                var entity = new MyObjectBuilder_VoxelMap(position, filename) {
                     EntityId = SpaceEngineersApi.GenerateEntityId(IDType.ASTEROID),
                     PersistentFlags = MyPersistentEntityFlags2.CastShadows | MyPersistentEntityFlags2.InScene,
                     StorageName = Path.GetFileNameWithoutExtension(filename)
                 };
 
-                entity.PositionAndOrientation = new MyPositionAndOrientation
-                {
+                entity.PositionAndOrientation = new MyPositionAndOrientation {
                     Position = position,
                     Forward = forward,
                     Up = up
                 };
 
                 IsValidEntity = voxelMap.BoundingContent.Size.Volume() > 0;
-
                 NewEntity = entity;
 
                 if (BeepWhenFinished)
                     System.Media.SystemSounds.Asterisk.Play();
             }
 
-            return !doCancel;
+            return !cts.IsCancellationRequested;
         }
 
         #endregion

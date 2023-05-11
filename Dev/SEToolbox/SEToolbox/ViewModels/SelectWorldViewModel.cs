@@ -249,7 +249,7 @@
 
         public void OpenFolderExecuted()
         {
-            System.Diagnostics.Process.Start("Explorer", string.Format("\"{0}\"", SelectedWorld.Savepath));
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("Explorer", string.Format("\"{0}\"", SelectedWorld.Savepath)) { UseShellExecute = true });
         }
 
         public bool OpenWorkshopCanExecute()
@@ -261,7 +261,7 @@
         public void OpenWorkshopExecuted()
         {
             if (SelectedWorld.WorkshopId.HasValue)
-                System.Diagnostics.Process.Start(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", SelectedWorld.WorkshopId.Value), null);
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(string.Format("http://steamcommunity.com/sharedfiles/filedetails/?id={0}", SelectedWorld.WorkshopId.Value)) { UseShellExecute = true });
         }
 
         public bool ZoomThumbnailCanExecute()

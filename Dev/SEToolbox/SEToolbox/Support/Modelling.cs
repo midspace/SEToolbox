@@ -178,7 +178,7 @@
 
                             Point3D intersect;
                             int normal;
-                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect, out normal))
+                            if (MeshHelper.RayIntersectTriangleRound(p1, p2, p3, rays, out intersect, out normal))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin][(int)Math.Floor(intersect.Y) - yMin][(int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
@@ -209,7 +209,7 @@
 
                             Point3D intersect;
                             int normal;
-                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect, out normal))
+                            if (MeshHelper.RayIntersectTriangleRound(p1, p2, p3, rays, out intersect, out normal))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin][(int)Math.Floor(intersect.Y) - yMin][(int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }
@@ -240,7 +240,7 @@
 
                             Point3D intersect;
                             int normal;
-                            if (MeshHelper.RayIntersetTriangleRound(p1, p2, p3, rays, out intersect, out normal))
+                            if (MeshHelper.RayIntersectTriangleRound(p1, p2, p3, rays, out intersect, out normal))
                             {
                                 ccubic[(int)Math.Floor(intersect.X) - xMin][(int)Math.Floor(intersect.Y) - yMin][(int)Math.Floor(intersect.Z) - zMin] = CubeType.Cube;
                             }

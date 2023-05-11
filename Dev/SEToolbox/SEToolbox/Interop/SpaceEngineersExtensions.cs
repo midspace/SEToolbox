@@ -456,8 +456,7 @@
 
         public static Vector3D? IntersectsRayAt(this BoundingBoxD boundingBox, Vector3D position, Vector3D rayTo)
         {
-            var corners = boundingBox.GetCorners();
-            var tariangles = new int[][] {
+            var triangles = new int[][] {
                 new [] {2,1,0},
                 new [] {3,2,0},
                 new [] {4,5,6},
@@ -471,12 +470,16 @@
                 new [] {5,1,2},
                 new [] {5,2,6}};
 
-            foreach (var triangle in tariangles)
+            foreach (var triangle in triangles)
             {
                 System.Windows.Media.Media3D.Point3D intersection;
                 int norm;
 
-                if (MeshHelper.RayIntersetTriangleRound(corners[triangle[0]].ToPoint3D(), corners[triangle[1]].ToPoint3D(), corners[triangle[2]].ToPoint3D(), position.ToPoint3D(), rayTo.ToPoint3D(), out intersection, out norm))
+                var c0 = boundingBox.GetCorner(triangle[0]);
+                var c1 = boundingBox.GetCorner(triangle[1]);
+                var c2 = boundingBox.GetCorner(triangle[2]);
+
+                if (MeshHelper.RayIntersectTriangleRound(c0.ToPoint3D(), c1.ToPoint3D(), c2.ToPoint3D(), position.ToPoint3D(), rayTo.ToPoint3D(), out intersection, out norm))
                 {
                     return intersection.ToVector3D();
                 }
