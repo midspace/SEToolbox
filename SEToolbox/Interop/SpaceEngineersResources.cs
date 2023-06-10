@@ -73,9 +73,9 @@
             get { return MyDefinitionManager.Static.GetBlueprintDefinitions().ToList(); }
         }
 
-        public IList<MyCubeBlockDefinition> CubeBlockDefinitions
+        public IEnumerable<MyCubeBlockDefinition> CubeBlockDefinitions
         {
-            get { return MyDefinitionManager.Static.GetAllDefinitions().Where(e => e is MyCubeBlockDefinition).Cast<MyCubeBlockDefinition>().ToList(); }
+            get { return MyDefinitionManager.Static.GetAllDefinitions().Where(e => e is MyCubeBlockDefinition).Cast<MyCubeBlockDefinition>(); }
         }
 
         public IList<MyComponentDefinition> ComponentDefinitions

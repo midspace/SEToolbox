@@ -183,15 +183,34 @@
                     props.Add(field.Name, GetValue(field, cubeDefinition));
                 }
 
-                CubeAssets.Add(new ComponentItemModel
+                string textureFile = null;
+
+                if (cubeDefinition.Icons != null)
                 {
+                    string icon = cubeDefinition.Icons.FirstOrDefault();
+
+                    if (icon != null)
+                        textureFile = SpaceEngineersCore.GetDataPathOrDefault(icon, Path.Combine(contentPath, icon));
+                }
+
+                var buildTime = TimeSpan.Zero;
+
+                if (cubeDefinition.IntegrityPointsPerSec != 0)
+                {
+                    double buildTimeSeconds = (double)cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec;
+
+                    if (buildTimeSeconds <= TimeSpan.MaxValue.TotalSeconds)
+                        buildTime = TimeSpan.FromSeconds(buildTimeSeconds);
+                }
+
+                CubeAssets.Add(new ComponentItemModel {
                     Name = cubeDefinition.DisplayNameText,
                     Definition = cubeDefinition,
                     TypeId = cubeDefinition.Id.TypeId,
                     TypeIdString = cubeDefinition.Id.TypeId.ToString(),
                     SubtypeId = cubeDefinition.Id.SubtypeName,
-                    TextureFile = (cubeDefinition.Icons == null || cubeDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First())),
-                    Time = TimeSpan.FromSeconds(cubeDefinition.IntegrityPointsPerSec != 0 ? cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec : 0),
+                    TextureFile = textureFile,
+                    Time = buildTime,
                     Accessible = cubeDefinition.Public,
                     PCU = cubeDefinition.PCU,
                     Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeName),
@@ -209,8 +228,7 @@
                 if (bp != null && bp.Results.Length > 0)
                     amount = (float)bp.Results[0].Amount;
 
-                ComponentAssets.Add(new ComponentItemModel
-                {
+                ComponentAssets.Add(new ComponentItemModel {
                     Name = componentDefinition.DisplayNameText,
                     TypeId = componentDefinition.Id.TypeId,
                     TypeIdString = componentDefinition.Id.TypeId.ToString(),
@@ -239,8 +257,7 @@
                     || physicalItemDefinition.Id.TypeId == typeof(MyObjectBuilder_Ingot))
                     timeMassMultiplyer = physicalItemDefinition.Mass;
 
-                ItemAssets.Add(new ComponentItemModel
-                {
+                ItemAssets.Add(new ComponentItemModel {
                     Name = physicalItemDefinition.DisplayNameText,
                     TypeId = physicalItemDefinition.Id.TypeId,
                     TypeIdString = physicalItemDefinition.Id.TypeId.ToString(),
@@ -258,8 +275,7 @@
             {
                 string texture = voxelMaterialDefinition.GetVoxelDisplayTexture();
 
-                MaterialAssets.Add(new ComponentItemModel
-                {
+                MaterialAssets.Add(new ComponentItemModel {
                     Name = voxelMaterialDefinition.Id.SubtypeName,
                     TextureFile = texture == null ? null : SpaceEngineersCore.GetDataPathOrDefault(texture, Path.Combine(contentPath, texture)),
                     IsRare = voxelMaterialDefinition.IsRare,

@@ -71,20 +71,40 @@
         public void Load(MyCubeSize cubeSize, MyObjectBuilderType typeId, string subTypeId)
         {
             CubeList.Clear();
+
             var list = new SortedList<string, ComponentItemModel>();
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
             var cubeDefinitions = SpaceEngineersCore.Resources.CubeBlockDefinitions.Where(c => c.CubeSize == cubeSize);
 
             foreach (var cubeDefinition in cubeDefinitions)
             {
-                var c = new ComponentItemModel
+                string textureFile = null;
+
+                if (cubeDefinition.Icons != null)
                 {
+                    string icon = cubeDefinition.Icons.FirstOrDefault();
+
+                    if (icon != null)
+                        textureFile = SpaceEngineersCore.GetDataPathOrDefault(icon, Path.Combine(contentPath, icon));
+                }
+
+                var buildTime = TimeSpan.Zero;
+
+                if (cubeDefinition.IntegrityPointsPerSec != 0)
+                {
+                    double buildTimeSeconds = (double)cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec;
+
+                    if (buildTimeSeconds <= TimeSpan.MaxValue.TotalSeconds)
+                        buildTime = TimeSpan.FromSeconds(buildTimeSeconds);
+                }
+
+                var c = new ComponentItemModel {
                     Name = cubeDefinition.DisplayNameText,
                     TypeId = cubeDefinition.Id.TypeId,
                     TypeIdString = cubeDefinition.Id.TypeId.ToString(),
                     SubtypeId = cubeDefinition.Id.SubtypeName,
-                    TextureFile = (cubeDefinition.Icons == null || cubeDefinition.Icons.First() == null) ? null : SpaceEngineersCore.GetDataPathOrDefault(cubeDefinition.Icons.First(), Path.Combine(contentPath, cubeDefinition.Icons.First())),
-                    Time = TimeSpan.FromSeconds(cubeDefinition.IntegrityPointsPerSec != 0 ? cubeDefinition.MaxIntegrity / cubeDefinition.IntegrityPointsPerSec : 0),
+                    TextureFile = textureFile,
+                    Time = buildTime,
                     Accessible = cubeDefinition.Public,
                     Mass = SpaceEngineersApi.FetchCubeBlockMass(cubeDefinition.Id.TypeId, cubeDefinition.CubeSize, cubeDefinition.Id.SubtypeName),
                     CubeSize = cubeDefinition.CubeSize,
@@ -94,12 +114,19 @@
                 list.Add(c.FriendlyName + c.TypeIdString + c.SubtypeId, c);
             }
 
+            ComponentItemModel cubeItem = null;
+
             foreach (var kvp in list)
             {
-                CubeList.Add(kvp.Value);
+                var cube = kvp.Value;
+
+                CubeList.Add(cube);
+
+                if (cubeItem == null && cube.TypeId == typeId && cube.SubtypeId == subTypeId)
+                    cubeItem = cube;
             }
 
-            CubeItem = CubeList.FirstOrDefault(c => c.TypeId == typeId && c.SubtypeId == subTypeId);
+            CubeItem = cubeItem;
         }
 
         #endregion
