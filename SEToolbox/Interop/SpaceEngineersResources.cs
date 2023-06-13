@@ -1,9 +1,8 @@
 ﻿namespace SEToolbox.Interop
 {
-    using Sandbox.Definitions;
-    using SEToolbox.Support;
     using System.Collections.Generic;
     using System.Linq;
+    using Sandbox.Definitions;
     using VRage.Game;
     using VRage.ObjectBuilders;
 
@@ -12,14 +11,14 @@
     /// </summary>
     public class SpaceEngineersResources
     {
-        #region LoadDefinitions
+        public Dictionary<string, byte> MaterialIndex { get; private set; }
 
         /// <summary>
         /// Loads Stock definitions from default path, useful for tests.
         /// </summary>
         public void LoadDefinitions()
         {
-            // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
+            // Call PreloadDefinitions(), to load DefinitionsToPreload.sbc file first.
             // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
             MyDefinitionManager.Static.PreloadDefinitions();
             MyDefinitionManager.Static.LoadData(new List<MyObjectBuilder_Checkpoint.ModItem>());
@@ -28,27 +27,12 @@
 
         public void LoadDefinitionsAndMods(string userModspath, List<MyObjectBuilder_Checkpoint.ModItem> mods)
         {
-            LoadDefinitionsAndMods(ToolboxUpdater.GetApplicationContentPath(), userModspath, mods);
-        }
-
-        public void LoadDefinitionsAndMods(string applicationContentPath, string userModspath, List<MyObjectBuilder_Checkpoint.ModItem> mods)
-        {
-            // Call the PrepareBaseDefinitions(), to load DefinitionsToPreload.sbc file first.
+            // Call PreloadDefinitions(), to load DefinitionsToPreload.sbc file first.
             // otherwise LoadData() may throw an InvalidOperationException due to a modified collection.
             MyDefinitionManager.Static.PreloadDefinitions();
             MyDefinitionManager.Static.LoadData(mods);
             MaterialIndex = new Dictionary<string, byte>();
         }
-
-        #endregion
-
-        #region properties
-
-        public Dictionary<string, byte> MaterialIndex { get; private set; }
-
-        #endregion
-
-        #region methods
 
         public string GetDataPathOrDefault(string key, string defaultValue)
         {
@@ -148,7 +132,5 @@
         {
             return (T)MyObjectBuilderSerializer.CreateNewObject(typeId, subtypeId);
         }
-
-        #endregion
     }
 }

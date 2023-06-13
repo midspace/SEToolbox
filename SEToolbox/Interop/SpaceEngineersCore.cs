@@ -10,7 +10,6 @@
     using Sandbox;
     using Sandbox.Engine.Networking;
     using Sandbox.Engine.Utils;
-    using Sandbox.Engine.Voxels;
     using Sandbox.Game.Entities.Planet;
     using Sandbox.Game.GameSystems;
     using SEToolbox.Models;
@@ -29,34 +28,64 @@
     /// </summary>
     public class SpaceEngineersCore
     {
-        class DerivedGame : MySandboxGame
+        public static SpaceEngineersResources Resources
         {
-            public DerivedGame(string[] commandlineArgs, IntPtr windowHandle = default)
-                : base(commandlineArgs, windowHandle) { }
-
-            protected override void InitializeRender(IntPtr windowHandle) { }
+            get => singleton._worldResource?.Resources ?? singleton._stockDefinitions;
         }
 
-        protected static readonly uint AppId = 244850; // Game
-        //protected static readonly uint AppId = 298740; // Dedicated Server
+        public static Dictionary<string, byte> MaterialIndex
+        {
+            get => Resources.MaterialIndex;
+        }
 
-        public static SpaceEngineersCore Default;
-        private WorldResource _worldResource;
-        private readonly SpaceEngineersResources _stockDefinitions;
-        private readonly List<string> _manageDeleteVoxelList;
-        protected MyCommonProgramStartup _startup;
-        private IMyGameService _steamService;
+        public static WorldResource WorldResource
+        {
+            get => singleton._worldResource;
+            set => singleton._worldResource = value;
+        }
+
+        public static List<string> ManageDeleteVoxelList
+        {
+            get => singleton._manageDeleteVoxelList;
+        }
+
+        public static string GetDataPathOrDefault(string key, string defaultValue)
+        {
+            return Resources.GetDataPathOrDefault(key, defaultValue);
+        }
+
+        /// <summary>
+        /// Forces static ctor to load stock defintiions.
+        /// </summary>
+        public static void LoadDefinitions()
+        {
+            typeof(MyTexts).TypeInitializer.Invoke(null, null); // For tests
+
+            singleton = new SpaceEngineersCore();
+        }
+
+        static SpaceEngineersCore singleton;
+
+        WorldResource _worldResource;
+        readonly SpaceEngineersResources _stockDefinitions;
+        readonly List<string> _manageDeleteVoxelList;
+        MyCommonProgramStartup _startup;
+        IMyGameService _steamService;
+
+        const uint AppId = 244850; // Game
+        //const uint AppId = 298740; // Dedicated Server
 
         public SpaceEngineersCore()
         {
             var contentPath = ToolboxUpdater.GetApplicationContentPath();
-            string userDataPath = SpaceEngineersConsts.BaseLocalPath.DataPath;
+            var userDataPath = SpaceEngineersConsts.BaseLocalPath.DataPath;
 
             MyFileSystem.ExePath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(FastResourceLock)).Location);
 
             MyLog.Default = MySandboxGame.Log;
             SpaceEngineersGame.SetupBasicGameInfo();
-            _startup = new MyCommonProgramStartup(new string[] { });
+
+            _startup = new MyCommonProgramStartup(Array.Empty<string>());
 
             //var appDataPath = _startup.GetAppDataPath();
             //MyInitializer.InvokeBeforeRun(AppId, MyPerGameSettings.BasicGameInfo.ApplicationName + "SEToolbox", appDataPath);
@@ -68,7 +97,7 @@
             // This will start the Steam Service, and Steam will think SE is running.
             // TODO: we don't want to be doing this all the while SEToolbox is running,
             // perhaps a once off during load to fetch of mods then disconnect/Dispose.
-            _steamService = MySteamGameService.Create(MySandboxGame.IsDedicated, AppId);
+            _steamService = MySteamGameService.Create(Sandbox.Engine.Platform.Game.IsDedicated, AppId);
             MyServiceManager.Instance.AddService(_steamService);
 
             MyVRage.Init(new ToolboxPlatform());
@@ -86,42 +115,39 @@
             MySandboxGame.Config.Load();
 
             SpaceEngineersGame.SetupPerGameSettings();
-
             MySandboxGame.InitMultithreading();
-
             MyRenderProxy.Initialize(new MyNullRender());
 
-            // We create a whole instance of MySandboxGame!
-            // If this is causing an exception, then there is a missing dependency.
+            // If this is causing an exception then there is a missing dependency.
+            // gameTemp instance gets captured in MySandboxGame.Static
             MySandboxGame gameTemp = new DerivedGame(new string[] { "-skipintro" });
 
-            // creating MySandboxGame will reset the CurrentUICulture, so I have to reapply it.
+            // Creating MySandboxGame will reset the CurrentUICulture, so I have to reapply it.
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfoByIetfLanguageTag(GlobalSettings.Default.LanguageCode);
             SpaceEngineersApi.LoadLocalization();
-            //MyStorageBase.UseStorageCache = false;
 
             // Create an empty instance of MySession for use by low level code.
-            var mySession = (Sandbox.Game.World.MySession)FormatterServices.GetUninitializedObject(typeof(Sandbox.Game.World.MySession));
+            var session = (Sandbox.Game.World.MySession)FormatterServices.GetUninitializedObject(typeof(Sandbox.Game.World.MySession));
 
             // Required as the above code doesn't populate it during ctor of MySession.
-            ReflectionUtil.ConstructField(mySession, "CreativeTools");
-            ReflectionUtil.ConstructField(mySession, "m_sessionComponents");
-            ReflectionUtil.ConstructField(mySession, "m_sessionComponentsForUpdate");
+            ReflectionUtil.ConstructField(session, "CreativeTools");
+            ReflectionUtil.ConstructField(session, "m_sessionComponents");
+            ReflectionUtil.ConstructField(session, "m_sessionComponentsForUpdate");
 
-            mySession.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
+            session.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
 
-            // change for the Clone() method to use XML cloning instead of Protobuf because of issues with MyObjectBuilder_CubeGrid.Clone()
+            // Change for the Clone() method to use XML cloning instead of Protobuf because of issues with MyObjectBuilder_CubeGrid.Clone()
             ReflectionUtil.SetFieldValue(typeof(VRage.ObjectBuilders.MyObjectBuilderSerializer), "ENABLE_PROTOBUFFERS_CLONING", false);
 
             // Assign the instance back to the static.
-            Sandbox.Game.World.MySession.Static = mySession;
+            Sandbox.Game.World.MySession.Static = session;
 
-            var heightMapLoadingSystem = new MyHeightMapLoadingSystem();
-            mySession.RegisterComponent(heightMapLoadingSystem, heightMapLoadingSystem.UpdateOrder, heightMapLoadingSystem.Priority);
-            heightMapLoadingSystem.LoadData();
+            var heightmapSystem = new MyHeightMapLoadingSystem();
+            session.RegisterComponent(heightmapSystem, heightmapSystem.UpdateOrder, heightmapSystem.Priority);
+            heightmapSystem.LoadData();
 
             var planets = new MyPlanets();
-            mySession.RegisterComponent(planets, heightMapLoadingSystem.UpdateOrder, heightMapLoadingSystem.Priority);
+            session.RegisterComponent(planets, heightmapSystem.UpdateOrder, heightmapSystem.Priority);
             planets.LoadData();
 
             _stockDefinitions = new SpaceEngineersResources();
@@ -129,55 +155,12 @@
             _manageDeleteVoxelList = new List<string>();
         }
 
-        /// <summary>
-        /// Forces static ctor to load stock defintiions.
-        /// </summary>
-        public static void LoadDefinitions()
+        class DerivedGame : MySandboxGame
         {
-            typeof(MyTexts).TypeInitializer.Invoke(null, null); // For tests
+            public DerivedGame(string[] commandlineArgs, IntPtr windowHandle = default)
+                : base(commandlineArgs, windowHandle) { }
 
-            Default = new SpaceEngineersCore();
-        }
-
-        public static SpaceEngineersResources Resources
-        {
-            get
-            {
-                if (Default._worldResource != null)
-                    return Default._worldResource.Resources;
-
-                return Default._stockDefinitions;
-            }
-        }
-
-        public static string GetDataPathOrDefault(string key, string defaultValue)
-        {
-            if (Default._worldResource != null)
-                return Default._worldResource.Resources.GetDataPathOrDefault(key, defaultValue);
-
-            return Default._stockDefinitions.GetDataPathOrDefault(key, defaultValue);
-        }
-
-        public static Dictionary<string, byte> MaterialIndex
-        {
-            get
-            {
-                if (Default._worldResource != null)
-                    return Default._worldResource.Resources.MaterialIndex;
-
-                return Default._stockDefinitions.MaterialIndex;
-            }
-        }
-
-        public static WorldResource WorldResource
-        {
-            get { return Default._worldResource; }
-            set { Default._worldResource = value; }
-        }
-
-        public static List<string> ManageDeleteVoxelList
-        {
-            get { return Default._manageDeleteVoxelList; }
+            protected override void InitializeRender(IntPtr windowHandle) { }
         }
     }
 }

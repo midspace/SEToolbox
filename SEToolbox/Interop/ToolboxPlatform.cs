@@ -302,6 +302,16 @@ namespace SEToolbox.Interop
         {
             throw new NotImplementedException();
         }
+
+        public string GetPlatformSpecificCrashReport()
+        {
+            return null;
+        }
+
+        public string GetModsCachePath()
+        {
+            return null;
+        }
     }
 
     class VRageRenderImpl : IVRageRender

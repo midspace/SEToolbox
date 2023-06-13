@@ -4,28 +4,17 @@ using ParallelTasks;
 using Sandbox;
 using Sandbox.Engine.Networking;
 using Sandbox.Game;
-using VRage;
+using Sandbox.Game.Multiplayer;
 using VRage.Game;
 using VRage.GameServices;
-using VRage.Utils;
-using static Sandbox.Engine.Networking.MyWorkshop;
 
 namespace SEToolbox.Interop
 {
     public class SpaceEngineersWorkshop
     {
-        public static IMyGameService MySteam => MyServiceManager.Instance.GetService<IMyGameService>();
-
-        static readonly int m_dependenciesRequestTimeout = 30000;
-
-        public static void GetModItems(List<MyObjectBuilder_Checkpoint.ModItem> mods, CancelToken cancelToken)
+        public static MyWorkshop.ResultData DownloadWorldModsBlocking(List<MyObjectBuilder_Checkpoint.ModItem> mods, MyWorkshop.CancelToken cancelToken)
         {
-            DownloadWorldModsBlocking(mods, cancelToken);
-        }
-
-        public static ResultData DownloadWorldModsBlocking(List<MyObjectBuilder_Checkpoint.ModItem> mods, CancelToken cancelToken)
-        {
-            ResultData ret = default;
+            MyWorkshop.ResultData ret = default;
 
             Task task = Parallel.Start(() =>
             {
@@ -41,13 +30,13 @@ namespace SEToolbox.Interop
             return ret;
         }
 
-        static ResultData DownloadWorldModsBlockingInternal(List<MyObjectBuilder_Checkpoint.ModItem> mods, CancelToken cancelToken)
+        static MyWorkshop.ResultData DownloadWorldModsBlockingInternal(List<MyObjectBuilder_Checkpoint.ModItem> mods, MyWorkshop.CancelToken cancelToken)
         {
             MySandboxGame.Log.WriteLineAndConsole("Downloading world mods - START");
             MySandboxGame.Log.IncreaseIndent();
 
-            ResultData resultData = default;
-            resultData.Success = true;
+            MyWorkshop.ResultData resultData = default;
+            resultData.Result = MyGameServiceCallResult.OK;
 
             if (mods != null && mods.Count > 0)
             {
@@ -85,24 +74,34 @@ namespace SEToolbox.Interop
                         if (aggregate == null)
                         {
                             flag = true;
-                            MySandboxGame.Log.WriteLineAndConsole(string.Format("Can't download mod {0}. Service {1} is not available", item2.Id, item2.ServiceName));
+                            MySandboxGame.Log.WriteLineAndConsole($"Can't download mod {item2.Id}. Service {item2.ServiceName} is not available");
                         }
                         else if (!aggregate.IsConsoleCompatible)
                         {
                             flag = true;
-                            MySandboxGame.Log.WriteLineAndConsole(string.Format("Can't download mod {0}. Service {1} is not console compatible", item2.Id, aggregate.ServiceName));
+                            MySandboxGame.Log.WriteLineAndConsole($"Can't download mod {item2.Id}. Service {aggregate.ServiceName} is not console compatible");
                         }
                     }
                 }
 
                 if (flag)
                 {
-                    resultData.Success = false;
+                    resultData.Result = MyGameServiceCallResult.Fail;
                 }
+                //else if (Sandbox.Engine.Platform.Game.IsDedicated)
+                //{
+                //    if (MySandboxGame.ConfigDedicated.AutodetectDependencies)
+                //        AddModDependencies(mods, list);
+
+                //    MyGameService.SetServerModTemporaryDirectory();
+                //    resultData = DownloadModsBlocking(mods, list, cancelToken);
+                //}
                 else
                 {
-                    AddModDependencies(mods, list);
-                    resultData = DownloadModsBlocking(mods, resultData, list, cancelToken);
+                    if (Sync.IsServer)
+                        AddModDependencies(mods, list);
+
+                    resultData = DownloadModsBlocking(mods, list, cancelToken);
                 }
             }
 
@@ -131,13 +130,13 @@ namespace SEToolbox.Interop
 
             bool hasReferenceIssue;
 
-            foreach (var item3 in GetModsDependencyHiearchy(hashSet, out hasReferenceIssue))
+            foreach (var item3 in MyWorkshop.GetModsDependencyHiearchy(hashSet, out hasReferenceIssue))
             {
                 var item2 = new WorkshopId(item3.Id, item3.ServiceName);
 
                 if (hashSet2.Add(item2))
                 {
-                    mods.Add(new MyObjectBuilder_Checkpoint.ModItem(item3.Id, item3.ServiceName, true) {
+                    mods.Add(new MyObjectBuilder_Checkpoint.ModItem(item3.Id, item3.ServiceName, isDependency: true) {
                         FriendlyName = item3.Title
                     });
                 }
@@ -147,141 +146,39 @@ namespace SEToolbox.Interop
             }
         }
 
-        static List<MyWorkshopItem> GetModsDependencyHiearchy(HashSet<WorkshopId> workshopIds, out bool hasReferenceIssue)
+        static MyWorkshop.ResultData DownloadModsBlocking(List<MyObjectBuilder_Checkpoint.ModItem> mods, List<WorkshopId> workshopIds, MyWorkshop.CancelToken cancelToken)
         {
-            hasReferenceIssue = false;
-
-            var list = new List<MyWorkshopItem>();
-            var hashSet = new HashSet<WorkshopId>();
-            var list2 = new List<WorkshopId>();
-            var stack = new Stack<WorkshopId>();
-
-            foreach (var workshopId in workshopIds)
-                stack.Push(workshopId);
-
-            while (stack.Count > 0)
-            {
-                while (stack.Count > 0)
-                {
-                    var item = stack.Pop();
-
-                    if (!hashSet.Contains(item))
-                    {
-                        hashSet.Add(item);
-                        list2.Add(item);
-                    }
-                    else
-                    {
-                        hasReferenceIssue = true;
-                        MyLog.Default.WriteLineAndConsole(string.Format("Reference issue detected (circular reference or wrong order) for mod {0}:{1}", item.ServiceName, item.Id));
-                    }
-                }
-
-                if (list2.Count == 0)
-                    continue;
-
-                var modsInfo = GetModsInfo(list2);
-
-                if (modsInfo != null)
-                {
-                    foreach (MyWorkshopItem item2 in modsInfo)
-                    {
-                        list.Insert(0, item2);
-                        item2.UpdateDependencyBlocking();
-
-                        for (int num = item2.Dependencies.Count - 1; num >= 0; num--)
-                        {
-                            ulong id = item2.Dependencies[num];
-                            stack.Push(new WorkshopId(id, item2.ServiceName));
-                        }
-                    }
-                }
-
-                list2.Clear();
-            }
-
-            return list;
-        }
-
-        static List<MyWorkshopItem> GetModsInfo(List<WorkshopId> workshopIds)
-        {
-            var dictionary = ToDictionary(workshopIds);
-            List<MyWorkshopItem> list = null;
-
-            foreach (var item in dictionary)
-            {
-                if (list == null)
-                {
-                    list = GetModsInfo(item.Key, item.Value);
-                    continue;
-                }
-
-                var modsInfo = GetModsInfo(item.Key, item.Value);
-
-                if (modsInfo != null)
-                    list.AddRange(modsInfo);
-            }
-
-            return list;
-        }
-
-        static List<MyWorkshopItem> GetModsInfo(string serviceName, List<ulong> workshopIds)
-        {
-            var myWorkshopQuery = MyGameService.CreateWorkshopQuery(serviceName);
-
-            if (myWorkshopQuery == null)
-                return null;
-
-            myWorkshopQuery.ItemIds = workshopIds;
-
-            using (var resetEvent = new AutoResetEvent(false))
-            {
-                myWorkshopQuery.QueryCompleted += result =>
-                {
-                    if (result == MyGameServiceCallResult.OK)
-                        MySandboxGame.Log.WriteLine("Mod dependencies query successful");
-                    else
-                        MySandboxGame.Log.WriteLine(string.Format("Error during mod dependencies query: {0}", result));
-
-                    resetEvent.Set();
-                };
-
-                myWorkshopQuery.Run();
-
-                if (!resetEvent.WaitOne(m_dependenciesRequestTimeout))
-                {
-                    myWorkshopQuery.Dispose();
-                    return null;
-                }
-            }
-
-            var items = myWorkshopQuery.Items;
-            myWorkshopQuery.Dispose();
-
-            return items;
-        }
-
-        static ResultData DownloadModsBlocking(List<MyObjectBuilder_Checkpoint.ModItem> mods, ResultData ret, List<WorkshopId> workshopIds, CancelToken cancelToken)
-        {
+            var ret = new MyWorkshop.ResultData(MyGameServiceCallResult.OK, false);
             var toGet = new List<MyWorkshopItem>(workshopIds.Count);
 
-            if (!GetItemsBlockingUGC(workshopIds, toGet))
+            if (!MyWorkshop.GetItemsBlockingUGC(workshopIds, toGet))
             {
                 MySandboxGame.Log.WriteLine("Could not obtain workshop item details");
-                ret.Success = false;
+                ret.Result = MyGameServiceCallResult.Fail;
             }
+
+            // Changed from SE to not fail if some mods could not be found
+
             //else if (workshopIds.Count != toGet.Count)
             //{
-            //    MySandboxGame.Log.WriteLine(string.Format("Could not obtain all workshop item details, expected {0}, got {1}", workshopIds.Count, toGet.Count));
-            //    ret.Success = false;
+            //    MySandboxGame.Log.WriteLine($"Could not obtain all workshop item details, expected {workshopIds.Count}, got {toGet.Count}");
+            //    ret.Result = MyGameServiceCallResult.Fail;
             //}
             else
             {
-                ret = DownloadModsBlockingUGC(toGet, cancelToken);
+                //if (m_downloadScreen != null)
+                //{
+                //    MySandboxGame.Static.Invoke(delegate
+                //    {
+                //        m_downloadScreen.MessageText = new StringBuilder(MyTexts.GetString(MyCommonTexts.ProgressTextDownloadingMods) + " 0 of " + toGet.Count);
+                //    }, "DownloadModsBlocking");
+                //}
 
-                if (!ret.Success)
+                ret = MyWorkshop.DownloadModsBlockingUGC(toGet, cancelToken);
+
+                if (ret.Result != MyGameServiceCallResult.OK)
                 {
-                    MySandboxGame.Log.WriteLine("Downloading mods failed");
+                    MySandboxGame.Log.WriteLine($"Downloading mods failed, Result: {ret.Result}");
                 }
                 else
                 {
@@ -322,23 +219,6 @@ namespace SEToolbox.Interop
                     mods[i] = value;
                 }
             }
-        }
-
-        static Dictionary<string, List<ulong>> ToDictionary(IEnumerable<WorkshopId> workshopIds)
-        {
-            var dictionary = new Dictionary<string, List<ulong>>();
-
-            foreach (WorkshopId workshopId in workshopIds)
-            {
-                string key = workshopId.ServiceName ?? MyGameService.GetDefaultUGC().ServiceName;
-
-                if (!dictionary.TryGetValue(key, out var value))
-                    dictionary.Add(key, value = new List<ulong>());
-
-                value.Add(workshopId.Id);
-            }
-
-            return dictionary;
         }
     }
 }

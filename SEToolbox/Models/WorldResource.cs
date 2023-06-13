@@ -287,8 +287,7 @@
             if (_resources == null || Checkpoint == null || Checkpoint.Mods == null)
                 return;
 
-            var cancelToken = new MyWorkshop.CancelToken();
-            SpaceEngineersWorkshop.GetModItems(Checkpoint.Mods, cancelToken);
+            SpaceEngineersWorkshop.DownloadWorldModsBlocking(Checkpoint.Mods, cancelToken: null);
 
             _resources.LoadDefinitionsAndMods(DataPath.ModsPath, Checkpoint.Mods);
         }
