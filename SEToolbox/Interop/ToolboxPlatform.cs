@@ -434,6 +434,11 @@ namespace SEToolbox.Interop
         {
             throw new NotImplementedException();
         }
+
+        public void SetDepthTextureHint(VRageRender_DepthTextureHintType hint, object deviceContext = null, object texture = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     // Internal class copied from VRage.Platform.Windows
