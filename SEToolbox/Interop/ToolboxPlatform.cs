@@ -145,6 +145,7 @@ namespace SEToolbox.Interop
         public event Action<string> OnSystemProtocolActivated;
 
         public event Action OnResuming;
+        public event Action LeaveSession;
         public event Action OnSuspending;
 
         (string Name, uint MaxClock, uint Cores) m_cpuInfo;
