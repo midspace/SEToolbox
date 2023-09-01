@@ -116,11 +116,12 @@
 
             SpaceEngineersGame.SetupPerGameSettings();
             MySandboxGame.InitMultithreading();
+
+            // Needed for MyRenderProxy.Log access in MyFont.LogWriteLine() and likely other things.
+            // TODO: Static patching
             MyRenderProxy.Initialize(new MyNullRender());
 
-            // If this is causing an exception then there is a missing dependency.
-            // gameTemp instance gets captured in MySandboxGame.Static
-            MySandboxGame gameTemp = new DerivedGame(new string[] { "-skipintro" });
+            InitSandboxGame();
 
             // Creating MySandboxGame will reset the CurrentUICulture, so I have to reapply it.
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfoByIetfLanguageTag(GlobalSettings.Default.LanguageCode);
@@ -137,7 +138,9 @@
             session.Settings = new MyObjectBuilder_SessionSettings { EnableVoxelDestruction = true };
 
             // Change for the Clone() method to use XML cloning instead of Protobuf because of issues with MyObjectBuilder_CubeGrid.Clone()
-            ReflectionUtil.SetFieldValue(typeof(VRage.ObjectBuilders.MyObjectBuilderSerializer), "ENABLE_PROTOBUFFERS_CLONING", false);
+            // TODO: ENABLE_PROTOBUFFERS_CLONING is a static readonly field. Setting these
+            // via reflection is not guaranteed to work and is blocked in newer runtimes.
+            ReflectionUtil.SetFieldValue(typeof(VRage.ObjectBuilders.Private.MyObjectBuilderSerializerKeen), "ENABLE_PROTOBUFFERS_CLONING", false);
 
             // Assign the instance back to the static.
             Sandbox.Game.World.MySession.Static = session;
@@ -153,6 +156,13 @@
             _stockDefinitions = new SpaceEngineersResources();
             _stockDefinitions.LoadDefinitions();
             _manageDeleteVoxelList = new List<string>();
+        }
+
+        void InitSandboxGame()
+        {
+            // If this is causing an exception then there is a missing dependency.
+            // gameTemp instance gets captured in MySandboxGame.Static
+            MySandboxGame gameTemp = new DerivedGame(new string[] { "-skipintro" });
         }
 
         class DerivedGame : MySandboxGame

@@ -5,6 +5,7 @@
     using Sandbox.Definitions;
     using VRage.Game;
     using VRage.ObjectBuilders;
+    using VRage.ObjectBuilders.Private;
 
     /// <summary>
     /// Encapsulates the game definitions, either stock or loaded for a specific save game world.
@@ -124,13 +125,13 @@
         public T CreateNewObject<T>()
             where T : MyObjectBuilder_Base
         {
-            return (T)MyObjectBuilderSerializer.CreateNewObject(typeof(T));
+            return (T)MyObjectBuilderSerializerKeen.CreateNewObject(typeof(T));
         }
 
         public T CreateNewObject<T>(MyObjectBuilderType typeId, string subtypeId)
            where T : MyObjectBuilder_Base
         {
-            return (T)MyObjectBuilderSerializer.CreateNewObject(typeId, subtypeId);
+            return (T)MyObjectBuilderSerializerKeen.CreateNewObject(typeId, subtypeId);
         }
     }
 }

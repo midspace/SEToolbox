@@ -4,15 +4,13 @@
     using System.Collections.Generic;
     using System.Drawing.Imaging;
     using System.IO;
-    using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SEToolbox.Interop;
     using SEToolbox.Support;
     using VRage;
     using VRage.Compression;
-    using VRage.FileSystem;
     using VRage.Game;
-    using VRage.ObjectBuilders;
+    using VRage.ObjectBuilders.Private;
     using VRageMath;
     using Color = System.Drawing.Color;
 
@@ -258,7 +256,7 @@
                 {"INGAME dark dark gray", new SerializableVector3(0f,-0.81f,-0.13f)},
             };
 
-            foreach(var kvp in hsvColors)
+            foreach (var kvp in hsvColors)
             {
                 string name = kvp.Key;
                 SerializableVector3 storedHsv = kvp.Value;
@@ -321,8 +319,8 @@
             var positionOrientation = new MyPositionAndOrientation(new Vector3D(10, 10, 10), Vector3.Backward, Vector3.Up);
             var gridSizeEnum = MyCubeSize.Large;
 
-            var cube = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(typeof(MyObjectBuilder_CubeBlock), "LargeBlockArmorBlock");
-            //var cube = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(typeof(MyObjectBuilder_Thrust), "LargeBlockLargeThrust");
+            var cube = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializerKeen.CreateNewObject(typeof(MyObjectBuilder_CubeBlock), "LargeBlockArmorBlock");
+            //var cube = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializerKeen.CreateNewObject(typeof(MyObjectBuilder_Thrust), "LargeBlockLargeThrust");
             cube.Min = new SerializableVector3I(10, 10, 10);
             cube.BlockOrientation = new SerializableBlockOrientation(Base6Directions.Direction.Forward, Base6Directions.Direction.Up);
             cube.BuildPercent = 1;
@@ -340,7 +338,7 @@
         }
 
         /// <summary>
-        /// This test is critical for rotation a station. For some reason, 
+        /// This test is critical for rotation a station. For some reason,
         /// if the rotation is not exactly 1, or 0, then there is an issue placing cubes on the station.
         /// </summary>
         [TestMethod, TestCategory("UnitTest")]
@@ -366,10 +364,9 @@
 
             var quaternion3 = new System.Windows.Media.Media3D.Quaternion(new System.Windows.Media.Media3D.Vector3D(0, 0, 1), -90d);
             var x3 = positionAndOrientation.ToQuaternionD();
-            var o3 = new System.Windows.Media.Media3D.Quaternion(x3.X, x3.Y, x3.Z, x3.W)*quaternion3;
+            var o3 = new System.Windows.Media.Media3D.Quaternion(x3.X, x3.Y, x3.Z, x3.W) * quaternion3;
             var on3 = o3;
             on3.Normalize();
-
 
             double num = on3.X * on3.X;
             double num3 = on3.Z * on3.Z;
@@ -380,12 +377,7 @@
             var M21 = (2.0d * (num4 - num5));
             var M22 = (1.0d - 2.0d * (num3 + num));
             var M23 = (2.0d * (num8 + num9));
-
             var up3 = new Vector3D(M21, M22, M23);
-
-            
-
-
             var fwd = new SerializableVector3(0.0f, 0.0f, -1.0f);
             var up = new SerializableVector3(1.0f, 0.0f, 0.0f);
 

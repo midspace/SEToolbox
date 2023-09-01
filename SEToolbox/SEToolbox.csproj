@@ -14,7 +14,7 @@
     <Copyright>Copyright © MidSpace 2013-2019</Copyright>
     <!-- First 3 numbers to match the current Space Engineers release. https://forum.keenswh.com/threads/about-change-log.6578819/
          Forth number to indicate my own build of SEToolbox to match. Remember to reset it back to 1 every time there is a new release of SpaceEngineers.-->
-    <Version>01.202.124.1</Version>
+    <Version>01.203.022.1</Version>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\SEToolbox.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
@@ -93,6 +93,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Interop\SubtypeId.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SubtypeId.tt</DependentUpon>
+    </Compile>
+    <None Update="Interop\SubtypeId.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SubtypeId.cs</LastGenOutput>
+    </None>
     <Content Include="$(BinPath)\steam_api64.dll">
       <Link>steam_api64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -114,6 +123,10 @@
     <PackageReference Include="Octokit" Version="0.47.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="WPFLocalizeExtension" Version="3.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
   <Target Name="CopyUpdater" AfterTargets="AfterBuild">

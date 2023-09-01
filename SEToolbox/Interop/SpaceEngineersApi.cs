@@ -9,15 +9,16 @@
     using System.Resources;
     using System.Text;
     using System.Xml;
+    using System.Xml.Serialization;
     using Sandbox.Definitions;
     using SEToolbox.Support;
     using VRage;
+    using VRage.FileSystem;
     using VRage.Game;
     using VRage.ObjectBuilders;
+    using VRage.ObjectBuilders.Private;
     using VRage.Utils;
     using VRageMath;
-    using VRage.FileSystem;
-    using System.Xml.Serialization;
     using Res = SEToolbox.Properties.Resources;
 
     /// <summary>
@@ -31,7 +32,7 @@
         public static T ReadSpaceEngineersFile<T>(Stream stream) where T : MyObjectBuilder_Base
         {
             T outObject;
-            MyObjectBuilderSerializer.DeserializeXML<T>(stream, out outObject);
+            MyObjectBuilderSerializerKeen.DeserializeXML<T>(stream, out outObject);
             return outObject;
         }
 
@@ -75,7 +76,7 @@
                 {
                     // A failure to load here, will only mean it falls back to try and read the xml file instead.
                     // So a file corruption could easily have been covered up.
-                    retCode = MyObjectBuilderSerializer.DeserializePB<T>(tempFilename, out outObject);
+                    retCode = MyObjectBuilderSerializerKeen.DeserializePB<T>(tempFilename, out outObject);
                 }
                 catch (InvalidCastException ex)
                 {
@@ -134,7 +135,7 @@
                 sw.Flush();
                 stream.Position = 0;
 
-                MyObjectBuilderSerializer.DeserializeXML(stream, out outObject);
+                MyObjectBuilderSerializerKeen.DeserializeXML(stream, out outObject);
             }
             return outObject;
         }
@@ -143,7 +144,7 @@
         {
             using (var outStream = new MemoryStream())
             {
-                if (MyObjectBuilderSerializer.SerializeXML(outStream, item))
+                if (MyObjectBuilderSerializerKeen.SerializeXML(outStream, item))
                 {
                     outStream.Position = 0;
 
@@ -160,7 +161,7 @@
             bool ret;
             using (StreamWriter sw = new StreamWriter(filename))
             {
-                ret = MyObjectBuilderSerializer.SerializeXML(sw.BaseStream, myObject);
+                ret = MyObjectBuilderSerializerKeen.SerializeXML(sw.BaseStream, myObject);
                 if (ret)
                 {
                     var xmlTextWriter = new XmlTextWriter(sw.BaseStream, null);
@@ -176,7 +177,7 @@
         public static bool WriteSpaceEngineersFilePB<T>(T myObject, string filename, bool compress)
             where T : MyObjectBuilder_Base
         {
-            return MyObjectBuilderSerializer.SerializePB(filename, compress, myObject);
+            return MyObjectBuilderSerializerKeen.SerializePB(filename, compress, myObject);
         }
 
         /// <returns>True if it sucessfully deserialized the file.</returns>

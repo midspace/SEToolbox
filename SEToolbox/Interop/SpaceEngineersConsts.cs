@@ -25,7 +25,7 @@
         /// <summary>
         /// This is the file extension added to the normal filename for Sanbox files, changing the ".sbs" to ".sbsPB"
         /// </summary>
-        public readonly static string ProtobuffersExtension = VRage.ObjectBuilders.MyObjectBuilderSerializer.ProtobufferExtension ?? "PB";
+        public readonly static string ProtobuffersExtension = VRage.ObjectBuilders.Private.MyObjectBuilderSerializerKeen.ProtobufferExtension ?? "PB";
 
         public const byte EmptyVoxelMaterial = 0xff;
 

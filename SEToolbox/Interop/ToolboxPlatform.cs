@@ -106,6 +106,8 @@ namespace SEToolbox.Interop
 
         public long ProcessPrivateMemory => throw new NotImplementedException();
 
+        public bool IsUsingGeforceNow => false;
+
         public bool IsScriptCompilationSupported => throw new NotImplementedException();
 
         public string Clipboard { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

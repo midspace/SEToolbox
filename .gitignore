@@ -233,12 +233,6 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
-
-
-
-# Shader generated files.
-*.ps
-
 *.props
 *.vsprops
 user.targets
